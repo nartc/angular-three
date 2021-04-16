@@ -259,6 +259,86 @@
           }
         }
       }
+    },
+    "demo": {
+      "projectType": "application",
+      "root": "packages/demo",
+      "sourceRoot": "packages/demo/src",
+      "prefix": "demo",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/packages/demo",
+            "index": "packages/demo/src/index.html",
+            "main": "packages/demo/src/main.ts",
+            "polyfills": "packages/demo/src/polyfills.ts",
+            "tsConfig": "packages/demo/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "packages/demo/src/favicon.ico",
+              "packages/demo/src/assets"
+            ],
+            "styles": ["packages/demo/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "packages/demo/src/environments/environment.ts",
+                  "with": "packages/demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "demo:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/demo/src/**/*.ts",
+              "packages/demo/src/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
@@ -268,7 +348,9 @@
     "@nrwl/angular:application": {
       "style": "scss",
       "linter": "eslint",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "none",
+      "strict": true
     },
     "@nrwl/angular:library": {
       "style": "scss",
