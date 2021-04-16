@@ -20,7 +20,8 @@
       "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
       "@angular-three/core/geometries": [
         "packages/core/geometries/src/index.ts"
-      ]
+      ],
+      "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

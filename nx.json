@@ -21,7 +21,8 @@
     },
     "core-geometries": {
       "tags": ["scope:core", "type:library", "context:geometries"]
-    }
+    },
+    "core-meshes": { "tags": ["scope:core", "type:library", "context:meshes"] }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }
