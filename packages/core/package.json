@@ -1,0 +1,13 @@
+{
+  "name": "@angular-three/core",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "~11.2.10",
+    "@angular/core": "~11.2.10"
+  },
+  "dependencies": {
+    "@ngrx/component-store": "~11.1.0",
+    "three": "~0.127.0",
+    "tslib": "^2.0.0"
+  }
+}
