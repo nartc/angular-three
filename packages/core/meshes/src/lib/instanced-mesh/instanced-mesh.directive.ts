@@ -1,7 +1,6 @@
 import { ThreeObject3d } from '@angular-three/core';
-import { UniqueMeshArgs } from '@angular-three/core/typings';
-import { Directive } from '@angular/core';
-import { InstancedMesh } from 'three';
+import { Directive, Input, OnChanges } from '@angular/core';
+import { DynamicDrawUsage, InstancedMesh } from 'three';
 import { ThreeMesh } from '../abstracts';
 
 @Directive({
@@ -9,8 +8,25 @@ import { ThreeMesh } from '../abstracts';
   exportAs: 'ngtInstancedMesh',
   providers: [{ provide: ThreeObject3d, useExisting: InstancedMeshDirective }],
 })
-export class InstancedMeshDirective extends ThreeMesh<InstancedMesh> {
-  static ngAcceptInputType_args: UniqueMeshArgs<typeof InstancedMesh>;
+export class InstancedMeshDirective
+  extends ThreeMesh<InstancedMesh>
+  implements OnChanges {
+  @Input() set args(v: [number]) {
+    this.extraArgs = v;
+  }
 
   meshType = InstancedMesh;
+
+  ngOnChanges() {
+    this.init();
+    super.ngOnChanges();
+  }
+
+  protected canCreate(): boolean {
+    return !this.object3d && this.geometry;
+  }
+
+  customize = () => {
+    this.object3d.instanceMatrix.setUsage(DynamicDrawUsage);
+  };
 }

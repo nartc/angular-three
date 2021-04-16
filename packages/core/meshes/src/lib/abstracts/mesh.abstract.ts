@@ -1,17 +1,16 @@
 import { ThreeObject3d } from '@angular-three/core';
 import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import { ThreeMaterial } from '@angular-three/core/materials';
-import type { UniqueMeshArgs } from '@angular-three/core/typings';
 import { ContentChild, Directive, Input } from '@angular/core';
 import { BufferGeometry, Material, Mesh } from 'three';
 
 @Directive()
 export abstract class ThreeMesh<
-  TMesh extends Mesh = Mesh
+  TMesh extends Mesh = Mesh,
+  TMeshConstructor extends typeof Mesh = typeof Mesh
 > extends ThreeObject3d<TMesh> {
-  @Input() geometry?: string | BufferGeometry;
-  @Input() material?: string | Material;
-  @Input() args?: UniqueMeshArgs<typeof Mesh>;
+  @Input() geometry?: string | BufferGeometry | null;
+  @Input() material?: string | Material | null;
 
   @ContentChild(ThreeMaterial) materialDirective?: ThreeMaterial;
   @ContentChild(ThreeBufferGeometry)
@@ -20,6 +19,10 @@ export abstract class ThreeMesh<
   abstract meshType: new (...args: any[]) => TMesh;
 
   private _mesh!: TMesh;
+  private _extraArgs?: unknown[];
+  set extraArgs(v: unknown[]) {
+    this._extraArgs = v;
+  }
 
   protected initObject() {
     if (this.canCreate()) {
@@ -49,7 +52,7 @@ export abstract class ThreeMesh<
 
       this._mesh = new ((this.meshType as unknown) as new (
         ...args: unknown[]
-      ) => TMesh)(geometry, material, ...(this.args || [])) as TMesh;
+      ) => TMesh)(geometry, material, ...(this._extraArgs || [])) as TMesh;
 
       if (this.customize) {
         this.customize();
