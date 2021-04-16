@@ -5,5 +5,6 @@ module.exports = {
     '<rootDir>/packages/core/materials',
     '<rootDir>/packages/core/geometries',
     '<rootDir>/packages/core/meshes',
+    '<rootDir>/packages/core/lights',
   ],
 };
