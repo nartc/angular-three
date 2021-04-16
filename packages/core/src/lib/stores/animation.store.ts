@@ -61,7 +61,7 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
     callback: AnimationCallback<TObject3d>
   ): void;
   registerAnimation<TObject3d extends Object3D = Object3D>(
-    obs: Observable<TObject3d>,
+    obs: Observable<TObject3d | null>,
     callback: AnimationCallback<TObject3d>
   ): void;
   registerAnimation(callback: AnimationCallback): void;
