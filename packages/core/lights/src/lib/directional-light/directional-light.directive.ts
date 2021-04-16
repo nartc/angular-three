@@ -1,5 +1,5 @@
 import { ThreeObject3d } from '@angular-three/core';
-import { Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import { DirectionalLight } from 'three';
 import { ThreeLight } from '../abstracts';
 
@@ -14,7 +14,9 @@ export class DirectionalLightDirective extends ThreeLight<
   DirectionalLight,
   typeof DirectionalLight
 > {
-  static ngAcceptInputType_args: ConstructorParameters<typeof DirectionalLight>;
+  @Input() set args(v: ConstructorParameters<typeof DirectionalLight>) {
+    this.extraArgs = v;
+  }
 
   lightType = DirectionalLight;
 }

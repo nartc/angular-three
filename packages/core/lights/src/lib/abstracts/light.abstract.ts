@@ -1,5 +1,5 @@
 import { ThreeObject3d } from '@angular-three/core';
-import { Directive, Input, OnInit } from '@angular/core';
+import { Directive, OnInit } from '@angular/core';
 import { Light } from 'three';
 
 @Directive()
@@ -9,9 +9,12 @@ export abstract class ThreeLight<
   >
   extends ThreeObject3d<TLight>
   implements OnInit {
-  @Input() args?: ConstructorParameters<TLightConstructor>;
-
   abstract lightType: TLightConstructor;
+
+  private _extraArgs?: unknown[] = [];
+  protected set extraArgs(v: unknown[]) {
+    this._extraArgs = v;
+  }
 
   private _light!: TLight;
 
@@ -20,7 +23,10 @@ export abstract class ThreeLight<
   }
 
   protected initObject() {
-    this._light = new this.lightType(...(this.args || [])) as TLight;
+    const args = this._extraArgs;
+    this._light = new this.lightType(
+      ...(args as ConstructorParameters<TLightConstructor>)
+    ) as TLight;
   }
 
   get object3d(): TLight {
