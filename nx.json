@@ -15,6 +15,9 @@
     "core": { "tags": ["scope:core", "type:library"] },
     "core-typings": {
       "tags": ["scope:core", "type:library", "context:typings"]
+    },
+    "core-materials": {
+      "tags": ["scope:core", "type:library", "context:materials"]
     }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }

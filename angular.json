@@ -74,6 +74,43 @@
           }
         }
       }
+    },
+    "core-materials": {
+      "projectType": "library",
+      "root": "packages/core/materials",
+      "sourceRoot": "packages/core/materials/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/materials/tsconfig.lib.json",
+            "project": "packages/core/materials/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/materials/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/materials/src/**/*.ts",
+              "packages/core/materials/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/materials"],
+          "options": {
+            "jestConfig": "packages/core/materials/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

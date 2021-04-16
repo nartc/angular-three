@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@angular-three/core": ["packages/core/src/index.ts"],
-      "@angular-three/core/typings": ["packages/core/typings/src/index.ts"]
+      "@angular-three/core/typings": ["packages/core/typings/src/index.ts"],
+      "@angular-three/core/materials": ["packages/core/materials/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
