@@ -9,8 +9,8 @@ import type {
   ThreeVector3,
 } from '@angular-three/core/typings';
 import {
+  Directive,
   EventEmitter,
-  Injectable,
   Input,
   NgZone,
   OnChanges,
@@ -31,7 +31,7 @@ import {
 } from '../stores';
 import { applyProps } from '../utils';
 
-@Injectable()
+@Directive()
 export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   implements OnDestroy, OnChanges {
   @Input() position?: ThreeVector3;
