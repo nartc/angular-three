@@ -111,6 +111,43 @@
           }
         }
       }
+    },
+    "core-geometries": {
+      "projectType": "library",
+      "root": "packages/core/geometries",
+      "sourceRoot": "packages/core/geometries/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/geometries/tsconfig.lib.json",
+            "project": "packages/core/geometries/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/geometries/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/geometries/src/**/*.ts",
+              "packages/core/geometries/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/geometries"],
+          "options": {
+            "jestConfig": "packages/core/geometries/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

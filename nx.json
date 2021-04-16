@@ -18,6 +18,9 @@
     },
     "core-materials": {
       "tags": ["scope:core", "type:library", "context:materials"]
+    },
+    "core-geometries": {
+      "tags": ["scope:core", "type:library", "context:geometries"]
     }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
