@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import { CylinderBufferGeometry } from 'three';
 import { ThreeBufferGeometry } from '../abstracts';
 
@@ -16,9 +16,9 @@ export class CylinderBufferGeometryDirective extends ThreeBufferGeometry<
   CylinderBufferGeometry,
   typeof CylinderBufferGeometry
 > {
-  static ngAcceptInputType_args: ConstructorParameters<
-    typeof CylinderBufferGeometry
-  >;
+  @Input() set args(v: ConstructorParameters<typeof CylinderBufferGeometry>) {
+    this.extraArgs = v;
+  }
 
   geometryType = CylinderBufferGeometry;
 }
