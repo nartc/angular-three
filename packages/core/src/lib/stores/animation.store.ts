@@ -6,7 +6,7 @@ import type {
 import { Injectable } from '@angular/core';
 import { isObservable, Observable } from 'rxjs';
 import { filter, tap, withLatestFrom } from 'rxjs/operators';
-import { Object3D } from 'three';
+import type { Object3D } from 'three';
 import { makeId } from '../utils';
 import { ImperativeComponentStore } from './imperative-component-store.abstract';
 

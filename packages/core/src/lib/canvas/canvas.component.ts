@@ -24,7 +24,7 @@ import {
 import { asyncScheduler } from 'rxjs';
 import { observeOn, takeUntil } from 'rxjs/operators';
 import type { Scene, WebGLRenderer, WebGLShadowMap } from 'three';
-import Stats from 'three/examples/jsm/libs/stats.module';
+import type Stats from 'three/examples/jsm/libs/stats.module';
 import { DestroyedService, LoopService } from '../services';
 import {
   AnimationStore,

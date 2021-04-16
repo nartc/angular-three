@@ -21,7 +21,8 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Color, Object3D } from 'three';
+import type { Object3D } from 'three';
+import { Color } from 'three';
 import {
   AnimationStore,
   CanvasStore,
