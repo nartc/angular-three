@@ -23,7 +23,10 @@
       "tags": ["scope:core", "type:library", "context:geometries"]
     },
     "core-meshes": { "tags": ["scope:core", "type:library", "context:meshes"] },
-    "core-lights": { "tags": ["scope:core", "type:library", "context:lights"] }
+    "core-lights": { "tags": ["scope:core", "type:library", "context:lights"] },
+    "core-loaders": {
+      "tags": ["scope:core", "type:library", "context:loaders"]
+    }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

@@ -22,7 +22,8 @@
         "packages/core/geometries/src/index.ts"
       ],
       "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
-      "@angular-three/core/lights": ["packages/core/lights/src/index.ts"]
+      "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
+      "@angular-three/core/loaders": ["packages/core/loaders/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
