@@ -6,7 +6,8 @@ import { Color, Material, MaterialParameters } from 'three';
 @Directive()
 export abstract class ThreeMaterial<
   TMaterial extends Material = Material,
-  TMaterialParameters extends MaterialParameters = MaterialParameters
+  TMaterialParameters extends MaterialParameters = MaterialParameters,
+  TMaterialConstructor extends typeof Material = typeof Material
 > {
   @Input() ngtId?: string;
 
@@ -30,12 +31,14 @@ export abstract class ThreeMaterial<
     @SkipSelf() protected readonly canvasStore: CanvasStore
   ) {}
 
-  abstract init(): TMaterial;
+  abstract materialType: TMaterialConstructor;
 
   private _material?: TMaterial;
   get material(): TMaterial {
     if (this._material == null) {
-      this._material = this.init();
+      this._material = new ((this.materialType as unknown) as new (
+        params?: TMaterialParameters
+      ) => TMaterial)(this.parameters);
       this.instancesStore.saveMaterial({
         id: this.ngtId,
         material: this._material,

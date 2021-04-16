@@ -11,13 +11,12 @@ import { ThreeMaterial } from '../abstracts';
 })
 export class MeshLambertMaterialDirective extends ThreeMaterial<
   MeshLambertMaterial,
-  MeshLambertMaterialParameters
+  MeshLambertMaterialParameters,
+  typeof MeshLambertMaterial
 > {
   static ngAcceptInputType_parameters:
     | MeshLambertMaterialParameters
     | undefined;
 
-  init(): MeshLambertMaterial {
-    return new MeshLambertMaterial(this.parameters);
-  }
+  materialType = MeshLambertMaterial;
 }

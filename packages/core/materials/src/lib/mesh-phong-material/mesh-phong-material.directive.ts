@@ -11,11 +11,10 @@ import { ThreeMaterial } from '../abstracts';
 })
 export class MeshPhongMaterialDirective extends ThreeMaterial<
   MeshPhongMaterial,
-  MeshPhongMaterialParameters
+  MeshPhongMaterialParameters,
+  typeof MeshPhongMaterial
 > {
   static ngAcceptInputType_parameters: MeshPhongMaterialParameters;
 
-  init(): MeshPhongMaterial {
-    return new MeshPhongMaterial(this.parameters);
-  }
+  materialType = MeshPhongMaterial;
 }
