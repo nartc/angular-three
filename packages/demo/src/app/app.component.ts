@@ -21,6 +21,7 @@ import { Color } from 'three';
       [camera]="{ position: [0, 0, 20] }"
       [scene]="{ background: sceneColor }"
     >
+      <ngt-stats></ngt-stats>
       <demo-suzanne></demo-suzanne>
     </ngt-canvas>
   `,
