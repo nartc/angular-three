@@ -1,6 +1,6 @@
 import { CanvasStore, InstancesStore } from '@angular-three/core';
 import { ThreeColor } from '@angular-three/core/typings';
-import { Directive, Input, SkipSelf } from '@angular/core';
+import { Directive, Input, NgZone, SkipSelf } from '@angular/core';
 import { Color, Material, MaterialParameters } from 'three';
 
 @Directive()
@@ -13,9 +13,11 @@ export abstract class ThreeMaterial<
 
   @Input() set parameters(v: TMaterialParameters | undefined) {
     if (v && this.material) {
-      this.convertColorToLinear(v);
-      this.material.setValues(v);
-      this.material.needsUpdate = true;
+      this.ngZone.runOutsideAngular(() => {
+        this.convertColorToLinear(v);
+        this.material.setValues(v);
+        this.material.needsUpdate = true;
+      });
     }
     this._parameters = v;
   }
@@ -27,6 +29,7 @@ export abstract class ThreeMaterial<
   private _parameters?: TMaterialParameters;
 
   constructor(
+    protected readonly ngZone: NgZone,
     @SkipSelf() protected readonly instancesStore: InstancesStore,
     @SkipSelf() protected readonly canvasStore: CanvasStore
   ) {}
