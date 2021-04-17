@@ -7,4 +7,4 @@ import { SsaoPassDirective } from './ssao-pass.directive';
   declarations: [SsaoPassDirective],
   exports: [SsaoPassDirective],
 })
-export class PostprocessingSsaoPassModule {}
+export class ThreeSsaoPassModule {}
