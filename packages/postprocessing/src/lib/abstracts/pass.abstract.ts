@@ -2,11 +2,15 @@ import { applyProps, CanvasStore } from '@angular-three/core';
 import type { ThreeInstance } from '@angular-three/core/typings';
 import {
   Directive,
+  EventEmitter,
   Input,
   NgZone,
+  OnChanges,
   OnDestroy,
   OnInit,
   Optional,
+  Output,
+  SimpleChanges,
   SkipSelf,
 } from '@angular/core';
 import { Pass } from 'three/examples/jsm/postprocessing/Pass';
@@ -14,11 +18,13 @@ import { EffectComposerDirective } from '../effect-composer.directive';
 
 @Directive()
 export abstract class ThreePass<TPass extends Pass = Pass>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy, OnChanges {
   @Input() enabled?: boolean;
   @Input() needsSwap?: boolean;
   @Input() clear?: boolean;
   @Input() renderToScreen?: boolean;
+
+  @Output() ready = new EventEmitter<TPass>();
 
   constructor(
     protected readonly ngZone: NgZone,
@@ -37,18 +43,28 @@ export abstract class ThreePass<TPass extends Pass = Pass>
 
   private _pass!: TPass;
 
+  ngOnChanges(changes: SimpleChanges) {
+    this.ngZone.runOutsideAngular(() => {
+      if (this.pass) {
+        this.applyExtraInputs(changes);
+      }
+    });
+  }
+
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       if (this.useSceneAndCamera) {
         const { scene, camera } = this.canvasStore.getImperativeState();
-        this._extraArgs[0] = scene;
-        this._extraArgs[1] = camera;
+        this._extraArgs = [scene, camera, ...this._extraArgs];
       }
       this._pass = new this.passType(...this._extraArgs);
       this.applyExtraInputs();
       if (this.composer) {
         this.composer.composer.addPass(this.pass);
       }
+      this.ngZone.run(() => {
+        this.ready.emit(this.pass);
+      });
     });
   }
 
@@ -68,7 +84,7 @@ export abstract class ThreePass<TPass extends Pass = Pass>
     return false;
   }
 
-  private applyExtraInputs(): void {
+  private applyExtraInputs(inputChanges?: SimpleChanges): void {
     this.ngZone.runOutsideAngular(() => {
       const extraProps = [
         'enabled',
@@ -77,12 +93,20 @@ export abstract class ThreePass<TPass extends Pass = Pass>
         'renderToScreen',
         ...this.extraInputs,
       ].reduce((extraProps, extraInput) => {
-        const inputProp = ((this as unknown) as Record<string, unknown>)[
+        let inputProp = ((this as unknown) as Record<string, unknown>)[
           extraInput
         ];
-        if (inputProp) {
-          extraProps[extraInput] = inputProp;
+        if (inputChanges) {
+          if (inputChanges[extraInput]) {
+            inputProp = inputChanges[extraInput].currentValue;
+            extraProps[extraInput] = inputProp;
+          }
+        } else {
+          if (inputProp) {
+            extraProps[extraInput] = inputProp;
+          }
         }
+
         return extraProps;
       }, {} as Record<string, unknown>);
       applyProps((this.pass as unknown) as ThreeInstance, extraProps);
