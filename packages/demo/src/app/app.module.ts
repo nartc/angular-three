@@ -1,5 +1,6 @@
 import { OrbitControlsModule } from '@angular-three/controls/orbit-controls';
 import { ThreeCoreModule } from '@angular-three/core';
+import { InstancedBufferAttributeModule } from "@angular-three/core/attributes";
 import { BoxBufferGeometryModule } from '@angular-three/core/geometries';
 import {
   AmbientLightModule,
@@ -7,9 +8,9 @@ import {
   SpotLightModule,
 } from '@angular-three/core/lights';
 import {
-  MeshNormalMaterialModule,
-  MeshStandardMaterialModule,
-} from '@angular-three/core/materials';
+  MeshNormalMaterialModule, MeshPhongMaterialModule,
+  MeshStandardMaterialModule
+} from "@angular-three/core/materials";
 import { InstancedMeshModule, MeshModule } from '@angular-three/core/meshes';
 import { ThreeCoreStatsModule } from '@angular-three/core/stats';
 import { NgModule } from '@angular/core';
@@ -19,6 +20,7 @@ import { AppComponent } from './app.component';
 import { BoxComponent } from './box.component';
 import { OrbitControlsComponent } from './orbit-controls.component';
 import { SuzanneComponent } from './suzanne.component';
+import { BoxesComponent } from './boxes.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { SuzanneComponent } from './suzanne.component';
     BoxComponent,
     SuzanneComponent,
     OrbitControlsComponent,
+    BoxesComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,6 +43,8 @@ import { SuzanneComponent } from './suzanne.component';
     MeshNormalMaterialModule,
     ThreeCoreStatsModule,
     OrbitControlsModule,
+    InstancedBufferAttributeModule,
+    MeshPhongMaterialModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

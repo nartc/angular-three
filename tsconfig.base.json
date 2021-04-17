@@ -28,6 +28,9 @@
       "@angular-three/controls": ["packages/controls/src/index.ts"],
       "@angular-three/controls/orbit-controls": [
         "packages/controls/orbit-controls/src/index.ts"
+      ],
+      "@angular-three/core/attributes": [
+        "packages/core/attributes/src/index.ts"
       ]
     }
   },
