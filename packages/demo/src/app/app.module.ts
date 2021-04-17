@@ -5,9 +5,12 @@ import {
   PointLightModule,
   SpotLightModule,
 } from '@angular-three/core/lights';
-import { MeshNormalMaterialModule, MeshStandardMaterialModule } from "@angular-three/core/materials";
-import { InstancedMeshModule, MeshModule } from "@angular-three/core/meshes";
-import { CoreStatsModule } from "@angular-three/core/stats";
+import {
+  MeshNormalMaterialModule,
+  MeshStandardMaterialModule,
+} from '@angular-three/core/materials';
+import { InstancedMeshModule, MeshModule } from '@angular-three/core/meshes';
+import { ThreeCoreStatsModule } from '@angular-three/core/stats';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -28,7 +31,7 @@ import { SuzanneComponent } from './suzanne.component';
     MeshStandardMaterialModule,
     InstancedMeshModule,
     MeshNormalMaterialModule,
-    CoreStatsModule,
+    ThreeCoreStatsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
