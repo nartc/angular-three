@@ -42,34 +42,29 @@ export class SsaoPassDirective extends ThreePass<SSAOPass> {
   @Input() originalClearColor?: Color;
 
   passType = SSAOPass;
+  extraInputs = [
+    'clear',
+    'kernelRadius',
+    'kernelSize',
+    'kernel',
+    'noiseTexture',
+    'output',
+    'minDistance',
+    'maxDistance',
+    'beautyRenderTarget',
+    'normalRenderTarget',
+    'ssaoRenderTarget',
+    'blurRenderTarget',
+    'ssaoMaterial',
+    'normalMaterial',
+    'blurMaterial',
+    'depthRenderMaterial',
+    'copyMaterial',
+    'fsQuad',
+    'originalClearColor',
+  ];
 
-  customize = () => {
-    ([
-      'clear',
-      'kernelRadius',
-      'kernelSize',
-      'kernel',
-      'noiseTexture',
-      'output',
-      'minDistance',
-      'maxDistance',
-      'beautyRenderTarget',
-      'normalRenderTarget',
-      'ssaoRenderTarget',
-      'blurRenderTarget',
-      'ssaoMaterial',
-      'normalMaterial',
-      'blurMaterial',
-      'depthRenderMaterial',
-      'copyMaterial',
-      'fsQuad',
-      'originalClearColor',
-    ] as const).forEach((inputName) => {
-      if (this[inputName]) {
-        ((this.pass as unknown) as Record<string, unknown>)[inputName] = this[
-          inputName
-        ];
-      }
-    });
-  };
+  protected get useSceneAndCamera(): boolean {
+    return true;
+  }
 }
