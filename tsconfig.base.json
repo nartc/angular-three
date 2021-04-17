@@ -36,6 +36,12 @@
       "@angular-three/core/canvas": ["packages/core/canvas/src/index.ts"],
       "@angular-three/postprocessing/ssao-pass": [
         "packages/postprocessing/ssao-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/unreal-bloom-pass": [
+        "packages/postprocessing/unreal-bloom-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/shader-pass": [
+        "packages/postprocessing/shader-pass/src/index.ts"
       ]
     }
   },

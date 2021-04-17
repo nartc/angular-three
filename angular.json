@@ -609,6 +609,80 @@
           }
         }
       }
+    },
+    "postprocessing-unreal-bloom-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/unreal-bloom-pass",
+      "sourceRoot": "packages/postprocessing/unreal-bloom-pass/src",
+      "prefix": "angular-three",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/unreal-bloom-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/unreal-bloom-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/unreal-bloom-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/unreal-bloom-pass/src/**/*.ts",
+              "packages/postprocessing/unreal-bloom-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/unreal-bloom-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/unreal-bloom-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "postprocessing-shader-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/shader-pass",
+      "sourceRoot": "packages/postprocessing/shader-pass/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/shader-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/shader-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/shader-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/shader-pass/src/**/*.ts",
+              "packages/postprocessing/shader-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/shader-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/shader-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

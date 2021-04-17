@@ -14,5 +14,7 @@ module.exports = {
     '<rootDir>/packages/postprocessing/render-pass',
     '<rootDir>/packages/core/canvas',
     '<rootDir>/packages/postprocessing/ssao-pass',
+    '<rootDir>/packages/postprocessing/unreal-bloom-pass',
+    '<rootDir>/packages/postprocessing/shader-pass',
   ],
 };

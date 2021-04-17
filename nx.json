@@ -40,6 +40,16 @@
     "core-canvas": { "tags": ["scope:core", "type:library", "context:canvas"] },
     "postprocessing-ssao-pass": {
       "tags": ["scope:postprocessing", "type:library", "context:ssao-pass"]
+    },
+    "postprocessing-unreal-bloom-pass": {
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:unreal-bloom-pass"
+      ]
+    },
+    "postprocessing-shader-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:shader-pass"]
     }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
