@@ -1,4 +1,8 @@
-import { AnimationStore, CanvasStore } from '@angular-three/core';
+import {
+  AnimationStore,
+  CanvasStore,
+  DestroyedService,
+} from '@angular-three/core';
 import { EffectComposerDirective } from '@angular-three/postprocessing';
 import {
   AfterViewInit,
@@ -6,8 +10,9 @@ import {
   Component,
   ViewChild,
 } from '@angular/core';
-import { distinctUntilKeyChanged, map } from 'rxjs/operators';
-import { Vector2 } from 'three';
+import { distinctUntilKeyChanged, map, pluck, takeUntil } from 'rxjs/operators';
+import { Uniform, Vector2 } from 'three';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader';
 
 @Component({
@@ -20,15 +25,21 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader';
       <ngt-shaderPass
         [args]="[FXAAShader]"
         [renderToScreen]="true"
+        (ready)="onShaderPassReady($event)"
       ></ngt-shaderPass>
     </ngt-effectComposer>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyedService],
 })
 export class BoxesEffectsComponent implements AfterViewInit {
-  aspect$ = this.canvasStore.canvasInternal$.pipe(
+  readonly size$ = this.canvasStore.canvasInternal$.pipe(
     distinctUntilKeyChanged('size'),
-    map(({ size }) => {
+    pluck('size')
+  );
+
+  aspect$ = this.size$.pipe(
+    map((size) => {
       if (this.effectComposer) {
         this.effectComposer.composer.setSize(size.width, size.height);
       }
@@ -40,14 +51,31 @@ export class BoxesEffectsComponent implements AfterViewInit {
 
   @ViewChild(EffectComposerDirective) effectComposer?: EffectComposerDirective;
 
+  shaderPass?: ShaderPass;
+
   constructor(
     private readonly animationStore: AnimationStore,
-    private readonly canvasStore: CanvasStore
+    private readonly canvasStore: CanvasStore,
+    private readonly destroyed: DestroyedService
   ) {}
 
   ngAfterViewInit() {
+    this.size$.pipe(takeUntil(this.destroyed)).subscribe((size) => {
+      this.effectComposer?.composer.setSize(size.width, size.height);
+      if (this.shaderPass) {
+        this.shaderPass.material.uniforms.resolution = new Uniform(
+          new Vector2(1 / size.width, 1 / size.height)
+        );
+        this.shaderPass.material.needsUpdate = true;
+      }
+    });
+
     this.animationStore.registerAnimation(() => {
       this.effectComposer?.composer.render();
-    });
+    }, 2);
+  }
+
+  onShaderPassReady(pass: ShaderPass) {
+    this.shaderPass = pass;
   }
 }
