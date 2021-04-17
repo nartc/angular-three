@@ -10,5 +10,6 @@ module.exports = {
     '<rootDir>/packages/core/stats',
     '<rootDir>/packages/controls',
     '<rootDir>/packages/controls/orbit-controls',
+    '<rootDir>/packages/core/attributes',
   ],
 };

@@ -32,6 +32,9 @@
     "controls": { "tags": ["scope:controls", "type:library"] },
     "controls-orbit-controls": {
       "tags": ["scope:controls", "type:library", "context:orbit-controls"]
+    },
+    "core-attributes": {
+      "tags": ["scope:core", "type:library", "context:attributes"]
     }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
