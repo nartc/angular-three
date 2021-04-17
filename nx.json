@@ -1,27 +1,18 @@
 {
   "npmScope": "angular-three",
-  "affected": {
-    "defaultBase": "master"
-  },
+  "affected": { "defaultBase": "master" },
   "implicitDependencies": {
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     ".eslintrc.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
-      }
+      "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
     }
   },
   "projects": {
-    "core": {
-      "tags": ["scope:core", "type:library"]
-    },
+    "core": { "tags": ["scope:core", "type:library"] },
     "core-typings": {
       "tags": ["scope:core", "type:library", "context:typings"]
     },
@@ -31,21 +22,13 @@
     "core-geometries": {
       "tags": ["scope:core", "type:library", "context:geometries"]
     },
-    "core-meshes": {
-      "tags": ["scope:core", "type:library", "context:meshes"]
-    },
-    "core-lights": {
-      "tags": ["scope:core", "type:library", "context:lights"]
-    },
+    "core-meshes": { "tags": ["scope:core", "type:library", "context:meshes"] },
+    "core-lights": { "tags": ["scope:core", "type:library", "context:lights"] },
     "core-loaders": {
       "tags": ["scope:core", "type:library", "context:loaders"]
     },
-    "demo": {
-      "tags": []
-    }
+    "demo": { "tags": [] },
+    "core-stats": { "tags": ["scope:core", "type:library", "context:stats"] }
   },
-  "workspaceLayout": {
-    "appsDir": "packages",
-    "libsDir": "packages"
-  }
+  "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

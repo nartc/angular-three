@@ -7,5 +7,6 @@ module.exports = {
     '<rootDir>/packages/core/meshes',
     '<rootDir>/packages/core/lights',
     '<rootDir>/packages/core/loaders',
+    '<rootDir>/packages/core/stats',
   ],
 };
