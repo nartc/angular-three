@@ -35,6 +35,7 @@ export class LoopService implements OnDestroy {
     const { animations } = this.animationStore.getImperativeState();
 
     if (renderer && scene && camera) {
+      renderer.render(scene, camera);
       for (const animationCallback of Object.values(animations)) {
         if (animationCallback.obj) {
           animationCallback.callback(animationCallback.obj, {
@@ -54,8 +55,6 @@ export class LoopService implements OnDestroy {
           });
         }
       }
-
-      renderer.render(scene, camera);
     }
   }
 
