@@ -1,4 +1,5 @@
-import { Directive, Input, OnChanges, OnInit } from '@angular/core';
+import { ThreeBufferGeometry } from '@angular-three/core/geometries';
+import { Directive, Input, OnChanges, OnInit, Optional } from '@angular/core';
 import type { BuiltinShaderAttributeName } from 'three';
 import { BufferAttribute } from 'three';
 
@@ -10,6 +11,10 @@ export abstract class ThreeAttribute<
   @Input() attach?: BuiltinShaderAttributeName;
 
   abstract attributeType: TAttributeConstructor;
+
+  constructor(
+    @Optional() protected readonly geometryDirective?: ThreeBufferGeometry
+  ) {}
 
   private _extraArgs: unknown[] = [];
 
@@ -29,6 +34,18 @@ export abstract class ThreeAttribute<
     this._attribute = new ((this.attributeType as unknown) as new (
       ...args: unknown[]
     ) => TAttribute)(...this._extraArgs) as TAttribute;
+    if (this.geometryDirective && this.attach) {
+      this.geometryDirective.bufferGeometry.setAttribute(
+        this.attach,
+        this.attribute
+      );
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.geometryDirective && this.attach) {
+      this.geometryDirective.bufferGeometry.deleteAttribute(this.attach);
+    }
   }
 
   get attribute(): TAttribute {
