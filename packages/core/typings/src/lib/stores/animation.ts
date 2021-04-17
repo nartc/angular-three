@@ -9,11 +9,13 @@ export type AnimationCallback<TObject = null> = TObject extends null
 export interface AnimationRecord {
   obj: Object3D;
   callback: AnimationCallback<Object3D>;
+  priority?: number;
 }
 
 export interface AnimationRecordNoObject {
   obj: null;
   callback: AnimationCallback;
+  priority?: number;
 }
 
 export interface AnimationStoreState {

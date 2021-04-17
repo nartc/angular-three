@@ -58,18 +58,23 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
 
   registerAnimation<TObject3d extends Object3D = Object3D>(
     obj: TObject3d,
-    callback: AnimationCallback<TObject3d>
+    callback: AnimationCallback<TObject3d>,
+    priority?: number
   ): void;
   registerAnimation<TObject3d extends Object3D = Object3D>(
     obs: Observable<TObject3d | null>,
-    callback: AnimationCallback<TObject3d>
+    callback: AnimationCallback<TObject3d>,
+    priority?: number
   ): void;
-  registerAnimation(callback: AnimationCallback): void;
+  registerAnimation(callback: AnimationCallback, priority?: number): void;
   registerAnimation<TObject3d extends Object3D = Object3D>(
     objOrObsOrCallback: TObject3d | Observable<TObject3d> | AnimationCallback,
-    callback?: (obj: TObject3d, state: RenderState) => void
+    callbackOrPriority?:
+      | ((obj: TObject3d, state: RenderState) => void)
+      | number,
+    priority = 0
   ) {
-    if (objOrObsOrCallback == null) return;
+    if (objOrObsOrCallback === undefined) return;
 
     if (typeof objOrObsOrCallback === 'function') {
       this.patchState((state) => ({
@@ -79,6 +84,7 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
           [makeId()]: {
             obj: null,
             callback: objOrObsOrCallback,
+            priority: (callbackOrPriority as number) || 0,
           },
         },
       }));
@@ -99,7 +105,8 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
                 ...state.animations,
                 [obj.uuid]: {
                   obj,
-                  callback: callback as AnimationCallback<TObject3d>,
+                  callback: callbackOrPriority as AnimationCallback<TObject3d>,
+                  priority,
                 },
               },
               objectSubscriptions,
@@ -120,7 +127,8 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
         ...state.animations,
         [(objOrObsOrCallback as Object3D).uuid]: {
           obj: objOrObsOrCallback,
-          callback: callback as AnimationCallback<TObject3d>,
+          callback: callbackOrPriority as AnimationCallback<TObject3d>,
+          priority,
         },
       },
     }));

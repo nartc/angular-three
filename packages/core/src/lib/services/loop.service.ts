@@ -35,8 +35,18 @@ export class LoopService implements OnDestroy {
     const { animations } = this.animationStore.getImperativeState();
 
     if (renderer && scene && camera) {
-      renderer.render(scene, camera);
-      for (const animationCallback of Object.values(animations)) {
+      const animationsCallbacks = Object.values(animations);
+      const hasPriority = animationsCallbacks.some(
+        ({ priority }) => !!priority
+      );
+
+      if (hasPriority) {
+        animationsCallbacks.sort(({ priority: a }, { priority: b }) => a! - b!);
+      } else {
+        renderer.render(scene, camera);
+      }
+
+      for (const animationCallback of animationsCallbacks) {
         if (animationCallback.obj) {
           animationCallback.callback(animationCallback.obj, {
             clock,
