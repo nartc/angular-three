@@ -28,7 +28,11 @@
       "tags": ["scope:core", "type:library", "context:loaders"]
     },
     "demo": { "tags": [] },
-    "core-stats": { "tags": ["scope:core", "type:library", "context:stats"] }
+    "core-stats": { "tags": ["scope:core", "type:library", "context:stats"] },
+    "controls": { "tags": ["scope:controls", "type:library"] },
+    "controls-orbit-controls": {
+      "tags": ["scope:controls", "type:library", "context:orbit-controls"]
+    }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

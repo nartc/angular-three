@@ -376,6 +376,80 @@
           }
         }
       }
+    },
+    "controls": {
+      "projectType": "library",
+      "root": "packages/controls",
+      "sourceRoot": "packages/controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/tsconfig.lib.json",
+            "project": "packages/controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/src/**/*.ts",
+              "packages/controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls"],
+          "options": {
+            "jestConfig": "packages/controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "controls-orbit-controls": {
+      "projectType": "library",
+      "root": "packages/controls/orbit-controls",
+      "sourceRoot": "packages/controls/orbit-controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.json",
+            "project": "packages/controls/orbit-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/orbit-controls/src/**/*.ts",
+              "packages/controls/orbit-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/orbit-controls"],
+          "options": {
+            "jestConfig": "packages/controls/orbit-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
