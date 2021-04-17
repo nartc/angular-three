@@ -35,6 +35,10 @@
     },
     "core-attributes": {
       "tags": ["scope:core", "type:library", "context:attributes"]
+    },
+    "postprocessing": { "tags": ["scope:postprocessing", "type:library"] },
+    "postprocessing-render-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:render-pass"]
     }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }

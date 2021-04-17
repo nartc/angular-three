@@ -487,6 +487,80 @@
           }
         }
       }
+    },
+    "postprocessing": {
+      "projectType": "library",
+      "root": "packages/postprocessing",
+      "sourceRoot": "packages/postprocessing/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/tsconfig.lib.json",
+            "project": "packages/postprocessing/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/src/**/*.ts",
+              "packages/postprocessing/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing"],
+          "options": {
+            "jestConfig": "packages/postprocessing/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "postprocessing-render-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/render-pass",
+      "sourceRoot": "packages/postprocessing/render-pass/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/render-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/render-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/render-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/render-pass/src/**/*.ts",
+              "packages/postprocessing/render-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/render-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/render-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

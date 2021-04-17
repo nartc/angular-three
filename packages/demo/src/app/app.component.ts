@@ -4,19 +4,19 @@ import { Color } from 'three';
 @Component({
   selector: 'demo-root',
   template: `
-    <!--    <ngt-canvas-->
-    <!--      [linear]="true"-->
-    <!--      [camera]="{ position: [0, 0, 15], near: 5, far: 20 }"-->
-    <!--      (created)="$event.gl.setClearColor('lightpink')"-->
-    <!--    >-->
-    <!--      <ngt-stats></ngt-stats>-->
-    <!--      <ngt-ambientLight></ngt-ambientLight>-->
-    <!--      <ngt-pointLight-->
-    <!--        [position]="[150, 150, 150]"-->
-    <!--        [args]="[undefined, 0.55]"-->
-    <!--      ></ngt-pointLight>-->
-    <!--      <demo-boxes></demo-boxes>-->
-    <!--    </ngt-canvas>-->
+    <ngt-canvas
+      [linear]="true"
+      [camera]="{ position: [0, 0, 15], near: 5, far: 20 }"
+      (created)="$event.gl.setClearColor('lightpink')"
+    >
+      <ngt-stats></ngt-stats>
+      <ngt-ambientLight></ngt-ambientLight>
+      <ngt-pointLight
+        [position]="[150, 150, 150]"
+        [args]="[undefined, 0.55]"
+      ></ngt-pointLight>
+      <demo-boxes></demo-boxes>
+    </ngt-canvas>
     <!--        <ngt-canvas-->
     <!--          [camera]="{ position: [0, 0, 5] }"-->
     <!--          [scene]="{ background: sceneColor }"-->

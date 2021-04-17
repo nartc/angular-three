@@ -11,5 +11,7 @@ module.exports = {
     '<rootDir>/packages/controls',
     '<rootDir>/packages/controls/orbit-controls',
     '<rootDir>/packages/core/attributes',
+    '<rootDir>/packages/postprocessing',
+    '<rootDir>/packages/postprocessing/render-pass',
   ],
 };

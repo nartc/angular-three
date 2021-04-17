@@ -31,6 +31,10 @@
       ],
       "@angular-three/core/attributes": [
         "packages/core/attributes/src/index.ts"
+      ],
+      "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
+      "@angular-three/postprocessing/render-pass": [
+        "packages/postprocessing/render-pass/src/index.ts"
       ]
     }
   },
