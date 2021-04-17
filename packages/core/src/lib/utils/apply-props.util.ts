@@ -55,5 +55,11 @@ export function applyProps(
         ((instance as unknown) as Record<string, unknown>)[key] = propAtKey;
       }
     }
+    if (
+      typeof propAtKey === 'object' &&
+      'needsUpdate' in (propAtKey as Record<string, unknown>)
+    ) {
+      (propAtKey as Record<string, unknown>)['needsUpdate'] = true;
+    }
   }
 }
