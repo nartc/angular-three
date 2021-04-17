@@ -23,7 +23,7 @@ export class InstancedMeshDirective
   }
 
   protected canCreate(): boolean {
-    return !this.object3d && this.geometry;
+    return !this.object3d && (this.geometry || this.bufferGeometryDirective);
   }
 
   customize = () => {

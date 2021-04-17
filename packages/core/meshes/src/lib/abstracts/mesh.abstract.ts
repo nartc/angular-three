@@ -1,14 +1,21 @@
 import { ThreeObject3d } from '@angular-three/core';
 import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import { ThreeMaterial } from '@angular-three/core/materials';
-import { ContentChild, Directive, Input } from '@angular/core';
+import {
+  AfterContentInit,
+  ContentChild,
+  Directive,
+  Input,
+} from '@angular/core';
 import { BufferGeometry, Material, Mesh } from 'three';
 
 @Directive()
 export abstract class ThreeMesh<
-  TMesh extends Mesh = Mesh,
-  TMeshConstructor extends typeof Mesh = typeof Mesh
-> extends ThreeObject3d<TMesh> {
+    TMesh extends Mesh = Mesh,
+    TMeshConstructor extends typeof Mesh = typeof Mesh
+  >
+  extends ThreeObject3d<TMesh>
+  implements AfterContentInit {
   @Input() geometry?: string | BufferGeometry | null;
   @Input() material?: string | Material | null;
 
@@ -22,6 +29,10 @@ export abstract class ThreeMesh<
   private _extraArgs?: unknown[];
   set extraArgs(v: unknown[]) {
     this._extraArgs = v;
+  }
+
+  ngAfterContentInit() {
+    this.init();
   }
 
   protected initObject() {
