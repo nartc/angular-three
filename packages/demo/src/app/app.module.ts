@@ -1,3 +1,4 @@
+import { OrbitControlsModule } from '@angular-three/controls/orbit-controls';
 import { ThreeCoreModule } from '@angular-three/core';
 import { BoxBufferGeometryModule } from '@angular-three/core/geometries';
 import {
@@ -16,10 +17,16 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { BoxComponent } from './box.component';
+import { OrbitControlsComponent } from './orbit-controls.component';
 import { SuzanneComponent } from './suzanne.component';
 
 @NgModule({
-  declarations: [AppComponent, BoxComponent, SuzanneComponent],
+  declarations: [
+    AppComponent,
+    BoxComponent,
+    SuzanneComponent,
+    OrbitControlsComponent,
+  ],
   imports: [
     BrowserModule,
     ThreeCoreModule,
@@ -32,6 +39,7 @@ import { SuzanneComponent } from './suzanne.component';
     InstancedMeshModule,
     MeshNormalMaterialModule,
     ThreeCoreStatsModule,
+    OrbitControlsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
