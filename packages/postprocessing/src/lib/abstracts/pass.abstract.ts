@@ -21,6 +21,9 @@ export abstract class ThreePass<TPass extends Pass = Pass>
 
   ngOnInit() {
     this._pass = new this.passType(...this._extraArgs);
+    if (this.customize) {
+      this.customize();
+    }
     if (this.composer) {
       this.composer.composer.addPass(this.pass);
     }
@@ -35,4 +38,6 @@ export abstract class ThreePass<TPass extends Pass = Pass>
   get pass(): TPass {
     return this._pass;
   }
+
+  customize?: () => void;
 }

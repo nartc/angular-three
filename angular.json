@@ -572,6 +572,43 @@
           }
         }
       }
+    },
+    "postprocessing-ssao-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/ssao-pass",
+      "sourceRoot": "packages/postprocessing/ssao-pass/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/ssao-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/ssao-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/ssao-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/ssao-pass/src/**/*.ts",
+              "packages/postprocessing/ssao-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/ssao-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/ssao-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

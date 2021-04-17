@@ -37,7 +37,10 @@
     "postprocessing-render-pass": {
       "tags": ["scope:postprocessing", "type:library", "context:render-pass"]
     },
-    "core-canvas": { "tags": ["scope:core", "type:library", "context:canvas"] }
+    "core-canvas": { "tags": ["scope:core", "type:library", "context:canvas"] },
+    "postprocessing-ssao-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:ssao-pass"]
+    }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }
