@@ -16,6 +16,7 @@ import { Color } from 'three';
         [args]="[undefined, 0.55]"
       ></ngt-pointLight>
       <demo-boxes></demo-boxes>
+      <demo-boxes-effects></demo-boxes-effects>
     </ngt-canvas>
     <!--        <ngt-canvas-->
     <!--          [camera]="{ position: [0, 0, 5] }"-->
