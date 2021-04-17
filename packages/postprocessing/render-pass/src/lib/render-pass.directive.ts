@@ -13,4 +13,8 @@ export class RenderPassDirective extends ThreePass<RenderPass> {
   }
 
   passType = RenderPass;
+
+  protected get useSceneAndCamera(): boolean {
+    return true;
+  }
 }
