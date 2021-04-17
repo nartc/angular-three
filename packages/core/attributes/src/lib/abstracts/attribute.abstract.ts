@@ -1,5 +1,12 @@
 import { ThreeBufferGeometry } from '@angular-three/core/geometries';
-import { Directive, Input, OnChanges, OnInit, Optional } from '@angular/core';
+import {
+  Directive,
+  Input,
+  NgZone,
+  OnChanges,
+  OnInit,
+  Optional,
+} from '@angular/core';
 import type { BuiltinShaderAttributeName } from 'three';
 import { BufferAttribute } from 'three';
 
@@ -13,6 +20,7 @@ export abstract class ThreeAttribute<
   abstract attributeType: TAttributeConstructor;
 
   constructor(
+    protected readonly ngZone: NgZone,
     @Optional() protected readonly geometryDirective?: ThreeBufferGeometry
   ) {}
 
@@ -25,27 +33,33 @@ export abstract class ThreeAttribute<
   private _attribute!: TAttribute;
 
   ngOnChanges() {
-    if (this.attribute) {
-      this.attribute.needsUpdate = true;
-    }
+    this.ngZone.runOutsideAngular(() => {
+      if (this.attribute) {
+        this.attribute.needsUpdate = true;
+      }
+    });
   }
 
   ngOnInit() {
-    this._attribute = new ((this.attributeType as unknown) as new (
-      ...args: unknown[]
-    ) => TAttribute)(...this._extraArgs) as TAttribute;
-    if (this.geometryDirective && this.attach) {
-      this.geometryDirective.bufferGeometry.setAttribute(
-        this.attach,
-        this.attribute
-      );
-    }
+    this.ngZone.runOutsideAngular(() => {
+      this._attribute = new ((this.attributeType as unknown) as new (
+        ...args: unknown[]
+      ) => TAttribute)(...this._extraArgs) as TAttribute;
+      if (this.geometryDirective && this.attach) {
+        this.geometryDirective.bufferGeometry.setAttribute(
+          this.attach,
+          this.attribute
+        );
+      }
+    });
   }
 
   ngOnDestroy() {
-    if (this.geometryDirective && this.attach) {
-      this.geometryDirective.bufferGeometry.deleteAttribute(this.attach);
-    }
+    this.ngZone.runOutsideAngular(() => {
+      if (this.geometryDirective && this.attach) {
+        this.geometryDirective.bufferGeometry.deleteAttribute(this.attach);
+      }
+    });
   }
 
   get attribute(): TAttribute {
