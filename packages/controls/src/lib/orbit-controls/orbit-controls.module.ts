@@ -3,12 +3,8 @@ import { NgModule } from '@angular/core';
 import { OrbitControlsDirective } from './orbit-controls.directive';
 
 @NgModule({
+  declarations: [OrbitControlsDirective],
   imports: [CommonModule],
-  declarations: [
-    OrbitControlsDirective
-  ],
-  exports: [
-    OrbitControlsDirective
-  ],
+  exports: [OrbitControlsDirective],
 })
 export class OrbitControlsModule {}

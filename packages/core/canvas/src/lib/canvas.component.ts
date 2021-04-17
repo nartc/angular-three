@@ -1,3 +1,11 @@
+import {
+  AnimationStore,
+  CanvasStore,
+  DestroyedService,
+  EventsStore,
+  InstancesStore,
+  LoopService,
+} from '@angular-three/core';
 import type {
   CameraOptions,
   RaycasterOptions,
@@ -24,13 +32,6 @@ import {
 import { asyncScheduler } from 'rxjs';
 import { observeOn, takeUntil } from 'rxjs/operators';
 import type { Scene, WebGLRenderer, WebGLShadowMap } from 'three';
-import { DestroyedService, LoopService } from '../services';
-import {
-  AnimationStore,
-  CanvasStore,
-  EventsStore,
-  InstancesStore,
-} from '../stores';
 
 @Component({
   selector: 'ngt-canvas',

@@ -4,7 +4,7 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "three": "three"
+      "three/examples/jsm/postprocessing/RenderPass": "three/examples/jsm/postprocessing/RenderPass"
     }
   }
 }

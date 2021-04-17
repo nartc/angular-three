@@ -35,6 +35,17 @@
             "jestConfig": "packages/core/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "build-all": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "npx ng run core:build",
+              "npx ng run postprocessing:build",
+              "npx ng run controls:build"
+            ],
+            "parallel": false
+          }
         }
       }
     },
@@ -414,43 +425,6 @@
         }
       }
     },
-    "controls-orbit-controls": {
-      "projectType": "library",
-      "root": "packages/controls/orbit-controls",
-      "sourceRoot": "packages/controls/orbit-controls/src",
-      "prefix": "ngt",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/angular:package",
-          "options": {
-            "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.json",
-            "project": "packages/controls/orbit-controls/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "packages/controls/orbit-controls/src/**/*.ts",
-              "packages/controls/orbit-controls/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls/orbit-controls"],
-          "options": {
-            "jestConfig": "packages/controls/orbit-controls/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "core-attributes": {
       "projectType": "library",
       "root": "packages/core/attributes",
@@ -557,6 +531,43 @@
           "outputs": ["coverage/packages/postprocessing/render-pass"],
           "options": {
             "jestConfig": "packages/postprocessing/render-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "core-canvas": {
+      "projectType": "library",
+      "root": "packages/core/canvas",
+      "sourceRoot": "packages/core/canvas/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/canvas/tsconfig.lib.json",
+            "project": "packages/core/canvas/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/canvas/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/canvas/src/**/*.ts",
+              "packages/core/canvas/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/canvas"],
+          "options": {
+            "jestConfig": "packages/core/canvas/jest.config.js",
             "passWithNoTests": true
           }
         }

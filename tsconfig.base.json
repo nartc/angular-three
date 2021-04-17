@@ -10,33 +10,57 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@angular-three/core": ["packages/core/src/index.ts"],
-      "@angular-three/core/typings": ["packages/core/typings/src/index.ts"],
-      "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
+      "@angular-three/core": [
+        "packages/core/src/index.ts"
+      ],
+      "@angular-three/core/typings": [
+        "packages/core/typings/src/index.ts"
+      ],
+      "@angular-three/core/materials": [
+        "packages/core/materials/src/index.ts"
+      ],
       "@angular-three/core/geometries": [
         "packages/core/geometries/src/index.ts"
       ],
-      "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
-      "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
-      "@angular-three/core/loaders": ["packages/core/loaders/src/index.ts"],
-      "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
-      "@angular-three/controls": ["packages/controls/src/index.ts"],
-      "@angular-three/controls/orbit-controls": [
-        "packages/controls/orbit-controls/src/index.ts"
+      "@angular-three/core/meshes": [
+        "packages/core/meshes/src/index.ts"
+      ],
+      "@angular-three/core/lights": [
+        "packages/core/lights/src/index.ts"
+      ],
+      "@angular-three/core/loaders": [
+        "packages/core/loaders/src/index.ts"
+      ],
+      "@angular-three/core/stats": [
+        "packages/core/stats/src/index.ts"
+      ],
+      "@angular-three/controls": [
+        "packages/controls/src/index.ts"
       ],
       "@angular-three/core/attributes": [
         "packages/core/attributes/src/index.ts"
       ],
-      "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
+      "@angular-three/postprocessing": [
+        "packages/postprocessing/src/index.ts"
+      ],
       "@angular-three/postprocessing/render-pass": [
         "packages/postprocessing/render-pass/src/index.ts"
+      ],
+      "@angular-three/core/canvas": [
+        "packages/core/canvas/src/index.ts"
       ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'controls-orbit-controls',
+  displayName: 'core-canvas',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -14,7 +14,7 @@ module.exports = {
       },
     },
   },
-  coverageDirectory: '../../../coverage/packages/controls/orbit-controls',
+  coverageDirectory: '../../../coverage/packages/core/canvas',
   snapshotSerializers: [
     'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
     'jest-preset-angular/build/AngularSnapshotSerializer.js',

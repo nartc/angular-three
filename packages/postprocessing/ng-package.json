@@ -4,7 +4,8 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "three": "three"
+      "three/examples/jsm/postprocessing/EffectComposer": "three/examples/jsm/postprocessing/EffectComposer",
+      "@angular-three/core": "@angular-three/core"
     }
   }
 }

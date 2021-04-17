@@ -1,5 +1,5 @@
 {
-  "name": "@angular-three/controls/orbit-controls",
+  "name": "@angular-three/core/canvas",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^11.2.10",

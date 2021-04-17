@@ -30,16 +30,14 @@
     "demo": { "tags": [] },
     "core-stats": { "tags": ["scope:core", "type:library", "context:stats"] },
     "controls": { "tags": ["scope:controls", "type:library"] },
-    "controls-orbit-controls": {
-      "tags": ["scope:controls", "type:library", "context:orbit-controls"]
-    },
     "core-attributes": {
       "tags": ["scope:core", "type:library", "context:attributes"]
     },
     "postprocessing": { "tags": ["scope:postprocessing", "type:library"] },
     "postprocessing-render-pass": {
       "tags": ["scope:postprocessing", "type:library", "context:render-pass"]
-    }
+    },
+    "core-canvas": { "tags": ["scope:core", "type:library", "context:canvas"] }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

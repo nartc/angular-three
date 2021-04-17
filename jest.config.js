@@ -9,9 +9,9 @@ module.exports = {
     '<rootDir>/packages/core/loaders',
     '<rootDir>/packages/core/stats',
     '<rootDir>/packages/controls',
-    '<rootDir>/packages/controls/orbit-controls',
     '<rootDir>/packages/core/attributes',
     '<rootDir>/packages/postprocessing',
     '<rootDir>/packages/postprocessing/render-pass',
+    '<rootDir>/packages/core/canvas',
   ],
 };
