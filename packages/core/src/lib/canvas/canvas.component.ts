@@ -24,7 +24,6 @@ import {
 import { asyncScheduler } from 'rxjs';
 import { observeOn, takeUntil } from 'rxjs/operators';
 import type { Scene, WebGLRenderer, WebGLShadowMap } from 'three';
-import type Stats from 'three/examples/jsm/libs/stats.module';
 import { DestroyedService, LoopService } from '../services';
 import {
   AnimationStore,
@@ -81,8 +80,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   @Input() scene?: SceneOptions;
   @Input() raycaster?: RaycasterOptions = {};
 
-  @Input() stats?: Stats;
-
   @Output() created = new EventEmitter<{
     gl: WebGLRenderer;
     camera: ThreeCamera;
@@ -113,13 +110,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ngZone.runOutsideAngular(() => {
-      if (this.stats) {
-        this.document.body.appendChild(this.stats.dom);
-        this.animationStore.registerAnimation(() => {
-          this.stats!.update();
-        });
-      }
-
       this.canvasStore.initRendererEffect(this.rendererCanvas.nativeElement);
       this.canvasStore.initSceneEffect(this.scene);
       this.canvasStore.initCameraEffect(this.camera);
