@@ -1,6 +1,6 @@
 {
   "npmScope": "angular-three",
-  "affected": { "defaultBase": "master" },
+  "affected": { "defaultBase": "main" },
   "implicitDependencies": {
     "package.json": { "dependencies": "*", "devDependencies": "*" },
     ".eslintrc.json": "*"

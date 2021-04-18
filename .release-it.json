@@ -1,0 +1,48 @@
+{
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": {
+        "name": "conventionalcommits",
+        "types": [
+          {
+            "type": "feat",
+            "section": "Features"
+          },
+          {
+            "type": "fix",
+            "section": "Bug Fixes"
+          },
+          {
+            "type": "perf",
+            "section": "Performances"
+          },
+          {
+            "type": "refactor",
+            "section": "Refactor"
+          },
+          {
+            "type": "docs",
+            "section": "Documentations"
+          }
+        ]
+      },
+      "infile": "CHANGELOG.md"
+    },
+    "@release-it/bumper": {
+      "out": [
+        "package.json",
+        "package-lock.json",
+        "packages/**/package*.json"
+      ]
+    }
+  },
+  "npm": {
+    "publish": false
+  },
+  "git": {
+    "commitMessage": "Prepare release ${version}"
+  },
+  "github": {
+    "releaseNotes": true
+  }
+}
