@@ -17,5 +17,6 @@ module.exports = {
     '<rootDir>/packages/postprocessing/unreal-bloom-pass',
     '<rootDir>/packages/postprocessing/shader-pass',
     '<rootDir>/packages/core/group',
+    '<rootDir>/packages/core/scene',
   ],
 };
