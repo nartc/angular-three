@@ -1,2 +1,2 @@
-export * from './text-geometry.directive';
-export * from './text-geometry.module';
+export * from './text-buffer-geometry.directive';
+export * from './text-buffer-geometry.module';
