@@ -7,4 +7,5 @@ export * from './lib/instance';
 export * from './lib/intersection';
 export * from './lib/render';
 export * from './lib/three';
+export * from './lib/common';
 export * from './lib/stores';

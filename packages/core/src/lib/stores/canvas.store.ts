@@ -8,6 +8,7 @@ import type {
   ThreeCamera,
   ThreeInstance,
   ThreeRaycaster,
+  UnknownRecord,
 } from '@angular-three/core/typings';
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
@@ -139,55 +140,57 @@ export class CanvasStore extends ImperativeComponentStore<CanvasStoreState> {
     );
   });
 
-  readonly initSceneEffect = this.effect<SceneOptions | undefined>((sceneOptions$) =>
-    sceneOptions$.pipe(
-      tap((sceneOptions: SceneOptions | undefined) => {
-        const scene = new Scene();
-        applyProps(scene, sceneOptions as Record<string, unknown>);
-        this.patchState({ scene });
-      })
-    )
+  readonly initSceneEffect = this.effect<SceneOptions | undefined>(
+    (sceneOptions$) =>
+      sceneOptions$.pipe(
+        tap((sceneOptions: SceneOptions | undefined) => {
+          const scene = new Scene();
+          applyProps(scene, sceneOptions as UnknownRecord);
+          this.patchState({ scene });
+        })
+      )
   );
 
-  readonly initCameraEffect = this.effect<CameraOptions | undefined>((cameraOptions$) =>
-    cameraOptions$.pipe(
-      withLatestFrom(this.isOrthographic$, this.canvasInternal$),
-      tap(
-        ([cameraOptions, isOrthographic, { size }]: [
-          CameraOptions | undefined,
-          boolean,
-          CanvasInternal
-        ]) => {
-          const isCamera = cameraOptions instanceof Camera;
-          let camera: ThreeCamera;
+  readonly initCameraEffect = this.effect<CameraOptions | undefined>(
+    (cameraOptions$) =>
+      cameraOptions$.pipe(
+        withLatestFrom(this.isOrthographic$, this.canvasInternal$),
+        tap(
+          ([cameraOptions, isOrthographic, { size }]: [
+            CameraOptions | undefined,
+            boolean,
+            CanvasInternal
+          ]) => {
+            const isCamera = cameraOptions instanceof Camera;
+            let camera: ThreeCamera;
 
-          if (isCamera) {
-            camera = cameraOptions as ThreeCamera;
-          } else {
-            if (isOrthographic) {
-              camera = new OrthographicCamera(0, 0, 0, 0, 0.1, 1000);
-              camera.zoom = 100;
+            if (isCamera) {
+              camera = cameraOptions as ThreeCamera;
             } else {
-              camera = new PerspectiveCamera(
-                75,
-                size.width / size.height ?? 0,
-                0.1,
-                1000
-              );
+              if (isOrthographic) {
+                camera = new OrthographicCamera(0, 0, 0, 0, 0.1, 1000);
+                camera.zoom = 100;
+              } else {
+                camera = new PerspectiveCamera(
+                  75,
+                  size.width / size.height ?? 0,
+                  0.1,
+                  1000
+                );
+              }
+
+              camera.position.z = 5;
+
+              applyProps(camera, cameraOptions as UnknownRecord);
             }
 
-            camera.position.z = 5;
+            // look at center by default
+            camera.lookAt(0, 0, 0);
 
-            applyProps(camera, cameraOptions as Record<string, unknown>);
+            this.patchState({ camera });
           }
-
-          // look at center by default
-          camera.lookAt(0, 0, 0);
-
-          this.patchState({ camera });
-        }
+        )
       )
-    )
   );
 
   readonly initRaycasterEffect = this.effect<RaycasterOptions | undefined>(
@@ -198,7 +201,7 @@ export class CanvasStore extends ImperativeComponentStore<CanvasStoreState> {
           raycaster.enabled = true;
           applyProps(
             (raycaster as unknown) as ThreeInstance,
-            raycasterOptions as Record<string, unknown>
+            raycasterOptions as UnknownRecord
           );
           this.patchState({ raycaster });
         })

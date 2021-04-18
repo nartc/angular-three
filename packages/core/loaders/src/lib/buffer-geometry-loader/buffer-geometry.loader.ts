@@ -1,3 +1,4 @@
+import type { UnknownRecord } from '@angular-three/core/typings';
 import { defer, from, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import type { BufferGeometry, InstancedBufferGeometry } from 'three';
@@ -6,7 +7,7 @@ import { BufferGeometryLoader } from 'three';
 const bufferGeometryLoader = new BufferGeometryLoader();
 
 export function loadBufferGeometry(
-  data: string | Record<string, unknown>,
+  data: string | UnknownRecord,
   onLoad?: (geometry: InstancedBufferGeometry | BufferGeometry) => void
 ): Observable<InstancedBufferGeometry | BufferGeometry> {
   return defer(() => {

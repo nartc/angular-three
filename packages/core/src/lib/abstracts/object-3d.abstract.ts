@@ -7,6 +7,7 @@ import type {
   ThreeInstance,
   ThreeQuaternion,
   ThreeVector3,
+  UnknownRecord,
 } from '@angular-three/core/typings';
 import {
   Directive,
@@ -39,7 +40,7 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   @Input() quaternion?: ThreeQuaternion;
   @Input() scale?: ThreeVector3;
   @Input() color?: ThreeColor;
-  @Input() userData?: Record<string, unknown>;
+  @Input() userData?: UnknownRecord;
   @Input() visible = true;
   @Input() matrixAutoUpdate = true;
 
@@ -145,7 +146,7 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     const customProps = {
       visible: this.visible,
       matrixAutoUpdate: this.matrixAutoUpdate,
-    } as Record<string, unknown>;
+    } as UnknownRecord;
 
     if (this.position) {
       customProps['position'] = this.position;

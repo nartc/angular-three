@@ -1,5 +1,5 @@
 import { CanvasStore, InstancesStore } from '@angular-three/core';
-import { ThreeColor } from '@angular-three/core/typings';
+import type { ThreeColor, UnknownRecord } from '@angular-three/core/typings';
 import { Directive, Input, NgZone, SkipSelf } from '@angular/core';
 import { Color, Material, MaterialParameters } from 'three';
 
@@ -52,19 +52,13 @@ export abstract class ThreeMaterial<
 
   private convertColorToLinear(parameters: TMaterialParameters) {
     if ('color' in parameters) {
-      const colorParams = (parameters as Record<string, unknown>)[
-        'color'
-      ] as ThreeColor;
-      (parameters as Record<string, unknown>)['color'] = Array.isArray(
-        colorParams
-      )
+      const colorParams = (parameters as UnknownRecord)['color'] as ThreeColor;
+      (parameters as UnknownRecord)['color'] = Array.isArray(colorParams)
         ? new Color(...colorParams)
         : new Color(colorParams);
 
       if (!this.canvasStore.getImperativeState().isLinear) {
-        ((parameters as Record<string, unknown>)[
-          'color'
-        ] as Color).convertSRGBToLinear();
+        ((parameters as UnknownRecord)['color'] as Color).convertSRGBToLinear();
       }
     }
   }
