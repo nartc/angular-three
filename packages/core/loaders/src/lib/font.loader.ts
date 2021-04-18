@@ -1,4 +1,4 @@
-import { UnknownRecord } from '@angular-three/core/typings';
+import type { UnknownRecord } from '@angular-three/core';
 import { defer, from, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Font, FontLoader } from 'three';

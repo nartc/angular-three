@@ -1,12 +1,12 @@
-import type {
-  AnimationCallback,
-  AnimationStoreState,
-  RenderState,
-} from '@angular-three/core/typings';
 import { Injectable } from '@angular/core';
 import { isObservable, Observable } from 'rxjs';
 import { filter, tap, withLatestFrom } from 'rxjs/operators';
 import type { Object3D } from 'three';
+import type {
+  AnimationCallback,
+  AnimationStoreState,
+  RenderState,
+} from '../typings';
 import { makeId } from '../utils';
 import { ImperativeComponentStore } from './imperative-component-store.abstract';
 

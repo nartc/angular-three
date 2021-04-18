@@ -1,6 +1,6 @@
+import type { ThreeEuler, ThreeVector3 } from '@angular-three/core';
 import { AnimationStore } from '@angular-three/core';
 import { GroupDirective } from '@angular-three/core/group';
-import type { ThreeEuler, ThreeVector3 } from '@angular-three/core/typings';
 import { loadGLTF } from '@angular-three/loaders/gltf-loader';
 import {
   ChangeDetectionStrategy,

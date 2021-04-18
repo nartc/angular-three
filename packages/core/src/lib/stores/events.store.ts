@@ -1,6 +1,6 @@
-import { EventsStoreState, ThreeDomEvent } from '@angular-three/core/typings';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
+import type { EventsStoreState, ThreeDomEvent } from '../typings';
 import { createEvents } from '../utils';
 import { CanvasStore } from './canvas.store';
 import { ImperativeComponentStore } from './imperative-component-store.abstract';

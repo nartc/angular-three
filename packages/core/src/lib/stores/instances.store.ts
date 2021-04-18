@@ -1,9 +1,6 @@
-import type {
-  InstancesStoreState,
-  ThreeInstance,
-} from '@angular-three/core/typings';
 import { Injectable } from '@angular/core';
 import type { BufferGeometry, Material } from 'three';
+import type { InstancesStoreState, ThreeInstance } from '../typings';
 import { ImperativeComponentStore } from './imperative-component-store.abstract';
 
 @Injectable()

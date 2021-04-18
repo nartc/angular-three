@@ -1,5 +1,5 @@
+import type { ThreeInstance, UnknownRecord } from '@angular-three/core';
 import { applyProps, CanvasStore } from '@angular-three/core';
-import type { ThreeInstance, UnknownRecord } from '@angular-three/core/typings';
 import {
   Directive,
   EventEmitter,

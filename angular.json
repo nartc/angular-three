@@ -30,9 +30,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core"
-          ],
+          "outputs": ["coverage/packages/core"],
           "options": {
             "jestConfig": "packages/core/jest.config.js",
             "passWithNoTests": true
@@ -70,45 +68,6 @@
         }
       }
     },
-    "core-typings": {
-      "projectType": "library",
-      "root": "packages/core/typings",
-      "sourceRoot": "packages/core/typings/src",
-      "prefix": "angular-three",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/angular:package",
-          "options": {
-            "tsConfig": "packages/core/typings/tsconfig.lib.json",
-            "project": "packages/core/typings/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "packages/core/typings/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "packages/core/typings/src/**/*.ts",
-              "packages/core/typings/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/typings"
-          ],
-          "options": {
-            "jestConfig": "packages/core/typings/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "core-materials": {
       "projectType": "library",
       "root": "packages/core/materials",
@@ -138,9 +97,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/materials"
-          ],
+          "outputs": ["coverage/packages/core/materials"],
           "options": {
             "jestConfig": "packages/core/materials/jest.config.js",
             "passWithNoTests": true
@@ -177,9 +134,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/geometries"
-          ],
+          "outputs": ["coverage/packages/core/geometries"],
           "options": {
             "jestConfig": "packages/core/geometries/jest.config.js",
             "passWithNoTests": true
@@ -216,9 +171,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/meshes"
-          ],
+          "outputs": ["coverage/packages/core/meshes"],
           "options": {
             "jestConfig": "packages/core/meshes/jest.config.js",
             "passWithNoTests": true
@@ -255,9 +208,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/lights"
-          ],
+          "outputs": ["coverage/packages/core/lights"],
           "options": {
             "jestConfig": "packages/core/lights/jest.config.js",
             "passWithNoTests": true
@@ -294,9 +245,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/loaders"
-          ],
+          "outputs": ["coverage/packages/core/loaders"],
           "options": {
             "jestConfig": "packages/core/loaders/jest.config.js",
             "passWithNoTests": true
@@ -323,9 +272,7 @@
               "packages/demo/src/favicon.ico",
               "packages/demo/src/assets"
             ],
-            "styles": [
-              "packages/demo/src/styles.scss"
-            ],
+            "styles": ["packages/demo/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -415,9 +362,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/stats"
-          ],
+          "outputs": ["coverage/packages/core/stats"],
           "options": {
             "jestConfig": "packages/core/stats/jest.config.js",
             "passWithNoTests": true
@@ -454,9 +399,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/controls"
-          ],
+          "outputs": ["coverage/packages/controls"],
           "options": {
             "jestConfig": "packages/controls/jest.config.js",
             "passWithNoTests": true
@@ -500,9 +443,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/attributes"
-          ],
+          "outputs": ["coverage/packages/core/attributes"],
           "options": {
             "jestConfig": "packages/core/attributes/jest.config.js",
             "passWithNoTests": true
@@ -539,9 +480,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/postprocessing"
-          ],
+          "outputs": ["coverage/packages/postprocessing"],
           "options": {
             "jestConfig": "packages/postprocessing/jest.config.js",
             "passWithNoTests": true
@@ -585,9 +524,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/postprocessing/render-pass"
-          ],
+          "outputs": ["coverage/packages/postprocessing/render-pass"],
           "options": {
             "jestConfig": "packages/postprocessing/render-pass/jest.config.js",
             "passWithNoTests": true
@@ -624,9 +561,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/canvas"
-          ],
+          "outputs": ["coverage/packages/core/canvas"],
           "options": {
             "jestConfig": "packages/core/canvas/jest.config.js",
             "passWithNoTests": true
@@ -663,9 +598,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/postprocessing/ssao-pass"
-          ],
+          "outputs": ["coverage/packages/postprocessing/ssao-pass"],
           "options": {
             "jestConfig": "packages/postprocessing/ssao-pass/jest.config.js",
             "passWithNoTests": true
@@ -702,9 +635,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/postprocessing/unreal-bloom-pass"
-          ],
+          "outputs": ["coverage/packages/postprocessing/unreal-bloom-pass"],
           "options": {
             "jestConfig": "packages/postprocessing/unreal-bloom-pass/jest.config.js",
             "passWithNoTests": true
@@ -741,9 +672,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/postprocessing/shader-pass"
-          ],
+          "outputs": ["coverage/packages/postprocessing/shader-pass"],
           "options": {
             "jestConfig": "packages/postprocessing/shader-pass/jest.config.js",
             "passWithNoTests": true
@@ -780,9 +709,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/group"
-          ],
+          "outputs": ["coverage/packages/core/group"],
           "options": {
             "jestConfig": "packages/core/group/jest.config.js",
             "passWithNoTests": true
@@ -819,9 +746,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/core/scene"
-          ],
+          "outputs": ["coverage/packages/core/scene"],
           "options": {
             "jestConfig": "packages/core/scene/jest.config.js",
             "passWithNoTests": true
@@ -858,9 +783,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/loaders"
-          ],
+          "outputs": ["coverage/packages/loaders"],
           "options": {
             "jestConfig": "packages/loaders/jest.config.js",
             "passWithNoTests": true
@@ -904,9 +827,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/loaders/gltf-loader"
-          ],
+          "outputs": ["coverage/packages/loaders/gltf-loader"],
           "options": {
             "jestConfig": "packages/loaders/gltf-loader/jest.config.js",
             "passWithNoTests": true

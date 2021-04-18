@@ -1,4 +1,4 @@
-import type { ThreeIntersection } from '@angular-three/core/typings';
+import type { ThreeIntersection } from '../typings';
 
 /**
  * Generate a random Id or an Event's uuid

@@ -1,3 +1,5 @@
+import type { Object3D } from 'three';
+import { Vector3 } from 'three';
 import type {
   CanvasStoreState,
   EventHandlers,
@@ -8,9 +10,7 @@ import type {
   ThreeEvent,
   ThreeInstance,
   ThreeIntersection,
-} from '@angular-three/core/typings';
-import type { Object3D } from 'three';
-import { Vector3 } from 'three';
+} from '../typings';
 import { makeId } from './make-id.util';
 
 /**

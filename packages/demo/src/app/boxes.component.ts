@@ -1,6 +1,6 @@
+import type { ThreeEvent } from '@angular-three/core';
 import { AnimationStore } from '@angular-three/core';
 import { InstancedMeshDirective } from '@angular-three/core/meshes';
-import type { ThreeEvent } from '@angular-three/core/typings';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,

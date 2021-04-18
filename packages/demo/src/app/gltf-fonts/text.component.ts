@@ -1,5 +1,5 @@
+import type { ThreeVector3 } from '@angular-three/core';
 import { loadFont } from '@angular-three/core/loaders';
-import type { ThreeVector3 } from '@angular-three/core/typings';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Mesh, Vector3 } from 'three';
 

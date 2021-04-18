@@ -1,6 +1,6 @@
+import type { ThreeVector3 } from '@angular-three/core';
 import { AnimationStore } from '@angular-three/core';
 import { MeshDirective } from '@angular-three/core/meshes';
-import { ThreeVector3 } from '@angular-three/core/typings';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,

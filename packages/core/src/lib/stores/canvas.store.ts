@@ -1,15 +1,3 @@
-import type {
-  CameraOptions,
-  CanvasInternal,
-  CanvasStoreState,
-  RaycasterOptions,
-  SceneOptions,
-  Size,
-  ThreeCamera,
-  ThreeInstance,
-  ThreeRaycaster,
-  UnknownRecord,
-} from '@angular-three/core/typings';
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, mapTo, tap, withLatestFrom } from 'rxjs/operators';
@@ -27,6 +15,18 @@ import {
   WebGLRenderer,
   WebGLShadowMap,
 } from 'three';
+import type {
+  CameraOptions,
+  CanvasInternal,
+  CanvasStoreState,
+  RaycasterOptions,
+  SceneOptions,
+  Size,
+  ThreeCamera,
+  ThreeInstance,
+  ThreeRaycaster,
+  UnknownRecord,
+} from '../typings';
 import { applyProps } from '../utils';
 import { ImperativeComponentStore } from './imperative-component-store.abstract';
 

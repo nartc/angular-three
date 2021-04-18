@@ -2,7 +2,7 @@ import type {
   InstanceInternal,
   ThreeInstance,
   UnknownRecord,
-} from '@angular-three/core/typings';
+} from '../typings';
 
 function applyDottedPathProps(
   instance: ThreeInstance,

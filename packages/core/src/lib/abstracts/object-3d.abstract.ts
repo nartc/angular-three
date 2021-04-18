@@ -1,14 +1,3 @@
-import type {
-  EventHandlers,
-  InstanceInternal,
-  ThreeColor,
-  ThreeEuler,
-  ThreeEvent,
-  ThreeInstance,
-  ThreeQuaternion,
-  ThreeVector3,
-  UnknownRecord,
-} from '@angular-three/core/typings';
 import {
   Directive,
   EventEmitter,
@@ -31,6 +20,17 @@ import {
   EventsStore,
   InstancesStore,
 } from '../stores';
+import type {
+  EventHandlers,
+  InstanceInternal,
+  ThreeColor,
+  ThreeEuler,
+  ThreeEvent,
+  ThreeInstance,
+  ThreeQuaternion,
+  ThreeVector3,
+  UnknownRecord,
+} from '../typings';
 import { applyProps } from '../utils';
 
 @Directive()

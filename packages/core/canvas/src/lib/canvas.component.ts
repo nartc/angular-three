@@ -1,3 +1,9 @@
+import type {
+  CameraOptions,
+  RaycasterOptions,
+  SceneOptions,
+  ThreeCamera,
+} from '@angular-three/core';
 import {
   AnimationStore,
   CanvasStore,
@@ -6,12 +12,6 @@ import {
   InstancesStore,
   LoopService,
 } from '@angular-three/core';
-import type {
-  CameraOptions,
-  RaycasterOptions,
-  SceneOptions,
-  ThreeCamera,
-} from '@angular-three/core/typings';
 import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,

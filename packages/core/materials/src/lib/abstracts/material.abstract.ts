@@ -1,5 +1,5 @@
+import type { ThreeColor, UnknownRecord } from '@angular-three/core';
 import { CanvasStore, InstancesStore } from '@angular-three/core';
-import type { ThreeColor, UnknownRecord } from '@angular-three/core/typings';
 import { Directive, Input, NgZone, SkipSelf } from '@angular/core';
 import { Color, Material, MaterialParameters } from 'three';
 
