@@ -49,6 +49,24 @@
             ],
             "parallel": false
           }
+        },
+        "publish": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/core"
+          }
+        },
+        "publish-all": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "npx ng run core:publish",
+              "npx ng run postprocessing:publish",
+              "npx ng run controls:publish",
+              "npx ng run loaders:publish"
+            ]
+          }
         }
       }
     },
@@ -443,6 +461,13 @@
             "jestConfig": "packages/controls/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "publish": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/controls"
+          }
         }
       }
     },
@@ -520,6 +545,13 @@
           "options": {
             "jestConfig": "packages/postprocessing/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "publish": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/postprocessing"
           }
         }
       }
@@ -832,6 +864,13 @@
           "options": {
             "jestConfig": "packages/loaders/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "publish": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/loaders"
           }
         }
       }

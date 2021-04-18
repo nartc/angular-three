@@ -33,7 +33,8 @@
     "help": "nx help",
     "commit": "cz",
     "release": "release-it",
-    "build:all": "ng run core:build-all"
+    "build:all": "ng run core:build-all",
+    "publish:all": "ng run core:publish-all"
   },
   "private": true,
   "dependencies": {
