@@ -19,5 +19,6 @@ module.exports = {
     '<rootDir>/packages/core/group',
     '<rootDir>/packages/core/scene',
     '<rootDir>/packages/loaders',
+    '<rootDir>/packages/loaders/gltf-loader',
   ],
 };

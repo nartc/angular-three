@@ -53,7 +53,10 @@
     },
     "core-group": { "tags": ["scope:core", "type:library", "context:group"] },
     "core-scene": { "tags": ["scope:core", "type:library", "context:scene"] },
-    "loaders": { "tags": ["scope:loaders", "type:library"] }
+    "loaders": { "tags": ["scope:loaders", "type:library"] },
+    "loaders-gltf-loader": {
+      "tags": ["scope:loaders", "type:library", "context:gltf-loader"]
+    }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

@@ -794,6 +794,43 @@
           }
         }
       }
+    },
+    "loaders-gltf-loader": {
+      "projectType": "library",
+      "root": "packages/loaders/gltf-loader",
+      "sourceRoot": "packages/loaders/gltf-loader/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/loaders/gltf-loader/tsconfig.lib.json",
+            "project": "packages/loaders/gltf-loader/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/loaders/gltf-loader/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/loaders/gltf-loader/src/**/*.ts",
+              "packages/loaders/gltf-loader/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/loaders/gltf-loader"],
+          "options": {
+            "jestConfig": "packages/loaders/gltf-loader/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
