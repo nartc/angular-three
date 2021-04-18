@@ -52,7 +52,8 @@
       "tags": ["scope:postprocessing", "type:library", "context:shader-pass"]
     },
     "core-group": { "tags": ["scope:core", "type:library", "context:group"] },
-    "core-scene": { "tags": ["scope:core", "type:library", "context:scene"] }
+    "core-scene": { "tags": ["scope:core", "type:library", "context:scene"] },
+    "loaders": { "tags": ["scope:loaders", "type:library"] }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }
