@@ -1,3 +1,10 @@
+## [1.0.0-beta.1](https://github.com/nartc/angular-three/compare/1.0.0-beta.0...1.0.0-beta.1) (2021-04-18)
+
+
+### Bug Fixes
+
+* move typings from 2nd entry to core ([63a0c7d](https://github.com/nartc/angular-three/commit/63a0c7d4cb04191abed58be4d3c762ed15b19f1b))
+
 ## 1.0.0-beta.0 (2021-04-18)
 
 
