@@ -180,7 +180,19 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
 
       if (inputChanges) {
         for (const [inputName, inputChange] of Object.entries(inputChanges)) {
-          if (!inputChange.isFirstChange()) continue;
+          if (
+            !inputChange.isFirstChange() ||
+            [
+              'position',
+              'rotation',
+              'quaternion',
+              'scale',
+              'userData',
+              'color',
+            ].includes(inputName) // skip 6 common inputs
+          ) {
+            continue;
+          }
           customProps[inputName] = inputChange.currentValue;
         }
       }
