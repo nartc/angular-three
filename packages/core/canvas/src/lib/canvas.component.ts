@@ -100,7 +100,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     private readonly ngZone: NgZone,
     private readonly hostElement: ElementRef<HTMLElement>,
     private readonly renderer: Renderer2,
-    @Inject(DOCUMENT) private readonly document: Document,
+    @Inject(DOCUMENT) private readonly document: any,
     private readonly destroyed: DestroyedService
   ) {
     canvasStore.setSize({
@@ -129,7 +129,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   private initWindowResizeListener() {
     this.windowResizeListener = this.renderer.listen(
-      this.document.defaultView,
+      (this.document as Document).defaultView,
       'resize',
       () => {
         this.canvasStore.windowResizeEffect({
@@ -137,7 +137,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
             width: this.hostElement.nativeElement.clientWidth,
             height: this.hostElement.nativeElement.clientHeight,
           },
-          dpr: this.document.defaultView?.devicePixelRatio || 0,
+          dpr: (this.document as Document).defaultView?.devicePixelRatio || 0,
         });
       }
     );
