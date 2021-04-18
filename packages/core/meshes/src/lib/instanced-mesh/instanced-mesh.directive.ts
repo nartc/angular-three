@@ -1,5 +1,5 @@
 import { ThreeObject3d } from '@angular-three/core';
-import { Directive, Input, OnChanges } from '@angular/core';
+import { Directive, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DynamicDrawUsage, InstancedMesh } from 'three';
 import { ThreeMesh } from '../abstracts';
 
@@ -17,9 +17,9 @@ export class InstancedMeshDirective
 
   meshType = InstancedMesh;
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     this.init();
-    super.ngOnChanges();
+    super.ngOnChanges(changes);
   }
 
   protected canCreate(): boolean {

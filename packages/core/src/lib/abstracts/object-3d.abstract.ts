@@ -18,6 +18,7 @@ import {
   OnDestroy,
   Optional,
   Output,
+  SimpleChanges,
   SkipSelf,
 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -81,9 +82,9 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     protected readonly parentObjectDirective?: ThreeObject3d
   ) {}
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.object3d) {
-      this.applyCustomProps();
+      this.applyCustomProps(changes);
     }
   }
 
@@ -142,42 +143,51 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     });
   }
 
-  private applyCustomProps() {
-    const customProps = {
-      visible: this.visible,
-      matrixAutoUpdate: this.matrixAutoUpdate,
-    } as UnknownRecord;
+  private applyCustomProps(inputChanges?: SimpleChanges) {
+    this.ngZone.runOutsideAngular(() => {
+      const customProps = {
+        visible: this.visible,
+        matrixAutoUpdate: this.matrixAutoUpdate,
+      } as UnknownRecord;
 
-    if (this.position) {
-      customProps['position'] = this.position;
-    }
-
-    if (this.rotation) {
-      customProps['rotation'] = this.rotation;
-    } else if (this.quaternion) {
-      customProps['quaternion'] = this.quaternion;
-    }
-
-    if (this.scale) {
-      customProps['scale'] = this.scale;
-    }
-
-    if (this.userData) {
-      customProps['userData'] = this.userData;
-    }
-
-    if (this.color) {
-      this.color = Array.isArray(this.color)
-        ? new Color(...this.color)
-        : new Color(this.color);
-      if (!this.canvasStore.getImperativeState().isLinear) {
-        this.color.convertSRGBToLinear();
+      if (this.position) {
+        customProps['position'] = this.position;
       }
-      customProps['color'] = this.color;
-    }
 
-    applyProps(this.object3d, customProps);
-    this.object3d.updateMatrix();
+      if (this.rotation) {
+        customProps['rotation'] = this.rotation;
+      } else if (this.quaternion) {
+        customProps['quaternion'] = this.quaternion;
+      }
+
+      if (this.scale) {
+        customProps['scale'] = this.scale;
+      }
+
+      if (this.userData) {
+        customProps['userData'] = this.userData;
+      }
+
+      if (this.color) {
+        this.color = Array.isArray(this.color)
+          ? new Color(...this.color)
+          : new Color(this.color);
+        if (!this.canvasStore.getImperativeState().isLinear) {
+          this.color.convertSRGBToLinear();
+        }
+        customProps['color'] = this.color;
+      }
+
+      if (inputChanges) {
+        for (const [inputName, inputChange] of Object.entries(inputChanges)) {
+          if (!inputChange.isFirstChange()) continue;
+          customProps[inputName] = inputChange.currentValue;
+        }
+      }
+
+      applyProps(this.object3d, customProps);
+      this.object3d.updateMatrix();
+    });
   }
 
   private applyEvents(): EventHandlers {
