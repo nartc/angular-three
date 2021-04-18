@@ -27,6 +27,7 @@ export class BirdsComponent {
         : bird === 'Flamingo'
         ? 0.25 + Math.random()
         : 1 + Math.random() - 0.5;
+
     return {
       x,
       y,

@@ -9,6 +9,7 @@ import { Mesh, Vector3 } from 'three';
     <ngt-group
       *ngIf="font$ | async as font"
       [position]="position"
+      [scale]="[0.1 * size, 0.1 * size, 0.1]"
     >
       <ngt-mesh (ready)="onMeshReady($event)">
         <ngt-textBufferGeometry
@@ -47,20 +48,19 @@ export class TextComponent {
     const size = new Vector3();
     mesh.geometry.computeBoundingBox();
     mesh.geometry.boundingBox?.getSize(size);
-    // mesh.position.x =
-    //   this.hAlign === 'center'
-    //     ? -size.x / 2
-    //     : this.hAlign === 'right'
-    //     ? 0
-    //     : -size.x;
-    // mesh.position.y =
-    //   this.vAlign === 'center'
-    //     ? -size.y / 2
-    //     : this.vAlign === 'top'
-    //     ? 0
-    //     : -size.y;
+    mesh.position.x =
+      this.hAlign === 'center'
+        ? -size.x / 2
+        : this.hAlign === 'right'
+        ? 0
+        : -size.x / 2;
+    mesh.position.y =
+      this.vAlign === 'center'
+        ? -size.y / 2
+        : this.vAlign === 'top'
+        ? 0
+        : -size.y / 2;
 
     // mesh.updateMatrix();
-
   }
 }
