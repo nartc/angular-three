@@ -1,5 +1,5 @@
 import { applyProps, CanvasStore } from '@angular-three/core';
-import type { ThreeInstance } from '@angular-three/core/typings';
+import type { ThreeInstance, UnknownRecord } from '@angular-three/core/typings';
 import {
   Directive,
   EventEmitter,
@@ -24,6 +24,19 @@ export abstract class ThreePass<TPass extends Pass = Pass>
   @Input() clear?: boolean;
   @Input() renderToScreen?: boolean;
 
+  @Input() set assignTo(values: [string, unknown][]) {
+    if (values.length) {
+      this._assignTo = values;
+      if (this.pass) {
+        this.assignToPass(values);
+      } else {
+        setTimeout(() => {
+          this.assignToPass(this._assignTo);
+        });
+      }
+    }
+  }
+
   @Output() ready = new EventEmitter<TPass>();
 
   constructor(
@@ -33,8 +46,9 @@ export abstract class ThreePass<TPass extends Pass = Pass>
   ) {}
 
   protected abstract passType: new (...args: any[]) => TPass;
-  protected extraInputs: string[] = [];
 
+  protected extraInputs: string[] = [];
+  private _assignTo: [string, unknown][] = [];
   private _extraArgs: unknown[] = [];
 
   protected set extraArgs(v: unknown[]) {
@@ -93,9 +107,7 @@ export abstract class ThreePass<TPass extends Pass = Pass>
         'renderToScreen',
         ...this.extraInputs,
       ].reduce((extraProps, extraInput) => {
-        let inputProp = ((this as unknown) as Record<string, unknown>)[
-          extraInput
-        ];
+        let inputProp = ((this as unknown) as UnknownRecord)[extraInput];
         if (inputChanges) {
           if (inputChanges[extraInput]) {
             inputProp = inputChanges[extraInput].currentValue;
@@ -108,8 +120,19 @@ export abstract class ThreePass<TPass extends Pass = Pass>
         }
 
         return extraProps;
-      }, {} as Record<string, unknown>);
+      }, {} as UnknownRecord);
       applyProps((this.pass as unknown) as ThreeInstance, extraProps);
+    });
+  }
+
+  private assignToPass(values: [string, unknown][]) {
+    this.ngZone.runOutsideAngular(() => {
+      const propsToAssign = values.reduce((props, [key, value]) => {
+        props[key] = value;
+        return props;
+      }, {} as UnknownRecord);
+
+      applyProps((this.pass as unknown) as ThreeInstance, propsToAssign);
     });
   }
 }
