@@ -18,6 +18,8 @@ export abstract class ThreeMesh<
   implements AfterContentInit {
   @Input() geometry?: string | BufferGeometry | null;
   @Input() material?: string | Material | null;
+  @Input() morphTargetInfluences?: number[];
+  @Input() morphTargetDictionary?: { [key: string]: number };
 
   @ContentChild(ThreeMaterial) materialDirective?: ThreeMaterial;
   @ContentChild(ThreeBufferGeometry)
@@ -64,6 +66,14 @@ export abstract class ThreeMesh<
       this._mesh = new ((this.meshType as unknown) as new (
         ...args: unknown[]
       ) => TMesh)(geometry, material, ...(this._extraArgs || [])) as TMesh;
+
+      if (this.morphTargetDictionary) {
+        this._mesh.morphTargetDictionary = this.morphTargetDictionary;
+      }
+
+      if (this.morphTargetInfluences) {
+        this._mesh.morphTargetInfluences = this.morphTargetInfluences;
+      }
 
       if (this.customize) {
         this.customize();
