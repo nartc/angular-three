@@ -4,11 +4,7 @@ import { CanvasComponent } from './canvas.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [
-    CanvasComponent
-  ],
-  exports: [
-    CanvasComponent
-  ],
+  declarations: [CanvasComponent],
+  exports: [CanvasComponent],
 })
-export class ThreeCoreCanvasModule {}
+export class ThreeCanvasModule {}

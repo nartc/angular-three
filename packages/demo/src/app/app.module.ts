@@ -1,6 +1,6 @@
 import { ThreeOrbitControlsModule } from '@angular-three/controls';
 import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attributes';
-import { ThreeCoreCanvasModule } from '@angular-three/core/canvas';
+import { ThreeCanvasModule } from '@angular-three/core/canvas';
 import { ThreeBoxBufferGeometryModule } from '@angular-three/core/geometries';
 import {
   ThreeAmbientLightModule,
@@ -40,7 +40,7 @@ import { SuzanneComponent } from './suzanne.component';
   ],
   imports: [
     BrowserModule,
-    ThreeCoreCanvasModule,
+    ThreeCanvasModule,
     ThreeAmbientLightModule,
     ThreeSpotLightModule,
     ThreePointLightModule,
