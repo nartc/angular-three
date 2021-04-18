@@ -1,7 +1,8 @@
 import { ThreeOrbitControlsModule } from '@angular-three/controls';
 import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attributes';
 import { ThreeCanvasModule } from '@angular-three/core/canvas';
-import { ThreeBoxBufferGeometryModule } from '@angular-three/core/geometries';
+import { ThreeBoxBufferGeometryModule, ThreeTextBufferGeometryModule } from "@angular-three/core/geometries";
+import { ThreeGroupModule } from "@angular-three/core/group";
 import {
   ThreeAmbientLightModule,
   ThreePointLightModule,
@@ -13,6 +14,7 @@ import {
   ThreeMeshStandardMaterialModule,
 } from '@angular-three/core/materials';
 import { ThreeInstancedMeshModule, ThreeMeshModule } from '@angular-three/core/meshes';
+import { ThreeSceneModule } from "@angular-three/core/scene";
 import { ThreeStatsModule } from '@angular-three/core/stats';
 import { ThreePostprocessingModule } from '@angular-three/postprocessing';
 import { ThreeRenderPassModule } from '@angular-three/postprocessing/render-pass';
@@ -28,6 +30,10 @@ import { BoxesEffectsComponent } from './boxes-effects.component';
 import { BoxesComponent } from './boxes.component';
 import { OrbitControlsComponent } from './orbit-controls.component';
 import { SuzanneComponent } from './suzanne.component';
+import { TextComponent } from './gltf-fonts/text.component';
+import { BirdComponent } from './gltf-fonts/bird.component';
+import { BirdsComponent } from './gltf-fonts/birds.component';
+import { JumboComponent } from './gltf-fonts/jumbo.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +43,10 @@ import { SuzanneComponent } from './suzanne.component';
     OrbitControlsComponent,
     BoxesComponent,
     BoxesEffectsComponent,
+    TextComponent,
+    BirdComponent,
+    BirdsComponent,
+    JumboComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +68,9 @@ import { SuzanneComponent } from './suzanne.component';
     ThreeSsaoPassModule,
     ThreeUnrealBloomPassModule,
     ThreeShaderPassModule,
+    ThreeGroupModule,
+    ThreeTextBufferGeometryModule,
+    ThreeSceneModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

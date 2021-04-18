@@ -8,4 +8,5 @@ export interface RenderState {
   renderer: WebGLRenderer;
   camera: ThreeCamera;
   scene: Scene;
+  delta: number;
 }

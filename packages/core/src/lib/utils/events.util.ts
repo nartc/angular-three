@@ -34,6 +34,7 @@ export function createEvents(
       scene,
       internal: { size },
     } = canvasStateGetter();
+    const delta = clock.getDelta();
     if (raycaster && camera && renderer && scene) {
       const { offsetX, offsetY } =
         raycaster.computeOffsets?.(event, {
@@ -42,6 +43,7 @@ export function createEvents(
           size,
           renderer,
           scene,
+          delta,
         }) ?? event;
       const { width, height } = size;
       mouse.set((offsetX / width) * 2 - 1, -(offsetY / height) * 2 + 1);

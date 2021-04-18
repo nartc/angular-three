@@ -32,6 +32,7 @@ export class LoopService implements OnDestroy {
       internal,
       clock,
     } = this.canvasStore.getImperativeState();
+    const delta = clock.getDelta();
     const { animations } = this.animationStore.getImperativeState();
 
     if (renderer && scene && camera) {
@@ -54,6 +55,7 @@ export class LoopService implements OnDestroy {
             scene,
             renderer,
             size: internal.size,
+            delta,
           });
         } else {
           animationCallback.callback({
@@ -62,6 +64,7 @@ export class LoopService implements OnDestroy {
             scene,
             renderer,
             size: internal.size,
+            delta,
           });
         }
       }
