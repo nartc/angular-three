@@ -15,4 +15,4 @@ import { InstancedBufferAttributeDirective } from './instanced-buffer-attribute.
     InstancedBufferAttributeDirective
   ]
 })
-export class InstancedBufferAttributeModule { }
+export class ThreeInstancedBufferAttributeModule { }

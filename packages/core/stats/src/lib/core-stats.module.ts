@@ -7,4 +7,4 @@ import { StatsDirective } from './stats.directive';
   declarations: [StatsDirective],
   exports: [StatsDirective],
 })
-export class ThreeCoreStatsModule {}
+export class ThreeStatsModule {}

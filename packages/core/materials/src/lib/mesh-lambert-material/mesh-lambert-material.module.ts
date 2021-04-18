@@ -7,4 +7,4 @@ import { MeshLambertMaterialDirective } from './mesh-lambert-material.directive'
   imports: [CommonModule],
   exports: [MeshLambertMaterialDirective],
 })
-export class MeshLambertMaterialModule {}
+export class ThreeMeshLambertMaterialModule {}

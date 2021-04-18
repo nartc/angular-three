@@ -42,7 +42,8 @@
       ],
       "@angular-three/postprocessing/shader-pass": [
         "packages/postprocessing/shader-pass/src/index.ts"
-      ]
+      ],
+      "@angular-three/core/group": ["packages/core/group/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

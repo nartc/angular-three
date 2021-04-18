@@ -7,4 +7,4 @@ import { InstancedMeshDirective } from './instanced-mesh.directive';
   imports: [CommonModule],
   exports: [InstancedMeshDirective],
 })
-export class InstancedMeshModule {}
+export class ThreeInstancedMeshModule {}

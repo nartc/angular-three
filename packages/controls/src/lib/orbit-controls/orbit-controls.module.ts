@@ -7,4 +7,4 @@ import { OrbitControlsDirective } from './orbit-controls.directive';
   imports: [CommonModule],
   exports: [OrbitControlsDirective],
 })
-export class OrbitControlsModule {}
+export class ThreeOrbitControlsModule {}

@@ -15,4 +15,4 @@ import { BufferAttributeDirective } from './buffer-attribute.directive';
     BufferAttributeDirective
   ]
 })
-export class BufferAttributeModule { }
+export class ThreeBufferAttributeModule { }

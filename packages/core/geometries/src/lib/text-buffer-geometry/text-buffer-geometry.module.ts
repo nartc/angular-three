@@ -7,4 +7,4 @@ import { TextBufferGeometryDirective } from './text-buffer-geometry.directive';
   imports: [CommonModule],
   exports: [TextBufferGeometryDirective],
 })
-export class TextBufferGeometryModule {}
+export class ThreeTextBufferGeometryModule {}

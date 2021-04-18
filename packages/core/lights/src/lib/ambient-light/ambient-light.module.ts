@@ -15,4 +15,4 @@ import { AmbientLightDirective } from './ambient-light.directive';
     AmbientLightDirective
   ]
 })
-export class AmbientLightModule { }
+export class ThreeAmbientLightModule { }

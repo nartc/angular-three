@@ -7,4 +7,4 @@ import { CylinderBufferGeometryDirective } from './cylinder-buffer-geometry.dire
   imports: [CommonModule],
   exports: [CylinderBufferGeometryDirective],
 })
-export class CylinderBufferGeometryModule {}
+export class ThreeCylinderBufferGeometryModule {}

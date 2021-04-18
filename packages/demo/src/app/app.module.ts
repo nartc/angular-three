@@ -1,19 +1,19 @@
-import { OrbitControlsModule } from '@angular-three/controls';
-import { InstancedBufferAttributeModule } from '@angular-three/core/attributes';
+import { ThreeOrbitControlsModule } from '@angular-three/controls';
+import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attributes';
 import { ThreeCoreCanvasModule } from '@angular-three/core/canvas';
-import { BoxBufferGeometryModule } from '@angular-three/core/geometries';
+import { ThreeBoxBufferGeometryModule } from '@angular-three/core/geometries';
 import {
-  AmbientLightModule,
-  PointLightModule,
-  SpotLightModule,
+  ThreeAmbientLightModule,
+  ThreePointLightModule,
+  ThreeSpotLightModule,
 } from '@angular-three/core/lights';
 import {
-  MeshNormalMaterialModule,
-  MeshPhongMaterialModule,
-  MeshStandardMaterialModule,
+  ThreeMeshNormalMaterialModule,
+  ThreeMeshPhongMaterialModule,
+  ThreeMeshStandardMaterialModule,
 } from '@angular-three/core/materials';
-import { InstancedMeshModule, MeshModule } from '@angular-three/core/meshes';
-import { ThreeCoreStatsModule } from '@angular-three/core/stats';
+import { ThreeInstancedMeshModule, ThreeMeshModule } from '@angular-three/core/meshes';
+import { ThreeStatsModule } from '@angular-three/core/stats';
 import { ThreePostprocessingModule } from '@angular-three/postprocessing';
 import { ThreeRenderPassModule } from '@angular-three/postprocessing/render-pass';
 import { ThreeShaderPassModule } from '@angular-three/postprocessing/shader-pass';
@@ -41,18 +41,18 @@ import { SuzanneComponent } from './suzanne.component';
   imports: [
     BrowserModule,
     ThreeCoreCanvasModule,
-    AmbientLightModule,
-    SpotLightModule,
-    PointLightModule,
-    MeshModule,
-    BoxBufferGeometryModule,
-    MeshStandardMaterialModule,
-    InstancedMeshModule,
-    MeshNormalMaterialModule,
-    ThreeCoreStatsModule,
-    OrbitControlsModule,
-    InstancedBufferAttributeModule,
-    MeshPhongMaterialModule,
+    ThreeAmbientLightModule,
+    ThreeSpotLightModule,
+    ThreePointLightModule,
+    ThreeMeshModule,
+    ThreeBoxBufferGeometryModule,
+    ThreeMeshStandardMaterialModule,
+    ThreeInstancedMeshModule,
+    ThreeMeshNormalMaterialModule,
+    ThreeStatsModule,
+    ThreeOrbitControlsModule,
+    ThreeInstancedBufferAttributeModule,
+    ThreeMeshPhongMaterialModule,
     ThreePostprocessingModule,
     ThreeRenderPassModule,
     ThreeSsaoPassModule,

@@ -16,5 +16,6 @@ module.exports = {
     '<rootDir>/packages/postprocessing/ssao-pass',
     '<rootDir>/packages/postprocessing/unreal-bloom-pass',
     '<rootDir>/packages/postprocessing/shader-pass',
+    '<rootDir>/packages/core/group',
   ],
 };

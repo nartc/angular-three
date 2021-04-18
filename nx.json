@@ -50,7 +50,8 @@
     },
     "postprocessing-shader-pass": {
       "tags": ["scope:postprocessing", "type:library", "context:shader-pass"]
-    }
+    },
+    "core-group": { "tags": ["scope:core", "type:library", "context:group"] }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

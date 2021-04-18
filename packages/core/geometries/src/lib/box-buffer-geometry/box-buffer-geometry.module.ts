@@ -7,4 +7,4 @@ import { BoxBufferGeometryDirective } from './box-buffer-geometry.directive';
   imports: [CommonModule],
   exports: [BoxBufferGeometryDirective],
 })
-export class BoxBufferGeometryModule {}
+export class ThreeBoxBufferGeometryModule {}
