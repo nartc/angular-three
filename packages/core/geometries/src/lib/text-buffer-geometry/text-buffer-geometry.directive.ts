@@ -17,5 +17,5 @@ export class TextBufferGeometryDirective extends ThreeBufferGeometry<
     this.extraArgs = v;
   }
 
-  geometryType = TextGeometry;
+  geometryType = TextBufferGeometry;
 }
