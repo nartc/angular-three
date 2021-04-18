@@ -44,7 +44,8 @@
         "packages/postprocessing/shader-pass/src/index.ts"
       ],
       "@angular-three/core/group": ["packages/core/group/src/index.ts"],
-      "@angular-three/core/scene": ["packages/core/scene/src/index.ts"]
+      "@angular-three/core/scene": ["packages/core/scene/src/index.ts"],
+      "@angular-three/loaders": ["packages/loaders/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

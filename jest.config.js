@@ -18,5 +18,6 @@ module.exports = {
     '<rootDir>/packages/postprocessing/shader-pass',
     '<rootDir>/packages/core/group',
     '<rootDir>/packages/core/scene',
+    '<rootDir>/packages/loaders',
   ],
 };
