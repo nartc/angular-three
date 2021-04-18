@@ -36,6 +36,7 @@ import { applyProps } from '../utils';
 @Directive()
 export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   implements OnDestroy, OnChanges {
+  @Input() name?: string;
   @Input() position?: ThreeVector3;
   @Input() rotation?: ThreeEuler;
   @Input() quaternion?: ThreeQuaternion;
@@ -150,6 +151,10 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
         matrixAutoUpdate: this.matrixAutoUpdate,
       } as UnknownRecord;
 
+      if (this.name) {
+        customProps['name'] = this.name;
+      }
+
       if (this.position) {
         customProps['position'] = this.position;
       }
@@ -183,13 +188,14 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
           if (
             !inputChange.isFirstChange() ||
             [
+              'name',
               'position',
               'rotation',
               'quaternion',
               'scale',
               'userData',
               'color',
-            ].includes(inputName) // skip 6 common inputs
+            ].includes(inputName) // skip 7 common inputs
           ) {
             continue;
           }
