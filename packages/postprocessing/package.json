@@ -1,6 +1,24 @@
 {
   "name": "@angular-three/postprocessing",
   "version": "1.0.0-beta.0",
+  "author": {
+    "name": "Chau Tran",
+    "email": "nartc7789@gmail.com",
+    "url": "https://nartc.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nartc/angular-three"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "THREE.js wrapper for Angular",
+  "keywords": [
+    "angular",
+    "threejs",
+    "nx"
+  ],
   "peerDependencies": {
     "@angular/common": "^11.2.10",
     "@angular/core": "^11.2.10"
