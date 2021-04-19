@@ -17,6 +17,15 @@ export class InstancesStore extends ImperativeComponentStore<InstancesStoreState
     materials: { ...state.materials, [id]: material },
   }));
 
+  readonly removeMaterial = this.updater<string>((state, id) => {
+    const { [id]: _, ...materials } = state.materials;
+
+    return {
+      ...state,
+      materials,
+    };
+  });
+
   readonly saveBufferGeometry = this.updater<{
     bufferGeometry: BufferGeometry;
     id?: string;
@@ -25,8 +34,22 @@ export class InstancesStore extends ImperativeComponentStore<InstancesStoreState
     bufferGeometries: { ...state.bufferGeometries, [id]: bufferGeometry },
   }));
 
+  readonly removeBufferGeometry = this.updater<string>((state, id) => {
+    const { [id]: _, ...bufferGeometries } = state.bufferGeometries;
+
+    return {
+      ...state,
+      bufferGeometries,
+    };
+  });
+
   readonly saveObject = this.updater<ThreeInstance>((state, obj) => ({
     ...state,
     objects: { ...state.objects, [obj.uuid]: obj },
   }));
+
+  readonly removeObject = this.updater<string>((state, id) => {
+    const { [id]: _, ...objects } = state.objects;
+    return { ...state, objects };
+  });
 }
