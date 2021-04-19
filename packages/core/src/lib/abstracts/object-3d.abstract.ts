@@ -138,6 +138,19 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     }
   }
 
+  protected remove() {
+    if (this.appendTo) {
+      this.appendTo.remove(this.object3d);
+    } else if (this.parentObjectDirective && this.appendMode === 'immediate') {
+      this.parentObjectDirective.object3d.remove(this.object3d);
+    } else {
+      const { scene } = this.canvasStore.getImperativeState();
+      if (scene) {
+        scene.remove(this.object3d);
+      }
+    }
+  }
+
   protected objectReady() {
     this.ngZone.run(() => {
       this.$object3d.next(this.object3d);
@@ -243,10 +256,13 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   }
 
   ngOnDestroy(): void {
-    const { scene } = this.canvasStore.getImperativeState();
-    if (scene) {
-      scene.remove(this.object3d);
-    }
+    this.ngZone.runOutsideAngular(() => {
+      this.remove();
+      if (this.object3d) {
+        this.instancesStore.removeObject(this.object3d.uuid);
+        this.animationStore.unregisterAnimationEffect(this.object3d.uuid);
+      }
+    });
   }
 
   protected abstract initObject(): void;
