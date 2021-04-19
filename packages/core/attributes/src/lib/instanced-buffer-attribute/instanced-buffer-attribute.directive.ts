@@ -9,10 +9,7 @@ import { ThreeAttribute } from '../abstracts';
     { provide: ThreeAttribute, useExisting: InstancedBufferAttributeDirective },
   ],
 })
-export class InstancedBufferAttributeDirective extends ThreeAttribute<
-  InstancedBufferAttribute,
-  typeof InstancedBufferAttribute
-> {
+export class InstancedBufferAttributeDirective extends ThreeAttribute<InstancedBufferAttribute> {
   @Input() set args(v: ConstructorParameters<typeof InstancedBufferAttribute>) {
     this.extraArgs = v;
   }

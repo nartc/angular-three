@@ -1,3 +1,4 @@
+import type { AnyConstructor } from '@angular-three/core';
 import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import {
   Directive,
@@ -12,12 +13,11 @@ import { BufferAttribute } from 'three';
 
 @Directive()
 export abstract class ThreeAttribute<
-  TAttribute extends BufferAttribute = BufferAttribute,
-  TAttributeConstructor extends typeof BufferAttribute = typeof BufferAttribute
+  TAttribute extends BufferAttribute = BufferAttribute
 > implements OnInit, OnChanges {
   @Input() attach?: BuiltinShaderAttributeName;
 
-  abstract attributeType: TAttributeConstructor;
+  abstract attributeType: AnyConstructor<TAttribute>;
 
   constructor(
     protected readonly ngZone: NgZone,
@@ -42,10 +42,8 @@ export abstract class ThreeAttribute<
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this._attribute = new ((this.attributeType as unknown) as new (
-        ...args: unknown[]
-      ) => TAttribute)(...this._extraArgs) as TAttribute;
       if (this.geometryDirective && this.attach) {
+        this._attribute = new this.attributeType(...this._extraArgs);
         this.geometryDirective.bufferGeometry.setAttribute(
           this.attach,
           this.attribute
