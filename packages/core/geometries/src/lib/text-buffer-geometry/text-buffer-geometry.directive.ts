@@ -9,10 +9,7 @@ import { ThreeBufferGeometry } from '../abstracts';
     { provide: ThreeBufferGeometry, useExisting: TextBufferGeometryDirective },
   ],
 })
-export class TextBufferGeometryDirective extends ThreeBufferGeometry<
-  TextGeometry,
-  any
-> {
+export class TextBufferGeometryDirective extends ThreeBufferGeometry<TextGeometry> {
   @Input() set args(v: ConstructorParameters<typeof TextBufferGeometry>) {
     this.extraArgs = v;
   }

@@ -12,10 +12,7 @@ import { ThreeBufferGeometry } from '../abstracts';
     },
   ],
 })
-export class CylinderBufferGeometryDirective extends ThreeBufferGeometry<
-  CylinderBufferGeometry,
-  typeof CylinderBufferGeometry
-> {
+export class CylinderBufferGeometryDirective extends ThreeBufferGeometry<CylinderBufferGeometry> {
   @Input() set args(v: ConstructorParameters<typeof CylinderBufferGeometry>) {
     this.extraArgs = v;
   }
