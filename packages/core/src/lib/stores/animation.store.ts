@@ -60,13 +60,13 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
     obj: TObject3d,
     callback: AnimationCallback<TObject3d>,
     priority?: number
-  ): void;
+  ): () => void;
   registerAnimation<TObject3d extends Object3D = Object3D>(
     obs: Observable<TObject3d | null>,
     callback: AnimationCallback<TObject3d>,
     priority?: number
-  ): void;
-  registerAnimation(callback: AnimationCallback, priority?: number): void;
+  ): () => void;
+  registerAnimation(callback: AnimationCallback, priority?: number): () => void;
   registerAnimation<TObject3d extends Object3D = Object3D>(
     objOrObsOrCallback: TObject3d | Observable<TObject3d> | AnimationCallback,
     callbackOrPriority?:
@@ -77,21 +77,25 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
     if (objOrObsOrCallback === undefined) return;
 
     if (typeof objOrObsOrCallback === 'function') {
+      const id = makeId();
       this.patchState((state) => ({
         ...state,
         animations: {
           ...state.animations,
-          [makeId()]: {
+          [id]: {
             obj: null,
             callback: objOrObsOrCallback,
             priority: (callbackOrPriority as number) || 0,
           },
         },
       }));
-      return;
+      return () => {
+        this.unregisterAnimationEffect(id);
+      };
     }
 
     if (isObservable(objOrObsOrCallback)) {
+      let id = '';
       const subscription = objOrObsOrCallback
         .pipe(filter((obj) => !!obj))
         .subscribe((obj) => {
@@ -100,10 +104,11 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
             if (objectSubscriptions[objectSubscriptions.length - 1]?.[0]) {
               objectSubscriptions[objectSubscriptions.length - 1][0] = obj.uuid;
             }
+            id = obj.uuid;
             return {
               animations: {
                 ...state.animations,
-                [obj.uuid]: {
+                [id]: {
                   obj,
                   callback: callbackOrPriority as AnimationCallback<TObject3d>,
                   priority,
@@ -119,19 +124,25 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
           [null, subscription],
         ],
       }));
-      return;
+      return () => {
+        this.unregisterAnimationEffect(id);
+      };
     }
 
+    const uuid = (objOrObsOrCallback as Object3D).uuid;
     this.patchState((state) => ({
       animations: {
         ...state.animations,
-        [(objOrObsOrCallback as Object3D).uuid]: {
+        [uuid]: {
           obj: objOrObsOrCallback,
           callback: callbackOrPriority as AnimationCallback<TObject3d>,
           priority,
         },
       },
     }));
+    return () => {
+      this.unregisterAnimationEffect(uuid);
+    };
   }
 
   ngOnDestroy() {
