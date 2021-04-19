@@ -2,6 +2,7 @@ import { CanvasStore, DestroyedService } from '@angular-three/core';
 import {
   Directive,
   EventEmitter,
+  NgZone,
   OnInit,
   Output,
   SkipSelf,
@@ -18,6 +19,7 @@ export class OrbitControlsDirective implements OnInit {
   @Output() ready = new EventEmitter<OrbitControls>();
 
   constructor(
+    private readonly ngZone: NgZone,
     @SkipSelf() private readonly canvasStore: CanvasStore,
     private readonly destroyed: DestroyedService
   ) {}
@@ -25,15 +27,19 @@ export class OrbitControlsDirective implements OnInit {
   private _controls?: OrbitControls;
 
   ngOnInit() {
-    this.canvasStore.active$
-      .pipe(takeUntil(this.destroyed))
-      .subscribe((active) => {
-        const { camera, renderer } = this.canvasStore.getImperativeState();
-        if (active && camera && renderer) {
-          this._controls = new OrbitControls(camera, renderer.domElement);
-          this.ready.emit(this.controls);
-        }
-      });
+    this.ngZone.runOutsideAngular(() => {
+      this.canvasStore.active$
+        .pipe(takeUntil(this.destroyed))
+        .subscribe((active) => {
+          const { camera, renderer } = this.canvasStore.getImperativeState();
+          if (active && camera && renderer) {
+            this._controls = new OrbitControls(camera, renderer.domElement);
+            this.ngZone.run(() => {
+              this.ready.emit(this.controls);
+            });
+          }
+        });
+    });
   }
 
   get controls(): OrbitControls | undefined {
