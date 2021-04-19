@@ -1,13 +1,7 @@
 import type { ThreeVector3 } from '@angular-three/core';
 import { AnimationStore } from '@angular-three/core';
-import { MeshDirective } from '@angular-three/core/meshes';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Mesh } from 'three';
 
 @Component({
   selector: 'demo-box',
@@ -18,6 +12,7 @@ import {
       (pointerover)="color = 'hotpink'"
       (pointerout)="color = 'orange'"
       (click)="active = !active"
+      (ready)="onBoxReady($event)"
     >
       <ngt-boxBufferGeometry></ngt-boxBufferGeometry>
       <ngt-meshStandardMaterial
@@ -27,18 +22,16 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BoxComponent implements AfterViewInit {
+export class BoxComponent {
   @Input() position?: ThreeVector3;
-
-  @ViewChild(MeshDirective) mesh!: MeshDirective;
 
   constructor(private readonly animationStore: AnimationStore) {}
 
   color = 'orange';
   active = false;
 
-  ngAfterViewInit() {
-    this.animationStore.registerAnimation(this.mesh.object3d$, (mesh) => {
+  onBoxReady(box: Mesh) {
+    this.animationStore.registerAnimation(box, (mesh) => {
       mesh.rotation.x = mesh.rotation.y += 0.01;
     });
   }
