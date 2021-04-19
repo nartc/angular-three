@@ -1,3 +1,4 @@
+import type { AnyConstructor } from '@angular-three/core';
 import { ThreeObject3d } from '@angular-three/core';
 import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import { ThreeMaterial } from '@angular-three/core/materials';
@@ -10,10 +11,7 @@ import {
 import { BufferGeometry, Material, Mesh } from 'three';
 
 @Directive()
-export abstract class ThreeMesh<
-    TMesh extends Mesh = Mesh,
-    TMeshConstructor extends typeof Mesh = typeof Mesh
-  >
+export abstract class ThreeMesh<TMesh extends Mesh = Mesh>
   extends ThreeObject3d<TMesh>
   implements AfterContentInit {
   @Input() geometry?: string | BufferGeometry | null;
@@ -25,7 +23,7 @@ export abstract class ThreeMesh<
   @ContentChild(ThreeBufferGeometry)
   bufferGeometryDirective?: ThreeBufferGeometry;
 
-  abstract meshType: new (...args: any[]) => TMesh;
+  abstract meshType: AnyConstructor<TMesh>;
 
   private _mesh!: TMesh;
   private _extraArgs?: unknown[];
