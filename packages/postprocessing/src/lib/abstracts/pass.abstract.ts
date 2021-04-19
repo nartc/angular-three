@@ -1,4 +1,8 @@
-import type { ThreeInstance, UnknownRecord } from '@angular-three/core';
+import type {
+  AnyConstructor,
+  ThreeInstance,
+  UnknownRecord,
+} from '@angular-three/core';
 import { applyProps, CanvasStore } from '@angular-three/core';
 import {
   Directive,
@@ -45,7 +49,7 @@ export abstract class ThreePass<TPass extends Pass = Pass>
     @Optional() protected readonly composer?: EffectComposerDirective
   ) {}
 
-  protected abstract passType: new (...args: any[]) => TPass;
+  protected abstract passType: AnyConstructor<TPass>;
 
   protected extraInputs: string[] = [];
   private _assignTo: [string, unknown][] = [];
