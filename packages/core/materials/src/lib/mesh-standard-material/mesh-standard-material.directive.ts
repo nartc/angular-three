@@ -11,8 +11,7 @@ import { ThreeMaterial } from '../abstracts';
 })
 export class MeshStandardMaterialDirective extends ThreeMaterial<
   MeshStandardMaterial,
-  MeshStandardMaterialParameters,
-  typeof MeshStandardMaterial
+  MeshStandardMaterialParameters
 > {
   static ngAcceptInputType_parameters:
     | MeshStandardMaterialParameters

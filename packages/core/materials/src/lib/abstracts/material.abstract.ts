@@ -1,14 +1,17 @@
-import type { ThreeColor, UnknownRecord } from '@angular-three/core';
+import type {
+  AnyConstructor,
+  ThreeColor,
+  UnknownRecord,
+} from '@angular-three/core';
 import { CanvasStore, InstancesStore } from '@angular-three/core';
-import { Directive, Input, NgZone, SkipSelf } from '@angular/core';
+import { Directive, Input, NgZone, OnDestroy, SkipSelf } from '@angular/core';
 import { Color, Material, MaterialParameters } from 'three';
 
 @Directive()
 export abstract class ThreeMaterial<
   TMaterial extends Material = Material,
-  TMaterialParameters extends MaterialParameters = MaterialParameters,
-  TMaterialConstructor extends typeof Material = typeof Material
-> {
+  TMaterialParameters extends MaterialParameters = MaterialParameters
+> implements OnDestroy {
   @Input() ngtId?: string;
 
   @Input() set parameters(v: TMaterialParameters | undefined) {
@@ -34,14 +37,12 @@ export abstract class ThreeMaterial<
     @SkipSelf() protected readonly canvasStore: CanvasStore
   ) {}
 
-  abstract materialType: TMaterialConstructor;
+  abstract materialType: AnyConstructor<TMaterial>;
 
   private _material?: TMaterial;
   get material(): TMaterial {
     if (this._material == null) {
-      this._material = new ((this.materialType as unknown) as new (
-        params?: TMaterialParameters
-      ) => TMaterial)(this.parameters);
+      this._material = new this.materialType(this.parameters);
       this.instancesStore.saveMaterial({
         id: this.ngtId,
         material: this._material,
@@ -60,6 +61,12 @@ export abstract class ThreeMaterial<
       if (!this.canvasStore.getImperativeState().isLinear) {
         ((parameters as UnknownRecord)['color'] as Color).convertSRGBToLinear();
       }
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.material) {
+      this.instancesStore.removeMaterial(this.ngtId || this.material.uuid);
     }
   }
 }
