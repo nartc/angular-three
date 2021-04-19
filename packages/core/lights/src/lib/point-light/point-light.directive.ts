@@ -8,10 +8,7 @@ import { ThreeLight } from '../abstracts';
   exportAs: 'ngtPointLight',
   providers: [{ provide: ThreeObject3d, useExisting: PointLightDirective }],
 })
-export class PointLightDirective extends ThreeLight<
-  PointLight,
-  typeof PointLight
-> {
+export class PointLightDirective extends ThreeLight<PointLight> {
   @Input() set args(v: ConstructorParameters<typeof PointLight>) {
     this.extraArgs = v;
   }

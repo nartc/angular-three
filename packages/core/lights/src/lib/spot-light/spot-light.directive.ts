@@ -8,10 +8,7 @@ import { ThreeLight } from '../abstracts';
   exportAs: 'ngtSpotLight',
   providers: [{ provide: ThreeObject3d, useExisting: SpotLightDirective }],
 })
-export class SpotLightDirective extends ThreeLight<
-  SpotLight,
-  typeof SpotLight
-> {
+export class SpotLightDirective extends ThreeLight<SpotLight> {
   @Input() set args(v: ConstructorParameters<typeof SpotLight>) {
     this.extraArgs = v;
   }

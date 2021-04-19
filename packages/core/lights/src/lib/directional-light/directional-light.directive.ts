@@ -10,10 +10,7 @@ import { ThreeLight } from '../abstracts';
     { provide: ThreeObject3d, useExisting: DirectionalLightDirective },
   ],
 })
-export class DirectionalLightDirective extends ThreeLight<
-  DirectionalLight,
-  typeof DirectionalLight
-> {
+export class DirectionalLightDirective extends ThreeLight<DirectionalLight> {
   @Input() set args(v: ConstructorParameters<typeof DirectionalLight>) {
     this.extraArgs = v;
   }

@@ -1,17 +1,15 @@
+import type { AnyConstructor } from '@angular-three/core';
 import { ThreeObject3d } from '@angular-three/core';
 import { Directive, OnInit } from '@angular/core';
 import { Light } from 'three';
 
 @Directive()
-export abstract class ThreeLight<
-    TLight extends Light = Light,
-    TLightConstructor extends typeof Light = typeof Light
-  >
+export abstract class ThreeLight<TLight extends Light = Light>
   extends ThreeObject3d<TLight>
   implements OnInit {
-  abstract lightType: TLightConstructor;
+  abstract lightType: AnyConstructor<TLight>;
 
-  private _extraArgs?: unknown[] = [];
+  private _extraArgs: unknown[] = [];
   protected set extraArgs(v: unknown[]) {
     this._extraArgs = v;
   }
@@ -23,10 +21,7 @@ export abstract class ThreeLight<
   }
 
   protected initObject() {
-    const args = this._extraArgs;
-    this._light = new this.lightType(
-      ...(args as ConstructorParameters<TLightConstructor>)
-    ) as TLight;
+    this._light = new this.lightType(...this._extraArgs);
   }
 
   get object3d(): TLight {
