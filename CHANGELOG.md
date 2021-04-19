@@ -1,3 +1,29 @@
+## [1.0.0-beta.2](https://github.com/nartc/angular-three/compare/1.0.0-beta.1...1.0.0-beta.2) (2021-04-19)
+
+
+### Features
+
+* **core:** add remove effects to InstancesStore (wip) ([a042820](https://github.com/nartc/angular-three/commit/a042820b525091c134fb49e0168217054ee44f70))
+* **core:** return a cleanup function from registerAnimation ([e3020eb](https://github.com/nartc/angular-three/commit/e3020eb23f5abf69df535b8fbbe81f006f59e987))
+* **postprocessing:** add ready output to EffectComposer ([c66c4dd](https://github.com/nartc/angular-three/commit/c66c4dd15267b5862d29373a109dbbd647cab197))
+
+
+### Bug Fixes
+
+* **controls:** initialize OrbitControls outsideOfAngular ([f87c17c](https://github.com/nartc/angular-three/commit/f87c17c9d08c4c95357ee46c62510fa7e0e3febb))
+* **core:** clean up and make Attributes consistent with the rest ([9d6e434](https://github.com/nartc/angular-three/commit/9d6e4344902ea1716d46ebcc99c3aaa64af63ddc))
+* **core:** clean up and make Geometries consistent with the rest ([5b9a749](https://github.com/nartc/angular-three/commit/5b9a749cddd59c15f4bf8027e1ba23ed961f8d2c))
+* **core:** clean up and make Lights consistent with the rests ([b7c24c3](https://github.com/nartc/angular-three/commit/b7c24c3eeafb25abc6e2c2d6d1b8e42284dc953e))
+* **core:** clean up and make Materials consistent with the rest ([650977a](https://github.com/nartc/angular-three/commit/650977a2c8ba65ad163831d7298b72c056b3a9a7))
+* **core:** ensure to clean up properly on object3d destroy ([a37d0cc](https://github.com/nartc/angular-three/commit/a37d0cc06fe2f52466df9cd2dcee9303cffc8788))
+* **core:** rename UnknownConstructor to AnyConstructor with any[] instead of unknown[] ([494f18d](https://github.com/nartc/angular-three/commit/494f18d5bbd29447a44feac2b560c6b5be697774))
+* **core:** use AnyConstructor for Mesh abstract ([6857a71](https://github.com/nartc/angular-three/commit/6857a7126a54c1ad8b2c1fd2cfa3a48ff22f62ca))
+
+
+### Documentations
+
+* **demo:** adjust demo to use (ready) instead of ViewChild. Seems more consistent ([b4578ba](https://github.com/nartc/angular-three/commit/b4578ba3b0d7d78c9363cf01b901df9408cc585b))
+
 ## [1.0.0-beta.1](https://github.com/nartc/angular-three/compare/1.0.0-beta.0...1.0.0-beta.1) (2021-04-18)
 
 
