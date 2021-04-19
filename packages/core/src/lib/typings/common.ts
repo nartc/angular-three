@@ -1,2 +1,2 @@
 export type UnknownRecord = Record<string, unknown>;
-export type UnknownConstructor<TObject> = new (...args: unknown[]) => TObject;
+export type AnyConstructor<TObject> = new (...args: any[]) => TObject;
