@@ -834,6 +834,43 @@
           }
         }
       }
+    },
+    "core-audios": {
+      "projectType": "library",
+      "root": "packages/core/audios",
+      "sourceRoot": "packages/core/audios/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/audios/tsconfig.lib.json",
+            "project": "packages/core/audios/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/audios/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/audios/src/**/*.ts",
+              "packages/core/audios/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/audios"],
+          "options": {
+            "jestConfig": "packages/core/audios/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
