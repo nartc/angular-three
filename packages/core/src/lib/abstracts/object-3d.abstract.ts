@@ -13,7 +13,7 @@ import {
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import type { Object3D } from 'three';
-import { AudioListener, Color } from 'three';
+import { Color } from 'three';
 import {
   AnimationStore,
   CanvasStore,
@@ -118,13 +118,6 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     const { scene } = this.canvasStore.getImperativeState();
     if (scene) {
       scene.add(this.object3d);
-    }
-  }
-
-  protected addToCamera() {
-    const { camera } = this.canvasStore.getImperativeState();
-    if (camera) {
-      camera.add(this.object3d);
     }
   }
 
@@ -254,11 +247,6 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   }
 
   private appendToParent(): void {
-    if (this.object3d instanceof AudioListener) {
-      this.addToCamera();
-      return;
-    }
-
     if (this.appendTo) {
       this.appendTo.add(this.object3d);
       return;
