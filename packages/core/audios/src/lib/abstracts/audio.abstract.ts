@@ -1,5 +1,12 @@
 import { AnyConstructor, ThreeObject3d } from '@angular-three/core';
-import { Directive, Input, Optional, SkipSelf } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Input,
+  Optional,
+  Output,
+  SkipSelf,
+} from '@angular/core';
 import { Audio, Object3D } from 'three';
 import { AudioListenerDirective } from '../audio-listener';
 
@@ -9,6 +16,8 @@ export abstract class ThreeAudio<
   TAudio extends Audio<TAudioNode> = Audio<TAudioNode>
 > {
   @Input() object3d?: Object3D;
+
+  @Output() ready = new EventEmitter<TAudio>();
 
   constructor(
     @Optional()
@@ -33,12 +42,11 @@ export abstract class ThreeAudio<
 
     if (this.object3d) {
       this.object3d.add(this.audio!);
-      return;
-    }
-
-    if (this.parentObjectDirective) {
+    } else if (this.parentObjectDirective) {
       this.parentObjectDirective.object3d.add(this.audio!);
     }
+
+    this.ready.emit(this.audio);
   }
 
   get audio(): TAudio | undefined {

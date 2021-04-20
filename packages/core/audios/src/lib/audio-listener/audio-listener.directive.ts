@@ -1,5 +1,12 @@
 import { CanvasStore, DestroyedService } from '@angular-three/core';
-import { Directive, Input, OnInit, SkipSelf } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SkipSelf,
+} from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { AudioListener } from 'three';
 
@@ -11,6 +18,8 @@ import { AudioListener } from 'three';
 export class AudioListenerDirective implements OnInit {
   @Input() filter?: AudioNode;
   @Input() timeDelta?: number;
+
+  @Output() ready = new EventEmitter<AudioListener>();
 
   private _listener!: AudioListener;
 
@@ -36,6 +45,7 @@ export class AudioListenerDirective implements OnInit {
         const { camera } = this.canvasStore.getImperativeState();
         if (active && camera) {
           camera.add(this.audioListener);
+          this.ready.emit(this.audioListener);
         }
       });
   }
