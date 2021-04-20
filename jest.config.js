@@ -22,5 +22,6 @@ module.exports = {
     '<rootDir>/packages/core/audios',
     '<rootDir>/packages/core/sprites',
     '<rootDir>/packages/core/lod',
+    '<rootDir>/packages/core/lines',
   ],
 };
