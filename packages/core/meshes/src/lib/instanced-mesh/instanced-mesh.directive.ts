@@ -6,7 +6,13 @@ import { ThreeMesh } from '../abstracts';
 @Directive({
   selector: 'ngt-instancedMesh',
   exportAs: 'ngtInstancedMesh',
-  providers: [{ provide: ThreeObject3d, multi: true, useExisting: InstancedMeshDirective }],
+  providers: [
+    {
+      provide: ThreeObject3d,
+      multi: true,
+      useExisting: InstancedMeshDirective,
+    },
+  ],
 })
 export class InstancedMeshDirective
   extends ThreeMesh<InstancedMesh>
