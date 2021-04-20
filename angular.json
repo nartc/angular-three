@@ -871,6 +871,43 @@
           }
         }
       }
+    },
+    "core-sprites": {
+      "projectType": "library",
+      "root": "packages/core/sprites",
+      "sourceRoot": "packages/core/sprites/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/sprites/tsconfig.lib.json",
+            "project": "packages/core/sprites/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/sprites/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/sprites/src/**/*.ts",
+              "packages/core/sprites/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/sprites"],
+          "options": {
+            "jestConfig": "packages/core/sprites/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

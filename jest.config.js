@@ -20,5 +20,6 @@ module.exports = {
     '<rootDir>/packages/loaders',
     '<rootDir>/packages/loaders/gltf-loader',
     '<rootDir>/packages/core/audios',
+    '<rootDir>/packages/core/sprites',
   ],
 };

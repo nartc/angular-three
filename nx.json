@@ -54,7 +54,10 @@
     "loaders-gltf-loader": {
       "tags": ["scope:loaders", "type:library", "context:gltf-loader"]
     },
-    "core-audios": { "tags": ["scope:core", "type:library", "context:audios"] }
+    "core-audios": { "tags": ["scope:core", "type:library", "context:audios"] },
+    "core-sprites": {
+      "tags": ["scope:core", "type:library", "context:sprites"]
+    }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }
