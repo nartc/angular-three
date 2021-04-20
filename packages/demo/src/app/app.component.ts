@@ -25,18 +25,18 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       <demo-boxes></demo-boxes>
       <demo-boxes-effects></demo-boxes-effects>
     </ngt-canvas>
-    <!--    <ngt-canvas [camera]="{ position: [0, 0, 5] }">-->
-    <!--      <demo-orbit-controls></demo-orbit-controls>-->
-    <!--      <ngt-stats></ngt-stats>-->
-    <!--      <ngt-ambientLight [args]="[undefined, 0.5]"></ngt-ambientLight>-->
-    <!--      <ngt-spotLight-->
-    <!--        [position]="[10, 10, 10]"-->
-    <!--        [args]="[undefined, undefined, undefined, 0.5, 1]"-->
-    <!--      ></ngt-spotLight>-->
-    <!--      <ngt-pointLight [position]="[-10, -10, -10]"></ngt-pointLight>-->
-    <!--      <demo-box [position]="[1.2, 0, 0]"></demo-box>-->
-    <!--      <demo-box [position]="[-1.2, 0, 0]"></demo-box>-->
-    <!--    </ngt-canvas>-->
+    <!--        <ngt-canvas [camera]="{ position: [0, 0, 5] }">-->
+    <!--          <demo-orbit-controls></demo-orbit-controls>-->
+    <!--          <ngt-stats></ngt-stats>-->
+    <!--          <ngt-ambientLight [args]="[undefined, 0.5]"></ngt-ambientLight>-->
+    <!--          <ngt-spotLight-->
+    <!--            [position]="[10, 10, 10]"-->
+    <!--            [args]="[undefined, undefined, undefined, 0.5, 1]"-->
+    <!--          ></ngt-spotLight>-->
+    <!--          <ngt-pointLight [position]="[-10, -10, -10]"></ngt-pointLight>-->
+    <!--          <demo-box [position]="[1.2, 0, 0]"></demo-box>-->
+    <!--          <demo-box [position]="[-1.2, 0, 0]"></demo-box>-->
+    <!--        </ngt-canvas>-->
     <!--    <ngt-canvas [camera]="{ position: [0, 0, 20] }">-->
     <!--      <demo-orbit-controls></demo-orbit-controls>-->
     <!--      <ngt-stats></ngt-stats>-->

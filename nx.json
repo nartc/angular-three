@@ -57,7 +57,8 @@
     "core-audios": { "tags": ["scope:core", "type:library", "context:audios"] },
     "core-sprites": {
       "tags": ["scope:core", "type:library", "context:sprites"]
-    }
+    },
+    "core-lod": { "tags": ["scope:core", "type:library", "context:lod"] }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

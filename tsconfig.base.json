@@ -49,7 +49,8 @@
         "packages/loaders/gltf-loader/src/index.ts"
       ],
       "@angular-three/core/audios": ["packages/core/audios/src/index.ts"],
-      "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"]
+      "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"],
+      "@angular-three/core/lod": ["packages/core/lod/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

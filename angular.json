@@ -908,6 +908,43 @@
           }
         }
       }
+    },
+    "core-lod": {
+      "projectType": "library",
+      "root": "packages/core/lod",
+      "sourceRoot": "packages/core/lod/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/lod/tsconfig.lib.json",
+            "project": "packages/core/lod/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/lod/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/lod/src/**/*.ts",
+              "packages/core/lod/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/lod"],
+          "options": {
+            "jestConfig": "packages/core/lod/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
