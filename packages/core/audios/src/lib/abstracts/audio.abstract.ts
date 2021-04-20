@@ -7,7 +7,8 @@ import {
   Output,
   SkipSelf,
 } from '@angular/core';
-import { Audio, Object3D } from 'three';
+import type { Object3D } from 'three';
+import { Audio } from 'three';
 import { AudioListenerDirective } from '../audio-listener';
 
 @Directive()
