@@ -1,6 +1,6 @@
 import type { AnyConstructor } from '@angular-three/core';
 import { ThreeObject3d } from '@angular-three/core';
-import { Directive, OnInit } from '@angular/core';
+import { Directive, Input, OnInit } from '@angular/core';
 import { Light } from 'three';
 
 @Directive()
@@ -8,6 +8,8 @@ export abstract class ThreeLight<TLight extends Light = Light>
   extends ThreeObject3d<TLight>
   implements OnInit {
   abstract lightType: AnyConstructor<TLight>;
+
+  @Input() intensity?: number;
 
   private _extraArgs: unknown[] = [];
   protected set extraArgs(v: unknown[]) {
@@ -21,6 +23,9 @@ export abstract class ThreeLight<TLight extends Light = Light>
   }
 
   protected initObject() {
+    if (this.intensity) {
+      this._extraArgs[1] = this.intensity;
+    }
     this._light = new this.lightType(...this._extraArgs);
   }
 
