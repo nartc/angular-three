@@ -6,7 +6,7 @@ import { ThreeLight } from '../abstracts';
 @Directive({
   selector: 'ngt-rectAreaLight',
   exportAs: 'ngtRectAreaLight',
-  providers: [{ provide: ThreeObject3d, useExisting: RectAreaLightDirective }],
+  providers: [{ provide: ThreeObject3d, multi: true, useExisting: RectAreaLightDirective }],
 })
 export class RectAreaLightDirective extends ThreeLight<RectAreaLight> {
   @Input() set args(v: ConstructorParameters<typeof RectAreaLight>) {

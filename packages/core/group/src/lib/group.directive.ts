@@ -5,7 +5,7 @@ import { Group } from 'three';
 @Directive({
   selector: 'ngt-group',
   exportAs: 'ngtGroup',
-  providers: [{ provide: ThreeObject3d, useExisting: GroupDirective }],
+  providers: [{ provide: ThreeObject3d, multi: true, useExisting: GroupDirective }],
 })
 export class GroupDirective extends ThreeObject3d<Group> implements OnInit {
   private _group!: Group;

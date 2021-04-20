@@ -7,7 +7,7 @@ import { ThreeLight } from '../abstracts';
   selector: 'ngt-hemisphereLight',
   exportAs: 'ngtHemisphereLight',
   providers: [
-    { provide: ThreeObject3d, useExisting: HemisphereLightDirective },
+    { provide: ThreeObject3d, multi: true, useExisting: HemisphereLightDirective },
   ],
 })
 export class HemisphereLightDirective extends ThreeLight<HemisphereLight> {

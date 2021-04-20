@@ -5,7 +5,7 @@ import { Scene } from 'three';
 @Directive({
   selector: 'ngt-scene',
   exportAs: 'ngtScene',
-  providers: [{ provide: ThreeObject3d, useExisting: SceneDirective }],
+  providers: [{ provide: ThreeObject3d, multi: true, useExisting: SceneDirective }],
 })
 export class SceneDirective extends ThreeObject3d<Scene> implements OnInit {
   private _scene!: Scene;
