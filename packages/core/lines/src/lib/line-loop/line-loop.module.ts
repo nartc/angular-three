@@ -1,18 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { LineLoopDirective } from './line-loop.directive';
 
-
-
 @NgModule({
-  declarations: [
-    LineLoopDirective
-  ],
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    LineLoopDirective
-  ]
+  declarations: [LineLoopDirective],
+  imports: [CommonModule],
+  exports: [LineLoopDirective],
 })
-export class LineLoopModule { }
+export class LineLoopModule {}
