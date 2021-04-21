@@ -1,3 +1,10 @@
+## [1.0.0-beta.5](https://github.com/nartc/angular-three/compare/1.0.0-beta.4...1.0.0-beta.5) (2021-04-21)
+
+
+### Features
+
+* **core:** add circlebuffergeometry ([d89e2f2](https://github.com/nartc/angular-three/commit/d89e2f2e3357429b289e01faa37a2a46abfa6e35))
+
 ## [1.0.0-beta.4](https://github.com/nartc/angular-three/compare/1.0.0-beta.3...1.0.0-beta.4) (2021-04-21)
 
 
