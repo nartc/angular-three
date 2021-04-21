@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { LodDirective } from './lod.directive';
-import { LodLevelDirective } from './lod-level.directive';
 
 @NgModule({
-  declarations: [LodDirective, LodLevelDirective],
+  declarations: [LodDirective],
   imports: [CommonModule],
-  exports: [LodDirective, LodLevelDirective],
+  exports: [LodDirective],
 })
 export class ThreeLodModule {}

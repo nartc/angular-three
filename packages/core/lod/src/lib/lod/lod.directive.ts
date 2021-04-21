@@ -2,7 +2,6 @@ import { ThreeObject3d } from '@angular-three/core';
 import type { OnInit, QueryList } from '@angular/core';
 import { AfterContentInit, ContentChildren, Directive } from '@angular/core';
 import { LOD } from 'three';
-import { LodLevelDirective } from './lod-level.directive';
 
 @Directive({
   selector: 'ngt-lod',
@@ -14,7 +13,7 @@ export class LodDirective
   implements OnInit, AfterContentInit {
   private _lod!: LOD;
 
-  @ContentChildren(LodLevelDirective) lodLevels?: QueryList<LodLevelDirective>;
+  @ContentChildren(ThreeObject3d) objectLevels?: QueryList<ThreeObject3d>;
 
   ngOnInit() {
     this.init();
@@ -22,10 +21,10 @@ export class LodDirective
 
   ngAfterContentInit() {
     this.ngZone.runOutsideAngular(() => {
-      if (this.lodLevels) {
-        this.lodLevels.forEach((lodLevel) => {
-          if (lodLevel.hostObject) {
-            this._lod.addLevel(lodLevel.hostObject, lodLevel.distance);
+      if (this.objectLevels) {
+        this.objectLevels.forEach((objectLevel) => {
+          if (objectLevel.object3d) {
+            this._lod.addLevel(objectLevel.object3d, objectLevel.lodDistance);
           }
         });
       }
