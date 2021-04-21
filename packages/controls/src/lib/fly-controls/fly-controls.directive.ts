@@ -1,4 +1,8 @@
-import { CanvasStore, DestroyedService } from '@angular-three/core';
+import {
+  CanvasStore,
+  DestroyedService,
+  runOutsideAngular,
+} from '@angular-three/core';
 import {
   Directive,
   EventEmitter,
@@ -29,16 +33,19 @@ export class FlyControlsDirective implements OnInit {
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.canvasStore.active$
-        .pipe(takeUntil(this.destroyed))
-        .subscribe((active) => {
-          const { camera, renderer } = this.canvasStore.getImperativeState();
-          if (active && camera && renderer) {
-            this._controls = new FlyControls(camera, renderer.domElement);
-            this.ngZone.run(() => {
-              this.ready.emit(this.controls);
-            });
-          }
-        });
+        .pipe(
+          runOutsideAngular(this.ngZone, (active, run) => {
+            const { camera, renderer } = this.canvasStore.getImperativeState();
+            if (active && camera && renderer) {
+              this._controls = new FlyControls(camera, renderer.domElement);
+              run(() => {
+                this.ready.emit(this.controls);
+              });
+            }
+          }),
+          takeUntil(this.destroyed)
+        )
+        .subscribe();
     });
   }
 

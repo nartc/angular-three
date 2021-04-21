@@ -11,6 +11,7 @@ import {
   EventsStore,
   InstancesStore,
   LoopService,
+  runOutsideAngular,
 } from '@angular-three/core';
 import { DOCUMENT } from '@angular/common';
 import {
@@ -145,20 +146,26 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   private initActiveListener() {
     this.canvasStore.active$
-      .pipe(takeUntil(this.destroyed), observeOn(asyncScheduler))
-      .subscribe((active) => {
-        if (active) {
-          const {
-            renderer,
-            camera,
-            scene,
-          } = this.canvasStore.getImperativeState();
-          if (renderer && camera && scene) {
-            this.created.emit({ gl: renderer, camera, scene });
-            this.eventsStore.connectEffect(renderer.domElement);
-            this.loopService.start();
+      .pipe(
+        takeUntil(this.destroyed),
+        observeOn(asyncScheduler),
+        runOutsideAngular(this.ngZone, (active, run) => {
+          if (active) {
+            const {
+              renderer,
+              camera,
+              scene,
+            } = this.canvasStore.getImperativeState();
+            if (renderer && camera && scene) {
+              run(() => {
+                this.created.emit({ gl: renderer, camera, scene });
+              });
+              this.eventsStore.connectEffect(renderer.domElement);
+              this.loopService.start();
+            }
           }
-        }
-      });
+        })
+      )
+      .subscribe();
   }
 }

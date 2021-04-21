@@ -1,4 +1,8 @@
-import { CanvasStore, DestroyedService } from '@angular-three/core';
+import {
+  CanvasStore,
+  DestroyedService,
+  runOutsideAngular,
+} from '@angular-three/core';
 import {
   Directive,
   EventEmitter,
@@ -35,30 +39,34 @@ export class EffectComposerDirective implements OnInit {
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.canvasStore.active$
-        .pipe(takeUntil(this.destroyed))
-        .subscribe((active) => {
-          const { renderer } = this.canvasStore.getImperativeState();
-          if (active && renderer) {
-            this._composer = new EffectComposer(renderer, this.renderTarget);
+        .pipe(
+          runOutsideAngular(this.ngZone, (active, run) => {
+            const { renderer } = this.canvasStore.getImperativeState();
+            if (active && renderer) {
+              this._composer = new EffectComposer(renderer, this.renderTarget);
 
-            this.ngZone.run(() => {
-              this.ready.emit(this.composer);
-            });
+              run(() => {
+                this.ready.emit(this.composer);
+              });
 
-            if (this.watchSizeChanged) {
-              // nested subscription
-              this.canvasStore.canvasInternal$
-                .pipe(
-                  distinctUntilKeyChanged('size'),
-                  pluck('size'),
-                  takeUntil(race(this.canvasStore.active$, this.destroyed))
-                )
-                .subscribe(({ width, height }) => {
-                  this._composer.setSize(width, height);
-                });
+              if (this.watchSizeChanged) {
+                // nested subscription
+                this.canvasStore.canvasInternal$
+                  .pipe(
+                    distinctUntilKeyChanged('size'),
+                    pluck('size'),
+                    runOutsideAngular(this.ngZone, ({ width, height }) => {
+                      this._composer.setSize(width, height);
+                    }),
+                    takeUntil(race(this.canvasStore.active$, this.destroyed))
+                  )
+                  .subscribe();
+              }
             }
-          }
-        });
+          }),
+          takeUntil(this.destroyed)
+        )
+        .subscribe();
     });
   }
 

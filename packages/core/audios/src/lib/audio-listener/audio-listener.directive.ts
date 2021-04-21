@@ -1,8 +1,13 @@
-import { CanvasStore, DestroyedService } from '@angular-three/core';
+import {
+  CanvasStore,
+  DestroyedService,
+  runOutsideAngular,
+} from '@angular-three/core';
 import {
   Directive,
   EventEmitter,
   Input,
+  NgZone,
   OnInit,
   Output,
   SkipSelf,
@@ -25,29 +30,37 @@ export class AudioListenerDirective implements OnInit {
 
   constructor(
     @SkipSelf() private readonly canvasStore: CanvasStore,
-    private readonly destroyed: DestroyedService
+    private readonly destroyed: DestroyedService,
+    private readonly ngZone: NgZone
   ) {}
 
   ngOnInit() {
-    this._listener = new AudioListener();
+    this.ngZone.runOutsideAngular(() => {
+      this._listener = new AudioListener();
 
-    if (this.filter) {
-      this._listener.filter = this.filter;
-    }
+      if (this.filter) {
+        this._listener.filter = this.filter;
+      }
 
-    if (this.timeDelta) {
-      this._listener.timeDelta = this.timeDelta;
-    }
+      if (this.timeDelta) {
+        this._listener.timeDelta = this.timeDelta;
+      }
 
-    this.canvasStore.active$
-      .pipe(takeUntil(this.destroyed))
-      .subscribe((active) => {
-        const { camera } = this.canvasStore.getImperativeState();
-        if (active && camera) {
-          camera.add(this.audioListener);
-          this.ready.emit(this.audioListener);
-        }
-      });
+      this.canvasStore.active$
+        .pipe(
+          runOutsideAngular(this.ngZone, (active, run) => {
+            const { camera } = this.canvasStore.getImperativeState();
+            if (active && camera) {
+              camera.add(this.audioListener);
+              run(() => {
+                this.ready.emit(this.audioListener);
+              });
+            }
+          }),
+          takeUntil(this.destroyed)
+        )
+        .subscribe();
+    });
   }
 
   get audioListener(): AudioListener {
