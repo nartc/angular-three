@@ -1,6 +1,5 @@
 import { AnimationStore } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Clock } from 'three';
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls';
 
 @Component({
@@ -11,8 +10,6 @@ import { FlyControls } from 'three/examples/jsm/controls/FlyControls';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlyControlsComponent {
-  clock = new Clock();
-
   constructor(private readonly animationStore: AnimationStore) {}
 
   onControlsReady(flyControls: FlyControls) {

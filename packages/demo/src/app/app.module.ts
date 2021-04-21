@@ -1,8 +1,8 @@
-import { FlyControlsModule, ThreeOrbitControlsModule } from "@angular-three/controls";
+import { ThreeFlyControlsModule, ThreeOrbitControlsModule } from "@angular-three/controls";
 import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attributes';
 import { ThreeCanvasModule } from '@angular-three/core/canvas';
 import {
-  IcosahedronGeometryModule,
+  ThreeIcosahedronGeometryModule,
   ThreeBoxBufferGeometryModule,
   ThreeTextBufferGeometryModule,
 } from '@angular-three/core/geometries';
@@ -13,7 +13,7 @@ import {
   ThreePointLightModule,
   ThreeSpotLightModule,
 } from '@angular-three/core/lights';
-import { LodModule } from '@angular-three/core/lod';
+import { ThreeLodModule } from '@angular-three/core/lod';
 import {
   ThreeMeshLambertMaterialModule,
   ThreeMeshNormalMaterialModule,
@@ -85,10 +85,10 @@ import { SuzanneComponent } from './suzanne.component';
     ThreeTextBufferGeometryModule,
     ThreeSceneModule,
     ThreeDirectionalLightModule,
-    IcosahedronGeometryModule,
+    ThreeIcosahedronGeometryModule,
     ThreeMeshLambertMaterialModule,
-    LodModule,
-    FlyControlsModule,
+    ThreeLodModule,
+    ThreeFlyControlsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
