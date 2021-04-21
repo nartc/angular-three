@@ -1,3 +1,48 @@
+## [1.0.0-beta.3](https://github.com/nartc/angular-three/compare/1.0.0-beta.2...1.0.0-beta.3) (2021-04-21)
+
+
+### Features
+
+* **audio:** add PositionalAudio ([7e49db6](https://github.com/nartc/angular-three/commit/7e49db63cc0d9ad5a8b57823d866495cf381819c))
+* **controls:** add FlyControls ([5b18c29](https://github.com/nartc/angular-three/commit/5b18c291b1de1acc80c162dfb5c91b0655de6d68))
+* **core:** add `(ready)` to audios ([c03c5ab](https://github.com/nartc/angular-three/commit/c03c5ab8104882360ee3e6f8a19e5618c62c2ab1))
+* **core:** add a base class for object that has a geometry and a material ([45ef17e](https://github.com/nartc/angular-three/commit/45ef17ec373dae55084e7a260cc9fb47290f2735))
+* **core:** add AudioListener ([b5e8eff](https://github.com/nartc/angular-three/commit/b5e8eff13e8cf6b4d0faaef0dc9e628d7ecea452))
+* **core:** add HemisphereLight ([ca9d72c](https://github.com/nartc/angular-three/commit/ca9d72ccfce00149104bad720cf47a251c3b7e5e))
+* **core:** add IcosahedronGeometry ([5f2e981](https://github.com/nartc/angular-three/commit/5f2e98173795fcda6a9678ccdfa33655692b4336))
+* **core:** add Line, LineLoop, LineSegments ([e2c4af5](https://github.com/nartc/angular-three/commit/e2c4af524250fb8308cd18a7108fe94f55964da9))
+* **core:** add LOD ([a295c77](https://github.com/nartc/angular-three/commit/a295c772ac05d717049f86ff33f67c037f475f63))
+* **core:** add Points ([bd76850](https://github.com/nartc/angular-three/commit/bd76850d40700924edb16c52eef1abd98d9d92b5))
+* **core:** add PointsMaterial ([9e9bc0d](https://github.com/nartc/angular-three/commit/9e9bc0d16b764c4bcaaae7caed4f2b6718af9fd3))
+* **core:** add RectAreaLight ([504b08f](https://github.com/nartc/angular-three/commit/504b08ffc11985b357068b9b3051637763e08e79))
+* **core:** add SkinnedMesh, Skeleton, and Bone ([62f1e6c](https://github.com/nartc/angular-three/commit/62f1e6cba875686ac55f41bb89a304236b61a82c))
+* **core:** add Sprite ([24179f6](https://github.com/nartc/angular-three/commit/24179f65ab5ebd256337d0cf091c6df0f8f6c956))
+* **core:** add SpriteMaterial ([9210721](https://github.com/nartc/angular-three/commit/9210721efe9d3832e3450a3497d5dc5f91641186))
+
+
+### Bug Fixes
+
+* **core:** add intensity input to Light objects ([b832295](https://github.com/nartc/angular-three/commit/b832295421049529b3e5289426613ba3afcded19))
+* **core:** adjust MeshAbstract to use new base object ([68a29d5](https://github.com/nartc/angular-three/commit/68a29d522628b067d7ab0c0fce7f7afe32046886))
+* **core:** ensure to initialize geometry in ngOnInit ([af0132e](https://github.com/nartc/angular-three/commit/af0132ec665996ebf4155d39f7e439369c68fced))
+* **core:** ensure to initialize LOD in init ([28a88a7](https://github.com/nartc/angular-three/commit/28a88a73efdfd102a300d1101e0d0c7d09e380a6))
+* **core:** import type for Object3d in audios ([023f2cd](https://github.com/nartc/angular-three/commit/023f2cdaf4dea3569756ac01701b3e6143f533f3))
+* **core:** make AudioListener not extends ThreeObject3d ([12cc61c](https://github.com/nartc/angular-three/commit/12cc61ca73c94636849cf6e37ca5b088a97e3cb1))
+* **core:** make ThreeObject3d a multi provider ([89683c9](https://github.com/nartc/angular-three/commit/89683c9b27ce05a2592f98c2c4eafc9ba5f9a5fd))
+* **core:** precalc animationCallbacks and hasPriority in store ([fc4d7ff](https://github.com/nartc/angular-three/commit/fc4d7ff2ee8fb2b4b033e3743695d19fc0b00465))
+* **core:** remove multi providers ([180d184](https://github.com/nartc/angular-three/commit/180d18497a90db172769584c0dd19aef07009569))
+
+
+### Refactor
+
+* **core:** use runOutsideAngular operator on imperative subscription ([108a055](https://github.com/nartc/angular-three/commit/108a0551ac8fe6503a2bd8c472115d1bcf4fa97f))
+
+
+### Documentations
+
+* **demo:** add LOD demo ([5020adb](https://github.com/nartc/angular-three/commit/5020adb8303f3385748e8a6a395c9358a0e539dc))
+* **demo:** init docusaurus ([f5ebd63](https://github.com/nartc/angular-three/commit/f5ebd638380f0363f23578aff1db818047e60cd9))
+
 ## [1.0.0-beta.2](https://github.com/nartc/angular-three/compare/1.0.0-beta.1...1.0.0-beta.2) (2021-04-19)
 
 
