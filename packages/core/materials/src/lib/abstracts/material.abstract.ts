@@ -4,14 +4,21 @@ import type {
   UnknownRecord,
 } from '@angular-three/core';
 import { CanvasStore, InstancesStore } from '@angular-three/core';
-import { Directive, Input, NgZone, OnDestroy, SkipSelf } from '@angular/core';
+import {
+  Directive,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  SkipSelf,
+} from '@angular/core';
 import { Color, Material, MaterialParameters } from 'three';
 
 @Directive()
 export abstract class ThreeMaterial<
   TMaterial extends Material = Material,
   TMaterialParameters extends MaterialParameters = MaterialParameters
-> implements OnDestroy {
+> implements OnInit, OnDestroy {
   @Input() ngtId?: string;
 
   @Input() set parameters(v: TMaterialParameters | undefined) {
@@ -39,15 +46,16 @@ export abstract class ThreeMaterial<
 
   abstract materialType: AnyConstructor<TMaterial>;
 
-  private _material?: TMaterial;
+  ngOnInit() {
+    this._material = new this.materialType(this.parameters);
+    this.instancesStore.saveMaterial({
+      id: this.ngtId,
+      material: this._material,
+    });
+  }
+
+  private _material!: TMaterial;
   get material(): TMaterial {
-    if (this._material == null) {
-      this._material = new this.materialType(this.parameters);
-      this.instancesStore.saveMaterial({
-        id: this.ngtId,
-        material: this._material,
-      });
-    }
     return this._material;
   }
 
