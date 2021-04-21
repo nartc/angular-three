@@ -223,12 +223,17 @@ export class CanvasStore extends ImperativeComponentStore<CanvasStoreState> {
           ]) => {
             if (camera.type === 'PerspectiveCamera') {
               camera.aspect = size.width / size.height;
+            } else {
+              camera.left = size.width / -2;
+              camera.right = size.width / 2;
+              camera.top = size.height / 2;
+              camera.bottom = size.height / -2;
             }
             camera.updateProjectionMatrix();
             camera.updateMatrixWorld();
 
-            renderer.setSize(size.width, size.height);
             renderer.setPixelRatio(dpr);
+            renderer.setSize(size.width, size.height);
             this.setSize(size);
             this.setDpr(dpr);
           }
