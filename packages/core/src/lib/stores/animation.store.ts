@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { isObservable, Observable } from 'rxjs';
-import { filter, tap, withLatestFrom } from 'rxjs/operators';
+import { filter, skip, tap, withLatestFrom } from 'rxjs/operators';
 import type { Object3D } from 'three';
 import type {
   AnimationCallback,
@@ -13,8 +13,31 @@ import { ImperativeComponentStore } from './imperative-component-store.abstract'
 @Injectable()
 export class AnimationStore extends ImperativeComponentStore<AnimationStoreState> {
   constructor() {
-    super({ animations: {}, objectSubscriptions: [] });
+    super({
+      animations: {},
+      objectSubscriptions: [],
+      animationCallbacks: [],
+      hasPriority: false,
+    });
+
+    this.animationsChangedEffect(
+      this.select((s) => s.animations).pipe(skip(1))
+    );
   }
+
+  readonly animationsChangedEffect = this.effect<
+    AnimationStoreState['animations']
+  >((animations$) =>
+    animations$.pipe(
+      tap((animations) => {
+        const animationCallbacks = Object.values(animations);
+        const hasPriority = animationCallbacks.some(
+          ({ priority }) => !!priority
+        );
+        this.patchState({ animationCallbacks, hasPriority });
+      })
+    )
+  );
 
   readonly unregisterAnimationEffect = this.effect<string>((uuid$) =>
     uuid$.pipe(

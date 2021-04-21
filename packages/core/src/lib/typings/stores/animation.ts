@@ -20,5 +20,7 @@ export interface AnimationRecordNoObject {
 
 export interface AnimationStoreState {
   animations: Record<string, AnimationRecord | AnimationRecordNoObject>;
+  animationCallbacks: Array<AnimationRecord | AnimationRecordNoObject>;
+  hasPriority: boolean;
   objectSubscriptions: Array<[string | null, Subscription]>;
 }

@@ -1,8 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { Clock } from 'three';
 import { AnimationStore, CanvasStore } from '../stores';
 
 @Injectable()
 export class LoopService implements OnDestroy {
+  private readonly loopClock = new Clock();
+
   constructor(
     private readonly canvasStore: CanvasStore,
     private readonly animationStore: AnimationStore
@@ -12,7 +15,7 @@ export class LoopService implements OnDestroy {
     const { renderer } = this.canvasStore.getImperativeState();
     if (renderer) {
       renderer.setAnimationLoop(() => {
-        this.tick();
+        this.tick(this.loopClock.getDelta());
       });
     }
   }
@@ -24,7 +27,7 @@ export class LoopService implements OnDestroy {
     }
   }
 
-  tick() {
+  tick(delta: number) {
     const {
       renderer,
       scene,
@@ -32,22 +35,19 @@ export class LoopService implements OnDestroy {
       internal,
       clock,
     } = this.canvasStore.getImperativeState();
-    const delta = clock.getDelta();
-    const { animations } = this.animationStore.getImperativeState();
+    const {
+      animationCallbacks,
+      hasPriority,
+    } = this.animationStore.getImperativeState();
 
     if (renderer && scene && camera) {
-      const animationsCallbacks = Object.values(animations);
-      const hasPriority = animationsCallbacks.some(
-        ({ priority }) => !!priority
-      );
-
       if (hasPriority) {
-        animationsCallbacks.sort(({ priority: a }, { priority: b }) => a! - b!);
+        animationCallbacks.sort(({ priority: a }, { priority: b }) => a! - b!);
       } else {
         renderer.render(scene, camera);
       }
 
-      for (const animationCallback of animationsCallbacks) {
+      for (const animationCallback of animationCallbacks) {
         if (animationCallback.obj) {
           animationCallback.callback(animationCallback.obj, {
             clock,
