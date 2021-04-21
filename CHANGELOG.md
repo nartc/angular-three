@@ -1,3 +1,23 @@
+## [1.0.0-beta.4](https://github.com/nartc/angular-three/compare/1.0.0-beta.3...1.0.0-beta.4) (2021-04-21)
+
+
+### Features
+
+* **controls:** prefix Three to FlyControls ([9074cc6](https://github.com/nartc/angular-three/commit/9074cc686152096390aa3cd9f6c3b3d5ab5173df))
+* **core:** prefix Three to new modules ([40be427](https://github.com/nartc/angular-three/commit/40be42746ae4c232c2e41815ebd713354dc5839e))
+* **core:** remove LodLevelDirective ([390d781](https://github.com/nartc/angular-three/commit/390d781b2105263a513b84e9a8819acadebdca6b))
+
+
+### Bug Fixes
+
+* **core:** fix circular dep ([b04273d](https://github.com/nartc/angular-three/commit/b04273db2e2a065a8b311cf57dd07714f41e1b95))
+
+
+### Documentations
+
+* **demo:** adjust demo with new imports ([332461f](https://github.com/nartc/angular-three/commit/332461f276d71b99ee13f82e89f6b0eb560672a5))
+* **demo:** adjust docs ([ebfaa95](https://github.com/nartc/angular-three/commit/ebfaa95a7f2c760a2af42c5164afa62806b91bec))
+
 ## [1.0.0-beta.3](https://github.com/nartc/angular-three/compare/1.0.0-beta.2...1.0.0-beta.3) (2021-04-21)
 
 
