@@ -1,3 +1,22 @@
+## [1.0.0-beta.7](https://github.com/nartc/angular-three/compare/1.0.0-beta.6...1.0.0-beta.7) (2021-04-21)
+
+
+### Features
+
+* **core:** add AnimationLoopParticipant class for animateReady output ([4c189a0](https://github.com/nartc/angular-three/commit/4c189a0d69b79c0383f592f5a975e5b5e7bb3ea9))
+
+
+### Bug Fixes
+
+* **controls:** have OrbitControls and FlyControls extend AnimationLoopParticipant ([2c43a8a](https://github.com/nartc/angular-three/commit/2c43a8afa8d4dfdd2cb6503f67af62b1553b38ea))
+* **core:** adjust windowResizeEffect ([a99ba0e](https://github.com/nartc/angular-three/commit/a99ba0ec77d2e7796f6e9764d0ae7f776e777660))
+* **core:** have Object3d extends AnimationLoopParticipant ([420bb88](https://github.com/nartc/angular-three/commit/420bb88adbc48d6780cc8ae53a275d8dc58c80aa))
+
+
+### Documentations
+
+* **demo:** clean up demo ([a466c8a](https://github.com/nartc/angular-three/commit/a466c8af6191c69f6e99838f18a0d75e583eeca9))
+
 ## [1.0.0-beta.6](https://github.com/nartc/angular-three/compare/1.0.0-beta.5...1.0.0-beta.6) (2021-04-21)
 
 
