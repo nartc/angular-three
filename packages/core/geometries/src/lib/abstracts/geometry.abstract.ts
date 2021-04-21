@@ -17,16 +17,17 @@ export abstract class ThreeBufferGeometry<
     this._extraArgs = v;
   }
 
-  private _bufferGeometry?: TGeometry;
-  get bufferGeometry(): TGeometry {
-    if (!this._bufferGeometry) {
-      this._bufferGeometry = new this.geometryType(...this._extraArgs);
+  ngOnInit() {
+    this._bufferGeometry = new this.geometryType(...this._extraArgs);
 
-      this.instancesStore.saveBufferGeometry({
-        id: this.ngtId,
-        bufferGeometry: this._bufferGeometry,
-      });
-    }
+    this.instancesStore.saveBufferGeometry({
+      id: this.ngtId,
+      bufferGeometry: this._bufferGeometry,
+    });
+  }
+
+  private _bufferGeometry!: TGeometry;
+  get bufferGeometry(): TGeometry {
     return this._bufferGeometry;
   }
 

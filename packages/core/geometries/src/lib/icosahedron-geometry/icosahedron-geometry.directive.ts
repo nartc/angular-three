@@ -1,6 +1,6 @@
-import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import { Directive, Input } from '@angular/core';
 import { IcosahedronGeometry } from 'three';
+import { ThreeBufferGeometry } from '../abstracts';
 
 @Directive({
   selector: 'ngt-icosahedronGeometry',
