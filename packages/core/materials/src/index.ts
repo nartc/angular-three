@@ -5,3 +5,4 @@ export * from './lib/mesh-phong-material';
 export * from './lib/mesh-standard-material';
 export * from './lib/sprite-material';
 export * from './lib/points-material';
+export * from './lib/mesh-basic-material';
