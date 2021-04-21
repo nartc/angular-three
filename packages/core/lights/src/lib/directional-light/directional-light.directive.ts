@@ -7,7 +7,7 @@ import { ThreeLight } from '../abstracts';
   selector: 'ngt-directionalLight',
   exportAs: 'ngtDirectionalLight',
   providers: [
-    { provide: ThreeObject3d, multi: true, useExisting: DirectionalLightDirective },
+    { provide: ThreeObject3d,  useExisting: DirectionalLightDirective },
   ],
 })
 export class DirectionalLightDirective extends ThreeLight<DirectionalLight> {

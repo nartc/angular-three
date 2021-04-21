@@ -7,7 +7,7 @@ import { ThreeMesh } from '../abstracts';
   selector: 'ngt-mesh',
   exportAs: 'ngtMesh',
   providers: [
-    { provide: ThreeObject3d, multi: true, useExisting: MeshDirective },
+    { provide: ThreeObject3d,  useExisting: MeshDirective },
   ],
 })
 export class MeshDirective extends ThreeMesh {

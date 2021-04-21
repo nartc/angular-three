@@ -7,7 +7,7 @@ import { ThreeLight } from '../abstracts';
   selector: 'ngt-spotLight',
   exportAs: 'ngtSpotLight',
   providers: [
-    { provide: ThreeObject3d, multi: true, useExisting: SpotLightDirective },
+    { provide: ThreeObject3d,  useExisting: SpotLightDirective },
   ],
 })
 export class SpotLightDirective extends ThreeLight<SpotLight> {

@@ -6,7 +6,7 @@ import { Bone } from 'three';
   selector: 'ngt-bone',
   exportAs: 'ngtBone',
   providers: [
-    { provide: ThreeObject3d, useExisting: BoneDirective, multi: true },
+    { provide: ThreeObject3d, useExisting: BoneDirective },
   ],
 })
 export class BoneDirective extends ThreeObject3d<Bone> implements OnInit {

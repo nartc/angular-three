@@ -8,7 +8,7 @@ import { LodLevelDirective } from './lod-level.directive';
   selector: 'ngt-lod',
   exportAs: 'ngtLod',
   providers: [
-    { provide: ThreeObject3d, useExisting: LodDirective, multi: true },
+    { provide: ThreeObject3d, useExisting: LodDirective },
   ],
 })
 export class LodDirective

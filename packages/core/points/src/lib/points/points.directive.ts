@@ -12,7 +12,7 @@ import { Points } from 'three';
   selector: 'ngt-points',
   exportAs: 'ngtPoints',
   providers: [
-    { provide: ThreeObject3d, useExisting: PointsDirective, multi: true },
+    { provide: ThreeObject3d, useExisting: PointsDirective },
   ],
 })
 export class PointsDirective extends ThreeObject3dMaterialGeometry<Points> {

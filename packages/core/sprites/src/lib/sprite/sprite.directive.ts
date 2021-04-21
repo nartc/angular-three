@@ -7,7 +7,7 @@ import { ThreeSprite } from '../abstracts';
   selector: 'ngt-sprite',
   exportAs: 'ngtSprite',
   providers: [
-    { provide: ThreeObject3d, useExisting: SpriteDirective, multi: true },
+    { provide: ThreeObject3d, useExisting: SpriteDirective },
   ],
 })
 export class SpriteDirective extends ThreeSprite {

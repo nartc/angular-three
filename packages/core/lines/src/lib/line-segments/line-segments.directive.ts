@@ -7,7 +7,7 @@ import { LineSegments } from 'three';
   selector: 'ngt-lineSegments',
   exportAs: 'ngtLineSegments',
   providers: [
-    { provide: ThreeObject3d, useExisting: LineSegmentsDirective, multi: true },
+    { provide: ThreeObject3d, useExisting: LineSegmentsDirective },
   ],
 })
 export class LineSegmentsDirective extends ThreeLine<LineSegments> {

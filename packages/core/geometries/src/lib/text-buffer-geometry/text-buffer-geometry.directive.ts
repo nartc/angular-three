@@ -6,7 +6,7 @@ import { ThreeBufferGeometry } from '../abstracts';
   selector: 'ngt-textBufferGeometry',
   exportAs: 'ngtTextBufferGeometry',
   providers: [
-    { provide: ThreeBufferGeometry, useExisting: TextBufferGeometryDirective },
+    { provide: ThreeBufferGeometry,  useExisting: TextBufferGeometryDirective },
   ],
 })
 export class TextBufferGeometryDirective extends ThreeBufferGeometry<TextGeometry> {

@@ -7,7 +7,7 @@ import { LineLoop } from 'three';
   selector: 'ngt-lineLoop',
   exportAs: 'ngtLineLoop',
   providers: [
-    { provide: ThreeObject3d, useExisting: LineLoopDirective, multi: true },
+    { provide: ThreeObject3d, useExisting: LineLoopDirective },
   ],
 })
 export class LineLoopDirective extends ThreeLine<LineLoop> {

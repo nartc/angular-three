@@ -6,9 +6,7 @@ import { ThreeMesh } from '../abstracts';
 @Directive({
   selector: 'ngt-skinnedMesh',
   exportAs: 'ngtSkinnedMesh',
-  providers: [
-    { provide: ThreeObject3d, useExisting: SkinnedMeshDirective, multi: true },
-  ],
+  providers: [{ provide: ThreeObject3d, useExisting: SkinnedMeshDirective }],
 })
 export class SkinnedMeshDirective extends ThreeMesh<SkinnedMesh> {
   @Input() set args(v: [boolean]) {

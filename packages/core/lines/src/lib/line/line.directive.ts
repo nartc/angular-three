@@ -7,7 +7,7 @@ import { ThreeLine } from '../abstracts';
   selector: 'ngt-line',
   exportAs: 'ngtLine',
   providers: [
-    { provide: ThreeObject3d, useExisting: LineDirective, multi: true },
+    { provide: ThreeObject3d, useExisting: LineDirective },
   ],
 })
 export class LineDirective extends ThreeLine {

@@ -6,7 +6,7 @@ import { ThreeLight } from '../abstracts';
 @Directive({
   selector: 'ngt-ambientLight',
   exportAs: 'ngtAmbientLight',
-  providers: [{ provide: ThreeObject3d, multi: true, useExisting: AmbientLightDirective }],
+  providers: [{ provide: ThreeObject3d, useExisting: AmbientLightDirective }],
 })
 export class AmbientLightDirective extends ThreeLight<AmbientLight> {
   @Input() set args(v: ConstructorParameters<typeof AmbientLight>) {

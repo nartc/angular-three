@@ -6,7 +6,10 @@ import { ThreeBufferGeometry } from '../abstracts';
   selector: 'ngt-boxBufferGeometry',
   exportAs: 'ngtBoxBufferGeometry',
   providers: [
-    { provide: ThreeBufferGeometry, useExisting: BoxBufferGeometryDirective },
+    {
+      provide: ThreeBufferGeometry,
+      useExisting: BoxBufferGeometryDirective,
+    },
   ],
 })
 export class BoxBufferGeometryDirective extends ThreeBufferGeometry<BoxBufferGeometry> {

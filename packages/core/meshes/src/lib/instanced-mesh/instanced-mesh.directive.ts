@@ -9,7 +9,7 @@ import { ThreeMesh } from '../abstracts';
   providers: [
     {
       provide: ThreeObject3d,
-      multi: true,
+
       useExisting: InstancedMeshDirective,
     },
   ],
