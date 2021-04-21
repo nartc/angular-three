@@ -32,9 +32,11 @@ import type {
   UnknownRecord,
 } from '../typings';
 import { applyProps } from '../utils';
+import { AnimationLoopParticipant } from './animation-loop-participant.abstract';
 
 @Directive()
 export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
+  extends AnimationLoopParticipant<TObject>
   implements OnDestroy, OnChanges {
   @Input() name?: string;
   @Input() position?: ThreeVector3;
@@ -83,7 +85,9 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     @Optional()
     @SkipSelf()
     protected readonly parentObjectDirective?: ThreeObject3d
-  ) {}
+  ) {
+    super(animationStore, ngZone);
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.object3d) {
@@ -148,6 +152,8 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     this.ngZone.run(() => {
       this.$object3d.next(this.object3d);
     });
+
+    this.participate(this.object3d);
   }
 
   private applyCustomProps(inputChanges?: SimpleChanges) {
@@ -265,6 +271,7 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   }
 
   ngOnDestroy(): void {
+    super.ngOnDestroy();
     this.ngZone.runOutsideAngular(() => {
       this.remove();
       if (this.object3d) {
