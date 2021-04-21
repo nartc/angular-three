@@ -101,7 +101,7 @@ export class AppComponent {
     >
       <ngt-mesh
         *ngFor="let geometry of geometries"
-        [ngtLodLevel]="geometry.distance"
+        [lodDistance]="geometry.distance"
         [material]="'lambertMaterial'"
         [geometry]="geometry.id"
         [scale]="[1.5, 1.5, 1.5]"
