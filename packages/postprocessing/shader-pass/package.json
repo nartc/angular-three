@@ -1,6 +1,6 @@
 {
   "name": "@angular-three/postprocessing/shader-pass",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "peerDependencies": {
     "@angular/common": "^11.2.10",
     "@angular/core": "^11.2.10"

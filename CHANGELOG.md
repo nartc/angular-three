@@ -1,3 +1,20 @@
+## [1.0.0-beta.6](https://github.com/nartc/angular-three/compare/1.0.0-beta.5...1.0.0-beta.6) (2021-04-21)
+
+
+### Features
+
+* **core:** add MeshBasicMaterial ([704a29c](https://github.com/nartc/angular-three/commit/704a29c3aa2736c5d2178a3ffac673a1e62aac6f))
+
+
+### Bug Fixes
+
+* **core:** initialize material in OnInit ([d073270](https://github.com/nartc/angular-three/commit/d073270c51b61cd925c81b242370abe35e416f92))
+
+
+### Documentations
+
+* **demo:** adjust demo ([4937f42](https://github.com/nartc/angular-three/commit/4937f42960fb594712b7291358cb8b1238cff475))
+
 ## [1.0.0-beta.5](https://github.com/nartc/angular-three/compare/1.0.0-beta.4...1.0.0-beta.5) (2021-04-21)
 
 
