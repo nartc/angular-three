@@ -1,4 +1,6 @@
 import {
+  AnimationLoopParticipant,
+  AnimationStore,
   CanvasStore,
   DestroyedService,
   runOutsideAngular,
@@ -19,14 +21,19 @@ import { FlyControls } from 'three/examples/jsm/controls/FlyControls';
   exportAs: 'ngtFlyControls',
   providers: [DestroyedService],
 })
-export class FlyControlsDirective implements OnInit {
+export class FlyControlsDirective
+  extends AnimationLoopParticipant<FlyControls>
+  implements OnInit {
   @Output() ready = new EventEmitter<FlyControls>();
 
   constructor(
-    private readonly ngZone: NgZone,
+    private readonly _ngZone: NgZone,
     @SkipSelf() private readonly canvasStore: CanvasStore,
+    @SkipSelf() private readonly _animationStore: AnimationStore,
     private readonly destroyed: DestroyedService
-  ) {}
+  ) {
+    super(_animationStore, _ngZone);
+  }
 
   private _controls?: FlyControls;
 
@@ -41,6 +48,7 @@ export class FlyControlsDirective implements OnInit {
               run(() => {
                 this.ready.emit(this.controls);
               });
+              this.participate(this.controls!);
             }
           }),
           takeUntil(this.destroyed)

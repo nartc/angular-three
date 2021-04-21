@@ -1,4 +1,6 @@
 import {
+  AnimationLoopParticipant,
+  AnimationStore,
   CanvasStore,
   DestroyedService,
   runOutsideAngular,
@@ -19,14 +21,19 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
   exportAs: 'ngtOrbitControls',
   providers: [DestroyedService],
 })
-export class OrbitControlsDirective implements OnInit {
+export class OrbitControlsDirective
+  extends AnimationLoopParticipant<OrbitControls>
+  implements OnInit {
   @Output() ready = new EventEmitter<OrbitControls>();
 
   constructor(
-    private readonly ngZone: NgZone,
+    private readonly _ngZone: NgZone,
     @SkipSelf() private readonly canvasStore: CanvasStore,
+    @SkipSelf() private readonly _animationStore: AnimationStore,
     private readonly destroyed: DestroyedService
-  ) {}
+  ) {
+    super(_animationStore, _ngZone);
+  }
 
   private _controls?: OrbitControls;
 
@@ -41,6 +48,8 @@ export class OrbitControlsDirective implements OnInit {
               run(() => {
                 this.ready.emit(this.controls);
               });
+
+              this.participate(this.controls!);
             }
           }),
           takeUntil(this.destroyed)
