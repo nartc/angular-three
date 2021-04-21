@@ -5,6 +5,7 @@
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "three/examples/jsm/controls/OrbitControls": "three/examples/jsm/controls/OrbitControls",
+      "three/examples/jsm/controls/FlyControls": "three/examples/jsm/controls/FlyControls",
       "@angular-three/core": "@angular-three/core"
     }
   }
