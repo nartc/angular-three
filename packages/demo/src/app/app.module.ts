@@ -1,20 +1,30 @@
-import { ThreeOrbitControlsModule } from '@angular-three/controls';
+import { FlyControlsModule, ThreeOrbitControlsModule } from "@angular-three/controls";
 import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attributes';
 import { ThreeCanvasModule } from '@angular-three/core/canvas';
-import { ThreeBoxBufferGeometryModule, ThreeTextBufferGeometryModule } from "@angular-three/core/geometries";
-import { ThreeGroupModule } from "@angular-three/core/group";
+import {
+  IcosahedronGeometryModule,
+  ThreeBoxBufferGeometryModule,
+  ThreeTextBufferGeometryModule,
+} from '@angular-three/core/geometries';
+import { ThreeGroupModule } from '@angular-three/core/group';
 import {
   ThreeAmbientLightModule,
+  ThreeDirectionalLightModule,
   ThreePointLightModule,
   ThreeSpotLightModule,
 } from '@angular-three/core/lights';
+import { LodModule } from '@angular-three/core/lod';
 import {
+  ThreeMeshLambertMaterialModule,
   ThreeMeshNormalMaterialModule,
   ThreeMeshPhongMaterialModule,
   ThreeMeshStandardMaterialModule,
 } from '@angular-three/core/materials';
-import { ThreeInstancedMeshModule, ThreeMeshModule } from '@angular-three/core/meshes';
-import { ThreeSceneModule } from "@angular-three/core/scene";
+import {
+  ThreeInstancedMeshModule,
+  ThreeMeshModule,
+} from '@angular-three/core/meshes';
+import { ThreeSceneModule } from '@angular-three/core/scene';
 import { ThreeStatsModule } from '@angular-three/core/stats';
 import { ThreePostprocessingModule } from '@angular-three/postprocessing';
 import { ThreeRenderPassModule } from '@angular-three/postprocessing/render-pass';
@@ -24,16 +34,17 @@ import { ThreeUnrealBloomPassModule } from '@angular-three/postprocessing/unreal
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
+import { AppComponent, LodComponent } from './app.component';
 import { BoxComponent } from './box.component';
 import { BoxesEffectsComponent } from './boxes-effects.component';
 import { BoxesComponent } from './boxes.component';
-import { OrbitControlsComponent } from './orbit-controls.component';
-import { SuzanneComponent } from './suzanne.component';
-import { TextComponent } from './gltf-fonts/text.component';
+import { FlyControlsComponent } from './fly-controls.component';
 import { BirdComponent } from './gltf-fonts/bird.component';
 import { BirdsComponent } from './gltf-fonts/birds.component';
 import { JumboComponent } from './gltf-fonts/jumbo.component';
+import { TextComponent } from './gltf-fonts/text.component';
+import { OrbitControlsComponent } from './orbit-controls.component';
+import { SuzanneComponent } from './suzanne.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +58,8 @@ import { JumboComponent } from './gltf-fonts/jumbo.component';
     BirdComponent,
     BirdsComponent,
     JumboComponent,
+    LodComponent,
+    FlyControlsComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +84,11 @@ import { JumboComponent } from './gltf-fonts/jumbo.component';
     ThreeGroupModule,
     ThreeTextBufferGeometryModule,
     ThreeSceneModule,
+    ThreeDirectionalLightModule,
+    IcosahedronGeometryModule,
+    ThreeMeshLambertMaterialModule,
+    LodModule,
+    FlyControlsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
