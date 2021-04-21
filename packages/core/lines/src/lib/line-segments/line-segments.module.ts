@@ -7,4 +7,4 @@ import { LineSegmentsDirective } from './line-segments.directive';
   imports: [CommonModule],
   exports: [LineSegmentsDirective],
 })
-export class LineSegmentsModule {}
+export class ThreeLineSegmentsModule {}

@@ -8,4 +8,4 @@ import { LodLevelDirective } from './lod-level.directive';
   imports: [CommonModule],
   exports: [LodDirective, LodLevelDirective],
 })
-export class LodModule {}
+export class ThreeLodModule {}

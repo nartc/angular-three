@@ -1,18 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { PositionalAudioDirective } from './positional-audio.directive';
 
-
-
 @NgModule({
-  declarations: [
-    PositionalAudioDirective
-  ],
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    PositionalAudioDirective
-  ]
+  declarations: [PositionalAudioDirective],
+  imports: [CommonModule],
+  exports: [PositionalAudioDirective],
 })
-export class PositionalAudioModule { }
+export class ThreePositionalAudioModule {}

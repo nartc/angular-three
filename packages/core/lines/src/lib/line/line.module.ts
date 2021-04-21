@@ -7,4 +7,4 @@ import { LineDirective } from './line.directive';
   imports: [CommonModule],
   exports: [LineDirective],
 })
-export class LineModule {}
+export class ThreeLineModule {}

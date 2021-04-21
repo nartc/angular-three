@@ -7,4 +7,4 @@ import { IcosahedronGeometryDirective } from './icosahedron-geometry.directive';
   imports: [CommonModule],
   exports: [IcosahedronGeometryDirective],
 })
-export class IcosahedronGeometryModule {}
+export class ThreeIcosahedronGeometryModule {}

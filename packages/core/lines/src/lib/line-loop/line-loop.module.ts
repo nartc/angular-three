@@ -7,4 +7,4 @@ import { LineLoopDirective } from './line-loop.directive';
   imports: [CommonModule],
   exports: [LineLoopDirective],
 })
-export class LineLoopModule {}
+export class ThreeLineLoopModule {}

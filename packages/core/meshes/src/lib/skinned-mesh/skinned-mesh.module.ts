@@ -9,4 +9,4 @@ import { SkinnedMeshDirective } from './skinned-mesh.directive';
   imports: [CommonModule],
   exports: [SkinnedMeshDirective, BoneDirective, SkeletonDirective],
 })
-export class SkinnedMeshModule {}
+export class ThreeSkinnedMeshModule {}
