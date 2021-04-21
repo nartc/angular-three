@@ -59,7 +59,8 @@
       "tags": ["scope:core", "type:library", "context:sprites"]
     },
     "core-lod": { "tags": ["scope:core", "type:library", "context:lod"] },
-    "core-lines": { "tags": ["scope:core", "type:library", "context:lines"] }
+    "core-lines": { "tags": ["scope:core", "type:library", "context:lines"] },
+    "core-points": { "tags": ["scope:core", "type:library", "context:points"] }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

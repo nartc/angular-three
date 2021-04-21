@@ -23,5 +23,6 @@ module.exports = {
     '<rootDir>/packages/core/sprites',
     '<rootDir>/packages/core/lod',
     '<rootDir>/packages/core/lines',
+    '<rootDir>/packages/core/points',
   ],
 };
