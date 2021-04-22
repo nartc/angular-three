@@ -25,14 +25,15 @@ export class OrbitControlsDirective
   extends AnimationLoopParticipant<OrbitControls>
   implements OnInit {
   @Output() ready = new EventEmitter<OrbitControls>();
+  @Output() zonelessReady = new EventEmitter<OrbitControls>();
 
   constructor(
-    private readonly _ngZone: NgZone,
+    readonly ngZone: NgZone,
     @SkipSelf() private readonly canvasStore: CanvasStore,
-    @SkipSelf() private readonly _animationStore: AnimationStore,
+    @SkipSelf() readonly animationStore: AnimationStore,
     private readonly destroyed: DestroyedService
   ) {
-    super(_animationStore, _ngZone);
+    super(animationStore, ngZone);
   }
 
   private _controls?: OrbitControls;
@@ -48,6 +49,7 @@ export class OrbitControlsDirective
               run(() => {
                 this.ready.emit(this.controls);
               });
+              this.zonelessReady.emit(this.controls);
 
               this.participate(this.controls!);
             }
