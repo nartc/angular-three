@@ -6,4 +6,5 @@ export * from './lib/cylinder-buffer-geometry';
 export * from './lib/dodecahedron-buffer-geometry';
 export * from './lib/extrude-buffer-geometry';
 export * from './lib/icosahedron-geometry';
+export * from './lib/lathe-buffer-geometry';
 export * from './lib/text-buffer-geometry';
