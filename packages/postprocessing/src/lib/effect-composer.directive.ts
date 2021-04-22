@@ -27,6 +27,7 @@ export class EffectComposerDirective implements OnInit {
   @Input() watchSizeChanged = true;
 
   @Output() ready = new EventEmitter<EffectComposer>();
+  @Output() zonelessReady = new EventEmitter<EffectComposer>();
 
   constructor(
     @SkipSelf() private readonly canvasStore: CanvasStore,
@@ -48,6 +49,7 @@ export class EffectComposerDirective implements OnInit {
               run(() => {
                 this.ready.emit(this.composer);
               });
+              this.zonelessReady.emit(this.composer);
 
               if (this.watchSizeChanged) {
                 // nested subscription
