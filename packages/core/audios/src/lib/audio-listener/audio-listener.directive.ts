@@ -25,6 +25,7 @@ export class AudioListenerDirective implements OnInit {
   @Input() timeDelta?: number;
 
   @Output() ready = new EventEmitter<AudioListener>();
+  @Output() zonelessReady = new EventEmitter<AudioListener>();
 
   private _listener!: AudioListener;
 
@@ -55,6 +56,7 @@ export class AudioListenerDirective implements OnInit {
               run(() => {
                 this.ready.emit(this.audioListener);
               });
+              this.zonelessReady.emit(this.audioListener);
             }
           }),
           takeUntil(this.destroyed)
