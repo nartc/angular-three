@@ -10,14 +10,14 @@ export abstract class ThreeMesh<
   TMesh extends Mesh = Mesh
 > extends ThreeObject3dMaterialGeometry<TMesh> {
   @ContentChild(ThreeMaterial) set materialDirective(v: ThreeMaterial) {
-    if (this.material == null) {
+    if (this.material == null && v) {
       this.material = v.material;
     }
   }
 
   @ContentChild(ThreeBufferGeometry)
   set bufferGeometryDirective(v: ThreeBufferGeometry) {
-    if (this.geometry == null) {
+    if (this.geometry == null && v) {
       this.geometry = v.bufferGeometry;
     }
   }
