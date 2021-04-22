@@ -1,5 +1,4 @@
-import type { ThreeVector3 } from '@angular-three/core';
-import { AnimationStore } from '@angular-three/core';
+import type { AnimationReady, ThreeVector3 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Mesh } from 'three';
 
@@ -12,7 +11,7 @@ import { Mesh } from 'three';
       (pointerover)="color = 'hotpink'"
       (pointerout)="color = 'orange'"
       (click)="active = !active"
-      (ready)="onBoxReady($event)"
+      (animateReady)="onBoxReady($event)"
     >
       <ngt-boxBufferGeometry></ngt-boxBufferGeometry>
       <ngt-meshStandardMaterial
@@ -25,14 +24,10 @@ import { Mesh } from 'three';
 export class BoxComponent {
   @Input() position?: ThreeVector3;
 
-  constructor(private readonly animationStore: AnimationStore) {}
-
   color = 'orange';
   active = false;
 
-  onBoxReady(box: Mesh) {
-    this.animationStore.registerAnimation(box, (mesh) => {
-      mesh.rotation.x = mesh.rotation.y += 0.01;
-    });
+  onBoxReady({ animateObject }: AnimationReady<Mesh>) {
+    animateObject.rotation.x = animateObject.rotation.y += 0.01;
   }
 }

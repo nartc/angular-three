@@ -38,7 +38,7 @@ import { ThreeUnrealBloomPassModule } from '@angular-three/postprocessing/unreal
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppComponent, LodComponent } from './app.component';
+import { AppComponent } from './app.component';
 import { BoxComponent } from './box.component';
 import { BoxesEffectsComponent } from './boxes-effects.component';
 import { BoxesComponent } from './boxes.component';
@@ -47,6 +47,7 @@ import { BirdComponent } from './gltf-fonts/bird.component';
 import { BirdsComponent } from './gltf-fonts/birds.component';
 import { JumboComponent } from './gltf-fonts/jumbo.component';
 import { TextComponent } from './gltf-fonts/text.component';
+import { LodComponent } from './lods.component';
 import { OrbitControlsComponent } from './orbit-controls.component';
 import { SuzanneComponent } from './suzanne.component';
 
@@ -62,9 +63,8 @@ import { SuzanneComponent } from './suzanne.component';
     BirdComponent,
     BirdsComponent,
     JumboComponent,
-    LodComponent,
     FlyControlsComponent,
-    // CubeComponent,
+    LodComponent,
   ],
   imports: [
     BrowserModule,

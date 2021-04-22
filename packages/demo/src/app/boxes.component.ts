@@ -1,5 +1,4 @@
-import type { ThreeEvent } from '@angular-three/core';
-import { AnimationStore } from '@angular-three/core';
+import type { AnimationReady, ThreeEvent } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgZone } from '@angular/core';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
@@ -16,7 +15,7 @@ const colors = new Array(1000)
       [args]="[1000]"
       (pointermove)="onHover($event)"
       (pointerout)="onOffHover()"
-      (ready)="onReady($event)"
+      (animateReady)="onReady($event)"
     >
       <ngt-boxBufferGeometry [args]="[0.7, 0.7, 0.7]">
         <ngt-instancedBufferAttribute
@@ -46,10 +45,7 @@ export class BoxesComponent {
   hovered?: number;
   previous?: number;
 
-  constructor(
-    private readonly animationStore: AnimationStore,
-    private readonly ngZone: NgZone
-  ) {}
+  constructor(private readonly ngZone: NgZone) {}
 
   onHover($event: ThreeEvent<PointerEvent>) {
     this.hovered = $event.instanceId;
@@ -65,34 +61,35 @@ export class BoxesComponent {
     });
   }
 
-  onReady(mesh: InstancedMesh) {
-    this.animationStore.registerAnimation(mesh, (obj, { clock }) => {
-      const time = clock.getElapsedTime();
-      obj.rotation.x = Math.sin(time / 4);
-      obj.rotation.y = Math.sin(time / 2);
-      let i = 0;
-      for (let x = 0; x < 10; x++)
-        for (let y = 0; y < 10; y++)
-          for (let z = 0; z < 10; z++) {
-            const id = i++;
-            this.tempObject.position.set(5 - x, 5 - y, 5 - z);
-            this.tempObject.rotation.y =
-              Math.sin(x / 4 + time) +
-              Math.sin(y / 4 + time) +
-              Math.sin(z / 4 + time);
-            this.tempObject.rotation.z = this.tempObject.rotation.y * 2;
-            if (this.hovered !== this.previous) {
-              this.tempColor
-                .set(id === this.hovered ? 'white' : colors[id])
-                .toArray(this.colorArray, id * 3);
-              obj.geometry.attributes.color.needsUpdate = true;
-            }
-            const scale = id === this.hovered ? 2 : 1;
-            this.tempObject.scale.set(scale, scale, scale);
-            this.tempObject.updateMatrix();
-            obj.setMatrixAt(id, this.tempObject.matrix);
+  onReady({
+    animateObject,
+    renderState: { clock },
+  }: AnimationReady<InstancedMesh>) {
+    const time = clock.getElapsedTime();
+    animateObject.rotation.x = Math.sin(time / 4);
+    animateObject.rotation.y = Math.sin(time / 2);
+    let i = 0;
+    for (let x = 0; x < 10; x++)
+      for (let y = 0; y < 10; y++)
+        for (let z = 0; z < 10; z++) {
+          const id = i++;
+          this.tempObject.position.set(5 - x, 5 - y, 5 - z);
+          this.tempObject.rotation.y =
+            Math.sin(x / 4 + time) +
+            Math.sin(y / 4 + time) +
+            Math.sin(z / 4 + time);
+          this.tempObject.rotation.z = this.tempObject.rotation.y * 2;
+          if (this.hovered !== this.previous) {
+            this.tempColor
+              .set(id === this.hovered ? 'white' : colors[id])
+              .toArray(this.colorArray, id * 3);
+            animateObject.geometry.attributes.color.needsUpdate = true;
           }
-      obj.instanceMatrix.needsUpdate = true;
-    });
+          const scale = id === this.hovered ? 2 : 1;
+          this.tempObject.scale.set(scale, scale, scale);
+          this.tempObject.updateMatrix();
+          animateObject.setMatrixAt(id, this.tempObject.matrix);
+        }
+    animateObject.instanceMatrix.needsUpdate = true;
   }
 }

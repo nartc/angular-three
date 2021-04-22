@@ -34,7 +34,7 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
           [rotation]="[1.5707964611537577, 0, 0]"
           [geometry]="$any(gltf.scene.children[0]).geometry"
           [material]="$any(gltf.scene.children[0]).material"
-          (ready)="onBirdReady($event, gltf)"
+          (zonelessReady)="onBirdReady($event, gltf)"
         ></ngt-mesh>
       </ngt-scene>
     </ngt-group>

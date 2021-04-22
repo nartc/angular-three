@@ -5,7 +5,9 @@ import { FlyControls } from 'three/examples/jsm/controls/FlyControls';
 @Component({
   selector: 'demo-fly-controls',
   template: `
-    <ngt-flyControls (ready)="onControlsReady($event)"></ngt-flyControls>
+    <ngt-flyControls
+      (zonelessReady)="onControlsReady($event)"
+    ></ngt-flyControls>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

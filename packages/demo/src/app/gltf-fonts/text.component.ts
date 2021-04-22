@@ -11,7 +11,7 @@ import { Mesh, Vector3 } from 'three';
       [position]="position"
       [scale]="[0.1 * size, 0.1 * size, 0.1]"
     >
-      <ngt-mesh (ready)="onMeshReady($event)">
+      <ngt-mesh (zonelessReady)="onMeshReady($event)">
         <ngt-textBufferGeometry
           [args]="[
             text,
