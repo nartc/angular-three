@@ -1,3 +1,10 @@
+## [1.0.0-beta.9](https://github.com/nartc/angular-three/compare/1.0.0-beta.8...1.0.0-beta.9) (2021-04-22)
+
+
+### Bug Fixes
+
+* **core:** remove recursivePartial and add background to common instead ([12c9bf2](https://github.com/nartc/angular-three/commit/12c9bf2477271a8bfdc80ace660df28c66c89908))
+
 ## [1.0.0-beta.8](https://github.com/nartc/angular-three/compare/1.0.0-beta.7...1.0.0-beta.8) (2021-04-22)
 
 
