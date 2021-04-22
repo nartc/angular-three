@@ -1,3 +1,10 @@
+## [1.0.0-beta.8](https://github.com/nartc/angular-three/compare/1.0.0-beta.7...1.0.0-beta.8) (2021-04-22)
+
+
+### Bug Fixes
+
+* **core:** add RecursivePartial type ([66bcd14](https://github.com/nartc/angular-three/commit/66bcd14632ec6d7f64525c106a6b950d9c9db9fb))
+
 ## [1.0.0-beta.7](https://github.com/nartc/angular-three/compare/1.0.0-beta.6...1.0.0-beta.7) (2021-04-21)
 
 
