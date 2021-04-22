@@ -1,3 +1,25 @@
+## [1.0.0-beta.10](https://github.com/nartc/angular-three/compare/1.0.0-beta.9...1.0.0-beta.10) (2021-04-22)
+
+
+### Features
+
+* **controls:** add zonelessReady to flyControls ([046bc2a](https://github.com/nartc/angular-three/commit/046bc2a331518a3a1792762dbe800fba72f37ff1))
+* **controls:** add zonelessReady to orbitControls ([c651fe9](https://github.com/nartc/angular-three/commit/c651fe958f058d57e845f5966cc1d49ee019535e))
+* **core:** add zonelessReady to AudioListener ([7605f79](https://github.com/nartc/angular-three/commit/7605f798c6aae4fbb8051026d3a4c3bacd2d680a))
+* **core:** add zonelessReady to Skeleton ([a00cd50](https://github.com/nartc/angular-three/commit/a00cd501e3f0b00942a5c0f74c263ebf4f29bdd4))
+* **postprocessing:** add zonelessReady ([7cb674c](https://github.com/nartc/angular-three/commit/7cb674cfb5f24174e9bffaeda246038de58e9d9b))
+
+
+### Bug Fixes
+
+* **core:** null check for bufferGeometry and material in Mesh ([91f5497](https://github.com/nartc/angular-three/commit/91f5497ece953164c3090ec5146f0efc9e354afc))
+* **core:** rework LOD ([a30e2d3](https://github.com/nartc/angular-three/commit/a30e2d3bb6a30b04636db94a1a251c036528de42))
+
+
+### Documentations
+
+* **demo:** adjust demo ([1905f69](https://github.com/nartc/angular-three/commit/1905f69d1104ffe2bd1d558813fe17f3bc8b9dfb))
+
 ## [1.0.0-beta.9](https://github.com/nartc/angular-three/compare/1.0.0-beta.8...1.0.0-beta.9) (2021-04-22)
 
 
