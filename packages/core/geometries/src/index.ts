@@ -10,4 +10,5 @@ export * from './lib/lathe-buffer-geometry';
 export * from './lib/octahedron-buffer-geometry';
 export * from './lib/parametric-buffer-geometry';
 export * from './lib/plane-buffer-geometry';
+export * from './lib/polyhedron-buffer-geometry';
 export * from './lib/text-buffer-geometry';
