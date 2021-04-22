@@ -45,5 +45,6 @@ export interface ThreeCommonParameters {
   matrix?: ThreeMatrix4;
   quaternion?: ThreeQuaternion;
   layers?: ThreeLayers;
+  background?: ThreeColor;
   dispose?: (() => void) | null;
 }
