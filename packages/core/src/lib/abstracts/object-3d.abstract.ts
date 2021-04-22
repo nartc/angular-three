@@ -48,8 +48,6 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   @Input() visible = true;
   @Input() matrixAutoUpdate = true;
 
-  @Input() lodDistance?: number;
-
   @Input() appendMode: 'immediate' | 'root' = 'immediate';
   @Input() appendTo?: Object3D;
 
@@ -75,13 +73,14 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   }
 
   @Output() ready = this.object3d$.pipe(filter(Boolean)) as Observable<TObject>;
+  @Output() zonelessReady = new EventEmitter<TObject>();
 
   constructor(
     protected readonly canvasStore: CanvasStore,
-    protected readonly animationStore: AnimationStore,
     protected readonly instancesStore: InstancesStore,
     protected readonly eventsStore: EventsStore,
-    protected readonly ngZone: NgZone,
+    readonly animationStore: AnimationStore,
+    readonly ngZone: NgZone,
     @Optional()
     @SkipSelf()
     protected readonly parentObjectDirective?: ThreeObject3d
@@ -153,6 +152,7 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
       this.$object3d.next(this.object3d);
     });
 
+    this.zonelessReady.emit(this.object3d);
     this.participate(this.object3d);
   }
 
