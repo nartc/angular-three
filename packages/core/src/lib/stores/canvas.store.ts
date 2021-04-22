@@ -82,7 +82,7 @@ export class CanvasStore extends ImperativeComponentStore<CanvasStoreState> {
     ...state,
     isLinear,
   }));
-  readonly setShadows = this.updater<boolean | Partial<THREE.WebGLShadowMap>>(
+  readonly setShadows = this.updater<boolean | Partial<WebGLShadowMap>>(
     (state, shadows) => ({
       ...state,
       shadows,
