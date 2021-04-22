@@ -25,14 +25,15 @@ export class FlyControlsDirective
   extends AnimationLoopParticipant<FlyControls>
   implements OnInit {
   @Output() ready = new EventEmitter<FlyControls>();
+  @Output() zonelessReady = new EventEmitter<FlyControls>();
 
   constructor(
-    private readonly _ngZone: NgZone,
+    readonly ngZone: NgZone,
     @SkipSelf() private readonly canvasStore: CanvasStore,
-    @SkipSelf() private readonly _animationStore: AnimationStore,
+    @SkipSelf() readonly animationStore: AnimationStore,
     private readonly destroyed: DestroyedService
   ) {
-    super(_animationStore, _ngZone);
+    super(animationStore, ngZone);
   }
 
   private _controls?: FlyControls;
@@ -48,6 +49,7 @@ export class FlyControlsDirective
               run(() => {
                 this.ready.emit(this.controls);
               });
+              this.zonelessReady.emit(this.controls);
               this.participate(this.controls!);
             }
           }),
