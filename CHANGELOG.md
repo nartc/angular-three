@@ -2,22 +2,24 @@
 
 ### Features
 
-- **core:** add ConeBufferGeometry ([05d5363](https://github.com/nartc/angular-three/commit/05d5363e1e98859fd471a4ed9d2a1967a4930443))
-- **core:** add DodecahedronBufferGeometry ([e5a2196](https://github.com/nartc/angular-three/commit/e5a2196ed127999e9e2aa93d82b613c588aabdd7))
-- **core:** add ExtrudeBufferGeometry ([480a4b7](https://github.com/nartc/angular-three/commit/480a4b76f1074b9bd4bf4ddc409da34e41eab4ea))
-- **core:** add LatheBufferGeometry ([a11fadb](https://github.com/nartc/angular-three/commit/a11fadbf81ec98c8855ab17ada75fa47b4d0ad93))
-- **core:** add ParametricBufferGeometry ([a456cea](https://github.com/nartc/angular-three/commit/a456cead930096deb2f687df61b75e4a5baf7177))
-- **core:** add PlaneBufferGeometry ([2a07b88](https://github.com/nartc/angular-three/commit/2a07b885f4a1bd684e616b24857990315f456692))
-- **core:** add PolyhedronBufferGeometry ([f161545](https://github.com/nartc/angular-three/commit/f161545bd76ceb03ac017c10da26edebf1b6ff93))
-- **core:** add RingBufferGeometry ([2866754](https://github.com/nartc/angular-three/commit/286675417144cd44a08bb74fe03b8ac8ae8046fe))
-- **core:** add ShapeBufferGeometry ([b2354a9](https://github.com/nartc/angular-three/commit/b2354a927f3f47aec239e7fa93a4fbef52285d9b))
-- **core:** add SphereBufferGeometry and fix lints ([b1fe554](https://github.com/nartc/angular-three/commit/b1fe554a7512aff4d9eade7930371b7368e618e3))
-- **core:** add TetrahedronBufferGeometry ([23627a5](https://github.com/nartc/angular-three/commit/23627a56faa6027e459098ebdccce042e5829172))
-- **core:** OctahedronBufferGeometry ([6e4ee50](https://github.com/nartc/angular-three/commit/6e4ee50cacbb6cd668d6e6b85cf60eee58d286b3))
+* **core:** add ConeBufferGeometry ([05d5363](https://github.com/nartc/angular-three/commit/05d5363e1e98859fd471a4ed9d2a1967a4930443))
+* **core:** add DodecahedronBufferGeometry ([e5a2196](https://github.com/nartc/angular-three/commit/e5a2196ed127999e9e2aa93d82b613c588aabdd7))
+* **core:** add ExtrudeBufferGeometry ([480a4b7](https://github.com/nartc/angular-three/commit/480a4b76f1074b9bd4bf4ddc409da34e41eab4ea))
+* **core:** add LatheBufferGeometry ([a11fadb](https://github.com/nartc/angular-three/commit/a11fadbf81ec98c8855ab17ada75fa47b4d0ad93))
+* **core:** add ParametricBufferGeometry ([a456cea](https://github.com/nartc/angular-three/commit/a456cead930096deb2f687df61b75e4a5baf7177))
+* **core:** add PlaneBufferGeometry ([2a07b88](https://github.com/nartc/angular-three/commit/2a07b885f4a1bd684e616b24857990315f456692))
+* **core:** add PolyhedronBufferGeometry ([f161545](https://github.com/nartc/angular-three/commit/f161545bd76ceb03ac017c10da26edebf1b6ff93))
+* **core:** add RingBufferGeometry ([2866754](https://github.com/nartc/angular-three/commit/286675417144cd44a08bb74fe03b8ac8ae8046fe))
+* **core:** add ShapeBufferGeometry ([b2354a9](https://github.com/nartc/angular-three/commit/b2354a927f3f47aec239e7fa93a4fbef52285d9b))
+* **core:** add SphereBufferGeometry and fix lints ([b1fe554](https://github.com/nartc/angular-three/commit/b1fe554a7512aff4d9eade7930371b7368e618e3))
+* **core:** add TetrahedronBufferGeometry ([23627a5](https://github.com/nartc/angular-three/commit/23627a56faa6027e459098ebdccce042e5829172))
+* **core:** OctahedronBufferGeometry ([6e4ee50](https://github.com/nartc/angular-three/commit/6e4ee50cacbb6cd668d6e6b85cf60eee58d286b3))
+
 
 ### Bug Fixes
 
-- **core:** fix lints ([429cdfb](https://github.com/nartc/angular-three/commit/429cdfb77fe93b55b68b967fab03896e8a1d833e))
+* **core:** fix lints ([429cdfb](https://github.com/nartc/angular-three/commit/429cdfb77fe93b55b68b967fab03896e8a1d833e))
+
 
 ## [1.0.0-beta.10](https://github.com/nartc/angular-three/compare/1.0.0-beta.9...1.0.0-beta.10) (2021-04-22)
 
