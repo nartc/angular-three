@@ -8,11 +8,18 @@
         "plugin:@nrwl/nx/angular",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
-      "parserOptions": { "project": ["packages/core/stats/tsconfig.*?.json"] },
+      "parserOptions": {
+        "project": ["packages/core/stats/tsconfig.*?.json"]
+      },
       "rules": {
+        "@typescript-eslint/no-explicit-any": 0,
         "@angular-eslint/component-selector": [
           "error",
-          { "type": "element", "prefix": "ngt", "style": "kebab-case" }
+          {
+            "type": "element",
+            "prefix": "ngt",
+            "style": "kebab-case"
+          }
         ]
       }
     },
