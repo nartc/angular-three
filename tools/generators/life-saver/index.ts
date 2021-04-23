@@ -182,6 +182,81 @@ const catalogue = {
   },
 };
 
+const controls = [
+  {
+    name: 'OrbitControls',
+    injectDocument: false,
+    importThree: false,
+    useRenderer: true,
+    inputs: [],
+    constructor: '(camera, renderer.domElement)',
+  },
+  {
+    name: 'FlyControls',
+    injectDocument: false,
+    importThree: false,
+    useRenderer: true,
+    inputs: [],
+    constructor: '(camera, renderer.domElement)',
+  },
+  {
+    name: 'DeviceOrientationControls',
+    injectDocument: false,
+    importThree: false,
+    useRenderer: false,
+    inputs: [],
+    constructor: '(camera)',
+  },
+  {
+    name: 'FirstPersonControls',
+    injectDocument: false,
+    importThree: false,
+    useRenderer: true,
+    inputs: [],
+    constructor: '(camera, renderer.domElement)',
+  },
+  {
+    name: 'PointerLockControls',
+    injectDocument: true,
+    importThree: false,
+    useRenderer: false,
+    inputs: [],
+    constructor: '(camera, this.document.body)',
+  },
+  {
+    name: 'DragControls',
+    injectDocument: false,
+    importThree: true,
+    useRenderer: true,
+    inputs: [
+      {
+        name: 'objects',
+        import: 'Object3D',
+        isOptional: false,
+        isArray: true,
+        default: '[]',
+      },
+    ],
+    constructor: '(this.objects, camera, renderer.domElement)',
+  },
+  {
+    name: 'TrackballControls',
+    injectDocument: false,
+    importThree: false,
+    useRenderer: true,
+    inputs: [],
+    constructor: '(camera, renderer.domElement)',
+  },
+  {
+    name: 'TransformControls',
+    injectDocument: false,
+    importThree: false,
+    useRenderer: true,
+    inputs: [],
+    constructor: '(camera, renderer.domElement)',
+  },
+];
+
 export default function (): Rule {
   return (tree, context) => {
     const templates = [];
@@ -227,6 +302,56 @@ export default function (): Rule {
       );
 
       templates.push(...keyTemplates, indexTemplate);
+    }
+
+    for (const {
+      name,
+      importThree,
+      useRenderer,
+      constructor,
+      injectDocument,
+      inputs,
+    } of controls) {
+      context.logger.info(`Generating ${name}`);
+      const controlTemplate = mergeWith(
+        apply(url('./files/controls/lib'), [
+          applyTemplates({
+            name,
+            constructor,
+            injectDocument,
+            useRenderer,
+            inputs,
+            camelize,
+            dasherize,
+          }),
+          move(
+            path.normalize(`./packages/controls/${dasherize(name)}/src/lib`)
+          ),
+        ]),
+        MergeStrategy.Overwrite
+      );
+
+      const controlIndexTemplate = mergeWith(
+        apply(url('./files/controls/index'), [
+          applyTemplates({ name, dasherize }),
+          move(path.normalize(`./packages/controls/${dasherize(name)}/src`)),
+        ]),
+        MergeStrategy.Overwrite
+      );
+
+      const ngPackageEslintTemplate = mergeWith(
+        apply(url('./files/controls/ng-package'), [
+          applyTemplates({ name, dasherize, importThree }),
+          move(path.normalize(`./packages/controls/${dasherize(name)}`)),
+        ]),
+        MergeStrategy.Overwrite
+      );
+
+      templates.push(
+        controlTemplate,
+        controlIndexTemplate,
+        ngPackageEslintTemplate
+      );
     }
 
     return chain(templates);

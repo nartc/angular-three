@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/packages/controls/pointer-lock-controls",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "three/examples/jsm/controls/PointerLockControls": "three/examples/jsm/controls/PointerLockControls",
+      "@angular-three/core": "@angular-three/core"
+    }
+  }
+}

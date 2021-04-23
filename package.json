@@ -33,6 +33,7 @@
     "help": "nx help",
     "commit": "cz",
     "release": "release-it",
+    "lint:all": "npx ng run-many --target=lint --all",
     "build:all": "ng run core:build-all",
     "publish:all": "ng run core:publish-all"
   },

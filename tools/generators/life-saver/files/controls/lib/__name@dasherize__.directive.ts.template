@@ -1,0 +1,32 @@
+// GENERATED
+
+import { ThreeControls } from '@angular-three/controls';
+import type { ThreeCamera } from '@angular-three/core';
+import { DestroyedService<% if (injectDocument) { %>, CanvasStore, AnimationStore<% } %> } from '@angular-three/core';<% if (injectDocument) { %>
+import { DOCUMENT } from '@angular/common';<% } %>
+import { Directive<% if (inputs.length) { %>, Input<% } %><% if (injectDocument) { %>, NgZone, Inject, SkipSelf<% }%> } from '@angular/core';<% if (useRenderer || inputs.length) { %>
+import type { <% if (useRenderer) { %>WebGLRenderer, <% } %><% for (const input of inputs) {%><%= input.import %>, <% } %> } from 'three';<% } %>
+import { <%= name %> } from 'three/examples/jsm/controls/<%= name %>';
+
+@Directive({
+  selector: 'ngt-<%= camelize(name) %>',
+  exportAs: 'ngt<%= name %>',
+  providers: [DestroyedService],
+})
+export class <%= name %>Directive extends ThreeControls<<%= name %>> {<% for (const input of inputs) { %>
+  @Input() <%= input.name %><% if (input.isOptional) { %>?<% } %>: <%= input.import %><% if (input.isArray) { %>[]<% } %><% if (input.default) { %> = <%= input.default %>;<% } else { %>;<% } %><% } %><% if (injectDocument) { %>
+
+  constructor(
+    @Inject(DOCUMENT) private readonly document: any,
+    readonly ngZone: NgZone,
+    @SkipSelf() protected readonly canvasStore: CanvasStore,
+    @SkipSelf() readonly animationStore: AnimationStore,
+    protected readonly destroyed: DestroyedService
+  ) {
+    super(ngZone, canvasStore, animationStore, destroyed);
+  }<% } %>
+
+  initControls(camera: ThreeCamera<% if (useRenderer) { %>, renderer: WebGLRenderer<% } %>): <%= name %> {
+    return new <%= name %><%= constructor %>;
+  }
+}

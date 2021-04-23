@@ -27,5 +27,13 @@ module.exports = {
     '<rootDir>/packages/core/textures',
     '<rootDir>/packages/core/curves',
     '<rootDir>/packages/core/helpers',
+    '<rootDir>/packages/controls/drag-controls',
+    '<rootDir>/packages/controls/orbit-controls',
+    '<rootDir>/packages/controls/fly-controls',
+    '<rootDir>/packages/controls/device-orientation-controls',
+    '<rootDir>/packages/controls/first-person-controls',
+    '<rootDir>/packages/controls/pointer-lock-controls',
+    '<rootDir>/packages/controls/trackball-controls',
+    '<rootDir>/packages/controls/transform-controls',
   ],
 };

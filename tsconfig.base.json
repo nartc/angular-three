@@ -55,7 +55,31 @@
       "@angular-three/core/points": ["packages/core/points/src/index.ts"],
       "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
       "@angular-three/core/curves": ["packages/core/curves/src/index.ts"],
-      "@angular-three/core/helpers": ["packages/core/helpers/src/index.ts"]
+      "@angular-three/core/helpers": ["packages/core/helpers/src/index.ts"],
+      "@angular-three/controls/drag-controls": [
+        "packages/controls/drag-controls/src/index.ts"
+      ],
+      "@angular-three/controls/orbit-controls": [
+        "packages/controls/orbit-controls/src/index.ts"
+      ],
+      "@angular-three/controls/fly-controls": [
+        "packages/controls/fly-controls/src/index.ts"
+      ],
+      "@angular-three/controls/device-orientation-controls": [
+        "packages/controls/device-orientation-controls/src/index.ts"
+      ],
+      "@angular-three/controls/first-person-controls": [
+        "packages/controls/first-person-controls/src/index.ts"
+      ],
+      "@angular-three/controls/pointer-lock-controls": [
+        "packages/controls/pointer-lock-controls/src/index.ts"
+      ],
+      "@angular-three/controls/trackball-controls": [
+        "packages/controls/trackball-controls/src/index.ts"
+      ],
+      "@angular-three/controls/transform-controls": [
+        "packages/controls/transform-controls/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,7 +1,5 @@
-import {
-  ThreeFlyControlsModule,
-  ThreeOrbitControlsModule,
-} from '@angular-three/controls';
+import { ThreeFlyControlsModule } from '@angular-three/controls/fly-controls';
+import { ThreeOrbitControlsModule } from '@angular-three/controls/orbit-controls';
 import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attributes';
 import { ThreeCanvasModule } from '@angular-three/core/canvas';
 import {

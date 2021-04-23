@@ -1130,6 +1130,302 @@
           }
         }
       }
+    },
+    "controls-drag-controls": {
+      "projectType": "library",
+      "root": "packages/controls/drag-controls",
+      "sourceRoot": "packages/controls/drag-controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/drag-controls/tsconfig.lib.json",
+            "project": "packages/controls/drag-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/drag-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/drag-controls/src/**/*.ts",
+              "packages/controls/drag-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/drag-controls"],
+          "options": {
+            "jestConfig": "packages/controls/drag-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "controls-orbit-controls": {
+      "projectType": "library",
+      "root": "packages/controls/orbit-controls",
+      "sourceRoot": "packages/controls/orbit-controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.json",
+            "project": "packages/controls/orbit-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/orbit-controls/src/**/*.ts",
+              "packages/controls/orbit-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/orbit-controls"],
+          "options": {
+            "jestConfig": "packages/controls/orbit-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "controls-fly-controls": {
+      "projectType": "library",
+      "root": "packages/controls/fly-controls",
+      "sourceRoot": "packages/controls/fly-controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/fly-controls/tsconfig.lib.json",
+            "project": "packages/controls/fly-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/fly-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/fly-controls/src/**/*.ts",
+              "packages/controls/fly-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/fly-controls"],
+          "options": {
+            "jestConfig": "packages/controls/fly-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "controls-device-orientation-controls": {
+      "projectType": "library",
+      "root": "packages/controls/device-orientation-controls",
+      "sourceRoot": "packages/controls/device-orientation-controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/device-orientation-controls/tsconfig.lib.json",
+            "project": "packages/controls/device-orientation-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/device-orientation-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/device-orientation-controls/src/**/*.ts",
+              "packages/controls/device-orientation-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/device-orientation-controls"],
+          "options": {
+            "jestConfig": "packages/controls/device-orientation-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "controls-first-person-controls": {
+      "projectType": "library",
+      "root": "packages/controls/first-person-controls",
+      "sourceRoot": "packages/controls/first-person-controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/first-person-controls/tsconfig.lib.json",
+            "project": "packages/controls/first-person-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/first-person-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/first-person-controls/src/**/*.ts",
+              "packages/controls/first-person-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/first-person-controls"],
+          "options": {
+            "jestConfig": "packages/controls/first-person-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "controls-pointer-lock-controls": {
+      "projectType": "library",
+      "root": "packages/controls/pointer-lock-controls",
+      "sourceRoot": "packages/controls/pointer-lock-controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/pointer-lock-controls/tsconfig.lib.json",
+            "project": "packages/controls/pointer-lock-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/pointer-lock-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/pointer-lock-controls/src/**/*.ts",
+              "packages/controls/pointer-lock-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/pointer-lock-controls"],
+          "options": {
+            "jestConfig": "packages/controls/pointer-lock-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "controls-trackball-controls": {
+      "projectType": "library",
+      "root": "packages/controls/trackball-controls",
+      "sourceRoot": "packages/controls/trackball-controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/trackball-controls/tsconfig.lib.json",
+            "project": "packages/controls/trackball-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/trackball-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/trackball-controls/src/**/*.ts",
+              "packages/controls/trackball-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/trackball-controls"],
+          "options": {
+            "jestConfig": "packages/controls/trackball-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "controls-transform-controls": {
+      "projectType": "library",
+      "root": "packages/controls/transform-controls",
+      "sourceRoot": "packages/controls/transform-controls/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/transform-controls/tsconfig.lib.json",
+            "project": "packages/controls/transform-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/transform-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/transform-controls/src/**/*.ts",
+              "packages/controls/transform-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/transform-controls"],
+          "options": {
+            "jestConfig": "packages/controls/transform-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

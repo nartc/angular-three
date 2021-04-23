@@ -67,6 +67,42 @@
     "core-curves": { "tags": ["scope:core", "type:library", "context:curves"] },
     "core-helpers": {
       "tags": ["scope:core", "type:library", "context:helpers"]
+    },
+    "controls-drag-controls": {
+      "tags": ["scope:controls", "type:library", "context:drag-controls"]
+    },
+    "controls-orbit-controls": {
+      "tags": ["scope:controls", "type:library", "context:orbit-controls"]
+    },
+    "controls-fly-controls": {
+      "tags": ["scope:controls", "type:library", "context:fly-controls"]
+    },
+    "controls-device-orientation-controls": {
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:device-orientation-controls"
+      ]
+    },
+    "controls-first-person-controls": {
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:first-person-controls"
+      ]
+    },
+    "controls-pointer-lock-controls": {
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:pointer-lock-controls"
+      ]
+    },
+    "controls-trackball-controls": {
+      "tags": ["scope:controls", "type:library", "context:trackball-controls"]
+    },
+    "controls-transform-controls": {
+      "tags": ["scope:controls", "type:library", "context:transform-controls"]
     }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }

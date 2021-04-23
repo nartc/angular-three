@@ -4,12 +4,8 @@ import {
 } from '@angular-three/core';
 import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import { ThreeMaterial } from '@angular-three/core/materials';
-import {
-  ContentChild,
-  ContentChildren,
-  Directive,
-  QueryList,
-} from '@angular/core';
+import type { QueryList } from '@angular/core';
+import { ContentChild, ContentChildren, Directive } from '@angular/core';
 import { Line } from 'three';
 
 @Directive()

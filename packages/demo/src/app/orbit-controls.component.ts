@@ -15,6 +15,7 @@ export class OrbitControlsComponent {
   constructor(private readonly animationStore: AnimationStore) {}
 
   onControlsReady(controls: OrbitControls) {
+    console.log(controls);
     controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
     controls.dampingFactor = 0.05;
 
