@@ -1,7 +1,9 @@
-# loaders
+# `@angular-three/loaders`
 
-This library was generated with [Nx](https://nx.dev).
+This package provides the external Loaders like `GLTFLoader` etc...
 
-## Running unit tests
+## Installation
 
-Run `nx test loaders` to execute the unit tests.
+```shell
+npm install @angular-three/loaders
+```

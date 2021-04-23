@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Let's discover **Docusaurus in less than 5 minutes**.
 
-<iframe src="https://codesandbox.io/embed/angular-three-box-animation-demo-n8i0b?fontsize=14&hidenavigation=1&module=%2Fsrc%2Fapp%2Fapp.component.html&theme=dark&view=preview" className="embedded-sandbox" title="angular-three-box-animation-demo" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"/>
+<iframe src='https://stackblitz.com/edit/angular-ivy-hh56v3?ctl=1&embed=1&file=src/app/app.component.ts&hideExplorer=1&view=preview'/>
 
 ## Getting Started
 

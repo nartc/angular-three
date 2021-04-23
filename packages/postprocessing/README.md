@@ -1,7 +1,9 @@
-# postprocessing
+# `@angular-three/postprocessing`
 
-This library was generated with [Nx](https://nx.dev).
+This package provides the external Post-processing like `EffectComposer`, and the Passes like `ShaderPass`, `UnrealBloomPass` etc...
 
-## Running unit tests
+## Installation
 
-Run `nx test postprocessing` to execute the unit tests.
+```shell
+npm install @angular-three/postprocessing
+```
