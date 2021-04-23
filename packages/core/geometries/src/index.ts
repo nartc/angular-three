@@ -13,4 +13,5 @@ export * from './lib/plane-buffer-geometry';
 export * from './lib/polyhedron-buffer-geometry';
 export * from './lib/ring-buffer-geometry';
 export * from './lib/shape-buffer-geometry';
+export * from './lib/sphere-buffer-geometry';
 export * from './lib/text-buffer-geometry';

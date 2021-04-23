@@ -1,3 +1,4 @@
+import type { UnknownRecord } from '@angular-three/core';
 import { ThreePass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
@@ -29,17 +30,17 @@ export class UnrealBloomPassDirective extends ThreePass<UnrealBloomPass> {
   @Input() renderTargetsVertical?: WebGLRenderTarget[];
   @Input() nMips?: number;
   @Input() renderTargetBright?: WebGLRenderTarget;
-  @Input() highPassUniforms?: object;
+  @Input() highPassUniforms?: UnknownRecord;
   @Input() materialHighPassFilter?: ShaderMaterial;
   @Input() separableBlurMaterials?: ShaderMaterial[];
   @Input() compositeMaterial?: ShaderMaterial;
   @Input() bloomTintColors?: Vector3[];
-  @Input() copyUniforms?: object;
+  @Input() copyUniforms?: UnknownRecord;
   @Input() materialCopy?: ShaderMaterial;
   @Input() oldClearColor?: Color;
   @Input() oldClearAlpha?: number;
   @Input() basic?: MeshBasicMaterial;
-  @Input() fsQuad?: object;
+  @Input() fsQuad?: UnknownRecord;
 
   passType = UnrealBloomPass;
   extraInputs = [

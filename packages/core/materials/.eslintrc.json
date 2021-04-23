@@ -12,10 +12,6 @@
         "project": ["packages/core/materials/tsconfig.*?.json"]
       },
       "rules": {
-        "@angular-eslint/directive-selector": [
-          "error",
-          { "type": "attribute", "prefix": "ngt", "style": "camelCase" }
-        ],
         "@angular-eslint/component-selector": [
           "error",
           { "type": "element", "prefix": "ngt", "style": "kebab-case" }

@@ -101,7 +101,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     private readonly ngZone: NgZone,
     private readonly hostElement: ElementRef<HTMLElement>,
     private readonly renderer: Renderer2,
-    @Inject(DOCUMENT) private readonly document: any,
+    @Inject(DOCUMENT) private readonly document: unknown,
     private readonly destroyed: DestroyedService
   ) {
     canvasStore.setSize({

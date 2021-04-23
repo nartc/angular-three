@@ -46,12 +46,14 @@ export class OrbitControlsDirective
             const { camera, renderer } = this.canvasStore.getImperativeState();
             if (active && camera && renderer) {
               this._controls = new OrbitControls(camera, renderer.domElement);
-              run(() => {
-                this.ready.emit(this.controls);
-              });
-              this.zonelessReady.emit(this.controls);
+              if (this.controls) {
+                run(() => {
+                  this.ready.emit(this.controls);
+                });
+                this.zonelessReady.emit(this.controls);
 
-              this.participate(this.controls!);
+                this.participate(this.controls);
+              }
             }
           }),
           takeUntil(this.destroyed)

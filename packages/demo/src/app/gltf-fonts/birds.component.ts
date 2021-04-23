@@ -15,7 +15,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BirdsComponent {
-  birds = new Array(100).fill(undefined).map((_, i) => {
+  birds = new Array(100).fill(undefined).map(() => {
     const x = (15 + Math.random() * 30) * (Math.round(Math.random()) ? -1 : 1);
     const y = -10 + Math.random() * 20;
     const z = -5 + Math.random() * 10;

@@ -5,6 +5,7 @@ import {
   Input,
   NgZone,
   OnChanges,
+  OnDestroy,
   OnInit,
   Optional,
 } from '@angular/core';
@@ -14,7 +15,7 @@ import { BufferAttribute } from 'three';
 @Directive()
 export abstract class ThreeAttribute<
   TAttribute extends BufferAttribute = BufferAttribute
-> implements OnInit, OnChanges {
+> implements OnInit, OnChanges, OnDestroy {
   @Input() attach?: BuiltinShaderAttributeName;
 
   abstract attributeType: AnyConstructor<TAttribute>;

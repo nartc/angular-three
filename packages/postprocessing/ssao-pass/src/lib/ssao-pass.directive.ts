@@ -1,3 +1,4 @@
+import type { UnknownRecord } from '@angular-three/core';
 import { ThreePass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import type {
@@ -38,7 +39,7 @@ export class SsaoPassDirective extends ThreePass<SSAOPass> {
   @Input() blurMaterial?: ShaderMaterial;
   @Input() depthRenderMaterial?: ShaderMaterial;
   @Input() copyMaterial?: ShaderMaterial;
-  @Input() fsQuad?: object;
+  @Input() fsQuad?: UnknownRecord;
   @Input() originalClearColor?: Color;
 
   passType = SSAOPass;

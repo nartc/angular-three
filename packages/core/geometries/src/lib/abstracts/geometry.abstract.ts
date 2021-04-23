@@ -1,11 +1,11 @@
 import { AnyConstructor, InstancesStore } from '@angular-three/core';
-import { Directive, Input, OnDestroy, SkipSelf } from '@angular/core';
+import { Directive, Input, OnDestroy, OnInit, SkipSelf } from '@angular/core';
 import type { BufferGeometry } from 'three';
 
 @Directive()
 export abstract class ThreeBufferGeometry<
   TGeometry extends BufferGeometry = BufferGeometry
-> implements OnDestroy {
+> implements OnInit, OnDestroy {
   @Input() ngtId?: string;
 
   constructor(@SkipSelf() protected readonly instancesStore: InstancesStore) {}
