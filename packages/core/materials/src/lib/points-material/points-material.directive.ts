@@ -1,3 +1,5 @@
+// GENERATED
+
 import { Directive } from '@angular/core';
 import { PointsMaterial, PointsMaterialParameters } from 'three';
 import { ThreeMaterial } from '../abstracts';
@@ -5,7 +7,9 @@ import { ThreeMaterial } from '../abstracts';
 @Directive({
   selector: 'ngt-pointsMaterial',
   exportAs: 'ngtPointsMaterial',
-  providers: [{ provide: ThreeMaterial, useExisting: PointsMaterialDirective }],
+  providers: [
+    { provide: ThreeMaterial, useExisting: PointsMaterialDirective },
+  ],
 })
 export class PointsMaterialDirective extends ThreeMaterial<
   PointsMaterial,

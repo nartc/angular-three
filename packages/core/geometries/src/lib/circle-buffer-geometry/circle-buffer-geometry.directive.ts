@@ -1,9 +1,11 @@
+// GENERATED
+
 import { Directive, Input } from '@angular/core';
 import { CircleBufferGeometry } from 'three';
 import { ThreeBufferGeometry } from '../abstracts';
 
 @Directive({
-  selector: 'ngt-circleBufferGeometry',
+  selector: 'ngt-circleBufferGeometry,ngt-circleGeometry',
   exportAs: 'ngtCircleBufferGeometry',
   providers: [
     {
@@ -13,6 +15,8 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class CircleBufferGeometryDirective extends ThreeBufferGeometry<CircleBufferGeometry> {
+  static ngAcceptInputType_args: ConstructorParameters<typeof CircleBufferGeometry> | undefined;
+
   @Input() set args(v: ConstructorParameters<typeof CircleBufferGeometry>) {
     this.extraArgs = v;
   }

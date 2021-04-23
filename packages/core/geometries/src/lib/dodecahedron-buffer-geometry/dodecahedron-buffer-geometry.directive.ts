@@ -1,9 +1,11 @@
+// GENERATED
+
 import { Directive, Input } from '@angular/core';
 import { DodecahedronBufferGeometry } from 'three';
 import { ThreeBufferGeometry } from '../abstracts';
 
 @Directive({
-  selector: 'ngt-dodecahedronBufferGeometry',
+  selector: 'ngt-dodecahedronBufferGeometry,ngt-dodecahedronGeometry',
   exportAs: 'ngtDodecahedronBufferGeometry',
   providers: [
     {
@@ -13,9 +15,9 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class DodecahedronBufferGeometryDirective extends ThreeBufferGeometry<DodecahedronBufferGeometry> {
-  @Input() set args(
-    v: ConstructorParameters<typeof DodecahedronBufferGeometry>
-  ) {
+  static ngAcceptInputType_args: ConstructorParameters<typeof DodecahedronBufferGeometry> | undefined;
+
+  @Input() set args(v: ConstructorParameters<typeof DodecahedronBufferGeometry>) {
     this.extraArgs = v;
   }
 

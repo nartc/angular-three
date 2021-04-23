@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.1102.9",
+    "@angular-devkit/schematics": "11.2.10",
     "@angular-eslint/eslint-plugin": "4.0.0",
     "@angular-eslint/eslint-plugin-template": "4.0.0",
     "@angular-eslint/template-parser": "4.0.0",
@@ -63,6 +64,7 @@
     "@angular/language-service": "11.2.10",
     "@nrwl/angular": "12.0.8",
     "@nrwl/cli": "12.0.8",
+    "@nrwl/devkit": "12.0.8",
     "@nrwl/eslint-plugin-nx": "12.0.8",
     "@nrwl/jest": "12.0.8",
     "@nrwl/linter": "12.0.8",
@@ -100,9 +102,6 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.{js,json,ts}": [
-      "npm run affected:lint",
-      "npm run format:write"
-    ]
+    "*.{js,json,ts}": []
   }
 }

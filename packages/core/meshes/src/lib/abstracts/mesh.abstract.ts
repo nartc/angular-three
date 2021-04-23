@@ -2,16 +2,26 @@ import type { AnyConstructor } from '@angular-three/core';
 import { ThreeObject3dMaterialGeometry } from '@angular-three/core';
 import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import { ThreeMaterial } from '@angular-three/core/materials';
-import { ContentChild, Directive } from '@angular/core';
+import {
+  ContentChild,
+  ContentChildren,
+  Directive,
+  QueryList,
+} from '@angular/core';
 import { Mesh } from 'three';
 
 @Directive()
 export abstract class ThreeMesh<
   TMesh extends Mesh = Mesh
 > extends ThreeObject3dMaterialGeometry<TMesh> {
-  @ContentChild(ThreeMaterial) set materialDirective(v: ThreeMaterial) {
+  @ContentChildren(ThreeMaterial) set materialDirectives(
+    v: QueryList<ThreeMaterial>
+  ) {
     if (this.material == null && v) {
-      this.material = v.material;
+      this.material =
+        v.length === 1
+          ? [v.first.material]
+          : v.toArray().map((dir) => dir.material);
     }
   }
 

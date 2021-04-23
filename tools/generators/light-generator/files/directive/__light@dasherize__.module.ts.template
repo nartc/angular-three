@@ -1,0 +1,12 @@
+// GENERATED
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { <%= light %>Directive } from './<%= dasherize(light) %>.directive';
+
+@NgModule({
+  declarations: [<%= light %>Directive],
+  imports: [CommonModule],
+  exports: [<%= light %>Directive]
+})
+export class Three<%= light %>Module { }

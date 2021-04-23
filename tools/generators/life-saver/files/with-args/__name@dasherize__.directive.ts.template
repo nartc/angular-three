@@ -1,0 +1,26 @@
+// GENERATED
+<% if (withThreeObject3d) { %>
+import { ThreeObject3d } from '@angular-three/core';<% } %>
+import { Directive, Input } from '@angular/core';
+import { <%= name %> } from 'three';
+import { <%= abstract %> } from '../abstracts';
+
+@Directive({
+  selector: 'ngt-<%= camelize(name) %><% if (alternative) { %>,ngt-<%= camelize(alternative) %><% } %>',
+  exportAs: 'ngt<%= name %>',
+  providers: [
+    {
+      provide: <% if (withThreeObject3d) { %>ThreeObject3d<% } else { %><%= abstract %><% } %>,
+      useExisting: <%= name %>Directive,
+    },
+  ],
+})
+export class <%= name %>Directive extends <%= abstract %><<%= name %>> {
+  static ngAcceptInputType_args: ConstructorParameters<typeof <%= name %>> | undefined;
+
+  @Input() set args(v: ConstructorParameters<typeof <%= name %>>) {
+    this.extraArgs = v;
+  }
+
+  <%= type %> = <%= name %>;
+}

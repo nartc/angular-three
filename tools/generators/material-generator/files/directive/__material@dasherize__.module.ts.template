@@ -1,0 +1,12 @@
+// GENERATED
+
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { <%= material %>Directive } from './<%= dasherize(material) %>.directive';
+
+@NgModule({
+  declarations: [<%= material %>Directive],
+  imports: [CommonModule],
+  exports: [<%= material %>Directive],
+})
+export class Three<%= material %>Module {}

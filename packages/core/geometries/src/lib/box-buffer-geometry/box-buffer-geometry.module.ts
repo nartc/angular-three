@@ -1,3 +1,5 @@
+// GENERATED
+
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BoxBufferGeometryDirective } from './box-buffer-geometry.directive';

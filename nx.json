@@ -60,7 +60,14 @@
     },
     "core-lod": { "tags": ["scope:core", "type:library", "context:lod"] },
     "core-lines": { "tags": ["scope:core", "type:library", "context:lines"] },
-    "core-points": { "tags": ["scope:core", "type:library", "context:points"] }
+    "core-points": { "tags": ["scope:core", "type:library", "context:points"] },
+    "core-textures": {
+      "tags": ["scope:core", "type:library", "context:textures"]
+    },
+    "core-curves": { "tags": ["scope:core", "type:library", "context:curves"] },
+    "core-helpers": {
+      "tags": ["scope:core", "type:library", "context:helpers"]
+    }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

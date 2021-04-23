@@ -24,5 +24,8 @@ module.exports = {
     '<rootDir>/packages/core/lod',
     '<rootDir>/packages/core/lines',
     '<rootDir>/packages/core/points',
+    '<rootDir>/packages/core/textures',
+    '<rootDir>/packages/core/curves',
+    '<rootDir>/packages/core/helpers',
   ],
 };

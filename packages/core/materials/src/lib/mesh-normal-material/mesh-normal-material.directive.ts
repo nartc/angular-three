@@ -1,3 +1,5 @@
+// GENERATED
+
 import { Directive } from '@angular/core';
 import { MeshNormalMaterial, MeshNormalMaterialParameters } from 'three';
 import { ThreeMaterial } from '../abstracts';

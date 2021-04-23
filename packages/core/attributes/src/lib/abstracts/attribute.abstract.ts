@@ -31,7 +31,7 @@ export abstract class ThreeAttribute<
     this._extraArgs = v;
   }
 
-  private _attribute!: TAttribute;
+  private _attribute?: TAttribute;
 
   ngOnChanges() {
     this.ngZone.runOutsideAngular(() => {
@@ -45,10 +45,12 @@ export abstract class ThreeAttribute<
     this.ngZone.runOutsideAngular(() => {
       if (this.geometryDirective && this.attach) {
         this._attribute = new this.attributeType(...this._extraArgs);
-        this.geometryDirective.bufferGeometry.setAttribute(
-          this.attach,
-          this.attribute
-        );
+        if (this.attribute) {
+          this.geometryDirective.bufferGeometry.setAttribute(
+            this.attach,
+            this.attribute
+          );
+        }
       }
     });
   }
@@ -61,7 +63,7 @@ export abstract class ThreeAttribute<
     });
   }
 
-  get attribute(): TAttribute {
+  get attribute(): TAttribute | undefined {
     return this._attribute;
   }
 }

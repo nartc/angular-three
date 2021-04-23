@@ -1,0 +1,4 @@
+// GENERATED
+
+export * from './<%= dasherize(geometry) %>.directive';
+export * from './<%= dasherize(geometry) %>.module';

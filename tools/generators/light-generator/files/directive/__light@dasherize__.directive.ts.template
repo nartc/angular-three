@@ -1,0 +1,21 @@
+// GENERATED
+
+import { ThreeObject3d } from '@angular-three/core';
+import { Directive, Input } from '@angular/core';
+import { <%= light %> } from 'three';
+import { ThreeLight } from '../abstracts';
+
+@Directive({
+  selector: 'ngt-<%= camelize(light) %>',
+  exportAs: 'ngt<%= light %>',
+  providers: [{ provide: ThreeObject3d, useExisting: <%= light %>Directive }],
+})
+export class <%= light %>Directive extends ThreeLight<<%= light %>> {
+  static ngAcceptInputType_args: ConstructorParameters<typeof <%= light %>> | undefined;
+
+  @Input() set args(v: ConstructorParameters<typeof <%= light %>>) {
+    this.extraArgs = v;
+  }
+
+  lightType = <%= light %>;
+}

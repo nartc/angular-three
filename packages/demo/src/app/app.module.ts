@@ -6,7 +6,7 @@ import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attribu
 import { ThreeCanvasModule } from '@angular-three/core/canvas';
 import {
   ThreeBoxBufferGeometryModule,
-  ThreeIcosahedronGeometryModule,
+  ThreeIcosahedronBufferGeometryModule,
   ThreeTextBufferGeometryModule,
 } from '@angular-three/core/geometries';
 import { ThreeGroupModule } from '@angular-three/core/group';
@@ -90,7 +90,7 @@ import { SuzanneComponent } from './suzanne.component';
     ThreeTextBufferGeometryModule,
     ThreeSceneModule,
     ThreeDirectionalLightModule,
-    ThreeIcosahedronGeometryModule,
+    ThreeIcosahedronBufferGeometryModule,
     ThreeMeshLambertMaterialModule,
     ThreeLodModule,
     ThreeFlyControlsModule,

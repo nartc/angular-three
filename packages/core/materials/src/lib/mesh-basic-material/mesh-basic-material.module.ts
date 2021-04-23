@@ -1,3 +1,5 @@
+// GENERATED
+
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MeshBasicMaterialDirective } from './mesh-basic-material.directive';

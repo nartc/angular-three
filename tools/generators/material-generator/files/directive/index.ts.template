@@ -1,0 +1,4 @@
+// GENERATED
+
+export * from './<%= dasherize(material) %>.directive';
+export * from './<%= dasherize(material) %>.module';

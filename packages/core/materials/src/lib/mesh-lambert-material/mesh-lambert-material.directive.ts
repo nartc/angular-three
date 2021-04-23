@@ -1,3 +1,5 @@
+// GENERATED
+
 import { Directive } from '@angular/core';
 import { MeshLambertMaterial, MeshLambertMaterialParameters } from 'three';
 import { ThreeMaterial } from '../abstracts';
@@ -13,9 +15,7 @@ export class MeshLambertMaterialDirective extends ThreeMaterial<
   MeshLambertMaterial,
   MeshLambertMaterialParameters
 > {
-  static ngAcceptInputType_parameters:
-    | MeshLambertMaterialParameters
-    | undefined;
+  static ngAcceptInputType_parameters: MeshLambertMaterialParameters | undefined;
 
   materialType = MeshLambertMaterial;
 }

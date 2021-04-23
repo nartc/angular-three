@@ -1,5 +1,7 @@
-import { NgModule } from '@angular/core';
+// GENERATED
+
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { TetrahedronBufferGeometryDirective } from './tetrahedron-buffer-geometry.directive';
 
 @NgModule({
@@ -7,4 +9,4 @@ import { TetrahedronBufferGeometryDirective } from './tetrahedron-buffer-geometr
   imports: [CommonModule],
   exports: [TetrahedronBufferGeometryDirective],
 })
-export class TetrahedronBufferGeometryModule {}
+export class ThreeTetrahedronBufferGeometryModule {}

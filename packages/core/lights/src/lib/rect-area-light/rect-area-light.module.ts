@@ -1,3 +1,5 @@
+// GENERATED
+
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RectAreaLightDirective } from './rect-area-light.directive';
@@ -7,4 +9,4 @@ import { RectAreaLightDirective } from './rect-area-light.directive';
   imports: [CommonModule],
   exports: [RectAreaLightDirective],
 })
-export class RectAreaLightModule {}
+export class ThreeRectAreaLightModule {}

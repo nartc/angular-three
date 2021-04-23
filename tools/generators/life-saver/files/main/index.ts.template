@@ -1,0 +1,5 @@
+// GENERATED
+
+export * from './lib/abstracts';<% if (extras) { %><% for (const extra of extras) { %>
+export * from './lib/<%= extra %>';<% } %><% } %><% for (const item of items) {%>
+export * from './lib/<%= dasherize(item) %>';<% } %>

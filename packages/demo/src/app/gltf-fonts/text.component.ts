@@ -6,12 +6,11 @@ import { Mesh, Vector3 } from 'three';
 @Component({
   selector: 'demo-text',
   template: `
-    <ngt-group
-      *ngIf="font$ | async as font"
-      [position]="position"
-      [scale]="[0.1 * size, 0.1 * size, 0.1]"
-    >
-      <ngt-mesh (zonelessReady)="onMeshReady($event)">
+    <ngt-group [position]="position" [scale]="[0.1 * size, 0.1 * size, 0.1]">
+      <ngt-mesh
+        *ngIf="font$ | async as font"
+        (zonelessReady)="onMeshReady($event)"
+      >
         <ngt-textBufferGeometry
           [args]="[
             text,

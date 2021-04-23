@@ -1,3 +1,5 @@
+// GENERATED
+
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { PointsMaterialDirective } from './points-material.directive';
@@ -7,4 +9,4 @@ import { PointsMaterialDirective } from './points-material.directive';
   imports: [CommonModule],
   exports: [PointsMaterialDirective],
 })
-export class PointsMaterialModule {}
+export class ThreePointsMaterialModule {}

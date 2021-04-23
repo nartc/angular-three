@@ -1019,6 +1019,117 @@
           }
         }
       }
+    },
+    "core-textures": {
+      "projectType": "library",
+      "root": "packages/core/textures",
+      "sourceRoot": "packages/core/textures/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/textures/tsconfig.lib.json",
+            "project": "packages/core/textures/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/textures/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/textures/src/**/*.ts",
+              "packages/core/textures/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/textures"],
+          "options": {
+            "jestConfig": "packages/core/textures/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "core-curves": {
+      "projectType": "library",
+      "root": "packages/core/curves",
+      "sourceRoot": "packages/core/curves/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/curves/tsconfig.lib.json",
+            "project": "packages/core/curves/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/curves/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/curves/src/**/*.ts",
+              "packages/core/curves/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/curves"],
+          "options": {
+            "jestConfig": "packages/core/curves/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "core-helpers": {
+      "projectType": "library",
+      "root": "packages/core/helpers",
+      "sourceRoot": "packages/core/helpers/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/helpers/tsconfig.lib.json",
+            "project": "packages/core/helpers/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/helpers/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/helpers/src/**/*.ts",
+              "packages/core/helpers/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/helpers"],
+          "options": {
+            "jestConfig": "packages/core/helpers/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
