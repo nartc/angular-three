@@ -16,7 +16,9 @@ import { ThreeLight } from '../abstracts';
   ],
 })
 export class PointLightDirective extends ThreeLight<PointLight> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof PointLight> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof PointLight>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof PointLight>) {
     this.extraArgs = v;

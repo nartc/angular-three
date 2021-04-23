@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class PlaneHelperDirective extends ThreeHelper<PlaneHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof PlaneHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof PlaneHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof PlaneHelper>) {
     this.extraArgs = v;

@@ -7,9 +7,7 @@ import { ThreeMaterial } from '../abstracts';
 @Directive({
   selector: 'ngt-spriteMaterial',
   exportAs: 'ngtSpriteMaterial',
-  providers: [
-    { provide: ThreeMaterial, useExisting: SpriteMaterialDirective },
-  ],
+  providers: [{ provide: ThreeMaterial, useExisting: SpriteMaterialDirective }],
 })
 export class SpriteMaterialDirective extends ThreeMaterial<
   SpriteMaterial,

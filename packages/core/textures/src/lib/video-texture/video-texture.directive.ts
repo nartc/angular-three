@@ -15,7 +15,9 @@ import { ThreeTexture } from '../abstracts';
   ],
 })
 export class VideoTextureDirective extends ThreeTexture<VideoTexture> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof VideoTexture> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof VideoTexture>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof VideoTexture>) {
     this.extraArgs = v;

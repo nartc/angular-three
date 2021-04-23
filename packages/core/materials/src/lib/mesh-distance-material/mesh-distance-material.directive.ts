@@ -15,7 +15,9 @@ export class MeshDistanceMaterialDirective extends ThreeMaterial<
   MeshDistanceMaterial,
   MeshDistanceMaterialParameters
 > {
-  static ngAcceptInputType_parameters: MeshDistanceMaterialParameters | undefined;
+  static ngAcceptInputType_parameters:
+    | MeshDistanceMaterialParameters
+    | undefined;
 
   materialType = MeshDistanceMaterial;
 }

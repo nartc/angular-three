@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class BoxHelperDirective extends ThreeHelper<BoxHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof BoxHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof BoxHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof BoxHelper>) {
     this.extraArgs = v;

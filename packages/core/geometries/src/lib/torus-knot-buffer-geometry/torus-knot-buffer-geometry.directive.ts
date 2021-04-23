@@ -15,7 +15,9 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class TorusKnotBufferGeometryDirective extends ThreeBufferGeometry<TorusKnotBufferGeometry> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof TorusKnotBufferGeometry> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof TorusKnotBufferGeometry>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof TorusKnotBufferGeometry>) {
     this.extraArgs = v;

@@ -13,8 +13,8 @@ import { ThreeGroupModule } from '@angular-three/core/group';
 import {
   ThreeGridHelperModule,
   ThreePointLightHelperModule,
-  ThreeSpotLightHelperModule
-} from "@angular-three/core/helpers";
+  ThreeSpotLightHelperModule,
+} from '@angular-three/core/helpers';
 import {
   ThreeAmbientLightModule,
   ThreeDirectionalLightModule,

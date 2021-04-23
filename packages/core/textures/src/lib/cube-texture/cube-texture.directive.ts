@@ -15,7 +15,9 @@ import { ThreeTexture } from '../abstracts';
   ],
 })
 export class CubeTextureDirective extends ThreeTexture<CubeTexture> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof CubeTexture> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof CubeTexture>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof CubeTexture>) {
     this.extraArgs = v;

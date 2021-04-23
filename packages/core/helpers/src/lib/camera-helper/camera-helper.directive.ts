@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class CameraHelperDirective extends ThreeHelper<CameraHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof CameraHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof CameraHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof CameraHelper>) {
     this.extraArgs = v;

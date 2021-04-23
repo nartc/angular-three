@@ -15,7 +15,9 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class WireframeGeometryDirective extends ThreeBufferGeometry<WireframeGeometry> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof WireframeGeometry> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof WireframeGeometry>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof WireframeGeometry>) {
     this.extraArgs = v;

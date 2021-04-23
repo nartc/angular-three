@@ -15,7 +15,9 @@ import { ThreeCurve } from '../abstracts';
   ],
 })
 export class SplineCurveDirective extends ThreeCurve<SplineCurve> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof SplineCurve> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof SplineCurve>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof SplineCurve>) {
     this.extraArgs = v;

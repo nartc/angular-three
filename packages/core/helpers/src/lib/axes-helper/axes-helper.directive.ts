@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class AxesHelperDirective extends ThreeHelper<AxesHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof AxesHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof AxesHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof AxesHelper>) {
     this.extraArgs = v;

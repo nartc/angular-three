@@ -15,7 +15,9 @@ import { ThreeTexture } from '../abstracts';
   ],
 })
 export class CanvasTextureDirective extends ThreeTexture<CanvasTexture> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof CanvasTexture> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof CanvasTexture>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof CanvasTexture>) {
     this.extraArgs = v;

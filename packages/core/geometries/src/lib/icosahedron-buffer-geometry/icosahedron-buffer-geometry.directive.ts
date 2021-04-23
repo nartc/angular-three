@@ -15,9 +15,13 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class IcosahedronBufferGeometryDirective extends ThreeBufferGeometry<IcosahedronBufferGeometry> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof IcosahedronBufferGeometry> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof IcosahedronBufferGeometry>
+    | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof IcosahedronBufferGeometry>) {
+  @Input() set args(
+    v: ConstructorParameters<typeof IcosahedronBufferGeometry>
+  ) {
     this.extraArgs = v;
   }
 

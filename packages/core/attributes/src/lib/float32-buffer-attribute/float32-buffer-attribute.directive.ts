@@ -15,7 +15,9 @@ import { ThreeAttribute } from '../abstracts';
   ],
 })
 export class Float32BufferAttributeDirective extends ThreeAttribute<Float32BufferAttribute> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof Float32BufferAttribute> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof Float32BufferAttribute>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof Float32BufferAttribute>) {
     this.extraArgs = v;

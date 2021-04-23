@@ -15,7 +15,9 @@ import { ThreeTexture } from '../abstracts';
   ],
 })
 export class DataTextureDirective extends ThreeTexture<DataTexture> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof DataTexture> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof DataTexture>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof DataTexture>) {
     this.extraArgs = v;

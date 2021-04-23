@@ -16,7 +16,9 @@ import { ThreeLight } from '../abstracts';
   ],
 })
 export class LightProbeDirective extends ThreeLight<LightProbe> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof LightProbe> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof LightProbe>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof LightProbe>) {
     this.extraArgs = v;

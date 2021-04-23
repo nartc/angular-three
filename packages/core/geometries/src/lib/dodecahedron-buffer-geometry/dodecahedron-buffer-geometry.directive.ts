@@ -15,9 +15,13 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class DodecahedronBufferGeometryDirective extends ThreeBufferGeometry<DodecahedronBufferGeometry> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof DodecahedronBufferGeometry> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof DodecahedronBufferGeometry>
+    | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof DodecahedronBufferGeometry>) {
+  @Input() set args(
+    v: ConstructorParameters<typeof DodecahedronBufferGeometry>
+  ) {
     this.extraArgs = v;
   }
 

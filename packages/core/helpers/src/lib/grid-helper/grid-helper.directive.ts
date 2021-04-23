@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class GridHelperDirective extends ThreeHelper<GridHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof GridHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof GridHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof GridHelper>) {
     this.extraArgs = v;

@@ -1,1 +1,1 @@
-export * from './helper.abstract'
+export * from './helper.abstract';

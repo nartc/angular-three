@@ -15,7 +15,9 @@ export class MeshLambertMaterialDirective extends ThreeMaterial<
   MeshLambertMaterial,
   MeshLambertMaterialParameters
 > {
-  static ngAcceptInputType_parameters: MeshLambertMaterialParameters | undefined;
+  static ngAcceptInputType_parameters:
+    | MeshLambertMaterialParameters
+    | undefined;
 
   materialType = MeshLambertMaterial;
 }

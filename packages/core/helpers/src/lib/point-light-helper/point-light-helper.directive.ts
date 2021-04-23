@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class PointLightHelperDirective extends ThreeHelper<PointLightHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof PointLightHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof PointLightHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof PointLightHelper>) {
     this.extraArgs = v;

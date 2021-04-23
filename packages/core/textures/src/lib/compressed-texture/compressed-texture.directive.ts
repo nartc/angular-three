@@ -15,7 +15,9 @@ import { ThreeTexture } from '../abstracts';
   ],
 })
 export class CompressedTextureDirective extends ThreeTexture<CompressedTexture> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof CompressedTexture> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof CompressedTexture>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof CompressedTexture>) {
     this.extraArgs = v;

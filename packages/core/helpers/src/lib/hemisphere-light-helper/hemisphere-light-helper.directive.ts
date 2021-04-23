@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class HemisphereLightHelperDirective extends ThreeHelper<HemisphereLightHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof HemisphereLightHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof HemisphereLightHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof HemisphereLightHelper>) {
     this.extraArgs = v;

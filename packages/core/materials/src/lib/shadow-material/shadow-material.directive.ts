@@ -7,9 +7,7 @@ import { ThreeMaterial } from '../abstracts';
 @Directive({
   selector: 'ngt-shadowMaterial',
   exportAs: 'ngtShadowMaterial',
-  providers: [
-    { provide: ThreeMaterial, useExisting: ShadowMaterialDirective },
-  ],
+  providers: [{ provide: ThreeMaterial, useExisting: ShadowMaterialDirective }],
 })
 export class ShadowMaterialDirective extends ThreeMaterial<
   ShadowMaterial,

@@ -15,7 +15,9 @@ import { ThreeCurve } from '../abstracts';
   ],
 })
 export class EllipseCurveDirective extends ThreeCurve<EllipseCurve> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof EllipseCurve> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof EllipseCurve>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof EllipseCurve>) {
     this.extraArgs = v;

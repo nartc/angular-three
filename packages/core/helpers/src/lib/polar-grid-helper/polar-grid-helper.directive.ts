@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class PolarGridHelperDirective extends ThreeHelper<PolarGridHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof PolarGridHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof PolarGridHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof PolarGridHelper>) {
     this.extraArgs = v;

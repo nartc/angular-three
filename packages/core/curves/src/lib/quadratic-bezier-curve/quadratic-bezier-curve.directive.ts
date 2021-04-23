@@ -15,7 +15,9 @@ import { ThreeCurve } from '../abstracts';
   ],
 })
 export class QuadraticBezierCurveDirective extends ThreeCurve<QuadraticBezierCurve> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof QuadraticBezierCurve> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof QuadraticBezierCurve>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof QuadraticBezierCurve>) {
     this.extraArgs = v;

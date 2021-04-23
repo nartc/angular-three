@@ -15,7 +15,9 @@ import { ThreeAttribute } from '../abstracts';
   ],
 })
 export class Uint32BufferAttributeDirective extends ThreeAttribute<Uint32BufferAttribute> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof Uint32BufferAttribute> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof Uint32BufferAttribute>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof Uint32BufferAttribute>) {
     this.extraArgs = v;

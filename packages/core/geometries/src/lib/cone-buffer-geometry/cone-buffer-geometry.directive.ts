@@ -15,7 +15,9 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class ConeBufferGeometryDirective extends ThreeBufferGeometry<ConeBufferGeometry> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof ConeBufferGeometry> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof ConeBufferGeometry>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof ConeBufferGeometry>) {
     this.extraArgs = v;

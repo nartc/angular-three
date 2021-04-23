@@ -16,7 +16,9 @@ import { ThreeLight } from '../abstracts';
   ],
 })
 export class DirectionalLightDirective extends ThreeLight<DirectionalLight> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof DirectionalLight> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof DirectionalLight>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof DirectionalLight>) {
     this.extraArgs = v;

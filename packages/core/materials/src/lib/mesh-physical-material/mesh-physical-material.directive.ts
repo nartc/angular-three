@@ -15,7 +15,9 @@ export class MeshPhysicalMaterialDirective extends ThreeMaterial<
   MeshPhysicalMaterial,
   MeshPhysicalMaterialParameters
 > {
-  static ngAcceptInputType_parameters: MeshPhysicalMaterialParameters | undefined;
+  static ngAcceptInputType_parameters:
+    | MeshPhysicalMaterialParameters
+    | undefined;
 
   materialType = MeshPhysicalMaterial;
 }

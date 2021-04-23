@@ -15,7 +15,9 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class BoxBufferGeometryDirective extends ThreeBufferGeometry<BoxBufferGeometry> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof BoxBufferGeometry> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof BoxBufferGeometry>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof BoxBufferGeometry>) {
     this.extraArgs = v;

@@ -15,7 +15,9 @@ import { ThreeCurve } from '../abstracts';
   ],
 })
 export class LineCurveDirective extends ThreeCurve<LineCurve> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof LineCurve> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof LineCurve>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof LineCurve>) {
     this.extraArgs = v;

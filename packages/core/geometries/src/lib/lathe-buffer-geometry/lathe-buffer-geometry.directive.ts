@@ -15,7 +15,9 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class LatheBufferGeometryDirective extends ThreeBufferGeometry<LatheBufferGeometry> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof LatheBufferGeometry> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof LatheBufferGeometry>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof LatheBufferGeometry>) {
     this.extraArgs = v;

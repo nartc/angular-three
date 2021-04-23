@@ -16,7 +16,9 @@ import { ThreeLight } from '../abstracts';
   ],
 })
 export class RectAreaLightDirective extends ThreeLight<RectAreaLight> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof RectAreaLight> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof RectAreaLight>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof RectAreaLight>) {
     this.extraArgs = v;

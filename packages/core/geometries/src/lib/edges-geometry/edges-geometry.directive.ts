@@ -15,7 +15,9 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class EdgesGeometryDirective extends ThreeBufferGeometry<EdgesGeometry> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof EdgesGeometry> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof EdgesGeometry>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof EdgesGeometry>) {
     this.extraArgs = v;

@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class ArrowHelperDirective extends ThreeHelper<ArrowHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof ArrowHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof ArrowHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof ArrowHelper>) {
     this.extraArgs = v;

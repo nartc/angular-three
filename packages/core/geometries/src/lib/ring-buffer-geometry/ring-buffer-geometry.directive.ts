@@ -15,7 +15,9 @@ import { ThreeBufferGeometry } from '../abstracts';
   ],
 })
 export class RingBufferGeometryDirective extends ThreeBufferGeometry<RingBufferGeometry> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof RingBufferGeometry> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof RingBufferGeometry>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof RingBufferGeometry>) {
     this.extraArgs = v;

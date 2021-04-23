@@ -15,7 +15,9 @@ import { ThreeCurve } from '../abstracts';
   ],
 })
 export class CatmullRomCurve3Directive extends ThreeCurve<CatmullRomCurve3> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof CatmullRomCurve3> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof CatmullRomCurve3>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof CatmullRomCurve3>) {
     this.extraArgs = v;

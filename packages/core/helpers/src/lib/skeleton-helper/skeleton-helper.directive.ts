@@ -16,7 +16,9 @@ import { ThreeHelper } from '../abstracts';
   ],
 })
 export class SkeletonHelperDirective extends ThreeHelper<SkeletonHelper> {
-  static ngAcceptInputType_args: ConstructorParameters<typeof SkeletonHelper> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof SkeletonHelper>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof SkeletonHelper>) {
     this.extraArgs = v;
