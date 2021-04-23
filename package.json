@@ -102,6 +102,9 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.{js,json,ts}": []
+    "*.{js,json,ts}": [
+      "npm run affected:lint",
+      "npm run format:write"
+    ]
   }
 }

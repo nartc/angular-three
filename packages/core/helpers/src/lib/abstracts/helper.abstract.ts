@@ -31,7 +31,9 @@ export abstract class ThreeHelper<THelper extends Object3D>
   protected initObject() {
     try {
       this._helper = new this.helperType(...this._extraArgs);
-    } catch (e) {}
+    } catch (e) {
+      console.log('Failed to initialize Helper');
+    }
   }
 
   get object3d(): THelper {

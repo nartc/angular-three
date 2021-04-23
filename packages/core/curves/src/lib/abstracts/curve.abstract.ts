@@ -1,10 +1,11 @@
 import type { AnyConstructor } from '@angular-three/core';
 import { ThreeBufferGeometry } from '@angular-three/core/geometries';
-import { Directive, Input, NgZone, Optional } from '@angular/core';
+import { Directive, Input, NgZone, OnInit, Optional } from '@angular/core';
 import { Curve, Vector, Vector2, Vector3 } from 'three';
 
 @Directive()
-export abstract class ThreeCurve<TCurve extends Curve<Vector> = Curve<Vector>> {
+export abstract class ThreeCurve<TCurve extends Curve<Vector> = Curve<Vector>>
+  implements OnInit {
   @Input() divisions?: number;
 
   abstract curveType: AnyConstructor<TCurve>;
