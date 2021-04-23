@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, mapTo, tap, withLatestFrom } from 'rxjs/operators';
 import {
@@ -36,7 +36,9 @@ interface WindowResizeEffectParams {
 }
 
 @Injectable()
-export class CanvasStore extends ImperativeComponentStore<CanvasStoreState> {
+export class CanvasStore
+  extends ImperativeComponentStore<CanvasStoreState>
+  implements OnDestroy {
   readonly renderer$ = this.select((s) => s.renderer);
   readonly camera$ = this.select((s) => s.camera);
   readonly scene$ = this.select((s) => s.scene);

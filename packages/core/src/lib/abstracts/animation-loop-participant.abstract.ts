@@ -10,7 +10,7 @@ import { AnimationStore } from '../stores';
 import type { AnimationReady } from '../typings';
 
 @Directive()
-export abstract class AnimationLoopParticipant<TObject = any>
+export abstract class AnimationLoopParticipant<TObject = unknown>
   implements OnDestroy {
   @Output() animateReady = new EventEmitter<AnimationReady<TObject>>();
 

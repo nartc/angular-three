@@ -42,7 +42,9 @@ export class LoopService implements OnDestroy {
 
     if (renderer && scene && camera) {
       if (hasPriority) {
-        animationCallbacks.sort(({ priority: a }, { priority: b }) => a! - b!);
+        animationCallbacks.sort(
+          ({ priority: a = 0 }, { priority: b = 0 }) => a - b
+        );
       } else {
         renderer.render(scene, camera);
       }

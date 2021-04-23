@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { isObservable, Observable } from 'rxjs';
 import { filter, skip, tap, withLatestFrom } from 'rxjs/operators';
 import type { Object3D } from 'three';
@@ -11,7 +11,9 @@ import { makeId } from '../utils';
 import { ImperativeComponentStore } from './imperative-component-store.abstract';
 
 @Injectable()
-export class AnimationStore extends ImperativeComponentStore<AnimationStoreState> {
+export class AnimationStore
+  extends ImperativeComponentStore<AnimationStoreState>
+  implements OnDestroy {
   constructor() {
     super({
       animations: {},
@@ -54,7 +56,7 @@ export class AnimationStore extends ImperativeComponentStore<AnimationStoreState
             subscription[1].unsubscribe();
           }
 
-          const { [uuid]: _removed, ...updatedAnimations } = animations;
+          const { [uuid]: _, ...updatedAnimations } = animations;
           this.patchState({
             animations: updatedAnimations,
             objectSubscriptions: objectSubscriptions.filter(

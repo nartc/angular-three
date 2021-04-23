@@ -10,10 +10,10 @@
       ],
       "parserOptions": { "project": ["packages/core/tsconfig.*?.json"] },
       "rules": {
-        "@angular-eslint/directive-selector": [
-          "error",
-          { "type": "attribute", "prefix": "three", "style": "camelCase" }
-        ],
+        "@angular-eslint/no-output-native": 0,
+        "@typescript-eslint/ban-types": 0,
+        "@typescript-eslint/no-unused-vars": 0,
+        "@typescript-eslint/no-explicit-any": 0,
         "@angular-eslint/component-selector": [
           "error",
           { "type": "element", "prefix": "three", "style": "kebab-case" }

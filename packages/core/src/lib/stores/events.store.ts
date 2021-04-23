@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import type { EventsStoreState, ThreeDomEvent } from '../typings';
 import { createEvents } from '../utils';
@@ -20,7 +20,9 @@ const supportedEvents = [
 ];
 
 @Injectable()
-export class EventsStore extends ImperativeComponentStore<EventsStoreState> {
+export class EventsStore
+  extends ImperativeComponentStore<EventsStoreState>
+  implements OnDestroy {
   constructor(
     private readonly canvasStore: CanvasStore,
     private readonly instancesStore: InstancesStore

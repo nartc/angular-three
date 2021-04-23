@@ -1,2 +1,2 @@
-// TODO: test
-describe.skip('makeId', () => {})
+// // TODO: test
+// describe.skip('makeId', () => {})

@@ -10,6 +10,7 @@ import type {
   ThreeEvent,
   ThreeInstance,
   ThreeIntersection,
+  UnknownRecord,
 } from '../typings';
 import { makeId } from './make-id.util';
 
@@ -88,7 +89,7 @@ export function createEvents(
       : Object.values(objects);
 
     // Intersect known handler objects and filter against duplicates
-    let intersects = raycaster
+    const intersects = raycaster
       .intersectObjects(eventsObjects, true)
       .filter((item) => {
         const id = makeId(item as ThreeIntersection);
@@ -165,8 +166,8 @@ export function createEvents(
         };
 
         // Add native event props
-        let extractEventProps: any = {};
-        for (let prop in Object.getPrototypeOf(event)) {
+        const extractEventProps: UnknownRecord = {};
+        for (const prop in Object.getPrototypeOf(event)) {
           // noinspection JSUnfilteredForInLoop
           extractEventProps[prop] = event[prop as keyof ThreeDomEvent];
         }
@@ -218,7 +219,7 @@ export function createEvents(
         };
 
         // Call subscribers
-        callback(raycastEvent as ThreeDomEvent);
+        callback((raycastEvent as unknown) as ThreeDomEvent);
         // Event bubbling may be interrupted by stopPropagation
         if (localState.stopped) break;
       }

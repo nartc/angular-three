@@ -1,2 +1,2 @@
-// TODO: test
-describe.skip('applyProps', () => {})
+// // TODO: test
+// describe.skip('applyProps', () => {})
