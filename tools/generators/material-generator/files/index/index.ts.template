@@ -1,4 +1,0 @@
-// GENERATED
-
-export * from './lib/abstracts';<% for (const material of materials) {%>
-export * from './lib/<%= dasherize(material) %>';<% } %>

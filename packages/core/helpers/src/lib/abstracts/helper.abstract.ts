@@ -1,12 +1,12 @@
 import type { AnyConstructor } from '@angular-three/core';
 import { ThreeObject3d } from '@angular-three/core';
-import { Directive, OnInit } from '@angular/core';
+import { Directive, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Object3D } from 'three';
 
 @Directive()
 export abstract class ThreeHelper<THelper extends Object3D>
   extends ThreeObject3d<THelper>
-  implements OnInit {
+  implements OnInit, OnChanges {
   abstract helperType: AnyConstructor<THelper>;
 
   private _extraArgs: unknown[] = [];
@@ -17,12 +17,21 @@ export abstract class ThreeHelper<THelper extends Object3D>
     this._extraArgs = v;
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    super.ngOnChanges(changes);
+    if (!this.object3d) {
+      this.init();
+    }
+  }
+
   ngOnInit() {
     this.init();
   }
 
   protected initObject() {
-    this._helper = new this.helperType(...this._extraArgs);
+    try {
+      this._helper = new this.helperType(...this._extraArgs);
+    } catch (e) {}
   }
 
   get object3d(): THelper {

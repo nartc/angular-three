@@ -1,4 +1,0 @@
-// GENERATED
-
-export * from './lib/abstracts';<% for (const light of lights) {%>
-export * from './lib/<%= dasherize(light) %>';<% } %>

@@ -1,4 +1,0 @@
-// GENERATED
-
-export * from './<%= dasherize(light) %>.directive';
-export * from './<%= dasherize(light) %>.module';

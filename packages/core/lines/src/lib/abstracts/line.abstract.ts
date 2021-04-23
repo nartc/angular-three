@@ -22,7 +22,7 @@ export abstract class ThreeLine<
     if (this.material == null && v) {
       this.material =
         v.length === 1
-          ? [v.first.material]
+          ? v.first.material
           : v.toArray().map((dir) => dir.material);
     }
   }

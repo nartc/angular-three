@@ -25,7 +25,7 @@ export class PointsDirective extends ThreeObject3dMaterialGeometry<Points> {
     if (this.material == null && v) {
       this.material =
         v.length === 1
-          ? [v.first.material]
+          ? v.first.material
           : v.toArray().map((dir) => dir.material);
     }
   }

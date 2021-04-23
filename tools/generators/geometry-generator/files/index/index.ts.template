@@ -1,4 +1,0 @@
-// GENERATED
-
-export * from './lib/abstracts';<% for (const geometry of geometries) {%>
-export * from './lib/<%= dasherize(geometry) %>';<% } %>

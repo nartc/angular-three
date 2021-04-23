@@ -11,6 +11,11 @@ import {
 } from '@angular-three/core/geometries';
 import { ThreeGroupModule } from '@angular-three/core/group';
 import {
+  ThreeGridHelperModule,
+  ThreePointLightHelperModule,
+  ThreeSpotLightHelperModule
+} from "@angular-three/core/helpers";
+import {
   ThreeAmbientLightModule,
   ThreeDirectionalLightModule,
   ThreePointLightModule,
@@ -95,6 +100,9 @@ import { SuzanneComponent } from './suzanne.component';
     ThreeLodModule,
     ThreeFlyControlsModule,
     ThreeMeshBasicMaterialModule,
+    ThreeGridHelperModule,
+    ThreeSpotLightHelperModule,
+    ThreePointLightHelperModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
