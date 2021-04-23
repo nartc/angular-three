@@ -1,3 +1,15 @@
+## [1.0.0-beta.12](https://github.com/nartc/angular-three/compare/1.0.0-beta.11...1.0.0-beta.12) (2021-04-23)
+
+
+### Features
+
+* **core:** add genereators ([e16820c](https://github.com/nartc/angular-three/commit/e16820c81f10b7a59fba5f4b545bf76ccb3f5da8))
+
+
+### Bug Fixes
+
+* **core:** adjust material ContentChild ([5ad05f0](https://github.com/nartc/angular-three/commit/5ad05f034d2bc8aabfca5377d6b5e22bba8f61a1))
+
 ## [1.0.0-beta.11](https://github.com/nartc/angular-three/compare/1.0.0-beta.10...1.0.0-beta.11) (2021-04-23)
 
 ### Features
