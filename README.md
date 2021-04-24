@@ -6,26 +6,31 @@ Q: Is there a better way to do this in Angular?
 
 ```ts
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
 const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
 
 camera.position.z = 5;
 
 const animate = function () {
-    requestAnimationFrame( animate );
+  requestAnimationFrame(animate);
 
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
 
-    renderer.render( scene, camera );
+  renderer.render(scene, camera);
 };
 
 animate();
@@ -35,21 +40,23 @@ A: YES!
 
 ```ts
 @Component({
-    selector: 'app-root',
-    template: `
-        <ngt-canvas>
-            <ngt-mesh (animateReady)="onMeshAnimateReady($event)">
-                <ngt-boxGeometry></ngt-boxGeometry>
-                <ngt-meshBasicMaterial [parameters]="{color: '#00ff00'}"></ngt-meshBasicMaterial>
-            </ngt-mesh>
-        </ngt-canvas>
-    `,
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <ngt-mesh (animateReady)="onMeshAnimateReady($event)">
+        <ngt-boxGeometry></ngt-boxGeometry>
+        <ngt-meshBasicMaterial
+          [parameters]="{ color: '#00ff00' }"
+        ></ngt-meshBasicMaterial>
+      </ngt-mesh>
+    </ngt-canvas>
+  `,
 })
 export class AppComponent {
-    onMeshAnimateReady({ animateObject }: AnimationReady<THREE.Mesh>) {
-        animateObject.rotation.x += 0.01;
-        animateObject.rotation.y += 0.01;
-    }
+  onMeshAnimateReady({ animateObject }: AnimationReady<THREE.Mesh>) {
+    animateObject.rotation.x += 0.01;
+    animateObject.rotation.y += 0.01;
+  }
 }
 ```
 
@@ -57,7 +64,7 @@ and voila...
 
 ![cube](/assets/gifs/cube.gif)
 
-**Angular Three** provides **Directives** to build your 3D scene declaratively, and in a performant way. There is nothing attached to the DOM except for `ngt-canvas`. 
+**Angular Three** provides **Directives** to build your 3D scene declaratively, and in a performant way. There is nothing attached to the DOM except for `ngt-canvas`.
 
 ## Attention
 
@@ -66,8 +73,6 @@ This package is still in development
 ## Packages
 
 **Angular Three** is a collection of packages that provide different **THREE.js** functionalities
-
-| **core**         | [`@automapper/core`](https://npmjs.com/package/@automapper/core)           | ![npm (scoped)](https://img.shields.io/npm/v/@automapper/core)      | [![README](https://img.shields.io/badge/README--green.svg)](/packages/core/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@automapper/core) ![NPM](https://img.shields.io/npm/l/@automapper/core)                |
 
 | Package                                                                                    | Version                                                                     | Links                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

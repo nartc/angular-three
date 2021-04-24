@@ -104,7 +104,6 @@
   },
   "lint-staged": {
     "*.{js,json,ts}": [
-      "npm run affected:lint",
       "npm run format:write"
     ]
   }
