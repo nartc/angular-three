@@ -22,6 +22,7 @@ export abstract class ThreeMaterial<
   @Input() ngtId?: string;
 
   @Input() set parameters(v: TMaterialParameters | undefined) {
+    this._parameters = v;
     if (v && this.material) {
       this.ngZone.runOutsideAngular(() => {
         this.convertColorToLinear(v);
@@ -29,7 +30,6 @@ export abstract class ThreeMaterial<
         this.material.needsUpdate = true;
       });
     }
-    this._parameters = v;
   }
 
   get parameters(): TMaterialParameters | undefined {
@@ -47,6 +47,9 @@ export abstract class ThreeMaterial<
   abstract materialType: AnyConstructor<TMaterial>;
 
   ngOnInit() {
+    if (this.parameters) {
+      this.convertColorToLinear(this.parameters);
+    }
     this._material = new this.materialType(this.parameters);
     this.instancesStore.saveMaterial({
       id: this.ngtId,
