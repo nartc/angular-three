@@ -1,3 +1,18 @@
+## [1.0.0-beta.14](https://github.com/nartc/angular-three/compare/1.0.0-beta.13...1.0.0-beta.14) (2021-04-24)
+
+
+### Features
+
+* **core:** add receiveShadow and castShadow on object3d ([2690cbc](https://github.com/nartc/angular-three/commit/2690cbc9455b8f3bfe405520494f809fbda7ce29))
+
+
+### Documentations
+
+* adjust Readme ([d3c6ea0](https://github.com/nartc/angular-three/commit/d3c6ea0522fdf8d74ca8d7e62be29849953789a7))
+* adjust README ([0bb5009](https://github.com/nartc/angular-three/commit/0bb5009a4e22dc2dea0d68ab5e2d12b3f55b20e9))
+* fix (yet another) typo and adjust info about component store ([3047713](https://github.com/nartc/angular-three/commit/30477130aaa311ac2deac8f058c6c0db6c56b1c7))
+* fix typo ([49ae6c8](https://github.com/nartc/angular-three/commit/49ae6c819cf0818d9e0156e80e509dffa419ebbb))
+
 ## [1.0.0-beta.13](https://github.com/nartc/angular-three/compare/1.0.0-beta.12...1.0.0-beta.13) (2021-04-24)
 
 ### Bug Fixes
