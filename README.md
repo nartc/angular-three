@@ -6,6 +6,37 @@
 
 This package is still in development
 
+## Packages
+
+**Angular Three** is a collection of packages that provide different **THREE.js** functionalities
+
+| Package                                                                                    | Version                                                                     | Links                                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@angular-three/core`](https://npmjs.com/package/@angular-three/core)                     | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/core)           | [![README](https://img.shields.io/badge/README--green.svg)](/packages/core/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/core)                     |
+| [`@angular-three/controls`](https://npmjs.com/package/@angular-three/controls)             | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/controls)       | [![README](https://img.shields.io/badge/README--green.svg)](/packages/controls/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/controls)             |
+| [`@angular-three/loaders`](https://npmjs.com/package/@angular-three/loaders)               | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/loaders)        | [![README](https://img.shields.io/badge/README--green.svg)](/packages/loaders/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/loaders)               |
+| [`@angular-three/postprocessing`](https://npmjs.com/package/@angular-three/postprocessing) | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/postprocessing) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/postprocessing/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/postprocessing) |
+
+### Peer Dependencies
+
+- `three@0.128`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js** is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.128`
+  - Make sure to also have `@types/three` installed as well
+
+```bash
+npm install -E three@0.128
+npm install -DE @types/three
+```
+
+- `@ngrx/component-store`: **Angular Three** uses `ComponentStore` to manage internal states. `ComponentStore` is a stand-alone (separate from `@ngrx/store`), small, and feature-packed local state management solution (~300LOC).
+
+```bash
+npm install @ngrx/component-store
+```
+
+> **Q: Why don't you roll your own `ComponentStore` to prevent consumers from having to install another external package?**
+>
+> A: `@ngrx/component-store` is extremely lightweight. It is also well-tested. I decided to keep it as a `peerDependency` because the consumers can actually **make use** of `@ngrx/component-store` if they find a need for it. After all, it's just a **Subject-as-a-Service**, but supercharged. The consumers will definitely gain more than what they have to pay for `@ngrx/component-store`.
+
 ## Overview
 
 Q: Is there a better way to do this in Angular?
@@ -70,38 +101,43 @@ and voila...
 
 ![cube](/assets/gifs/cube.gif)
 
-**Angular Three** provides **Directives** to build your 3D scene declaratively, and in a performant way. There is nothing attached to the DOM except for `ngt-canvas` component.
+**Angular Three** provides **Directives** to build our 3D scene declaratively, and in a performant way. There is nothing attached to the DOM except for `ngt-canvas` component.
 
-## Packages
+### Canvas
 
-**Angular Three** is a collection of packages that provide different **THREE.js** functionalities
+`ngt-canvas` is the main building block of **Angular Three**. Normally when working with **THREE.js**, we need to set up a `Renderer`, `Scene`, and `Camera`. `ngt-canvas` sets these up with some defaults:
 
-| Package                                                                                    | Version                                                                     | Links                                                                                                                                                                                                 |
-| ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@angular-three/core`](https://npmjs.com/package/@angular-three/core)                     | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/core)           | [![README](https://img.shields.io/badge/README--green.svg)](/packages/core/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/core)                     |
-| [`@angular-three/controls`](https://npmjs.com/package/@angular-three/controls)             | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/controls)       | [![README](https://img.shields.io/badge/README--green.svg)](/packages/controls/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/controls)             |
-| [`@angular-three/loaders`](https://npmjs.com/package/@angular-three/loaders)               | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/loaders)        | [![README](https://img.shields.io/badge/README--green.svg)](/packages/loaders/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/loaders)               |
-| [`@angular-three/postprocessing`](https://npmjs.com/package/@angular-three/postprocessing) | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/postprocessing) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/postprocessing/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/postprocessing) |
+- `WebGLRenderer` with the following
+  - antialias: true
+  - powerPreference: 'high-performance'
+  - alpha: true
+  - `setClearAlpha(0)`
+  - If `shadows` is provided, `shadowMap` will be enabled, and a _default_ `PCFSoftShadowMap` will be assigned.
+  - If `linear` is `false` (which is the default), the colorspace on the Renderer will be set to `sRGB` and all colors/textures will be converted automatically.
+- A _default_ `PerspectiveCamera` with: `fov: 75, near: 0.1, far: 1000, z: 5`
+  - If `isOrthographic` is set to true, a _default_ `OrthographicCamera` will be initialized instead, and with: `near: 0.1, far: 1000, z: 5`
+  - By default, `Camera` will look at `[0, 0, 0]` (center)
+- A _default_ `Scene` and `Raycaster`
+- A `window:resize` event listener to recalculate the `Renderer#size` and `Camera#aspect` on resize.
 
-### Peer Dependencies
+### Component Stores
 
-- `three@0.128`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js** is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.128`
-  - Make sure to also have `@types/three` installed as well
+As mentioned, **Angular Three** utilizes `ngrx/component-store` to manage internal state even though most state usages in the library are _imperative_.
 
-```bash
-npm install -E three@0.128
-npm install -DE @types/three
-```
+There are 4 stores in **Angular Three**
 
-- `@ngrx/component-store`: **Angular Three** uses `ComponentStore` to manage internal states. `ComponentStore` is a stand-alone (separate from `@ngrx/store`), small, and feature-packed local state management solution (~300LOC).
+- `CanvasStore`: state of the `Renderer`, `Camera`, `Scene` etc...
+- `AnimationStore`: state of the registered animations (to participate in the Animation Loop)
+- `InstancesStore`: state of the instances of Materials, Geometries, and Objects at the moment. Materials and Geometries instances are mainly for reuse purposes.
+- `EventsStore`: this store is somewhat _internal_ though we can use it to see all the current interactions through pointer events (mainly via the `Raycaster`)
 
-```bash
-npm install @ngrx/component-store
-```
+These 4 stores are provided on `ngt-canvas` which will allow all children of `ngt-canvas` to have access to the same instances of these 4 stores that `ngt-canvas` initialized.
 
-> **Q: Why don't you roll your own `ComponentStore` to prevent consumers from having to install another external package?**
->
-> A: `@ngrx/component-store` is extremely lightweight. It is also well-tested. I decided to keep it as a `peerDependency` because the consumers can actually **make use** of `@ngrx/component-store` if they find a need for it. After all, it's just a **Subject-as-a-Service**, but supercharged. The consumers will definitely gain more than what they have to pay for `@ngrx/component-store`.
+### Services
+
+In addition to the Stores, `ngt-canvas` also provides a `LoopService`. `LoopService` is, again, somewhat _internal_ but for some reason you want to `stop()` the animation loop, call `loopService.stop()`.
+
+For more information, please check out the [Documentations](#documentations)
 
 ## Documentations
 
