@@ -1,14 +1,12 @@
 ## [1.0.0-beta.16](https://github.com/nartc/angular-three/compare/1.0.0-beta.15...1.0.0-beta.16) (2021-04-24)
 
-
 ### Bug Fixes
 
-* **core:** make `LoopService#tick` private ([054e73e](https://github.com/nartc/angular-three/commit/054e73e5105f07036b39c1a3d7b554ee4c020b9f))
-
+- **core:** make `LoopService#tick` private ([054e73e](https://github.com/nartc/angular-three/commit/054e73e5105f07036b39c1a3d7b554ee4c020b9f))
 
 ### Documentations
 
-* add basic info to README ([4d8664d](https://github.com/nartc/angular-three/commit/4d8664dfea3a3897ee747a8ed6ca5fb0c09cd525))
+- add basic info to README ([4d8664d](https://github.com/nartc/angular-three/commit/4d8664dfea3a3897ee747a8ed6ca5fb0c09cd525))
 
 ## [1.0.0-beta.15](https://github.com/nartc/angular-three/compare/1.0.0-beta.14...1.0.0-beta.15) (2021-04-24)
 
