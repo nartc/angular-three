@@ -1,3 +1,10 @@
+## [1.0.0-beta.15](https://github.com/nartc/angular-three/compare/1.0.0-beta.14...1.0.0-beta.15) (2021-04-24)
+
+
+### Bug Fixes
+
+* **core:** make sure to convertColor before creating material ([5d6e3b4](https://github.com/nartc/angular-three/commit/5d6e3b40a6c96cde92458c3a475482dbb2d8302d))
+
 ## [1.0.0-beta.14](https://github.com/nartc/angular-three/compare/1.0.0-beta.13...1.0.0-beta.14) (2021-04-24)
 
 ### Features
