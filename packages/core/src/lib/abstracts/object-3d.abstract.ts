@@ -45,6 +45,8 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   @Input() scale?: ThreeVector3;
   @Input() color?: ThreeColor;
   @Input() userData?: UnknownRecord;
+  @Input() castShadow = false;
+  @Input() receiveShadow = false;
   @Input() visible = true;
   @Input() matrixAutoUpdate = true;
 
@@ -154,6 +156,8 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   private applyCustomProps(inputChanges?: SimpleChanges) {
     this.ngZone.runOutsideAngular(() => {
       const customProps = {
+        castShadow: this.castShadow,
+        receiveShadow: this.receiveShadow,
         visible: this.visible,
         matrixAutoUpdate: this.matrixAutoUpdate,
       } as UnknownRecord;
