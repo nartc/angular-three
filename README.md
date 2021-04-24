@@ -2,6 +2,12 @@
 
 🔥 Leverage your [Angular](https://angular.io) skill to build mind-blowing 3D applications with [THREE.js](https://threejs.org) 🔥
 
+## Attention
+
+This package is still in development
+
+## Overview
+
 Q: Is there a better way to do this in Angular?
 
 ```ts
@@ -66,10 +72,6 @@ and voila...
 
 **Angular Three** provides **Directives** to build your 3D scene declaratively, and in a performant way. There is nothing attached to the DOM except for `ngt-canvas` component.
 
-## Attention
-
-This package is still in development
-
 ## Packages
 
 **Angular Three** is a collection of packages that provide different **THREE.js** functionalities
@@ -98,8 +100,8 @@ npm install @ngrx/component-store
 ```
 
 > **Q: Why don't you roll your own `ComponentStore` to prevent consumers from having to install another external package?**
-> 
-> A: `@ngrx/component-store` is extremely lightweight. It is also well-tested. I decided to keep it as a `peerDependency` because the consumers can actually **make use** of `@ngrx/component-store` if they find a need for it. After all, it's just a **Subject-as-a-Service**, but supercharged. The consumers will definitely gain more than what they have to pay for `@ngrx/component-store`. 
+>
+> A: `@ngrx/component-store` is extremely lightweight. It is also well-tested. I decided to keep it as a `peerDependency` because the consumers can actually **make use** of `@ngrx/component-store` if they find a need for it. After all, it's just a **Subject-as-a-Service**, but supercharged. The consumers will definitely gain more than what they have to pay for `@ngrx/component-store`.
 
 ## Documentations
 
