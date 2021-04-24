@@ -1,10 +1,10 @@
 import type { AnyConstructor } from '@angular-three/core';
-import { Directive, NgZone, OnInit } from '@angular/core';
+import { Directive, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Texture } from 'three';
 
 @Directive()
 export abstract class ThreeTexture<TTexture extends Texture = Texture>
-  implements OnInit {
+  implements OnInit, OnDestroy {
   abstract textureType: AnyConstructor<TTexture>;
 
   constructor(private readonly ngZone: NgZone) {}
@@ -25,5 +25,13 @@ export abstract class ThreeTexture<TTexture extends Texture = Texture>
 
   get texture(): TTexture | undefined {
     return this._texture;
+  }
+
+  ngOnDestroy() {
+    this.ngZone.runOutsideAngular(() => {
+      if (this.texture) {
+        this.texture.dispose();
+      }
+    });
   }
 }

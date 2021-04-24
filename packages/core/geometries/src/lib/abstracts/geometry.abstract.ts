@@ -1,5 +1,12 @@
 import { AnyConstructor, InstancesStore } from '@angular-three/core';
-import { Directive, Input, OnDestroy, OnInit, SkipSelf } from '@angular/core';
+import {
+  Directive,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  SkipSelf,
+} from '@angular/core';
 import type { BufferGeometry } from 'three';
 
 @Directive()
@@ -8,7 +15,10 @@ export abstract class ThreeBufferGeometry<
 > implements OnInit, OnDestroy {
   @Input() ngtId?: string;
 
-  constructor(@SkipSelf() protected readonly instancesStore: InstancesStore) {}
+  constructor(
+    @SkipSelf() protected readonly instancesStore: InstancesStore,
+    private readonly ngZone: NgZone
+  ) {}
 
   abstract geometryType: AnyConstructor<TGeometry>;
 
@@ -18,11 +28,13 @@ export abstract class ThreeBufferGeometry<
   }
 
   ngOnInit() {
-    this._bufferGeometry = new this.geometryType(...this._extraArgs);
+    this.ngZone.runOutsideAngular(() => {
+      this._bufferGeometry = new this.geometryType(...this._extraArgs);
 
-    this.instancesStore.saveBufferGeometry({
-      id: this.ngtId,
-      bufferGeometry: this._bufferGeometry,
+      this.instancesStore.saveBufferGeometry({
+        id: this.ngtId,
+        bufferGeometry: this._bufferGeometry,
+      });
     });
   }
 
@@ -32,10 +44,13 @@ export abstract class ThreeBufferGeometry<
   }
 
   ngOnDestroy() {
-    if (this.bufferGeometry) {
-      this.instancesStore.removeBufferGeometry(
-        this.ngtId || this.bufferGeometry.uuid
-      );
-    }
+    this.ngZone.runOutsideAngular(() => {
+      if (this.bufferGeometry) {
+        this.instancesStore.removeBufferGeometry(
+          this.ngtId || this.bufferGeometry.uuid
+        );
+        this.bufferGeometry.dispose();
+      }
+    });
   }
 }

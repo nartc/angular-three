@@ -49,8 +49,10 @@ export abstract class AnimationLoopParticipant<TObject = unknown>
   }
 
   ngOnDestroy() {
-    if (this.animateTeardown) {
-      this.animateTeardown();
-    }
+    this.ngZone.runOutsideAngular(() => {
+      if (this.animateTeardown) {
+        this.animateTeardown();
+      }
+    });
   }
 }

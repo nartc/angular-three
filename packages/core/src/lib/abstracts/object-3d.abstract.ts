@@ -146,6 +146,8 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
         scene.remove(this.object3d);
       }
     }
+
+    this.object3d.clear();
   }
 
   protected objectReady() {
@@ -272,8 +274,8 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   ngOnDestroy(): void {
     super.ngOnDestroy();
     this.ngZone.runOutsideAngular(() => {
-      this.remove();
       if (this.object3d) {
+        this.remove();
         this.instancesStore.removeObject(this.object3d.uuid);
         this.animationStore.unregisterAnimationEffect(this.object3d.uuid);
       }

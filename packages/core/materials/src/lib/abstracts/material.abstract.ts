@@ -47,13 +47,15 @@ export abstract class ThreeMaterial<
   abstract materialType: AnyConstructor<TMaterial>;
 
   ngOnInit() {
-    if (this.parameters) {
-      this.convertColorToLinear(this.parameters);
-    }
-    this._material = new this.materialType(this.parameters);
-    this.instancesStore.saveMaterial({
-      id: this.ngtId,
-      material: this._material,
+    this.ngZone.runOutsideAngular(() => {
+      if (this.parameters) {
+        this.convertColorToLinear(this.parameters);
+      }
+      this._material = new this.materialType(this.parameters);
+      this.instancesStore.saveMaterial({
+        id: this.ngtId,
+        material: this._material,
+      });
     });
   }
 
@@ -76,8 +78,11 @@ export abstract class ThreeMaterial<
   }
 
   ngOnDestroy() {
-    if (this.material) {
-      this.instancesStore.removeMaterial(this.ngtId || this.material.uuid);
-    }
+    this.ngZone.runOutsideAngular(() => {
+      if (this.material) {
+        this.instancesStore.removeMaterial(this.ngtId || this.material.uuid);
+        this.material.dispose();
+      }
+    });
   }
 }
