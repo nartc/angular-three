@@ -8,10 +8,7 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader';
 @Component({
   selector: 'demo-boxes-effects',
   template: `
-    <ngt-effectComposer
-      *ngIf="vm$ | async as vm"
-      (zonelessReady)="onReady($event)"
-    >
+    <ngt-effectComposer *ngIf="vm$ | async as vm" (ready)="onReady($event)">
       <ngt-renderPass></ngt-renderPass>
       <ngt-sSAOPass [kernelRadius]="0.6" [maxDistance]="0.03"></ngt-sSAOPass>
       <ngt-unrealBloomPass

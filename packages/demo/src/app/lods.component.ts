@@ -34,7 +34,7 @@ import { LOD, Mesh } from 'three';
       *ngFor="let position of amount"
       [position]="position"
       [matrixAutoUpdate]="false"
-      (zonelessReady)="onLodReady($event)"
+      (ready)="onLodReady($event)"
       (animateReady)="onLodAnimateReady($event)"
     ></ngt-lod>
   `,
