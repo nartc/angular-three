@@ -1,3 +1,18 @@
+## [1.0.0-beta.13](https://github.com/nartc/angular-three/compare/1.0.0-beta.12...1.0.0-beta.13) (2021-04-24)
+
+
+### Bug Fixes
+
+* **core:** remove runOutsideAngular utils and remove zonelessReady ([50a0459](https://github.com/nartc/angular-three/commit/50a04591b7a52ae8b458664f7da8f1fc94a0e471))
+
+
+### Documentations
+
+* **demo:** adjust demo with zonelessReady removal ([069aed6](https://github.com/nartc/angular-three/commit/069aed671b3a6a3881b0642700907deccd224f71))
+* add basic info to README ([89eaf41](https://github.com/nartc/angular-three/commit/89eaf41a909c22c229d9301dfcfabbad4399f4d9))
+* add cube gif ([d8815e4](https://github.com/nartc/angular-three/commit/d8815e40c0f99896c465aaddf34d29f136044688))
+* fix typo ([b478ea2](https://github.com/nartc/angular-three/commit/b478ea2a88a299fb8b9357c4ac4d62aed880260e))
+
 ## [1.0.0-beta.12](https://github.com/nartc/angular-three/compare/1.0.0-beta.11...1.0.0-beta.12) (2021-04-23)
 
 ### Features
