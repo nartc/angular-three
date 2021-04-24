@@ -1,4 +1,4 @@
-import type { ThreeCamera } from '@angular-three/core';
+import type { ThreeCamera, UnknownRecord } from '@angular-three/core';
 import {
   AnimationLoopParticipant,
   AnimationStore,
@@ -9,6 +9,7 @@ import {
   Directive,
   EventEmitter,
   NgZone,
+  OnDestroy,
   OnInit,
   Output,
   SkipSelf,
@@ -19,7 +20,7 @@ import type { WebGLRenderer } from 'three';
 @Directive()
 export abstract class ThreeControls<TControls = unknown>
   extends AnimationLoopParticipant<TControls>
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @Output() ready = new EventEmitter<TControls>();
 
   constructor(
@@ -60,4 +61,13 @@ export abstract class ThreeControls<TControls = unknown>
     camera: ThreeCamera,
     renderer: WebGLRenderer
   ): TControls;
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
+    this.ngZone.runOutsideAngular(() => {
+      if (this.controls && (this.controls as UnknownRecord).dispose) {
+        ((this.controls as UnknownRecord).dispose as () => void)();
+      }
+    });
+  }
 }
