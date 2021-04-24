@@ -89,6 +89,10 @@ export abstract class ThreePass<TPass extends Pass = Pass>
       if (this.composer) {
         this.composer.composer.removePass(this.pass);
       }
+
+      if (this.pass && 'dispose' in this.pass) {
+        ((this.pass as UnknownRecord).dispose as () => void)();
+      }
     });
   }
 
