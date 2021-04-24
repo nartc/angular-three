@@ -64,7 +64,7 @@ and voila...
 
 ![cube](/assets/gifs/cube.gif)
 
-**Angular Three** provides **Directives** to build your 3D scene declaratively, and in a performant way. There is nothing attached to the DOM except for `ngt-canvas`.
+**Angular Three** provides **Directives** to build your 3D scene declaratively, and in a performant way. There is nothing attached to the DOM except for `ngt-canvas` component.
 
 ## Attention
 
@@ -83,9 +83,23 @@ This package is still in development
 
 ### Peer Dependencies
 
-- `three@0.128`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Although, **THREE.js** is moving quite frequently, and this wrapper currently supports `0.128`
+- `three@0.128`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js** is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.128`
   - Make sure to also have `@types/three` installed as well
-- `@ngrx/component-store`: **Angular Three** uses `ComponentStore` to manage internal states. `ComponentStore` is a separated, small, and feature-packed local state management solution. You'll definitely get more than what you have to pay for `ComponentStore` (~300LOC)
+
+```bash
+npm install -E three@0.128
+npm install -DE @types/three
+```
+
+- `@ngrx/component-store`: **Angular Three** uses `ComponentStore` to manage internal states. `ComponentStore` is a separated, small, and feature-packed local state management solution (~300LOC).
+
+```bash
+npm install @ngrx/component-store
+```
+
+> **Q: Why don't you roll your own `ComponentStore` to prevent consumers from having to install another external package?**
+> 
+> A: `@ngrx/component-store` is extremely lightweight. It is also well-tested. I decided to keep it as a `peerDependency` because the consumers can actually **make use** of `@ngrx/component-store` if they find a need for it. After all, it's just a **Subject-as-a-Service**, but supercharged. The consumers will definitely gain more that what they have to pay for `@ngrx/component-store`. 
 
 ## Documentations
 
