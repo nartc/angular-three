@@ -27,7 +27,7 @@ export class LoopService implements OnDestroy {
     }
   }
 
-  tick(delta: number) {
+  private tick(delta: number) {
     const {
       renderer,
       scene,
