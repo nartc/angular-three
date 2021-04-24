@@ -91,7 +91,7 @@ npm install -E three@0.128
 npm install -DE @types/three
 ```
 
-- `@ngrx/component-store`: **Angular Three** uses `ComponentStore` to manage internal states. `ComponentStore` is a separated, small, and feature-packed local state management solution (~300LOC).
+- `@ngrx/component-store`: **Angular Three** uses `ComponentStore` to manage internal states. `ComponentStore` is a stand-alone (separate from `@ngrx/store`), small, and feature-packed local state management solution (~300LOC).
 
 ```bash
 npm install @ngrx/component-store
