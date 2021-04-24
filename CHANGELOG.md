@@ -1,3 +1,12 @@
+## [1.0.0-beta.17](https://github.com/nartc/angular-three/compare/1.0.0-beta.16...1.0.0-beta.17) (2021-04-24)
+
+
+### Bug Fixes
+
+* **controls:** call dispose() on destroy ([1f6a774](https://github.com/nartc/angular-three/commit/1f6a7743e709bd0a7d770e136c1cbcbb68ce328d))
+* **core:** call dispose() on destroy ([5c0fc46](https://github.com/nartc/angular-three/commit/5c0fc466d9b0cc597fdf04c30e73553397366e5a))
+* **postprocessing:** check for dispose and call it on destroy ([d0fbbb0](https://github.com/nartc/angular-three/commit/d0fbbb08f06a8c542e057864a698aa95fa4313c6))
+
 ## [1.0.0-beta.16](https://github.com/nartc/angular-three/compare/1.0.0-beta.15...1.0.0-beta.16) (2021-04-24)
 
 ### Bug Fixes
