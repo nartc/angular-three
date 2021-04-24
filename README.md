@@ -46,7 +46,7 @@ A: YES!
     `,
 })
 export class AppComponent {
-    onMeshAnimateReady({ animateObject }: AnimateReady<THREE.Mesh>) {
+    onMeshAnimateReady({ animateObject }: AnimationReady<THREE.Mesh>) {
         animateObject.rotation.x += 0.01;
         animateObject.rotation.y += 0.01;
     }
