@@ -53,6 +53,10 @@ export class AppComponent {
 }
 ```
 
+and voila...
+
+![cube](/assets/gifs/cube.gif)
+
 **Angular Three** provides **Directives** to build your 3D scene declaratively, and in a performant way. There is nothing attached to the DOM except for `ngt-canvas`. 
 
 ## Attention
