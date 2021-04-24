@@ -1,8 +1,4 @@
-import {
-  CanvasStore,
-  DestroyedService,
-  runOutsideAngular,
-} from '@angular-three/core';
+import { CanvasStore, DestroyedService } from '@angular-three/core';
 import {
   Directive,
   EventEmitter,
@@ -25,7 +21,6 @@ export class AudioListenerDirective implements OnInit {
   @Input() timeDelta?: number;
 
   @Output() ready = new EventEmitter<AudioListener>();
-  @Output() zonelessReady = new EventEmitter<AudioListener>();
 
   private _listener!: AudioListener;
 
@@ -48,20 +43,16 @@ export class AudioListenerDirective implements OnInit {
       }
 
       this.canvasStore.active$
-        .pipe(
-          runOutsideAngular(this.ngZone, (active, run) => {
+        .pipe(takeUntil(this.destroyed))
+        .subscribe((active) => {
+          this.ngZone.runOutsideAngular(() => {
             const { camera } = this.canvasStore.getImperativeState();
             if (active && camera) {
               camera.add(this.audioListener);
-              run(() => {
-                this.ready.emit(this.audioListener);
-              });
-              this.zonelessReady.emit(this.audioListener);
+              this.ready.emit(this.audioListener);
             }
-          }),
-          takeUntil(this.destroyed)
-        )
-        .subscribe();
+          });
+        });
     });
   }
 

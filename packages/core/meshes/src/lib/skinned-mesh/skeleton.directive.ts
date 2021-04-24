@@ -22,7 +22,6 @@ import { SkinnedMeshDirective } from './skinned-mesh.directive';
 export class SkeletonDirective implements OnInit {
   @Input() boneInverses?: ThreeMatrix4[];
   @Output() ready = new EventEmitter<Skeleton>();
-  @Output() zonelessReady = new EventEmitter<Skeleton>();
 
   @ContentChildren(BoneDirective) bones?: QueryList<BoneDirective>;
 
@@ -47,10 +46,7 @@ export class SkeletonDirective implements OnInit {
           boneInverses
         );
 
-        this.ngZone.run(() => {
-          this.ready.emit(this.skeleton);
-        });
-        this.zonelessReady.emit(this.skeleton);
+        this.ready.emit(this.skeleton);
 
         if (this.hostObject) {
           if (this.hostObject instanceof SkinnedMeshDirective) {

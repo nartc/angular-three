@@ -42,7 +42,6 @@ export abstract class ThreePass<TPass extends Pass = Pass>
   }
 
   @Output() ready = new EventEmitter<TPass>();
-  @Output() zonelessReady = new EventEmitter<TPass>();
 
   constructor(
     protected readonly ngZone: NgZone,
@@ -81,10 +80,7 @@ export abstract class ThreePass<TPass extends Pass = Pass>
       if (this.composer) {
         this.composer.composer.addPass(this.pass);
       }
-      this.ngZone.run(() => {
-        this.ready.emit(this.pass);
-      });
-      this.zonelessReady.emit(this.pass);
+      this.ready.emit(this.pass);
     });
   }
 

@@ -73,7 +73,6 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   }
 
   @Output() ready = this.object3d$.pipe(filter(Boolean)) as Observable<TObject>;
-  @Output() zonelessReady = new EventEmitter<TObject>();
 
   constructor(
     protected readonly canvasStore: CanvasStore,
@@ -148,11 +147,7 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   }
 
   protected objectReady() {
-    this.ngZone.run(() => {
-      this.$object3d.next(this.object3d);
-    });
-
-    this.zonelessReady.emit(this.object3d);
+    this.$object3d.next(this.object3d);
     this.participate(this.object3d);
   }
 

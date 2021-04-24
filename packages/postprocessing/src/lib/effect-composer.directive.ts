@@ -1,8 +1,4 @@
-import {
-  CanvasStore,
-  DestroyedService,
-  runOutsideAngular,
-} from '@angular-three/core';
+import { CanvasStore, DestroyedService } from '@angular-three/core';
 import {
   Directive,
   EventEmitter,
@@ -27,7 +23,6 @@ export class EffectComposerDirective implements OnInit {
   @Input() watchSizeChanged = true;
 
   @Output() ready = new EventEmitter<EffectComposer>();
-  @Output() zonelessReady = new EventEmitter<EffectComposer>();
 
   constructor(
     @SkipSelf() private readonly canvasStore: CanvasStore,
@@ -39,17 +34,16 @@ export class EffectComposerDirective implements OnInit {
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
+      // TODO: figure out how to clean up nested subscription
       this.canvasStore.active$
-        .pipe(
-          runOutsideAngular(this.ngZone, (active, run) => {
+        .pipe(takeUntil(this.destroyed))
+        .subscribe((active) => {
+          this.ngZone.runOutsideAngular(() => {
             const { renderer } = this.canvasStore.getImperativeState();
             if (active && renderer) {
               this._composer = new EffectComposer(renderer, this.renderTarget);
 
-              run(() => {
-                this.ready.emit(this.composer);
-              });
-              this.zonelessReady.emit(this.composer);
+              this.ready.emit(this.composer);
 
               if (this.watchSizeChanged) {
                 // nested subscription
@@ -57,18 +51,17 @@ export class EffectComposerDirective implements OnInit {
                   .pipe(
                     distinctUntilKeyChanged('size'),
                     pluck('size'),
-                    runOutsideAngular(this.ngZone, ({ width, height }) => {
-                      this._composer.setSize(width, height);
-                    }),
                     takeUntil(race(this.canvasStore.active$, this.destroyed))
                   )
-                  .subscribe();
+                  .subscribe(({ width, height }) => {
+                    this.ngZone.runOutsideAngular(() => {
+                      this._composer.setSize(width, height);
+                    });
+                  });
               }
             }
-          }),
-          takeUntil(this.destroyed)
-        )
-        .subscribe();
+          });
+        });
     });
   }
 
