@@ -1,9 +1,8 @@
 // GENERATED
 
-import { ThreeObject3d } from '@angular-three/core';
+import { ThreeHelper, ThreeObject3d } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { PointLightHelper } from 'three';
-import { ThreeHelper } from '../abstracts';
 
 @Directive({
   selector: 'ngt-pointLightHelper',

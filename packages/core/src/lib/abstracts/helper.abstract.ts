@@ -1,7 +1,7 @@
-import type { AnyConstructor } from '@angular-three/core';
-import { ThreeObject3d } from '@angular-three/core';
 import { Directive, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Object3D } from 'three';
+import type { AnyConstructor } from '../typings';
+import { ThreeObject3d } from './object-3d.abstract';
 
 @Directive()
 export abstract class ThreeHelper<THelper extends Object3D>

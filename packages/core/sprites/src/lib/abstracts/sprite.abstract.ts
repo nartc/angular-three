@@ -1,5 +1,8 @@
-import { AnyConstructor, ThreeObject3d } from '@angular-three/core';
-import { ThreeMaterial } from '@angular-three/core/materials';
+import {
+  AnyConstructor,
+  ThreeMaterial,
+  ThreeObject3d,
+} from '@angular-three/core';
 import {
   AfterContentInit,
   ContentChild,

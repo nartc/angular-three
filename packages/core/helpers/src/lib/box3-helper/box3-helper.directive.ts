@@ -1,9 +1,8 @@
 // GENERATED
 
-import { ThreeObject3d } from '@angular-three/core';
+import { ThreeHelper, ThreeObject3d } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { Box3Helper } from 'three';
-import { ThreeHelper } from '../abstracts';
 
 @Directive({
   selector: 'ngt-box3Helper',

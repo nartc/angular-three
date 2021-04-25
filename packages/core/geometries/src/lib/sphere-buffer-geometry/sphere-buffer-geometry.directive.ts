@@ -1,8 +1,7 @@
 // GENERATED
-
+import { ThreeBufferGeometry } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { SphereBufferGeometry } from 'three';
-import { ThreeBufferGeometry } from '../abstracts';
 
 @Directive({
   selector: 'ngt-sphereBufferGeometry,ngt-sphereGeometry',

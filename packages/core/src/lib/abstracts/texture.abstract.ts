@@ -1,6 +1,6 @@
-import type { AnyConstructor } from '@angular-three/core';
 import { Directive, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Texture } from 'three';
+import type { AnyConstructor } from '../typings';
 
 @Directive()
 export abstract class ThreeTexture<TTexture extends Texture = Texture>

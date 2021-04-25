@@ -1,4 +1,3 @@
-import { AnyConstructor, InstancesStore } from '@angular-three/core';
 import {
   Directive,
   Input,
@@ -8,6 +7,8 @@ import {
   SkipSelf,
 } from '@angular/core';
 import type { BufferGeometry } from 'three';
+import { InstancesStore } from '../stores';
+import type { AnyConstructor } from '../typings';
 
 @Directive()
 export abstract class ThreeBufferGeometry<

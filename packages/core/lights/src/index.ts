@@ -1,6 +1,5 @@
 // GENERATED
 
-export * from './lib/abstracts';
 export * from './lib/light-probe';
 export * from './lib/ambient-light';
 export * from './lib/ambient-light-probe';

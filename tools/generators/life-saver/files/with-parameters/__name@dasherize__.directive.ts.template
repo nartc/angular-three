@@ -1,8 +1,8 @@
 // GENERATED
 
+import { <%= abstract %> } from '@angular-three/core';
 import { Directive } from '@angular/core';
 import { <%= name %>, <% if (name === 'RawShaderMaterial') { %>ShaderMaterial<% } else { %><%= name %><% } %>Parameters } from 'three';
-import { <%= abstract %> } from '../abstracts';
 
 @Directive({
   selector: 'ngt-<%= camelize(name) %>',

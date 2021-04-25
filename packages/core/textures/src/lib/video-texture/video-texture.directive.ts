@@ -1,8 +1,7 @@
 // GENERATED
-
+import { ThreeTexture } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { VideoTexture } from 'three';
-import { ThreeTexture } from '../abstracts';
 
 @Directive({
   selector: 'ngt-videoTexture',

@@ -1,8 +1,7 @@
 // GENERATED
-
+import { ThreeTexture } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { DataTexture2DArray } from 'three';
-import { ThreeTexture } from '../abstracts';
 
 @Directive({
   selector: 'ngt-dataTexture2DArray',

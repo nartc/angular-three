@@ -1,7 +1,7 @@
-import type { AnyConstructor } from '@angular-three/core';
-import { ThreeObject3d } from '@angular-three/core';
 import { Directive, Input, OnInit } from '@angular/core';
 import { Light } from 'three';
+import type { AnyConstructor } from '../typings';
+import { ThreeObject3d } from './object-3d.abstract';
 
 @Directive()
 export abstract class ThreeLight<TLight extends Light = Light>

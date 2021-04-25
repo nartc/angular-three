@@ -1,6 +1,5 @@
 // GENERATED
 
-export * from './lib/abstracts';
 export * from './lib/canvas-texture';
 export * from './lib/compressed-texture';
 export * from './lib/cube-texture';

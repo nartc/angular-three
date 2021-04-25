@@ -1,8 +1,8 @@
 // GENERATED
 
+import { ThreeMaterial } from '@angular-three/core';
 import { Directive } from '@angular/core';
 import { MeshMatcapMaterial, MeshMatcapMaterialParameters } from 'three';
-import { ThreeMaterial } from '../abstracts';
 
 @Directive({
   selector: 'ngt-meshMatcapMaterial',

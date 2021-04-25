@@ -1,6 +1,5 @@
 // GENERATED
 
-export * from './lib/abstracts';
 export * from './lib/instanced-buffer-geometry';
 export * from './lib/box-buffer-geometry';
 export * from './lib/circle-buffer-geometry';

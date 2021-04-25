@@ -1,6 +1,5 @@
 // GENERATED
 
-export * from './lib/abstracts';
 export * from './lib/arrow-helper';
 export * from './lib/axes-helper';
 export * from './lib/box-helper';

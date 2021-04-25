@@ -1,4 +1,4 @@
-import { ThreeBufferGeometry } from '@angular-three/core/geometries';
+import { ThreeBufferGeometry } from '@angular-three/core';
 import {
   Directive,
   Input,

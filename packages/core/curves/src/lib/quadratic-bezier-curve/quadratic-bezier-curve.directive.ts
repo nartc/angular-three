@@ -1,8 +1,7 @@
 // GENERATED
-
+import { ThreeCurve } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { QuadraticBezierCurve } from 'three';
-import { ThreeCurve } from '../abstracts';
 
 @Directive({
   selector: 'ngt-quadraticBezierCurve',

@@ -1,5 +1,3 @@
-import type { AnyConstructor } from '@angular-three/core';
-import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import {
   Directive,
   Input,
@@ -11,6 +9,8 @@ import {
 } from '@angular/core';
 import type { BuiltinShaderAttributeName } from 'three';
 import { BufferAttribute } from 'three';
+import type { AnyConstructor } from '../typings';
+import { ThreeBufferGeometry } from './geometry.abstract';
 
 @Directive()
 export abstract class ThreeAttribute<

@@ -1,6 +1,5 @@
 // GENERATED
 
-export * from './lib/abstracts';
 export * from './lib/shadow-material';
 export * from './lib/sprite-material';
 export * from './lib/raw-shader-material';

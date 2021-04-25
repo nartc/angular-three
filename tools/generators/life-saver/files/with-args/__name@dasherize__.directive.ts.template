@@ -1,9 +1,8 @@
 // GENERATED
 <% if (withThreeObject3d) { %>
-import { ThreeObject3d } from '@angular-three/core';<% } %>
+import { <%= abstract %>, ThreeObject3d } from '@angular-three/core';<% } else { %>import { <%= abstract %> } from '@angular-three/core';<% } %>
 import { Directive, Input } from '@angular/core';
 import { <%= name %> } from 'three';
-import { <%= abstract %> } from '../abstracts';
 
 @Directive({
   selector: 'ngt-<%= camelize(name) %><% if (alternative) { %>,ngt-<%= camelize(alternative) %><% } %>',

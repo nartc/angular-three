@@ -1,8 +1,7 @@
 // GENERATED
-
+import { ThreeAttribute } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { Uint8BufferAttribute } from 'three';
-import { ThreeAttribute } from '../abstracts';
 
 @Directive({
   selector: 'ngt-uint8BufferAttribute',

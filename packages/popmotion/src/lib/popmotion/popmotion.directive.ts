@@ -1,6 +1,5 @@
 import type { UnknownRecord } from '@angular-three/core';
-import { applyProps, ThreeObject3d } from '@angular-three/core';
-import { ThreeMaterial } from '@angular-three/core/materials';
+import { applyProps, ThreeMaterial, ThreeObject3d } from '@angular-three/core';
 import {
   Directive,
   Inject,

@@ -1,7 +1,7 @@
-import type { AnyConstructor } from '@angular-three/core';
-import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import { Directive, Input, NgZone, OnInit, Optional } from '@angular/core';
 import { Curve, Vector, Vector2, Vector3 } from 'three';
+import type { AnyConstructor } from '../typings';
+import { ThreeBufferGeometry } from './geometry.abstract';
 
 @Directive()
 export abstract class ThreeCurve<TCurve extends Curve<Vector> = Curve<Vector>>

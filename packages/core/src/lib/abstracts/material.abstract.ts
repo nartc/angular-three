@@ -1,9 +1,3 @@
-import type {
-  AnyConstructor,
-  ThreeColor,
-  UnknownRecord,
-} from '@angular-three/core';
-import { CanvasStore, InstancesStore } from '@angular-three/core';
 import {
   Directive,
   Input,
@@ -13,6 +7,8 @@ import {
   SkipSelf,
 } from '@angular/core';
 import { Color, Material, MaterialParameters } from 'three';
+import { CanvasStore, InstancesStore } from '../stores';
+import type { AnyConstructor, ThreeColor, UnknownRecord } from '../typings';
 
 @Directive()
 export abstract class ThreeMaterial<

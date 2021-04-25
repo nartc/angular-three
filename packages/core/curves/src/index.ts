@@ -1,6 +1,5 @@
 // GENERATED
 
-export * from './lib/abstracts';
 export * from './lib/catmull-rom-curve3';
 export * from './lib/cubic-bezier-curve';
 export * from './lib/cubic-bezier-curve3';
