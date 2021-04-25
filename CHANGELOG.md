@@ -1,3 +1,15 @@
+## [1.0.0-beta.18](https://github.com/nartc/angular-three/compare/1.0.0-beta.17...1.0.0-beta.18) (2021-04-25)
+
+
+### Features
+
+* **popmotion:** add rough implementation for popmotion ([a1674fb](https://github.com/nartc/angular-three/commit/a1674fb06c72693b05c8fc29f7777794b9e7bf59))
+
+
+### Documentations
+
+* **demo:** adjust demo to use popmotion ([15f6d1c](https://github.com/nartc/angular-three/commit/15f6d1c1e7f0860bf82fb750334b1430f930bf9a))
+
 ## [1.0.0-beta.17](https://github.com/nartc/angular-three/compare/1.0.0-beta.16...1.0.0-beta.17) (2021-04-24)
 
 ### Bug Fixes
