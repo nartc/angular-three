@@ -1,9 +1,9 @@
 import {
   AnyConstructor,
+  ThreeBufferGeometry,
   ThreeMaterial,
   ThreeObject3dMaterialGeometry,
 } from '@angular-three/core';
-import { ThreeBufferGeometry } from '@angular-three/core/geometries';
 import type { QueryList } from '@angular/core';
 import { ContentChild, ContentChildren, Directive } from '@angular/core';
 import { Line } from 'three';
