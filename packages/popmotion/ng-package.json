@@ -1,0 +1,12 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/packages/popmotion",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "popmotion": "popmotion",
+      "@angular-three/core": "@angular-three/core",
+      "@angular-three/core/materials": "@angular-three/core/materials"
+    }
+  }
+}

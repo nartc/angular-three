@@ -103,7 +103,8 @@
     },
     "controls-transform-controls": {
       "tags": ["scope:controls", "type:library", "context:transform-controls"]
-    }
+    },
+    "popmotion": { "tags": ["scope:popmotion", "type:library"] }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

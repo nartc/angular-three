@@ -49,6 +49,7 @@
     "@angular/router": "11.2.11",
     "@ngrx/component-store": "11.1.1",
     "nice-color-palettes": "3.0.0",
+    "popmotion": "~9.3.5",
     "rxjs": "6.6.7",
     "three": "0.128.0",
     "tslib": "2.2.0",

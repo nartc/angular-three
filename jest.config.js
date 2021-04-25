@@ -35,5 +35,6 @@ module.exports = {
     '<rootDir>/packages/controls/pointer-lock-controls',
     '<rootDir>/packages/controls/trackball-controls',
     '<rootDir>/packages/controls/transform-controls',
+    '<rootDir>/packages/popmotion',
   ],
 };

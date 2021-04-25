@@ -1426,6 +1426,43 @@
           }
         }
       }
+    },
+    "popmotion": {
+      "projectType": "library",
+      "root": "packages/popmotion",
+      "sourceRoot": "packages/popmotion/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/popmotion/tsconfig.lib.json",
+            "project": "packages/popmotion/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/popmotion/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/popmotion/src/**/*.ts",
+              "packages/popmotion/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/popmotion"],
+          "options": {
+            "jestConfig": "packages/popmotion/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
