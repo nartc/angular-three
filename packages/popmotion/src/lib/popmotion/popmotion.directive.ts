@@ -14,18 +14,29 @@ import { animate } from 'popmotion';
 import type { Material, Object3D } from 'three';
 import { THREE_POPABLE } from '../di';
 
+export interface Popable {
+  (): Object3D | Material | null;
+}
+
+export function popableFactory(
+  object3d?: ThreeObject3d,
+  material?: ThreeMaterial
+) {
+  // noinspection UnnecessaryLocalVariableJS
+  const getter = () => {
+    if (material) return material.material;
+    if (object3d) return object3d.object3d;
+    return null;
+  };
+  return getter;
+}
+
 @Directive({
   selector: '[ngtPop]',
   providers: [
     {
       provide: THREE_POPABLE,
-      useFactory: (object3d?: ThreeObject3d, material?: ThreeMaterial) => {
-        return () => {
-          if (material) return material.material;
-          if (object3d) return object3d.object3d;
-          return null;
-        };
-      },
+      useFactory: popableFactory,
       deps: [
         [new Optional(), ThreeObject3d],
         [new Optional(), ThreeMaterial],
@@ -43,7 +54,7 @@ export class PopmotionDirective implements OnChanges, OnDestroy {
   constructor(
     private readonly ngZone: NgZone,
     @Inject(THREE_POPABLE)
-    private readonly popable: () => Object3D | Material | null
+    private readonly popable: Popable
   ) {}
 
   ngOnChanges() {
