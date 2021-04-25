@@ -1,6 +1,6 @@
 {
   "name": "@angular-three/core/materials",
-  "version": "1.0.0-beta.18",
+  "version": "1.0.0-beta.19",
   "peerDependencies": {
     "@angular/common": "^11.2.10",
     "@angular/core": "^11.2.10"

@@ -1,3 +1,15 @@
+## [1.0.0-beta.19](https://github.com/nartc/angular-three/compare/1.0.0-beta.18...1.0.0-beta.19) (2021-04-25)
+
+
+### Features
+
+* **core:** move all abstracts to core ([b7a4a36](https://github.com/nartc/angular-three/commit/b7a4a36348e9bfa3d50c09ddf648b793b63aa21d))
+
+
+### Bug Fixes
+
+* **popmotion:** extract `popmotionFactory` for Ivy ([d6d0df5](https://github.com/nartc/angular-three/commit/d6d0df5c3223addf66b519c7d4a7a79d5cc81bd8))
+
 ## [1.0.0-beta.18](https://github.com/nartc/angular-three/compare/1.0.0-beta.17...1.0.0-beta.18) (2021-04-25)
 
 ### Features
