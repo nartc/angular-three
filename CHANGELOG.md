@@ -1,3 +1,10 @@
+## [1.0.0-beta.20](https://github.com/nartc/angular-three/compare/1.0.0-beta.19...1.0.0-beta.20) (2021-04-25)
+
+
+### Bug Fixes
+
+* **core:** fix geometry import ([ef81ada](https://github.com/nartc/angular-three/commit/ef81adad70020e7b6b01c6a17dfa429b5472bbaa))
+
 ## [1.0.0-beta.19](https://github.com/nartc/angular-three/compare/1.0.0-beta.18...1.0.0-beta.19) (2021-04-25)
 
 ### Features
