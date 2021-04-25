@@ -43,7 +43,8 @@
               "npx ng run core:build --prod",
               "npx ng run postprocessing:build --prod",
               "npx ng run controls:build --prod",
-              "npx ng run loaders:build --prod"
+              "npx ng run loaders:build --prod",
+              "npx ng run popmotion:build --prod"
             ],
             "parallel": false
           }
@@ -62,7 +63,8 @@
               "npx ng run core:publish",
               "npx ng run postprocessing:publish",
               "npx ng run controls:publish",
-              "npx ng run loaders:publish"
+              "npx ng run loaders:publish",
+              "npx ng run popmotion:publish"
             ]
           }
         }
@@ -1460,6 +1462,13 @@
           "options": {
             "jestConfig": "packages/popmotion/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "publish": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/popmotion"
           }
         }
       }
