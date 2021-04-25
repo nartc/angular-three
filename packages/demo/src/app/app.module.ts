@@ -33,6 +33,7 @@ import {
 } from '@angular-three/core/meshes';
 import { ThreeSceneModule } from '@angular-three/core/scene';
 import { ThreeStatsModule } from '@angular-three/core/stats';
+import { ThreePopmotionModule } from '@angular-three/popmotion';
 import { ThreePostprocessingModule } from '@angular-three/postprocessing';
 import { ThreeRenderPassModule } from '@angular-three/postprocessing/render-pass';
 import { ThreeShaderPassModule } from '@angular-three/postprocessing/shader-pass';
@@ -101,6 +102,7 @@ import { SuzanneComponent } from './suzanne.component';
     ThreeGridHelperModule,
     ThreeSpotLightHelperModule,
     ThreePointLightHelperModule,
+    ThreePopmotionModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

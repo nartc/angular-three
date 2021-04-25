@@ -6,16 +6,22 @@ import { Mesh } from 'three';
   selector: 'demo-box',
   template: `
     <ngt-mesh
+      [ngtPop]="['scale', active ? [1.5, 1.5, 1.5] : [1, 1, 1]]"
+      [ngtPopValueGetter]="'toArray'"
+      [scale]="[1, 1, 1]"
       [position]="position"
-      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
-      (pointerover)="color = 'hotpink'"
-      (pointerout)="color = 'orange'"
+      (pointerover)="hovered = true"
+      (pointerout)="hovered = false"
       (click)="active = !active"
       (animateReady)="onBoxReady($event)"
     >
       <ngt-boxBufferGeometry></ngt-boxBufferGeometry>
       <ngt-meshStandardMaterial
-        [parameters]="{ color: color }"
+        [ngtPop]="['color', hovered ? 'rgb(255,105,180)' : 'rgb(255,165,0)']"
+        [ngtPopValueGetter]="'getStyle'"
+        [parameters]="{
+          color: 'rgb(255,165,0)'
+        }"
       ></ngt-meshStandardMaterial>
     </ngt-mesh>
   `,
@@ -24,7 +30,7 @@ import { Mesh } from 'three';
 export class BoxComponent {
   @Input() position?: ThreeVector3;
 
-  color = 'orange';
+  hovered = false;
   active = false;
 
   onBoxReady({ animateObject }: AnimationReady<Mesh>) {
