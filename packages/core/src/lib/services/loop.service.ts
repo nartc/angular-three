@@ -34,6 +34,7 @@ export class LoopService implements OnDestroy {
       camera,
       internal,
       clock,
+      mouse,
     } = this.canvasStore.getImperativeState();
     const {
       animationCallbacks,
@@ -49,25 +50,20 @@ export class LoopService implements OnDestroy {
         renderer.render(scene, camera);
       }
 
+      const renderState = {
+        clock,
+        camera,
+        scene,
+        renderer,
+        mouse,
+        size: internal.size,
+        delta,
+      };
       for (const animationCallback of animationCallbacks) {
         if (animationCallback.obj) {
-          animationCallback.callback(animationCallback.obj, {
-            clock,
-            camera,
-            scene,
-            renderer,
-            size: internal.size,
-            delta,
-          });
+          animationCallback.callback(animationCallback.obj, renderState);
         } else {
-          animationCallback.callback({
-            clock,
-            camera,
-            scene,
-            renderer,
-            size: internal.size,
-            delta,
-          });
+          animationCallback.callback(renderState);
         }
       }
     }
