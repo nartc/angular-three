@@ -1,7 +1,6 @@
-import { ThreeObject3d } from '@angular-three/core';
+import { ThreeMesh, ThreeObject3d } from '@angular-three/core';
 import { Directive } from '@angular/core';
 import { Mesh } from 'three';
-import { ThreeMesh } from '../abstracts';
 
 @Directive({
   selector: 'ngt-mesh',

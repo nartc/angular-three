@@ -8,3 +8,6 @@ export * from './helper.abstract';
 export * from './geometry.abstract';
 export * from './curve.abstract';
 export * from './attribute.abstract';
+export * from './line.abstract';
+export * from './mesh.abstract';
+export * from './sprite.abstract';

@@ -1,15 +1,13 @@
 import {
-  AnyConstructor,
-  ThreeMaterial,
-  ThreeObject3d,
-} from '@angular-three/core';
-import {
   AfterContentInit,
   ContentChild,
   Directive,
   Input,
 } from '@angular/core';
 import { Sprite, SpriteMaterial } from 'three';
+import { AnyConstructor } from '../typings';
+import { ThreeMaterial } from './material.abstract';
+import { ThreeObject3d } from './object-3d.abstract';
 
 @Directive()
 export abstract class ThreeSprite<TSprite extends Sprite = Sprite>

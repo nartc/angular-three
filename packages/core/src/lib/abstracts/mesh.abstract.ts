@@ -1,12 +1,10 @@
-import type { AnyConstructor } from '@angular-three/core';
-import {
-  ThreeBufferGeometry,
-  ThreeMaterial,
-  ThreeObject3dMaterialGeometry,
-} from '@angular-three/core';
 import type { QueryList } from '@angular/core';
 import { ContentChild, ContentChildren, Directive } from '@angular/core';
 import { Mesh } from 'three';
+import type { AnyConstructor } from '../typings';
+import { ThreeBufferGeometry } from './geometry.abstract';
+import { ThreeMaterial } from './material.abstract';
+import { ThreeObject3dMaterialGeometry } from './object-3d-material-geometry.abstract';
 
 @Directive()
 export abstract class ThreeMesh<

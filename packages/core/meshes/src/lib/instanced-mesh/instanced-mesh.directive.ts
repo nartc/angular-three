@@ -1,7 +1,6 @@
-import { ThreeObject3d } from '@angular-three/core';
+import { ThreeMesh, ThreeObject3d } from '@angular-three/core';
 import { Directive, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DynamicDrawUsage, InstancedMesh } from 'three';
-import { ThreeMesh } from '../abstracts';
 
 @Directive({
   selector: 'ngt-instancedMesh',

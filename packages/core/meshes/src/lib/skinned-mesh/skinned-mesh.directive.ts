@@ -1,7 +1,6 @@
-import { ThreeMatrix4, ThreeObject3d } from '@angular-three/core';
+import { ThreeMatrix4, ThreeMesh, ThreeObject3d } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { SkinnedMesh } from 'three';
-import { ThreeMesh } from '../abstracts';
 
 @Directive({
   selector: 'ngt-skinnedMesh',
