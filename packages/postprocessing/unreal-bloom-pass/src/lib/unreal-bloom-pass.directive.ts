@@ -1,7 +1,6 @@
 import type { UnknownRecord } from '@angular-three/core';
 import { ThreePass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import type {
   Color,
   MeshBasicMaterial,
@@ -9,7 +8,8 @@ import type {
   Vector2,
   Vector3,
   WebGLRenderTarget,
-} from 'three/src/Three';
+} from 'three';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 
 @Directive({
   selector: 'ngt-unrealBloomPass',
