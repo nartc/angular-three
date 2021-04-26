@@ -1,21 +1,18 @@
 ## [1.0.0-beta.21](https://github.com/nartc/angular-three/compare/1.0.0-beta.20...1.0.0-beta.21) (2021-04-26)
 
-
 ### Bug Fixes
 
-* **core:** add mouse to renderstate ([3332fb3](https://github.com/nartc/angular-three/commit/3332fb3533211162838e8c55b9368d4d10831d29))
-* **postprocessing:** adjust import in UnrealBloomPass ([f167363](https://github.com/nartc/angular-three/commit/f16736392725d407d2ed4026885f4312e83fda2c))
-
+- **core:** add mouse to renderstate ([3332fb3](https://github.com/nartc/angular-three/commit/3332fb3533211162838e8c55b9368d4d10831d29))
+- **postprocessing:** adjust import in UnrealBloomPass ([f167363](https://github.com/nartc/angular-three/commit/f16736392725d407d2ed4026885f4312e83fda2c))
 
 ### Refactor
 
-* **core:** move most abstracts (except audio) to core ([cd630aa](https://github.com/nartc/angular-three/commit/cd630aab2c1d412c4c58b3c0db77eef73e4a94b4))
-
+- **core:** move most abstracts (except audio) to core ([cd630aa](https://github.com/nartc/angular-three/commit/cd630aab2c1d412c4c58b3c0db77eef73e4a94b4))
 
 ### Documentations
 
-* add CONTRIBUTING and adjust README ([cf9bf2e](https://github.com/nartc/angular-three/commit/cf9bf2e9a5b425779e1b81e1b57c1d4f18c9b8bc))
-* wip ([367ec7d](https://github.com/nartc/angular-three/commit/367ec7d8b335950e680ce537722d1c004a3e2002))
+- add CONTRIBUTING and adjust README ([cf9bf2e](https://github.com/nartc/angular-three/commit/cf9bf2e9a5b425779e1b81e1b57c1d4f18c9b8bc))
+- wip ([367ec7d](https://github.com/nartc/angular-three/commit/367ec7d8b335950e680ce537722d1c004a3e2002))
 
 ## [1.0.0-beta.20](https://github.com/nartc/angular-three/compare/1.0.0-beta.19...1.0.0-beta.20) (2021-04-25)
 
