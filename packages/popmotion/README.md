@@ -1,7 +1,9 @@
-# popmotion
+# `@angular-three/popmotion`
 
-This library was generated with [Nx](https://nx.dev).
+This package provides a `PopmotionDirective` that wraps [Popmotion](https://popmotion.io) to give animation capability to **THREE.Object3D** and **THREE.Material**.
 
-## Running unit tests
+## Installation
 
-Run `nx test popmotion` to execute the unit tests.
+```shell
+npm install @angular-three/popmotion popmotion
+```
