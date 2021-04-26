@@ -139,6 +139,83 @@ In addition to the Stores, `ngt-canvas` also provides a `LoopService`. `LoopServ
 
 For more information, please check out the [Documentations](#documentations)
 
+### Structure
+
+```
+.
+├── docs
+├── packages/
+│   ├── controls
+│   ├── core
+│   ├── demo
+│   ├── loaders
+│   ├── popmotion
+│   └── postprocessing
+└── tools/
+    └── generators/
+        └── life-saver
+```
+
+- `docs`: Powered by [Docusaurus v2](https://docusaurus.io/)
+- `packages`
+  - `controls`: Different type of Controls from `three/examples/jsm/controls/*`
+    - [x] DeviceOrientationControls
+    - [x] DragControls
+    - [x] FirstPersonControls
+    - [x] FlyControls
+    - [x] OrbitControls
+    - [x] PointerLockControls
+    - [x] TrackballControls
+    - [x] TransformControls
+  - `core`: **THREE.js** core is in this package. There are too many to list (and also changing based on **THREE.js** version) so feel free to explore the directory and find out what's missing.
+  - `demo`: An **Angular** application for quickly build demo/test locally.
+  - `loaders`: External loaders from `three/examples/jsm/loaders/*`
+    - [ ] 3DMLoader
+    - [ ] BasisTextureLoader
+    - [ ] DRACOLoader
+    - [x] GLTFLoader
+    - [ ] KTX2Loader
+    - [ ] MMDLoader
+    - [ ] MTLLoader
+    - [ ] OBJLoader
+    - [ ] PCDLoader
+    - [ ] PDBLoader
+    - [ ] PRWMLoader
+    - [ ] SVGLoader
+    - [ ] TGALoader
+  - `popmotion`: An experimental directive that wraps [Popmotion](https://popmotion.io) to provide animations to **THREE.js** primitives
+    - [x] Object3D
+    - [x] Material
+  - `postprocessing`: `EffectComposer` and Passes from `three/examples/jsm/postprocessin/*`
+    - [x] EffectComposer
+    - [ ] AdaptiveToneMappingPass
+    - [ ] AfterImagePass
+    - [ ] BloomPass
+    - [ ] BokehPass
+    - [ ] ClearPass
+    - [ ] CubeTexturePass
+    - [ ] DotScreenPass
+    - [ ] FilmPass
+    - [ ] GlitchPass
+    - [ ] HalftonePass
+    - [ ] LUTPass
+    - [ ] MaskPass
+    - [ ] OutlinePass
+    - [x] RenderPass
+    - [ ] SAOPass
+    - [ ] SavePass
+    - [x] ShaderPass
+    - [ ] SMAAPass
+    - [ ] SSAARenderPass
+    - [x] SSAOPass
+    - [ ] SSRPass
+    - [ ] TAARenderPass
+    - [ ] TexturePass
+    - [x] UnrealBloomPass
+  - `tools`
+    - `generators`
+      - `life-saver`: A `workspace-generator` that generates some wrappers for **THREE.js** classes instead of creating these manually. See CONTRIBUTING's [Generators](./CONTRIBUTING.md#generators)
+
 ## Documentations
 
 Coming soon
