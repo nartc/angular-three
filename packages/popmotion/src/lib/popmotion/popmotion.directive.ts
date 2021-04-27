@@ -73,7 +73,6 @@ export class PopmotionDirective implements OnChanges, OnDestroy {
             : ((popable as unknown) as UnknownRecord)[attachTo],
           attachToValue,
         ],
-        type: 'spring',
         onUpdate: (latest) => {
           applyProps(popable as any, { [attachTo]: latest });
         },
