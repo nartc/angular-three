@@ -219,4 +219,4 @@ For more information, please check out the [Documentations](#documentations)
 
 ## Documentations
 
-Coming soon
+Documentations is available at [https://angular-three.netlify.app/](https://angular-three.netlify.app/)
