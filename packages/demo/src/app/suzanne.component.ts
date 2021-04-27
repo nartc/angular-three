@@ -6,13 +6,13 @@ import { InstancedMesh, Object3D } from 'three';
 @Component({
   selector: 'demo-suzanne',
   template: `
-    <ngt-instancedMesh
+    <ngt-instanced-mesh
       [geometry]="geometry$ | async"
       [args]="[1000]"
       (animateReady)="onReady($event)"
     >
-      <ngt-meshNormalMaterial></ngt-meshNormalMaterial>
-    </ngt-instancedMesh>
+      <ngt-mesh-normal-material></ngt-mesh-normal-material>
+    </ngt-instanced-mesh>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

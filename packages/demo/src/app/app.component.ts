@@ -34,13 +34,13 @@ let count = 0;
     >
       <demo-orbit-controls></demo-orbit-controls>
       <ngt-stats></ngt-stats>
-      <ngt-gridHelper></ngt-gridHelper>
-      <ngt-ambientLight [args]="[undefined, 0.5]"></ngt-ambientLight>
-      <ngt-spotLight
+      <ngt-grid-helper></ngt-grid-helper>
+      <ngt-ambient-light [args]="[undefined, 0.5]"></ngt-ambient-light>
+      <ngt-spot-light
         [position]="[10, 10, 10]"
         [args]="[undefined, undefined, undefined, 0.5, 1]"
-      ></ngt-spotLight>
-      <ngt-pointLight [position]="[-10, -10, -10]"></ngt-pointLight>
+      ></ngt-spot-light>
+      <ngt-point-light [position]="[-10, -10, -10]"></ngt-point-light>
       <demo-box [position]="[1.2, 0, 0]"></demo-box>
       <demo-box [position]="[-1.2, 0, 0]"></demo-box>
     </ngt-canvas>

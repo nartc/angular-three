@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 @Component({
   selector: 'demo-orbit-controls',
   template: `
-    <ngt-orbitControls (ready)="onControlsReady($event)"></ngt-orbitControls>
+    <ngt-orbit-controls (ready)="onControlsReady($event)"></ngt-orbit-controls>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

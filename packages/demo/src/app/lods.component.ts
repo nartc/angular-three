@@ -5,30 +5,30 @@ import { LOD, Mesh } from 'three';
 @Component({
   selector: 'demo-lods',
   template: `
-    <ngt-icosahedronGeometry
+    <ngt-icosahedron-geometry
       ngtId="highestDetail"
       [args]="[100, 16]"
-    ></ngt-icosahedronGeometry>
-    <ngt-icosahedronGeometry
+    ></ngt-icosahedron-geometry>
+    <ngt-icosahedron-geometry
       ngtId="highDetail"
       [args]="[100, 8]"
-    ></ngt-icosahedronGeometry>
-    <ngt-icosahedronGeometry
+    ></ngt-icosahedron-geometry>
+    <ngt-icosahedron-geometry
       ngtId="normal"
       [args]="[100, 4]"
-    ></ngt-icosahedronGeometry>
-    <ngt-icosahedronGeometry
+    ></ngt-icosahedron-geometry>
+    <ngt-icosahedron-geometry
       ngtId="lowDetail"
       [args]="[100, 2]"
-    ></ngt-icosahedronGeometry>
-    <ngt-icosahedronGeometry
+    ></ngt-icosahedron-geometry>
+    <ngt-icosahedron-geometry
       ngtId="lowestDetail"
       [args]="[100, 1]"
-    ></ngt-icosahedronGeometry>
-    <ngt-meshLambertMaterial
+    ></ngt-icosahedron-geometry>
+    <ngt-mesh-lambert-material
       ngtId="lambertMaterial"
       [parameters]="{ color: '#ffffff', wireframe: true }"
-    ></ngt-meshLambertMaterial>
+    ></ngt-mesh-lambert-material>
 
     <ngt-lod
       *ngFor="let position of amount"

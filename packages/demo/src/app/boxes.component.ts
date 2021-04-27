@@ -11,22 +11,22 @@ const colors = new Array(1000)
 @Component({
   selector: 'demo-boxes',
   template: `
-    <ngt-instancedMesh
+    <ngt-instanced-mesh
       [args]="[1000]"
       (pointermove)="onHover($event)"
       (pointerout)="onOffHover()"
       (animateReady)="onReady($event)"
     >
-      <ngt-boxBufferGeometry [args]="[0.7, 0.7, 0.7]">
-        <ngt-instancedBufferAttribute
+      <ngt-box-geometry [args]="[0.7, 0.7, 0.7]">
+        <ngt-instanced-buffer-attribute
           attach="color"
           [args]="[colorArray, 3]"
-        ></ngt-instancedBufferAttribute>
-      </ngt-boxBufferGeometry>
-      <ngt-meshPhongMaterial
+        ></ngt-instanced-buffer-attribute>
+      </ngt-box-geometry>
+      <ngt-mesh-phong-material
         [parameters]="{ vertexColors: true }"
-      ></ngt-meshPhongMaterial>
-    </ngt-instancedMesh>
+      ></ngt-mesh-phong-material>
+    </ngt-instanced-mesh>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

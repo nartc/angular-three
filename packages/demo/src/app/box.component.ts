@@ -15,14 +15,14 @@ import { Mesh } from 'three';
       (click)="active = !active"
       (animateReady)="onBoxReady($event)"
     >
-      <ngt-boxBufferGeometry></ngt-boxBufferGeometry>
-      <ngt-meshStandardMaterial
+      <ngt-box-geometry></ngt-box-geometry>
+      <ngt-mesh-standard-material
         [ngtPop]="['color', hovered ? 'rgb(255,105,180)' : 'rgb(255,165,0)']"
         [ngtPopValueGetter]="'getStyle'"
         [parameters]="{
           color: 'rgb(255,165,0)'
         }"
-      ></ngt-meshStandardMaterial>
+      ></ngt-mesh-standard-material>
     </ngt-mesh>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

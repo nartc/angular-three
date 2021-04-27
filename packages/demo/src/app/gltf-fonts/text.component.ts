@@ -8,7 +8,7 @@ import { Mesh, Vector3 } from 'three';
   template: `
     <ngt-group [position]="position" [scale]="[0.1 * size, 0.1 * size, 0.1]">
       <ngt-mesh *ngIf="font$ | async as font" (ready)="onMeshReady($event)">
-        <ngt-textBufferGeometry
+        <ngt-text-geometry
           [args]="[
             text,
             {
@@ -23,8 +23,8 @@ import { Mesh, Vector3 } from 'three';
               bevelSegments: 8
             }
           ]"
-        ></ngt-textBufferGeometry>
-        <ngt-meshNormalMaterial></ngt-meshNormalMaterial>
+        ></ngt-text-geometry>
+        <ngt-mesh-normal-material></ngt-mesh-normal-material>
       </ngt-mesh>
     </ngt-group>
   `,
