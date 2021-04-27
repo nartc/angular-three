@@ -9,9 +9,9 @@ import TabItem from '@theme/TabItem';
 
 ## What
 
-**Angular Three** is an [Angular](https://angular.io) wrapper for [THREE.js](https://threejs.org). This project is inspired by [react-three-fiber](https://github.com/pmndrs/react-three-fiber).
+**Angular Three (NGT)** is an [Angular](https://angular.io) wrapper for [THREE.js](https://threejs.org). This project is inspired by [react-three-fiber](https://github.com/pmndrs/react-three-fiber).
 
-Different from **React Three Fiber** which is a **Renderer**, **Angular Three** is a wrapper because it wraps **THREE.js** classes in **Directives** to take advantage of **Angular** template and other **Angular** features.
+Different from **React Three Fiber** which is a **Renderer**, **NGT** is a wrapper because it wraps **THREE.js** classes in **Directives** to take advantage of **Angular** template and other **Angular** features.
 
 ## Why
 
@@ -19,7 +19,7 @@ Utilizing Template-less **Directives** to build 3D scenes declaratively with acc
 
 ## How
 
-**Angular Three** relies heavily on
+**NGT** relies heavily on
 [Hierarchical Dependency Injection](https://angular.io/guide/hierarchical-dependency-injection)
 to allow for declarative creation of **THREE.js** objects on the
 template. Take a look at the following example:
@@ -43,10 +43,10 @@ We will explore what each of the element here means in later sections.
     <ngt-canvas>
       // highlight-start
       <ngt-mesh>
-        <ngt-boxBufferGeometry></ngt-boxBufferGeometry>
-        <ngt-meshBasicMaterial
+        <ngt-box-geometry></ngt-box-geometry>
+        <ngt-mesh-basic-material
           [parameters]="{ color: 'red' }"
-        ></ngt-meshBasicMaterial>
+        ></ngt-mesh-basic-material>
       </ngt-mesh>
       // highlight-end
     </ngt-canvas>
@@ -101,8 +101,8 @@ In the vanilla **THREE.js** version, we instantiate a `Mesh` with a
 `Mesh`, we would repeat this step. The flow is `Geometry + Material => Mesh`
 
 Now look at the **Angular** template counterpart, we actually write
-`<ngt-mesh>` before we would write `<ngt-boxBufferGeometry>` and
-`<ngt-meshBasicMaterial>`, and we also nest the `Geometry` with
+`<ngt-mesh>` before we would write `<ngt-box-geometry>` and
+`<ngt-mesh-basic-material>`, and we also nest the `Geometry` with
 `Material` inside `Mesh`. The flow is different. This is because in
 **Angular**, `ngt-mesh` can _query_ for its nested children which we can
 leverage this to assign a `Geometry`, and a `Material` to their _parent_

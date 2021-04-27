@@ -6,7 +6,7 @@ sidebar_label: Installation
 
 ## Basic
 
-**Angular Three** (**NGT**) is a collection of packages that provide different area of **THREE.js**. To get started, you only need `@angular-three/core` and its `peerDependencies`
+**NGT** is a collection of packages that provide different area of **THREE.js**. To get started, you only need `@angular-three/core` and its `peerDependencies`
 
 ```bash
 npm install @angular-three/core three @ngrx/component-store
