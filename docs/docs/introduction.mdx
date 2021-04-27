@@ -1,0 +1,112 @@
+---
+id: introduction
+title: Introduction
+sidebar_label: Introduction
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## What
+
+**Angular Three** is an [Angular](https://angular.io) wrapper for [THREE.js](https://threejs.org). This project is inspired by [react-three-fiber](https://github.com/pmndrs/react-three-fiber).
+
+Different from **React Three Fiber** which is a **Renderer**, **Angular Three** is a wrapper because it wraps **THREE.js** classes in **Directives** to take advantage of **Angular** template and other **Angular** features.
+
+## Why
+
+Utilizing Template-less **Directives** to build 3D scenes declaratively with accessing to **Angular** Dependency Injection, Inputs, Outputs, and other common **Directives** while keeping the DOM clean.
+
+## How
+
+**Angular Three** relies heavily on
+[Hierarchical Dependency Injection](https://angular.io/guide/hierarchical-dependency-injection)
+to allow for declarative creation of **THREE.js** objects on the
+template. Take a look at the following example:
+
+:::tip
+We will explore what each of the element here means in later sections.
+:::
+
+<Tabs
+  defaultValue="ng"
+  values={[
+    {label: 'Angular', value: 'ng'},
+    {label: 'THREE.js', value: 'three'},
+  ]}>
+  <TabItem value={'ng'}>
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      // highlight-start
+      <ngt-mesh>
+        <ngt-boxBufferGeometry></ngt-boxBufferGeometry>
+        <ngt-meshBasicMaterial
+          [parameters]="{ color: 'red' }"
+        ></ngt-meshBasicMaterial>
+      </ngt-mesh>
+      // highlight-end
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+```
+
+  </TabItem>
+  <TabItem value={'three'}>
+
+```ts
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// highlight-start
+const geometry = new THREE.BoxBufferGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 'red' });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+// highlight-end
+
+camera.position.z = 5;
+
+renderer.render(scene, camera);
+```
+
+  </TabItem>
+</Tabs>
+
+Pay attention to the highlighted portion of both snippets, this is where
+a `THREE.Mesh` gets instantiated, and added to the `Scene`.
+
+:::info
+
+`THREE.Mesh` is one of the most basic Object type in **THREE.js** that
+holds some `Geometry` and `Material` to be displayed on the `Scene`
+
+:::
+
+In the vanilla **THREE.js** version, we instantiate a `Mesh` with a
+`BoxBufferGeometry` and `MeshBasicMaterial`. If we were to have another
+`Mesh`, we would repeat this step. The flow is `Geometry + Material => Mesh`
+
+Now look at the **Angular** template counterpart, we actually write
+`<ngt-mesh>` before we would write `<ngt-boxBufferGeometry>` and
+`<ngt-meshBasicMaterial>`, and we also nest the `Geometry` with
+`Material` inside `Mesh`. The flow is different. This is because in
+**Angular**, `ngt-mesh` can _query_ for its nested children which we can
+leverage this to assign a `Geometry`, and a `Material` to their _parent_
+`Mesh`, declaratively on the Template. Then `<ngt-mesh>`, which is right
+under `<ngt-canvas>`, gets added to the `Scene` that `<ngt-canvas>`
+created _automatically_. This concept is applied throughout **Angular
+Three**

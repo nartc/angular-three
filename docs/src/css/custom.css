@@ -7,18 +7,24 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: hsl(216, 16%, 34%);
-  --ifm-color-primary-dark: hsl(216, 16%, 30%);
-  --ifm-color-primary-darker: hsl(216, 16%, 26%);
-  --ifm-color-primary-darkest: hsl(216, 16%, 22%);
-  --ifm-color-primary-light: hsl(216, 16%, 40%);
-  --ifm-color-primary-lighter: hsl(216, 16%, 46%);
-  --ifm-color-primary-lightest: hsl(216, 16%, 52%);
+  /*--ifm-color-primary: hsl(216, 16%, 52%);*/
+  /*--ifm-color-primary-dark: hsl(216, 16%, 30%);*/
+  /*--ifm-color-primary-darker: hsl(216, 16%, 26%);*/
+  /*--ifm-color-primary-darkest: hsl(216, 16%, 22%);*/
+  /*--ifm-color-primary-light: hsl(216, 16%, 40%);*/
+  /*--ifm-color-primary-lighter: hsl(216, 16%, 46%);*/
+  /*--ifm-color-primary-lightest: hsl(216, 16%, 52%);*/
 
+  --ifm-color-primary: hsl(216, 16%, 30%);
   --ifm-color-success: hsl(159, 64%, 45%);
   --ifm-color-danger: hsl(357, 96%, 60%);
+  --ifm-color-info: hsl(202, 69%, 59%);
 
   --ifm-code-font-size: 95%;
+}
+
+:root[data-theme='dark'] {
+  --ifm-color-primary: hsl(211, 20%, 57%);
 }
 
 .docusaurus-highlight-code-line {
@@ -33,4 +39,13 @@ iframe {
   height: 500px;
   overflow: hidden;
   border: 0;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-wrapper > div {
+  flex: 1;
 }

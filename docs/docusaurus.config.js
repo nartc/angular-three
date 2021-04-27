@@ -11,7 +11,7 @@ module.exports = {
   projectName: 'angular-three', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'Angular Three',
+      title: 'Angular Three (NGT)',
       // logo: {
       //   alt: 'My Site Logo',
       //   src: 'img/logo.svg',
@@ -19,11 +19,11 @@ module.exports = {
       items: [
         {
           type: 'doc',
-          docId: 'intro',
+          docId: 'introduction',
           position: 'left',
           label: 'Documentations',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        { to: '/blog', label: 'Blog', position: 'left' },
         {
           href: 'https://github.com/nartc/angular-three',
           label: 'GitHub',
@@ -76,6 +76,10 @@ module.exports = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Angular Three, Inc. Built with Docusaurus.`,
     },
+    prism: {
+      theme: require('prism-react-renderer/themes/vsDark'),
+    },
+    hideableSidebar: true,
   },
   presets: [
     [
