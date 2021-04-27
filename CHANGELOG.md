@@ -1,23 +1,20 @@
 ## [1.0.0-beta.22](https://github.com/nartc/angular-three/compare/1.0.0-beta.21...1.0.0-beta.22) (2021-04-27)
 
-
 ### Bug Fixes
 
-* **popmotion:** remove redundant type from animation config ([5913189](https://github.com/nartc/angular-three/commit/591318991d2e9857e7fffd4f445c603d6f6a2157))
-
+- **popmotion:** remove redundant type from animation config ([5913189](https://github.com/nartc/angular-three/commit/591318991d2e9857e7fffd4f445c603d6f6a2157))
 
 ### Refactor
 
-* **core:** change camelCase selectors to kebab-case ([6572365](https://github.com/nartc/angular-three/commit/657236597f35ccf47835e126ac0042a565b33e1f))
-* **postprocessing:** rename selector of renderpass ([5488b1a](https://github.com/nartc/angular-three/commit/5488b1a8820a49839f5575309fe9e0d22558a0bf))
-
+- **core:** change camelCase selectors to kebab-case ([6572365](https://github.com/nartc/angular-three/commit/657236597f35ccf47835e126ac0042a565b33e1f))
+- **postprocessing:** rename selector of renderpass ([5488b1a](https://github.com/nartc/angular-three/commit/5488b1a8820a49839f5575309fe9e0d22558a0bf))
 
 ### Documentations
 
-* add more docs ([e894f65](https://github.com/nartc/angular-three/commit/e894f651daa86d7753608d0142e91e4752362e0b))
-* add popmotion to readme ([db81182](https://github.com/nartc/angular-three/commit/db81182acb643a1ac0a0d4f7dba4e57d1af345c4))
-* format ([7e61fdb](https://github.com/nartc/angular-three/commit/7e61fdbcbbe075c508b56c50bf38dbceb43cce40))
-* **demo:** use kebab-case selectors ([1b56fc9](https://github.com/nartc/angular-three/commit/1b56fc9dacfec1e86779d204fd4b5cb2d0ef6478))
+- add more docs ([e894f65](https://github.com/nartc/angular-three/commit/e894f651daa86d7753608d0142e91e4752362e0b))
+- add popmotion to readme ([db81182](https://github.com/nartc/angular-three/commit/db81182acb643a1ac0a0d4f7dba4e57d1af345c4))
+- format ([7e61fdb](https://github.com/nartc/angular-three/commit/7e61fdbcbbe075c508b56c50bf38dbceb43cce40))
+- **demo:** use kebab-case selectors ([1b56fc9](https://github.com/nartc/angular-three/commit/1b56fc9dacfec1e86779d204fd4b5cb2d0ef6478))
 
 ## [1.0.0-beta.21](https://github.com/nartc/angular-three/compare/1.0.0-beta.20...1.0.0-beta.21) (2021-04-26)
 
