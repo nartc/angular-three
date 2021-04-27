@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { DodecahedronBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-dodecahedronBufferGeometry,ngt-dodecahedronGeometry',
+  selector: 'ngt-dodecahedron-buffer-geometry,ngt-dodecahedron-geometry',
   exportAs: 'ngtDodecahedronBufferGeometry',
   providers: [
     {

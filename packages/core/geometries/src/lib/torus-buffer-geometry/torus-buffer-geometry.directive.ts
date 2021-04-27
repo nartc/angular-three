@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { TorusBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-torusBufferGeometry,ngt-torusGeometry',
+  selector: 'ngt-torus-buffer-geometry,ngt-torus-geometry',
   exportAs: 'ngtTorusBufferGeometry',
   providers: [
     {

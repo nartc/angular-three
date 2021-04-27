@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { ParametricBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-parametricBufferGeometry,ngt-parametricGeometry',
+  selector: 'ngt-parametric-buffer-geometry,ngt-parametric-geometry',
   exportAs: 'ngtParametricBufferGeometry',
   providers: [
     {

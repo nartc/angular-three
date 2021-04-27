@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { MeshDepthMaterial, MeshDepthMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-meshDepthMaterial',
+  selector: 'ngt-mesh-depth-material',
   exportAs: 'ngtMeshDepthMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: MeshDepthMaterialDirective },

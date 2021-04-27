@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { LineBasicMaterial, LineBasicMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-lineBasicMaterial',
+  selector: 'ngt-line-basic-material',
   exportAs: 'ngtLineBasicMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: LineBasicMaterialDirective },

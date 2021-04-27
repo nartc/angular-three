@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { Uint8ClampedBufferAttribute } from 'three';
 
 @Directive({
-  selector: 'ngt-uint8ClampedBufferAttribute',
+  selector: 'ngt-uint8-clamped-buffer-attribute',
   exportAs: 'ngtUint8ClampedBufferAttribute',
   providers: [
     {

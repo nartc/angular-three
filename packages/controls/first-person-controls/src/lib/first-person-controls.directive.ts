@@ -8,7 +8,7 @@ import type { WebGLRenderer } from 'three';
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls';
 
 @Directive({
-  selector: 'ngt-firstPersonControls',
+  selector: 'ngt-first-person-controls',
   exportAs: 'ngtFirstPersonControls',
   providers: [DestroyedService],
 })

@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { RawShaderMaterial, ShaderMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-rawShaderMaterial',
+  selector: 'ngt-raw-shader-material',
   exportAs: 'ngtRawShaderMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: RawShaderMaterialDirective },

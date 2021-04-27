@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { CanvasTexture } from 'three';
 
 @Directive({
-  selector: 'ngt-canvasTexture',
+  selector: 'ngt-canvas-texture',
   exportAs: 'ngtCanvasTexture',
   providers: [
     {

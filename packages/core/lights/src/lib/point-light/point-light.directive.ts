@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { PointLight } from 'three';
 
 @Directive({
-  selector: 'ngt-pointLight',
+  selector: 'ngt-point-light',
   exportAs: 'ngtPointLight',
   providers: [
     {

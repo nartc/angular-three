@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { SpriteMaterial, SpriteMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-spriteMaterial',
+  selector: 'ngt-sprite-material',
   exportAs: 'ngtSpriteMaterial',
   providers: [{ provide: ThreeMaterial, useExisting: SpriteMaterialDirective }],
 })

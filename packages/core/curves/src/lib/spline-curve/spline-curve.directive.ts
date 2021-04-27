@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { SplineCurve } from 'three';
 
 @Directive({
-  selector: 'ngt-splineCurve',
+  selector: 'ngt-spline-curve',
   exportAs: 'ngtSplineCurve',
   providers: [
     {

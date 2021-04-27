@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { CircleBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-circleBufferGeometry,ngt-circleGeometry',
+  selector: 'ngt-circle-buffer-geometry,ngt-circle-geometry',
   exportAs: 'ngtCircleBufferGeometry',
   providers: [
     {

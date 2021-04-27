@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { MeshLambertMaterial, MeshLambertMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-meshLambertMaterial',
+  selector: 'ngt-mesh-lambert-material',
   exportAs: 'ngtMeshLambertMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: MeshLambertMaterialDirective },

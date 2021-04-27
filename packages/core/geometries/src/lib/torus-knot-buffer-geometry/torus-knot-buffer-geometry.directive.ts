@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { TorusKnotBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-torusKnotBufferGeometry,ngt-torusKnotGeometry',
+  selector: 'ngt-torus-knot-buffer-geometry,ngt-torus-knot-geometry',
   exportAs: 'ngtTorusKnotBufferGeometry',
   providers: [
     {

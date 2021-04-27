@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { AmbientLightProbe } from 'three';
 
 @Directive({
-  selector: 'ngt-ambientLightProbe',
+  selector: 'ngt-ambient-light-probe',
   exportAs: 'ngtAmbientLightProbe',
   providers: [
     {

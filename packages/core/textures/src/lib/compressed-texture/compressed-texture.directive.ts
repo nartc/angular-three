@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { CompressedTexture } from 'three';
 
 @Directive({
-  selector: 'ngt-compressedTexture',
+  selector: 'ngt-compressed-texture',
   exportAs: 'ngtCompressedTexture',
   providers: [
     {

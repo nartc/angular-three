@@ -13,7 +13,7 @@ import type { SSAOPassOUTPUT } from 'three/examples/jsm/postprocessing/SSAOPass'
 import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass';
 
 @Directive({
-  selector: 'ngt-sSAOPass',
+  selector: 'ngt-ssao-pass',
   exportAs: 'ngtSSAOPass',
   providers: [{ provide: ThreePass, useExisting: SsaoPassDirective }],
 })

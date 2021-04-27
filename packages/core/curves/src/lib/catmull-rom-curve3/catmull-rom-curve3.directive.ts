@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { CatmullRomCurve3 } from 'three';
 
 @Directive({
-  selector: 'ngt-catmullRomCurve3',
+  selector: 'ngt-catmull-rom-curve3',
   exportAs: 'ngtCatmullRomCurve3',
   providers: [
     {

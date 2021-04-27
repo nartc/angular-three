@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { MeshToonMaterial, MeshToonMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-meshToonMaterial',
+  selector: 'ngt-mesh-toon-material',
   exportAs: 'ngtMeshToonMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: MeshToonMaterialDirective },

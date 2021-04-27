@@ -8,7 +8,7 @@ import type { WebGLRenderer, Object3D } from 'three';
 import { DragControls } from 'three/examples/jsm/controls/DragControls';
 
 @Directive({
-  selector: 'ngt-dragControls',
+  selector: 'ngt-drag-controls',
   exportAs: 'ngtDragControls',
   providers: [DestroyedService],
 })

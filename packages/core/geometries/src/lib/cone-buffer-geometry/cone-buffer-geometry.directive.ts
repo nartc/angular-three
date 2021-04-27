@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { ConeBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-coneBufferGeometry,ngt-coneGeometry',
+  selector: 'ngt-cone-buffer-geometry,ngt-cone-geometry',
   exportAs: 'ngtConeBufferGeometry',
   providers: [
     {

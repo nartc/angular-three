@@ -3,7 +3,7 @@ import { Directive, Input } from '@angular/core';
 import { SkinnedMesh } from 'three';
 
 @Directive({
-  selector: 'ngt-skinnedMesh',
+  selector: 'ngt-skinned-mesh',
   exportAs: 'ngtSkinnedMesh',
   providers: [{ provide: ThreeObject3d, useExisting: SkinnedMeshDirective }],
 })

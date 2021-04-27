@@ -11,7 +11,7 @@ import {
 import { BuiltinShaderAttributeName, InterleavedBufferAttribute } from 'three';
 
 @Directive({
-  selector: 'ngt-interleavedBufferAttribute',
+  selector: 'ngt-interleaved-buffer-attribute',
   exportAs: 'ngtInterleavedBufferAttribute',
 })
 export class InterleavedBufferAttributeDirective

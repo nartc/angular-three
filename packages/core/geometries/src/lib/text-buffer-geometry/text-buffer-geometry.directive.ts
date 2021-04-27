@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { TextBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-textBufferGeometry,ngt-textGeometry',
+  selector: 'ngt-text-buffer-geometry,ngt-text-geometry',
   exportAs: 'ngtTextBufferGeometry',
   providers: [
     {

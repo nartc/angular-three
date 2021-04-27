@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { TubeBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-tubeBufferGeometry,ngt-tubeGeometry',
+  selector: 'ngt-tube-buffer-geometry,ngt-tube-geometry',
   exportAs: 'ngtTubeBufferGeometry',
   providers: [
     {

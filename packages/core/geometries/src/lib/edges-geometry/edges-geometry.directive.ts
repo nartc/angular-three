@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { EdgesGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-edgesGeometry',
+  selector: 'ngt-edges-geometry',
   exportAs: 'ngtEdgesGeometry',
   providers: [
     {

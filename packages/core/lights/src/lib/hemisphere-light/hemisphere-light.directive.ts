@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { HemisphereLight } from 'three';
 
 @Directive({
-  selector: 'ngt-hemisphereLight',
+  selector: 'ngt-hemisphere-light',
   exportAs: 'ngtHemisphereLight',
   providers: [
     {

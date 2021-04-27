@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { IcosahedronBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-icosahedronBufferGeometry,ngt-icosahedronGeometry',
+  selector: 'ngt-icosahedron-buffer-geometry,ngt-icosahedron-geometry',
   exportAs: 'ngtIcosahedronBufferGeometry',
   providers: [
     {

@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { LatheBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-latheBufferGeometry,ngt-latheGeometry',
+  selector: 'ngt-lathe-buffer-geometry,ngt-lathe-geometry',
   exportAs: 'ngtLatheBufferGeometry',
   providers: [
     {

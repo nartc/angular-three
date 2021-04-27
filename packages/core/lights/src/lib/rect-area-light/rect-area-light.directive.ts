@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { RectAreaLight } from 'three';
 
 @Directive({
-  selector: 'ngt-rectAreaLight',
+  selector: 'ngt-rect-area-light',
   exportAs: 'ngtRectAreaLight',
   providers: [
     {

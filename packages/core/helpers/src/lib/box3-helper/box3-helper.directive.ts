@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { Box3Helper } from 'three';
 
 @Directive({
-  selector: 'ngt-box3Helper',
+  selector: 'ngt-box3-helper',
   exportAs: 'ngtBox3Helper',
   providers: [
     {

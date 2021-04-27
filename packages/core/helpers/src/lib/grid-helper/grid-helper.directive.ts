@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { GridHelper } from 'three';
 
 @Directive({
-  selector: 'ngt-gridHelper',
+  selector: 'ngt-grid-helper',
   exportAs: 'ngtGridHelper',
   providers: [
     {

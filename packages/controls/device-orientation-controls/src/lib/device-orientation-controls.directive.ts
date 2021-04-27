@@ -7,7 +7,7 @@ import { Directive } from '@angular/core';
 import { DeviceOrientationControls } from 'three/examples/jsm/controls/DeviceOrientationControls';
 
 @Directive({
-  selector: 'ngt-deviceOrientationControls',
+  selector: 'ngt-device-orientation-controls',
   exportAs: 'ngtDeviceOrientationControls',
   providers: [DestroyedService],
 })

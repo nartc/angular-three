@@ -12,7 +12,7 @@ import type {
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 
 @Directive({
-  selector: 'ngt-unrealBloomPass',
+  selector: 'ngt-unreal-bloom-pass',
   exportAs: 'ngtUnrealBloomPass',
   providers: [{ provide: ThreePass, useExisting: UnrealBloomPassDirective }],
 })

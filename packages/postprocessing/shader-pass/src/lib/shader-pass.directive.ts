@@ -5,7 +5,7 @@ import type { ShaderMaterial } from 'three';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 
 @Directive({
-  selector: 'ngt-shaderPass',
+  selector: 'ngt-shader-pass',
   exportAs: 'ngtShaderPass',
   providers: [{ provide: ThreePass, useExisting: ShaderPassDirective }],
 })

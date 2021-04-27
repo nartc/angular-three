@@ -8,7 +8,7 @@ import type { WebGLRenderer } from 'three';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 
 @Directive({
-  selector: 'ngt-transformControls',
+  selector: 'ngt-transform-controls',
   exportAs: 'ngtTransformControls',
   providers: [DestroyedService],
 })

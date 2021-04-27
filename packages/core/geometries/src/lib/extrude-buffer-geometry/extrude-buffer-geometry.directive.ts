@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { ExtrudeBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-extrudeBufferGeometry,ngt-extrudeGeometry',
+  selector: 'ngt-extrude-buffer-geometry,ngt-extrude-geometry',
   exportAs: 'ngtExtrudeBufferGeometry',
   providers: [
     {

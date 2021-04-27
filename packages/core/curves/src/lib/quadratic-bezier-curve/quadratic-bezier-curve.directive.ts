@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { QuadraticBezierCurve } from 'three';
 
 @Directive({
-  selector: 'ngt-quadraticBezierCurve',
+  selector: 'ngt-quadratic-bezier-curve',
   exportAs: 'ngtQuadraticBezierCurve',
   providers: [
     {

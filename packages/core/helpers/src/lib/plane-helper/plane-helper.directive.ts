@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { PlaneHelper } from 'three';
 
 @Directive({
-  selector: 'ngt-planeHelper',
+  selector: 'ngt-plane-helper',
   exportAs: 'ngtPlaneHelper',
   providers: [
     {

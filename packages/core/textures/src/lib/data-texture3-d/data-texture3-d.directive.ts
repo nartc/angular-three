@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { DataTexture3D } from 'three';
 
 @Directive({
-  selector: 'ngt-dataTexture3D',
+  selector: 'ngt-data-texture3-d',
   exportAs: 'ngtDataTexture3D',
   providers: [
     {

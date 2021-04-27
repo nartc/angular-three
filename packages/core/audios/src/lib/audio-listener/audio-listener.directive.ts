@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AudioListener } from 'three';
 
 @Directive({
-  selector: 'ngt-audioListener',
+  selector: 'ngt-audio-listener',
   exportAs: 'ngtAudioListener',
   providers: [DestroyedService],
 })

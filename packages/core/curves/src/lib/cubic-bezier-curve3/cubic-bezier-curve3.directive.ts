@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { CubicBezierCurve3 } from 'three';
 
 @Directive({
-  selector: 'ngt-cubicBezierCurve3',
+  selector: 'ngt-cubic-bezier-curve3',
   exportAs: 'ngtCubicBezierCurve3',
   providers: [
     {

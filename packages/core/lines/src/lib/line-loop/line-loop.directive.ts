@@ -3,7 +3,7 @@ import { Directive } from '@angular/core';
 import { LineLoop } from 'three';
 
 @Directive({
-  selector: 'ngt-lineLoop',
+  selector: 'ngt-line-loop',
   exportAs: 'ngtLineLoop',
   providers: [{ provide: ThreeObject3d, useExisting: LineLoopDirective }],
 })

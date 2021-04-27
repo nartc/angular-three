@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { MeshDistanceMaterial, MeshDistanceMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-meshDistanceMaterial',
+  selector: 'ngt-mesh-distance-material',
   exportAs: 'ngtMeshDistanceMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: MeshDistanceMaterialDirective },

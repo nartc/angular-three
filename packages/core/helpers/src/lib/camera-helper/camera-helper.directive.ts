@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { CameraHelper } from 'three';
 
 @Directive({
-  selector: 'ngt-cameraHelper',
+  selector: 'ngt-camera-helper',
   exportAs: 'ngtCameraHelper',
   providers: [
     {

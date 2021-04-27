@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { CubeTexture } from 'three';
 
 @Directive({
-  selector: 'ngt-cubeTexture',
+  selector: 'ngt-cube-texture',
   exportAs: 'ngtCubeTexture',
   providers: [
     {

@@ -12,7 +12,7 @@ import { Directive, NgZone, Inject, SkipSelf } from '@angular/core';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
 
 @Directive({
-  selector: 'ngt-pointerLockControls',
+  selector: 'ngt-pointer-lock-controls',
   exportAs: 'ngtPointerLockControls',
   providers: [DestroyedService],
 })

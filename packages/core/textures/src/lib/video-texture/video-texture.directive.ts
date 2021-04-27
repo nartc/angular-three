@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { VideoTexture } from 'three';
 
 @Directive({
-  selector: 'ngt-videoTexture',
+  selector: 'ngt-video-texture',
   exportAs: 'ngtVideoTexture',
   providers: [
     {

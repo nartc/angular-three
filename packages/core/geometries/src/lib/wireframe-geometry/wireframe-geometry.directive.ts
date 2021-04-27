@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { WireframeGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-wireframeGeometry',
+  selector: 'ngt-wireframe-geometry',
   exportAs: 'ngtWireframeGeometry',
   providers: [
     {

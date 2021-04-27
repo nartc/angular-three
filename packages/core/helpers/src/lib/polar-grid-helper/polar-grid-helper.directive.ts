@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { PolarGridHelper } from 'three';
 
 @Directive({
-  selector: 'ngt-polarGridHelper',
+  selector: 'ngt-polar-grid-helper',
   exportAs: 'ngtPolarGridHelper',
   providers: [
     {

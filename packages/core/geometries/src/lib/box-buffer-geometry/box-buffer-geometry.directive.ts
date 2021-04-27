@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { BoxBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-boxBufferGeometry,ngt-boxGeometry',
+  selector: 'ngt-box-buffer-geometry,ngt-box-geometry',
   exportAs: 'ngtBoxBufferGeometry',
   providers: [
     {

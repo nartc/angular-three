@@ -14,7 +14,7 @@ import type { WebGLRenderTarget } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 
 @Directive({
-  selector: 'ngt-effectComposer',
+  selector: 'ngt-effect-composer',
   exportAs: 'ngtEffectComposer',
   providers: [DestroyedService],
 })

@@ -8,7 +8,7 @@ import type { WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 @Directive({
-  selector: 'ngt-orbitControls',
+  selector: 'ngt-orbit-controls',
   exportAs: 'ngtOrbitControls',
   providers: [DestroyedService],
 })

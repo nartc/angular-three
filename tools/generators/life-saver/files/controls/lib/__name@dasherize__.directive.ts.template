@@ -9,7 +9,7 @@ import type { <% if (useRenderer) { %>WebGLRenderer, <% } %><% for (const input 
 import { <%= name %> } from 'three/examples/jsm/controls/<%= name %>';
 
 @Directive({
-  selector: 'ngt-<%= camelize(name) %>',
+  selector: 'ngt-<%= dasherize(name) %>',
   exportAs: 'ngt<%= name %>',
   providers: [DestroyedService],
 })

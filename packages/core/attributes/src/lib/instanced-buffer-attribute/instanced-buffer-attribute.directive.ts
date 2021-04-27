@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { InstancedBufferAttribute } from 'three';
 
 @Directive({
-  selector: 'ngt-instancedBufferAttribute',
+  selector: 'ngt-instanced-buffer-attribute',
   exportAs: 'ngtInstancedBufferAttribute',
   providers: [
     {

@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { <%= name %>, <% if (name === 'RawShaderMaterial') { %>ShaderMaterial<% } else { %><%= name %><% } %>Parameters } from 'three';
 
 @Directive({
-  selector: 'ngt-<%= camelize(name) %>',
+  selector: 'ngt-<%= dasherize(name) %>',
   exportAs: 'ngt<%= name %>',
   providers: [
     { provide: <%= abstract %>, useExisting: <%= name %>Directive },

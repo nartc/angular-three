@@ -8,11 +8,7 @@ import {
   Rule,
   url,
 } from '@angular-devkit/schematics';
-import {
-  camelize,
-  classify,
-  dasherize,
-} from '@nrwl/workspace/src/utils/strings';
+import { classify, dasherize } from '@nrwl/workspace/src/utils/strings';
 import * as path from 'path';
 
 import * as THREE from 'three';
@@ -279,7 +275,6 @@ export default function (): Rule {
               abstract,
               type,
               dasherize,
-              camelize,
             }),
             move(
               path.normalize(
@@ -321,7 +316,6 @@ export default function (): Rule {
             injectDocument,
             useRenderer,
             inputs,
-            camelize,
             dasherize,
           }),
           move(

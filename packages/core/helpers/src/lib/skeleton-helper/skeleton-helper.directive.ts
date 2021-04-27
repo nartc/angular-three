@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { SkeletonHelper } from 'three';
 
 @Directive({
-  selector: 'ngt-skeletonHelper',
+  selector: 'ngt-skeleton-helper',
   exportAs: 'ngtSkeletonHelper',
   providers: [
     {

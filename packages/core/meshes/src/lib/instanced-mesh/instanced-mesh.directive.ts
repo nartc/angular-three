@@ -3,7 +3,7 @@ import { Directive, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DynamicDrawUsage, InstancedMesh } from 'three';
 
 @Directive({
-  selector: 'ngt-instancedMesh',
+  selector: 'ngt-instanced-mesh',
   exportAs: 'ngtInstancedMesh',
   providers: [
     {

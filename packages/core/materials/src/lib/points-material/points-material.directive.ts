@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { PointsMaterial, PointsMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-pointsMaterial',
+  selector: 'ngt-points-material',
   exportAs: 'ngtPointsMaterial',
   providers: [{ provide: ThreeMaterial, useExisting: PointsMaterialDirective }],
 })

@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { DepthTexture } from 'three';
 
 @Directive({
-  selector: 'ngt-depthTexture',
+  selector: 'ngt-depth-texture',
   exportAs: 'ngtDepthTexture',
   providers: [
     {

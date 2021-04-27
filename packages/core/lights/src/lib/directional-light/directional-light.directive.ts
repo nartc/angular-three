@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { DirectionalLight } from 'three';
 
 @Directive({
-  selector: 'ngt-directionalLight',
+  selector: 'ngt-directional-light',
   exportAs: 'ngtDirectionalLight',
   providers: [
     {

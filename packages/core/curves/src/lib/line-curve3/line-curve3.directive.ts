@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { LineCurve3 } from 'three';
 
 @Directive({
-  selector: 'ngt-lineCurve3',
+  selector: 'ngt-line-curve3',
   exportAs: 'ngtLineCurve3',
   providers: [
     {

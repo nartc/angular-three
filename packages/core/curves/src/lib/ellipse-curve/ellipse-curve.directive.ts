@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { EllipseCurve } from 'three';
 
 @Directive({
-  selector: 'ngt-ellipseCurve',
+  selector: 'ngt-ellipse-curve',
   exportAs: 'ngtEllipseCurve',
   providers: [
     {

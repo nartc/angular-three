@@ -8,7 +8,7 @@ import type { WebGLRenderer } from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 
 @Directive({
-  selector: 'ngt-trackballControls',
+  selector: 'ngt-trackball-controls',
   exportAs: 'ngtTrackballControls',
   providers: [DestroyedService],
 })

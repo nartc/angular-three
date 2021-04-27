@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { MeshPhongMaterial, MeshPhongMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-meshPhongMaterial',
+  selector: 'ngt-mesh-phong-material',
   exportAs: 'ngtMeshPhongMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: MeshPhongMaterialDirective },

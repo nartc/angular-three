@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { ShadowMaterial, ShadowMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-shadowMaterial',
+  selector: 'ngt-shadow-material',
   exportAs: 'ngtShadowMaterial',
   providers: [{ provide: ThreeMaterial, useExisting: ShadowMaterialDirective }],
 })

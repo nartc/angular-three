@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { AmbientLight } from 'three';
 
 @Directive({
-  selector: 'ngt-ambientLight',
+  selector: 'ngt-ambient-light',
   exportAs: 'ngtAmbientLight',
   providers: [
     {

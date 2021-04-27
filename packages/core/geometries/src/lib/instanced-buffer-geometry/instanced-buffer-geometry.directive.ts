@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { InstancedBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-instancedBufferGeometry,ngt-instancedGeometry',
+  selector: 'ngt-instanced-buffer-geometry,ngt-instanced-geometry',
   exportAs: 'ngtInstancedBufferGeometry',
   providers: [
     {

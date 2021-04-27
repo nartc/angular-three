@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { Float64BufferAttribute } from 'three';
 
 @Directive({
-  selector: 'ngt-float64BufferAttribute',
+  selector: 'ngt-float64-buffer-attribute',
   exportAs: 'ngtFloat64BufferAttribute',
   providers: [
     {

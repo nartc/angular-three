@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { SphereBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-sphereBufferGeometry,ngt-sphereGeometry',
+  selector: 'ngt-sphere-buffer-geometry,ngt-sphere-geometry',
   exportAs: 'ngtSphereBufferGeometry',
   providers: [
     {

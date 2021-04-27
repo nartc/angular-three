@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { ShaderMaterial, ShaderMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-shaderMaterial',
+  selector: 'ngt-shader-material',
   exportAs: 'ngtShaderMaterial',
   providers: [{ provide: ThreeMaterial, useExisting: ShaderMaterialDirective }],
 })

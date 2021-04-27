@@ -8,7 +8,7 @@ import type { WebGLRenderer } from 'three';
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls';
 
 @Directive({
-  selector: 'ngt-flyControls',
+  selector: 'ngt-fly-controls',
   exportAs: 'ngtFlyControls',
   providers: [DestroyedService],
 })

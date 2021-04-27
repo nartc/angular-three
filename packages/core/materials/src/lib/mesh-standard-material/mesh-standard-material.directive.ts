@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { MeshStandardMaterial, MeshStandardMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-meshStandardMaterial',
+  selector: 'ngt-mesh-standard-material',
   exportAs: 'ngtMeshStandardMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: MeshStandardMaterialDirective },

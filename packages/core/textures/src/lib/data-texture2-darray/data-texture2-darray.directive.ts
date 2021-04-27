@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { DataTexture2DArray } from 'three';
 
 @Directive({
-  selector: 'ngt-dataTexture2DArray',
+  selector: 'ngt-data-texture2-darray',
   exportAs: 'ngtDataTexture2DArray',
   providers: [
     {

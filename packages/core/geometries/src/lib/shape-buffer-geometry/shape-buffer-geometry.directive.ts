@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { ShapeBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-shapeBufferGeometry,ngt-shapeGeometry',
+  selector: 'ngt-shape-buffer-geometry,ngt-shape-geometry',
   exportAs: 'ngtShapeBufferGeometry',
   providers: [
     {

@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { PolyhedronBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-polyhedronBufferGeometry,ngt-polyhedronGeometry',
+  selector: 'ngt-polyhedron-buffer-geometry,ngt-polyhedron-geometry',
   exportAs: 'ngtPolyhedronBufferGeometry',
   providers: [
     {

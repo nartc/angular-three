@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { LineDashedMaterial, LineDashedMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-lineDashedMaterial',
+  selector: 'ngt-line-dashed-material',
   exportAs: 'ngtLineDashedMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: LineDashedMaterialDirective },

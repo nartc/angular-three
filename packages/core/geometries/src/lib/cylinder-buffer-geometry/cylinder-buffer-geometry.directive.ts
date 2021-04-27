@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { CylinderBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-cylinderBufferGeometry,ngt-cylinderGeometry',
+  selector: 'ngt-cylinder-buffer-geometry,ngt-cylinder-geometry',
   exportAs: 'ngtCylinderBufferGeometry',
   providers: [
     {

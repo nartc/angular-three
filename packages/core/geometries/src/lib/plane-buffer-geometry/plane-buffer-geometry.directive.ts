@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { PlaneBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-planeBufferGeometry,ngt-planeGeometry',
+  selector: 'ngt-plane-buffer-geometry,ngt-plane-geometry',
   exportAs: 'ngtPlaneBufferGeometry',
   providers: [
     {

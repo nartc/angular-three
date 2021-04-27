@@ -3,7 +3,7 @@ import { Directive } from '@angular/core';
 import { LineSegments } from 'three';
 
 @Directive({
-  selector: 'ngt-lineSegments',
+  selector: 'ngt-line-segments',
   exportAs: 'ngtLineSegments',
   providers: [{ provide: ThreeObject3d, useExisting: LineSegmentsDirective }],
 })

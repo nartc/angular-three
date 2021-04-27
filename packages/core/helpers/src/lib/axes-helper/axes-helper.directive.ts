@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { AxesHelper } from 'three';
 
 @Directive({
-  selector: 'ngt-axesHelper',
+  selector: 'ngt-axes-helper',
   exportAs: 'ngtAxesHelper',
   providers: [
     {

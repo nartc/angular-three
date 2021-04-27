@@ -4,7 +4,7 @@ import { Directive, Input } from '@angular/core';
 import { RingBufferGeometry } from 'three';
 
 @Directive({
-  selector: 'ngt-ringBufferGeometry,ngt-ringGeometry',
+  selector: 'ngt-ring-buffer-geometry,ngt-ring-geometry',
   exportAs: 'ngtRingBufferGeometry',
   providers: [
     {

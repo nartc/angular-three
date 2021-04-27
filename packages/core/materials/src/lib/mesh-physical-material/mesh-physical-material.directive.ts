@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { MeshPhysicalMaterial, MeshPhysicalMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-meshPhysicalMaterial',
+  selector: 'ngt-mesh-physical-material',
   exportAs: 'ngtMeshPhysicalMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: MeshPhysicalMaterialDirective },

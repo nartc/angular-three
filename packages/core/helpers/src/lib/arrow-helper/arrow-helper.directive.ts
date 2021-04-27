@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
 import { ArrowHelper } from 'three';
 
 @Directive({
-  selector: 'ngt-arrowHelper',
+  selector: 'ngt-arrow-helper',
   exportAs: 'ngtArrowHelper',
   providers: [
     {

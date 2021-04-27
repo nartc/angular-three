@@ -5,7 +5,7 @@ import { Directive } from '@angular/core';
 import { MeshMatcapMaterial, MeshMatcapMaterialParameters } from 'three';
 
 @Directive({
-  selector: 'ngt-meshMatcapMaterial',
+  selector: 'ngt-mesh-matcap-material',
   exportAs: 'ngtMeshMatcapMaterial',
   providers: [
     { provide: ThreeMaterial, useExisting: MeshMatcapMaterialDirective },
