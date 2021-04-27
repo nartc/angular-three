@@ -3,7 +3,7 @@ import { Directive, Input } from '@angular/core';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 
 @Directive({
-  selector: 'ngt-renderPass',
+  selector: 'ngt-render-pass',
   exportAs: 'ngtRenderPass',
   providers: [{ provide: ThreePass, useExisting: RenderPassDirective }],
 })
