@@ -1,4 +1,7 @@
-import { ThreeObject3d } from '@angular-three/core';
+import {
+  OBJECT_3D_CONTROLLER_PROVIDER,
+  ThreeObject3d,
+} from '@angular-three/core';
 import type { OnInit } from '@angular/core';
 import { Directive } from '@angular/core';
 import { LOD } from 'three';
@@ -6,7 +9,10 @@ import { LOD } from 'three';
 @Directive({
   selector: 'ngt-lod',
   exportAs: 'ngtLod',
-  providers: [{ provide: ThreeObject3d, useExisting: LodDirective }],
+  providers: [
+    { provide: ThreeObject3d, useExisting: LodDirective },
+    OBJECT_3D_CONTROLLER_PROVIDER,
+  ],
 })
 export class LodDirective extends ThreeObject3d<LOD> implements OnInit {
   private _lod!: LOD;

@@ -1,6 +1,10 @@
 // GENERATED
 
-import { ThreeHelper, ThreeObject3d } from '@angular-three/core';
+import {
+  ThreeHelper,
+  ThreeObject3d,
+  OBJECT_3D_CONTROLLER_PROVIDER,
+} from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { ArrowHelper } from 'three';
 
@@ -12,6 +16,7 @@ import { ArrowHelper } from 'three';
       provide: ThreeObject3d,
       useExisting: ArrowHelperDirective,
     },
+    OBJECT_3D_CONTROLLER_PROVIDER,
   ],
 })
 export class ArrowHelperDirective extends ThreeHelper<ArrowHelper> {

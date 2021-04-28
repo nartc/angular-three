@@ -1,5 +1,6 @@
 import {
   AnyConstructor,
+  OBJECT_3D_CONTROLLER_PROVIDER,
   ThreeBufferGeometry,
   ThreeMaterial,
   ThreeObject3d,
@@ -12,7 +13,10 @@ import { Points } from 'three';
 @Directive({
   selector: 'ngt-points',
   exportAs: 'ngtPoints',
-  providers: [{ provide: ThreeObject3d, useExisting: PointsDirective }],
+  providers: [
+    { provide: ThreeObject3d, useExisting: PointsDirective },
+    OBJECT_3D_CONTROLLER_PROVIDER,
+  ],
 })
 export class PointsDirective extends ThreeObject3dMaterialGeometry<Points> {
   @ContentChildren(ThreeMaterial) set materialDirectives(

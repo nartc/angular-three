@@ -1,0 +1,20 @@
+// GENERATED
+<% if (withThreeObject3d) { %>
+import { <%= abstract %>, ThreeObject3d, OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';<% } else { %>import { <%= abstract %> } from '@angular-three/core';<% } %>
+import { Directive, Input } from '@angular/core';
+import { <%= name %> } from 'three';
+
+@Directive({
+  selector: 'ngt-<%= dasherize(name) %><% if (alternative) { %>,ngt-<%= dasherize(alternative) %><% } %>',
+  exportAs: 'ngt<%= name %>',
+  providers: [
+    {
+      provide: <% if (withThreeObject3d) { %>ThreeObject3d<% } else { %><%= abstract %><% } %>,
+      useExisting: <%= name %>Directive,
+    },<% if (withThreeObject3d) { %>
+    OBJECT_3D_CONTROLLER_PROVIDER,<% } %>
+  ],
+})
+export class <%= name %>Directive extends <%= abstract %><<%= name %>> {
+  <%= type %> = <%= name %>;
+}

@@ -1,4 +1,7 @@
-import { ThreeObject3d } from '@angular-three/core';
+import {
+  OBJECT_3D_CONTROLLER_PROVIDER,
+  ThreeObject3d,
+} from '@angular-three/core';
 import { Directive, OnInit } from '@angular/core';
 import { Bone } from 'three';
 
@@ -7,6 +10,7 @@ import { Bone } from 'three';
   exportAs: 'ngtBone',
   providers: [
     { provide: ThreeObject3d, useExisting: BoneDirective },
+    OBJECT_3D_CONTROLLER_PROVIDER,
   ],
 })
 export class BoneDirective extends ThreeObject3d<Bone> implements OnInit {

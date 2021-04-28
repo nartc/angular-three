@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'core-canvas',
-  preset: '../../../jest.preset.js',
+  displayName: 'helpers',
+  preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
@@ -14,7 +14,7 @@ module.exports = {
       },
     },
   },
-  coverageDirectory: '../../../coverage/packages/core/canvas',
+  coverageDirectory: '../../coverage/packages/helpers',
   snapshotSerializers: [
     'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
     'jest-preset-angular/build/AngularSnapshotSerializer.js',

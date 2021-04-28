@@ -1,6 +1,10 @@
 // GENERATED
 
-import { ThreeHelper, ThreeObject3d } from '@angular-three/core';
+import {
+  ThreeHelper,
+  ThreeObject3d,
+  OBJECT_3D_CONTROLLER_PROVIDER,
+} from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { HemisphereLightHelper } from 'three';
 
@@ -12,6 +16,7 @@ import { HemisphereLightHelper } from 'three';
       provide: ThreeObject3d,
       useExisting: HemisphereLightHelperDirective,
     },
+    OBJECT_3D_CONTROLLER_PROVIDER,
   ],
 })
 export class HemisphereLightHelperDirective extends ThreeHelper<HemisphereLightHelper> {

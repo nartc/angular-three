@@ -1,6 +1,10 @@
 // GENERATED
 
-import { ThreeHelper, ThreeObject3d } from '@angular-three/core';
+import {
+  ThreeHelper,
+  ThreeObject3d,
+  OBJECT_3D_CONTROLLER_PROVIDER,
+} from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { SpotLightHelper } from 'three';
 
@@ -12,6 +16,7 @@ import { SpotLightHelper } from 'three';
       provide: ThreeObject3d,
       useExisting: SpotLightHelperDirective,
     },
+    OBJECT_3D_CONTROLLER_PROVIDER,
   ],
 })
 export class SpotLightHelperDirective extends ThreeHelper<SpotLightHelper> {

@@ -1,11 +1,17 @@
-import { ThreeObject3d } from '@angular-three/core';
+import {
+  OBJECT_3D_CONTROLLER_PROVIDER,
+  ThreeObject3d,
+} from '@angular-three/core';
 import { Directive, OnInit } from '@angular/core';
 import { Group } from 'three';
 
 @Directive({
   selector: 'ngt-group',
   exportAs: 'ngtGroup',
-  providers: [{ provide: ThreeObject3d,  useExisting: GroupDirective }],
+  providers: [
+    { provide: ThreeObject3d, useExisting: GroupDirective },
+    OBJECT_3D_CONTROLLER_PROVIDER,
+  ],
 })
 export class GroupDirective extends ThreeObject3d<Group> implements OnInit {
   private _group!: Group;

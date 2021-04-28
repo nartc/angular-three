@@ -44,7 +44,8 @@
               "npx ng run postprocessing:build --prod",
               "npx ng run controls:build --prod",
               "npx ng run loaders:build --prod",
-              "npx ng run popmotion:build --prod"
+              "npx ng run popmotion:build --prod",
+              "npx ng run helpers:build --prod"
             ],
             "parallel": false
           }
@@ -64,7 +65,8 @@
               "npx ng run postprocessing:publish",
               "npx ng run controls:publish",
               "npx ng run loaders:publish",
-              "npx ng run popmotion:publish"
+              "npx ng run popmotion:publish",
+              "npx ng run helpers:publish"
             ]
           }
         }
@@ -529,43 +531,6 @@
           "outputs": ["coverage/packages/postprocessing/render-pass"],
           "options": {
             "jestConfig": "packages/postprocessing/render-pass/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "core-canvas": {
-      "projectType": "library",
-      "root": "packages/core/canvas",
-      "sourceRoot": "packages/core/canvas/src",
-      "prefix": "ngt",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/angular:package",
-          "options": {
-            "tsConfig": "packages/core/canvas/tsconfig.lib.json",
-            "project": "packages/core/canvas/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "packages/core/canvas/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "packages/core/canvas/src/**/*.ts",
-              "packages/core/canvas/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/canvas"],
-          "options": {
-            "jestConfig": "packages/core/canvas/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -1469,6 +1434,50 @@
           "options": {
             "command": "npm publish",
             "cwd": "dist/packages/popmotion"
+          }
+        }
+      }
+    },
+    "helpers": {
+      "projectType": "library",
+      "root": "packages/helpers",
+      "sourceRoot": "packages/helpers/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/helpers/tsconfig.lib.json",
+            "project": "packages/helpers/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/helpers/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/helpers/src/**/*.ts",
+              "packages/helpers/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/helpers"],
+          "options": {
+            "jestConfig": "packages/helpers/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "publish": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/helpers"
           }
         }
       }

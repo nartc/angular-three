@@ -1,7 +1,6 @@
 import {
   Directive,
-  EventEmitter,
-  Input,
+  Inject,
   NgZone,
   OnChanges,
   OnDestroy,
@@ -11,9 +10,11 @@ import {
   SkipSelf,
 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import type { Object3D } from 'three';
 import { Color } from 'three';
+import { Object3dControllerDirective } from '../controllers';
+import { OBJECT_3D_WATCHED_CONTROLLER } from '../di';
 import {
   AnimationStore,
   CanvasStore,
@@ -23,12 +24,8 @@ import {
 import type {
   EventHandlers,
   InstanceInternal,
-  ThreeColor,
-  ThreeEuler,
   ThreeEvent,
   ThreeInstance,
-  ThreeQuaternion,
-  ThreeVector3,
   UnknownRecord,
 } from '../typings';
 import { applyProps } from '../utils';
@@ -38,35 +35,35 @@ import { AnimationLoopParticipant } from './animation-loop-participant.abstract'
 export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   extends AnimationLoopParticipant<TObject>
   implements OnDestroy, OnChanges {
-  @Input() name?: string;
-  @Input() position?: ThreeVector3;
-  @Input() rotation?: ThreeEuler;
-  @Input() quaternion?: ThreeQuaternion;
-  @Input() scale?: ThreeVector3;
-  @Input() color?: ThreeColor;
-  @Input() userData?: UnknownRecord;
-  @Input() castShadow = false;
-  @Input() receiveShadow = false;
-  @Input() visible = true;
-  @Input() matrixAutoUpdate = true;
-
-  @Input() appendMode: 'immediate' | 'root' = 'immediate';
-  @Input() appendTo?: Object3D;
-
-  // events
-  @Output() click = new EventEmitter<ThreeEvent<MouseEvent>>();
-  @Output() contextmenu = new EventEmitter<ThreeEvent<MouseEvent>>();
-  @Output() dblclick = new EventEmitter<ThreeEvent<MouseEvent>>();
-  @Output() pointerup = new EventEmitter<ThreeEvent<PointerEvent>>();
-  @Output() pointerdown = new EventEmitter<ThreeEvent<PointerEvent>>();
-  @Output() pointerover = new EventEmitter<ThreeEvent<PointerEvent>>();
-  @Output() pointerout = new EventEmitter<ThreeEvent<PointerEvent>>();
-  @Output() pointerenter = new EventEmitter<ThreeEvent<PointerEvent>>();
-  @Output() pointerleave = new EventEmitter<ThreeEvent<PointerEvent>>();
-  @Output() pointermove = new EventEmitter<ThreeEvent<PointerEvent>>();
-  @Output() pointermissed = new EventEmitter<ThreeEvent<PointerEvent>>();
-  @Output() pointercancel = new EventEmitter<ThreeEvent<PointerEvent>>();
-  @Output() wheel = new EventEmitter<ThreeEvent<WheelEvent>>();
+  // @Input() name?: string;
+  // @Input() position?: ThreeVector3;
+  // @Input() rotation?: ThreeEuler;
+  // @Input() quaternion?: ThreeQuaternion;
+  // @Input() scale?: ThreeVector3;
+  // @Input() color?: ThreeColor;
+  // @Input() userData?: UnknownRecord;
+  // @Input() castShadow = false;
+  // @Input() receiveShadow = false;
+  // @Input() visible = true;
+  // @Input() matrixAutoUpdate = true;
+  //
+  // @Input() appendMode: 'immediate' | 'root' = 'immediate';
+  // @Input() appendTo?: Object3D;
+  //
+  // // events
+  // @Output() click = new EventEmitter<ThreeEvent<MouseEvent>>();
+  // @Output() contextmenu = new EventEmitter<ThreeEvent<MouseEvent>>();
+  // @Output() dblclick = new EventEmitter<ThreeEvent<MouseEvent>>();
+  // @Output() pointerup = new EventEmitter<ThreeEvent<PointerEvent>>();
+  // @Output() pointerdown = new EventEmitter<ThreeEvent<PointerEvent>>();
+  // @Output() pointerover = new EventEmitter<ThreeEvent<PointerEvent>>();
+  // @Output() pointerout = new EventEmitter<ThreeEvent<PointerEvent>>();
+  // @Output() pointerenter = new EventEmitter<ThreeEvent<PointerEvent>>();
+  // @Output() pointerleave = new EventEmitter<ThreeEvent<PointerEvent>>();
+  // @Output() pointermove = new EventEmitter<ThreeEvent<PointerEvent>>();
+  // @Output() pointermissed = new EventEmitter<ThreeEvent<PointerEvent>>();
+  // @Output() pointercancel = new EventEmitter<ThreeEvent<PointerEvent>>();
+  // @Output() wheel = new EventEmitter<ThreeEvent<WheelEvent>>();
 
   private $object3d = new BehaviorSubject<TObject | null>(null);
 
@@ -77,6 +74,8 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   @Output() ready = this.object3d$.pipe(filter(Boolean)) as Observable<TObject>;
 
   constructor(
+    @Inject(OBJECT_3D_WATCHED_CONTROLLER)
+    protected readonly object3dController: Object3dControllerDirective,
     protected readonly canvasStore: CanvasStore,
     protected readonly instancesStore: InstancesStore,
     protected readonly eventsStore: EventsStore,
@@ -89,9 +88,9 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     super(animationStore, ngZone);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(_: SimpleChanges) {
     if (this.object3d) {
-      this.applyCustomProps(changes);
+      this.applyCustomProps();
     }
   }
 
@@ -136,9 +135,12 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   }
 
   protected remove() {
-    if (this.appendTo) {
-      this.appendTo.remove(this.object3d);
-    } else if (this.parentObjectDirective && this.appendMode === 'immediate') {
+    if (this.object3dController.appendTo) {
+      this.object3dController.appendTo.remove(this.object3d);
+    } else if (
+      this.parentObjectDirective &&
+      this.object3dController.appendMode === 'immediate'
+    ) {
       this.parentObjectDirective.object3d.remove(this.object3d);
     } else {
       const { scene } = this.canvasStore.getImperativeState();
@@ -155,66 +157,74 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     this.participate(this.object3d);
   }
 
-  private applyCustomProps(inputChanges?: SimpleChanges) {
+  private applyCustomProps() {
     this.ngZone.runOutsideAngular(() => {
       const customProps = {
-        castShadow: this.castShadow,
-        receiveShadow: this.receiveShadow,
-        visible: this.visible,
-        matrixAutoUpdate: this.matrixAutoUpdate,
+        castShadow: this.object3dController.castShadow,
+        receiveShadow: this.object3dController.receiveShadow,
+        visible: this.object3dController.visible,
+        matrixAutoUpdate: this.object3dController.matrixAutoUpdate,
       } as UnknownRecord;
 
-      if (this.name) {
-        customProps['name'] = this.name;
+      if (this.object3dController.name) {
+        customProps['name'] = this.object3dController.name;
       }
 
-      if (this.position) {
-        customProps['position'] = this.position;
+      if (this.object3dController.position) {
+        customProps['position'] = this.object3dController.position;
       }
 
-      if (this.rotation) {
-        customProps['rotation'] = this.rotation;
-      } else if (this.quaternion) {
-        customProps['quaternion'] = this.quaternion;
+      if (this.object3dController.rotation) {
+        customProps['rotation'] = this.object3dController.rotation;
+      } else if (this.object3dController.quaternion) {
+        customProps['quaternion'] = this.object3dController.quaternion;
       }
 
-      if (this.scale) {
-        customProps['scale'] = this.scale;
+      if (this.object3dController.scale) {
+        customProps['scale'] = this.object3dController.scale;
       }
 
-      if (this.userData) {
-        customProps['userData'] = this.userData;
+      if (this.object3dController.userData) {
+        customProps['userData'] = this.object3dController.userData;
       }
 
-      if (this.color) {
-        this.color = Array.isArray(this.color)
-          ? new Color(...this.color)
-          : new Color(this.color);
+      if (this.object3dController.color) {
+        this.object3dController.color = Array.isArray(
+          this.object3dController.color
+        )
+          ? new Color(...this.object3dController.color)
+          : new Color(this.object3dController.color);
         if (!this.canvasStore.getImperativeState().isLinear) {
-          this.color.convertSRGBToLinear();
+          this.object3dController.color.convertSRGBToLinear();
         }
-        customProps['color'] = this.color;
+        customProps['color'] = this.object3dController.color;
       }
 
-      if (inputChanges) {
-        for (const [inputName, inputChange] of Object.entries(inputChanges)) {
-          if (
-            !inputChange.isFirstChange() ||
-            [
-              'name',
-              'position',
-              'rotation',
-              'quaternion',
-              'scale',
-              'userData',
-              'color',
-            ].includes(inputName) // skip 7 common inputs
-          ) {
-            continue;
+      this.object3dController.change$.pipe(take(1)).subscribe((changes) => {
+        if (changes) {
+          for (const [inputName, inputChange] of Object.entries(changes)) {
+            if (
+              !inputChange.isFirstChange() ||
+              [
+                'name',
+                'position',
+                'rotation',
+                'quaternion',
+                'scale',
+                'userData',
+                'color',
+                'castShadow',
+                'receiveShadow',
+                'visible',
+                'matrixAutoUpdate',
+              ].includes(inputName) // skip 11 common inputs
+            ) {
+              continue;
+            }
+            customProps[inputName] = inputChange.currentValue;
           }
-          customProps[inputName] = inputChange.currentValue;
         }
-      }
+      });
 
       applyProps(this.object3d, customProps);
       this.object3d.updateMatrix();
@@ -239,14 +249,14 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
       'pointercancel',
       'wheel',
     ] as const).forEach((eventName) => {
-      if (this[eventName].observers.length) {
+      if (this.object3dController[eventName].observers.length) {
         handlers[eventName] = (
           event: Parameters<
             Exclude<EventHandlers[typeof eventName], undefined>
           >[0]
         ) => {
           this.ngZone.run(() => {
-            this[eventName].emit(event as ThreeEvent<any>);
+            this.object3dController[eventName].emit(event as ThreeEvent<any>);
           });
         };
       }
@@ -256,17 +266,17 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   }
 
   private appendToParent(): void {
-    if (this.appendTo) {
-      this.appendTo.add(this.object3d);
+    if (this.object3dController.appendTo) {
+      this.object3dController.appendTo.add(this.object3d);
       return;
     }
 
-    if (this.appendMode === 'root') {
+    if (this.object3dController.appendMode === 'root') {
       this.addToScene();
       return;
     }
 
-    if (this.appendMode === 'immediate') {
+    if (this.object3dController.appendMode === 'immediate') {
       this.addToParent();
     }
   }

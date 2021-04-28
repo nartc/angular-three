@@ -13,6 +13,18 @@ import * as path from 'path';
 
 import * as THREE from 'three';
 
+export enum Template {
+  WithNoArgsNoParams,
+  WithArgs,
+  WithParams,
+}
+
+const sprites = [THREE.Sprite].map((m) => m.name);
+
+const lines = [THREE.Line, THREE.LineLoop, THREE.LineSegments].map(
+  (m) => m.name
+);
+
 const attributes = [
   THREE.BufferAttribute,
   THREE.InstancedBufferAttribute,
@@ -131,50 +143,64 @@ const catalogue = {
     items: attributes,
     abstract: 'ThreeAttribute',
     withThreeObject3d: false,
-    withArgs: true,
+    templateType: Template.WithArgs,
     type: 'attributeType',
   },
   geometries: {
     items: geometries,
     abstract: 'ThreeBufferGeometry',
     withThreeObject3d: false,
-    withArgs: true,
+    templateType: Template.WithArgs,
     type: 'geometryType',
   },
   materials: {
     items: materials,
     abstract: 'ThreeMaterial',
     withThreeObject3d: false,
-    withArgs: false,
+    templateType: Template.WithParams,
     type: 'materialType',
   },
   lights: {
     items: lights,
     abstract: 'ThreeLight',
     withThreeObject3d: true,
-    withArgs: true,
+    templateType: Template.WithArgs,
     type: 'lightType',
   },
   curves: {
     items: curves,
     abstract: 'ThreeCurve',
     withThreeObject3d: false,
-    withArgs: true,
+    templateType: Template.WithArgs,
     type: 'curveType',
   },
   helpers: {
     items: helpers,
     abstract: 'ThreeHelper',
     withThreeObject3d: true,
-    withArgs: true,
+    templateType: Template.WithArgs,
     type: 'helperType',
   },
   textures: {
     items: textures,
     abstract: 'ThreeTexture',
     withThreeObject3d: false,
-    withArgs: true,
+    templateType: Template.WithArgs,
     type: 'textureType',
+  },
+  lines: {
+    items: lines,
+    abstract: 'ThreeLine',
+    withThreeObject3d: true,
+    templateType: Template.WithNoArgsNoParams,
+    type: 'lineType',
+  },
+  sprites: {
+    items: sprites,
+    abstract: 'ThreeSprite',
+    withThreeObject3d: true,
+    templateType: Template.WithNoArgsNoParams,
+    type: 'spriteType',
   },
 };
 
@@ -255,15 +281,30 @@ const controls = [
 
 export default function (): Rule {
   return (tree, context) => {
+    const derivedObject3Ds = [];
     const templates = [];
 
     for (const [
       key,
-      { items, abstract, type, withThreeObject3d, withArgs },
+      { items, abstract, type, withThreeObject3d, templateType },
     ] of Object.entries(catalogue)) {
       context.logger.info(`Generating THREE ${classify(key)}`);
-      const fileDir = withArgs ? 'with-args' : 'with-parameters';
+      let fileDir = 'with-no-args-no-parameters';
+
+      switch (templateType) {
+        case Template.WithParams:
+          fileDir = 'with-parameters';
+          break;
+        case Template.WithArgs:
+          fileDir = 'with-args';
+          break;
+      }
+
       const keyTemplates = items.map((item) => {
+        const dasherizedItem = dasherize(item);
+        if (withThreeObject3d) {
+          derivedObject3Ds.push(`ngt-${dasherizedItem}`);
+        }
         return mergeWith(
           apply(url(`./files/${fileDir}`), [
             applyTemplates({
@@ -277,9 +318,7 @@ export default function (): Rule {
               dasherize,
             }),
             move(
-              path.normalize(
-                `./packages/core/${key}/src/lib/${dasherize(item)}`
-              )
+              path.normalize(`./packages/core/${key}/src/lib/${dasherizedItem}`)
             ),
           ]),
           MergeStrategy.Overwrite
@@ -298,6 +337,23 @@ export default function (): Rule {
 
       templates.push(...keyTemplates, indexTemplate);
     }
+
+    context.logger.info('Generating Object3dController');
+
+    templates.push(
+      mergeWith(
+        apply(url('./files/object-3d-controller'), [
+          applyTemplates({
+            selectors: derivedObject3Ds.map((selector, index) => ({
+              selector,
+              isLast: index === derivedObject3Ds.length - 1,
+            })),
+          }),
+          move(path.normalize('./packages/core/src/lib/controllers')),
+        ]),
+        MergeStrategy.Overwrite
+      )
+    );
 
     for (const {
       name,

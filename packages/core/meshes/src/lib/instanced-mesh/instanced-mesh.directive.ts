@@ -1,4 +1,8 @@
-import { ThreeMesh, ThreeObject3d } from '@angular-three/core';
+import {
+  OBJECT_3D_CONTROLLER_PROVIDER,
+  ThreeMesh,
+  ThreeObject3d,
+} from '@angular-three/core';
 import { Directive, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DynamicDrawUsage, InstancedMesh } from 'three';
 
@@ -8,9 +12,9 @@ import { DynamicDrawUsage, InstancedMesh } from 'three';
   providers: [
     {
       provide: ThreeObject3d,
-
       useExisting: InstancedMeshDirective,
     },
+    OBJECT_3D_CONTROLLER_PROVIDER,
   ],
 })
 export class InstancedMeshDirective

@@ -6,44 +6,44 @@ let count = 0;
 @Component({
   selector: 'demo-root',
   template: `
-    <!--        <ngt-canvas [camera]="{ position: [0, 0, 35] }">-->
-    <!--          <ngt-stats></ngt-stats>-->
-    <!--          <ngt-ambientLight [intensity]="2"></ngt-ambientLight>-->
-    <!--          <ngt-pointLight [position]="[40, 40, 40]"></ngt-pointLight>-->
-    <!--          <demo-jumbo></demo-jumbo>-->
-    <!--          <demo-birds></demo-birds>-->
-    <!--        </ngt-canvas>-->
-    <!--        <ngt-canvas-->
-    <!--          [linear]="true"-->
-    <!--          [camera]="{ position: [0, 0, 15], near: 5, far: 20 }"-->
-    <!--          (created)="$event.gl.setClearColor('lightpink')"-->
-    <!--        >-->
-    <!--          <demo-orbit-controls></demo-orbit-controls>-->
-    <!--          <ngt-stats></ngt-stats>-->
-    <!--          <ngt-ambientLight></ngt-ambientLight>-->
-    <!--          <ngt-pointLight-->
-    <!--            [position]="[150, 150, 150]"-->
-    <!--            [args]="[undefined, 0.55]"-->
-    <!--          ></ngt-pointLight>-->
-    <!--          <demo-boxes></demo-boxes>-->
-    <!--          <demo-boxes-effects></demo-boxes-effects>-->
-    <!--        </ngt-canvas>-->
-    <ngt-canvas
-      [camera]="{ position: [0, 0, 5] }"
-      (created)="$event.gl.setClearColor('white')"
-    >
-      <demo-orbit-controls></demo-orbit-controls>
+    <ngt-canvas [camera]="{ position: [0, 0, 35] }">
       <ngt-stats></ngt-stats>
-      <ngt-grid-helper></ngt-grid-helper>
-      <ngt-ambient-light [args]="[undefined, 0.5]"></ngt-ambient-light>
-      <ngt-spot-light
-        [position]="[10, 10, 10]"
-        [args]="[undefined, undefined, undefined, 0.5, 1]"
-      ></ngt-spot-light>
-      <ngt-point-light [position]="[-10, -10, -10]"></ngt-point-light>
-      <demo-box [position]="[1.2, 0, 0]"></demo-box>
-      <demo-box [position]="[-1.2, 0, 0]"></demo-box>
+      <ngt-ambient-light [intensity]="2"></ngt-ambient-light>
+      <ngt-point-light [position]="[40, 40, 40]"></ngt-point-light>
+      <demo-jumbo></demo-jumbo>
+      <demo-birds></demo-birds>
     </ngt-canvas>
+    <!--    <ngt-canvas-->
+    <!--      [linear]="true"-->
+    <!--      [camera]="{ position: [0, 0, 15], near: 5, far: 20 }"-->
+    <!--      (created)="$event.gl.setClearColor('lightpink')"-->
+    <!--    >-->
+    <!--      <demo-orbit-controls></demo-orbit-controls>-->
+    <!--      <ngt-stats></ngt-stats>-->
+    <!--      <ngt-ambient-light></ngt-ambient-light>-->
+    <!--      <ngt-point-light-->
+    <!--        [position]="[150, 150, 150]"-->
+    <!--        [args]="[undefined, 0.55]"-->
+    <!--      ></ngt-point-light>-->
+    <!--      <demo-boxes></demo-boxes>-->
+    <!--      <demo-boxes-effects></demo-boxes-effects>-->
+    <!--    </ngt-canvas>-->
+    <!--    <ngt-canvas-->
+    <!--      [camera]="{ position: [0, 0, 5] }"-->
+    <!--      (created)="$event.gl.setClearColor('white')"-->
+    <!--    >-->
+    <!--      <demo-orbit-controls></demo-orbit-controls>-->
+    <!--      <ngt-stats></ngt-stats>-->
+    <!--      <ngt-grid-helper></ngt-grid-helper>-->
+    <!--      <ngt-ambient-light [args]="[undefined, 0.5]"></ngt-ambient-light>-->
+    <!--      <ngt-spot-light-->
+    <!--        [position]="[10, 10, 10]"-->
+    <!--        [args]="[undefined, undefined, undefined, 0.5, 1]"-->
+    <!--      ></ngt-spot-light>-->
+    <!--      <ngt-point-light [position]="[-10, -10, -10]"></ngt-point-light>-->
+    <!--      <demo-box [position]="[1.2, 0, 0]"></demo-box>-->
+    <!--      <demo-box [position]="[-1.2, 0, 0]"></demo-box>-->
+    <!--    </ngt-canvas>-->
     <!--    <ngt-canvas [camera]="{ position: [0, 0, 20] }">-->
     <!--      <demo-orbit-controls></demo-orbit-controls>-->
     <!--      <ngt-stats></ngt-stats>-->
@@ -57,15 +57,19 @@ let count = 0;
     <!--    >-->
     <!--      <demo-fly-controls></demo-fly-controls>-->
     <!--      <ngt-stats></ngt-stats>-->
-    <!--      <ngt-pointLight-->
+    <!--      <ngt-point-light-->
     <!--        [position]="[0, 0, 0]"-->
     <!--        [args]="['#ff2200']"-->
-    <!--      ></ngt-pointLight>-->
-    <!--      <ngt-directionalLight-->
+    <!--      ></ngt-point-light>-->
+    <!--      <ngt-directional-light-->
     <!--        [position]="[0, 0, 1]"-->
     <!--        [args]="['#ffffff']"-->
-    <!--      ></ngt-directionalLight>-->
+    <!--      ></ngt-directional-light>-->
     <!--      <demo-lods></demo-lods>-->
+    <!--    </ngt-canvas>-->
+    <!--    <ngt-canvas>-->
+    <!--      <ngt-ambient-light></ngt-ambient-light>-->
+    <!--      <demo-box [position]="[1.2, 0, 0]"></demo-box>-->
     <!--    </ngt-canvas>-->
     {{ render() }}
   `,

@@ -34,7 +34,6 @@
     "postprocessing-render-pass": {
       "tags": ["scope:postprocessing", "type:library", "context:render-pass"]
     },
-    "core-canvas": { "tags": ["scope:core", "type:library", "context:canvas"] },
     "postprocessing-ssao-pass": {
       "tags": ["scope:postprocessing", "type:library", "context:ssao-pass"]
     },
@@ -104,7 +103,8 @@
     "controls-transform-controls": {
       "tags": ["scope:controls", "type:library", "context:transform-controls"]
     },
-    "popmotion": { "tags": ["scope:popmotion", "type:library"] }
+    "popmotion": { "tags": ["scope:popmotion", "type:library"] },
+    "helpers": { "tags": ["scope:helpers", "type:library"] }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

@@ -11,7 +11,6 @@ module.exports = {
     '<rootDir>/packages/core/attributes',
     '<rootDir>/packages/postprocessing',
     '<rootDir>/packages/postprocessing/render-pass',
-    '<rootDir>/packages/core/canvas',
     '<rootDir>/packages/postprocessing/ssao-pass',
     '<rootDir>/packages/postprocessing/unreal-bloom-pass',
     '<rootDir>/packages/postprocessing/shader-pass',
@@ -36,5 +35,6 @@ module.exports = {
     '<rootDir>/packages/controls/trackball-controls',
     '<rootDir>/packages/controls/transform-controls',
     '<rootDir>/packages/popmotion',
+    '<rootDir>/packages/helpers',
   ],
 };

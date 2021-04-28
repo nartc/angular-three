@@ -1,3 +1,5 @@
+// GENERATED
+
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { LineLoopDirective } from './line-loop.directive';

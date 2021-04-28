@@ -5,8 +5,7 @@
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "popmotion": "popmotion",
-      "@angular-three/core": "@angular-three/core",
-      "@angular-three/core/materials": "@angular-three/core/materials"
+      "@angular-three/core": "@angular-three/core"
     }
   }
 }

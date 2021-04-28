@@ -1,6 +1,10 @@
 // GENERATED
 
-import { ThreeHelper, ThreeObject3d } from '@angular-three/core';
+import {
+  ThreeHelper,
+  ThreeObject3d,
+  OBJECT_3D_CONTROLLER_PROVIDER,
+} from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import { SkeletonHelper } from 'three';
 
@@ -12,6 +16,7 @@ import { SkeletonHelper } from 'three';
       provide: ThreeObject3d,
       useExisting: SkeletonHelperDirective,
     },
+    OBJECT_3D_CONTROLLER_PROVIDER,
   ],
 })
 export class SkeletonHelperDirective extends ThreeHelper<SkeletonHelper> {
