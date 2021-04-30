@@ -1,16 +1,14 @@
 ## [1.0.0-beta.23](https://github.com/nartc/angular-three/compare/1.0.0-beta.22...1.0.0-beta.23) (2021-04-30)
 
-
 ### Documentations
 
-* add docs url ([8b529f7](https://github.com/nartc/angular-three/commit/8b529f7c7fdf608753ad804057c8e2c325ff728f))
-* quickly adjust docs ([3ba4ba7](https://github.com/nartc/angular-three/commit/3ba4ba7d9a110f307525a0bfd714add15f80f2e4))
-
+- add docs url ([8b529f7](https://github.com/nartc/angular-three/commit/8b529f7c7fdf608753ad804057c8e2c325ff728f))
+- quickly adjust docs ([3ba4ba7](https://github.com/nartc/angular-three/commit/3ba4ba7d9a110f307525a0bfd714add15f80f2e4))
 
 ### Refactor
 
-* **core:** bad habit for not committing frequently. this commit is massive ([cde55ae](https://github.com/nartc/angular-three/commit/cde55ae1367f61a6335f7e578bb98f555260f100))
-* **core:** use Object3dControllerDirective for Object3d inputs ([161f007](https://github.com/nartc/angular-three/commit/161f00794a5dfeb8d6a3a95359ed007b9d2c7548))
+- **core:** bad habit for not committing frequently. this commit is massive ([cde55ae](https://github.com/nartc/angular-three/commit/cde55ae1367f61a6335f7e578bb98f555260f100))
+- **core:** use Object3dControllerDirective for Object3d inputs ([161f007](https://github.com/nartc/angular-three/commit/161f00794a5dfeb8d6a3a95359ed007b9d2c7548))
 
 ## [1.0.0-beta.22](https://github.com/nartc/angular-three/compare/1.0.0-beta.21...1.0.0-beta.22) (2021-04-27)
 
