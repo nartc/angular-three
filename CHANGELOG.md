@@ -1,3 +1,10 @@
+## [1.0.0-beta.24](https://github.com/nartc/angular-three/compare/1.0.0-beta.23...1.0.0-beta.24) (2021-04-30)
+
+
+### Bug Fixes
+
+* **core:** expose primitive ([4a97b03](https://github.com/nartc/angular-three/commit/4a97b03ffb3ad2733016efb87dc6103b8a47296a))
+
 ## [1.0.0-beta.23](https://github.com/nartc/angular-three/compare/1.0.0-beta.22...1.0.0-beta.23) (2021-04-30)
 
 ### Documentations
