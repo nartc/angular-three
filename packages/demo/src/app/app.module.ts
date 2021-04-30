@@ -5,6 +5,7 @@ import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attribu
 import {
   ThreeBoxBufferGeometryModule,
   ThreeIcosahedronBufferGeometryModule,
+  ThreeSphereBufferGeometryModule,
   ThreeTextBufferGeometryModule,
 } from '@angular-three/core/geometries';
 import { ThreeGroupModule } from '@angular-three/core/group';
@@ -33,6 +34,7 @@ import {
 } from '@angular-three/core/meshes';
 import { ThreeSceneModule } from '@angular-three/core/scene';
 import { ThreeStatsModule } from '@angular-three/core/stats';
+import { ContactShadowsModule } from '@angular-three/helpers';
 import { ThreePopmotionModule } from '@angular-three/popmotion';
 import { ThreePostprocessingModule } from '@angular-three/postprocessing';
 import { ThreeRenderPassModule } from '@angular-three/postprocessing/render-pass';
@@ -46,6 +48,7 @@ import { AppComponent } from './app.component';
 import { BoxComponent } from './box.component';
 import { BoxesEffectsComponent } from './boxes-effects.component';
 import { BoxesComponent } from './boxes.component';
+import { SwarmComponent } from './docs-homepage/swarm.component';
 import { FlyControlsComponent } from './fly-controls.component';
 import { BirdComponent } from './gltf-fonts/bird.component';
 import { BirdsComponent } from './gltf-fonts/birds.component';
@@ -69,6 +72,7 @@ import { SuzanneComponent } from './suzanne.component';
     JumboComponent,
     FlyControlsComponent,
     LodComponent,
+    SwarmComponent,
   ],
   imports: [
     BrowserModule,
@@ -103,6 +107,8 @@ import { SuzanneComponent } from './suzanne.component';
     ThreeSpotLightHelperModule,
     ThreePointLightHelperModule,
     ThreePopmotionModule,
+    ThreeSphereBufferGeometryModule,
+    ContactShadowsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -14,6 +14,7 @@ import { Controller } from './controller.abstract';
 
 @Directive({
   selector: `
+    ngt-primitive,
     ngt-mesh,
     ngt-instanced-mesh,
     ngt-skinned-mesh,
@@ -21,7 +22,9 @@ import { Controller } from './controller.abstract';
     ngt-group,
     ngt-lod,
     ngt-scene,
-    ngt-points<% if (selectors.length) { %>,<% } %><% for (const selector of selectors) { %>
+    ngt-points,
+    ngt-cube-camera,
+    ngt-contact-shadows<% if (selectors.length) { %>,<% } %><% for (const selector of selectors) { %>
     <%= selector.selector %><% if (!selector.isLast) { %>,<% } %><% } %>
   `,
   exportAs: 'ngtObject3dController',
@@ -34,6 +37,7 @@ export class Object3dControllerDirective extends Controller {
   @Input() scale?: ThreeVector3;
   @Input() color?: ThreeColor;
   @Input() userData?: UnknownRecord;
+  @Input() dispose?: () => void;
   @Input() castShadow = false;
   @Input() receiveShadow = false;
   @Input() visible = true;

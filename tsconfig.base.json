@@ -80,7 +80,8 @@
         "packages/controls/transform-controls/src/index.ts"
       ],
       "@angular-three/popmotion": ["packages/popmotion/src/index.ts"],
-      "@angular-three/helpers": ["packages/helpers/src/index.ts"]
+      "@angular-three/helpers": ["packages/helpers/src/index.ts"],
+      "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

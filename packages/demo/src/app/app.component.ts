@@ -8,6 +8,7 @@ let count = 0;
   template: `
     <ngt-canvas [camera]="{ position: [0, 0, 35] }">
       <ngt-stats></ngt-stats>
+      <ngt-orbit-controls></ngt-orbit-controls>
       <ngt-ambient-light [intensity]="2"></ngt-ambient-light>
       <ngt-point-light [position]="[40, 40, 40]"></ngt-point-light>
       <demo-jumbo></demo-jumbo>
@@ -67,9 +68,33 @@ let count = 0;
     <!--      ></ngt-directional-light>-->
     <!--      <demo-lods></demo-lods>-->
     <!--    </ngt-canvas>-->
-    <!--    <ngt-canvas>-->
-    <!--      <ngt-ambient-light></ngt-ambient-light>-->
-    <!--      <demo-box [position]="[1.2, 0, 0]"></demo-box>-->
+
+    <!--    <ngt-canvas-->
+    <!--      [shadows]="true"-->
+    <!--      [camera]="{ fov: 75, position: [0, 0, 50], near: 10, far: 150 }"-->
+    <!--      [scene]="{ fog: anotherFog, background: background }"-->
+    <!--    >-->
+    <!--      <ngt-ambient-light [intensity]="1.5"></ngt-ambient-light>-->
+    <!--      <ngt-point-light-->
+    <!--        [position]="[100, 10, -50]"-->
+    <!--        [intensity]="20"-->
+    <!--        [castShadow]="true"-->
+    <!--      ></ngt-point-light>-->
+    <!--      <ngt-point-light-->
+    <!--        [position]="[-100, -100, -100]"-->
+    <!--        [intensity]="10"-->
+    <!--        color="black"-->
+    <!--      ></ngt-point-light>-->
+    <!--      <demo-swarm [count]="150" [position]="[0, 10, 0]"></demo-swarm>-->
+    <!--      <ngt-contact-shadows-->
+    <!--        [rotation]="[halfPi, 0, 0]"-->
+    <!--        [position]="[0, -30, 0]"-->
+    <!--        [opacity]="0.6"-->
+    <!--        [width]="130"-->
+    <!--        [height]="130"-->
+    <!--        [blur]="1"-->
+    <!--        [far]="40"-->
+    <!--      ></ngt-contact-shadows>-->
     <!--    </ngt-canvas>-->
     {{ render() }}
   `,
@@ -77,7 +102,10 @@ let count = 0;
 })
 export class AppComponent {
   fog = new THREE.Fog(0x000000, 1, 15000);
+  anotherFog = new THREE.Fog('black', 60, 100);
   hovered = false;
+  halfPi = Math.PI / 2;
+  background = new THREE.Color('#f0f0f0');
 
   render() {
     console.log('render count: ', ++count);

@@ -1,9 +1,9 @@
-import React, { Suspense, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import Layout from '@theme/Layout';
 import * as THREE from 'three';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { ContactShadows, Environment } from '@react-three/drei';
+import { ContactShadows } from '@react-three/drei';
 import { EffectComposer, SSAO } from '@react-three/postprocessing';
 
 function Swarm({ count, ...props }) {
@@ -31,10 +31,8 @@ function Swarm({ count, ...props }) {
       const a = Math.cos(t) + Math.sin(t) / 10;
       const b = Math.sin(t) + Math.cos(t * 2) / 10;
       const s = Math.max(1.5, Math.cos(t) * 5);
-      particle.mx +=
-        (state.mouse.x * state.viewport.width - particle.mx) * 0.02;
-      particle.my +=
-        (state.mouse.y * state.viewport.height - particle.my) * 0.02;
+      particle.mx += (state.mouse.x * state.size.width - particle.mx) * 0.02;
+      particle.my += (state.mouse.y * state.size.height - particle.my) * 0.02;
       dummy.position.set(
         (particle.mx / 10) * a +
           xFactor +
@@ -79,7 +77,6 @@ export default function Home() {
     >
       <Canvas
         shadows
-        gl={{ alpha: false, antialias: false }}
         camera={{ fov: 75, position: [0, 0, 50], near: 10, far: 150 }}
       >
         <color attach="background" args={['#f0f0f0']} />
@@ -93,6 +90,7 @@ export default function Home() {
         />
         <Swarm count={150} position={[0, 10, 0]} />
         <ContactShadows
+          name={'contactShadows'}
           rotation={[Math.PI / 2, 0, 0]}
           position={[0, -30, 0]}
           opacity={0.6}
@@ -110,9 +108,9 @@ export default function Home() {
             color="black"
           />
         </EffectComposer>
-        <Suspense fallback={null}>
-          <Environment preset="city" />
-        </Suspense>
+        {/*<Suspense fallback={null}>*/}
+        {/*  <Environment preset="city" />*/}
+        {/*</Suspense>*/}
       </Canvas>
     </Layout>
   );

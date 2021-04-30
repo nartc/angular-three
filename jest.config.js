@@ -36,5 +36,6 @@ module.exports = {
     '<rootDir>/packages/controls/transform-controls',
     '<rootDir>/packages/popmotion',
     '<rootDir>/packages/helpers',
+    '<rootDir>/packages/core/cameras',
   ],
 };

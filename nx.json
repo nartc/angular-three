@@ -104,7 +104,10 @@
       "tags": ["scope:controls", "type:library", "context:transform-controls"]
     },
     "popmotion": { "tags": ["scope:popmotion", "type:library"] },
-    "helpers": { "tags": ["scope:helpers", "type:library"] }
+    "helpers": { "tags": ["scope:helpers", "type:library"] },
+    "core-cameras": {
+      "tags": ["scope:core", "type:library", "context:cameras"]
+    }
   },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

@@ -35,36 +35,6 @@ import { AnimationLoopParticipant } from './animation-loop-participant.abstract'
 export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   extends AnimationLoopParticipant<TObject>
   implements OnDestroy, OnChanges {
-  // @Input() name?: string;
-  // @Input() position?: ThreeVector3;
-  // @Input() rotation?: ThreeEuler;
-  // @Input() quaternion?: ThreeQuaternion;
-  // @Input() scale?: ThreeVector3;
-  // @Input() color?: ThreeColor;
-  // @Input() userData?: UnknownRecord;
-  // @Input() castShadow = false;
-  // @Input() receiveShadow = false;
-  // @Input() visible = true;
-  // @Input() matrixAutoUpdate = true;
-  //
-  // @Input() appendMode: 'immediate' | 'root' = 'immediate';
-  // @Input() appendTo?: Object3D;
-  //
-  // // events
-  // @Output() click = new EventEmitter<ThreeEvent<MouseEvent>>();
-  // @Output() contextmenu = new EventEmitter<ThreeEvent<MouseEvent>>();
-  // @Output() dblclick = new EventEmitter<ThreeEvent<MouseEvent>>();
-  // @Output() pointerup = new EventEmitter<ThreeEvent<PointerEvent>>();
-  // @Output() pointerdown = new EventEmitter<ThreeEvent<PointerEvent>>();
-  // @Output() pointerover = new EventEmitter<ThreeEvent<PointerEvent>>();
-  // @Output() pointerout = new EventEmitter<ThreeEvent<PointerEvent>>();
-  // @Output() pointerenter = new EventEmitter<ThreeEvent<PointerEvent>>();
-  // @Output() pointerleave = new EventEmitter<ThreeEvent<PointerEvent>>();
-  // @Output() pointermove = new EventEmitter<ThreeEvent<PointerEvent>>();
-  // @Output() pointermissed = new EventEmitter<ThreeEvent<PointerEvent>>();
-  // @Output() pointercancel = new EventEmitter<ThreeEvent<PointerEvent>>();
-  // @Output() wheel = new EventEmitter<ThreeEvent<WheelEvent>>();
-
   private $object3d = new BehaviorSubject<TObject | null>(null);
 
   get object3d$(): Observable<TObject | null> {
@@ -200,6 +170,10 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
         customProps['color'] = this.object3dController.color;
       }
 
+      if (this.object3dController.dispose) {
+        customProps['dispose'] = this.object3dController.dispose;
+      }
+
       this.object3dController.change$.pipe(take(1)).subscribe((changes) => {
         if (changes) {
           for (const [inputName, inputChange] of Object.entries(changes)) {
@@ -213,11 +187,12 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
                 'scale',
                 'userData',
                 'color',
+                'dispose',
                 'castShadow',
                 'receiveShadow',
                 'visible',
                 'matrixAutoUpdate',
-              ].includes(inputName) // skip 11 common inputs
+              ].includes(inputName) // skip 12 common inputs
             ) {
               continue;
             }

@@ -14,6 +14,7 @@ import { Controller } from './controller.abstract';
 
 @Directive({
   selector: `
+    ngt-primitive,
     ngt-mesh,
     ngt-instanced-mesh,
     ngt-skinned-mesh,
@@ -22,6 +23,8 @@ import { Controller } from './controller.abstract';
     ngt-lod,
     ngt-scene,
     ngt-points,
+    ngt-cube-camera,
+    ngt-contact-shadows,
     ngt-light-probe,
     ngt-ambient-light,
     ngt-ambient-light-probe,
@@ -47,7 +50,12 @@ import { Controller } from './controller.abstract';
     ngt-line,
     ngt-line-loop,
     ngt-line-segments,
-    ngt-sprite
+    ngt-sprite,
+    ngt-camera,
+    ngt-perspective-camera,
+    ngt-orthographic-camera,
+    ngt-array-camera,
+    ngt-stereo-camera
   `,
   exportAs: 'ngtObject3dController',
 })
@@ -59,6 +67,7 @@ export class Object3dControllerDirective extends Controller {
   @Input() scale?: ThreeVector3;
   @Input() color?: ThreeColor;
   @Input() userData?: UnknownRecord;
+  @Input() dispose?: () => void;
   @Input() castShadow = false;
   @Input() receiveShadow = false;
   @Input() visible = true;

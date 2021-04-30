@@ -29,7 +29,7 @@ import type {
   CameraOptions,
   RaycasterOptions,
   SceneOptions,
-  ThreeCamera,
+  ThreeCameraAlias,
 } from './typings';
 
 @Component({
@@ -82,7 +82,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   @Output() created = new EventEmitter<{
     gl: WebGLRenderer;
-    camera: ThreeCamera;
+    camera: ThreeCameraAlias;
     scene: Scene;
   }>();
 

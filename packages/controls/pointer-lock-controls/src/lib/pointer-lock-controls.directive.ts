@@ -1,7 +1,7 @@
 // GENERATED
 
 import { ThreeControls } from '@angular-three/controls';
-import type { ThreeCamera } from '@angular-three/core';
+import type { ThreeCameraAlias } from '@angular-three/core';
 import {
   DestroyedService,
   CanvasStore,
@@ -27,7 +27,7 @@ export class PointerLockControlsDirective extends ThreeControls<PointerLockContr
     super(ngZone, canvasStore, animationStore, destroyed);
   }
 
-  initControls(camera: ThreeCamera): PointerLockControls {
+  initControls(camera: ThreeCameraAlias): PointerLockControls {
     return new PointerLockControls(camera, this.document.body);
   }
 }

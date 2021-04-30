@@ -11,3 +11,4 @@ export * from './attribute.abstract';
 export * from './line.abstract';
 export * from './mesh.abstract';
 export * from './sprite.abstract';
+export * from './camera.abstract';

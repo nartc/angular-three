@@ -138,6 +138,14 @@ const textures = [
   THREE.VideoTexture,
 ].map((m) => m.name);
 
+const cameras = [
+  THREE.Camera,
+  THREE.PerspectiveCamera,
+  THREE.OrthographicCamera,
+  THREE.ArrayCamera,
+  THREE.StereoCamera,
+].map((m) => m.name);
+
 const catalogue = {
   attributes: {
     items: attributes,
@@ -201,6 +209,13 @@ const catalogue = {
     withThreeObject3d: true,
     templateType: Template.WithNoArgsNoParams,
     type: 'spriteType',
+  },
+  cameras: {
+    items: cameras,
+    abstract: 'ThreeCamera',
+    withThreeObject3d: true,
+    templateType: Template.WithArgs,
+    type: 'cameraType',
   },
 };
 
@@ -325,8 +340,17 @@ export default function (): Rule {
         );
       });
 
-      const extras =
-        key === 'attributes' ? ['interleaved-buffer-attribute'] : undefined;
+      let extras = [];
+
+      switch (key) {
+        case 'attributes':
+          extras = ['interleaved-buffer-attribute'];
+          break;
+        case 'cameras':
+          extras = ['cube-camera'];
+          break;
+      }
+
       const indexTemplate = mergeWith(
         apply(url('./files/main'), [
           applyTemplates({ items, extras, dasherize }),

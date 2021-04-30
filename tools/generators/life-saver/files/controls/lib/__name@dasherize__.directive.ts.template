@@ -1,7 +1,7 @@
 // GENERATED
 
 import { ThreeControls } from '@angular-three/controls';
-import type { ThreeCamera } from '@angular-three/core';
+import type { ThreeCameraAlias } from '@angular-three/core';
 import { DestroyedService<% if (injectDocument) { %>, CanvasStore, AnimationStore<% } %> } from '@angular-three/core';<% if (injectDocument) { %>
 import { DOCUMENT } from '@angular/common';<% } %>
 import { Directive<% if (inputs.length) { %>, Input<% } %><% if (injectDocument) { %>, NgZone, Inject, SkipSelf<% }%> } from '@angular/core';<% if (useRenderer || inputs.length) { %>
@@ -26,7 +26,7 @@ export class <%= name %>Directive extends ThreeControls<<%= name %>> {<% for (co
     super(ngZone, canvasStore, animationStore, destroyed);
   }<% } %>
 
-  initControls(camera: ThreeCamera<% if (useRenderer) { %>, renderer: WebGLRenderer<% } %>): <%= name %> {
+  initControls(camera: ThreeCameraAlias<% if (useRenderer) { %>, renderer: WebGLRenderer<% } %>): <%= name %> {
     return new <%= name %><%= constructor %>;
   }
 }

@@ -1,11 +1,9 @@
 // GENERATED
 
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { <%= name %>Directive } from './<%= dasherize(name) %>.directive';
 
 @NgModule({
-  imports: [CommonModule],
   declarations: [<%= name %>Directive],
   exports: [<%= name %>Directive],
 })

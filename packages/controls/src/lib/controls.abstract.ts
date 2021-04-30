@@ -1,4 +1,4 @@
-import type { ThreeCamera, UnknownRecord } from '@angular-three/core';
+import type { ThreeCameraAlias, UnknownRecord } from '@angular-three/core';
 import {
   AnimationLoopParticipant,
   AnimationStore,
@@ -58,7 +58,7 @@ export abstract class ThreeControls<TControls = unknown>
   }
 
   abstract initControls(
-    camera: ThreeCamera,
+    camera: ThreeCameraAlias,
     renderer: WebGLRenderer
   ): TControls;
 

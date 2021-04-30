@@ -4,9 +4,11 @@ import { ChangeDetectionStrategy, Component, NgZone } from '@angular/core';
 import niceColors from 'nice-color-palettes';
 import { Color, InstancedMesh, Object3D } from 'three';
 
+const rando = Math.floor(Math.random() * 100);
+
 const colors = new Array(1000)
   .fill(undefined)
-  .map(() => niceColors[17][Math.floor(Math.random() * 5)]);
+  .map(() => niceColors[rando][Math.floor(Math.random() * 5)]);
 
 @Component({
   selector: 'demo-boxes',

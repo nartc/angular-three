@@ -5,7 +5,7 @@ import type {
   WebGLRenderer,
   WebGLShadowMap,
 } from 'three';
-import type { ThreeCamera } from '../camera';
+import type { ThreeCameraAlias } from '../camera';
 import type { ThreeRaycaster } from '../raycaster';
 import type { Size } from '../size';
 
@@ -23,7 +23,7 @@ export interface CanvasStoreState {
   mouse: Vector2;
   internal: CanvasInternal;
   renderer?: WebGLRenderer;
-  camera?: ThreeCamera;
+  camera?: ThreeCameraAlias;
   scene?: Scene;
   raycaster?: ThreeRaycaster;
 }

@@ -22,7 +22,7 @@ import type {
   RaycasterOptions,
   SceneOptions,
   Size,
-  ThreeCamera,
+  ThreeCameraAlias,
   ThreeInstance,
   ThreeRaycaster,
   UnknownRecord,
@@ -164,10 +164,10 @@ export class CanvasStore
             CanvasInternal
           ]) => {
             const isCamera = cameraOptions instanceof Camera;
-            let camera: ThreeCamera;
+            let camera: ThreeCameraAlias;
 
             if (isCamera) {
-              camera = cameraOptions as ThreeCamera;
+              camera = cameraOptions as ThreeCameraAlias;
             } else {
               if (isOrthographic) {
                 camera = new OrthographicCamera(0, 0, 0, 0, 0.1, 1000);
@@ -215,13 +215,13 @@ export class CanvasStore
       params$.pipe(
         withLatestFrom(
           this.renderer$ as Observable<WebGLRenderer>,
-          this.camera$ as Observable<ThreeCamera>
+          this.camera$ as Observable<ThreeCameraAlias>
         ),
         tap(
           ([{ dpr, size }, renderer, camera]: [
             WindowResizeEffectParams,
             WebGLRenderer,
-            ThreeCamera
+            ThreeCameraAlias
           ]) => {
             if (camera.type === 'PerspectiveCamera') {
               camera.aspect = size.width / size.height;

@@ -1,7 +1,7 @@
 // GENERATED
 
 import { ThreeControls } from '@angular-three/controls';
-import type { ThreeCamera } from '@angular-three/core';
+import type { ThreeCameraAlias } from '@angular-three/core';
 import { DestroyedService } from '@angular-three/core';
 import { Directive } from '@angular/core';
 import type { WebGLRenderer } from 'three';
@@ -14,7 +14,7 @@ import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonCont
 })
 export class FirstPersonControlsDirective extends ThreeControls<FirstPersonControls> {
   initControls(
-    camera: ThreeCamera,
+    camera: ThreeCameraAlias,
     renderer: WebGLRenderer
   ): FirstPersonControls {
     return new FirstPersonControls(camera, renderer.domElement);
