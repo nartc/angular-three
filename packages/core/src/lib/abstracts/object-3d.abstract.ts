@@ -6,10 +6,9 @@ import {
   OnDestroy,
   Optional,
   Output,
-  SimpleChanges,
   SkipSelf,
 } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import type { Object3D } from 'three';
 import { Color } from 'three';
@@ -43,6 +42,8 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
 
   @Output() ready = this.object3d$.pipe(filter(Boolean)) as Observable<TObject>;
 
+  private changesSubscription?: Subscription;
+
   constructor(
     @Inject(OBJECT_3D_WATCHED_CONTROLLER)
     protected readonly object3dController: Object3dControllerDirective,
@@ -56,9 +57,18 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     protected readonly parentObjectDirective?: ThreeObject3d
   ) {
     super(animationStore, ngZone);
+
+    this.changesSubscription = object3dController.change$.subscribe(() => {
+      if (this.object3d) {
+        this.applyCustomProps();
+      }
+      if (this.inputChangeHandler) {
+        this.inputChangeHandler();
+      }
+    });
   }
 
-  ngOnChanges(_: SimpleChanges) {
+  ngOnChanges() {
     if (this.object3d) {
       this.applyCustomProps();
     }
@@ -126,6 +136,8 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
     this.$object3d.next(this.object3d);
     this.participate(this.object3d);
   }
+
+  protected inputChangeHandler?: () => void;
 
   private applyCustomProps() {
     this.ngZone.runOutsideAngular(() => {
@@ -258,6 +270,9 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
+    if (this.changesSubscription) {
+      this.changesSubscription.unsubscribe();
+    }
     this.ngZone.runOutsideAngular(() => {
       if (this.object3d) {
         this.remove();

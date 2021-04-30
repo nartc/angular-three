@@ -1,4 +1,4 @@
-import { Directive, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Directive, OnChanges, OnInit } from '@angular/core';
 import { Object3D } from 'three';
 import type { AnyConstructor } from '../typings';
 import { ThreeObject3d } from './object-3d.abstract';
@@ -17,12 +17,18 @@ export abstract class ThreeHelper<THelper extends Object3D>
     this._extraArgs = v;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    super.ngOnChanges(changes);
+  ngOnChanges() {
+    super.ngOnChanges();
     if (!this.object3d) {
       this.init();
     }
   }
+
+  inputChangeHandler = () => {
+    if (!this.object3d) {
+      this.init();
+    }
+  };
 
   ngOnInit() {
     this.init();
