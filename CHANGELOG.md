@@ -1,3 +1,15 @@
+## [1.0.0-beta.25](https://github.com/nartc/angular-three/compare/1.0.0-beta.24...1.0.0-beta.25) (2021-04-30)
+
+
+### Bug Fixes
+
+* **core:** make sure to listen to controller change subject ([75a9355](https://github.com/nartc/angular-three/commit/75a9355df6b770acf4927667e24475a9df46cf87))
+
+
+### Documentations
+
+* **demo:** adjust docs ([939a3fb](https://github.com/nartc/angular-three/commit/939a3fb772506d4e455ea307252c9474e24f2334))
+
 ## [1.0.0-beta.24](https://github.com/nartc/angular-three/compare/1.0.0-beta.23...1.0.0-beta.24) (2021-04-30)
 
 ### Bug Fixes
