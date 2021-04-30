@@ -1,5 +1,7 @@
 export * from './lib/core.module';
 export * from './lib/canvas.component';
+export * from './lib/primitive/primitive.module';
+export * from './lib/primitive/primitive.directive';
 export * from './lib/controllers';
 export * from './lib/di';
 export * from './lib/stores';
