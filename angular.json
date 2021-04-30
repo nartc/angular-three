@@ -1448,7 +1448,8 @@
           "builder": "@nrwl/angular:package",
           "options": {
             "tsConfig": "packages/helpers/tsconfig.lib.json",
-            "project": "packages/helpers/ng-package.json"
+            "project": "packages/helpers/ng-package.json",
+            "updateBuildableProjectDepsInPackageJson": false
           },
           "configurations": {
             "production": {
