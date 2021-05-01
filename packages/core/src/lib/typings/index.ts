@@ -9,3 +9,4 @@ export * from './raycaster';
 export * from './scene';
 export * from './camera';
 export * from './common';
+export * from './loader';

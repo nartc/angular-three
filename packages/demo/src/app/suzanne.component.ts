@@ -1,7 +1,7 @@
-import { AnimationReady } from '@angular-three/core';
-import { loadBufferGeometry } from '@angular-three/core/loaders';
+import { AnimationReady, LoaderService } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { InstancedMesh, Object3D } from 'three';
+import { tap } from 'rxjs/operators';
+import { BufferGeometryLoader, InstancedMesh, Object3D } from 'three';
 
 @Component({
   selector: 'demo-suzanne',
@@ -17,12 +17,18 @@ import { InstancedMesh, Object3D } from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SuzanneComponent {
-  geometry$ = loadBufferGeometry('/assets/model.json', (geometry) => {
-    geometry.computeVertexNormals();
-    geometry.scale(0.5, 0.5, 0.5);
-  });
+  geometry$ = this.loaderService
+    .use(BufferGeometryLoader, '/assets/model.json')
+    .pipe(
+      tap((geometry) => {
+        geometry.computeVertexNormals();
+        geometry.scale(0.5, 0.5, 0.5);
+      })
+    );
 
   private dummy = new Object3D();
+
+  constructor(private readonly loaderService: LoaderService) {}
 
   onReady({
     animateObject,

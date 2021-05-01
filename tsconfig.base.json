@@ -22,7 +22,6 @@
       ],
       "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
       "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
-      "@angular-three/core/loaders": ["packages/core/loaders/src/index.ts"],
       "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
       "@angular-three/controls": ["packages/controls/src/index.ts"],
       "@angular-three/core/attributes": [
@@ -43,10 +42,6 @@
       ],
       "@angular-three/core/group": ["packages/core/group/src/index.ts"],
       "@angular-three/core/scene": ["packages/core/scene/src/index.ts"],
-      "@angular-three/loaders": ["packages/loaders/src/index.ts"],
-      "@angular-three/loaders/gltf-loader": [
-        "packages/loaders/gltf-loader/src/index.ts"
-      ],
       "@angular-three/core/audios": ["packages/core/audios/src/index.ts"],
       "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"],
       "@angular-three/core/lod": ["packages/core/lod/src/index.ts"],

@@ -1,7 +1,7 @@
 import type { ThreeVector3 } from '@angular-three/core';
-import { loadFont } from '@angular-three/core/loaders';
+import { LoaderService } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Mesh, Vector3 } from 'three';
+import { FontLoader, Mesh, Vector3 } from 'three';
 
 @Component({
   selector: 'demo-text',
@@ -38,7 +38,9 @@ export class TextComponent {
   @Input() size = 1;
   @Input() color = '#000000';
 
-  font$ = loadFont('/assets/bold.blob');
+  font$ = this.loaderService.use(FontLoader, '/assets/bold.blob');
+
+  constructor(private readonly loaderService: LoaderService) {}
 
   onMeshReady(mesh: Mesh) {
     const size = new Vector3();

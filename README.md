@@ -14,7 +14,6 @@ This package is still in development
 | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`@angular-three/core`](https://npmjs.com/package/@angular-three/core)                     | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/core)           | [![README](https://img.shields.io/badge/README--green.svg)](/packages/core/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/core)                     |
 | [`@angular-three/controls`](https://npmjs.com/package/@angular-three/controls)             | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/controls)       | [![README](https://img.shields.io/badge/README--green.svg)](/packages/controls/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/controls)             |
-| [`@angular-three/loaders`](https://npmjs.com/package/@angular-three/loaders)               | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/loaders)        | [![README](https://img.shields.io/badge/README--green.svg)](/packages/loaders/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/loaders)               |
 | [`@angular-three/postprocessing`](https://npmjs.com/package/@angular-three/postprocessing) | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/postprocessing) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/postprocessing/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/postprocessing) |
 | [`@angular-three/popmotion`](https://npmjs.com/package/@angular-three/popmotion) | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/popmotion) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/popmotion/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/popmotion) |
 
@@ -136,7 +135,12 @@ These 4 stores are provided on `ngt-canvas` which will allow all children of `ng
 
 ### Services
 
-In addition to the Stores, `ngt-canvas` also provides a `LoopService`. `LoopService` is, again, somewhat _internal_ but for some reason you want to `stop()` the animation loop, call `loopService.stop()`.
+- `LoopService`: `LoopService` is, again, somewhat _internal_ but for some reason you want to `stop()` the animation loop, call `loopService.stop()`
+- `LoaderService`: An Observable-based to load external data.
+
+```ts
+this.loaderService.use(GLTFLoader, '/assets/bird.gltf'); // Observable<GLTF>
+```
 
 For more information, please check out the [Documentations](#documentations)
 
@@ -149,7 +153,6 @@ For more information, please check out the [Documentations](#documentations)
 │   ├── controls
 │   ├── core
 │   ├── demo
-│   ├── loaders
 │   ├── popmotion
 │   └── postprocessing
 └── tools/
@@ -170,20 +173,6 @@ For more information, please check out the [Documentations](#documentations)
     - [x] TransformControls
   - `core`: **THREE.js** core is in this package. There are too many to list (and also changing based on **THREE.js** version) so feel free to explore the directory and find out what's missing.
   - `demo`: An **Angular** application for quickly build demo/test locally.
-  - `loaders`: External loaders from `three/examples/jsm/loaders/*`
-    - [ ] 3DMLoader
-    - [ ] BasisTextureLoader
-    - [ ] DRACOLoader
-    - [x] GLTFLoader
-    - [ ] KTX2Loader
-    - [ ] MMDLoader
-    - [ ] MTLLoader
-    - [ ] OBJLoader
-    - [ ] PCDLoader
-    - [ ] PDBLoader
-    - [ ] PRWMLoader
-    - [ ] SVGLoader
-    - [ ] TGALoader
   - `popmotion`: An experimental directive that wraps [Popmotion](https://popmotion.io) to provide animations to **THREE.js** primitives
     - [x] Object3D
     - [x] Material

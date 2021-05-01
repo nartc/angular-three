@@ -3,8 +3,7 @@ import type {
   ThreeEuler,
   ThreeVector3,
 } from '@angular-three/core';
-import { AnimationStore } from '@angular-three/core';
-import { loadGLTF } from '@angular-three/loaders/gltf-loader';
+import { AnimationStore, LoaderService } from '@angular-three/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,7 +12,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AnimationMixer, Group, Mesh } from 'three';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 @Component({
   selector: 'demo-bird',
@@ -54,10 +53,13 @@ export class BirdComponent implements OnInit {
 
   mixer!: AnimationMixer;
 
-  constructor(private readonly animationStore: AnimationStore) {}
+  constructor(
+    private readonly animationStore: AnimationStore,
+    private readonly loaderService: LoaderService
+  ) {}
 
   ngOnInit(): void {
-    this.gltf$ = loadGLTF(this.url);
+    this.gltf$ = this.loaderService.use(GLTFLoader, this.url);
   }
 
   onBirdReady(bird: Mesh, gltf: GLTF, group: Group) {

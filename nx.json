@@ -21,9 +21,6 @@
     },
     "core-meshes": { "tags": ["scope:core", "type:library", "context:meshes"] },
     "core-lights": { "tags": ["scope:core", "type:library", "context:lights"] },
-    "core-loaders": {
-      "tags": ["scope:core", "type:library", "context:loaders"]
-    },
     "demo": { "tags": [] },
     "core-stats": { "tags": ["scope:core", "type:library", "context:stats"] },
     "controls": { "tags": ["scope:controls", "type:library"] },
@@ -49,10 +46,6 @@
     },
     "core-group": { "tags": ["scope:core", "type:library", "context:group"] },
     "core-scene": { "tags": ["scope:core", "type:library", "context:scene"] },
-    "loaders": { "tags": ["scope:loaders", "type:library"] },
-    "loaders-gltf-loader": {
-      "tags": ["scope:loaders", "type:library", "context:gltf-loader"]
-    },
     "core-audios": { "tags": ["scope:core", "type:library", "context:audios"] },
     "core-sprites": {
       "tags": ["scope:core", "type:library", "context:sprites"]

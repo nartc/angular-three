@@ -43,7 +43,6 @@
               "npx ng run core:build --prod",
               "npx ng run postprocessing:build --prod",
               "npx ng run controls:build --prod",
-              "npx ng run loaders:build --prod",
               "npx ng run popmotion:build --prod",
               "npx ng run helpers:build --prod"
             ],
@@ -64,7 +63,6 @@
               "npx ng run core:publish",
               "npx ng run postprocessing:publish",
               "npx ng run controls:publish",
-              "npx ng run loaders:publish",
               "npx ng run popmotion:publish",
               "npx ng run helpers:publish"
             ]
@@ -215,43 +213,6 @@
           "outputs": ["coverage/packages/core/lights"],
           "options": {
             "jestConfig": "packages/core/lights/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "core-loaders": {
-      "projectType": "library",
-      "root": "packages/core/loaders",
-      "sourceRoot": "packages/core/loaders/src",
-      "prefix": "ngt",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/angular:package",
-          "options": {
-            "tsConfig": "packages/core/loaders/tsconfig.lib.json",
-            "project": "packages/core/loaders/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "packages/core/loaders/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "packages/core/loaders/src/**/*.ts",
-              "packages/core/loaders/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/loaders"],
-          "options": {
-            "jestConfig": "packages/core/loaders/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -716,87 +677,6 @@
           "outputs": ["coverage/packages/core/scene"],
           "options": {
             "jestConfig": "packages/core/scene/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "loaders": {
-      "projectType": "library",
-      "root": "packages/loaders",
-      "sourceRoot": "packages/loaders/src",
-      "prefix": "ngt",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/angular:package",
-          "options": {
-            "tsConfig": "packages/loaders/tsconfig.lib.json",
-            "project": "packages/loaders/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "packages/loaders/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "packages/loaders/src/**/*.ts",
-              "packages/loaders/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/loaders"],
-          "options": {
-            "jestConfig": "packages/loaders/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "publish": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "npm publish",
-            "cwd": "dist/packages/loaders"
-          }
-        }
-      }
-    },
-    "loaders-gltf-loader": {
-      "projectType": "library",
-      "root": "packages/loaders/gltf-loader",
-      "sourceRoot": "packages/loaders/gltf-loader/src",
-      "prefix": "ngt",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/angular:package",
-          "options": {
-            "tsConfig": "packages/loaders/gltf-loader/tsconfig.lib.json",
-            "project": "packages/loaders/gltf-loader/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "packages/loaders/gltf-loader/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "packages/loaders/gltf-loader/src/**/*.ts",
-              "packages/loaders/gltf-loader/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/loaders/gltf-loader"],
-          "options": {
-            "jestConfig": "packages/loaders/gltf-loader/jest.config.js",
             "passWithNoTests": true
           }
         }

@@ -19,6 +19,7 @@ import { asyncScheduler } from 'rxjs';
 import { observeOn, takeUntil } from 'rxjs/operators';
 import type { Scene, WebGLRenderer, WebGLShadowMap } from 'three';
 import { DestroyedService, LoopService } from './services';
+import { LoaderService } from './services/loader.service';
 import {
   AnimationStore,
   CanvasStore,
@@ -59,6 +60,7 @@ import type {
     AnimationStore,
     LoopService,
     DestroyedService,
+    LoaderService,
   ],
 })
 export class CanvasComponent implements OnInit, OnDestroy {
