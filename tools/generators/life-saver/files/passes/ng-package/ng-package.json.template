@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/packages/postprocessing/<%= dasherize(name) %>",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "three/examples/jsm/postprocessing/<%= name %>": "three/examples/jsm/postprocessing/<%= name %>",<% if (importThree) { %>
+      "three": "three",<% } %>
+      "@angular-three/core": "@angular-three/core"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+<% if (threeCoreImports.length) { %>import type {<% for (const coreImport of threeCoreImports) { %>
+  <%= coreImport %>,
+<% } %>} from '@angular-three/core';<% } %>
+import { ThreePass } from '@angular-three/postprocessing';
+import { Directive, Input } from '@angular/core';<% if (threeImports.length) { %>
+import type {<% for (const threeImport of threeImports) { %>
+  <%= threeImport %>,
+<% } %>} from 'three';<% } %><% if (passImports.length) { %>
+import type {<% for (const passImport of passImports) { %>
+  <%= passImport %>,
+<% } %>} from 'three/examples/jsm/postprocessing/<%= name %>';<% } %>
+import { <%= name %> } from 'three/examples/jsm/postprocessing/<%= name %>';
+
+@Directive({
+  selector: 'ngt-<%= dasherize(name) %>',
+  exportAs: 'ngt<%= name %>',
+  providers: [{ provide: ThreePass, useExisting: <%= name %>Directive }],
+})
+export class <%= name %>Directive extends ThreePass<<%= name %>> {
+  static ngAcceptInputType_args:
+    | <% if (withSceneAndCamera) { %>WithoutSceneCameraConstructorParameters<ConstructorParameters<typeof <%= name %>>> <% } else { %>ConstructorParameters<typeof <%= name %>><% } %>
+    | undefined;
+
+  @Input() set args(v: <% if (withSceneAndCamera) { %>WithoutSceneCameraConstructorParameters<ConstructorParameters<typeof <%= name %>>> <% } else { %>ConstructorParameters<typeof <%= name %>><% } %>) {
+    this.extraArgs = v;
+  }<% for (const input of inputs) { %>
+  @Input() <%= input.name %><% if (input.isOptional) { %>?<% } %>: <%= input.import %><% if (input.isArray) { %>[]<% } %><% if (input.default) { %> = <%= input.default %>;<% } else { %>;<% } %>
+  <% } %>
+
+  passType = <%= name %>;<% if (inputs.length) { %>
+  extraInputs = [<% for (const input of inputs) { %>
+    '<%= input.name %>',
+  <% } %>];<% } %>
+  <% if (withSceneAndCamera) { %>
+  protected get useSceneAndCamera(): boolean {
+    return true;
+  }<% } %>
+}

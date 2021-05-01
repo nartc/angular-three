@@ -1,0 +1,2 @@
+export * from './lib/<%= dasherize(name) %>.module';
+export * from './lib/<%= dasherize(name) %>.directive';

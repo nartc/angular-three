@@ -1,4 +1,7 @@
-import type { UnknownRecord } from '@angular-three/core';
+import type {
+  UnknownRecord,
+  WithoutSceneCameraConstructorParameters,
+} from '@angular-three/core';
 import { ThreePass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import type {
@@ -18,11 +21,20 @@ import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass';
   providers: [{ provide: ThreePass, useExisting: SsaoPassDirective }],
 })
 export class SsaoPassDirective extends ThreePass<SSAOPass> {
-  @Input() set args(v: ConstructorParameters<typeof SSAOPass>) {
+  static ngAcceptInputType_args:
+    | WithoutSceneCameraConstructorParameters<
+        ConstructorParameters<typeof SSAOPass>
+      >
+    | undefined;
+
+  @Input() set args(
+    v: WithoutSceneCameraConstructorParameters<
+      ConstructorParameters<typeof SSAOPass>
+    >
+  ) {
     this.extraArgs = v;
   }
 
-  @Input() clear?: boolean;
   @Input() kernelRadius?: number;
   @Input() kernelSize?: number;
   @Input() kernel?: Vector3[];
@@ -44,7 +56,6 @@ export class SsaoPassDirective extends ThreePass<SSAOPass> {
 
   passType = SSAOPass;
   extraInputs = [
-    'clear',
     'kernelRadius',
     'kernelSize',
     'kernel',
