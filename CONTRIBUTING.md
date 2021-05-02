@@ -28,7 +28,7 @@ Some **Directives** in **Angular Three** are generated using `workspace-generato
 `-- examples
     `-- controls
     `-- postprocessing
-``` 
+```
 
 ### Commit
 
