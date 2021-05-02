@@ -3,6 +3,7 @@ export * from './events';
 export * from './three';
 export * from './render';
 export * from './size';
+export * from './viewport';
 export * from './intersection';
 export * from './instance';
 export * from './raycaster';

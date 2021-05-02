@@ -32,7 +32,7 @@ export class LoopService implements OnDestroy {
       renderer,
       scene,
       camera,
-      internal,
+      internal: { size, viewport },
       clock,
       mouse,
     } = this.canvasStore.getImperativeState();
@@ -56,7 +56,8 @@ export class LoopService implements OnDestroy {
         scene,
         renderer,
         mouse,
-        size: internal.size,
+        size,
+        viewport,
         delta,
       };
       for (const animationCallback of animationCallbacks) {

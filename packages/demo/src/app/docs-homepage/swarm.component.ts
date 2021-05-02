@@ -66,7 +66,7 @@ export class SwarmComponent implements OnChanges {
 
   onMeshAnimateReady({
     animateObject,
-    renderState: { mouse, size },
+    renderState: { mouse, viewport },
   }: AnimationReady<InstancedMesh>) {
     this.particles.forEach((particle, i) => {
       let { t, factor, speed, xFactor, yFactor, zFactor } = particle;
@@ -74,8 +74,8 @@ export class SwarmComponent implements OnChanges {
       const a = Math.cos(t) + Math.sin(t) / 10;
       const b = Math.sin(t) + Math.cos(t * 2) / 10;
       const s = Math.max(1.5, Math.cos(t) * 5);
-      particle.mx += (mouse.x * size.width - particle.mx) * 0.02;
-      particle.my += (mouse.y * size.height - particle.my) * 0.02;
+      particle.mx += (mouse.x * viewport.width - particle.mx) * 0.02;
+      particle.my += (mouse.y * viewport.height - particle.my) * 0.02;
       this.dummy.position.set(
         (particle.mx / 10) * a +
           xFactor +

@@ -12,6 +12,7 @@ import {
   Scene,
   sRGBEncoding,
   Vector2,
+  Vector3,
   WebGLRenderer,
   WebGLShadowMap,
 } from 'three';
@@ -34,6 +35,12 @@ interface WindowResizeEffectParams {
   size: Size;
   dpr: number;
 }
+
+const position = new Vector3();
+const defaultTarget = new Vector3();
+
+export const isOrthographicCamera = (def: Camera): def is OrthographicCamera =>
+  def && (def as OrthographicCamera).isOrthographicCamera;
 
 @Injectable()
 export class CanvasStore
@@ -61,6 +68,46 @@ export class CanvasStore
         active: false,
         size: { width: 0, height: 0 },
         dpr: 1,
+        viewport: {
+          initialDpr: 1,
+          dpr: 1,
+          width: 0,
+          height: 0,
+          aspect: 0,
+          distance: 0,
+          factor: 0,
+          getCurrentViewport: (
+            camera = this.getImperativeState().camera,
+            target = defaultTarget,
+            size = this.getImperativeState().internal.size
+          ) => {
+            const { width, height } = size;
+            const aspect = width / height;
+            const distance = camera!
+              .getWorldPosition(position)
+              .distanceTo(target);
+            if (isOrthographicCamera(camera!)) {
+              return {
+                width: width / camera.zoom,
+                height: height / camera.zoom,
+                factor: 1,
+                distance,
+                aspect,
+              };
+            }
+
+            const fov = (camera!.fov * Math.PI) / 180; // convert vertical fov to radians
+            const h = 2 * Math.tan(fov / 2) * distance; // visible height
+            const w = h * (width / height);
+            return {
+              width: w,
+              height: h,
+              factor: width / w,
+              distance,
+              aspect,
+            };
+          },
+        },
       },
     });
 
@@ -97,6 +144,21 @@ export class CanvasStore
   readonly setDpr = this.updater<number>((state, dpr) => ({
     ...state,
     internal: { ...state.internal, dpr },
+  }));
+  readonly setViewport = this.updater((state) => ({
+    ...state,
+    internal: {
+      ...state.internal,
+      viewport: {
+        ...state.internal.viewport,
+        ...state.internal.viewport.getCurrentViewport(
+          state.camera,
+          defaultTarget,
+          state.internal.size
+        ),
+        dpr: state.internal.dpr,
+      },
+    },
   }));
   readonly setActive = this.updater<boolean>((state, active) => ({
     ...state,
@@ -190,6 +252,7 @@ export class CanvasStore
             camera.lookAt(0, 0, 0);
 
             this.patchState({ camera });
+            this.setViewport();
           }
         )
       )
@@ -238,6 +301,7 @@ export class CanvasStore
             renderer.setSize(size.width, size.height);
             this.setSize(size);
             this.setDpr(dpr);
+            this.setViewport();
           }
         )
       )

@@ -33,7 +33,7 @@ export function createEvents(
       clock,
       renderer,
       scene,
-      internal: { size },
+      internal: { size, viewport },
     } = canvasStateGetter();
     const delta = clock.getDelta();
     if (raycaster && camera && renderer && scene) {
@@ -42,6 +42,7 @@ export function createEvents(
           camera,
           clock,
           size,
+          viewport,
           renderer,
           scene,
           delta,
