@@ -1,3 +1,12 @@
+## [1.0.0-beta.26](https://github.com/nartc/angular-three/compare/1.0.0-beta.25...1.0.0-beta.26) (2021-05-02)
+
+
+### Features
+
+* **core:** refactor to use LoaderService. deprecating all current loaders ([6c8a5f2](https://github.com/nartc/angular-three/commit/6c8a5f27c5658b63c166b8fccca4b8e1935d249e))
+* **generators:** setup passes generator ([75f6c92](https://github.com/nartc/angular-three/commit/75f6c920abd831c8ee0efd22d3658bf476fb2c1f))
+* **postprocessing:** add all passes ([b49b1d6](https://github.com/nartc/angular-three/commit/b49b1d63da0b289bd6550c966a88a236a343d52b))
+
 ## [1.0.0-beta.25](https://github.com/nartc/angular-three/compare/1.0.0-beta.24...1.0.0-beta.25) (2021-04-30)
 
 ### Bug Fixes
