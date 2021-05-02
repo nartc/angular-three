@@ -16,6 +16,7 @@ This package is still in development
 | [`@angular-three/controls`](https://npmjs.com/package/@angular-three/controls)             | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/controls)       | [![README](https://img.shields.io/badge/README--green.svg)](/packages/controls/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/controls)             |
 | [`@angular-three/postprocessing`](https://npmjs.com/package/@angular-three/postprocessing) | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/postprocessing) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/postprocessing/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/postprocessing) |
 | [`@angular-three/popmotion`](https://npmjs.com/package/@angular-three/popmotion)           | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/popmotion)      | [![README](https://img.shields.io/badge/README--green.svg)](/packages/popmotion/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/popmotion)           |
+| [`@angular-three/helpers`](https://npmjs.com/package/@angular-three/helpers)           | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/helpers)      | [![README](https://img.shields.io/badge/README--green.svg)](/packages/helpers/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/helpers)           |
 
 ### Peer Dependencies
 
