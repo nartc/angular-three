@@ -50,17 +50,17 @@ export class BoxesComponent {
   constructor(private readonly ngZone: NgZone) {}
 
   onHover($event: ThreeEvent<PointerEvent>) {
-    this.hovered = $event.instanceId;
     this.ngZone.runOutsideAngular(() => {
       this.previous = this.hovered;
     });
+    this.hovered = $event.instanceId;
   }
 
   onOffHover() {
-    this.hovered = undefined;
     this.ngZone.runOutsideAngular(() => {
-      this.previous = undefined;
+      this.previous = this.hovered;
     });
+    this.hovered = undefined;
   }
 
   onReady({

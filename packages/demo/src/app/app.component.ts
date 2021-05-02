@@ -14,21 +14,21 @@ let count = 0;
     <!--      <demo-jumbo></demo-jumbo>-->
     <!--      <demo-birds></demo-birds>-->
     <!--    </ngt-canvas>-->
-    <!--        <ngt-canvas-->
-    <!--          [linear]="true"-->
-    <!--          [camera]="{ position: [0, 0, 15], near: 5, far: 20 }"-->
-    <!--          (created)="$event.gl.setClearColor('lightpink')"-->
-    <!--        >-->
-    <!--          <demo-orbit-controls></demo-orbit-controls>-->
-    <!--          <ngt-stats></ngt-stats>-->
-    <!--          <ngt-ambient-light></ngt-ambient-light>-->
-    <!--          <ngt-point-light-->
-    <!--            [position]="[150, 150, 150]"-->
-    <!--            [args]="[undefined, 0.55]"-->
-    <!--          ></ngt-point-light>-->
-    <!--          <demo-boxes></demo-boxes>-->
-    <!--          <demo-boxes-effects></demo-boxes-effects>-->
-    <!--        </ngt-canvas>-->
+    <ngt-canvas
+      [linear]="true"
+      [camera]="{ position: [0, 0, 15], near: 5, far: 20 }"
+      (created)="$event.gl.setClearColor('lightpink')"
+    >
+      <demo-orbit-controls></demo-orbit-controls>
+      <ngt-stats></ngt-stats>
+      <ngt-ambient-light></ngt-ambient-light>
+      <ngt-point-light
+        [position]="[150, 150, 150]"
+        [args]="[undefined, 0.55]"
+      ></ngt-point-light>
+      <demo-boxes></demo-boxes>
+      <demo-boxes-effects></demo-boxes-effects>
+    </ngt-canvas>
     <!--            <ngt-canvas-->
     <!--              [camera]="{ position: [0, 0, 5] }"-->
     <!--              (created)="$event.gl.setClearColor('white')"-->
@@ -69,34 +69,34 @@ let count = 0;
     <!--          <demo-lods></demo-lods>-->
     <!--        </ngt-canvas>-->
 
-    <ngt-canvas
-      [shadows]="true"
-      [camera]="{ fov: 75, position: [0, 0, 50], near: 10, far: 150 }"
-      [scene]="{ fog: anotherFog, background: background }"
-    >
-      <ngt-ambient-light [intensity]="1.5"></ngt-ambient-light>
-      <ngt-point-light
-        [position]="[100, 10, -50]"
-        [intensity]="20"
-        [castShadow]="true"
-      ></ngt-point-light>
-      <ngt-point-light
-        [position]="[-100, -100, -100]"
-        [intensity]="10"
-        color="black"
-      ></ngt-point-light>
-      <demo-swarm [count]="150" [position]="[0, 10, 0]"></demo-swarm>
-      <ngt-contact-shadows
-        [rotation]="[halfPi, 0, 0]"
-        [position]="[0, -30, 0]"
-        [opacity]="0.6"
-        [width]="130"
-        [height]="130"
-        [blur]="1"
-        [far]="40"
-      ></ngt-contact-shadows>
-    </ngt-canvas>
-    {{ render() }}
+    <!--    <ngt-canvas-->
+    <!--      [shadows]="true"-->
+    <!--      [camera]="{ fov: 75, position: [0, 0, 50], near: 10, far: 150 }"-->
+    <!--      [scene]="{ fog: anotherFog, background: background }"-->
+    <!--    >-->
+    <!--      <ngt-ambient-light [intensity]="1.5"></ngt-ambient-light>-->
+    <!--      <ngt-point-light-->
+    <!--        [position]="[100, 10, -50]"-->
+    <!--        [intensity]="20"-->
+    <!--        [castShadow]="true"-->
+    <!--      ></ngt-point-light>-->
+    <!--      <ngt-point-light-->
+    <!--        [position]="[-100, -100, -100]"-->
+    <!--        [intensity]="10"-->
+    <!--        color="black"-->
+    <!--      ></ngt-point-light>-->
+    <!--      <demo-swarm [count]="150" [position]="[0, 10, 0]"></demo-swarm>-->
+    <!--      <ngt-contact-shadows-->
+    <!--        [rotation]="[halfPi, 0, 0]"-->
+    <!--        [position]="[0, -30, 0]"-->
+    <!--        [opacity]="0.6"-->
+    <!--        [width]="130"-->
+    <!--        [height]="130"-->
+    <!--        [blur]="1"-->
+    <!--        [far]="40"-->
+    <!--      ></ngt-contact-shadows>-->
+    <!--    </ngt-canvas>-->
+    <!--    {{ render() }}-->
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
