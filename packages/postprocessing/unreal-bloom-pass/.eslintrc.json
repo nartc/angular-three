@@ -18,7 +18,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "angular-three",
+            "prefix": "ngt",
             "style": "kebab-case"
           }
         ]

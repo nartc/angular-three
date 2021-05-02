@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/packages/postprocessing/saopass",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "three/examples/jsm/postprocessing/SAOPass": "three/examples/jsm/postprocessing/SAOPass",
+      "three": "three",
+      "@angular-three/core": "@angular-three/core"
+    }
+  }
+}

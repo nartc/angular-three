@@ -27,6 +27,7 @@ export abstract class ThreePass<TPass extends Pass = Pass>
   @Input() needsSwap?: boolean;
   @Input() clear?: boolean;
   @Input() renderToScreen?: boolean;
+  @Input() dispose?: () => void;
 
   @Input() set assignTo(values: [string, unknown][]) {
     if (values.length) {
@@ -71,10 +72,19 @@ export abstract class ThreePass<TPass extends Pass = Pass>
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      if (this.useSceneAndCamera) {
-        const { scene, camera } = this.canvasStore.getImperativeState();
-        this._extraArgs = [scene, camera, ...this._extraArgs];
+      const { scene, camera } = this.canvasStore.getImperativeState();
+      switch (this.useSceneAndCamera) {
+        case 'scene':
+          this._extraArgs = [scene, ...this._extraArgs];
+          break;
+        case 'camera':
+          this._extraArgs = [camera, ...this._extraArgs];
+          break;
+        case 'sceneAndCamera':
+          this._extraArgs = [scene, camera, ...this._extraArgs];
+          break;
       }
+
       this._pass = new this.passType(...this._extraArgs);
       this.applyExtraInputs();
       if (this.composer) {
@@ -100,8 +110,12 @@ export abstract class ThreePass<TPass extends Pass = Pass>
     return this._pass;
   }
 
-  protected get useSceneAndCamera() {
-    return false;
+  protected get useSceneAndCamera():
+    | 'scene'
+    | 'camera'
+    | 'sceneAndCamera'
+    | null {
+    return null;
   }
 
   private applyExtraInputs(inputChanges?: SimpleChanges): void {

@@ -1,3 +1,6 @@
+// GENERATED
+
+import type { WithoutSceneCameraConstructorParameters } from '@angular-three/core';
 import { ThreePass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
@@ -8,13 +11,29 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
   providers: [{ provide: ThreePass, useExisting: RenderPassDirective }],
 })
 export class RenderPassDirective extends ThreePass<RenderPass> {
-  @Input() set args(v: ConstructorParameters<typeof RenderPass>) {
+  static ngAcceptInputType_args:
+    | WithoutSceneCameraConstructorParameters<
+        ConstructorParameters<typeof RenderPass>
+      >
+    | undefined;
+
+  @Input() set args(
+    v: WithoutSceneCameraConstructorParameters<
+      ConstructorParameters<typeof RenderPass>
+    >
+  ) {
     this.extraArgs = v;
   }
 
-  passType = RenderPass;
+  @Input() clearDepth?: boolean;
 
-  protected get useSceneAndCamera(): boolean {
-    return true;
+  passType = RenderPass;
+  extraInputs = ['clearDepth'];
+  protected get useSceneAndCamera():
+    | 'scene'
+    | 'camera'
+    | 'sceneAndCamera'
+    | null {
+    return 'sceneAndCamera';
   }
 }

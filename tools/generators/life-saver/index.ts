@@ -10,294 +10,17 @@ import {
 } from '@angular-devkit/schematics';
 import { classify, dasherize } from '@nrwl/workspace/src/utils/strings';
 import * as path from 'path';
-
-import * as THREE from 'three';
-
-export enum Template {
-  WithNoArgsNoParams,
-  WithArgs,
-  WithParams,
-}
-
-const sprites = [THREE.Sprite].map((m) => m.name);
-
-const lines = [THREE.Line, THREE.LineLoop, THREE.LineSegments].map(
-  (m) => m.name
-);
-
-const attributes = [
-  THREE.BufferAttribute,
-  THREE.InstancedBufferAttribute,
-  THREE.Float16BufferAttribute,
-  THREE.Float32BufferAttribute,
-  THREE.Float64BufferAttribute,
-  THREE.Int8BufferAttribute,
-  THREE.Int16BufferAttribute,
-  THREE.Int32BufferAttribute,
-  THREE.Uint8BufferAttribute,
-  THREE.Uint16BufferAttribute,
-  THREE.Uint32BufferAttribute,
-  THREE.Uint8ClampedBufferAttribute,
-].map((m) => m.name);
-
-// Use Buffer version to also include normal version
-const geometries = [
-  'InstancedBufferGeometry',
-  'BoxBufferGeometry',
-  'CircleBufferGeometry',
-  'ConeBufferGeometry',
-  'CylinderBufferGeometry',
-  'DodecahedronBufferGeometry',
-  'ExtrudeBufferGeometry',
-  'IcosahedronBufferGeometry',
-  'LatheBufferGeometry',
-  'OctahedronBufferGeometry',
-  'ParametricBufferGeometry',
-  'PlaneBufferGeometry',
-  'PolyhedronBufferGeometry',
-  'RingBufferGeometry',
-  'ShapeBufferGeometry',
-  'SphereBufferGeometry',
-  'TetrahedronBufferGeometry',
-  'TextBufferGeometry',
-  'TorusBufferGeometry',
-  'TorusKnotBufferGeometry',
-  'TubeBufferGeometry',
-  'WireframeGeometry',
-  'EdgesGeometry',
-];
-
-const materials = [
-  THREE.ShadowMaterial,
-  THREE.SpriteMaterial,
-  THREE.RawShaderMaterial,
-  THREE.ShaderMaterial,
-  THREE.PointsMaterial,
-  THREE.MeshPhysicalMaterial,
-  THREE.MeshStandardMaterial,
-  THREE.MeshPhongMaterial,
-  THREE.MeshToonMaterial,
-  THREE.MeshNormalMaterial,
-  THREE.MeshLambertMaterial,
-  THREE.MeshDepthMaterial,
-  THREE.MeshDistanceMaterial,
-  THREE.MeshBasicMaterial,
-  THREE.MeshMatcapMaterial,
-  THREE.LineDashedMaterial,
-  THREE.LineBasicMaterial,
-].map((m) => m.name);
-
-const lights = [
-  THREE.LightProbe,
-  THREE.AmbientLight,
-  THREE.AmbientLightProbe,
-  THREE.HemisphereLight,
-  THREE.HemisphereLightProbe,
-  THREE.DirectionalLight,
-  THREE.PointLight,
-  THREE.SpotLight,
-  THREE.RectAreaLight,
-].map((m) => m.name);
-
-const curves = [
-  THREE.CatmullRomCurve3,
-  THREE.CubicBezierCurve,
-  THREE.CubicBezierCurve3,
-  THREE.EllipseCurve,
-  THREE.LineCurve,
-  THREE.LineCurve3,
-  THREE.QuadraticBezierCurve,
-  THREE.QuadraticBezierCurve3,
-  THREE.SplineCurve,
-].map((m) => m.name);
-
-const helpers = [
-  THREE.ArrowHelper,
-  THREE.AxesHelper,
-  THREE.BoxHelper,
-  THREE.Box3Helper,
-  THREE.GridHelper,
-  THREE.CameraHelper,
-  THREE.DirectionalLightHelper,
-  THREE.HemisphereLightHelper,
-  THREE.PlaneHelper,
-  THREE.PointLightHelper,
-  THREE.PolarGridHelper,
-  THREE.SkeletonHelper,
-  THREE.SpotLightHelper,
-].map((m) => m.name);
-
-const textures = [
-  THREE.CanvasTexture,
-  THREE.CompressedTexture,
-  THREE.CubeTexture,
-  THREE.DataTexture,
-  THREE.DataTexture2DArray,
-  THREE.DataTexture3D,
-  THREE.DepthTexture,
-  THREE.VideoTexture,
-].map((m) => m.name);
-
-const cameras = [
-  THREE.Camera,
-  THREE.PerspectiveCamera,
-  THREE.OrthographicCamera,
-  THREE.ArrayCamera,
-  THREE.StereoCamera,
-].map((m) => m.name);
-
-const catalogue = {
-  attributes: {
-    items: attributes,
-    abstract: 'ThreeAttribute',
-    withThreeObject3d: false,
-    templateType: Template.WithArgs,
-    type: 'attributeType',
-  },
-  geometries: {
-    items: geometries,
-    abstract: 'ThreeBufferGeometry',
-    withThreeObject3d: false,
-    templateType: Template.WithArgs,
-    type: 'geometryType',
-  },
-  materials: {
-    items: materials,
-    abstract: 'ThreeMaterial',
-    withThreeObject3d: false,
-    templateType: Template.WithParams,
-    type: 'materialType',
-  },
-  lights: {
-    items: lights,
-    abstract: 'ThreeLight',
-    withThreeObject3d: true,
-    templateType: Template.WithArgs,
-    type: 'lightType',
-  },
-  curves: {
-    items: curves,
-    abstract: 'ThreeCurve',
-    withThreeObject3d: false,
-    templateType: Template.WithArgs,
-    type: 'curveType',
-  },
-  helpers: {
-    items: helpers,
-    abstract: 'ThreeHelper',
-    withThreeObject3d: true,
-    templateType: Template.WithArgs,
-    type: 'helperType',
-  },
-  textures: {
-    items: textures,
-    abstract: 'ThreeTexture',
-    withThreeObject3d: false,
-    templateType: Template.WithArgs,
-    type: 'textureType',
-  },
-  lines: {
-    items: lines,
-    abstract: 'ThreeLine',
-    withThreeObject3d: true,
-    templateType: Template.WithNoArgsNoParams,
-    type: 'lineType',
-  },
-  sprites: {
-    items: sprites,
-    abstract: 'ThreeSprite',
-    withThreeObject3d: true,
-    templateType: Template.WithNoArgsNoParams,
-    type: 'spriteType',
-  },
-  cameras: {
-    items: cameras,
-    abstract: 'ThreeCamera',
-    withThreeObject3d: true,
-    templateType: Template.WithArgs,
-    type: 'cameraType',
-  },
-};
-
-const controls = [
-  {
-    name: 'OrbitControls',
-    injectDocument: false,
-    importThree: false,
-    useRenderer: true,
-    inputs: [],
-    constructor: '(camera, renderer.domElement)',
-  },
-  {
-    name: 'FlyControls',
-    injectDocument: false,
-    importThree: false,
-    useRenderer: true,
-    inputs: [],
-    constructor: '(camera, renderer.domElement)',
-  },
-  {
-    name: 'DeviceOrientationControls',
-    injectDocument: false,
-    importThree: false,
-    useRenderer: false,
-    inputs: [],
-    constructor: '(camera)',
-  },
-  {
-    name: 'FirstPersonControls',
-    injectDocument: false,
-    importThree: false,
-    useRenderer: true,
-    inputs: [],
-    constructor: '(camera, renderer.domElement)',
-  },
-  {
-    name: 'PointerLockControls',
-    injectDocument: true,
-    importThree: false,
-    useRenderer: false,
-    inputs: [],
-    constructor: '(camera, this.document.body)',
-  },
-  {
-    name: 'DragControls',
-    injectDocument: false,
-    importThree: true,
-    useRenderer: true,
-    inputs: [
-      {
-        name: 'objects',
-        import: 'Object3D',
-        isOptional: false,
-        isArray: true,
-        default: '[]',
-      },
-    ],
-    constructor: '(this.objects, camera, renderer.domElement)',
-  },
-  {
-    name: 'TrackballControls',
-    injectDocument: false,
-    importThree: false,
-    useRenderer: true,
-    inputs: [],
-    constructor: '(camera, renderer.domElement)',
-  },
-  {
-    name: 'TransformControls',
-    injectDocument: false,
-    importThree: false,
-    useRenderer: true,
-    inputs: [],
-    constructor: '(camera, renderer.domElement)',
-  },
-];
+import { catalogue } from './catalogue';
+import { controls } from './entities/controls';
+import { passes } from './entities/passes';
+import { Template } from './models/template.enum';
 
 export default function (): Rule {
   return (tree, context) => {
     const derivedObject3Ds = [];
     const templates = [];
+    const controlTemplates = [];
+    const passTemplates = [];
 
     for (const [
       key,
@@ -320,23 +43,14 @@ export default function (): Rule {
         if (withThreeObject3d) {
           derivedObject3Ds.push(`ngt-${dasherizedItem}`);
         }
-        return mergeWith(
-          apply(url(`./files/${fileDir}`), [
-            applyTemplates({
-              name: item,
-              alternative: item.includes('BufferGeometry')
-                ? item.replace('Buffer', '')
-                : '',
-              withThreeObject3d,
-              abstract,
-              type,
-              dasherize,
-            }),
-            move(
-              path.normalize(`./packages/core/${key}/src/lib/${dasherizedItem}`)
-            ),
-          ]),
-          MergeStrategy.Overwrite
+        return objectLibTemplate(
+          fileDir,
+          item,
+          withThreeObject3d,
+          abstract,
+          type,
+          key,
+          dasherizedItem
         );
       });
 
@@ -351,33 +65,11 @@ export default function (): Rule {
           break;
       }
 
-      const indexTemplate = mergeWith(
-        apply(url('./files/main'), [
-          applyTemplates({ items, extras, dasherize }),
-          move(path.normalize(`./packages/core/${key}/src`)),
-        ]),
-        MergeStrategy.Overwrite
-      );
-
-      templates.push(...keyTemplates, indexTemplate);
+      templates.push(...keyTemplates, mainIndexTemplate(items, extras, key));
     }
 
     context.logger.info('Generating Object3dController');
-
-    templates.push(
-      mergeWith(
-        apply(url('./files/object-3d-controller'), [
-          applyTemplates({
-            selectors: derivedObject3Ds.map((selector, index) => ({
-              selector,
-              isLast: index === derivedObject3Ds.length - 1,
-            })),
-          }),
-          move(path.normalize('./packages/core/src/lib/controllers')),
-        ]),
-        MergeStrategy.Overwrite
-      )
-    );
+    templates.push(object3dControllerTemplate(derivedObject3Ds));
 
     for (const {
       name,
@@ -388,46 +80,206 @@ export default function (): Rule {
       inputs,
     } of controls) {
       context.logger.info(`Generating ${name}`);
-      const controlTemplate = mergeWith(
-        apply(url('./files/controls/lib'), [
-          applyTemplates({
-            name,
-            constructor,
-            injectDocument,
-            useRenderer,
-            inputs,
-            dasherize,
-          }),
-          move(
-            path.normalize(`./packages/controls/${dasherize(name)}/src/lib`)
-          ),
-        ]),
-        MergeStrategy.Overwrite
-      );
 
-      const controlIndexTemplate = mergeWith(
-        apply(url('./files/controls/index'), [
-          applyTemplates({ name, dasherize }),
-          move(path.normalize(`./packages/controls/${dasherize(name)}/src`)),
-        ]),
-        MergeStrategy.Overwrite
-      );
-
-      const ngPackageEslintTemplate = mergeWith(
-        apply(url('./files/controls/ng-package'), [
-          applyTemplates({ name, dasherize, importThree }),
-          move(path.normalize(`./packages/controls/${dasherize(name)}`)),
-        ]),
-        MergeStrategy.Overwrite
-      );
-
-      templates.push(
-        controlTemplate,
-        controlIndexTemplate,
-        ngPackageEslintTemplate
+      controlTemplates.push(
+        controlTemplate(name, constructor, injectDocument, useRenderer, inputs),
+        controlIndexTemplate(name),
+        controlConfigTemplate(name, importThree)
       );
     }
 
-    return chain(templates);
+    for (const {
+      name,
+      passImports,
+      useSceneAndCamera,
+      threeImports,
+      threeCoreImports,
+      inputs,
+      importPass,
+      importReflector,
+    } of passes) {
+      context.logger.info(`Generating ${name}`);
+
+      passTemplates.push(
+        passTemplate(
+          name,
+          threeCoreImports,
+          threeImports,
+          passImports,
+          inputs,
+          useSceneAndCamera,
+          importPass,
+          importReflector
+        ),
+        passIndexTemplate(name),
+        passConfigTemplate(name)
+      );
+    }
+
+    return chain([
+      chain(templates),
+      chain(controlTemplates),
+      chain(passTemplates),
+    ]);
   };
+}
+
+function mainIndexTemplate(
+  items: string[],
+  extras: string[],
+  key: string
+): Rule {
+  return mergeWith(
+    apply(url('./files/main'), [
+      applyTemplates({ items, extras, dasherize }),
+      move(path.normalize(`./packages/core/${key}/src`)),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+function objectLibTemplate(
+  fileDir: string,
+  item: string,
+  withThreeObject3d: boolean,
+  abstract: string,
+  type: string,
+  key: string,
+  dasherizedItem: string
+): Rule {
+  return mergeWith(
+    apply(url(`./files/${fileDir}`), [
+      applyTemplates({
+        name: item,
+        alternative: item.includes('BufferGeometry')
+          ? item.replace('Buffer', '')
+          : '',
+        withThreeObject3d,
+        abstract,
+        type,
+        dasherize,
+      }),
+      move(path.normalize(`./packages/core/${key}/src/lib/${dasherizedItem}`)),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+function object3dControllerTemplate(derivedObject3Ds: string[]): Rule {
+  return mergeWith(
+    apply(url('./files/object-3d-controller'), [
+      applyTemplates({
+        selectors: derivedObject3Ds.map((selector, index) => ({
+          selector,
+          isLast: index === derivedObject3Ds.length - 1,
+        })),
+      }),
+      move(path.normalize('./packages/core/src/lib/controllers')),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+function controlTemplate(
+  name: string,
+  constructor: string,
+  injectDocument: boolean,
+  useRenderer: boolean,
+  inputs: {
+    default: string;
+    import: string;
+    name: string;
+    isArray: boolean;
+    isOptional: boolean;
+  }[]
+): Rule {
+  return mergeWith(
+    apply(url('./files/controls/lib'), [
+      applyTemplates({
+        name,
+        constructor,
+        injectDocument,
+        useRenderer,
+        inputs,
+        dasherize,
+      }),
+      move(path.normalize(`./packages/controls/${dasherize(name)}/src/lib`)),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+function controlIndexTemplate(name: string): Rule {
+  return mergeWith(
+    apply(url('./files/controls/index'), [
+      applyTemplates({ name, dasherize }),
+      move(path.normalize(`./packages/controls/${dasherize(name)}/src`)),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+function controlConfigTemplate(name: string, importThree: boolean): Rule {
+  return mergeWith(
+    apply(url('./files/controls/ng-package'), [
+      applyTemplates({ name, dasherize, importThree }),
+      move(path.normalize(`./packages/controls/${dasherize(name)}`)),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+function passTemplate(
+  name: string,
+  threeCoreImports: string[],
+  threeImports: string[],
+  passImports: string[],
+  inputs: {
+    import: string;
+    name: string;
+    isArray: boolean;
+  }[],
+  sceneAndCamera: 'scene' | 'camera' | 'sceneAndCamera' | null,
+  importPass: boolean,
+  importReflector: boolean
+): Rule {
+  return mergeWith(
+    apply(url('./files/passes/lib'), [
+      applyTemplates({
+        name,
+        threeCoreImports,
+        threeImports,
+        passImports,
+        inputs,
+        sceneAndCamera,
+        importPass,
+        importReflector,
+        dasherize,
+      }),
+      move(
+        path.normalize(`./packages/postprocessing/${dasherize(name)}/src/lib`)
+      ),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+function passIndexTemplate(name: string): Rule {
+  return mergeWith(
+    apply(url('./files/passes/index'), [
+      applyTemplates({ name, dasherize }),
+      move(path.normalize(`./packages/postprocessing/${dasherize(name)}/src`)),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+function passConfigTemplate(name: string): Rule {
+  return mergeWith(
+    apply(url('./files/passes/ng-package'), [
+      applyTemplates({ name, dasherize, importThree: true }),
+      move(path.normalize(`./packages/postprocessing/${dasherize(name)}`)),
+    ]),
+    MergeStrategy.Overwrite
+  );
 }

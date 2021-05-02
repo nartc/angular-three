@@ -10,7 +10,7 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader';
   template: `
     <ngt-effect-composer *ngIf="vm$ | async as vm" (ready)="onReady($event)">
       <ngt-render-pass></ngt-render-pass>
-      <ngt-ssao-pass [kernelRadius]="0.6" [maxDistance]="0.03"></ngt-ssao-pass>
+      <ngt-ssaopass [kernelRadius]="0.6" [maxDistance]="0.03"></ngt-ssaopass>
       <ngt-unreal-bloom-pass
         [args]="[vm.aspect, 2, 1, 0.991]"
       ></ngt-unreal-bloom-pass>

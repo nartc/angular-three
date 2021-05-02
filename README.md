@@ -178,29 +178,29 @@ For more information, please check out the [Documentations](#documentations)
     - [x] Material
   - `postprocessing`: `EffectComposer` and Passes from `three/examples/jsm/postprocessin/*`
     - [x] EffectComposer
-    - [ ] AdaptiveToneMappingPass
-    - [ ] AfterImagePass
-    - [ ] BloomPass
-    - [ ] BokehPass
-    - [ ] ClearPass
-    - [ ] CubeTexturePass
-    - [ ] DotScreenPass
-    - [ ] FilmPass
-    - [ ] GlitchPass
-    - [ ] HalftonePass
-    - [ ] LUTPass
-    - [ ] MaskPass
-    - [ ] OutlinePass
+    - [x] AdaptiveToneMappingPass
+    - [x] AfterImagePass
+    - [x] BloomPass
+    - [x] BokehPass
+    - [x] ClearPass
+    - [x] CubeTexturePass
+    - [x] DotScreenPass
+    - [x] FilmPass
+    - [x] GlitchPass
+    - [x] HalftonePass
+    - [x] LUTPass
+    - [x] MaskPass
+    - [x] OutlinePass
     - [x] RenderPass
-    - [ ] SAOPass
-    - [ ] SavePass
+    - [x] SAOPass
+    - [x] SavePass
     - [x] ShaderPass
-    - [ ] SMAAPass
-    - [ ] SSAARenderPass
+    - [x] SMAAPass
+    - [x] SSAARenderPass
     - [x] SSAOPass
-    - [ ] SSRPass
-    - [ ] TAARenderPass
-    - [ ] TexturePass
+    - [x] SSRPass
+    - [x] TAARenderPass
+    - [x] TexturePass
     - [x] UnrealBloomPass
   - `tools`
     - `generators`

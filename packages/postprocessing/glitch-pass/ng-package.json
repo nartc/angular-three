@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/packages/postprocessing/glitch-pass",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "three/examples/jsm/postprocessing/GlitchPass": "three/examples/jsm/postprocessing/GlitchPass",
+      "three": "three",
+      "@angular-three/core": "@angular-three/core"
+    }
+  }
+}

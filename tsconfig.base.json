@@ -31,9 +31,6 @@
       "@angular-three/postprocessing/render-pass": [
         "packages/postprocessing/render-pass/src/index.ts"
       ],
-      "@angular-three/postprocessing/ssao-pass": [
-        "packages/postprocessing/ssao-pass/src/index.ts"
-      ],
       "@angular-three/postprocessing/unreal-bloom-pass": [
         "packages/postprocessing/unreal-bloom-pass/src/index.ts"
       ],
@@ -76,7 +73,73 @@
       ],
       "@angular-three/popmotion": ["packages/popmotion/src/index.ts"],
       "@angular-three/helpers": ["packages/helpers/src/index.ts"],
-      "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"]
+      "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"],
+      "@angular-three/postprocessing/afterimage-pass": [
+        "packages/postprocessing/afterimage-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/adaptive-tone-mapping-pass": [
+        "packages/postprocessing/adaptive-tone-mapping-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/bloom-pass": [
+        "packages/postprocessing/bloom-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/clear-pass": [
+        "packages/postprocessing/clear-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/bokeh-pass": [
+        "packages/postprocessing/bokeh-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/cube-texture-pass": [
+        "packages/postprocessing/cube-texture-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/dot-screen-pass": [
+        "packages/postprocessing/dot-screen-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/film-pass": [
+        "packages/postprocessing/film-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/glitch-pass": [
+        "packages/postprocessing/glitch-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/halftone-pass": [
+        "packages/postprocessing/halftone-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/mask-pass": [
+        "packages/postprocessing/mask-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/outline-pass": [
+        "packages/postprocessing/outline-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/save-pass": [
+        "packages/postprocessing/save-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/ssrr-pass": [
+        "packages/postprocessing/ssrr-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/texture-pass": [
+        "packages/postprocessing/texture-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/lutpass": [
+        "packages/postprocessing/lutpass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/saopass": [
+        "packages/postprocessing/saopass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/smaapass": [
+        "packages/postprocessing/smaapass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/ssaarender-pass": [
+        "packages/postprocessing/ssaarender-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/ssaopass": [
+        "packages/postprocessing/ssaopass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/ssrpass": [
+        "packages/postprocessing/ssrpass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/taarender-pass": [
+        "packages/postprocessing/taarender-pass/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -21,9 +21,13 @@ Some **Directives** in **Angular Three** are generated using `workspace-generato
 |   |-- curves
 |   |-- lights
 |   |-- helpers
+|   |-- lines
+|   |-- sprites
+|   |-- cameras
 |   `-- textures
 `-- examples
     `-- controls
+    `-- postprocessing
 ``` 
 
 ### Commit

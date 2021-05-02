@@ -1,13 +1,14 @@
+// GENERATED
+
 import type { UnknownRecord } from '@angular-three/core';
 import { ThreePass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import type {
   Color,
-  MeshBasicMaterial,
-  ShaderMaterial,
-  Vector2,
-  Vector3,
   WebGLRenderTarget,
+  ShaderMaterial,
+  Vector3,
+  MeshBasicMaterial,
 } from 'three';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 
@@ -17,14 +18,14 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
   providers: [{ provide: ThreePass, useExisting: UnrealBloomPassDirective }],
 })
 export class UnrealBloomPassDirective extends ThreePass<UnrealBloomPass> {
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof UnrealBloomPass>
+    | undefined;
+
   @Input() set args(v: ConstructorParameters<typeof UnrealBloomPass>) {
     this.extraArgs = v;
   }
 
-  @Input() resolution?: Vector2;
-  @Input() strength?: number;
-  @Input() radius?: number;
-  @Input() threshold?: number;
   @Input() clearColor?: Color;
   @Input() renderTargetsHorizontal?: WebGLRenderTarget[];
   @Input() renderTargetsVertical?: WebGLRenderTarget[];
@@ -44,10 +45,6 @@ export class UnrealBloomPassDirective extends ThreePass<UnrealBloomPass> {
 
   passType = UnrealBloomPass;
   extraInputs = [
-    'resolution',
-    'strength',
-    'radius',
-    'threshold',
     'clearColor',
     'renderTargetsHorizontal',
     'renderTargetsVertical',

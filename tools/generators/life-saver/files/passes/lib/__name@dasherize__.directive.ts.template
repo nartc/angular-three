@@ -1,14 +1,18 @@
+// GENERATED
+
 <% if (threeCoreImports.length) { %>import type {<% for (const coreImport of threeCoreImports) { %>
-  <%= coreImport %>,
-<% } %>} from '@angular-three/core';<% } %>
+  <%= coreImport %>,<% } %>
+} from '@angular-three/core';<% } %>
 import { ThreePass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';<% if (threeImports.length) { %>
 import type {<% for (const threeImport of threeImports) { %>
-  <%= threeImport %>,
-<% } %>} from 'three';<% } %><% if (passImports.length) { %>
+  <%= threeImport %>,<% } %>
+} from 'three';<% } %><% if (importPass) { %>
+import type { Pass } from 'three/examples/jsm/postprocessing/Pass';<% } %><% if (importReflector) { %>
+import type { Reflector } from 'three/examples/jsm/objects/ReflectorForSSRPass';<% } %><% if (passImports.length) { %>
 import type {<% for (const passImport of passImports) { %>
-  <%= passImport %>,
-<% } %>} from 'three/examples/jsm/postprocessing/<%= name %>';<% } %>
+  <%= passImport %>,<% } %>
+} from 'three/examples/jsm/postprocessing/<%= name %>';<% } %>
 import { <%= name %> } from 'three/examples/jsm/postprocessing/<%= name %>';
 
 @Directive({
@@ -18,21 +22,24 @@ import { <%= name %> } from 'three/examples/jsm/postprocessing/<%= name %>';
 })
 export class <%= name %>Directive extends ThreePass<<%= name %>> {
   static ngAcceptInputType_args:
-    | <% if (withSceneAndCamera) { %>WithoutSceneCameraConstructorParameters<ConstructorParameters<typeof <%= name %>>> <% } else { %>ConstructorParameters<typeof <%= name %>><% } %>
+    | <% if (sceneAndCamera === 'sceneAndCamera') { %>WithoutSceneCameraConstructorParameters<ConstructorParameters<typeof <%= name %>>> <% } else if (sceneAndCamera === 'camera') { %>WithoutCameraConstructorParameters<ConstructorParameters<typeof <%= name %>>><% } else { %>ConstructorParameters<typeof <%= name %>><% } %>
     | undefined;
 
-  @Input() set args(v: <% if (withSceneAndCamera) { %>WithoutSceneCameraConstructorParameters<ConstructorParameters<typeof <%= name %>>> <% } else { %>ConstructorParameters<typeof <%= name %>><% } %>) {
+  @Input() set args(v: <% if (sceneAndCamera === 'sceneAndCamera') { %>WithoutSceneCameraConstructorParameters<ConstructorParameters<typeof <%= name %>>> <% } else if (sceneAndCamera === 'camera') { %>WithoutCameraConstructorParameters<ConstructorParameters<typeof <%= name %>>><% } else { %>ConstructorParameters<typeof <%= name %>><% } %>) {
     this.extraArgs = v;
-  }<% for (const input of inputs) { %>
-  @Input() <%= input.name %><% if (input.isOptional) { %>?<% } %>: <%= input.import %><% if (input.isArray) { %>[]<% } %><% if (input.default) { %> = <%= input.default %>;<% } else { %>;<% } %>
-  <% } %>
+  }
+  <% for (const input of inputs) { %>
+  @Input() <%= input.name %>?: <%= input.import %><% if (input.isArray) { %>[]<% } %>;<% } %>
 
   passType = <%= name %>;<% if (inputs.length) { %>
   extraInputs = [<% for (const input of inputs) { %>
-    '<%= input.name %>',
-  <% } %>];<% } %>
-  <% if (withSceneAndCamera) { %>
-  protected get useSceneAndCamera(): boolean {
-    return true;
+    '<%= input.name %>',<% } %>
+  ];<% } %><% if (sceneAndCamera) { %>
+  protected get useSceneAndCamera():
+    | 'scene'
+    | 'camera'
+    | 'sceneAndCamera'
+    | null {
+    return '<%= sceneAndCamera %>';
   }<% } %>
 }

@@ -8,8 +8,5 @@
       "@ngrx/component-store": "@ngrx/component-store"
     }
   },
-  "allowedNonPeerDependencies": [
-    "three",
-    "@ngrx/component-store"
-  ]
+  "allowedNonPeerDependencies": ["three", "@ngrx/component-store"]
 }

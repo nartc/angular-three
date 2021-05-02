@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/packages/postprocessing/cube-texture-pass",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "three/examples/jsm/postprocessing/CubeTexturePass": "three/examples/jsm/postprocessing/CubeTexturePass",
+      "three": "three",
+      "@angular-three/core": "@angular-three/core"
+    }
+  }
+}

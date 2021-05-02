@@ -1,38 +1,56 @@
 {
   "npmScope": "angular-three",
-  "affected": { "defaultBase": "main" },
+  "affected": {
+    "defaultBase": "main"
+  },
   "implicitDependencies": {
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     ".eslintrc.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
     }
   },
   "projects": {
-    "core": { "tags": ["scope:core", "type:library"] },
+    "core": {
+      "tags": ["scope:core", "type:library"]
+    },
     "core-materials": {
       "tags": ["scope:core", "type:library", "context:materials"]
     },
     "core-geometries": {
       "tags": ["scope:core", "type:library", "context:geometries"]
     },
-    "core-meshes": { "tags": ["scope:core", "type:library", "context:meshes"] },
-    "core-lights": { "tags": ["scope:core", "type:library", "context:lights"] },
-    "demo": { "tags": [] },
-    "core-stats": { "tags": ["scope:core", "type:library", "context:stats"] },
-    "controls": { "tags": ["scope:controls", "type:library"] },
+    "core-meshes": {
+      "tags": ["scope:core", "type:library", "context:meshes"]
+    },
+    "core-lights": {
+      "tags": ["scope:core", "type:library", "context:lights"]
+    },
+    "demo": {
+      "tags": []
+    },
+    "core-stats": {
+      "tags": ["scope:core", "type:library", "context:stats"]
+    },
+    "controls": {
+      "tags": ["scope:controls", "type:library"]
+    },
     "core-attributes": {
       "tags": ["scope:core", "type:library", "context:attributes"]
     },
-    "postprocessing": { "tags": ["scope:postprocessing", "type:library"] },
+    "postprocessing": {
+      "tags": ["scope:postprocessing", "type:library"]
+    },
     "postprocessing-render-pass": {
       "tags": ["scope:postprocessing", "type:library", "context:render-pass"]
-    },
-    "postprocessing-ssao-pass": {
-      "tags": ["scope:postprocessing", "type:library", "context:ssao-pass"]
     },
     "postprocessing-unreal-bloom-pass": {
       "tags": [
@@ -44,19 +62,33 @@
     "postprocessing-shader-pass": {
       "tags": ["scope:postprocessing", "type:library", "context:shader-pass"]
     },
-    "core-group": { "tags": ["scope:core", "type:library", "context:group"] },
-    "core-scene": { "tags": ["scope:core", "type:library", "context:scene"] },
-    "core-audios": { "tags": ["scope:core", "type:library", "context:audios"] },
+    "core-group": {
+      "tags": ["scope:core", "type:library", "context:group"]
+    },
+    "core-scene": {
+      "tags": ["scope:core", "type:library", "context:scene"]
+    },
+    "core-audios": {
+      "tags": ["scope:core", "type:library", "context:audios"]
+    },
     "core-sprites": {
       "tags": ["scope:core", "type:library", "context:sprites"]
     },
-    "core-lod": { "tags": ["scope:core", "type:library", "context:lod"] },
-    "core-lines": { "tags": ["scope:core", "type:library", "context:lines"] },
-    "core-points": { "tags": ["scope:core", "type:library", "context:points"] },
+    "core-lod": {
+      "tags": ["scope:core", "type:library", "context:lod"]
+    },
+    "core-lines": {
+      "tags": ["scope:core", "type:library", "context:lines"]
+    },
+    "core-points": {
+      "tags": ["scope:core", "type:library", "context:points"]
+    },
     "core-textures": {
       "tags": ["scope:core", "type:library", "context:textures"]
     },
-    "core-curves": { "tags": ["scope:core", "type:library", "context:curves"] },
+    "core-curves": {
+      "tags": ["scope:core", "type:library", "context:curves"]
+    },
     "core-helpers": {
       "tags": ["scope:core", "type:library", "context:helpers"]
     },
@@ -96,11 +128,108 @@
     "controls-transform-controls": {
       "tags": ["scope:controls", "type:library", "context:transform-controls"]
     },
-    "popmotion": { "tags": ["scope:popmotion", "type:library"] },
-    "helpers": { "tags": ["scope:helpers", "type:library"] },
+    "popmotion": {
+      "tags": ["scope:popmotion", "type:library"]
+    },
+    "helpers": {
+      "tags": ["scope:helpers", "type:library"]
+    },
     "core-cameras": {
       "tags": ["scope:core", "type:library", "context:cameras"]
+    },
+    "postprocessing-afterimage-pass": {
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:afterimage-pass"
+      ]
+    },
+    "postprocessing-adaptive-tone-mapping-pass": {
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:adaptive-tone-mapping-pass"
+      ]
+    },
+    "postprocessing-bloom-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:bloom-pass"]
+    },
+    "postprocessing-clear-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:clear-pass"]
+    },
+    "postprocessing-bokeh-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:bokeh-pass"]
+    },
+    "postprocessing-cube-texture-pass": {
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:cube-texture-pass"
+      ]
+    },
+    "postprocessing-dot-screen-pass": {
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:dot-screen-pass"
+      ]
+    },
+    "postprocessing-film-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:film-pass"]
+    },
+    "postprocessing-glitch-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:glitch-pass"]
+    },
+    "postprocessing-halftone-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:halftone-pass"]
+    },
+    "postprocessing-mask-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:mask-pass"]
+    },
+    "postprocessing-outline-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:outline-pass"]
+    },
+    "postprocessing-save-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:save-pass"]
+    },
+    "postprocessing-ssrr-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:ssrr-pass"]
+    },
+    "postprocessing-texture-pass": {
+      "tags": ["scope:postprocessing", "type:library", "context:texture-pass"]
+    },
+    "postprocessing-lutpass": {
+      "tags": ["scope:postprocessing", "type:library", "context:lut-pass"]
+    },
+    "postprocessing-saopass": {
+      "tags": ["scope:postprocessing", "type:library", "context:sao-pass"]
+    },
+    "postprocessing-smaapass": {
+      "tags": ["scope:postprocessing", "type:library", "context:smaa-pass"]
+    },
+    "postprocessing-ssaarender-pass": {
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:ssaa-render-pass"
+      ]
+    },
+    "postprocessing-ssaopass": {
+      "tags": ["scope:postprocessing", "type:library", "context:ssao-pass"]
+    },
+    "postprocessing-ssrpass": {
+      "tags": ["scope:postprocessing", "type:library", "context:ssr-pass"]
+    },
+    "postprocessing-taarender-pass": {
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:taa-render-pass"
+      ]
     }
   },
-  "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
+  "workspaceLayout": {
+    "appsDir": "packages",
+    "libsDir": "packages"
+  }
 }

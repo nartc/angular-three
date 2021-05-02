@@ -39,7 +39,7 @@ import { ThreePopmotionModule } from '@angular-three/popmotion';
 import { ThreePostprocessingModule } from '@angular-three/postprocessing';
 import { ThreeRenderPassModule } from '@angular-three/postprocessing/render-pass';
 import { ThreeShaderPassModule } from '@angular-three/postprocessing/shader-pass';
-import { ThreeSsaoPassModule } from '@angular-three/postprocessing/ssao-pass';
+import { ThreeSSAOPassModule } from '@angular-three/postprocessing/ssaopass';
 import { ThreeUnrealBloomPassModule } from '@angular-three/postprocessing/unreal-bloom-pass';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -91,7 +91,6 @@ import { SuzanneComponent } from './suzanne.component';
     ThreeMeshPhongMaterialModule,
     ThreePostprocessingModule,
     ThreeRenderPassModule,
-    ThreeSsaoPassModule,
     ThreeUnrealBloomPassModule,
     ThreeShaderPassModule,
     ThreeGroupModule,
@@ -109,6 +108,7 @@ import { SuzanneComponent } from './suzanne.component';
     ThreePopmotionModule,
     ThreeSphereBufferGeometryModule,
     ContactShadowsModule,
+    ThreeSSAOPassModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
