@@ -1,8 +1,89 @@
 ---
 id: first-scene
 title: Create our first Scene
-sidebar_label: Create out first Scene
+sidebar_label: Create our first Scene
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## TL:DR;
+
+For folks that just want to get to the code, here's the full code that we're going over in this section
+
+<Tabs defaultValue="module"
+      values={[
+        {label: 'app.module.ts', value: 'module'},
+        {label: 'app.component.ts', value: 'component'},
+        {label: 'styles.css', value: 'styles'},
+      ]}>
+  <TabItem value={'module'}>
+
+```ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { ThreeCoreModule } from '@angular-three/core';
+import { ThreeBoxBufferGeometryModule } from '@angular-three/core/geometries';
+import { ThreeMeshBasicMaterialModule } from '@angular-three/core/materials';
+import { ThreeMeshModule } from '@angular-three/core/meshes';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    ThreeCoreModule,
+    ThreeMeshModule,
+    ThreeBoxBufferGeometryModule,
+    ThreeMeshBasicMaterialModule,
+  ],
+  /* ... */
+})
+export class AppModule {}
+```
+
+  </TabItem>
+  <TabItem value={'component'}>
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <ngt-mesh
+        (animateReady)="onAnimateReady($event.animateObject)"
+      >
+        <ngt-box-geometry></ngt-box-geometry>
+        <ngt-mesh-basic-material></ngt-mesh-basic-material>
+      </ngt-mesh>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {
+  onAnimateReady(cube: THREE.Mesh) {
+    // rotating the X and the Y axis 0.01 radian on every frame
+    cube.rotation.x = cube.rotation.y += 0.01;
+  }
+}
+```
+
+  </TabItem>
+  <TabItem value={'styles'}>
+
+```less
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+```
+
+  </TabItem>
+</Tabs>
+
+- We import the modules from **NGT** in `app.module.ts`
+- We adjust the `styles.css` to make the `document.body` to be 100% width and height
+- We use `ngt-mesh`, `ngt-box-geometry`, and `ngt-mesh-basic-material` in `app.component.ts` to construct a basic cube
+- We handle `(animateReady)` output to animate the cube
 
 ## Setting up Canvas
 
@@ -203,7 +284,7 @@ Most **Directives** in **NGT** have 3 types of Inputs:
 
 ### `args` (Constructor Arguments)
 
-When we consult **THREE.js** documentations on [BoxGeometry](https://threejs.org/docs/index.html?q=geometry#api/en/geometries/BoxGeometry), we see that a `THREE.BoxGeometry` can be constructed with 6 arguments: `width`, `height`, `depth`, `widthSegments`, `heightSegments`, and `depthSegments`. Similarly, the `BoxBufferGeometryDirective`, or `<ngt-box-geometry>`, has an input `[args]` which takes in an array that represents the 6 arguments that `THREE.BoxGeometry` accepts.
+When we consult **THREE.js** documentation on [BoxGeometry](https://threejs.org/docs/index.html?q=geometry#api/en/geometries/BoxGeometry), we see that a `THREE.BoxGeometry` can be constructed with 6 arguments: `width`, `height`, `depth`, `widthSegments`, `heightSegments`, and `depthSegments`. Similarly, the `BoxBufferGeometryDirective`, or `<ngt-box-geometry>`, has an input `[args]` which takes in an array that represents the 6 arguments that `THREE.BoxGeometry` accepts.
 
 ```ts
 const geometry = new THREE.BoxGeometry(2, 2, 2); // width: 2, height: 2, depth: 2
