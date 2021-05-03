@@ -1,9 +1,8 @@
 ## [1.0.0-beta.28](https://github.com/nartc/angular-three/compare/1.0.0-beta.27...1.0.0-beta.28) (2021-05-03)
 
-
 ### Documentations
 
-* **docs-site:** add TLDR to first scene docs ([22a7f09](https://github.com/nartc/angular-three/commit/22a7f09ed546f6873ed49a063d562a1c7bee2c2a))
+- **docs-site:** add TLDR to first scene docs ([22a7f09](https://github.com/nartc/angular-three/commit/22a7f09ed546f6873ed49a063d562a1c7bee2c2a))
 
 ## [1.0.0-beta.27](https://github.com/nartc/angular-three/compare/1.0.0-beta.26...1.0.0-beta.27) (2021-05-03)
 
