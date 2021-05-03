@@ -3,3 +3,280 @@ id: first-scene
 title: Create our first Scene
 sidebar_label: Create out first Scene
 ---
+
+## Setting up Canvas
+
+The main building block of **NGT** is the `CanvasComponent` (or `<ngt-canvas>`). To make `<ngt-canvas>` available, we will import `ThreeCoreModule` from `@angular-three/core`
+
+```ts title="app.module.ts"
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+// highlight-start
+import { ThreeCoreModule } from '@angular-three/core';
+// highlight-end
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    // highlight-start
+    ThreeCoreModule,
+    // highlight-end
+  ],
+  /* ... */
+})
+export class AppModule {}
+```
+
+Next, let's start by putting the `<ngt-canvas>` in our component's template.
+
+:::note
+We will stick with `AppComponent` and inline template for now
+:::
+
+```ts title="app.component.ts"
+@Component({
+  selector: 'app-root',
+  template: `
+    // highlight-start
+    <ngt-canvas></ngt-canvas>
+    // highlight-end
+  `,
+})
+export class AppComponent {}
+```
+
+`CanvasComponent` sets up the following:
+
+- A _default_ `THREE.Scene` and a _default_ `THREE.PerspectiveCamera`, along with a `THREE.WebGLRenderer` which are the 3 basic building blocks of **THREE.js** for rendering
+- Some **Component Stores** for storing data about the scene
+- A `window:resize` listener for handling resizing
+- Renders the scene every frame with `LoopService`
+
+:::tip
+`CanvasComponent` takes up the **width** and **height** of its parent. To control the size of the **Canvas**, modify the size of the parent. In this example, the **Canvas** size is being controlled by the `document.body` size.
+:::
+
+If we save now and check our application, we will see **nothing**. It is because we don't have any **Object** added to our scene yet. Let's add one in the next step.
+
+## Adding a Mesh
+
+A `Mesh` can be visualized as an object that takes up some physical space in the 3D space. It can hold any type of shape (**Geometry**) and have any type of texture on its surface (**Material**) to represent an object in 3D. In **THREE.js**, `Mesh` is the most basic object, and it is a great one to start out with.
+
+Beside the `CanvasComponent`, **NGT** represents everything else in **THREE.js** via **Directive** as wrappers. These wrappers' job is to instantiate the respective **THREE.js** class without the need of any template, hence **Directive**. When we use a **Directive** on the template, we instantiate the **Directive** (unavoidable), and the **THREE.js** class itself.
+
+```ts
+<ngt-mesh>
+// is equivalent to
+const meshDirective = new MeshDirective();
+meshDirective.object3d = new THREE.Mesh();
+```
+
+The convention is every class in **THREE.js** is available in **Directive** with `kebab-case-THREE-class-name` prefixed with `ngt-` as selector.
+
+Eg:
+
+- `THREE.Mesh` -> `<ngt-mesh>`
+- `THREE.BoxGeometry` -> `<ngt-box-geometry`
+
+:::info
+**NGT** is built with **SCAM** (Single Component as Module) in mind hence almost each wrapper will be available in its own **Module**. This is to enable tree-shaking tool to do its job most efficiently.
+:::
+
+With that, let's import `ThreeMeshModule`, as well as `ThreeBoxBufferGeometryModule`, and `ThreeMeshBasicMaterialModule` to `AppModule` to enable `<ngt-mesh>`, `<ngt-box-geometry>`, and `<ngt-mesh-basic-material>`
+
+```ts title="app.module.ts"
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { ThreeCoreModule } from '@angular-three/core';
+// highlight-start
+import { ThreeBoxBufferGeometryModule } from '@angular-three/core/geometries';
+import { ThreeMeshBasicMaterialModule } from '@angular-three/core/materials';
+import { ThreeMeshModule } from '@angular-three/core/meshes';
+// highlight-end
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    ThreeCoreModule,
+    // highlight-start
+    ThreeMeshModule,
+    ThreeBoxBufferGeometryModule,
+    ThreeMeshBasicMaterialModule,
+    // highlight-end
+  ],
+  /* ... */
+})
+export class AppModule {}
+```
+
+:::tip
+
+- All **Meshes** are exported from `@angular-three/core/meshes`
+- All **Materials** are exported from `@angular-three/core/materials`
+- All **Geometries** are exported from `@angular-three/core/geometries`
+
+We will run into some several types of objects from **THREE.js**, and they will also be exported from appropriate modules
+:::
+
+Next, let's fill our `AppComponent` template with the following
+
+```ts title="app.component.ts"
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      // highlight-start
+      <ngt-mesh>
+        <ngt-box-geometry></ngt-box-geometry>
+        <ngt-mesh-basic-material></ngt-mesh-basic-material>
+      </ngt-mesh>
+      // highlight-end
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+```
+
+Let's also make the `height` and `width` of `document.body` to be `100%` so our `CanvasComponent` takes up the whole screen.
+
+```css title="styles.css"
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+```
+
+Our application will now show a gray-ish square (it is actually a **cube**) on the screen.
+
+:::note
+For demos throughout the documentations, [Stackblitz](https://stackblitz.com) will be used, just like the embedded below.
+:::
+
+<iframe src='https://stackblitz.com/edit/ngt-basic-demo?ctl=1&embed=1&file=src/app/app.component.ts&hideExplorer=1&view=preview'/>
+
+Now that we can render _something_ on the screen with **NGT**, let's pause for a moment and examine the code that we added, specifically the **template** portion
+
+```html
+<ngt-canvas>
+  <ngt-mesh>
+    <ngt-box-geometry></ngt-box-geometry>
+    <ngt-mesh-basic-material></ngt-mesh-basic-material>
+  </ngt-mesh>
+</ngt-canvas>
+```
+
+The above is **equivalent** to the following in vanilla **THREE.js** code
+
+```ts
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.querySelector('ngt-canvas').appendChild(renderer.domElement);
+
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial();
+const mesh = new THREE.Mesh(geometry, material);
+
+scene.add(mesh);
+
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+
+animate();
+```
+
+When we place `<ngt-mesh>` inside of `<ngt-canvas>`, the `Mesh`, which was created by `MeshDirective`, is added to the `Scene` _automatically_ (`scene.add(mesh)`). Same concept with `<ngt-box-geometry>` and `<ngt-mesh-basic-material>`, the underlined `Geometry` and `Material` are added to the `Mesh` _automatically_. This is possible thanks to **Angular Dependency Injection**.
+
+## Inputs
+
+Most **Directives** in **NGT** have 3 types of Inputs:
+
+- `args`
+- `parameters`
+- Normal inputs like `[color]`, `[scale]`, `[position]` etc...
+
+### `args` (Constructor Arguments)
+
+When we consult **THREE.js** documentations on [BoxGeometry](https://threejs.org/docs/index.html?q=geometry#api/en/geometries/BoxGeometry), we see that a `THREE.BoxGeometry` can be constructed with 6 arguments: `width`, `height`, `depth`, `widthSegments`, `heightSegments`, and `depthSegments`. Similarly, the `BoxBufferGeometryDirective`, or `<ngt-box-geometry>`, has an input `[args]` which takes in an array that represents the 6 arguments that `THREE.BoxGeometry` accepts.
+
+```ts
+const geometry = new THREE.BoxGeometry(2, 2, 2); // width: 2, height: 2, depth: 2
+// is equivalent to
+<ngt-box-geometry [args]="[2, 2, 2]"></ngt-box-geometry>
+```
+
+### `parameters` (Constructor Arguments w/ an option object)
+
+On the other hand, when we consult **THREE.js** documentation on [MeshBasicMaterial](https://threejs.org/docs/index.html?q=basicma#api/en/materials/MeshBasicMaterial), we see that a `THREE.MeshBasicMaterial` can be constructed with a single option object: `parameters`. This applies to `MeshBasicMaterialDirective`, or `<ngt-mesh-basic-material>`, on which **NGT** exposes an input `[parameters]` which represents the option object that `THREE.MeshBasicMaterial` accepts.
+
+```ts
+const material = new THREE.MeshBasicMaterial({ color: 'red' });
+// is equivalent to
+<ngt-mesh-basic-material [parameters]="{color: 'red'}"></ngt-mesh-basic-material>
+```
+
+### Normal Inputs
+
+All **Directives** will either have a mix of `[args]` or `[parameters]` together with some normal inputs. Most inputs will be assigned to the same property name on the **THREE.js** object that we are constructing.
+
+Please check out the [API (coming soon)](./) section for more detailed information.
+
+#### Shortcuts
+
+Some inputs, like `color` or `position`, have `set()` method on them in vanilla **THREE.js**. For these inputs, **NGT** will call the `set()` method with the value of the input instead of assigning directly.
+
+```ts
+<ngt-mesh [position]="[1, 1, 1]"></ngt-mesh>
+// the following is called under the hood
+mesh.position.set(1, 1, 1);
+```
+
+### Exercise
+
+- Try assign a `color` to `<ngt-mesh-basic-material>`
+- Try assign a different `width`, `height`, and `depth` to `<ngt-box-geometry>` to make our cube a little bigger
+- Try moving `<ngt-mesh>` around with `[position]`
+
+## Animation
+
+By default, `CanvasComponent` initializes an **Animation Loop** that runs on every frame _outside of Angular zone_ (Check [NgZone](https://angular.io/api/core/NgZone)) to maintain the framerate. Any **Directive** that has `(animateReady)` output exposed on them will be able to _participate_ in this **Animation Loop**.
+
+`(animateReady)` is an `EventEmitter` where the `$event` contains the **THREE.js** object itself and a so-called `RenderState` which is the state of the current Canvas (Renderer, Camera, Scene, Viewport, etc...). Let's animate our cube
+
+```ts title="app.component.ts"
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <ngt-mesh
+        // highlight-start
+        (animateReady)="onAnimateReady($event.animateObject)"
+        // highlight-end
+      >
+        <ngt-box-geometry></ngt-box-geometry>
+        <ngt-mesh-basic-material></ngt-mesh-basic-material>
+      </ngt-mesh>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {
+  // highlight-start
+  onAnimateReady(cube: THREE.Mesh) {
+    // rotating the X and the Y axis 0.01 radian on every frame
+    cube.rotation.x = cube.rotation.y += 0.01;
+  }
+  // highlight-end
+}
+```
+
+Check out the application now, and we will see a spinning cube
+
+<iframe src='https://stackblitz.com/edit/ngt-basic-demo-animation?ctl=1&embed=1&file=src/app/app.component.ts&hideExplorer=1&view=preview' />
+
+Congratulations! We have our first scene. In the next section, we will look into how to apply Lights to our scene to make it more dynamic.
