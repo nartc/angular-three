@@ -28,4 +28,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: deployed-docs
           force: true
-          directory: docs/build
+          directory: docs-site/build
