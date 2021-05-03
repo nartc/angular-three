@@ -14,6 +14,9 @@ export abstract class ThreeCurve<TCurve extends Curve<Vector> = Curve<Vector>>
 
   protected set extraArgs(v: unknown[]) {
     this._extraArgs = v;
+    this.ngZone.runOutsideAngular(() => {
+      this.init();
+    });
   }
 
   constructor(
@@ -25,14 +28,20 @@ export abstract class ThreeCurve<TCurve extends Curve<Vector> = Curve<Vector>>
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this._curve = new this.curveType(...this._extraArgs);
-      if (this.curve && this.geometryDirective) {
-        const points = this.curve.getPoints(this.divisions);
-        this.geometryDirective.bufferGeometry.setFromPoints(
-          (points as unknown) as Vector3[] | Vector2[]
-        );
+      if (!this.curve) {
+        this.init();
       }
     });
+  }
+
+  private init() {
+    this._curve = new this.curveType(...this._extraArgs);
+    if (this.curve && this.geometryDirective) {
+      const points = this.curve.getPoints(this.divisions);
+      this.geometryDirective.bufferGeometry.setFromPoints(
+        (points as unknown) as Vector3[] | Vector2[]
+      );
+    }
   }
 
   get curve(): TCurve | undefined {

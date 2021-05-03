@@ -12,12 +12,17 @@ export abstract class ThreeCamera<TCamera extends Camera = Camera>
   private _extraArgs: unknown[] = [];
   protected set extraArgs(v: unknown[]) {
     this._extraArgs = v;
+    this.ngZone.runOutsideAngular(() => {
+      this.init();
+    });
   }
 
   private _camera!: TCamera;
 
   ngOnInit() {
-    this.init();
+    if (!this.object3d) {
+      this.init();
+    }
   }
 
   protected initObject() {

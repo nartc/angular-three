@@ -14,12 +14,17 @@ export abstract class ThreeLight<TLight extends Light = Light>
   private _extraArgs: unknown[] = [];
   protected set extraArgs(v: unknown[]) {
     this._extraArgs = v;
+    this.ngZone.runOutsideAngular(() => {
+      this.init();
+    });
   }
 
   private _light!: TLight;
 
   ngOnInit() {
-    this.init();
+    if (!this.object3d) {
+      this.init();
+    }
   }
 
   protected initObject() {

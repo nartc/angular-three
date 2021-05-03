@@ -13,13 +13,18 @@ export abstract class ThreeTexture<TTexture extends Texture = Texture>
 
   protected set extraArgs(v: unknown[]) {
     this._extraArgs = v;
+    this.ngZone.runOutsideAngular(() => {
+      this._texture = new this.textureType(...this._extraArgs);
+    });
   }
 
   private _texture?: TTexture;
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this._texture = new this.textureType(...this._extraArgs);
+      if (!this.texture) {
+        this._texture = new this.textureType(...this._extraArgs);
+      }
     });
   }
 

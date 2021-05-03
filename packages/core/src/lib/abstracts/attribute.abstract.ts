@@ -29,6 +29,9 @@ export abstract class ThreeAttribute<
 
   protected set extraArgs(v: unknown[]) {
     this._extraArgs = v;
+    this.ngZone.runOutsideAngular(() => {
+      this.init();
+    });
   }
 
   private _attribute?: TAttribute;
@@ -43,16 +46,22 @@ export abstract class ThreeAttribute<
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      if (this.geometryDirective && this.attach) {
-        this._attribute = new this.attributeType(...this._extraArgs);
-        if (this.attribute) {
-          this.geometryDirective.bufferGeometry.setAttribute(
-            this.attach,
-            this.attribute
-          );
-        }
+      if (!this.attribute) {
+        this.init();
       }
     });
+  }
+
+  private init() {
+    if (this.geometryDirective && this.attach) {
+      this._attribute = new this.attributeType(...this._extraArgs);
+      if (this.attribute) {
+        this.geometryDirective.bufferGeometry.setAttribute(
+          this.attach,
+          this.attribute
+        );
+      }
+    }
   }
 
   ngOnDestroy() {

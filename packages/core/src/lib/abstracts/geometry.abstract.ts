@@ -26,16 +26,25 @@ export abstract class ThreeBufferGeometry<
   private _extraArgs: unknown[] = [];
   protected set extraArgs(v: unknown[]) {
     this._extraArgs = v;
+    this.ngZone.runOutsideAngular(() => {
+      this.init();
+    });
   }
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this._bufferGeometry = new this.geometryType(...this._extraArgs);
+      if (!this.bufferGeometry) {
+        this.init();
+      }
+    });
+  }
 
-      this.instancesStore.saveBufferGeometry({
-        id: this.ngtId,
-        bufferGeometry: this._bufferGeometry,
-      });
+  private init() {
+    this._bufferGeometry = new this.geometryType(...this._extraArgs);
+
+    this.instancesStore.saveBufferGeometry({
+      id: this.ngtId,
+      bufferGeometry: this._bufferGeometry,
     });
   }
 

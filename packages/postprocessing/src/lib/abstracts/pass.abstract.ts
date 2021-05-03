@@ -58,6 +58,9 @@ export abstract class ThreePass<TPass extends Pass = Pass>
 
   protected set extraArgs(v: unknown[]) {
     this._extraArgs = v;
+    this.ngZone.runOutsideAngular(() => {
+      this.init();
+    });
   }
 
   private _pass!: TPass;
@@ -72,26 +75,41 @@ export abstract class ThreePass<TPass extends Pass = Pass>
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      const { scene, camera } = this.canvasStore.getImperativeState();
-      switch (this.useSceneAndCamera) {
-        case 'scene':
-          this._extraArgs = [scene, ...this._extraArgs];
-          break;
-        case 'camera':
-          this._extraArgs = [camera, ...this._extraArgs];
-          break;
-        case 'sceneAndCamera':
-          this._extraArgs = [scene, camera, ...this._extraArgs];
-          break;
+      if (!this.pass) {
+        this.init();
+      } else {
+        this.ready.emit(this.pass);
       }
-
-      this._pass = new this.passType(...this._extraArgs);
-      this.applyExtraInputs();
-      if (this.composer) {
-        this.composer.composer.addPass(this.pass);
-      }
-      this.ready.emit(this.pass);
     });
+  }
+
+  private init() {
+    const { scene, camera } = this.canvasStore.getImperativeState();
+    switch (this.useSceneAndCamera) {
+      case 'scene':
+        this._extraArgs = [scene, ...this._extraArgs];
+        break;
+      case 'camera':
+        this._extraArgs = [camera, ...this._extraArgs];
+        break;
+      case 'sceneAndCamera':
+        this._extraArgs = [scene, camera, ...this._extraArgs];
+        break;
+    }
+
+    if (
+      this.composer &&
+      this.pass &&
+      this.composer.composer.passes.some((pass) => pass === this.pass)
+    ) {
+      this.composer.composer.removePass(this.pass);
+    }
+
+    this._pass = new this.passType(...this._extraArgs);
+    this.applyExtraInputs();
+    if (this.composer) {
+      this.composer.composer.addPass(this.pass);
+    }
   }
 
   ngOnDestroy() {

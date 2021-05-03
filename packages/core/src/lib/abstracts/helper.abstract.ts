@@ -15,13 +15,14 @@ export abstract class ThreeHelper<THelper extends Object3D>
 
   protected set extraArgs(v: unknown[]) {
     this._extraArgs = v;
+    this.ngZone.runOutsideAngular(() => {
+      this.init();
+    });
   }
 
   ngOnChanges() {
     super.ngOnChanges();
-    if (!this.object3d) {
-      this.init();
-    }
+    this.inputChangeHandler();
   }
 
   inputChangeHandler = () => {
@@ -31,7 +32,7 @@ export abstract class ThreeHelper<THelper extends Object3D>
   };
 
   ngOnInit() {
-    this.init();
+    this.inputChangeHandler();
   }
 
   protected initObject() {
