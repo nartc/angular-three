@@ -1,22 +1,19 @@
 ## [1.0.0-beta.27](https://github.com/nartc/angular-three/compare/1.0.0-beta.26...1.0.0-beta.27) (2021-05-03)
 
-
 ### Features
 
-* **core:** add viewport to internal canvas state ([265e46c](https://github.com/nartc/angular-three/commit/265e46c2a6436af1cee1c06860430fbbbaba5aa8))
-
+- **core:** add viewport to internal canvas state ([265e46c](https://github.com/nartc/angular-three/commit/265e46c2a6436af1cee1c06860430fbbbaba5aa8))
 
 ### Bug Fixes
 
-* **core:** change all objects that have args to re-init when args change ([ef92d3e](https://github.com/nartc/angular-three/commit/ef92d3e3b25ce61d91b7fd5af9dc739e237829ac))
-
+- **core:** change all objects that have args to re-init when args change ([ef92d3e](https://github.com/nartc/angular-three/commit/ef92d3e3b25ce61d91b7fd5af9dc739e237829ac))
 
 ### Documentations
 
-* add first scene ([71d1882](https://github.com/nartc/angular-three/commit/71d1882de812a0324e2fecba0278f186730c7a06))
-* **demo:** adjust boxes docs ([f8b806b](https://github.com/nartc/angular-three/commit/f8b806bdb1cd73d78e7471083201e16fca008220))
-* add helpers ([ea5a71a](https://github.com/nartc/angular-three/commit/ea5a71aa42690fb33e61978a8938963ebaaf3a69))
-* update docs site ([6113311](https://github.com/nartc/angular-three/commit/611331169cc7ea09cee55d67671db3700bf76d81))
+- add first scene ([71d1882](https://github.com/nartc/angular-three/commit/71d1882de812a0324e2fecba0278f186730c7a06))
+- **demo:** adjust boxes docs ([f8b806b](https://github.com/nartc/angular-three/commit/f8b806bdb1cd73d78e7471083201e16fca008220))
+- add helpers ([ea5a71a](https://github.com/nartc/angular-three/commit/ea5a71aa42690fb33e61978a8938963ebaaf3a69))
+- update docs site ([6113311](https://github.com/nartc/angular-three/commit/611331169cc7ea09cee55d67671db3700bf76d81))
 
 ## [1.0.0-beta.26](https://github.com/nartc/angular-three/compare/1.0.0-beta.25...1.0.0-beta.26) (2021-05-02)
 
