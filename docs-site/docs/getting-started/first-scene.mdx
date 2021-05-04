@@ -48,9 +48,7 @@ export class AppModule {}
   selector: 'app-root',
   template: `
     <ngt-canvas>
-      <ngt-mesh
-        (animateReady)="onAnimateReady($event.animateObject)"
-      >
+      <ngt-mesh (animateReady)="onAnimateReady($event.animateObject)">
         <ngt-box-geometry></ngt-box-geometry>
         <ngt-mesh-basic-material></ngt-mesh-basic-material>
       </ngt-mesh>
@@ -235,7 +233,7 @@ Our application will now show a gray-ish square (it is actually a **cube** becau
 For demos throughout the documentation, [Stackblitz](https://stackblitz.com) will be used, just like the embedded below.
 :::
 
-<iframe src='https://stackblitz.com/edit/ngt-basic-demo?ctl=1&embed=1&file=src/app/app.component.ts&hideExplorer=1&view=preview'/>
+<iframe src="https://stackblitz.com/edit/ngt-basic-demo?ctl=1&embed=1&file=src/app/app.component.ts&hideExplorer=1&view=preview" />
 
 Now that we can render _something_ on the screen with **NGT**, let's pause for a moment and examine the code that we added, specifically the **template** portion
 
@@ -358,6 +356,6 @@ export class AppComponent {
 
 Check out the application now, and we will see a spinning cube
 
-<iframe src='https://stackblitz.com/edit/ngt-basic-demo-animation?ctl=1&embed=1&file=src/app/app.component.ts&hideExplorer=1&view=preview' />
+<iframe src="https://stackblitz.com/edit/ngt-basic-demo-animation?ctl=1&embed=1&file=src/app/app.component.ts&hideExplorer=1&view=preview" />
 
 Congratulations! We have our first scene. In the next section, we will look into how to apply Lights to our scene to make it more dynamic.
