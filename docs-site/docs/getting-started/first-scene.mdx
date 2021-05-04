@@ -137,13 +137,13 @@ export class AppComponent {}
 `CanvasComponent` takes up the **width** and **height** of its parent. To control the size of the **Canvas**, modify the size of the parent. In this example, the **Canvas** size is being controlled by the `document.body` size.
 :::
 
-If we save now and check our application, we will see **nothing**. It is because we don't have any **Object** added to our scene yet. Let's add one in the next step.
+If we save now and check our application, we will see **nothing**. It is because we don't have any **Objects** added to our scene yet. Let's add one in the next step.
 
 ## Adding a Mesh
 
-A `Mesh` can be visualized as an object that takes up some physical space in the 3D space. It can hold any type of shape (**Geometry**) and have any type of texture on its surface (**Material**) to represent an object in 3D. In **THREE.js**, `Mesh` is the most basic object, and it is a great one to start out with.
+A `Mesh` can be visualized as a physical object in 3D space. It can hold any type of shape (**Geometry**) and have any type of texture on its surface (**Material**) to represent the object. In **THREE.js**, `Mesh` is the most basic object, and it is a great starting point.
 
-Beside the `CanvasComponent`, **NGT** represents everything else in **THREE.js** via **Directive** as wrappers. These wrappers' job is to instantiate the respective **THREE.js** class without the need of any template, hence **Directive**. When we use a **Directive** on the template, we instantiate the **Directive** (unavoidable), and the **THREE.js** class itself.
+Beside the `CanvasComponent`, **NGT** represents everything else in **THREE.js** via **Directive** as wrappers. These wrappers' jobs are to instantiate the respective **THREE.js** classes without the need of any templates, hence **Directive**. When we use a **Directive** on the template, we instantiate the **Directive** (unavoidable), and the **THREE.js** class itself.
 
 ```ts
 <ngt-mesh>
@@ -152,7 +152,7 @@ const meshDirective = new MeshDirective();
 meshDirective.object3d = new THREE.Mesh();
 ```
 
-The convention is every class in **THREE.js** is available in **Directive** with `kebab-case-THREE-class-name` prefixed with `ngt-` as selector.
+The convention is every class in **THREE.js** is available as a **Directive** with `kebab-case-THREE-class-name` prefixed with `ngt-` as selector.
 
 Eg:
 
@@ -160,10 +160,10 @@ Eg:
 - `THREE.BoxGeometry` -> `<ngt-box-geometry`
 
 :::info
-**NGT** is built with **SCAM** (Single Component as Module) in mind hence almost each wrapper will be available in its own **Module**. This is to enable tree-shaking tool to do its job most efficiently.
+**NGT** is built with **SCAM** (Single Component as Module) in mind hence almost each wrapper will be available in its own **Module**. This allows tree-shaking to efficient remove anything you're not using from **NGT**.
 :::
 
-With that, let's import `ThreeMeshModule`, as well as `ThreeBoxBufferGeometryModule`, and `ThreeMeshBasicMaterialModule` to `AppModule` to enable `<ngt-mesh>`, `<ngt-box-geometry>`, and `<ngt-mesh-basic-material>`
+With that, let's import `ThreeMeshModule`, as well as `ThreeBoxBufferGeometryModule`, and `ThreeMeshBasicMaterialModule` in the `AppModule` to enable `<ngt-mesh>`, `<ngt-box-geometry>`, and `<ngt-mesh-basic-material>`
 
 ```ts title="app.module.ts"
 import { NgModule } from '@angular/core';
@@ -196,7 +196,7 @@ export class AppModule {}
 - All **Materials** are exported from `@angular-three/core/materials`
 - All **Geometries** are exported from `@angular-three/core/geometries`
 
-We will run into some several types of objects from **THREE.js**, and they will also be exported from appropriate modules
+We will run into various other types of objects from **THREE.js**. They will be exported from appropriate modules as well.
 :::
 
 Next, let's fill our `AppComponent` template with the following
@@ -229,10 +229,10 @@ body {
 }
 ```
 
-Our application will now show a gray-ish square (it is actually a **cube**) on the screen.
+Our application will now show a gray-ish square (it is actually a **cube** because we are in 3D space) on the screen.
 
 :::note
-For demos throughout the documentations, [Stackblitz](https://stackblitz.com) will be used, just like the embedded below.
+For demos throughout the documentation, [Stackblitz](https://stackblitz.com) will be used, just like the embedded below.
 :::
 
 <iframe src='https://stackblitz.com/edit/ngt-basic-demo?ctl=1&embed=1&file=src/app/app.component.ts&hideExplorer=1&view=preview'/>
@@ -272,7 +272,7 @@ function animate() {
 animate();
 ```
 
-When we place `<ngt-mesh>` inside of `<ngt-canvas>`, the `Mesh`, which was created by `MeshDirective`, is added to the `Scene` _automatically_ (`scene.add(mesh)`). Same concept with `<ngt-box-geometry>` and `<ngt-mesh-basic-material>`, the underlined `Geometry` and `Material` are added to the `Mesh` _automatically_. This is possible thanks to **Angular Dependency Injection**.
+When we place `<ngt-mesh>` inside of `<ngt-canvas>`, the `Mesh`, which is created by `MeshDirective`, is added to the `Scene` _automatically_ (`scene.add(mesh)`). Same concept with `<ngt-box-geometry>` and `<ngt-mesh-basic-material>`, the underlined `Geometry` and `Material` are added to the `Mesh` _automatically_. This is possible thanks to **Angular Dependency Injection**.
 
 ## Inputs
 
