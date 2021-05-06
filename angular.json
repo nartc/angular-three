@@ -2178,6 +2178,43 @@
           }
         }
       }
+    },
+    "helpers-core": {
+      "projectType": "library",
+      "root": "packages/helpers/core",
+      "sourceRoot": "packages/helpers/core/src",
+      "prefix": "ngt",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/helpers/core/tsconfig.lib.json",
+            "project": "packages/helpers/core/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/helpers/core/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/helpers/core/src/**/*.ts",
+              "packages/helpers/core/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/helpers/core"],
+          "options": {
+            "jestConfig": "packages/helpers/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

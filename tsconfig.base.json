@@ -139,7 +139,8 @@
       ],
       "@angular-three/postprocessing/taarender-pass": [
         "packages/postprocessing/taarender-pass/src/index.ts"
-      ]
+      ],
+      "@angular-three/helpers/core": ["packages/helpers/core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

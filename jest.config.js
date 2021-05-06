@@ -55,5 +55,6 @@ module.exports = {
     '<rootDir>/packages/postprocessing/ssrr-pass',
     '<rootDir>/packages/postprocessing/taa-render-pass',
     '<rootDir>/packages/postprocessing/texture-pass',
+    '<rootDir>/packages/helpers/core',
   ],
 };
