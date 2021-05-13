@@ -1,3 +1,5 @@
+## [1.0.0-beta.29](https://github.com/nartc/angular-three/compare/1.0.0-beta.28...1.0.0-beta.29) (2021-05-13)
+
 ## [1.0.0-beta.28](https://github.com/nartc/angular-three/compare/1.0.0-beta.27...1.0.0-beta.28) (2021-05-03)
 
 ### Documentations
