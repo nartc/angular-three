@@ -232,13 +232,18 @@
             "main": "packages/demo/src/main.ts",
             "polyfills": "packages/demo/src/polyfills.ts",
             "tsConfig": "packages/demo/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "packages/demo/src/favicon.ico",
               "packages/demo/src/assets"
             ],
             "styles": ["packages/demo/src/styles.scss"],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {

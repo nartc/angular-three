@@ -14,7 +14,11 @@
       "rules": {
         "@angular-eslint/component-selector": [
           "error",
-          { "type": "element", "prefix": "ngt", "style": "kebab-case" }
+          {
+            "type": "element",
+            "prefix": "ngt",
+            "style": "kebab-case"
+          }
         ]
       }
     },
