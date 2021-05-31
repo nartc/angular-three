@@ -1,6 +1,6 @@
 {
   "name": "@angular-three/postprocessing/taa-render-pass",
-  "version": "1.0.0-beta.29",
+  "version": "1.0.0-beta.30",
   "peerDependencies": {
     "@angular/common": "^11.2.10",
     "@angular/core": "^11.2.10"

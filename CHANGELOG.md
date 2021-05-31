@@ -1,3 +1,29 @@
+## [1.0.0-beta.30](https://github.com/nartc/angular-three/compare/1.0.0-beta.29...1.0.0-beta.30) (2021-05-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** Add `[o3d]` to all 3dObject modules you're using, for example: `<ngt-mesh>` ->
+`<ngt-mesh o3d>`
+
+### Features
+
+* **core:** add BufferGeometry ([cd25169](https://github.com/nartc/angular-three/commit/cd2516901a5f8132910a8a799b8c29047b84e08d))
+
+
+### Bug Fixes
+
+* **core:** add o3d to Object3DController to separate Controller with other modules ([8e06cae](https://github.com/nartc/angular-three/commit/8e06cae01c728f82f6f1f814b3bf7b60ddc48ca8))
+* **core:** make LoaderService providedIn root ([86a0840](https://github.com/nartc/angular-three/commit/86a0840810df715c93236b064a79c93238ccfbec))
+* **core:** use Subject#observed instead of Subject#observers ([514f0e2](https://github.com/nartc/angular-three/commit/514f0e26ba4d93ec5996efa878ea0c02cfe6f7f9))
+
+
+### Documentations
+
+* demo ([07d22d4](https://github.com/nartc/angular-three/commit/07d22d4f51925ccfeb70d33bb4924dd05b514b09))
+* format ([06fca82](https://github.com/nartc/angular-three/commit/06fca82882b811bd8dacb217b9fcfbdedb8c190b))
+* update docs to use o3d ([af52a1f](https://github.com/nartc/angular-three/commit/af52a1f0ccac4e56b9ef4e9e82f3c3b004349b88))
+
 ## [1.0.0-beta.29](https://github.com/nartc/angular-three/compare/1.0.0-beta.28...1.0.0-beta.29) (2021-05-13)
 
 ## [1.0.0-beta.28](https://github.com/nartc/angular-three/compare/1.0.0-beta.27...1.0.0-beta.28) (2021-05-03)
