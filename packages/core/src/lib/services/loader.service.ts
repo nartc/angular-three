@@ -11,7 +11,9 @@ import type {
   UnknownRecord,
 } from '../typings';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class LoaderService implements OnDestroy {
   private readonly cached = new Map<string, BranchingReturn>();
 
@@ -52,9 +54,11 @@ export class LoaderService implements OnDestroy {
       BranchingReturn<TReturnType, GLTF, GLTF & ThreeObjectMap>[]
     >;
 
-    return (Array.isArray(input)
-      ? results$
-      : results$.pipe(map((results) => results[0]))) as TUrl extends any[]
+    return (
+      Array.isArray(input)
+        ? results$
+        : results$.pipe(map((results) => results[0]))
+    ) as TUrl extends any[]
       ? Observable<BranchingReturn<TReturnType, GLTF, GLTF & ThreeObjectMap>[]>
       : Observable<BranchingReturn<TReturnType, GLTF, GLTF & ThreeObjectMap>>;
   }
@@ -71,16 +75,20 @@ export class LoaderService implements OnDestroy {
           data.nodes[obj.name] = obj;
         }
         if (
-          ((obj as unknown) as UnknownRecord).material &&
+          (obj as unknown as UnknownRecord).material &&
           !data.materials[
-            ((((obj as unknown) as UnknownRecord)
-              .material as unknown) as UnknownRecord).name as string
+            (
+              (obj as unknown as UnknownRecord)
+                .material as unknown as UnknownRecord
+            ).name as string
           ]
         ) {
           data.materials[
-            ((((obj as unknown) as UnknownRecord)
-              .material as unknown) as UnknownRecord).name as string
-          ] = ((obj as unknown) as UnknownRecord).material as Material;
+            (
+              (obj as unknown as UnknownRecord)
+                .material as unknown as UnknownRecord
+            ).name as string
+          ] = (obj as unknown as UnknownRecord).material as Material;
         }
       });
     }

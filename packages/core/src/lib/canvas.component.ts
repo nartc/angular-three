@@ -19,7 +19,6 @@ import { asyncScheduler } from 'rxjs';
 import { observeOn, takeUntil } from 'rxjs/operators';
 import type { Scene, WebGLRenderer, WebGLShadowMap } from 'three';
 import { DestroyedService, LoopService } from './services';
-import { LoaderService } from './services/loader.service';
 import {
   AnimationStore,
   CanvasStore,
@@ -60,7 +59,6 @@ import type {
     AnimationStore,
     LoopService,
     DestroyedService,
-    LoaderService,
   ],
 })
 export class CanvasComponent implements OnInit, OnDestroy {
@@ -149,11 +147,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed), observeOn(asyncScheduler))
       .subscribe((active) => {
         if (active) {
-          const {
-            renderer,
-            camera,
-            scene,
-          } = this.canvasStore.getImperativeState();
+          const { renderer, camera, scene } =
+            this.canvasStore.getImperativeState();
           if (renderer && camera && scene) {
             this.created.emit({ gl: renderer, camera, scene });
             this.eventsStore.connectEffect(renderer.domElement);
