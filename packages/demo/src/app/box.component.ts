@@ -6,6 +6,7 @@ import { Mesh } from 'three';
   selector: 'demo-box',
   template: `
     <ngt-mesh
+      o3d
       [ngtPop]="['scale', active ? [1.5, 1.5, 1.5] : [1, 1, 1]]"
       [ngtPopValueGetter]="'toArray'"
       [scale]="[1, 1, 1]"

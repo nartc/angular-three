@@ -32,6 +32,7 @@ import { LOD, Mesh } from 'three';
 
     <ngt-lod
       *ngFor="let position of amount"
+      o3d
       [position]="position"
       [matrixAutoUpdate]="false"
       (ready)="onLodReady($event)"

@@ -20,11 +20,13 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
     <ngt-group #group="ngtGroup" (animateReady)="onGroupAnimationReady($event)">
       <ngt-scene
         *ngIf="gltf$ && gltf$ | async as gltf"
+        o3d
         [name]="gltf.scene.name"
         [position]="position"
         [rotation]="rotation"
       >
         <ngt-mesh
+          o3d
           [name]="gltf.scene.children[0].name"
           [morphTargetDictionary]="
             $any(gltf.scene.children[0]).morphTargetDictionary

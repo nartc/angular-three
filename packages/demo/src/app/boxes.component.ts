@@ -14,6 +14,7 @@ const colors = new Array(1000)
   selector: 'demo-boxes',
   template: `
     <ngt-instanced-mesh
+      o3d
       [args]="[1000]"
       (pointermove)="onHover($event)"
       (pointerout)="onOffHover()"

@@ -6,7 +6,11 @@ import { FontLoader, Mesh, Vector3 } from 'three';
 @Component({
   selector: 'demo-text',
   template: `
-    <ngt-group [position]="position" [scale]="[0.1 * size, 0.1 * size, 0.1]">
+    <ngt-group
+      o3d
+      [position]="position"
+      [scale]="[0.1 * size, 0.1 * size, 0.1]"
+    >
       <ngt-mesh *ngIf="font$ | async as font" (ready)="onMeshReady($event)">
         <ngt-text-geometry
           [args]="[

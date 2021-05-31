@@ -30,7 +30,7 @@ import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShade
   selector: 'ngt-contact-shadows',
   template: `
     <ngt-group
-      ngt3d
+      o3d
       [name]="object3dController.name"
       [position]="object3dController.position"
       [rotation]="object3dController.rotation"
@@ -63,7 +63,7 @@ import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShade
         [args]="[-width / 2, width / 2, height / 2, -height / 2, 0, far]"
       ></ngt-orthographic-camera>
       <ngt-mesh
-        ngt3d
+        o3d
         [geometry]="planeGeometry"
         [scale]="[1, -1, 1]"
         [rotation]="[-halfPi, 0, 0]"
