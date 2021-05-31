@@ -30,8 +30,6 @@
     },
     "@release-it/bumper": {
       "out": [
-        "package.json",
-        "package-lock.json",
         "packages/controls/package*.json",
         "packages/core/package*.json",
         "packages/helpers/package*.json",
