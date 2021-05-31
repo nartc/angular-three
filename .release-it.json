@@ -29,13 +29,7 @@
       "infile": "CHANGELOG.md"
     },
     "@release-it/bumper": {
-      "out": [
-        "packages/controls/package*.json",
-        "packages/core/package*.json",
-        "packages/helpers/package*.json",
-        "packages/popmotion/package*.json",
-        "packages/postprocessing/package*.json"
-      ]
+      "out": ["packages/**/package*.json"]
     }
   },
   "npm": {
