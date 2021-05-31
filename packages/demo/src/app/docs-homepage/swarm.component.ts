@@ -11,6 +11,7 @@ import { InstancedMesh, Object3D } from 'three';
   selector: 'demo-swarm',
   template: `
     <ngt-instanced-mesh
+      o3d
       [args]="[count]"
       [castShadow]="true"
       [receiveShadow]="true"
