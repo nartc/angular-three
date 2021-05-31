@@ -1,5 +1,6 @@
 // Use Buffer version to also include normal version
 export const geometries = [
+  'BufferGeometry',
   'InstancedBufferGeometry',
   'BoxBufferGeometry',
   'CircleBufferGeometry',

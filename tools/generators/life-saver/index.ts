@@ -151,9 +151,10 @@ function objectLibTemplate(
     apply(url(`./files/${fileDir}`), [
       applyTemplates({
         name: item,
-        alternative: item.includes('BufferGeometry')
-          ? item.replace('Buffer', '')
-          : '',
+        alternative:
+          item !== 'BufferGeometry' && item.includes('BufferGeometry')
+            ? item.replace('Buffer', '')
+            : '',
         withThreeObject3d,
         abstract,
         type,
