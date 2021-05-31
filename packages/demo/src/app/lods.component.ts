@@ -82,10 +82,8 @@ export class LodComponent {
   }
 
   onLodReady(lod: LOD) {
-    const {
-      bufferGeometries,
-      materials,
-    } = this.instancesStore.getImperativeState();
+    const { bufferGeometries, materials } =
+      this.instancesStore.getImperativeState();
     const material = materials['lambertMaterial'];
     this.geometries.forEach(({ id: geometryId, distance }) => {
       const geometry = bufferGeometries[geometryId];

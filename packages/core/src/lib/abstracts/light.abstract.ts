@@ -6,7 +6,8 @@ import { ThreeObject3d } from './object-3d.abstract';
 @Directive()
 export abstract class ThreeLight<TLight extends Light = Light>
   extends ThreeObject3d<TLight>
-  implements OnInit {
+  implements OnInit
+{
   abstract lightType: AnyConstructor<TLight>;
 
   @Input() intensity?: number;

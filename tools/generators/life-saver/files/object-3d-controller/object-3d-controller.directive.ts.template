@@ -14,18 +14,18 @@ import { Controller } from './controller.abstract';
 
 @Directive({
   selector: `
-    ngt-primitive,
-    ngt-mesh,
-    ngt-instanced-mesh,
-    ngt-skinned-mesh,
-    ngt-bone,
-    ngt-group,
-    ngt-lod,
-    ngt-scene,
-    ngt-points,
-    ngt-cube-camera,
-    ngt-contact-shadows<% if (selectors.length) { %>,<% } %><% for (const selector of selectors) { %>
-    <%= selector.selector %><% if (!selector.isLast) { %>,<% } %><% } %>
+    ngt-primitive[o3d],
+    ngt-mesh[o3d],
+    ngt-instanced-mesh[o3d],
+    ngt-skinned-mesh[o3d],
+    ngt-bone[o3d],
+    ngt-group[o3d],
+    ngt-lod[o3d],
+    ngt-scene[o3d],
+    ngt-points[o3d],
+    ngt-cube-camera[o3d],
+    ngt-contact-shadows[o3d]<% if (selectors.length) { %>,<% } %><% for (const selector of selectors) { %>
+    <%= selector.selector %>[o3d]<% if (!selector.isLast) { %>,<% } %><% } %>
   `,
   exportAs: 'ngtObject3dController',
 })

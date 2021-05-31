@@ -4,7 +4,8 @@ import type { AnyConstructor } from '../typings';
 
 @Directive()
 export abstract class ThreeTexture<TTexture extends Texture = Texture>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   abstract textureType: AnyConstructor<TTexture>;
 
   constructor(private readonly ngZone: NgZone) {}

@@ -11,20 +11,20 @@ function applyDottedPathProps(
   isRoot = true
 ) {
   const [first, ...paths] = key.split('.');
-  const rootChild = ((instance as unknown) as UnknownRecord)[first];
+  const rootChild = (instance as unknown as UnknownRecord)[first];
   if (rootChild == null) {
     return;
   }
 
   if (paths.length >= 1) {
     applyDottedPathProps(
-      (rootChild as unknown) as ThreeInstance,
+      rootChild as unknown as ThreeInstance,
       paths.join('.'),
       propAtKey,
       false
     );
   } else {
-    ((instance as unknown) as UnknownRecord)[first] = propAtKey;
+    (instance as unknown as UnknownRecord)[first] = propAtKey;
   }
 
   if (isRoot) {
@@ -52,10 +52,10 @@ export function applyProps(instance: ThreeInstance, props?: UnknownRecord) {
   }
 
   if (
-    ((instance as unknown) as UnknownRecord)['set'] != null &&
-    typeof ((instance as unknown) as UnknownRecord)['set'] === 'function'
+    (instance as unknown as UnknownRecord)['set'] != null &&
+    typeof (instance as unknown as UnknownRecord)['set'] === 'function'
   ) {
-    (((instance as unknown) as UnknownRecord)['set'] as Function)(props);
+    ((instance as unknown as UnknownRecord)['set'] as Function)(props);
   }
 
   for (const [key, propAtKey] of Object.entries(props)) {
@@ -63,27 +63,30 @@ export function applyProps(instance: ThreeInstance, props?: UnknownRecord) {
       applyDottedPathProps(instance, key, propAtKey);
     } else {
       if (instance[key as keyof ThreeInstance] == null) {
-        ((instance as unknown) as UnknownRecord)[key] = propAtKey;
+        (instance as unknown as UnknownRecord)[key] = propAtKey;
       } else {
         if (
           (instance[key as keyof ThreeInstance] as UnknownRecord)['set'] !=
             null &&
-          typeof (instance[key as keyof ThreeInstance] as Record<
-            string,
-            unknown
-          >)['set'] === 'function'
+          typeof (
+            instance[key as keyof ThreeInstance] as Record<string, unknown>
+          )['set'] === 'function'
         ) {
           if (Array.isArray(propAtKey)) {
-            ((instance[key as keyof ThreeInstance] as UnknownRecord)[
-              'set'
-            ] as Function)(...propAtKey);
+            (
+              (instance[key as keyof ThreeInstance] as UnknownRecord)[
+                'set'
+              ] as Function
+            )(...propAtKey);
           } else {
-            ((instance[key as keyof ThreeInstance] as UnknownRecord)[
-              'set'
-            ] as Function)(propAtKey);
+            (
+              (instance[key as keyof ThreeInstance] as UnknownRecord)[
+                'set'
+              ] as Function
+            )(propAtKey);
           }
         } else {
-          ((instance as unknown) as UnknownRecord)[key] = propAtKey;
+          (instance as unknown as UnknownRecord)[key] = propAtKey;
         }
       }
       checkNeedsUpdate(propAtKey);

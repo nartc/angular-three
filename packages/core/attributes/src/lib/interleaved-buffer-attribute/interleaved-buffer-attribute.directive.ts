@@ -15,7 +15,8 @@ import { BuiltinShaderAttributeName, InterleavedBufferAttribute } from 'three';
   exportAs: 'ngtInterleavedBufferAttribute',
 })
 export class InterleavedBufferAttributeDirective
-  implements OnChanges, OnInit, OnDestroy {
+  implements OnChanges, OnInit, OnDestroy
+{
   static ngAcceptInputType_args:
     | ConstructorParameters<typeof InterleavedBufferAttribute>
     | undefined;

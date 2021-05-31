@@ -14,7 +14,8 @@ import type { AnyConstructor, ThreeColor, UnknownRecord } from '../typings';
 export abstract class ThreeMaterial<
   TMaterial extends Material = Material,
   TMaterialParameters extends MaterialParameters = MaterialParameters
-> implements OnInit, OnDestroy {
+> implements OnInit, OnDestroy
+{
   @Input() ngtId?: string;
 
   @Input() set parameters(v: TMaterialParameters | undefined) {

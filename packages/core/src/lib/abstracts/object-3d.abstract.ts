@@ -33,7 +33,8 @@ import { AnimationLoopParticipant } from './animation-loop-participant.abstract'
 @Directive()
 export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   extends AnimationLoopParticipant<TObject>
-  implements OnDestroy, OnChanges {
+  implements OnDestroy, OnChanges
+{
   private $object3d = new BehaviorSubject<TObject | null>(null);
 
   get object3d$(): Observable<TObject | null> {
@@ -90,7 +91,7 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
         });
 
         this.instancesStore.saveObject(
-          (this.object3d as unknown) as ThreeInstance
+          this.object3d as unknown as ThreeInstance
         );
 
         this.appendToParent();
@@ -221,21 +222,23 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
   private applyEvents(): EventHandlers {
     const handlers: EventHandlers = {};
 
-    ([
-      'click',
-      'contextmenu',
-      'dblclick',
-      'pointerup',
-      'pointerdown',
-      'pointerover',
-      'pointerout',
-      'pointerenter',
-      'pointerleave',
-      'pointermove',
-      'pointermissed',
-      'pointercancel',
-      'wheel',
-    ] as const).forEach((eventName) => {
+    (
+      [
+        'click',
+        'contextmenu',
+        'dblclick',
+        'pointerup',
+        'pointerdown',
+        'pointerover',
+        'pointerout',
+        'pointerenter',
+        'pointerleave',
+        'pointermove',
+        'pointermissed',
+        'pointercancel',
+        'wheel',
+      ] as const
+    ).forEach((eventName) => {
       if (this.object3dController[eventName].observers.length) {
         handlers[eventName] = (
           event: Parameters<

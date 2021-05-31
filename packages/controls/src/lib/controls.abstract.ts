@@ -20,7 +20,8 @@ import type { WebGLRenderer } from 'three';
 @Directive()
 export abstract class ThreeControls<TControls = unknown>
   extends AnimationLoopParticipant<TControls>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   @Output() ready = new EventEmitter<TControls>();
 
   constructor(

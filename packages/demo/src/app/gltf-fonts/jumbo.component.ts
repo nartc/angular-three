@@ -21,7 +21,9 @@ export class JumboComponent {
     animateObject,
     renderState: { clock },
   }: AnimationReady<Group>) {
-    animateObject.rotation.x = animateObject.rotation.y = animateObject.rotation.z =
-      Math.sin(clock.getElapsedTime()) * 0.3;
+    animateObject.rotation.x =
+      animateObject.rotation.y =
+      animateObject.rotation.z =
+        Math.sin(clock.getElapsedTime()) * 0.3;
   }
 }

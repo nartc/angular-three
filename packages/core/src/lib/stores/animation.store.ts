@@ -13,7 +13,8 @@ import { ImperativeComponentStore } from './imperative-component-store.abstract'
 @Injectable()
 export class AnimationStore
   extends ImperativeComponentStore<AnimationStoreState>
-  implements OnDestroy {
+  implements OnDestroy
+{
   constructor() {
     super({
       animations: {},

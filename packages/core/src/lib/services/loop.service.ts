@@ -36,10 +36,8 @@ export class LoopService implements OnDestroy {
       clock,
       mouse,
     } = this.canvasStore.getImperativeState();
-    const {
-      animationCallbacks,
-      hasPriority,
-    } = this.animationStore.getImperativeState();
+    const { animationCallbacks, hasPriority } =
+      this.animationStore.getImperativeState();
 
     if (renderer && scene && camera) {
       if (hasPriority) {

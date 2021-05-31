@@ -6,7 +6,8 @@ import { ThreeObject3d } from './object-3d.abstract';
 @Directive()
 export abstract class ThreeHelper<THelper extends Object3D>
   extends ThreeObject3d<THelper>
-  implements OnInit, OnChanges {
+  implements OnInit, OnChanges
+{
   abstract helperType: AnyConstructor<THelper>;
 
   private _extraArgs: unknown[] = [];

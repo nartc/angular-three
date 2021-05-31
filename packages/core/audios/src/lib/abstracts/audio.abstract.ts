@@ -16,7 +16,8 @@ import { AudioListenerDirective } from '../audio-listener';
 export abstract class ThreeAudio<
   TAudioNode extends AudioNode = GainNode,
   TAudio extends Audio<TAudioNode> = Audio<TAudioNode>
-> implements OnInit {
+> implements OnInit
+{
   @Input() object3d?: Object3D;
 
   @Output() ready = new EventEmitter<TAudio>();

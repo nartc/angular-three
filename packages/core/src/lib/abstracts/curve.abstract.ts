@@ -5,7 +5,8 @@ import { ThreeBufferGeometry } from './geometry.abstract';
 
 @Directive()
 export abstract class ThreeCurve<TCurve extends Curve<Vector> = Curve<Vector>>
-  implements OnInit {
+  implements OnInit
+{
   @Input() divisions?: number;
 
   abstract curveType: AnyConstructor<TCurve>;
@@ -39,7 +40,7 @@ export abstract class ThreeCurve<TCurve extends Curve<Vector> = Curve<Vector>>
     if (this.curve && this.geometryDirective) {
       const points = this.curve.getPoints(this.divisions);
       this.geometryDirective.bufferGeometry.setFromPoints(
-        (points as unknown) as Vector3[] | Vector2[]
+        points as unknown as Vector3[] | Vector2[]
       );
     }
   }

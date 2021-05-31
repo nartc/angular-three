@@ -19,7 +19,8 @@ import { DynamicDrawUsage, InstancedMesh } from 'three';
 })
 export class InstancedMeshDirective
   extends ThreeMesh<InstancedMesh>
-  implements OnChanges {
+  implements OnChanges
+{
   @Input() set args(v: [number]) {
     this.extraArgs = v;
   }

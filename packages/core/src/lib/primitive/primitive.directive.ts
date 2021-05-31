@@ -32,7 +32,8 @@ import { AnimationStore, CanvasStore } from '../stores';
 })
 export class PrimitiveDirective<TObject = unknown>
   extends AnimationLoopParticipant<TObject>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   @Output() ready = new EventEmitter<TObject>();
 
   get object(): TObject {

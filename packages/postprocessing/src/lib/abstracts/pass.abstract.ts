@@ -22,7 +22,8 @@ import { EffectComposerDirective } from '../effect-composer.directive';
 
 @Directive()
 export abstract class ThreePass<TPass extends Pass = Pass>
-  implements OnInit, OnDestroy, OnChanges {
+  implements OnInit, OnDestroy, OnChanges
+{
   @Input() enabled?: boolean;
   @Input() needsSwap?: boolean;
   @Input() clear?: boolean;
@@ -145,7 +146,7 @@ export abstract class ThreePass<TPass extends Pass = Pass>
         'renderToScreen',
         ...this.extraInputs,
       ].reduce((extraProps, extraInput) => {
-        let inputProp = ((this as unknown) as UnknownRecord)[extraInput];
+        let inputProp = (this as unknown as UnknownRecord)[extraInput];
         if (inputChanges) {
           if (inputChanges[extraInput]) {
             inputProp = inputChanges[extraInput].currentValue;
@@ -159,7 +160,7 @@ export abstract class ThreePass<TPass extends Pass = Pass>
 
         return extraProps;
       }, {} as UnknownRecord);
-      applyProps((this.pass as unknown) as ThreeInstance, extraProps);
+      applyProps(this.pass as unknown as ThreeInstance, extraProps);
     });
   }
 
@@ -170,7 +171,7 @@ export abstract class ThreePass<TPass extends Pass = Pass>
         return props;
       }, {} as UnknownRecord);
 
-      applyProps((this.pass as unknown) as ThreeInstance, propsToAssign);
+      applyProps(this.pass as unknown as ThreeInstance, propsToAssign);
     });
   }
 }

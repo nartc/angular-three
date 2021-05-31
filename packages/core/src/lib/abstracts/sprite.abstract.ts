@@ -12,7 +12,8 @@ import { ThreeObject3d } from './object-3d.abstract';
 @Directive()
 export abstract class ThreeSprite<TSprite extends Sprite = Sprite>
   extends ThreeObject3d<TSprite>
-  implements AfterContentInit {
+  implements AfterContentInit
+{
   @Input() material?: SpriteMaterial;
 
   @ContentChild(ThreeMaterial) materialDirective?: ThreeMaterial;

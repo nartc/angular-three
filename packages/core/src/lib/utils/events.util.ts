@@ -69,7 +69,7 @@ export function createEvents(
     return objects.filter((obj) =>
       ['move', 'over', 'enter', 'out', 'leave'].some(
         (name) =>
-          ((obj as unknown) as ThreeInstance).__ngt?.handlers?.[
+          (obj as unknown as ThreeInstance).__ngt?.handlers?.[
             ('pointer' + name) as keyof InstanceInternal['handlers']
           ]
       )
@@ -108,7 +108,7 @@ export function createEvents(
       let eventObject: Object3D | null = intersect.object;
       // Bubble event up
       while (eventObject) {
-        const handlers = ((eventObject as unknown) as ThreeInstance).__ngt
+        const handlers = (eventObject as unknown as ThreeInstance).__ngt
           ?.handlers;
         if (handlers) intersections.push({ ...intersect, eventObject });
         eventObject = eventObject.parent;
@@ -221,7 +221,7 @@ export function createEvents(
         };
 
         // Call subscribers
-        callback((raycastEvent as unknown) as ThreeDomEvent);
+        callback(raycastEvent as unknown as ThreeDomEvent);
         // Event bubbling may be interrupted by stopPropagation
         if (localState.stopped) break;
       }
@@ -242,7 +242,7 @@ export function createEvents(
         )
       ) {
         const eventObject = hoveredObj.eventObject;
-        const handlers = ((eventObject as unknown) as ThreeInstance).__ngt
+        const handlers = (eventObject as unknown as ThreeInstance).__ngt
           ?.handlers;
         internal.hovered.delete(makeId(hoveredObj));
         if (handlers) {
@@ -285,7 +285,7 @@ export function createEvents(
 
       handleIntersects(hits, event, (data: ThreeDomEvent) => {
         const eventObject = data.eventObject;
-        const handlers = ((eventObject as unknown) as ThreeInstance).__ngt
+        const handlers = (eventObject as unknown as ThreeInstance).__ngt
           ?.handlers;
         // Check presence of handlers
         if (!handlers) return;
@@ -360,7 +360,7 @@ export function createEvents(
 
   function pointerMissed(event: MouseEvent, objects: Object3D[]) {
     objects.forEach((object: Object3D) =>
-      ((object as unknown) as ThreeInstance).__ngt?.handlers?.pointermissed?.(
+      (object as unknown as ThreeInstance).__ngt?.handlers?.pointermissed?.(
         event as ThreeEvent<PointerEvent>
       )
     );

@@ -67,10 +67,14 @@ export class PopmotionDirective implements OnChanges, OnDestroy {
         ...(this.ngtPopConfig || {}),
         to: [
           this.ngtPopValueGetter
-            ? ((((popable as unknown) as UnknownRecord)[
-                attachTo
-              ] as UnknownRecord)[this.ngtPopValueGetter] as () => unknown)()
-            : ((popable as unknown) as UnknownRecord)[attachTo],
+            ? (
+                (
+                  (popable as unknown as UnknownRecord)[
+                    attachTo
+                  ] as UnknownRecord
+                )[this.ngtPopValueGetter] as () => unknown
+              )()
+            : (popable as unknown as UnknownRecord)[attachTo],
           attachToValue,
         ],
         onUpdate: (latest) => {

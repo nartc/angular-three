@@ -130,7 +130,8 @@ export class ContactShadowsComponent implements OnInit, OnChanges {
       this.resolution,
       this.resolution
     );
-    this.renderTargetBlur.texture.generateMipmaps = this.renderTarget.texture.generateMipmaps = false;
+    this.renderTargetBlur.texture.generateMipmaps =
+      this.renderTarget.texture.generateMipmaps = false;
 
     this.planeGeometry = new PlaneBufferGeometry(
       this.width,
@@ -148,7 +149,8 @@ export class ContactShadowsComponent implements OnInit, OnChanges {
 
     this.horizontalBlurMaterial = new ShaderMaterial(HorizontalBlurShader);
     this.verticalBlurMaterial = new ShaderMaterial(VerticalBlurShader);
-    this.verticalBlurMaterial.depthTest = this.horizontalBlurMaterial.depthTest = false;
+    this.verticalBlurMaterial.depthTest =
+      this.horizontalBlurMaterial.depthTest = false;
   }
 
   onCameraAnimateReady({
@@ -163,14 +165,14 @@ export class ContactShadowsComponent implements OnInit, OnChanges {
       renderer.render(scene, animateObject);
       scene.overrideMaterial = null;
       this.blurPlane.material = this.horizontalBlurMaterial;
-      (this.blurPlane
-        .material as any).uniforms.tDiffuse.value = this.renderTarget.texture;
+      (this.blurPlane.material as any).uniforms.tDiffuse.value =
+        this.renderTarget.texture;
       this.horizontalBlurMaterial.uniforms.h.value = this.blur / 256;
       renderer.setRenderTarget(this.renderTargetBlur);
       renderer.render(this.blurPlane, animateObject);
       this.blurPlane.material = this.verticalBlurMaterial;
-      (this.blurPlane
-        .material as any).uniforms.tDiffuse.value = this.renderTargetBlur.texture;
+      (this.blurPlane.material as any).uniforms.tDiffuse.value =
+        this.renderTargetBlur.texture;
       this.verticalBlurMaterial.uniforms.v.value = this.blur / 256;
       renderer.setRenderTarget(this.renderTarget);
       renderer.render(this.blurPlane, animateObject);

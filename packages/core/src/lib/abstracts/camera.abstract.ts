@@ -6,7 +6,8 @@ import { ThreeObject3d } from './object-3d.abstract';
 @Directive()
 export abstract class ThreeCamera<TCamera extends Camera = Camera>
   extends ThreeObject3d<TCamera>
-  implements OnInit {
+  implements OnInit
+{
   abstract cameraType: AnyConstructor<TCamera>;
 
   private _extraArgs: unknown[] = [];

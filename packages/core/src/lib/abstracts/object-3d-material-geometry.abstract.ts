@@ -8,7 +8,8 @@ export abstract class ThreeObject3dMaterialGeometry<
     TObject extends Object3D = Object3D
   >
   extends ThreeObject3d<TObject>
-  implements AfterContentInit {
+  implements AfterContentInit
+{
   abstract get objectType(): AnyConstructor<TObject>;
 
   @Input() geometry?: string | BufferGeometry | null;
@@ -42,16 +43,16 @@ export abstract class ThreeObject3dMaterialGeometry<
         this.morphTargetDictionary &&
         'morphTargetDictionary' in this._objectMaterialGeometry
       ) {
-        (this
-          ._objectMaterialGeometry as UnknownRecord).morphTargetDictionary = this.morphTargetDictionary;
+        (this._objectMaterialGeometry as UnknownRecord).morphTargetDictionary =
+          this.morphTargetDictionary;
       }
 
       if (
         this.morphTargetInfluences &&
         'morphTargetInfluences' in this._objectMaterialGeometry
       ) {
-        (this
-          ._objectMaterialGeometry as UnknownRecord).morphTargetInfluences = this.morphTargetInfluences;
+        (this._objectMaterialGeometry as UnknownRecord).morphTargetInfluences =
+          this.morphTargetInfluences;
       }
 
       if (this.customize) {

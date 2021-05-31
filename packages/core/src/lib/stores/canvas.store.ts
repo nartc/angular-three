@@ -45,7 +45,8 @@ export const isOrthographicCamera = (def: Camera): def is OrthographicCamera =>
 @Injectable()
 export class CanvasStore
   extends ImperativeComponentStore<CanvasStoreState>
-  implements OnDestroy {
+  implements OnDestroy
+{
   readonly renderer$ = this.select((s) => s.renderer);
   readonly camera$ = this.select((s) => s.camera);
   readonly scene$ = this.select((s) => s.scene);
@@ -265,7 +266,7 @@ export class CanvasStore
           const raycaster = new Raycaster() as ThreeRaycaster;
           raycaster.enabled = true;
           applyProps(
-            (raycaster as unknown) as ThreeInstance,
+            raycaster as unknown as ThreeInstance,
             raycasterOptions as UnknownRecord
           );
           this.patchState({ raycaster });

@@ -22,7 +22,8 @@ const supportedEvents = [
 @Injectable()
 export class EventsStore
   extends ImperativeComponentStore<EventsStoreState>
-  implements OnDestroy {
+  implements OnDestroy
+{
   constructor(
     private readonly canvasStore: CanvasStore,
     private readonly instancesStore: InstancesStore

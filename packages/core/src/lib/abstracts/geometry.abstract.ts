@@ -13,7 +13,8 @@ import type { AnyConstructor } from '../typings';
 @Directive()
 export abstract class ThreeBufferGeometry<
   TGeometry extends BufferGeometry = BufferGeometry
-> implements OnInit, OnDestroy {
+> implements OnInit, OnDestroy
+{
   @Input() ngtId?: string;
 
   constructor(

@@ -15,7 +15,8 @@ import { ThreeBufferGeometry } from './geometry.abstract';
 @Directive()
 export abstract class ThreeAttribute<
   TAttribute extends BufferAttribute = BufferAttribute
-> implements OnInit, OnChanges, OnDestroy {
+> implements OnInit, OnChanges, OnDestroy
+{
   @Input() attach?: BuiltinShaderAttributeName;
 
   abstract attributeType: AnyConstructor<TAttribute>;

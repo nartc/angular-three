@@ -11,7 +11,8 @@ import type { AnimationReady } from '../typings';
 
 @Directive()
 export abstract class AnimationLoopParticipant<TObject = unknown>
-  implements OnDestroy {
+  implements OnDestroy
+{
   @Output() animateReady = new EventEmitter<AnimationReady<TObject>>();
 
   private animateTeardown?: () => void;
@@ -29,7 +30,7 @@ export abstract class AnimationLoopParticipant<TObject = unknown>
             animateObject as Object3D,
             (obj, state) => {
               this.animateReady.emit({
-                animateObject: (obj as unknown) as TObject,
+                animateObject: obj as unknown as TObject,
                 renderState: state,
               });
             }
