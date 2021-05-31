@@ -33,8 +33,7 @@
     }
   },
   "npm": {
-    "publish": false,
-    "ignoreVersion": true
+    "publish": false
   },
   "git": {
     "commitMessage": "Prepare release ${version}"
