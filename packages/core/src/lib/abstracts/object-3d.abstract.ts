@@ -239,7 +239,7 @@ export abstract class ThreeObject3d<TObject extends Object3D = Object3D>
         'wheel',
       ] as const
     ).forEach((eventName) => {
-      if (this.object3dController[eventName].observers.length) {
+      if (this.object3dController[eventName].observed) {
         handlers[eventName] = (
           event: Parameters<
             Exclude<EventHandlers[typeof eventName], undefined>

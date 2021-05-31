@@ -24,7 +24,7 @@ export abstract class AnimationLoopParticipant<TObject = unknown>
 
   protected participate(animateObject: TObject) {
     this.ngZone.runOutsideAngular(() => {
-      if (this.animateReady.observers.length) {
+      if (this.animateReady.observed) {
         if (animateObject instanceof Object3D) {
           this.animateTeardown = this.animationStore.registerAnimation(
             animateObject as Object3D,
