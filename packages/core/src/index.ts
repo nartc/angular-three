@@ -3,6 +3,8 @@ export * from './lib/canvas.component';
 export * from './lib/primitive/primitive.module';
 export * from './lib/primitive/primitive.directive';
 export * from './lib/controllers';
+export * from './lib/pipes';
+export * from './lib/directives';
 export * from './lib/di';
 export * from './lib/stores';
 export * from './lib/services';
