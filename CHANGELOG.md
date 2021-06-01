@@ -1,20 +1,22 @@
 ## [1.0.0-beta.31](https://github.com/nartc/angular-three/compare/1.0.0-beta.30...1.0.0-beta.31) (2021-06-01)
 
-
 ### Features
 
-* **core:** add MathPipe and MathConstantPipe ([500b5b8](https://github.com/nartc/angular-three/commit/500b5b884648b95e73a01c5b9af059abd8eedf03))
+- **core:** add MathPipe and MathConstantPipe ([500b5b8](https://github.com/nartc/angular-three/commit/500b5b884648b95e73a01c5b9af059abd8eedf03))
 
 `MathPipe` and `MathConstantPipe` can be utilized to quickly calculate Math expression or use Math constants on the template
 
 ```html
-<span>{{ 1 | mathConst:'PI' }}</span> <!-- equals to Math.PI -->
-<span>{{ 0.5 | mathConst:'PI' }}</span> <!-- equals to Math.PI / 2 -->
+<span>{{ 1 | mathConst:'PI' }}</span>
+<!-- equals to Math.PI -->
+<span>{{ 0.5 | mathConst:'PI' }}</span>
+<!-- equals to Math.PI / 2 -->
 
-<span>{{ 1 | math:'sin' }}</span> <!-- equals to Math.sin(1) -->
+<span>{{ 1 | math:'sin' }}</span>
+<!-- equals to Math.sin(1) -->
 ```
 
-* **core:** add RepeatDirective ([25b2ea9](https://github.com/nartc/angular-three/commit/25b2ea978922d62c5719fdc66d7dd924480fec3e))
+- **core:** add RepeatDirective ([25b2ea9](https://github.com/nartc/angular-three/commit/25b2ea978922d62c5719fdc66d7dd924480fec3e))
 
 `RepeatDirective` is similar to `ngFor` but is meant to iterate over an amount of something rather than a list. For example, to loop over 30 days to build a calendar.
 
@@ -24,7 +26,7 @@
 
 ### Bug Fixes
 
-* fix imports ([3d4faf0](https://github.com/nartc/angular-three/commit/3d4faf0772388705a6015f70365a4c4da462d455))
+- fix imports ([3d4faf0](https://github.com/nartc/angular-three/commit/3d4faf0772388705a6015f70365a4c4da462d455))
 
 ## [1.0.0-beta.30](https://github.com/nartc/angular-three/compare/1.0.0-beta.29...1.0.0-beta.30) (2021-05-31)
 
