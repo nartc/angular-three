@@ -1,3 +1,40 @@
+## [1.0.0-beta.32](https://github.com/nartc/angular-three/compare/1.0.0-beta.31...1.0.0-beta.32) (2021-06-01)
+
+### Features
+
+- **core:** add ColorPipe ([ba7b2b0](https://github.com/nartc/angular-three/commit/ba7b2b0746c7bb3f0eb163befd020f33732ddd24))
+
+This pipe is mainly used for `parameters` that accepts a `THREE.Color` only instead of a `string | number | THREE.Color`.
+
+```html
+<!-- most materials accept all types of argument that THREE.Color accepts -->
+<ngt-mesh-basic-material [parameters]='{color: 'black'}'></ngt-mesh-basic-material>
+
+<!-- However, in the case of ngt-canvas, the background property only accepts THREE.Color -->
+<ngt-canvas [scene]='{ background: ["black"] | color }'></ngt-canvas>
+```
+
+- **core:** add FogPipe ([54c5f37](https://github.com/nartc/angular-three/commit/54c5f37dbfa20971bdbcebb56c7c5ab589293f8a))
+
+```html
+<!-- same idea as ColorPipe -->
+<ngt-canvas [scene]='{ fog: ['000000', 1, 15000] | fog}'></ngt-canvas>
+```
+
+### Bug Fixes
+
+- **core:** move MathConstantPipe to SCAM ([e9dc69c](https://github.com/nartc/angular-three/commit/e9dc69c6fa7a92cb6c9320f696d0214aa9a4318b))
+- **core:** move MathPipe to SCAM ([1495645](https://github.com/nartc/angular-three/commit/1495645fa0261d9a54cc15ee1e2d18b2f0eb1639))
+- **core:** move RepeatDirective to SCAM ([95d2e78](https://github.com/nartc/angular-three/commit/95d2e781bdc8c50dcbde9096b47f2832252504b2))
+
+### Refactor
+
+- **core:** remove MathConstantPipe and MathPipe from CoreModule ([a970375](https://github.com/nartc/angular-three/commit/a970375f24b4d1db595cd99e816d0e4b65b03ef0))
+
+### Documentations
+
+- **demo:** update docs ([e02eb97](https://github.com/nartc/angular-three/commit/e02eb97e158c6d4684a843f060639f40a6cf9afc))
+
 ## [1.0.0-beta.31](https://github.com/nartc/angular-three/compare/1.0.0-beta.30...1.0.0-beta.31) (2021-06-01)
 
 ### Features
