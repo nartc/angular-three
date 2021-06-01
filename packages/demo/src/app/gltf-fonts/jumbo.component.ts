@@ -5,7 +5,7 @@ import { Group } from 'three';
 @Component({
   selector: 'demo-jumbo',
   template: `
-    <ngt-group (animateReady)="onGroupReady($event)">
+    <ngt-group o3d (animateReady)="onGroupReady($event)">
       <demo-text
         hAlign="left"
         [position]="[0, 4.2, 0]"

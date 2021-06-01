@@ -1,6 +1,11 @@
 import { ThreeFlyControlsModule } from '@angular-three/controls/fly-controls';
 import { ThreeOrbitControlsModule } from '@angular-three/controls/orbit-controls';
-import { ThreeCoreModule } from '@angular-three/core';
+import {
+  ThreeColorPipeModule,
+  ThreeCoreModule,
+  ThreeFogPipeModule,
+  ThreeMathConstantPipeModule,
+} from '@angular-three/core';
 import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attributes';
 import {
   ThreeBoxBufferGeometryModule,
@@ -109,6 +114,9 @@ import { SuzanneComponent } from './suzanne.component';
     ThreeSphereBufferGeometryModule,
     ContactShadowsModule,
     ThreeSSAOPassModule,
+    ThreeMathConstantPipeModule,
+    ThreeFogPipeModule,
+    ThreeColorPipeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

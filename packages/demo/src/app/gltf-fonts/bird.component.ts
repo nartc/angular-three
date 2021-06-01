@@ -17,7 +17,11 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 @Component({
   selector: 'demo-bird',
   template: `
-    <ngt-group #group="ngtGroup" (animateReady)="onGroupAnimationReady($event)">
+    <ngt-group
+      o3d
+      #group="ngtGroup"
+      (animateReady)="onGroupAnimationReady($event)"
+    >
       <ngt-scene
         *ngIf="gltf$ && gltf$ | async as gltf"
         o3d

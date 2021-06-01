@@ -1,19 +1,18 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import * as THREE from 'three';
 
 let count = 0;
 
 @Component({
   selector: 'demo-root',
   template: `
-    <!--    <ngt-canvas [camera]="{ position: [0, 0, 35] }">-->
-    <!--      <ngt-stats></ngt-stats>-->
-    <!--      <ngt-orbit-controls></ngt-orbit-controls>-->
-    <!--      <ngt-ambient-light [intensity]="2"></ngt-ambient-light>-->
-    <!--      <ngt-point-light [position]="[40, 40, 40]"></ngt-point-light>-->
-    <!--      <demo-jumbo></demo-jumbo>-->
-    <!--      <demo-birds></demo-birds>-->
-    <!--    </ngt-canvas>-->
+    <ngt-canvas [camera]="{ position: [0, 0, 35] }">
+      <ngt-stats></ngt-stats>
+      <ngt-orbit-controls></ngt-orbit-controls>
+      <ngt-ambient-light o3d [intensity]="2"></ngt-ambient-light>
+      <ngt-point-light o3d [position]="[40, 40, 40]"></ngt-point-light>
+      <demo-jumbo></demo-jumbo>
+      <demo-birds></demo-birds>
+    </ngt-canvas>
     <!--    <ngt-canvas-->
     <!--      [linear]="true"-->
     <!--      [camera]="{ position: [0, 0, 15], near: 5, far: 20 }"-->
@@ -21,8 +20,9 @@ let count = 0;
     <!--    >-->
     <!--      <demo-orbit-controls></demo-orbit-controls>-->
     <!--      <ngt-stats></ngt-stats>-->
-    <!--      <ngt-ambient-light></ngt-ambient-light>-->
+    <!--      <ngt-ambient-light o3d></ngt-ambient-light>-->
     <!--      <ngt-point-light-->
+    <!--        o3d-->
     <!--        [position]="[150, 150, 150]"-->
     <!--        [args]="[undefined, 0.55]"-->
     <!--      ></ngt-point-light>-->
@@ -45,15 +45,15 @@ let count = 0;
     <!--              <demo-box [position]="[1.2, 0, 0]"></demo-box>-->
     <!--              <demo-box [position]="[-1.2, 0, 0]"></demo-box>-->
     <!--            </ngt-canvas>-->
-    <ngt-canvas [camera]="{ position: [0, 0, 20] }">
-      <demo-orbit-controls></demo-orbit-controls>
-      <ngt-stats></ngt-stats>
-      <demo-suzanne></demo-suzanne>
-    </ngt-canvas>
+    <!--    <ngt-canvas [camera]="{ position: [0, 0, 20] }">-->
+    <!--      <demo-orbit-controls></demo-orbit-controls>-->
+    <!--      <ngt-stats></ngt-stats>-->
+    <!--      <demo-suzanne></demo-suzanne>-->
+    <!--    </ngt-canvas>-->
     <!--    <ngt-canvas-->
     <!--      [linear]="true"-->
     <!--      [camera]="{ fov: 45, near: 1, far: 15000, position: [0, 0, 1000] }"-->
-    <!--      [scene]="{ fog: fog }"-->
+    <!--      [scene]="{ fog: ['000000', 1, 15000] | fog }"-->
     <!--      (created)="$event.camera.updateProjectionMatrix()"-->
     <!--    >-->
     <!--      <demo-fly-controls></demo-fly-controls>-->
@@ -74,7 +74,10 @@ let count = 0;
     <!--    <ngt-canvas-->
     <!--      [shadows]="true"-->
     <!--      [camera]="{ fov: 75, position: [0, 0, 50], near: 10, far: 150 }"-->
-    <!--      [scene]="{ fog: anotherFog, background: background }"-->
+    <!--      [scene]="{-->
+    <!--        fog: ['black', 60, 100] | fog,-->
+    <!--        background: ['#f0f0f0'] | color-->
+    <!--      }"-->
     <!--    >-->
     <!--      <ngt-ambient-light o3d [intensity]="1.5"></ngt-ambient-light>-->
     <!--      <ngt-point-light-->
@@ -92,7 +95,7 @@ let count = 0;
     <!--      <demo-swarm [count]="150" [position]="[0, 10, 0]"></demo-swarm>-->
     <!--      <ngt-contact-shadows-->
     <!--        o3d-->
-    <!--        [rotation]="[halfPi, 0, 0]"-->
+    <!--        [rotation]="[0.5 | mathConst: 'PI', 0, 0]"-->
     <!--        [position]="[0, -30, 0]"-->
     <!--        [opacity]="0.6"-->
     <!--        [width]="130"-->
@@ -106,11 +109,7 @@ let count = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  fog = new THREE.Fog(0x000000, 1, 15000);
-  anotherFog = new THREE.Fog('black', 60, 100);
   hovered = false;
-  halfPi = Math.PI / 2;
-  background = new THREE.Color('#f0f0f0');
 
   render() {
     console.log('render count: ', ++count);

@@ -11,7 +11,7 @@ import { FontLoader, Mesh, Vector3 } from 'three';
       [position]="position"
       [scale]="[0.1 * size, 0.1 * size, 0.1]"
     >
-      <ngt-mesh *ngIf="font$ | async as font" (ready)="onMeshReady($event)">
+      <ngt-mesh *ngIf="font$ | async as font" o3d (ready)="onMeshReady($event)">
         <ngt-text-geometry
           [args]="[
             text,
