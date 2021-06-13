@@ -6,11 +6,11 @@ let count = 0;
   selector: 'demo-root',
   template: `
     <!--    <demo-jumbo-birds></demo-jumbo-birds>-->
-    <!--    <demo-shaders-boxes></demo-shaders-boxes>-->
-    <demo-spinning-cubes></demo-spinning-cubes>
-    <!--    <demo-suzanne-instanced-mesh></demo-suzanne-instanced-mesh>-->
-    <!--    <demo-level-of-details></demo-level-of-details>-->
-    <!--    <demo-docs-homepage></demo-docs-homepage>-->
+    <!--        <demo-shaders-boxes></demo-shaders-boxes>-->
+    <!--    <demo-spinning-cubes></demo-spinning-cubes>-->
+    <!--        <demo-suzanne-instanced-mesh></demo-suzanne-instanced-mesh>-->
+    <!--        <demo-level-of-details></demo-level-of-details>-->
+    <demo-docs-homepage></demo-docs-homepage>
 
     <!--    {{ render() }}-->
   `,
