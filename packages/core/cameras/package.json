@@ -1,6 +1,6 @@
 {
   "name": "@angular-three/core/cameras",
-  "version": "1.0.0-beta.34",
+  "version": "1.0.0-beta.35",
   "peerDependencies": {
     "@angular/common": "~12.0.4",
     "@angular/core": "~12.0.4"

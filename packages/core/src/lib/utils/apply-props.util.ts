@@ -51,42 +51,38 @@ export function applyProps(instance: ThreeInstance, props?: UnknownRecord) {
     instance['__ngt'] = props['__ngt'] as InstanceInternal;
   }
 
+  const unknownInstance = instance as unknown as UnknownRecord;
+
   if (
-    (instance as unknown as UnknownRecord)['set'] != null &&
-    typeof (instance as unknown as UnknownRecord)['set'] === 'function'
+    unknownInstance['set'] != null &&
+    typeof unknownInstance['set'] === 'function'
   ) {
-    ((instance as unknown as UnknownRecord)['set'] as Function)(props);
+    (unknownInstance['set'] as Function)(props);
   }
 
   for (const [key, propAtKey] of Object.entries(props)) {
     if (key.split('.').length > 1) {
       applyDottedPathProps(instance, key, propAtKey);
     } else {
-      if (instance[key as keyof ThreeInstance] == null) {
-        (instance as unknown as UnknownRecord)[key] = propAtKey;
+      const threeInstancePropAtKey = unknownInstance[key] as UnknownRecord;
+      if (threeInstancePropAtKey == null) {
+        unknownInstance[key] = propAtKey;
       } else {
-        if (
-          (instance[key as keyof ThreeInstance] as UnknownRecord)['set'] !=
-            null &&
-          typeof (
-            instance[key as keyof ThreeInstance] as Record<string, unknown>
-          )['set'] === 'function'
-        ) {
+        const setFn = threeInstancePropAtKey['set'];
+
+        if (setFn != null && typeof setFn === 'function') {
           if (Array.isArray(propAtKey)) {
-            (
-              (instance[key as keyof ThreeInstance] as UnknownRecord)[
-                'set'
-              ] as Function
-            )(...propAtKey);
+            const fromArrayFn = threeInstancePropAtKey['fromArray'];
+            if (fromArrayFn != null && typeof fromArrayFn === 'function') {
+              fromArrayFn(propAtKey);
+            } else {
+              setFn(...propAtKey);
+            }
           } else {
-            (
-              (instance[key as keyof ThreeInstance] as UnknownRecord)[
-                'set'
-              ] as Function
-            )(propAtKey);
+            setFn(propAtKey);
           }
         } else {
-          (instance as unknown as UnknownRecord)[key] = propAtKey;
+          unknownInstance[key] = propAtKey;
         }
       }
       checkNeedsUpdate(propAtKey);
