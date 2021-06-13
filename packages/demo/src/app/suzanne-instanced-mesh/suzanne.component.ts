@@ -7,6 +7,7 @@ import { BufferGeometryLoader, InstancedMesh, Object3D } from 'three';
   selector: 'demo-suzanne',
   template: `
     <ngt-instanced-mesh
+      o3d
       [geometry]="geometry$ | async"
       [args]="[1000]"
       (animateReady)="onReady($event)"

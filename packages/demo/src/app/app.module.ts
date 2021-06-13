@@ -50,18 +50,24 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { BoxComponent } from './box.component';
-import { BoxesEffectsComponent } from './boxes-effects.component';
-import { BoxesComponent } from './boxes.component';
 import { SwarmComponent } from './docs-homepage/swarm.component';
 import { FlyControlsComponent } from './fly-controls.component';
-import { BirdComponent } from './gltf-fonts/bird.component';
-import { BirdsComponent } from './gltf-fonts/birds.component';
-import { JumboComponent } from './gltf-fonts/jumbo.component';
-import { TextComponent } from './gltf-fonts/text.component';
-import { LodComponent } from './lods.component';
+import { BirdComponent } from './jumbo-birds/bird.component';
+import { BirdsComponent } from './jumbo-birds/birds.component';
+import { JumboBirdsComponent } from './jumbo-birds/jumbo-birds.component';
+import { JumboComponent } from './jumbo-birds/jumbo.component';
+import { TextComponent } from './jumbo-birds/text.component';
+import { LevelOfDetailsComponent } from './level-of-details/level-of-details.component';
+import { LodComponent } from './level-of-details/lods.component';
 import { OrbitControlsComponent } from './orbit-controls.component';
-import { SuzanneComponent } from './suzanne.component';
+import { BoxesEffectsComponent } from './shaders-boxes/boxes-effects.component';
+import { BoxesComponent } from './shaders-boxes/boxes.component';
+import { ShadersBoxesComponent } from './shaders-boxes/shaders-boxes.component';
+import { BoxComponent } from './spinning-cubes/box.component';
+import { SpinningCubesComponent } from './spinning-cubes/spinning-cubes.component';
+import { SuzanneInstancedMeshComponent } from './suzanne-instanced-mesh/suzanne-instanced-mesh.component';
+import { SuzanneComponent } from './suzanne-instanced-mesh/suzanne.component';
+import { DocsHomepageComponent } from './docs-homepage/docs-homepage.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +84,12 @@ import { SuzanneComponent } from './suzanne.component';
     FlyControlsComponent,
     LodComponent,
     SwarmComponent,
+    JumboBirdsComponent,
+    ShadersBoxesComponent,
+    SpinningCubesComponent,
+    SuzanneInstancedMeshComponent,
+    LevelOfDetailsComponent,
+    DocsHomepageComponent,
   ],
   imports: [
     BrowserModule,
