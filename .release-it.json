@@ -29,7 +29,9 @@
       "infile": "CHANGELOG.md"
     },
     "@release-it/bumper": {
-      "out": ["packages/**/package*.json"]
+      "out": [
+        "packages/**/package*.json"
+      ]
     }
   },
   "npm": {
@@ -42,6 +44,13 @@
     "releaseNotes": true
   },
   "hooks": {
-    "before:init": "npm run affected:lint"
+    "before:init": [
+      "npm run affected:lint"
+    ],
+    "after:bump": [
+      "npm run format:write",
+      "git add .",
+      "git commit --amend --no-edit"
+    ]
   }
 }
