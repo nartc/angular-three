@@ -20,10 +20,10 @@
     "nx"
   ],
   "peerDependencies": {
-    "@angular/common": "~11.2.10",
-    "@angular/core": "~11.2.10",
-    "@ngrx/component-store": "~11.1.0",
-    "three": "~0.128.0"
+    "@angular/common": "~12.0.4",
+    "@angular/core": "~12.0.4",
+    "@ngrx/component-store": "~12.1.0",
+    "three": "~0.129.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"
