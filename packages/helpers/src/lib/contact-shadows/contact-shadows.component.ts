@@ -59,6 +59,7 @@ import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShade
       (wheel)="object3dController.wheel.emit($event)"
     >
       <ngt-orthographic-camera
+        o3d
         (animateReady)="onCameraAnimateReady($event)"
         [args]="[-width / 2, width / 2, height / 2, -height / 2, 0, far]"
       ></ngt-orthographic-camera>
