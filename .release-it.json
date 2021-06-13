@@ -47,10 +47,9 @@
     "before:init": [
       "npm run affected:lint"
     ],
-    "after:bump": [
+    "before:bump": [
       "npm run format:write",
-      "git add .",
-      "git commit --amend --no-edit"
+      "git add ."
     ]
   }
 }
