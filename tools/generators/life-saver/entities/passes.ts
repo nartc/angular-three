@@ -1095,7 +1095,7 @@ export const passes = [
       ThreeImports.MeshBasicMaterial,
     ],
     importReflector: true,
-    importPass: true,
+    importFsQuad: true,
     passImports: [],
     inputs: [
       {
@@ -1255,7 +1255,7 @@ export const passes = [
       },
       {
         name: 'fsQuad',
-        import: 'Pass.FullScreenQuad',
+        import: 'FullScreenQuad',
         isArray: false,
       },
       {
@@ -1282,7 +1282,7 @@ export const passes = [
       ThreeImports.MeshBasicMaterial,
       ThreeImports.MeshStandardMaterial,
     ],
-    importPass: true,
+    importFsQuad: true,
     passImports: [],
     inputs: [
       {
@@ -1427,7 +1427,7 @@ export const passes = [
       },
       {
         name: 'fsQuad',
-        import: 'Pass.FullScreenQuad',
+        import: 'FullScreenQuad',
         isArray: false,
       },
       {

@@ -95,7 +95,7 @@ export default function (): Rule {
       threeImports,
       threeCoreImports,
       inputs,
-      importPass,
+      importFsQuad,
       importReflector,
     } of passes) {
       context.logger.info(`Generating ${name}`);
@@ -108,7 +108,7 @@ export default function (): Rule {
           passImports,
           inputs,
           useSceneAndCamera,
-          importPass,
+          importFsQuad,
           importReflector
         ),
         passIndexTemplate(name),
@@ -241,7 +241,7 @@ function passTemplate(
     isArray: boolean;
   }[],
   sceneAndCamera: 'scene' | 'camera' | 'sceneAndCamera' | null,
-  importPass: boolean,
+  importFsQuad: boolean,
   importReflector: boolean
 ): Rule {
   return mergeWith(
@@ -253,7 +253,7 @@ function passTemplate(
         passImports,
         inputs,
         sceneAndCamera,
-        importPass,
+        importFsQuad,
         importReflector,
         dasherize,
       }),

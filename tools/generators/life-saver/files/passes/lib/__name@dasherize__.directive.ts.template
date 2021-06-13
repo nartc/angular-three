@@ -7,8 +7,8 @@ import { ThreePass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';<% if (threeImports.length) { %>
 import type {<% for (const threeImport of threeImports) { %>
   <%= threeImport %>,<% } %>
-} from 'three';<% } %><% if (importPass) { %>
-import type { Pass } from 'three/examples/jsm/postprocessing/Pass';<% } %><% if (importReflector) { %>
+} from 'three';<% } %><% if (importFsQuad) { %>
+import type { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass';<% } %><% if (importReflector) { %>
 import type { Reflector } from 'three/examples/jsm/objects/ReflectorForSSRPass';<% } %><% if (passImports.length) { %>
 import type {<% for (const passImport of passImports) { %>
   <%= passImport %>,<% } %>
