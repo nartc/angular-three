@@ -15,7 +15,7 @@ import {
   Self,
   ViewChild,
 } from '@angular/core';
-import { asyncScheduler } from 'rxjs';
+import { asapScheduler } from 'rxjs';
 import { observeOn, takeUntil } from 'rxjs/operators';
 import type { Scene, WebGLRenderer, WebGLShadowMap } from 'three';
 import { DestroyedService, LoopService } from './services';
@@ -144,7 +144,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   private initActiveListener() {
     this.canvasStore.active$
-      .pipe(takeUntil(this.destroyed), observeOn(asyncScheduler))
+      .pipe(takeUntil(this.destroyed), observeOn(asapScheduler))
       .subscribe((active) => {
         if (active) {
           const { renderer, camera, scene } =
