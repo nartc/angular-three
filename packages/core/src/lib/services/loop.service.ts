@@ -32,7 +32,7 @@ export class LoopService implements OnDestroy {
   private tick(delta: number) {
     this.internalDelta += delta;
 
-    if (this.internalDelta > this.interval) {
+    if (this.internalDelta >= this.interval) {
       const {
         renderer,
         scene,
