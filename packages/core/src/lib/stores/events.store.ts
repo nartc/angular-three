@@ -1,6 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { tap } from 'rxjs/operators';
-import type { EventsStoreState, ThreeDomEvent } from '../typings';
+import type { Object3D } from 'three';
+import type {
+  EventsStoreState,
+  ThreeDomEvent,
+  ThreeIntersection,
+} from '../typings';
 import { createEvents } from '../utils';
 import { CanvasStore } from './canvas.store';
 import { ImperativeComponentStore } from './imperative-component-store.abstract';
@@ -33,7 +38,7 @@ export class EventsStore
       internal: {
         interaction: [],
         hovered: new Map<string, ThreeDomEvent>(),
-        captured: undefined,
+        capturedMap: new Map<number, Map<Object3D, ThreeIntersection>>(),
         initialClick: [0, 0],
         initialHits: [],
       },

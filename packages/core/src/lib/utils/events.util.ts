@@ -123,17 +123,13 @@ export function createEvents(
     event: ThreeDomEvent
   ) {
     const {
-      internal: { captured },
+      internal: { capturedMap },
     } = eventsStateGetter();
     // If the interaction is captured take that into account, the captured event has to be part of the intersects
-    if (captured && event.type !== 'click' && event.type !== 'wheel') {
-      captured.forEach((captured) => {
-        if (
-          !intersections.find((hit) => hit.eventObject === captured.eventObject)
-        )
-          intersections.push(captured);
-      });
+    if ('pointerId' in event && capturedMap.has(event.pointerId)) {
+      intersections.push(...capturedMap.get(event.pointerId)!.values());
     }
+
     return intersections;
   }
 
@@ -151,18 +147,27 @@ export function createEvents(
       const delta = event.type === 'click' ? calculateDistance(event) : 0;
       const releasePointerCapture = (id: number) =>
         (event.target as Element).releasePointerCapture(id);
-      const localState = { stopped: false, captured: false };
+      const localState = { stopped: false };
 
       for (const hit of intersections) {
+        const hasPointerCapture = (id: number) =>
+          eventsInternal.capturedMap.get(id)?.has(hit.eventObject) ?? false;
+
         const setPointerCapture = (id: number) => {
-          // If the hit is going to be captured flag that we're in captured state
-          if (!localState.captured) {
-            localState.captured = true;
-            // The captured hit array is reset to collect hits
-            eventsInternal.captured = [];
+          if (eventsInternal.capturedMap.has(id)) {
+            // if the pointerId was previously captured, we add the hit to the
+            // event capturedMap.
+            eventsInternal.capturedMap.get(id)!.set(hit.eventObject, hit);
+          } else {
+            // if the pointerId was not previously captured, we create a map
+            // containing the hitObject, and the hit. hitObject is used for
+            // faster access.
+            eventsInternal.capturedMap.set(
+              id,
+              new Map([[hit.eventObject, hit]])
+            );
           }
-          // Push hits to the array
-          if (eventsInternal.captured) eventsInternal.captured.push(hit);
+
           // Call the original event now
           (event.target as Element).setPointerCapture(id);
         };
@@ -171,29 +176,42 @@ export function createEvents(
         const extractEventProps: UnknownRecord = {};
         for (const prop in Object.getPrototypeOf(event)) {
           // noinspection JSUnfilteredForInLoop
-          extractEventProps[prop] = event[prop as keyof ThreeDomEvent];
+          const property = event[prop as keyof ThreeDomEvent];
+          // Only copy over atomics, leave functions alone as these should be
+          // called as event.nativeEvent.fn()
+          if (typeof property !== 'function') {
+            // noinspection JSUnfilteredForInLoop
+            extractEventProps[prop] = property;
+          }
         }
 
         const raycastEvent = {
           ...hit,
           ...extractEventProps,
+          spaceX: mouse.x,
+          spaceY: mouse.y,
           intersections,
           stopped: localState.stopped,
           delta,
           unprojectedPoint,
           ray: raycaster ? raycaster.ray : null,
-          camera: camera,
+          camera,
           // Hijack stopPropagation, which just sets a flag
           stopPropagation: () => {
             // https://github.com/pmndrs/react-three-fiber/issues/596
             // Events are not allowed to stop propagation if the pointer has been captured
-            const cap = eventsInternal.captured;
+            const capturesForPointer =
+              'pointerId' in event &&
+              eventsInternal.capturedMap.get(event.pointerId);
+
+            // We only authorize stopPropagation...
             if (
-              !cap ||
-              cap.find((h) => h.eventObject.id === hit.eventObject.id)
+              // ...if this pointer hasn't been captured
+              !capturesForPointer ||
+              // ... or if the hit object is capturing the pointer
+              capturesForPointer.has(hit.eventObject)
             ) {
               raycastEvent.stopped = localState.stopped = true;
-
               // Propagation is stopped, remove all other hover records
               // An event handler is only allowed to flush other handlers if it is hovered itself
               if (
@@ -211,13 +229,20 @@ export function createEvents(
               }
             }
           },
-          target: { ...event.target, setPointerCapture, releasePointerCapture },
+          target: {
+            ...event.target,
+            setPointerCapture,
+            releasePointerCapture,
+            hasPointerCapture,
+          },
           currentTarget: {
             ...event.currentTarget,
             setPointerCapture,
             releasePointerCapture,
+            hasPointerCapture,
           },
           sourceEvent: event,
+          nativeEvent: event,
         };
 
         // Call subscribers
@@ -248,23 +273,30 @@ export function createEvents(
         if (handlers) {
           // Clear out intersects, they are outdated by now
           const data = { ...hoveredObj, intersections: hits || [] };
-          handlers.pointerleave?.(data as ThreeEvent<PointerEvent>);
           handlers.pointerout?.(data as ThreeEvent<PointerEvent>);
+          handlers.pointerleave?.(data as ThreeEvent<PointerEvent>);
         }
       }
     });
   }
 
   const handlePointer = (name: string) => {
-    // Deal with cancelation
+    // Deal with cancellation
     switch (name) {
       case 'pointerleave':
       case 'pointercancel':
         return () => cancelPointer([]);
       case 'lostpointercapture':
-        return () => {
-          eventsStateGetter().internal.captured = undefined;
-          cancelPointer([]);
+        return (event: ThreeDomEvent) => {
+          if ('pointerId' in event) {
+            // this will be a problem if one target releases the pointerId
+            // and another one is still keeping it, as the line below
+            // indifferently deletes all capturing references.
+            const {
+              internal: { capturedMap },
+            } = eventsStateGetter();
+            capturedMap.delete(event.pointerId);
+          }
         };
     }
 

@@ -17,7 +17,7 @@ export type SupportedEvents =
 export interface EventsInternal {
   interaction: Object3D[];
   hovered: Map<string, ThreeDomEvent>;
-  captured: ThreeIntersection[] | undefined;
+  capturedMap: Map<number, Map<Object3D, ThreeIntersection>>;
   initialClick: [x: number, y: number];
   initialHits: Object3D[];
 }

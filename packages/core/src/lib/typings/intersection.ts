@@ -12,6 +12,10 @@ export interface ThreeIntersectionEvent<TSourceEvent>
   ray: Ray;
   camera: Camera;
   stopPropagation: () => void;
+  /**
+   * @deprecated use {@link nativeEvent}
+   */
   sourceEvent: TSourceEvent;
+  nativeEvent: TSourceEvent;
   delta: number;
 }
