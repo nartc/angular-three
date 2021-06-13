@@ -110,6 +110,10 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ngZone.runOutsideAngular(() => {
+      this.canvasStore.setDpr(
+        (this.document as Document).defaultView?.devicePixelRatio || 1
+      );
+
       this.canvasStore.initRendererEffect(this.rendererCanvas.nativeElement);
       this.canvasStore.initSceneEffect(this.scene);
       this.canvasStore.initCameraEffect(this.camera);
@@ -136,7 +140,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
             width: this.hostElement.nativeElement.clientWidth,
             height: this.hostElement.nativeElement.clientHeight,
           },
-          dpr: (this.document as Document).defaultView?.devicePixelRatio || 0,
+          dpr: (this.document as Document).defaultView?.devicePixelRatio || 1,
         });
       }
     );
