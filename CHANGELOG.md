@@ -1,3 +1,22 @@
+## [1.0.0-beta.36](https://github.com/nartc/angular-three/compare/1.0.0-beta.34...1.0.0-beta.36) (2021-06-13)
+
+
+### Bug Fixes
+
+* **core:** adjust comparison delta ([d2eb0a4](https://github.com/nartc/angular-three/commit/d2eb0a441fa0f5485cea67961cf91dc36d5b3809))
+* **core:** ensure to setDpr before initialize canvas ([f27edcc](https://github.com/nartc/angular-three/commit/f27edcc106cd8c4d180e0b765c03de29b939e59d))
+
+
+### Documentations
+
+* adjust docs ([43c158a](https://github.com/nartc/angular-three/commit/43c158a858a0d71aef9cc06bfdc4033938253571))
+* changelog ([1722ac1](https://github.com/nartc/angular-three/commit/1722ac1ef60dc930183dddf516a19e36ed3c70c6))
+
+
+### Refactor
+
+* **core:** clean up applyProps ([c5fc4d0](https://github.com/nartc/angular-three/commit/c5fc4d04d52259790a3dbb68559fac386414d8f1))
+
 ## [1.0.0-beta.34](https://github.com/nartc/angular-three/compare/1.0.0-beta.33...1.0.0-beta.34) (2021-06-13)
 
 ### Bug Fixes
