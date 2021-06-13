@@ -11,18 +11,18 @@ import { CanvasStore } from './canvas.store';
 import { ImperativeComponentStore } from './imperative-component-store.abstract';
 import { InstancesStore } from './instances.store';
 
-const supportedEvents = [
-  'click',
-  'contextmenu',
-  'dblclick',
-  'wheel',
-  'pointerdown',
-  'pointerup',
-  'pointerleave',
-  'pointermove',
-  'pointercancel',
-  'lostpointercapture',
-];
+const events = {
+  click: false,
+  contextmenu: false,
+  dblclick: false,
+  wheel: true,
+  pointerdown: true,
+  pointerup: true,
+  pointerleave: true,
+  pointermove: true,
+  pointercancel: true,
+  lostpointercapture: true,
+} as const;
 
 @Injectable()
 export class EventsStore
@@ -55,12 +55,12 @@ export class EventsStore
           () => this.instancesStore.getImperativeState()
         );
         this.patchState({
-          handlers: supportedEvents.reduce(
-            (handlers, supportedEventName) => ({
-              ...handlers,
-              [supportedEventName]: handlePointer(supportedEventName),
-            }),
-            {}
+          handlers: Object.keys(events).reduce(
+            (handlers, supportedEventName) => {
+              handlers[supportedEventName] = handlePointer(supportedEventName);
+              return handlers;
+            },
+            {} as Record<string, unknown>
           ) as EventsStoreState['handlers'],
         });
       })
@@ -72,10 +72,11 @@ export class EventsStore
       tap((target: HTMLElement) => {
         this.disconnectEffect();
         const { handlers } = this.getImperativeState();
-        Object.entries(handlers ?? []).forEach(([name, event]) =>
-          target.addEventListener(name, event, { passive: true })
-        );
         this.patchState({ connected: target });
+        Object.entries(handlers ?? []).forEach(([name, event]) => {
+          const passive = events[name as keyof typeof events];
+          target.addEventListener(name, event, { passive });
+        });
       })
     )
   );
