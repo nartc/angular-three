@@ -1,15 +1,13 @@
 ## [1.0.0-beta.34](https://github.com/nartc/angular-three/compare/1.0.0-beta.33...1.0.0-beta.34) (2021-06-13)
 
-
 ### Bug Fixes
 
-* **postprocessing:** regenerate SSRPass ([6fa3e23](https://github.com/nartc/angular-three/commit/6fa3e23c92557b230ff9363a21d74c2c78381718))
-* **tools:** fix passes generators ([c9c6227](https://github.com/nartc/angular-three/commit/c9c62278348690d32c7ed0f3ab0bbb4862ba0e10))
-
+- **postprocessing:** regenerate SSRPass ([6fa3e23](https://github.com/nartc/angular-three/commit/6fa3e23c92557b230ff9363a21d74c2c78381718))
+- **tools:** fix passes generators ([c9c6227](https://github.com/nartc/angular-three/commit/c9c62278348690d32c7ed0f3ab0bbb4862ba0e10))
 
 ### Documentations
 
-* change log ([d38160d](https://github.com/nartc/angular-three/commit/d38160dbbed9d94acc3f21761e405230cfae7423))
+- change log ([d38160d](https://github.com/nartc/angular-three/commit/d38160dbbed9d94acc3f21761e405230cfae7423))
 
 ## [1.0.0-beta.33](https://github.com/nartc/angular-three/compare/1.0.0-beta.32...1.0.0-beta.33) (2021-06-13)
 
