@@ -15,7 +15,7 @@ import type {
   MeshBasicMaterial,
   MeshStandardMaterial,
 } from 'three';
-import type { Pass } from 'three/examples/jsm/postprocessing/Pass';
+import type { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass';
 import { SSRrPass } from 'three/examples/jsm/postprocessing/SSRrPass';
 
 @Directive({
@@ -60,7 +60,7 @@ export class SSRrPassDirective extends ThreePass<SSRrPass> {
   @Input() specularMaterial?: MeshStandardMaterial;
   @Input() depthRenderMaterial?: ShaderMaterial;
   @Input() copyMaterial?: ShaderMaterial;
-  @Input() fsQuad?: Pass.FullScreenQuad;
+  @Input() fsQuad?: FullScreenQuad;
   @Input() originalClearColor?: Color;
 
   passType = SSRrPass;
