@@ -1,4 +1,7 @@
-import { ThreeCoreModule } from '@angular-three/core';
+import {
+  ThreeCoreModule,
+  ThreeMathConstantPipeModule,
+} from '@angular-three/core';
 import { ThreeOrthographicCameraModule } from '@angular-three/core/cameras';
 import { ThreeGroupModule } from '@angular-three/core/group';
 import { ThreeMeshBasicMaterialModule } from '@angular-three/core/materials';
@@ -16,6 +19,7 @@ import { ContactShadowsComponent } from './contact-shadows.component';
     ThreeMeshModule,
     ThreeMeshBasicMaterialModule,
     ThreeOrthographicCameraModule,
+    ThreeMathConstantPipeModule,
   ],
   exports: [ContactShadowsComponent],
 })

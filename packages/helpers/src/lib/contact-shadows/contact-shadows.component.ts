@@ -66,7 +66,7 @@ import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShade
         o3d
         [geometry]="planeGeometry"
         [scale]="[1, -1, 1]"
-        [rotation]="[-halfPi, 0, 0]"
+        [rotation]="[-(0.5 | mathConst: 'PI'), 0, 0]"
       >
         <ngt-mesh-basic-material
           [parameters]="{
@@ -88,8 +88,6 @@ export class ContactShadowsComponent implements OnInit, OnChanges {
   @Input() blur = 1;
   @Input() far = 10;
   @Input() resolution = 256;
-
-  halfPi = Math.PI / 2;
 
   renderTarget!: WebGLRenderTarget;
   renderTargetBlur!: WebGLRenderTarget;
