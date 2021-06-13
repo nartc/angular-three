@@ -1,22 +1,20 @@
 ## [1.0.0-beta.33](https://github.com/nartc/angular-three/compare/1.0.0-beta.32...1.0.0-beta.33) (2021-06-13)
 
-
 ### Bug Fixes
 
-* **core:** add passive to events in EventsStore ([691e398](https://github.com/nartc/angular-three/commit/691e398c456c2f74159d2c0ef21e91a5154b40fd))
-* **core:** adjust transform params of ColorPipe due to TS limitation on ConstructorParameters ([f930295](https://github.com/nartc/angular-three/commit/f9302950fbacce003d1be54b25710b6cb01e0f5f))
-* **core:** limit to 60fps ([dfd0eb3](https://github.com/nartc/angular-three/commit/dfd0eb32502a86c430cd02c01c5b04099be604d9))
-* **core:** update event utils to sync with r3f ([0792204](https://github.com/nartc/angular-three/commit/0792204ce29db9cf08dca5bc5bde766a09f1ff10))
-* **core:** use asapScheduler to schedule loop ([288628a](https://github.com/nartc/angular-three/commit/288628a4db32997cd448ec09591c4864dc288e60))
-* **helpers:** ensure orthographicCamera is a object3D ([8c6fe2b](https://github.com/nartc/angular-three/commit/8c6fe2bc152a3b93f97ef3e4c70e6823e2ebcf5b))
-* **helpers:** use MathConst pipe in ContactShadows ([ba5c160](https://github.com/nartc/angular-three/commit/ba5c16098a90d8563e276bb9950994891f9455ea))
-
+- **core:** add passive to events in EventsStore ([691e398](https://github.com/nartc/angular-three/commit/691e398c456c2f74159d2c0ef21e91a5154b40fd))
+- **core:** adjust transform params of ColorPipe due to TS limitation on ConstructorParameters ([f930295](https://github.com/nartc/angular-three/commit/f9302950fbacce003d1be54b25710b6cb01e0f5f))
+- **core:** limit to 60fps ([dfd0eb3](https://github.com/nartc/angular-three/commit/dfd0eb32502a86c430cd02c01c5b04099be604d9))
+- **core:** update event utils to sync with r3f ([0792204](https://github.com/nartc/angular-three/commit/0792204ce29db9cf08dca5bc5bde766a09f1ff10))
+- **core:** use asapScheduler to schedule loop ([288628a](https://github.com/nartc/angular-three/commit/288628a4db32997cd448ec09591c4864dc288e60))
+- **helpers:** ensure orthographicCamera is a object3D ([8c6fe2b](https://github.com/nartc/angular-three/commit/8c6fe2bc152a3b93f97ef3e4c70e6823e2ebcf5b))
+- **helpers:** use MathConst pipe in ContactShadows ([ba5c160](https://github.com/nartc/angular-three/commit/ba5c16098a90d8563e276bb9950994891f9455ea))
 
 ### Documentations
 
-* adjust demo ([cd0f804](https://github.com/nartc/angular-three/commit/cd0f8044cc792139016dc2b02405331fa4bbaa94))
-* clean up demos ([bc8eabc](https://github.com/nartc/angular-three/commit/bc8eabc52c9ae62f1c11ff9039990cd1afc6101e))
-* use spinning-cubes for active demo ([c645c85](https://github.com/nartc/angular-three/commit/c645c859e989c2996befe679c45a01ab68f2a8b5))
+- adjust demo ([cd0f804](https://github.com/nartc/angular-three/commit/cd0f8044cc792139016dc2b02405331fa4bbaa94))
+- clean up demos ([bc8eabc](https://github.com/nartc/angular-three/commit/bc8eabc52c9ae62f1c11ff9039990cd1afc6101e))
+- use spinning-cubes for active demo ([c645c85](https://github.com/nartc/angular-three/commit/c645c859e989c2996befe679c45a01ab68f2a8b5))
 
 ## [1.0.0-beta.32](https://github.com/nartc/angular-three/compare/1.0.0-beta.31...1.0.0-beta.32) (2021-06-01)
 
