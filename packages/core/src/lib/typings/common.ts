@@ -5,5 +5,8 @@ export type ConditionalType<Child, Parent, Truthy, Falsy> = Child extends Parent
   ? Truthy
   : Falsy;
 
-export type BranchingReturn<T = any, Parent = any, Coerced = any> =
-  ConditionalType<T, Parent, Coerced, T>;
+export type BranchingReturn<
+  T = any,
+  Parent = any,
+  Coerced = any
+> = ConditionalType<T, Parent, Coerced, T>;

@@ -68,18 +68,21 @@ export function applyProps(instance: ThreeInstance, props?: UnknownRecord) {
       if (threeInstancePropAtKey == null) {
         unknownInstance[key] = propAtKey;
       } else {
-        const setFn = threeInstancePropAtKey['set'];
-
-        if (setFn != null && typeof setFn === 'function') {
+        if (
+          threeInstancePropAtKey['set'] != null &&
+          typeof threeInstancePropAtKey['set'] === 'function'
+        ) {
           if (Array.isArray(propAtKey)) {
-            const fromArrayFn = threeInstancePropAtKey['fromArray'];
-            if (fromArrayFn != null && typeof fromArrayFn === 'function') {
-              fromArrayFn(propAtKey);
+            if (
+              threeInstancePropAtKey['fromArray'] != null &&
+              typeof threeInstancePropAtKey['fromArray'] === 'function'
+            ) {
+              threeInstancePropAtKey['fromArray'](propAtKey);
             } else {
-              setFn(...propAtKey);
+              threeInstancePropAtKey['set'](...propAtKey);
             }
           } else {
-            setFn(propAtKey);
+            threeInstancePropAtKey['set'](propAtKey);
           }
         } else {
           unknownInstance[key] = propAtKey;
