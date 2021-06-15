@@ -1,3 +1,15 @@
+## [1.0.0-beta.37](https://github.com/nartc/angular-three/compare/1.0.0-beta.36...1.0.0-beta.37) (2021-06-15)
+
+
+### Bug Fixes
+
+* **core:** fix applyProps ([7a7a105](https://github.com/nartc/angular-three/commit/7a7a105fbf785eba9a9e03de5f411ee7a933c9b6))
+
+
+### Documentations
+
+* use spinning cubes ([406b32c](https://github.com/nartc/angular-three/commit/406b32ce00e966e205d6ded3da08b8ee7264f74f))
+
 ## [1.0.0-beta.36](https://github.com/nartc/angular-three/compare/1.0.0-beta.34...1.0.0-beta.36) (2021-06-13)
 
 
