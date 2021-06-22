@@ -247,6 +247,8 @@ export class CanvasStore
               camera.position.z = 5;
 
               applyProps(camera, cameraOptions as UnknownRecord);
+              // Update projection matrix after applying props
+              camera.updateProjectionMatrix();
             }
 
             // look at center by default
