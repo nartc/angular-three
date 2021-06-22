@@ -1,3 +1,10 @@
+## [1.0.0-beta.38](https://github.com/nartc/angular-three/compare/1.0.0-beta.37...1.0.0-beta.38) (2021-06-22)
+
+
+### Bug Fixes
+
+* **core:** update camera projection matrix on initialize ([14eb776](https://github.com/nartc/angular-three/commit/14eb776e70ec34a7f7ffbf234f652103a7d03d9f))
+
 ## [1.0.0-beta.37](https://github.com/nartc/angular-three/compare/1.0.0-beta.36...1.0.0-beta.37) (2021-06-15)
 
 
