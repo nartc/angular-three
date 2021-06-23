@@ -1,3 +1,15 @@
+## [1.0.0-beta.39](https://github.com/nartc/angular-three/compare/1.0.0-beta.38...1.0.0-beta.39) (2021-06-23)
+
+
+### Bug Fixes
+
+* **core:** initialize Size in ngOnInit instead ([384556a](https://github.com/nartc/angular-three/commit/384556a3a3689221c277a59ce42af00f74039c29))
+
+
+### Documentations
+
+* fix demo ([8bf0c9a](https://github.com/nartc/angular-three/commit/8bf0c9ab12fc51accaa576e684bbbd6b56a6725c))
+
 ## [1.0.0-beta.38](https://github.com/nartc/angular-three/compare/1.0.0-beta.37...1.0.0-beta.38) (2021-06-22)
 
 
