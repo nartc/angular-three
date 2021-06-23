@@ -48,8 +48,10 @@ import { ThreeSSAOPassModule } from '@angular-three/postprocessing/ssaopass';
 import { ThreeUnrealBloomPassModule } from '@angular-three/postprocessing/unreal-bloom-pass';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { DocsHomepageComponent } from './docs-homepage/docs-homepage.component';
 import { SwarmComponent } from './docs-homepage/swarm.component';
 import { FlyControlsComponent } from './fly-controls.component';
 import { BirdComponent } from './jumbo-birds/bird.component';
@@ -67,7 +69,38 @@ import { BoxComponent } from './spinning-cubes/box.component';
 import { SpinningCubesComponent } from './spinning-cubes/spinning-cubes.component';
 import { SuzanneInstancedMeshComponent } from './suzanne-instanced-mesh/suzanne-instanced-mesh.component';
 import { SuzanneComponent } from './suzanne-instanced-mesh/suzanne.component';
-import { DocsHomepageComponent } from './docs-homepage/docs-homepage.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'spinning-cubes',
+    pathMatch: 'full',
+  },
+  {
+    path: 'spinning-cubes',
+    component: SpinningCubesComponent,
+  },
+  {
+    path: 'docs-homepage',
+    component: DocsHomepageComponent,
+  },
+  {
+    path: 'jumbo-birds',
+    component: JumboBirdsComponent,
+  },
+  {
+    path: 'lod',
+    component: LevelOfDetailsComponent,
+  },
+  {
+    path: 'shaders-boxes',
+    component: ShadersBoxesComponent,
+  },
+  {
+    path: 'suzanne',
+    component: SuzanneInstancedMeshComponent,
+  },
+];
 
 @NgModule({
   declarations: [
@@ -129,6 +162,7 @@ import { DocsHomepageComponent } from './docs-homepage/docs-homepage.component';
     ThreeMathConstantPipeModule,
     ThreeFogPipeModule,
     ThreeColorPipeModule,
+    RouterModule.forRoot(routes),
   ],
   providers: [],
   bootstrap: [AppComponent],
