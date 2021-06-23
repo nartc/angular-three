@@ -101,15 +101,15 @@ export class CanvasComponent implements OnInit, OnDestroy {
     private readonly renderer: Renderer2,
     @Inject(DOCUMENT) private readonly document: any,
     private readonly destroyed: DestroyedService
-  ) {
-    canvasStore.setSize({
-      width: hostElement.nativeElement.clientWidth,
-      height: hostElement.nativeElement.clientHeight,
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.ngZone.runOutsideAngular(() => {
+      this.canvasStore.setSize({
+        width: this.hostElement.nativeElement.clientWidth,
+        height: this.hostElement.nativeElement.clientHeight,
+      });
+
       this.canvasStore.setDpr(
         (this.document as Document).defaultView?.devicePixelRatio || 1
       );
