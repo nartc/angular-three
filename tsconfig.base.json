@@ -15,52 +15,21 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@angular-three/core": ["packages/core/src/index.ts"],
-      "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
-      "@angular-three/core/geometries": [
-        "packages/core/geometries/src/index.ts"
-      ],
-      "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
-      "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
-      "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
       "@angular-three/controls": ["packages/controls/src/index.ts"],
-      "@angular-three/core/attributes": [
-        "packages/core/attributes/src/index.ts"
+      "@angular-three/controls/device-orientation-controls": [
+        "packages/controls/device-orientation-controls/src/index.ts"
       ],
-      "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
-      "@angular-three/postprocessing/render-pass": [
-        "packages/postprocessing/render-pass/src/index.ts"
-      ],
-      "@angular-three/postprocessing/unreal-bloom-pass": [
-        "packages/postprocessing/unreal-bloom-pass/src/index.ts"
-      ],
-      "@angular-three/postprocessing/shader-pass": [
-        "packages/postprocessing/shader-pass/src/index.ts"
-      ],
-      "@angular-three/core/group": ["packages/core/group/src/index.ts"],
-      "@angular-three/core/scene": ["packages/core/scene/src/index.ts"],
-      "@angular-three/core/audios": ["packages/core/audios/src/index.ts"],
-      "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"],
-      "@angular-three/core/lod": ["packages/core/lod/src/index.ts"],
-      "@angular-three/core/lines": ["packages/core/lines/src/index.ts"],
-      "@angular-three/core/points": ["packages/core/points/src/index.ts"],
-      "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
-      "@angular-three/core/curves": ["packages/core/curves/src/index.ts"],
-      "@angular-three/core/helpers": ["packages/core/helpers/src/index.ts"],
       "@angular-three/controls/drag-controls": [
         "packages/controls/drag-controls/src/index.ts"
       ],
-      "@angular-three/controls/orbit-controls": [
-        "packages/controls/orbit-controls/src/index.ts"
+      "@angular-three/controls/first-person-controls": [
+        "packages/controls/first-person-controls/src/index.ts"
       ],
       "@angular-three/controls/fly-controls": [
         "packages/controls/fly-controls/src/index.ts"
       ],
-      "@angular-three/controls/device-orientation-controls": [
-        "packages/controls/device-orientation-controls/src/index.ts"
-      ],
-      "@angular-three/controls/first-person-controls": [
-        "packages/controls/first-person-controls/src/index.ts"
+      "@angular-three/controls/orbit-controls": [
+        "packages/controls/orbit-controls/src/index.ts"
       ],
       "@angular-three/controls/pointer-lock-controls": [
         "packages/controls/pointer-lock-controls/src/index.ts"
@@ -71,23 +40,46 @@
       "@angular-three/controls/transform-controls": [
         "packages/controls/transform-controls/src/index.ts"
       ],
-      "@angular-three/popmotion": ["packages/popmotion/src/index.ts"],
-      "@angular-three/helpers": ["packages/helpers/src/index.ts"],
-      "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"],
-      "@angular-three/postprocessing/afterimage-pass": [
-        "packages/postprocessing/afterimage-pass/src/index.ts"
+      "@angular-three/core": ["packages/core/src/index.ts"],
+      "@angular-three/core/attributes": [
+        "packages/core/attributes/src/index.ts"
       ],
+      "@angular-three/core/audios": ["packages/core/audios/src/index.ts"],
+      "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"],
+      "@angular-three/core/curves": ["packages/core/curves/src/index.ts"],
+      "@angular-three/core/geometries": [
+        "packages/core/geometries/src/index.ts"
+      ],
+      "@angular-three/core/group": ["packages/core/group/src/index.ts"],
+      "@angular-three/core/helpers": ["packages/core/helpers/src/index.ts"],
+      "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
+      "@angular-three/core/lines": ["packages/core/lines/src/index.ts"],
+      "@angular-three/core/lod": ["packages/core/lod/src/index.ts"],
+      "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
+      "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
+      "@angular-three/core/points": ["packages/core/points/src/index.ts"],
+      "@angular-three/core/scene": ["packages/core/scene/src/index.ts"],
+      "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"],
+      "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
+      "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
+      "@angular-three/helpers": ["packages/helpers/src/index.ts"],
+      "@angular-three/helpers/core": ["packages/helpers/core/src/index.ts"],
+      "@angular-three/popmotion": ["packages/popmotion/src/index.ts"],
+      "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
       "@angular-three/postprocessing/adaptive-tone-mapping-pass": [
         "packages/postprocessing/adaptive-tone-mapping-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/afterimage-pass": [
+        "packages/postprocessing/afterimage-pass/src/index.ts"
       ],
       "@angular-three/postprocessing/bloom-pass": [
         "packages/postprocessing/bloom-pass/src/index.ts"
       ],
-      "@angular-three/postprocessing/clear-pass": [
-        "packages/postprocessing/clear-pass/src/index.ts"
-      ],
       "@angular-three/postprocessing/bokeh-pass": [
         "packages/postprocessing/bokeh-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/clear-pass": [
+        "packages/postprocessing/clear-pass/src/index.ts"
       ],
       "@angular-three/postprocessing/cube-texture-pass": [
         "packages/postprocessing/cube-texture-pass/src/index.ts"
@@ -104,26 +96,26 @@
       "@angular-three/postprocessing/halftone-pass": [
         "packages/postprocessing/halftone-pass/src/index.ts"
       ],
+      "@angular-three/postprocessing/lutpass": [
+        "packages/postprocessing/lutpass/src/index.ts"
+      ],
       "@angular-three/postprocessing/mask-pass": [
         "packages/postprocessing/mask-pass/src/index.ts"
       ],
       "@angular-three/postprocessing/outline-pass": [
         "packages/postprocessing/outline-pass/src/index.ts"
       ],
-      "@angular-three/postprocessing/save-pass": [
-        "packages/postprocessing/save-pass/src/index.ts"
-      ],
-      "@angular-three/postprocessing/ssrr-pass": [
-        "packages/postprocessing/ssrr-pass/src/index.ts"
-      ],
-      "@angular-three/postprocessing/texture-pass": [
-        "packages/postprocessing/texture-pass/src/index.ts"
-      ],
-      "@angular-three/postprocessing/lutpass": [
-        "packages/postprocessing/lutpass/src/index.ts"
+      "@angular-three/postprocessing/render-pass": [
+        "packages/postprocessing/render-pass/src/index.ts"
       ],
       "@angular-three/postprocessing/saopass": [
         "packages/postprocessing/saopass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/save-pass": [
+        "packages/postprocessing/save-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/shader-pass": [
+        "packages/postprocessing/shader-pass/src/index.ts"
       ],
       "@angular-three/postprocessing/smaapass": [
         "packages/postprocessing/smaapass/src/index.ts"
@@ -137,10 +129,18 @@
       "@angular-three/postprocessing/ssrpass": [
         "packages/postprocessing/ssrpass/src/index.ts"
       ],
+      "@angular-three/postprocessing/ssrr-pass": [
+        "packages/postprocessing/ssrr-pass/src/index.ts"
+      ],
       "@angular-three/postprocessing/taarender-pass": [
         "packages/postprocessing/taarender-pass/src/index.ts"
       ],
-      "@angular-three/helpers/core": ["packages/helpers/core/src/index.ts"]
+      "@angular-three/postprocessing/texture-pass": [
+        "packages/postprocessing/texture-pass/src/index.ts"
+      ],
+      "@angular-three/postprocessing/unreal-bloom-pass": [
+        "packages/postprocessing/unreal-bloom-pass/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
