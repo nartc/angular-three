@@ -18,7 +18,7 @@ import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockCont
 })
 export class PointerLockControlsDirective extends ThreeControls<PointerLockControls> {
   constructor(
-    @Inject(DOCUMENT) private readonly document: any,
+    @Inject(DOCUMENT) private readonly document: Document,
     readonly ngZone: NgZone,
     @SkipSelf() protected readonly canvasStore: CanvasStore,
     @SkipSelf() readonly animationStore: AnimationStore,

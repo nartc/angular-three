@@ -12,12 +12,12 @@ export class StatsDirective implements OnInit, OnDestroy {
 
   constructor(
     private readonly animationStore: AnimationStore,
-    @Inject(DOCUMENT) private readonly document: any
+    @Inject(DOCUMENT) private readonly document: Document
   ) {}
 
   ngOnInit() {
     this.stats = Stats();
-    (this.document as Document).body.appendChild(this.stats.dom);
+    this.document.body.appendChild(this.stats.dom);
     this.animationStore.registerAnimation(() => {
       this.stats.update();
     });

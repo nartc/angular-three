@@ -19,10 +19,10 @@ export class MathPipe implements PipeTransform {
       | 'SQRT2'
       | 'random'
     >
-  ): ReturnType<Math[typeof keyOfMath]> {
+  ): ReturnType<Extract<Math[typeof keyOfMath], 'string'>> {
     const params: number[] = Array.isArray(value) ? value : [value];
     return (Math[keyOfMath] as unknown as (...args: number[]) => number)(
       ...params
-    );
+    ) as ReturnType<Extract<Math[typeof keyOfMath], 'string'>>;
   }
 }

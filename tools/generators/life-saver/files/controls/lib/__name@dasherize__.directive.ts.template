@@ -17,7 +17,7 @@ export class <%= name %>Directive extends ThreeControls<<%= name %>> {<% for (co
   @Input() <%= input.name %><% if (input.isOptional) { %>?<% } %>: <%= input.import %><% if (input.isArray) { %>[]<% } %><% if (input.default) { %> = <%= input.default %>;<% } else { %>;<% } %><% } %><% if (injectDocument) { %>
 
   constructor(
-    @Inject(DOCUMENT) private readonly document: any,
+    @Inject(DOCUMENT) private readonly document: Document,
     readonly ngZone: NgZone,
     @SkipSelf() protected readonly canvasStore: CanvasStore,
     @SkipSelf() readonly animationStore: AnimationStore,
