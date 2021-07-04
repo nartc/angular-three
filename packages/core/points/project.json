@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/core/points",
+  "sourceRoot": "packages/core/points/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/core/points/tsconfig.lib.json",
+        "project": "packages/core/points/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/points/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/core/points/src/**/*.ts",
+          "packages/core/points/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/core/points"],
+      "options": {
+        "jestConfig": "packages/core/points/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:core", "type:library", "context:points"]
+}

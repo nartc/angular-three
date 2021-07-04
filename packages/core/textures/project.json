@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/core/textures",
+  "sourceRoot": "packages/core/textures/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/core/textures/tsconfig.lib.json",
+        "project": "packages/core/textures/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/textures/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/core/textures/src/**/*.ts",
+          "packages/core/textures/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/core/textures"],
+      "options": {
+        "jestConfig": "packages/core/textures/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:core", "type:library", "context:textures"]
+}

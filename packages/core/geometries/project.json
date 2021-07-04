@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/core/geometries",
+  "sourceRoot": "packages/core/geometries/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/core/geometries/tsconfig.lib.json",
+        "project": "packages/core/geometries/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/geometries/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/core/geometries/src/**/*.ts",
+          "packages/core/geometries/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/core/geometries"],
+      "options": {
+        "jestConfig": "packages/core/geometries/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:core", "type:library", "context:geometries"]
+}

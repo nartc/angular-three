@@ -1,0 +1,44 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/adaptive-tone-mapping-pass",
+  "sourceRoot": "packages/postprocessing/adaptive-tone-mapping-pass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/adaptive-tone-mapping-pass/tsconfig.lib.json",
+        "project": "packages/postprocessing/adaptive-tone-mapping-pass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/adaptive-tone-mapping-pass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/adaptive-tone-mapping-pass/src/**/*.ts",
+          "packages/postprocessing/adaptive-tone-mapping-pass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/packages/postprocessing/adaptive-tone-mapping-pass"
+      ],
+      "options": {
+        "jestConfig": "packages/postprocessing/adaptive-tone-mapping-pass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": [
+    "scope:postprocessing",
+    "type:library",
+    "context:adaptive-tone-mapping-pass"
+  ]
+}

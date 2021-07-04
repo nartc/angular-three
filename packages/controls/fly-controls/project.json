@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/controls/fly-controls",
+  "sourceRoot": "packages/controls/fly-controls/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/controls/fly-controls/tsconfig.lib.json",
+        "project": "packages/controls/fly-controls/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/controls/fly-controls/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/controls/fly-controls/src/**/*.ts",
+          "packages/controls/fly-controls/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/controls/fly-controls"],
+      "options": {
+        "jestConfig": "packages/controls/fly-controls/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:controls", "type:library", "context:fly-controls"]
+}

@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/render-pass",
+  "sourceRoot": "packages/postprocessing/render-pass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/render-pass/tsconfig.lib.json",
+        "project": "packages/postprocessing/render-pass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/render-pass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/render-pass/src/**/*.ts",
+          "packages/postprocessing/render-pass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/postprocessing/render-pass"],
+      "options": {
+        "jestConfig": "packages/postprocessing/render-pass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:postprocessing", "type:library", "context:render-pass"]
+}

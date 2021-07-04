@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/clear-pass",
+  "sourceRoot": "packages/postprocessing/clear-pass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/clear-pass/tsconfig.lib.json",
+        "project": "packages/postprocessing/clear-pass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/clear-pass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/clear-pass/src/**/*.ts",
+          "packages/postprocessing/clear-pass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/postprocessing/clear-pass"],
+      "options": {
+        "jestConfig": "packages/postprocessing/clear-pass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:postprocessing", "type:library", "context:clear-pass"]
+}

@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/glitch-pass",
+  "sourceRoot": "packages/postprocessing/glitch-pass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/glitch-pass/tsconfig.lib.json",
+        "project": "packages/postprocessing/glitch-pass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/glitch-pass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/glitch-pass/src/**/*.ts",
+          "packages/postprocessing/glitch-pass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/postprocessing/glitch-pass"],
+      "options": {
+        "jestConfig": "packages/postprocessing/glitch-pass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:postprocessing", "type:library", "context:glitch-pass"]
+}

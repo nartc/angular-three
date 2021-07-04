@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/core/materials",
+  "sourceRoot": "packages/core/materials/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/core/materials/tsconfig.lib.json",
+        "project": "packages/core/materials/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/materials/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/core/materials/src/**/*.ts",
+          "packages/core/materials/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/core/materials"],
+      "options": {
+        "jestConfig": "packages/core/materials/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:core", "type:library", "context:materials"]
+}

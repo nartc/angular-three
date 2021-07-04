@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/core/audios",
+  "sourceRoot": "packages/core/audios/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/core/audios/tsconfig.lib.json",
+        "project": "packages/core/audios/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/audios/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/core/audios/src/**/*.ts",
+          "packages/core/audios/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/core/audios"],
+      "options": {
+        "jestConfig": "packages/core/audios/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:core", "type:library", "context:audios"]
+}

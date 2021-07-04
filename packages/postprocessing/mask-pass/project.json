@@ -1,0 +1,38 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/mask-pass",
+  "sourceRoot": "packages/postprocessing/mask-pass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/mask-pass/tsconfig.lib.json",
+        "project": "packages/postprocessing/mask-pass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/mask-pass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/mask-pass/src/**/*.ts",
+          "packages/postprocessing/mask-pass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/postprocessing/mask-pass"],
+      "options": {
+        "jestConfig": "packages/postprocessing/mask-pass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:postprocessing", "type:library", "context:mask-pass"]
+}
