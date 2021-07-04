@@ -8,14 +8,12 @@ import {
   Inject,
   Input,
   NgZone,
-  OnDestroy,
   OnInit,
   Output,
-  Renderer2,
   Self,
   ViewChild,
 } from '@angular/core';
-import { asapScheduler } from 'rxjs';
+import { asapScheduler, fromEvent } from 'rxjs';
 import { observeOn, takeUntil } from 'rxjs/operators';
 import type { Scene, WebGLRenderer, WebGLShadowMap } from 'three';
 import { DestroyedService, LoopService } from './services';
@@ -61,7 +59,7 @@ import type {
     DestroyedService,
   ],
 })
-export class CanvasComponent implements OnInit, OnDestroy {
+export class CanvasComponent implements OnInit {
   @HostBinding('class.ngt-canvas') hostClass = true;
 
   @Input() set orthographic(v: boolean) {
@@ -89,8 +87,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   @ViewChild('rendererCanvas', { static: true })
   rendererCanvas!: ElementRef<HTMLCanvasElement>;
 
-  private windowResizeListener?: () => void;
-
   constructor(
     @Self() private readonly canvasStore: CanvasStore,
     @Self() private readonly animationStore: AnimationStore,
@@ -98,8 +94,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     @Self() private readonly loopService: LoopService,
     private readonly ngZone: NgZone,
     private readonly hostElement: ElementRef<HTMLElement>,
-    private readonly renderer: Renderer2,
-    @Inject(DOCUMENT) private readonly document: any,
+    @Inject(DOCUMENT) private readonly document: Document,
     private readonly destroyed: DestroyedService
   ) {}
 
@@ -124,41 +119,40 @@ export class CanvasComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.windowResizeListener) {
-      this.windowResizeListener();
-    }
-  }
-
   private initWindowResizeListener() {
-    this.windowResizeListener = this.renderer.listen(
-      (this.document as Document).defaultView,
-      'resize',
-      () => {
-        this.canvasStore.windowResizeEffect({
-          size: {
-            width: this.hostElement.nativeElement.clientWidth,
-            height: this.hostElement.nativeElement.clientHeight,
-          },
-          dpr: (this.document as Document).defaultView?.devicePixelRatio || 1,
+    if (this.document?.defaultView) {
+      fromEvent(this.document.defaultView, 'resize')
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(() => {
+          this.ngZone.runOutsideAngular(() => {
+            this.canvasStore.windowResizeEffect({
+              size: {
+                width: this.hostElement.nativeElement.clientWidth,
+                height: this.hostElement.nativeElement.clientHeight,
+              },
+              dpr:
+                (this.document as Document).defaultView?.devicePixelRatio || 1,
+            });
+          });
         });
-      }
-    );
+    }
   }
 
   private initActiveListener() {
     this.canvasStore.active$
       .pipe(takeUntil(this.destroyed), observeOn(asapScheduler))
       .subscribe((active) => {
-        if (active) {
-          const { renderer, camera, scene } =
-            this.canvasStore.getImperativeState();
-          if (renderer && camera && scene) {
-            this.created.emit({ gl: renderer, camera, scene });
-            this.eventsStore.connectEffect(renderer.domElement);
-            this.loopService.start();
+        this.ngZone.runOutsideAngular(() => {
+          if (active) {
+            const { renderer, camera, scene } =
+              this.canvasStore.getImperativeState();
+            if (renderer && camera && scene) {
+              this.created.emit({ gl: renderer, camera, scene });
+              this.eventsStore.connectEffect(renderer.domElement);
+              this.loopService.start();
+            }
           }
-        }
+        });
       });
   }
 }
