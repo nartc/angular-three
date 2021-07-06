@@ -55,6 +55,7 @@ export class AppComponent {
     'lod',
     'shaders-boxes',
     'suzanne',
+    'html',
   ];
 
   render() {

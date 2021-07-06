@@ -21,10 +21,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       <demo-box [position]="[-1.2, 0, 0]"></demo-box>
 
       <ngt-html o3d>
-        <div>This is an HTML</div>
+        <button (click)="count = count + 1">Click {{ count }}</button>
       </ngt-html>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SpinningCubesComponent {}
+export class SpinningCubesComponent {
+  count = 1;
+}

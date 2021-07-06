@@ -40,7 +40,7 @@ import {
 import { ThreeSceneModule } from '@angular-three/core/scene';
 import { ThreeStatsModule } from '@angular-three/core/stats';
 import { ContactShadowsModule } from '@angular-three/helpers';
-import { HtmlModule } from "@angular-three/helpers/web";
+import { HtmlModule } from '@angular-three/helpers/web';
 import { ThreePopmotionModule } from '@angular-three/popmotion';
 import { ThreePostprocessingModule } from '@angular-three/postprocessing';
 import { ThreeRenderPassModule } from '@angular-three/postprocessing/render-pass';
@@ -55,6 +55,7 @@ import { AppComponent } from './app.component';
 import { DocsHomepageComponent } from './docs-homepage/docs-homepage.component';
 import { SwarmComponent } from './docs-homepage/swarm.component';
 import { FlyControlsComponent } from './fly-controls.component';
+import { HtmlComponent } from './html/html.component';
 import { BirdComponent } from './jumbo-birds/bird.component';
 import { BirdsComponent } from './jumbo-birds/birds.component';
 import { JumboBirdsComponent } from './jumbo-birds/jumbo-birds.component';
@@ -101,6 +102,10 @@ const routes: Routes = [
     path: 'suzanne',
     component: SuzanneInstancedMeshComponent,
   },
+  {
+    path: 'html',
+    component: HtmlComponent,
+  },
 ];
 
 @NgModule({
@@ -124,6 +129,7 @@ const routes: Routes = [
     SuzanneInstancedMeshComponent,
     LevelOfDetailsComponent,
     DocsHomepageComponent,
+    HtmlComponent,
   ],
   imports: [
     BrowserModule,
