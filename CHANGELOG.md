@@ -1,3 +1,23 @@
+## [1.0.0-beta.40](https://github.com/nartc/angular-three/compare/1.0.0-beta.39...1.0.0-beta.40) (2021-07-06)
+
+
+### Features
+
+* **helpers:** add Html ([614c909](https://github.com/nartc/angular-three/commit/614c9097a8aef48baa99eb0d2c57d7e44aa478b2))
+
+
+### Bug Fixes
+
+* **core:** remove ng-content from Canvas ([11aca2b](https://github.com/nartc/angular-three/commit/11aca2bf5aa89534b0c737d2c244d41f4e1df123))
+* **helpers:** poc Html ([1add871](https://github.com/nartc/angular-three/commit/1add871e0072a6e5c9828a3288bec7d6ab3549e4))
+
+
+### Refactor
+
+* **core:** use fromEvent instead of renderer2 to listen for resize event ([ac77ba7](https://github.com/nartc/angular-three/commit/ac77ba746cbc2b6c4b6627de142c09736abb97ec))
+* per-project configuration ([6c7be66](https://github.com/nartc/angular-three/commit/6c7be665ff5f2c599e5cc22b0d72fa74f486dabb))
+* revert project.json ([60493c5](https://github.com/nartc/angular-three/commit/60493c5e96a71bfb765571d8d7b6751f24e2d0a8))
+
 ## [1.0.0-beta.39](https://github.com/nartc/angular-three/compare/1.0.0-beta.38...1.0.0-beta.39) (2021-06-23)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@angular-three/helpers/core",
-  "version": "1.0.0-beta.39",
+  "version": "1.0.0-beta.40",
   "peerDependencies": {
     "@angular/common": "^11.2.12",
     "@angular/core": "^11.2.12"
