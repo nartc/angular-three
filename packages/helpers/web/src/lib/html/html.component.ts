@@ -15,7 +15,6 @@ import {
   Input,
   NgZone,
   OnChanges,
-  OnInit,
   Output,
   SimpleChanges,
   TemplateRef,
@@ -195,6 +194,7 @@ const getObjectCSSMatrix = ((scaleMultipliers: (n: number) => number[]) => {
       (pointermissed)="object3dController.pointermissed.emit($event)"
       (pointercancel)="object3dController.pointercancel.emit($event)"
       (wheel)="object3dController.wheel.emit($event)"
+      (ready)="onHtmlReady($event)"
       (animateReady)="onHtmlAnimateReady($event)"
     ></ngt-group>
     <ng-template #transformDomTemplate>
@@ -216,12 +216,12 @@ const getObjectCSSMatrix = ((scaleMultipliers: (n: number) => number[]) => {
       </div>
     </ng-template>
 
-    <div ngtHtmlElement></div>
+    <div ngtHtmlElement id="ngtHtmlElement"></div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [OBJECT_3D_CONTROLLER_PROVIDER],
 })
-export class HtmlComponent implements OnInit, OnChanges {
+export class HtmlComponent implements OnChanges {
   @Input() prepend?: boolean;
   @Input() center?: boolean;
   @Input() fullscreen?: boolean;
@@ -263,7 +263,7 @@ export class HtmlComponent implements OnInit, OnChanges {
 
   private visible = true;
   styles?: Partial<CSSStyleDeclaration>;
-  private group?: Group;
+  group?: Group;
 
   constructor(
     @Inject(OBJECT_3D_WATCHED_CONTROLLER)
@@ -275,6 +275,7 @@ export class HtmlComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.ngZone.runOutsideAngular(() => {
+      this.renderEffect();
       if ('portal' in changes || 'transform' in changes) {
         if (changes.portal) {
           this.target = changes.portal.currentValue;
@@ -291,13 +292,7 @@ export class HtmlComponent implements OnInit, OnChanges {
       ) {
         this.setupStylesEffect();
       }
-
-      this.renderEffect();
     });
-  }
-
-  ngOnInit(): void {
-    this.element = this.htmlElement ?? this.defaultHtmlElement;
   }
 
   onHtmlAnimateReady({
@@ -406,12 +401,26 @@ export class HtmlComponent implements OnInit, OnChanges {
     } else {
       this.element.viewContainerRef.createEmbeddedView(this.domTemplate);
     }
+
+    const inserted = this.element.elRef.nativeElement.nextElementSibling;
+    if (inserted) {
+      this.element.elRef.nativeElement.appendChild(inserted);
+    }
   }
 
   private manipulateDomEffect() {
     const cleanUp = () => {
-      if (this.target)
-        this.target.removeChild(this.element.elRef.nativeElement);
+      let hasChild = false;
+
+      if (this.target) {
+        this.target.childNodes.forEach((child) => {
+          hasChild = child === this.element.elRef.nativeElement;
+        });
+
+        if (hasChild) {
+          this.target.removeChild(this.element.elRef.nativeElement);
+        }
+      }
     };
 
     cleanUp();
@@ -464,5 +473,19 @@ export class HtmlComponent implements OnInit, OnChanges {
         ...(this.domStyle || {}),
       };
     }
+  }
+
+  onHtmlReady(group: Group) {
+    this.ngZone.runOutsideAngular(() => {
+      this.group = group;
+      this.target =
+        this.portal ||
+        this.canvasStore.getImperativeState().renderer?.domElement.parentNode;
+      this.element = this.htmlElement ?? this.defaultHtmlElement;
+
+      this.renderEffect();
+      this.manipulateDomEffect();
+      this.setupStylesEffect();
+    });
   }
 }

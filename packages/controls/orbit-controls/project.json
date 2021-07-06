@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/controls/orbit-controls",
+  "sourceRoot": "packages/controls/orbit-controls/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.json",
+        "project": "packages/controls/orbit-controls/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/controls/orbit-controls/src/**/*.ts",
+          "packages/controls/orbit-controls/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/controls/orbit-controls"],
+      "options": {
+        "jestConfig": "packages/controls/orbit-controls/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:controls", "type:library", "context:orbit-controls"],
+  "configFilePath": "packages/controls/orbit-controls/project.json"
+}

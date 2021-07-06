@@ -40,6 +40,7 @@ import {
 import { ThreeSceneModule } from '@angular-three/core/scene';
 import { ThreeStatsModule } from '@angular-three/core/stats';
 import { ContactShadowsModule } from '@angular-three/helpers';
+import { HtmlModule } from "@angular-three/helpers/web";
 import { ThreePopmotionModule } from '@angular-three/popmotion';
 import { ThreePostprocessingModule } from '@angular-three/postprocessing';
 import { ThreeRenderPassModule } from '@angular-three/postprocessing/render-pass';
@@ -163,6 +164,7 @@ const routes: Routes = [
     ThreeFogPipeModule,
     ThreeColorPipeModule,
     RouterModule.forRoot(routes),
+    HtmlModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/core/stats",
+  "sourceRoot": "packages/core/stats/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/core/stats/tsconfig.lib.json",
+        "project": "packages/core/stats/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/stats/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/core/stats/src/**/*.ts",
+          "packages/core/stats/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/core/stats"],
+      "options": {
+        "jestConfig": "packages/core/stats/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:core", "type:library", "context:stats"],
+  "configFilePath": "packages/core/stats/project.json"
+}

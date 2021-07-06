@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/core/lod",
+  "sourceRoot": "packages/core/lod/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/core/lod/tsconfig.lib.json",
+        "project": "packages/core/lod/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/lod/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/core/lod/src/**/*.ts",
+          "packages/core/lod/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/core/lod"],
+      "options": {
+        "jestConfig": "packages/core/lod/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:core", "type:library", "context:lod"],
+  "configFilePath": "packages/core/lod/project.json"
+}

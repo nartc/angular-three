@@ -19,6 +19,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       <ngt-point-light o3d [position]="[-10, -10, -10]"></ngt-point-light>
       <demo-box [position]="[1.2, 0, 0]"></demo-box>
       <demo-box [position]="[-1.2, 0, 0]"></demo-box>
+
+      <ngt-html o3d>
+        <div>This is an HTML</div>
+      </ngt-html>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

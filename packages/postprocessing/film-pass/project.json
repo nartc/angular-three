@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/film-pass",
+  "sourceRoot": "packages/postprocessing/film-pass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/film-pass/tsconfig.lib.json",
+        "project": "packages/postprocessing/film-pass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/film-pass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/film-pass/src/**/*.ts",
+          "packages/postprocessing/film-pass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/postprocessing/film-pass"],
+      "options": {
+        "jestConfig": "packages/postprocessing/film-pass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:postprocessing", "type:library", "context:film-pass"],
+  "configFilePath": "packages/postprocessing/film-pass/project.json"
+}

@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/saopass",
+  "sourceRoot": "packages/postprocessing/saopass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/saopass/tsconfig.lib.json",
+        "project": "packages/postprocessing/saopass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/saopass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/saopass/src/**/*.ts",
+          "packages/postprocessing/saopass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/postprocessing/saopass"],
+      "options": {
+        "jestConfig": "packages/postprocessing/saopass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:postprocessing", "type:library", "context:sao-pass"],
+  "configFilePath": "packages/postprocessing/saopass/project.json"
+}

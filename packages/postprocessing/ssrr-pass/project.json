@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/ssrr-pass",
+  "sourceRoot": "packages/postprocessing/ssrr-pass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/ssrr-pass/tsconfig.lib.json",
+        "project": "packages/postprocessing/ssrr-pass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/ssrr-pass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/ssrr-pass/src/**/*.ts",
+          "packages/postprocessing/ssrr-pass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/postprocessing/ssrr-pass"],
+      "options": {
+        "jestConfig": "packages/postprocessing/ssrr-pass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:postprocessing", "type:library", "context:ssrr-pass"],
+  "configFilePath": "packages/postprocessing/ssrr-pass/project.json"
+}

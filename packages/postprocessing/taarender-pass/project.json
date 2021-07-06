@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/taarender-pass",
+  "sourceRoot": "packages/postprocessing/taarender-pass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/taarender-pass/tsconfig.lib.json",
+        "project": "packages/postprocessing/taarender-pass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/taarender-pass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/taarender-pass/src/**/*.ts",
+          "packages/postprocessing/taarender-pass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/postprocessing/taarender-pass"],
+      "options": {
+        "jestConfig": "packages/postprocessing/taarender-pass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:postprocessing", "type:library", "context:taa-render-pass"],
+  "configFilePath": "packages/postprocessing/taarender-pass/project.json"
+}

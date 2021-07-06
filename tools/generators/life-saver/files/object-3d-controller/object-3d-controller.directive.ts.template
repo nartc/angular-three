@@ -24,7 +24,8 @@ import { Controller } from './controller.abstract';
     ngt-scene[o3d],
     ngt-points[o3d],
     ngt-cube-camera[o3d],
-    ngt-contact-shadows[o3d]<% if (selectors.length) { %>,<% } %><% for (const selector of selectors) { %>
+    ngt-contact-shadows[o3d],
+    ngt-html[o3d]<% if (selectors.length) { %>,<% } %><% for (const selector of selectors) { %>
     <%= selector.selector %>[o3d]<% if (!selector.isLast) { %>,<% } %><% } %>
   `,
   exportAs: 'ngtObject3dController',

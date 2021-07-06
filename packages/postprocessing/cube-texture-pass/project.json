@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/postprocessing/cube-texture-pass",
+  "sourceRoot": "packages/postprocessing/cube-texture-pass/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/postprocessing/cube-texture-pass/tsconfig.lib.json",
+        "project": "packages/postprocessing/cube-texture-pass/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/postprocessing/cube-texture-pass/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/postprocessing/cube-texture-pass/src/**/*.ts",
+          "packages/postprocessing/cube-texture-pass/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/postprocessing/cube-texture-pass"],
+      "options": {
+        "jestConfig": "packages/postprocessing/cube-texture-pass/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:postprocessing", "type:library", "context:cube-texture-pass"],
+  "configFilePath": "packages/postprocessing/cube-texture-pass/project.json"
+}

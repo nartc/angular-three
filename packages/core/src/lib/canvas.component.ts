@@ -33,7 +33,10 @@ import type {
 @Component({
   selector: 'ngt-canvas',
   exportAs: 'ngtCanvas',
-  template: ` <canvas #rendererCanvas></canvas> `,
+  template: `
+    <canvas #rendererCanvas></canvas>
+    <ng-content></ng-content>
+  `,
   styles: [
     `
       :host {

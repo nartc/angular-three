@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/controls/pointer-lock-controls",
+  "sourceRoot": "packages/controls/pointer-lock-controls/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/controls/pointer-lock-controls/tsconfig.lib.json",
+        "project": "packages/controls/pointer-lock-controls/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/controls/pointer-lock-controls/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/controls/pointer-lock-controls/src/**/*.ts",
+          "packages/controls/pointer-lock-controls/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/controls/pointer-lock-controls"],
+      "options": {
+        "jestConfig": "packages/controls/pointer-lock-controls/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:controls", "type:library", "context:pointer-lock-controls"],
+  "configFilePath": "packages/controls/pointer-lock-controls/project.json"
+}

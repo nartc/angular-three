@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "packages/core/meshes",
+  "sourceRoot": "packages/core/meshes/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/core/meshes/tsconfig.lib.json",
+        "project": "packages/core/meshes/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/meshes/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/core/meshes/src/**/*.ts",
+          "packages/core/meshes/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/core/meshes"],
+      "options": {
+        "jestConfig": "packages/core/meshes/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:core", "type:library", "context:meshes"],
+  "configFilePath": "packages/core/meshes/project.json"
+}

@@ -1,0 +1,71 @@
+{
+  "projectType": "library",
+  "root": "packages/core",
+  "sourceRoot": "packages/core/src",
+  "prefix": "three",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "options": {
+        "tsConfig": "packages/core/tsconfig.lib.json",
+        "project": "packages/core/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/core/src/**/*.ts",
+          "packages/core/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/core"],
+      "options": {
+        "jestConfig": "packages/core/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "build-all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npx ng run core:build --prod",
+          "npx ng run postprocessing:build --prod",
+          "npx ng run controls:build --prod",
+          "npx ng run popmotion:build --prod",
+          "npx ng run helpers:build --prod"
+        ],
+        "parallel": false
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm publish",
+        "cwd": "dist/packages/core"
+      }
+    },
+    "publish-all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npx ng run core:publish",
+          "npx ng run postprocessing:publish",
+          "npx ng run controls:publish",
+          "npx ng run popmotion:publish",
+          "npx ng run helpers:publish"
+        ]
+      }
+    }
+  },
+  "tags": ["scope:core", "type:library"],
+  "configFilePath": "packages/core/project.json"
+}

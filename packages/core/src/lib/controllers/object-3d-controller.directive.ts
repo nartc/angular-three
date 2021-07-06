@@ -25,6 +25,7 @@ import { Controller } from './controller.abstract';
     ngt-points[o3d],
     ngt-cube-camera[o3d],
     ngt-contact-shadows[o3d],
+    ngt-html[o3d],
     ngt-light-probe[o3d],
     ngt-ambient-light[o3d],
     ngt-ambient-light-probe[o3d],
