@@ -28,6 +28,7 @@ import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShade
 
 @Component({
   selector: 'ngt-contact-shadows',
+  exportAs: 'ngtContactShadows',
   template: `
     <ngt-group
       o3d

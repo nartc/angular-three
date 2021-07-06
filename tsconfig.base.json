@@ -64,6 +64,7 @@
       "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
       "@angular-three/helpers": ["packages/helpers/src/index.ts"],
       "@angular-three/helpers/core": ["packages/helpers/core/src/index.ts"],
+      "@angular-three/helpers/web": ["packages/helpers/web/src/index.ts"],
       "@angular-three/popmotion": ["packages/popmotion/src/index.ts"],
       "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
       "@angular-three/postprocessing/adaptive-tone-mapping-pass": [

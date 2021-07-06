@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "packages/helpers/web",
+  "sourceRoot": "packages/helpers/web/src",
+  "prefix": "angular-three",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "outputs": ["dist/packages/helpers/web"],
+      "options": {
+        "project": "packages/helpers/web/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/helpers/web/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/helpers/web/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/helpers/web"],
+      "options": {
+        "jestConfig": "packages/helpers/web/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/helpers/web/src/**/*.ts",
+          "packages/helpers/web/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["scope:helpers"]
+}

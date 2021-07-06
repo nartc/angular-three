@@ -1,63 +1,2381 @@
 {
   "version": 2,
   "projects": {
-    "controls": "packages/controls",
-    "controls-device-orientation-controls": "packages/controls/device-orientation-controls",
-    "controls-drag-controls": "packages/controls/drag-controls",
-    "controls-first-person-controls": "packages/controls/first-person-controls",
-    "controls-fly-controls": "packages/controls/fly-controls",
-    "controls-orbit-controls": "packages/controls/orbit-controls",
-    "controls-pointer-lock-controls": "packages/controls/pointer-lock-controls",
-    "controls-trackball-controls": "packages/controls/trackball-controls",
-    "controls-transform-controls": "packages/controls/transform-controls",
-    "core": "packages/core",
-    "core-attributes": "packages/core/attributes",
-    "core-audios": "packages/core/audios",
-    "core-cameras": "packages/core/cameras",
-    "core-curves": "packages/core/curves",
-    "core-geometries": "packages/core/geometries",
-    "core-group": "packages/core/group",
-    "core-helpers": "packages/core/helpers",
-    "core-lights": "packages/core/lights",
-    "core-lines": "packages/core/lines",
-    "core-lod": "packages/core/lod",
-    "core-materials": "packages/core/materials",
-    "core-meshes": "packages/core/meshes",
-    "core-points": "packages/core/points",
-    "core-scene": "packages/core/scene",
-    "core-sprites": "packages/core/sprites",
-    "core-stats": "packages/core/stats",
-    "core-textures": "packages/core/textures",
-    "demo": "packages/demo",
-    "helpers": "packages/helpers",
-    "helpers-core": "packages/helpers/core",
-    "popmotion": "packages/popmotion",
-    "postprocessing": "packages/postprocessing",
-    "postprocessing-adaptive-tone-mapping-pass": "packages/postprocessing/adaptive-tone-mapping-pass",
-    "postprocessing-afterimage-pass": "packages/postprocessing/afterimage-pass",
-    "postprocessing-bloom-pass": "packages/postprocessing/bloom-pass",
-    "postprocessing-bokeh-pass": "packages/postprocessing/bokeh-pass",
-    "postprocessing-clear-pass": "packages/postprocessing/clear-pass",
-    "postprocessing-cube-texture-pass": "packages/postprocessing/cube-texture-pass",
-    "postprocessing-dot-screen-pass": "packages/postprocessing/dot-screen-pass",
-    "postprocessing-film-pass": "packages/postprocessing/film-pass",
-    "postprocessing-glitch-pass": "packages/postprocessing/glitch-pass",
-    "postprocessing-halftone-pass": "packages/postprocessing/halftone-pass",
-    "postprocessing-lutpass": "packages/postprocessing/lutpass",
-    "postprocessing-mask-pass": "packages/postprocessing/mask-pass",
-    "postprocessing-outline-pass": "packages/postprocessing/outline-pass",
-    "postprocessing-render-pass": "packages/postprocessing/render-pass",
-    "postprocessing-saopass": "packages/postprocessing/saopass",
-    "postprocessing-save-pass": "packages/postprocessing/save-pass",
-    "postprocessing-shader-pass": "packages/postprocessing/shader-pass",
-    "postprocessing-smaapass": "packages/postprocessing/smaapass",
-    "postprocessing-ssaarender-pass": "packages/postprocessing/ssaarender-pass",
-    "postprocessing-ssaopass": "packages/postprocessing/ssaopass",
-    "postprocessing-ssrpass": "packages/postprocessing/ssrpass",
-    "postprocessing-ssrr-pass": "packages/postprocessing/ssrr-pass",
-    "postprocessing-taarender-pass": "packages/postprocessing/taarender-pass",
-    "postprocessing-texture-pass": "packages/postprocessing/texture-pass",
-    "postprocessing-unreal-bloom-pass": "packages/postprocessing/unreal-bloom-pass"
+    "controls": {
+      "projectType": "library",
+      "root": "packages/controls",
+      "sourceRoot": "packages/controls/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/tsconfig.lib.json",
+            "project": "packages/controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/src/**/*.ts",
+              "packages/controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls"],
+          "options": {
+            "jestConfig": "packages/controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "publish": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/controls"
+          }
+        }
+      },
+      "tags": ["scope:controls", "type:library"],
+      "configFilePath": "packages/controls/project.json"
+    },
+    "controls-device-orientation-controls": {
+      "projectType": "library",
+      "root": "packages/controls/device-orientation-controls",
+      "sourceRoot": "packages/controls/device-orientation-controls/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/device-orientation-controls/tsconfig.lib.json",
+            "project": "packages/controls/device-orientation-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/device-orientation-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/device-orientation-controls/src/**/*.ts",
+              "packages/controls/device-orientation-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/device-orientation-controls"],
+          "options": {
+            "jestConfig": "packages/controls/device-orientation-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:device-orientation-controls"
+      ],
+      "configFilePath": "packages/controls/device-orientation-controls/project.json"
+    },
+    "controls-drag-controls": {
+      "projectType": "library",
+      "root": "packages/controls/drag-controls",
+      "sourceRoot": "packages/controls/drag-controls/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/drag-controls/tsconfig.lib.json",
+            "project": "packages/controls/drag-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/drag-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/drag-controls/src/**/*.ts",
+              "packages/controls/drag-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/drag-controls"],
+          "options": {
+            "jestConfig": "packages/controls/drag-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:controls", "type:library", "context:drag-controls"],
+      "configFilePath": "packages/controls/drag-controls/project.json"
+    },
+    "controls-first-person-controls": {
+      "projectType": "library",
+      "root": "packages/controls/first-person-controls",
+      "sourceRoot": "packages/controls/first-person-controls/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/first-person-controls/tsconfig.lib.json",
+            "project": "packages/controls/first-person-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/first-person-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/first-person-controls/src/**/*.ts",
+              "packages/controls/first-person-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/first-person-controls"],
+          "options": {
+            "jestConfig": "packages/controls/first-person-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:first-person-controls"
+      ],
+      "configFilePath": "packages/controls/first-person-controls/project.json"
+    },
+    "controls-fly-controls": {
+      "projectType": "library",
+      "root": "packages/controls/fly-controls",
+      "sourceRoot": "packages/controls/fly-controls/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/fly-controls/tsconfig.lib.json",
+            "project": "packages/controls/fly-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/fly-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/fly-controls/src/**/*.ts",
+              "packages/controls/fly-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/fly-controls"],
+          "options": {
+            "jestConfig": "packages/controls/fly-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:controls", "type:library", "context:fly-controls"],
+      "configFilePath": "packages/controls/fly-controls/project.json"
+    },
+    "controls-orbit-controls": {
+      "projectType": "library",
+      "root": "packages/controls/orbit-controls",
+      "sourceRoot": "packages/controls/orbit-controls/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.json",
+            "project": "packages/controls/orbit-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/orbit-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/orbit-controls/src/**/*.ts",
+              "packages/controls/orbit-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/orbit-controls"],
+          "options": {
+            "jestConfig": "packages/controls/orbit-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:controls", "type:library", "context:orbit-controls"],
+      "configFilePath": "packages/controls/orbit-controls/project.json"
+    },
+    "controls-pointer-lock-controls": {
+      "projectType": "library",
+      "root": "packages/controls/pointer-lock-controls",
+      "sourceRoot": "packages/controls/pointer-lock-controls/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/pointer-lock-controls/tsconfig.lib.json",
+            "project": "packages/controls/pointer-lock-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/pointer-lock-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/pointer-lock-controls/src/**/*.ts",
+              "packages/controls/pointer-lock-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/pointer-lock-controls"],
+          "options": {
+            "jestConfig": "packages/controls/pointer-lock-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:pointer-lock-controls"
+      ],
+      "configFilePath": "packages/controls/pointer-lock-controls/project.json"
+    },
+    "controls-trackball-controls": {
+      "projectType": "library",
+      "root": "packages/controls/trackball-controls",
+      "sourceRoot": "packages/controls/trackball-controls/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/trackball-controls/tsconfig.lib.json",
+            "project": "packages/controls/trackball-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/trackball-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/trackball-controls/src/**/*.ts",
+              "packages/controls/trackball-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/trackball-controls"],
+          "options": {
+            "jestConfig": "packages/controls/trackball-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:controls", "type:library", "context:trackball-controls"],
+      "configFilePath": "packages/controls/trackball-controls/project.json"
+    },
+    "controls-transform-controls": {
+      "projectType": "library",
+      "root": "packages/controls/transform-controls",
+      "sourceRoot": "packages/controls/transform-controls/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/controls/transform-controls/tsconfig.lib.json",
+            "project": "packages/controls/transform-controls/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/controls/transform-controls/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/controls/transform-controls/src/**/*.ts",
+              "packages/controls/transform-controls/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/controls/transform-controls"],
+          "options": {
+            "jestConfig": "packages/controls/transform-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:controls", "type:library", "context:transform-controls"],
+      "configFilePath": "packages/controls/transform-controls/project.json"
+    },
+    "core": {
+      "projectType": "library",
+      "root": "packages/core",
+      "sourceRoot": "packages/core/src",
+      "prefix": "three",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/tsconfig.lib.json",
+            "project": "packages/core/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/src/**/*.ts",
+              "packages/core/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core"],
+          "options": {
+            "jestConfig": "packages/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build-all": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "npx ng run core:build --prod",
+              "npx ng run postprocessing:build --prod",
+              "npx ng run controls:build --prod",
+              "npx ng run popmotion:build --prod",
+              "npx ng run helpers:build --prod"
+            ],
+            "parallel": false
+          }
+        },
+        "publish": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/core"
+          }
+        },
+        "publish-all": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "npx ng run core:publish",
+              "npx ng run postprocessing:publish",
+              "npx ng run controls:publish",
+              "npx ng run popmotion:publish",
+              "npx ng run helpers:publish"
+            ]
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library"],
+      "configFilePath": "packages/core/project.json"
+    },
+    "core-attributes": {
+      "projectType": "library",
+      "root": "packages/core/attributes",
+      "sourceRoot": "packages/core/attributes/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/attributes/tsconfig.lib.json",
+            "project": "packages/core/attributes/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/attributes/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/attributes/src/**/*.ts",
+              "packages/core/attributes/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/attributes"],
+          "options": {
+            "jestConfig": "packages/core/attributes/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:attributes"],
+      "configFilePath": "packages/core/attributes/project.json"
+    },
+    "core-audios": {
+      "projectType": "library",
+      "root": "packages/core/audios",
+      "sourceRoot": "packages/core/audios/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/audios/tsconfig.lib.json",
+            "project": "packages/core/audios/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/audios/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/audios/src/**/*.ts",
+              "packages/core/audios/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/audios"],
+          "options": {
+            "jestConfig": "packages/core/audios/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:audios"],
+      "configFilePath": "packages/core/audios/project.json"
+    },
+    "core-cameras": {
+      "projectType": "library",
+      "root": "packages/core/cameras",
+      "sourceRoot": "packages/core/cameras/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/cameras/tsconfig.lib.json",
+            "project": "packages/core/cameras/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/cameras/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/cameras/src/**/*.ts",
+              "packages/core/cameras/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/cameras"],
+          "options": {
+            "jestConfig": "packages/core/cameras/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:cameras"],
+      "configFilePath": "packages/core/cameras/project.json"
+    },
+    "core-curves": {
+      "projectType": "library",
+      "root": "packages/core/curves",
+      "sourceRoot": "packages/core/curves/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/curves/tsconfig.lib.json",
+            "project": "packages/core/curves/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/curves/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/curves/src/**/*.ts",
+              "packages/core/curves/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/curves"],
+          "options": {
+            "jestConfig": "packages/core/curves/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:curves"],
+      "configFilePath": "packages/core/curves/project.json"
+    },
+    "core-geometries": {
+      "projectType": "library",
+      "root": "packages/core/geometries",
+      "sourceRoot": "packages/core/geometries/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/geometries/tsconfig.lib.json",
+            "project": "packages/core/geometries/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/geometries/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/geometries/src/**/*.ts",
+              "packages/core/geometries/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/geometries"],
+          "options": {
+            "jestConfig": "packages/core/geometries/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:geometries"],
+      "configFilePath": "packages/core/geometries/project.json"
+    },
+    "core-group": {
+      "projectType": "library",
+      "root": "packages/core/group",
+      "sourceRoot": "packages/core/group/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/group/tsconfig.lib.json",
+            "project": "packages/core/group/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/group/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/group/src/**/*.ts",
+              "packages/core/group/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/group"],
+          "options": {
+            "jestConfig": "packages/core/group/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:group"],
+      "configFilePath": "packages/core/group/project.json"
+    },
+    "core-helpers": {
+      "projectType": "library",
+      "root": "packages/core/helpers",
+      "sourceRoot": "packages/core/helpers/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/helpers/tsconfig.lib.json",
+            "project": "packages/core/helpers/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/helpers/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/helpers/src/**/*.ts",
+              "packages/core/helpers/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/helpers"],
+          "options": {
+            "jestConfig": "packages/core/helpers/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:helpers"],
+      "configFilePath": "packages/core/helpers/project.json"
+    },
+    "core-lights": {
+      "projectType": "library",
+      "root": "packages/core/lights",
+      "sourceRoot": "packages/core/lights/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/lights/tsconfig.lib.json",
+            "project": "packages/core/lights/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/lights/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/lights/src/**/*.ts",
+              "packages/core/lights/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/lights"],
+          "options": {
+            "jestConfig": "packages/core/lights/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:lights"],
+      "configFilePath": "packages/core/lights/project.json"
+    },
+    "core-lines": {
+      "projectType": "library",
+      "root": "packages/core/lines",
+      "sourceRoot": "packages/core/lines/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/lines/tsconfig.lib.json",
+            "project": "packages/core/lines/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/lines/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/lines/src/**/*.ts",
+              "packages/core/lines/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/lines"],
+          "options": {
+            "jestConfig": "packages/core/lines/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:lines"],
+      "configFilePath": "packages/core/lines/project.json"
+    },
+    "core-lod": {
+      "projectType": "library",
+      "root": "packages/core/lod",
+      "sourceRoot": "packages/core/lod/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/lod/tsconfig.lib.json",
+            "project": "packages/core/lod/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/lod/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/lod/src/**/*.ts",
+              "packages/core/lod/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/lod"],
+          "options": {
+            "jestConfig": "packages/core/lod/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:lod"],
+      "configFilePath": "packages/core/lod/project.json"
+    },
+    "core-materials": {
+      "projectType": "library",
+      "root": "packages/core/materials",
+      "sourceRoot": "packages/core/materials/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/materials/tsconfig.lib.json",
+            "project": "packages/core/materials/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/materials/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/materials/src/**/*.ts",
+              "packages/core/materials/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/materials"],
+          "options": {
+            "jestConfig": "packages/core/materials/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:materials"],
+      "configFilePath": "packages/core/materials/project.json"
+    },
+    "core-meshes": {
+      "projectType": "library",
+      "root": "packages/core/meshes",
+      "sourceRoot": "packages/core/meshes/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/meshes/tsconfig.lib.json",
+            "project": "packages/core/meshes/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/meshes/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/meshes/src/**/*.ts",
+              "packages/core/meshes/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/meshes"],
+          "options": {
+            "jestConfig": "packages/core/meshes/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:meshes"],
+      "configFilePath": "packages/core/meshes/project.json"
+    },
+    "core-points": {
+      "projectType": "library",
+      "root": "packages/core/points",
+      "sourceRoot": "packages/core/points/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/points/tsconfig.lib.json",
+            "project": "packages/core/points/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/points/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/points/src/**/*.ts",
+              "packages/core/points/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/points"],
+          "options": {
+            "jestConfig": "packages/core/points/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:points"],
+      "configFilePath": "packages/core/points/project.json"
+    },
+    "core-scene": {
+      "projectType": "library",
+      "root": "packages/core/scene",
+      "sourceRoot": "packages/core/scene/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/scene/tsconfig.lib.json",
+            "project": "packages/core/scene/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/scene/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/scene/src/**/*.ts",
+              "packages/core/scene/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/scene"],
+          "options": {
+            "jestConfig": "packages/core/scene/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:scene"],
+      "configFilePath": "packages/core/scene/project.json"
+    },
+    "core-sprites": {
+      "projectType": "library",
+      "root": "packages/core/sprites",
+      "sourceRoot": "packages/core/sprites/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/sprites/tsconfig.lib.json",
+            "project": "packages/core/sprites/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/sprites/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/sprites/src/**/*.ts",
+              "packages/core/sprites/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/sprites"],
+          "options": {
+            "jestConfig": "packages/core/sprites/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:sprites"],
+      "configFilePath": "packages/core/sprites/project.json"
+    },
+    "core-stats": {
+      "projectType": "library",
+      "root": "packages/core/stats",
+      "sourceRoot": "packages/core/stats/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/stats/tsconfig.lib.json",
+            "project": "packages/core/stats/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/stats/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/stats/src/**/*.ts",
+              "packages/core/stats/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/stats"],
+          "options": {
+            "jestConfig": "packages/core/stats/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:stats"],
+      "configFilePath": "packages/core/stats/project.json"
+    },
+    "core-textures": {
+      "projectType": "library",
+      "root": "packages/core/textures",
+      "sourceRoot": "packages/core/textures/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/core/textures/tsconfig.lib.json",
+            "project": "packages/core/textures/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/core/textures/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/core/textures/src/**/*.ts",
+              "packages/core/textures/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/core/textures"],
+          "options": {
+            "jestConfig": "packages/core/textures/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:core", "type:library", "context:textures"],
+      "configFilePath": "packages/core/textures/project.json"
+    },
+    "demo": {
+      "projectType": "application",
+      "root": "packages/demo",
+      "sourceRoot": "packages/demo/src",
+      "prefix": "demo",
+      "targets": {
+        "build": {
+          "executor": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/packages/demo",
+            "index": "packages/demo/src/index.html",
+            "main": "packages/demo/src/main.ts",
+            "polyfills": "packages/demo/src/polyfills.ts",
+            "tsConfig": "packages/demo/tsconfig.app.json",
+            "assets": [
+              "packages/demo/src/favicon.ico",
+              "packages/demo/src/assets"
+            ],
+            "styles": ["packages/demo/src/styles.scss"],
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "packages/demo/src/environments/environment.ts",
+                  "with": "packages/demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "executor": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "demo:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/demo/src/**/*.ts",
+              "packages/demo/src/**/*.html"
+            ]
+          }
+        }
+      },
+      "tags": [],
+      "configFilePath": "packages/demo/project.json"
+    },
+    "helpers": {
+      "projectType": "library",
+      "root": "packages/helpers",
+      "sourceRoot": "packages/helpers/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/helpers/tsconfig.lib.json",
+            "project": "packages/helpers/ng-package.json",
+            "updateBuildableProjectDepsInPackageJson": false
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/helpers/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/helpers/src/**/*.ts",
+              "packages/helpers/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/helpers"],
+          "options": {
+            "jestConfig": "packages/helpers/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "publish": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/helpers"
+          }
+        }
+      },
+      "tags": ["scope:helpers", "type:library"],
+      "configFilePath": "packages/helpers/project.json"
+    },
+    "helpers-core": {
+      "projectType": "library",
+      "root": "packages/helpers/core",
+      "sourceRoot": "packages/helpers/core/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/helpers/core/tsconfig.lib.json",
+            "project": "packages/helpers/core/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/helpers/core/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/helpers/core/src/**/*.ts",
+              "packages/helpers/core/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/helpers/core"],
+          "options": {
+            "jestConfig": "packages/helpers/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:helpers", "type:library", "context:core"],
+      "configFilePath": "packages/helpers/core/project.json"
+    },
+    "helpers-web": "packages/helpers/web",
+    "popmotion": {
+      "projectType": "library",
+      "root": "packages/popmotion",
+      "sourceRoot": "packages/popmotion/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/popmotion/tsconfig.lib.json",
+            "project": "packages/popmotion/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/popmotion/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/popmotion/src/**/*.ts",
+              "packages/popmotion/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/popmotion"],
+          "options": {
+            "jestConfig": "packages/popmotion/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "publish": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/popmotion"
+          }
+        }
+      },
+      "tags": ["scope:popmotion", "type:library"],
+      "configFilePath": "packages/popmotion/project.json"
+    },
+    "postprocessing": {
+      "projectType": "library",
+      "root": "packages/postprocessing",
+      "sourceRoot": "packages/postprocessing/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/tsconfig.lib.json",
+            "project": "packages/postprocessing/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/src/**/*.ts",
+              "packages/postprocessing/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing"],
+          "options": {
+            "jestConfig": "packages/postprocessing/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "publish": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm publish",
+            "cwd": "dist/packages/postprocessing"
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library"],
+      "configFilePath": "packages/postprocessing/project.json"
+    },
+    "postprocessing-adaptive-tone-mapping-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/adaptive-tone-mapping-pass",
+      "sourceRoot": "packages/postprocessing/adaptive-tone-mapping-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/adaptive-tone-mapping-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/adaptive-tone-mapping-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/adaptive-tone-mapping-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/adaptive-tone-mapping-pass/src/**/*.ts",
+              "packages/postprocessing/adaptive-tone-mapping-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/packages/postprocessing/adaptive-tone-mapping-pass"
+          ],
+          "options": {
+            "jestConfig": "packages/postprocessing/adaptive-tone-mapping-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:adaptive-tone-mapping-pass"
+      ],
+      "configFilePath": "packages/postprocessing/adaptive-tone-mapping-pass/project.json"
+    },
+    "postprocessing-afterimage-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/afterimage-pass",
+      "sourceRoot": "packages/postprocessing/afterimage-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/afterimage-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/afterimage-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/afterimage-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/afterimage-pass/src/**/*.ts",
+              "packages/postprocessing/afterimage-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/afterimage-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/afterimage-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:afterimage-pass"
+      ],
+      "configFilePath": "packages/postprocessing/afterimage-pass/project.json"
+    },
+    "postprocessing-bloom-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/bloom-pass",
+      "sourceRoot": "packages/postprocessing/bloom-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/bloom-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/bloom-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/bloom-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/bloom-pass/src/**/*.ts",
+              "packages/postprocessing/bloom-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/bloom-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/bloom-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:bloom-pass"],
+      "configFilePath": "packages/postprocessing/bloom-pass/project.json"
+    },
+    "postprocessing-bokeh-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/bokeh-pass",
+      "sourceRoot": "packages/postprocessing/bokeh-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/bokeh-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/bokeh-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/bokeh-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/bokeh-pass/src/**/*.ts",
+              "packages/postprocessing/bokeh-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/bokeh-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/bokeh-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:bokeh-pass"],
+      "configFilePath": "packages/postprocessing/bokeh-pass/project.json"
+    },
+    "postprocessing-clear-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/clear-pass",
+      "sourceRoot": "packages/postprocessing/clear-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/clear-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/clear-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/clear-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/clear-pass/src/**/*.ts",
+              "packages/postprocessing/clear-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/clear-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/clear-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:clear-pass"],
+      "configFilePath": "packages/postprocessing/clear-pass/project.json"
+    },
+    "postprocessing-cube-texture-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/cube-texture-pass",
+      "sourceRoot": "packages/postprocessing/cube-texture-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/cube-texture-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/cube-texture-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/cube-texture-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/cube-texture-pass/src/**/*.ts",
+              "packages/postprocessing/cube-texture-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/cube-texture-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/cube-texture-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:cube-texture-pass"
+      ],
+      "configFilePath": "packages/postprocessing/cube-texture-pass/project.json"
+    },
+    "postprocessing-dot-screen-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/dot-screen-pass",
+      "sourceRoot": "packages/postprocessing/dot-screen-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/dot-screen-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/dot-screen-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/dot-screen-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/dot-screen-pass/src/**/*.ts",
+              "packages/postprocessing/dot-screen-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/dot-screen-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/dot-screen-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:dot-screen-pass"
+      ],
+      "configFilePath": "packages/postprocessing/dot-screen-pass/project.json"
+    },
+    "postprocessing-film-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/film-pass",
+      "sourceRoot": "packages/postprocessing/film-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/film-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/film-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/film-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/film-pass/src/**/*.ts",
+              "packages/postprocessing/film-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/film-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/film-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:film-pass"],
+      "configFilePath": "packages/postprocessing/film-pass/project.json"
+    },
+    "postprocessing-glitch-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/glitch-pass",
+      "sourceRoot": "packages/postprocessing/glitch-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/glitch-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/glitch-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/glitch-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/glitch-pass/src/**/*.ts",
+              "packages/postprocessing/glitch-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/glitch-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/glitch-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:glitch-pass"],
+      "configFilePath": "packages/postprocessing/glitch-pass/project.json"
+    },
+    "postprocessing-halftone-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/halftone-pass",
+      "sourceRoot": "packages/postprocessing/halftone-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/halftone-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/halftone-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/halftone-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/halftone-pass/src/**/*.ts",
+              "packages/postprocessing/halftone-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/halftone-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/halftone-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:halftone-pass"],
+      "configFilePath": "packages/postprocessing/halftone-pass/project.json"
+    },
+    "postprocessing-lutpass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/lutpass",
+      "sourceRoot": "packages/postprocessing/lutpass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/lutpass/tsconfig.lib.json",
+            "project": "packages/postprocessing/lutpass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/lutpass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/lutpass/src/**/*.ts",
+              "packages/postprocessing/lutpass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/lutpass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/lutpass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:lut-pass"],
+      "configFilePath": "packages/postprocessing/lutpass/project.json"
+    },
+    "postprocessing-mask-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/mask-pass",
+      "sourceRoot": "packages/postprocessing/mask-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/mask-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/mask-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/mask-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/mask-pass/src/**/*.ts",
+              "packages/postprocessing/mask-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/mask-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/mask-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:mask-pass"],
+      "configFilePath": "packages/postprocessing/mask-pass/project.json"
+    },
+    "postprocessing-outline-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/outline-pass",
+      "sourceRoot": "packages/postprocessing/outline-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/outline-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/outline-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/outline-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/outline-pass/src/**/*.ts",
+              "packages/postprocessing/outline-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/outline-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/outline-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:outline-pass"],
+      "configFilePath": "packages/postprocessing/outline-pass/project.json"
+    },
+    "postprocessing-render-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/render-pass",
+      "sourceRoot": "packages/postprocessing/render-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/render-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/render-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/render-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/render-pass/src/**/*.ts",
+              "packages/postprocessing/render-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/render-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/render-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:render-pass"],
+      "configFilePath": "packages/postprocessing/render-pass/project.json"
+    },
+    "postprocessing-saopass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/saopass",
+      "sourceRoot": "packages/postprocessing/saopass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/saopass/tsconfig.lib.json",
+            "project": "packages/postprocessing/saopass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/saopass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/saopass/src/**/*.ts",
+              "packages/postprocessing/saopass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/saopass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/saopass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:sao-pass"],
+      "configFilePath": "packages/postprocessing/saopass/project.json"
+    },
+    "postprocessing-save-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/save-pass",
+      "sourceRoot": "packages/postprocessing/save-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/save-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/save-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/save-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/save-pass/src/**/*.ts",
+              "packages/postprocessing/save-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/save-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/save-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:save-pass"],
+      "configFilePath": "packages/postprocessing/save-pass/project.json"
+    },
+    "postprocessing-shader-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/shader-pass",
+      "sourceRoot": "packages/postprocessing/shader-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/shader-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/shader-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/shader-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/shader-pass/src/**/*.ts",
+              "packages/postprocessing/shader-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/shader-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/shader-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:shader-pass"],
+      "configFilePath": "packages/postprocessing/shader-pass/project.json"
+    },
+    "postprocessing-smaapass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/smaapass",
+      "sourceRoot": "packages/postprocessing/smaapass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/smaapass/tsconfig.lib.json",
+            "project": "packages/postprocessing/smaapass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/smaapass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/smaapass/src/**/*.ts",
+              "packages/postprocessing/smaapass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/smaapass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/smaapass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:smaa-pass"],
+      "configFilePath": "packages/postprocessing/smaapass/project.json"
+    },
+    "postprocessing-ssaarender-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/ssaarender-pass",
+      "sourceRoot": "packages/postprocessing/ssaarender-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/ssaarender-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/ssaarender-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/ssaarender-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/ssaarender-pass/src/**/*.ts",
+              "packages/postprocessing/ssaarender-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/ssaarender-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/ssaarender-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:ssaa-render-pass"
+      ],
+      "configFilePath": "packages/postprocessing/ssaarender-pass/project.json"
+    },
+    "postprocessing-ssaopass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/ssaopass",
+      "sourceRoot": "packages/postprocessing/ssaopass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/ssaopass/tsconfig.lib.json",
+            "project": "packages/postprocessing/ssaopass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/ssaopass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/ssaopass/src/**/*.ts",
+              "packages/postprocessing/ssaopass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/ssaopass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/ssaopass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:ssao-pass"],
+      "configFilePath": "packages/postprocessing/ssaopass/project.json"
+    },
+    "postprocessing-ssrpass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/ssrpass",
+      "sourceRoot": "packages/postprocessing/ssrpass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/ssrpass/tsconfig.lib.json",
+            "project": "packages/postprocessing/ssrpass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/ssrpass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/ssrpass/src/**/*.ts",
+              "packages/postprocessing/ssrpass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/ssrpass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/ssrpass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:ssr-pass"],
+      "configFilePath": "packages/postprocessing/ssrpass/project.json"
+    },
+    "postprocessing-ssrr-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/ssrr-pass",
+      "sourceRoot": "packages/postprocessing/ssrr-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/ssrr-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/ssrr-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/ssrr-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/ssrr-pass/src/**/*.ts",
+              "packages/postprocessing/ssrr-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/ssrr-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/ssrr-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:ssrr-pass"],
+      "configFilePath": "packages/postprocessing/ssrr-pass/project.json"
+    },
+    "postprocessing-taarender-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/taarender-pass",
+      "sourceRoot": "packages/postprocessing/taarender-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/taarender-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/taarender-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/taarender-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/taarender-pass/src/**/*.ts",
+              "packages/postprocessing/taarender-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/taarender-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/taarender-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:taa-render-pass"
+      ],
+      "configFilePath": "packages/postprocessing/taarender-pass/project.json"
+    },
+    "postprocessing-texture-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/texture-pass",
+      "sourceRoot": "packages/postprocessing/texture-pass/src",
+      "prefix": "ngt",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/texture-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/texture-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/texture-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/texture-pass/src/**/*.ts",
+              "packages/postprocessing/texture-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/texture-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/texture-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:postprocessing", "type:library", "context:texture-pass"],
+      "configFilePath": "packages/postprocessing/texture-pass/project.json"
+    },
+    "postprocessing-unreal-bloom-pass": {
+      "projectType": "library",
+      "root": "packages/postprocessing/unreal-bloom-pass",
+      "sourceRoot": "packages/postprocessing/unreal-bloom-pass/src",
+      "prefix": "angular-three",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "packages/postprocessing/unreal-bloom-pass/tsconfig.lib.json",
+            "project": "packages/postprocessing/unreal-bloom-pass/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/postprocessing/unreal-bloom-pass/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/postprocessing/unreal-bloom-pass/src/**/*.ts",
+              "packages/postprocessing/unreal-bloom-pass/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/postprocessing/unreal-bloom-pass"],
+          "options": {
+            "jestConfig": "packages/postprocessing/unreal-bloom-pass/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:unreal-bloom-pass"
+      ],
+      "configFilePath": "packages/postprocessing/unreal-bloom-pass/project.json"
+    }
   },
   "cli": {
     "defaultCollection": "@nrwl/angular"
