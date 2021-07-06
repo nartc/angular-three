@@ -1,3 +1,15 @@
+## [1.0.0-beta.41](https://github.com/nartc/angular-three/compare/1.0.0-beta.40...1.0.0-beta.41) (2021-07-06)
+
+
+### Bug Fixes
+
+* **helpers:** change to HtmlStore ([7a527e6](https://github.com/nartc/angular-three/commit/7a527e68665c59e790f99ef56b803a0733d6f653))
+
+
+### Documentations
+
+* add Html demo ([113c0ee](https://github.com/nartc/angular-three/commit/113c0ee857ba3c0f2f5f6aebe89021968777547a))
+
 ## [1.0.0-beta.40](https://github.com/nartc/angular-three/compare/1.0.0-beta.39...1.0.0-beta.40) (2021-07-06)
 
 
