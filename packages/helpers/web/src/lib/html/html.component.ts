@@ -1,166 +1,23 @@
 import {
-  AnimationReady,
-  CanvasStore,
   Object3dControllerDirective,
   OBJECT_3D_CONTROLLER_PROVIDER,
   OBJECT_3D_WATCHED_CONTROLLER,
 } from '@angular-three/core';
-import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  EventEmitter,
   Inject,
   Input,
   NgZone,
-  OnChanges,
+  OnInit,
   Output,
-  SimpleChanges,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {
-  Camera,
-  Group,
-  Matrix4,
-  Object3D,
-  OrthographicCamera,
-  PerspectiveCamera,
-  Raycaster,
-  Vector3,
-} from 'three';
+import { Group, Object3D } from 'three';
 import { HtmlElementDirective } from './html-element.directive';
-
-/* Port from React Drei HTML component: https://github.com/pmndrs/drei/blob/master/src/web/Html.tsx */
-const v1 = new Vector3();
-const v2 = new Vector3();
-const v3 = new Vector3();
-
-function defaultCalculatePosition(
-  el: Object3D,
-  camera: Camera,
-  size: { width: number; height: number }
-): number[] {
-  const objectPos = v1.setFromMatrixPosition(el.matrixWorld);
-  objectPos.project(camera);
-  const widthHalf = size.width / 2;
-  const heightHalf = size.height / 2;
-  return [
-    objectPos.x * widthHalf + widthHalf,
-    -(objectPos.y * heightHalf) + heightHalf,
-  ];
-}
-
-export type CalculatePosition = typeof defaultCalculatePosition;
-
-function isObjectBehindCamera(el: Object3D, camera: Camera): boolean {
-  const objectPos = v1.setFromMatrixPosition(el.matrixWorld);
-  const cameraPos = v2.setFromMatrixPosition(camera.matrixWorld);
-  const deltaCamObj = objectPos.sub(cameraPos);
-  const camDir = camera.getWorldDirection(v3);
-  return deltaCamObj.angleTo(camDir) > Math.PI / 2;
-}
-
-function isObjectVisible(
-  el: Object3D,
-  camera: Camera,
-  raycaster: Raycaster,
-  occlude: Object3D[]
-): boolean {
-  const elPos = v1.setFromMatrixPosition(el.matrixWorld);
-  const screenPos = elPos.clone();
-  screenPos.project(camera);
-  raycaster.setFromCamera(screenPos, camera);
-  const intersects = raycaster.intersectObjects(occlude, true);
-
-  if (intersects.length) {
-    const intersectionDistance = intersects[0].distance;
-    const pointDistance = elPos.distanceTo(raycaster.ray.origin);
-    return pointDistance < intersectionDistance;
-  }
-
-  return true;
-}
-
-function objectScale(el: Object3D, camera: Camera): number {
-  if (camera instanceof OrthographicCamera) {
-    return camera.zoom;
-  }
-
-  if (camera instanceof PerspectiveCamera) {
-    const objectPos = v1.setFromMatrixPosition(el.matrixWorld);
-    const cameraPos = v2.setFromMatrixPosition(camera.matrixWorld);
-    const vFOV = (camera.fov * Math.PI) / 180;
-    const dist = objectPos.distanceTo(cameraPos);
-    const scaleFOV = 2 * Math.tan(vFOV / 2) * dist;
-    return 1 / scaleFOV;
-  }
-
-  return 1;
-}
-
-function objectZIndex(
-  el: Object3D,
-  camera: Camera,
-  zIndexRange: Array<number>
-): number | undefined {
-  if (
-    camera instanceof PerspectiveCamera ||
-    camera instanceof OrthographicCamera
-  ) {
-    const objectPos = v1.setFromMatrixPosition(el.matrixWorld);
-    const cameraPos = v2.setFromMatrixPosition(camera.matrixWorld);
-    const dist = objectPos.distanceTo(cameraPos);
-    const A = (zIndexRange[1] - zIndexRange[0]) / (camera.far - camera.near);
-    const B = zIndexRange[1] - A * camera.far;
-    return Math.round(A * dist + B);
-  }
-  return undefined;
-}
-
-function epsilon(value: number): number {
-  return Math.abs(value) < 1e-10 ? 0 : value;
-}
-
-function getCSSMatrix(
-  matrix: Matrix4,
-  multipliers: number[],
-  prepend = ''
-): string {
-  let matrix3d = 'matrix3d(';
-  for (let i = 0; i !== 16; i++) {
-    matrix3d +=
-      epsilon(multipliers[i] * matrix.elements[i]) + (i !== 15 ? ',' : ')');
-  }
-  return prepend + matrix3d;
-}
-
-const getCameraCSSMatrix = ((multipliers: number[]) => {
-  return (matrix: Matrix4) => getCSSMatrix(matrix, multipliers);
-})([1, -1, 1, 1, 1, -1, 1, 1, 1, -1, 1, 1, 1, -1, 1, 1]);
-
-const getObjectCSSMatrix = ((scaleMultipliers: (n: number) => number[]) => {
-  return (matrix: Matrix4, factor: number) =>
-    getCSSMatrix(matrix, scaleMultipliers(factor), 'translate(-50%,-50%)');
-})((f: number) => [
-  1 / f,
-  1 / f,
-  1 / f,
-  1,
-  -1 / f,
-  -1 / f,
-  -1 / f,
-  -1,
-  1 / f,
-  1 / f,
-  1 / f,
-  1,
-  1,
-  1,
-  1,
-  1,
-]);
+import { CalculatePosition, HtmlStore } from './html.store';
 
 @Component({
   selector: 'ngt-html',
@@ -195,23 +52,21 @@ const getObjectCSSMatrix = ((scaleMultipliers: (n: number) => number[]) => {
       (pointercancel)="object3dController.pointercancel.emit($event)"
       (wheel)="object3dController.wheel.emit($event)"
       (ready)="onHtmlReady($event)"
-      (animateReady)="onHtmlAnimateReady($event)"
+      (animateReady)="onHtmlAnimateReady()"
     ></ngt-group>
     <ng-template #transformDomTemplate>
-      <div #transformOuterRef [style]="styles">
+      <div #transformOuterRef [style]="transformStyles$ | async">
         <div
           #transformInnerRef
           [style]="{ position: 'absolute', pointerEvents: 'auto' }"
         >
-          <div #renderedRef [class]="domStyle" [style]="domStyle">
-            <ng-content></ng-content>
-          </div>
+          <ng-container *ngTemplateOutlet="domTemplate"></ng-container>
         </div>
       </div>
     </ng-template>
 
     <ng-template #domTemplate>
-      <div #renderedRef [class]="domStyle" [style]="domStyle">
+      <div #renderedRef [class]="domClass$ | async" [style]="domStyle$ | async">
         <ng-content></ng-content>
       </div>
     </ng-template>
@@ -219,26 +74,69 @@ const getObjectCSSMatrix = ((scaleMultipliers: (n: number) => number[]) => {
     <div ngtHtmlElement id="ngtHtmlElement"></div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [OBJECT_3D_CONTROLLER_PROVIDER],
+  providers: [HtmlStore, OBJECT_3D_CONTROLLER_PROVIDER],
 })
-export class HtmlComponent implements OnChanges {
-  @Input() prepend?: boolean;
-  @Input() center?: boolean;
-  @Input() fullscreen?: boolean;
-  @Input() distanceFactor?: number;
-  @Input() portal?: HTMLElement;
-  @Input() occlude?: Object3D[] | boolean;
-  @Input() domStyle?: Partial<CSSStyleDeclaration>;
-  @Input() domClass = '';
-  @Input() eps = 0.001;
-  @Input() sprite = false;
-  @Input() transform = false;
-  @Input() zIndexRange: number[] = [16777271, 0];
-  @Input() calculatePosition: CalculatePosition = defaultCalculatePosition;
+export class HtmlComponent implements OnInit {
+  @Input() set prepend(v: boolean) {
+    this.htmlStore.setPrepend(v);
+  }
 
-  @Input() htmlElement?: HtmlElementDirective;
+  @Input() set center(v: boolean) {
+    this.htmlStore.setCenter(v);
+  }
 
-  @Output() occludeChange = new EventEmitter<boolean>();
+  @Input() set fullscreen(v: boolean) {
+    this.htmlStore.setFullscreen(v);
+  }
+
+  @Input() set distanceFactor(v: number) {
+    this.htmlStore.setDistanceFactor(v);
+  }
+
+  @Input() set portal(v: HTMLElement) {
+    this.htmlStore.setPortal(v);
+  }
+
+  @Input() set occlude(v: Object3D[] | boolean) {
+    this.htmlStore.setOcclude(v);
+  }
+
+  @Input() set domStyle(v: Partial<CSSStyleDeclaration>) {
+    this.htmlStore.setDomStyle(v);
+  }
+
+  @Input() set domClass(v: string) {
+    this.htmlStore.setDomClass(v);
+  }
+
+  @Input() set eps(v: number) {
+    this.htmlStore.setEps(v);
+  }
+
+  @Input() set sprite(v: boolean) {
+    this.htmlStore.setSprite(v);
+  }
+
+  @Input() set transform(v: boolean) {
+    this.htmlStore.setTransform(v);
+  }
+
+  @Input() set zIndexRange(v: number[]) {
+    this.htmlStore.setZIndexRange(v);
+  }
+
+  @Input() set calculatePosition(v: CalculatePosition) {
+    this.htmlStore.setCalculatePosition(v);
+  }
+
+  @Input() set htmlElement(v: HtmlElementDirective) {
+    this.htmlStore.elementChangedEffect({
+      elementRef: v.elRef,
+      viewContainerRef: v.viewContainerRef,
+    });
+  }
+
+  @Output() occludeChange = this.htmlStore.$occlude;
 
   @ViewChild('transformDomTemplate', { static: true })
   transformDomTemplate!: TemplateRef<unknown>;
@@ -247,245 +145,51 @@ export class HtmlComponent implements OnChanges {
   domTemplate!: TemplateRef<unknown>;
 
   @ViewChild(HtmlElementDirective, { static: true })
-  defaultHtmlElement!: HtmlElementDirective;
+  set defaultHtmlElement(v: HtmlElementDirective) {
+    this.htmlStore.elementChangedEffect({
+      elementRef: v.elRef,
+      viewContainerRef: v.viewContainerRef,
+    });
+  }
 
   @ViewChild('transformOuterRef')
   transformOuterRef?: ElementRef<HTMLDivElement>;
   @ViewChild('transformInnerRef')
   transformInnerRef?: ElementRef<HTMLDivElement>;
+
   @ViewChild('renderedRef') renderedDomRef!: ElementRef<HTMLDivElement>;
 
-  private element!: HtmlElementDirective;
-  private oldZoom = 0;
-  private oldPosition = [0, 0];
-  private target =
-    this.canvasStore.getImperativeState().renderer?.domElement.parentNode;
-
-  private visible = true;
-  styles?: Partial<CSSStyleDeclaration>;
-  group?: Group;
+  readonly domStyle$ = this.htmlStore.domStyle$;
+  readonly domClass$ = this.htmlStore.domClass$;
+  readonly transformStyles$ = this.htmlStore.transformStyles$;
 
   constructor(
     @Inject(OBJECT_3D_WATCHED_CONTROLLER)
     public readonly object3dController: Object3dControllerDirective,
-    private readonly canvasStore: CanvasStore,
     private readonly ngZone: NgZone,
-    @Inject(DOCUMENT) private readonly document: Document
+    private readonly htmlStore: HtmlStore
   ) {}
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnInit(): void {
     this.ngZone.runOutsideAngular(() => {
-      this.renderEffect();
-      if ('portal' in changes || 'transform' in changes) {
-        if (changes.portal) {
-          this.target = changes.portal.currentValue;
-        }
-
-        this.manipulateDomEffect();
-      }
-
-      if (
-        'style' in changes ||
-        'center' in changes ||
-        'fullscreen' in changes ||
-        'transform' in changes
-      ) {
-        this.setupStylesEffect();
-      }
+      this.htmlStore.renderEffect({
+        domTemplate: this.domTemplate,
+        transformDomTemplate: this.transformDomTemplate,
+      });
     });
   }
 
-  onHtmlAnimateReady({
-    animateObject,
-    renderState: { camera, size, scene },
-  }: AnimationReady<Group>) {
-    this.group = animateObject;
-    const { raycaster } = this.canvasStore.getImperativeState();
-    camera.updateMatrixWorld();
-    const vec = this.transform
-      ? this.oldPosition
-      : this.calculatePosition(this.group, camera, size);
-
-    if (
-      this.transform ||
-      Math.abs(this.oldZoom - camera.zoom) > this.eps ||
-      Math.abs(this.oldPosition[0] - vec[0]) > this.eps ||
-      Math.abs(this.oldPosition[1] - vec[1]) > this.eps
-    ) {
-      const isBehindCamera = isObjectBehindCamera(this.group, camera);
-      let raytraceTarget: null | undefined | boolean | Object3D[] = false;
-
-      if (typeof this.occlude === 'boolean') {
-        if (this.occlude) {
-          raytraceTarget = [scene];
-        }
-      } else if (Array.isArray(this.occlude)) {
-        raytraceTarget = this.occlude as Object3D[];
-      }
-
-      const previouslyVisible = this.visible;
-      if (raytraceTarget && raycaster) {
-        const isVisible = isObjectVisible(
-          this.group,
-          camera,
-          raycaster,
-          raytraceTarget
-        );
-        this.visible = isVisible && !isBehindCamera;
-      } else {
-        this.visible = !isBehindCamera;
-      }
-
-      if (previouslyVisible !== this.visible) {
-        if (this.occludeChange.observed) this.occludeChange.next(!this.visible);
-        else
-          this.element.elRef.nativeElement.style.display = this.visible
-            ? 'block'
-            : 'none';
-      }
-
-      this.element.elRef.nativeElement.style.zIndex = `${objectZIndex(
-        this.group,
-        camera,
-        this.zIndexRange
-      )}`;
-
-      if (this.transform) {
-        const [widthHalf, heightHalf] = [size.width / 2, size.height / 2];
-        const fov = camera.projectionMatrix.elements[5] * heightHalf;
-        const { isOrthographicCamera, top, left, bottom, right } =
-          camera as OrthographicCamera;
-        const cameraMatrix = getCameraCSSMatrix(camera.matrixWorldInverse);
-        const cameraTransform = isOrthographicCamera
-          ? `scale(${fov})translate(${epsilon(-(right + left) / 2)}px,${epsilon(
-              (top + bottom) / 2
-            )}px)`
-          : `translateZ(${fov}px)`;
-        let matrix = this.group.matrixWorld;
-        if (this.sprite) {
-          matrix = camera.matrixWorldInverse
-            .clone()
-            .transpose()
-            .copyPosition(matrix)
-            .scale(this.group.scale);
-          matrix.elements[3] = matrix.elements[7] = matrix.elements[11] = 0;
-          matrix.elements[15] = 1;
-        }
-        this.element.elRef.nativeElement.style.width = size.width + 'px';
-        this.element.elRef.nativeElement.style.height = size.height + 'px';
-        this.element.elRef.nativeElement.style.perspective =
-          isOrthographicCamera ? '' : `${fov}px`;
-        if (this.transformOuterRef && this.transformInnerRef) {
-          this.transformOuterRef.nativeElement.style.transform = `${cameraTransform}${cameraMatrix}translate(${widthHalf}px,${heightHalf}px)`;
-          this.transformInnerRef.nativeElement.style.transform =
-            getObjectCSSMatrix(matrix, 1 / ((this.distanceFactor || 10) / 400));
-        }
-      } else {
-        const scale =
-          this.distanceFactor === undefined
-            ? 1
-            : objectScale(this.group, camera) * this.distanceFactor;
-        this.element.elRef.nativeElement.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0) scale(${scale})`;
-      }
-      this.oldPosition = vec;
-      this.oldZoom = camera.zoom;
-    }
-  }
-
-  private renderEffect() {
-    this.element.viewContainerRef.clear();
-    if (this.transform) {
-      this.element.viewContainerRef.createEmbeddedView(
-        this.transformDomTemplate
-      );
-    } else {
-      this.element.viewContainerRef.createEmbeddedView(this.domTemplate);
-    }
-
-    const inserted = this.element.elRef.nativeElement.nextElementSibling;
-    if (inserted) {
-      this.element.elRef.nativeElement.appendChild(inserted);
-    }
-  }
-
-  private manipulateDomEffect() {
-    const cleanUp = () => {
-      let hasChild = false;
-
-      if (this.target) {
-        this.target.childNodes.forEach((child) => {
-          hasChild = child === this.element.elRef.nativeElement;
-        });
-
-        if (hasChild) {
-          this.target.removeChild(this.element.elRef.nativeElement);
-        }
-      }
-    };
-
-    cleanUp();
-
-    const {
-      scene,
-      camera,
-      internal: { size },
-    } = this.canvasStore.getImperativeState();
-
-    if (scene && camera && this.group) {
-      scene.updateMatrixWorld();
-      if (this.transform) {
-        this.element.elRef.nativeElement.style.cssText = `position:absolute;top:0;left:0;pointer-events:none;overflow:hidden;`;
-      } else {
-        const vec = this.calculatePosition(this.group, camera, size);
-        this.element.elRef.nativeElement.style.cssText = `position:absolute;top:0;left:0;transform:translate3d(${vec[0]}px,${vec[1]}px,0);transform-origin:0 0;`;
-      }
-      if (this.target) {
-        if (this.prepend) this.target.prepend(this.element.elRef.nativeElement);
-        else this.target.appendChild(this.element.elRef.nativeElement);
-      }
-    }
-  }
-
-  private setupStylesEffect() {
-    const {
-      internal: { size },
-    } = this.canvasStore.getImperativeState();
-    if (this.transform) {
-      this.styles = {
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        width: `${size.width.toString()}px`,
-        height: `${size.height.toString()}px`,
-        transformStyle: 'preserve-3d',
-        pointerEvents: 'none',
-      };
-    } else {
-      this.styles = {
-        position: 'absolute',
-        transform: this.center ? 'translate3d(-50%,-50%,0)' : 'none',
-        ...(this.fullscreen && {
-          top: `${-size.height / 2}px`,
-          left: `${-size.width / 2}px`,
-          width: `${size.width}px`,
-          height: `${size.height}px`,
-        }),
-        ...(this.domStyle || {}),
-      };
-    }
+  onHtmlAnimateReady() {
+    this.htmlStore.animateEffect({
+      occludeObserved: this.occludeChange.observed,
+      outerRef: this.transformOuterRef,
+      innerRef: this.transformInnerRef,
+    });
   }
 
   onHtmlReady(group: Group) {
     this.ngZone.runOutsideAngular(() => {
-      this.group = group;
-      this.target =
-        this.portal ||
-        this.canvasStore.getImperativeState().renderer?.domElement.parentNode;
-      this.element = this.htmlElement ?? this.defaultHtmlElement;
-
-      this.renderEffect();
-      this.manipulateDomEffect();
-      this.setupStylesEffect();
+      this.htmlStore.setGroup(group);
     });
   }
 }
