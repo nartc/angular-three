@@ -30,7 +30,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls"],
+          "outputs": [
+            "coverage/packages/controls"
+          ],
           "options": {
             "jestConfig": "packages/controls/jest.config.js",
             "passWithNoTests": true
@@ -44,7 +46,10 @@
           }
         }
       },
-      "tags": ["scope:controls", "type:library"],
+      "tags": [
+        "scope:controls",
+        "type:library"
+      ],
       "configFilePath": "packages/controls/project.json"
     },
     "controls-device-orientation-controls": {
@@ -76,7 +81,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls/device-orientation-controls"],
+          "outputs": [
+            "coverage/packages/controls/device-orientation-controls"
+          ],
           "options": {
             "jestConfig": "packages/controls/device-orientation-controls/jest.config.js",
             "passWithNoTests": true
@@ -119,14 +126,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls/drag-controls"],
+          "outputs": [
+            "coverage/packages/controls/drag-controls"
+          ],
           "options": {
             "jestConfig": "packages/controls/drag-controls/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:controls", "type:library", "context:drag-controls"],
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:drag-controls"
+      ],
       "configFilePath": "packages/controls/drag-controls/project.json"
     },
     "controls-first-person-controls": {
@@ -158,7 +171,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls/first-person-controls"],
+          "outputs": [
+            "coverage/packages/controls/first-person-controls"
+          ],
           "options": {
             "jestConfig": "packages/controls/first-person-controls/jest.config.js",
             "passWithNoTests": true
@@ -201,14 +216,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls/fly-controls"],
+          "outputs": [
+            "coverage/packages/controls/fly-controls"
+          ],
           "options": {
             "jestConfig": "packages/controls/fly-controls/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:controls", "type:library", "context:fly-controls"],
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:fly-controls"
+      ],
       "configFilePath": "packages/controls/fly-controls/project.json"
     },
     "controls-orbit-controls": {
@@ -240,14 +261,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls/orbit-controls"],
+          "outputs": [
+            "coverage/packages/controls/orbit-controls"
+          ],
           "options": {
             "jestConfig": "packages/controls/orbit-controls/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:controls", "type:library", "context:orbit-controls"],
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:orbit-controls"
+      ],
       "configFilePath": "packages/controls/orbit-controls/project.json"
     },
     "controls-pointer-lock-controls": {
@@ -279,7 +306,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls/pointer-lock-controls"],
+          "outputs": [
+            "coverage/packages/controls/pointer-lock-controls"
+          ],
           "options": {
             "jestConfig": "packages/controls/pointer-lock-controls/jest.config.js",
             "passWithNoTests": true
@@ -322,14 +351,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls/trackball-controls"],
+          "outputs": [
+            "coverage/packages/controls/trackball-controls"
+          ],
           "options": {
             "jestConfig": "packages/controls/trackball-controls/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:controls", "type:library", "context:trackball-controls"],
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:trackball-controls"
+      ],
       "configFilePath": "packages/controls/trackball-controls/project.json"
     },
     "controls-transform-controls": {
@@ -361,14 +396,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/controls/transform-controls"],
+          "outputs": [
+            "coverage/packages/controls/transform-controls"
+          ],
           "options": {
             "jestConfig": "packages/controls/transform-controls/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:controls", "type:library", "context:transform-controls"],
+      "tags": [
+        "scope:controls",
+        "type:library",
+        "context:transform-controls"
+      ],
       "configFilePath": "packages/controls/transform-controls/project.json"
     },
     "core": {
@@ -400,7 +441,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core"],
+          "outputs": [
+            "coverage/packages/core"
+          ],
           "options": {
             "jestConfig": "packages/core/jest.config.js",
             "passWithNoTests": true
@@ -439,7 +482,10 @@
           }
         }
       },
-      "tags": ["scope:core", "type:library"],
+      "tags": [
+        "scope:core",
+        "type:library"
+      ],
       "configFilePath": "packages/core/project.json"
     },
     "core-attributes": {
@@ -471,14 +517,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/attributes"],
+          "outputs": [
+            "coverage/packages/core/attributes"
+          ],
           "options": {
             "jestConfig": "packages/core/attributes/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:attributes"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:attributes"
+      ],
       "configFilePath": "packages/core/attributes/project.json"
     },
     "core-audios": {
@@ -510,14 +562,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/audios"],
+          "outputs": [
+            "coverage/packages/core/audios"
+          ],
           "options": {
             "jestConfig": "packages/core/audios/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:audios"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:audios"
+      ],
       "configFilePath": "packages/core/audios/project.json"
     },
     "core-cameras": {
@@ -549,14 +607,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/cameras"],
+          "outputs": [
+            "coverage/packages/core/cameras"
+          ],
           "options": {
             "jestConfig": "packages/core/cameras/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:cameras"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:cameras"
+      ],
       "configFilePath": "packages/core/cameras/project.json"
     },
     "core-curves": {
@@ -588,14 +652,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/curves"],
+          "outputs": [
+            "coverage/packages/core/curves"
+          ],
           "options": {
             "jestConfig": "packages/core/curves/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:curves"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:curves"
+      ],
       "configFilePath": "packages/core/curves/project.json"
     },
     "core-geometries": {
@@ -627,14 +697,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/geometries"],
+          "outputs": [
+            "coverage/packages/core/geometries"
+          ],
           "options": {
             "jestConfig": "packages/core/geometries/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:geometries"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:geometries"
+      ],
       "configFilePath": "packages/core/geometries/project.json"
     },
     "core-group": {
@@ -666,14 +742,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/group"],
+          "outputs": [
+            "coverage/packages/core/group"
+          ],
           "options": {
             "jestConfig": "packages/core/group/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:group"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:group"
+      ],
       "configFilePath": "packages/core/group/project.json"
     },
     "core-helpers": {
@@ -705,14 +787,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/helpers"],
+          "outputs": [
+            "coverage/packages/core/helpers"
+          ],
           "options": {
             "jestConfig": "packages/core/helpers/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:helpers"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:helpers"
+      ],
       "configFilePath": "packages/core/helpers/project.json"
     },
     "core-lights": {
@@ -744,14 +832,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/lights"],
+          "outputs": [
+            "coverage/packages/core/lights"
+          ],
           "options": {
             "jestConfig": "packages/core/lights/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:lights"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:lights"
+      ],
       "configFilePath": "packages/core/lights/project.json"
     },
     "core-lines": {
@@ -783,14 +877,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/lines"],
+          "outputs": [
+            "coverage/packages/core/lines"
+          ],
           "options": {
             "jestConfig": "packages/core/lines/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:lines"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:lines"
+      ],
       "configFilePath": "packages/core/lines/project.json"
     },
     "core-lod": {
@@ -822,14 +922,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/lod"],
+          "outputs": [
+            "coverage/packages/core/lod"
+          ],
           "options": {
             "jestConfig": "packages/core/lod/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:lod"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:lod"
+      ],
       "configFilePath": "packages/core/lod/project.json"
     },
     "core-materials": {
@@ -861,14 +967,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/materials"],
+          "outputs": [
+            "coverage/packages/core/materials"
+          ],
           "options": {
             "jestConfig": "packages/core/materials/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:materials"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:materials"
+      ],
       "configFilePath": "packages/core/materials/project.json"
     },
     "core-meshes": {
@@ -900,14 +1012,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/meshes"],
+          "outputs": [
+            "coverage/packages/core/meshes"
+          ],
           "options": {
             "jestConfig": "packages/core/meshes/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:meshes"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:meshes"
+      ],
       "configFilePath": "packages/core/meshes/project.json"
     },
     "core-points": {
@@ -939,14 +1057,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/points"],
+          "outputs": [
+            "coverage/packages/core/points"
+          ],
           "options": {
             "jestConfig": "packages/core/points/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:points"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:points"
+      ],
       "configFilePath": "packages/core/points/project.json"
     },
     "core-scene": {
@@ -978,14 +1102,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/scene"],
+          "outputs": [
+            "coverage/packages/core/scene"
+          ],
           "options": {
             "jestConfig": "packages/core/scene/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:scene"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:scene"
+      ],
       "configFilePath": "packages/core/scene/project.json"
     },
     "core-sprites": {
@@ -1017,14 +1147,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/sprites"],
+          "outputs": [
+            "coverage/packages/core/sprites"
+          ],
           "options": {
             "jestConfig": "packages/core/sprites/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:sprites"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:sprites"
+      ],
       "configFilePath": "packages/core/sprites/project.json"
     },
     "core-stats": {
@@ -1056,14 +1192,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/stats"],
+          "outputs": [
+            "coverage/packages/core/stats"
+          ],
           "options": {
             "jestConfig": "packages/core/stats/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:stats"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:stats"
+      ],
       "configFilePath": "packages/core/stats/project.json"
     },
     "core-textures": {
@@ -1095,14 +1237,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core/textures"],
+          "outputs": [
+            "coverage/packages/core/textures"
+          ],
           "options": {
             "jestConfig": "packages/core/textures/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:core", "type:library", "context:textures"],
+      "tags": [
+        "scope:core",
+        "type:library",
+        "context:textures"
+      ],
       "configFilePath": "packages/core/textures/project.json"
     },
     "demo": {
@@ -1123,7 +1271,9 @@
               "packages/demo/src/favicon.ico",
               "packages/demo/src/assets"
             ],
-            "styles": ["packages/demo/src/styles.scss"],
+            "styles": [
+              "packages/demo/src/styles.scss"
+            ],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -1222,7 +1372,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/helpers"],
+          "outputs": [
+            "coverage/packages/helpers"
+          ],
           "options": {
             "jestConfig": "packages/helpers/jest.config.js",
             "passWithNoTests": true
@@ -1236,7 +1388,10 @@
           }
         }
       },
-      "tags": ["scope:helpers", "type:library"],
+      "tags": [
+        "scope:helpers",
+        "type:library"
+      ],
       "configFilePath": "packages/helpers/project.json"
     },
     "helpers-core": {
@@ -1268,17 +1423,70 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/helpers/core"],
+          "outputs": [
+            "coverage/packages/helpers/core"
+          ],
           "options": {
             "jestConfig": "packages/helpers/core/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:helpers", "type:library", "context:core"],
+      "tags": [
+        "scope:helpers",
+        "type:library",
+        "context:core"
+      ],
       "configFilePath": "packages/helpers/core/project.json"
     },
-    "helpers-web": "packages/helpers/web",
+    "helpers-web": {
+      "projectType": "library",
+      "root": "packages/helpers/web",
+      "sourceRoot": "packages/helpers/web/src",
+      "prefix": "angular-three",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "outputs": [
+            "dist/packages/helpers/web"
+          ],
+          "options": {
+            "project": "packages/helpers/web/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/helpers/web/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "packages/helpers/web/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/packages/helpers/web"
+          ],
+          "options": {
+            "jestConfig": "packages/helpers/web/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/helpers/web/src/**/*.ts",
+              "packages/helpers/web/src/**/*.html"
+            ]
+          }
+        }
+      },
+      "tags": [
+        "scope:helpers"
+      ]
+    },
     "popmotion": {
       "projectType": "library",
       "root": "packages/popmotion",
@@ -1308,7 +1516,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/popmotion"],
+          "outputs": [
+            "coverage/packages/popmotion"
+          ],
           "options": {
             "jestConfig": "packages/popmotion/jest.config.js",
             "passWithNoTests": true
@@ -1322,7 +1532,10 @@
           }
         }
       },
-      "tags": ["scope:popmotion", "type:library"],
+      "tags": [
+        "scope:popmotion",
+        "type:library"
+      ],
       "configFilePath": "packages/popmotion/project.json"
     },
     "postprocessing": {
@@ -1354,7 +1567,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing"],
+          "outputs": [
+            "coverage/packages/postprocessing"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/jest.config.js",
             "passWithNoTests": true
@@ -1368,7 +1583,10 @@
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library"
+      ],
       "configFilePath": "packages/postprocessing/project.json"
     },
     "postprocessing-adaptive-tone-mapping-pass": {
@@ -1445,7 +1663,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/afterimage-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/afterimage-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/afterimage-pass/jest.config.js",
             "passWithNoTests": true
@@ -1488,14 +1708,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/bloom-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/bloom-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/bloom-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:bloom-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:bloom-pass"
+      ],
       "configFilePath": "packages/postprocessing/bloom-pass/project.json"
     },
     "postprocessing-bokeh-pass": {
@@ -1527,14 +1753,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/bokeh-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/bokeh-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/bokeh-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:bokeh-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:bokeh-pass"
+      ],
       "configFilePath": "packages/postprocessing/bokeh-pass/project.json"
     },
     "postprocessing-clear-pass": {
@@ -1566,14 +1798,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/clear-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/clear-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/clear-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:clear-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:clear-pass"
+      ],
       "configFilePath": "packages/postprocessing/clear-pass/project.json"
     },
     "postprocessing-cube-texture-pass": {
@@ -1605,7 +1843,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/cube-texture-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/cube-texture-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/cube-texture-pass/jest.config.js",
             "passWithNoTests": true
@@ -1648,7 +1888,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/dot-screen-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/dot-screen-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/dot-screen-pass/jest.config.js",
             "passWithNoTests": true
@@ -1691,14 +1933,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/film-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/film-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/film-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:film-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:film-pass"
+      ],
       "configFilePath": "packages/postprocessing/film-pass/project.json"
     },
     "postprocessing-glitch-pass": {
@@ -1730,14 +1978,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/glitch-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/glitch-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/glitch-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:glitch-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:glitch-pass"
+      ],
       "configFilePath": "packages/postprocessing/glitch-pass/project.json"
     },
     "postprocessing-halftone-pass": {
@@ -1769,14 +2023,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/halftone-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/halftone-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/halftone-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:halftone-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:halftone-pass"
+      ],
       "configFilePath": "packages/postprocessing/halftone-pass/project.json"
     },
     "postprocessing-lutpass": {
@@ -1808,14 +2068,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/lutpass"],
+          "outputs": [
+            "coverage/packages/postprocessing/lutpass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/lutpass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:lut-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:lut-pass"
+      ],
       "configFilePath": "packages/postprocessing/lutpass/project.json"
     },
     "postprocessing-mask-pass": {
@@ -1847,14 +2113,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/mask-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/mask-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/mask-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:mask-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:mask-pass"
+      ],
       "configFilePath": "packages/postprocessing/mask-pass/project.json"
     },
     "postprocessing-outline-pass": {
@@ -1886,14 +2158,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/outline-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/outline-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/outline-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:outline-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:outline-pass"
+      ],
       "configFilePath": "packages/postprocessing/outline-pass/project.json"
     },
     "postprocessing-render-pass": {
@@ -1925,14 +2203,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/render-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/render-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/render-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:render-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:render-pass"
+      ],
       "configFilePath": "packages/postprocessing/render-pass/project.json"
     },
     "postprocessing-saopass": {
@@ -1964,14 +2248,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/saopass"],
+          "outputs": [
+            "coverage/packages/postprocessing/saopass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/saopass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:sao-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:sao-pass"
+      ],
       "configFilePath": "packages/postprocessing/saopass/project.json"
     },
     "postprocessing-save-pass": {
@@ -2003,14 +2293,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/save-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/save-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/save-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:save-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:save-pass"
+      ],
       "configFilePath": "packages/postprocessing/save-pass/project.json"
     },
     "postprocessing-shader-pass": {
@@ -2042,14 +2338,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/shader-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/shader-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/shader-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:shader-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:shader-pass"
+      ],
       "configFilePath": "packages/postprocessing/shader-pass/project.json"
     },
     "postprocessing-smaapass": {
@@ -2081,14 +2383,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/smaapass"],
+          "outputs": [
+            "coverage/packages/postprocessing/smaapass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/smaapass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:smaa-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:smaa-pass"
+      ],
       "configFilePath": "packages/postprocessing/smaapass/project.json"
     },
     "postprocessing-ssaarender-pass": {
@@ -2120,7 +2428,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/ssaarender-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/ssaarender-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/ssaarender-pass/jest.config.js",
             "passWithNoTests": true
@@ -2163,14 +2473,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/ssaopass"],
+          "outputs": [
+            "coverage/packages/postprocessing/ssaopass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/ssaopass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:ssao-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:ssao-pass"
+      ],
       "configFilePath": "packages/postprocessing/ssaopass/project.json"
     },
     "postprocessing-ssrpass": {
@@ -2202,14 +2518,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/ssrpass"],
+          "outputs": [
+            "coverage/packages/postprocessing/ssrpass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/ssrpass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:ssr-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:ssr-pass"
+      ],
       "configFilePath": "packages/postprocessing/ssrpass/project.json"
     },
     "postprocessing-ssrr-pass": {
@@ -2241,14 +2563,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/ssrr-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/ssrr-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/ssrr-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:ssrr-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:ssrr-pass"
+      ],
       "configFilePath": "packages/postprocessing/ssrr-pass/project.json"
     },
     "postprocessing-taarender-pass": {
@@ -2280,7 +2608,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/taarender-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/taarender-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/taarender-pass/jest.config.js",
             "passWithNoTests": true
@@ -2323,14 +2653,20 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/texture-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/texture-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/texture-pass/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
-      "tags": ["scope:postprocessing", "type:library", "context:texture-pass"],
+      "tags": [
+        "scope:postprocessing",
+        "type:library",
+        "context:texture-pass"
+      ],
       "configFilePath": "packages/postprocessing/texture-pass/project.json"
     },
     "postprocessing-unreal-bloom-pass": {
@@ -2362,7 +2698,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/postprocessing/unreal-bloom-pass"],
+          "outputs": [
+            "coverage/packages/postprocessing/unreal-bloom-pass"
+          ],
           "options": {
             "jestConfig": "packages/postprocessing/unreal-bloom-pass/jest.config.js",
             "passWithNoTests": true
