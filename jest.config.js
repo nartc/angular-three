@@ -1,14 +1,14 @@
+const { getJestProjects } = require('@nrwl/jest');
+
 module.exports = {
   projects: [
-    '<rootDir>/packages/core',
+    ...getJestProjects(),
     '<rootDir>/packages/core/materials',
     '<rootDir>/packages/core/geometries',
     '<rootDir>/packages/core/meshes',
     '<rootDir>/packages/core/lights',
     '<rootDir>/packages/core/stats',
-    '<rootDir>/packages/controls',
     '<rootDir>/packages/core/attributes',
-    '<rootDir>/packages/postprocessing',
     '<rootDir>/packages/postprocessing/render-pass',
     '<rootDir>/packages/postprocessing/ssao-pass',
     '<rootDir>/packages/postprocessing/unreal-bloom-pass',
@@ -31,8 +31,6 @@ module.exports = {
     '<rootDir>/packages/controls/pointer-lock-controls',
     '<rootDir>/packages/controls/trackball-controls',
     '<rootDir>/packages/controls/transform-controls',
-    '<rootDir>/packages/popmotion',
-    '<rootDir>/packages/helpers',
     '<rootDir>/packages/core/cameras',
     '<rootDir>/packages/postprocessing/afterimage-pass',
     '<rootDir>/packages/postprocessing/adaptive-tone-mapping-pass',
