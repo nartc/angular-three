@@ -62,7 +62,8 @@
           "npx ng run controls:publish",
           "npx ng run popmotion:publish",
           "npx ng run helpers:publish"
-        ]
+        ],
+        "parallel": false
       }
     }
   },
