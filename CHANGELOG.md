@@ -1,3 +1,10 @@
+## [1.0.0-beta.42](https://github.com/nartc/angular-three/compare/1.0.0-beta.41...1.0.0-beta.42) (2021-08-03)
+
+
+### Bug Fixes
+
+* **helpers:** quick html fix ([1e972e9](https://github.com/nartc/angular-three/commit/1e972e964dd47787f2658224d22182432c41aaa5))
+
 ## [1.0.0-beta.41](https://github.com/nartc/angular-three/compare/1.0.0-beta.40...1.0.0-beta.41) (2021-07-06)
 
 
