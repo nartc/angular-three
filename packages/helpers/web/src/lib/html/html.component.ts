@@ -18,11 +18,13 @@ import {
 import { Group, Object3D } from 'three';
 import { HtmlElementDirective } from './html-element.directive';
 import { CalculatePosition, HtmlStore } from './html.store';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'ngt-html',
   exportAs: 'ngtHtml',
   template: `
+    <div ngtHtmlElement id="ngtHtmlElement"></div>
     <ngt-group
       o3d
       [name]="object3dController.name"
@@ -53,7 +55,8 @@ import { CalculatePosition, HtmlStore } from './html.store';
       (wheel)="object3dController.wheel.emit($event)"
       (ready)="onHtmlReady($event)"
       (animateReady)="onHtmlAnimateReady()"
-    ></ngt-group>
+    >
+    </ngt-group>
     <ng-template #transformDomTemplate>
       <div #transformOuterRef [style]="transformStyles$ | async">
         <div
@@ -66,12 +69,10 @@ import { CalculatePosition, HtmlStore } from './html.store';
     </ng-template>
 
     <ng-template #domTemplate>
-      <div #renderedRef [class]="domClass$ | async" [style]="domStyle$ | async">
+      <div #renderedRef [class]="domClass$ | async" [style]="transformStyles$ | async">
         <ng-content></ng-content>
       </div>
     </ng-template>
-
-    <div ngtHtmlElement id="ngtHtmlElement"></div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [HtmlStore, OBJECT_3D_CONTROLLER_PROVIDER],
@@ -159,7 +160,6 @@ export class HtmlComponent implements OnInit {
 
   @ViewChild('renderedRef') renderedDomRef!: ElementRef<HTMLDivElement>;
 
-  readonly domStyle$ = this.htmlStore.domStyle$;
   readonly domClass$ = this.htmlStore.domClass$;
   readonly transformStyles$ = this.htmlStore.transformStyles$;
 
