@@ -1,6 +1,6 @@
 {
   "name": "@angular-three/controls/trackball-controls",
-  "version": "1.0.0-beta.42",
+  "version": "1.0.0-beta.43",
   "peerDependencies": {
     "@angular/common": "~12.0.4",
     "@angular/core": "~12.0.4"

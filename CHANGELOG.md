@@ -1,3 +1,11 @@
+## [1.0.0-beta.43](https://github.com/nartc/angular-three/compare/1.0.0-beta.42...1.0.0-beta.43) (2021-08-12)
+
+
+### Bug Fixes
+
+* **core:** ensure primitive is participated in animation loop ([3786939](https://github.com/nartc/angular-three/commit/3786939c0fa2f90b4eb62701c85d3bd3bb294c05))
+* **core:** remove limit 60fps from loop service for now ([84bb7ad](https://github.com/nartc/angular-three/commit/84bb7adfd56ed4a08a48b7bb027044e35a572b47))
+
 ## [1.0.0-beta.42](https://github.com/nartc/angular-three/compare/1.0.0-beta.41...1.0.0-beta.42) (2021-08-03)
 
 
