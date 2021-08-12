@@ -48,6 +48,7 @@ export class PrimitiveDirective<TObject = unknown>
     this._object = value;
     if (value) {
       this.ready.emit(value);
+      this.participate(value);
     }
   }
 
