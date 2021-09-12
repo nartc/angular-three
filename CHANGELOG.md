@@ -1,3 +1,16 @@
+## [1.0.0-beta.44](https://github.com/nartc/angular-three/compare/1.0.0-beta.43...1.0.0-beta.44) (2021-09-12)
+
+
+### Bug Fixes
+
+* **core:** shareReplay with LoaderService ([834ad4a](https://github.com/nartc/angular-three/commit/834ad4a6a218bf905d4c14c5e08aaaf6eddda3d9))
+
+
+### Documentations
+
+* add gltf model demo ([72a0665](https://github.com/nartc/angular-three/commit/72a0665894eb879d3fb35691266b4ed12956844a))
+* adjust demo for ghpages ([a113a04](https://github.com/nartc/angular-three/commit/a113a04777af1eee6964d436c8c641e0f0eedfe4))
+
 ## [1.0.0-beta.43](https://github.com/nartc/angular-three/compare/1.0.0-beta.42...1.0.0-beta.43) (2021-08-12)
 
 
