@@ -1,0 +1,21 @@
+name: Docusaurus
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+        run: |
+          npm install --only=development
+          npm run ng -- deploy --name="Chau Tran" --email="nartc7789@gmail.com"
