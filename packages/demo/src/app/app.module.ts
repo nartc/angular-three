@@ -4,7 +4,7 @@ import {
   ThreeColorPipeModule,
   ThreeCoreModule,
   ThreeFogPipeModule,
-  ThreeMathConstantPipeModule,
+  ThreeMathConstantPipeModule, ThreePrimitiveModule
 } from '@angular-three/core';
 import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attributes';
 import {
@@ -71,6 +71,7 @@ import { BoxComponent } from './spinning-cubes/box.component';
 import { SpinningCubesComponent } from './spinning-cubes/spinning-cubes.component';
 import { SuzanneInstancedMeshComponent } from './suzanne-instanced-mesh/suzanne-instanced-mesh.component';
 import { SuzanneComponent } from './suzanne-instanced-mesh/suzanne.component';
+import { GltfModelComponent } from './gltf-model/gltf-model.component';
 
 const routes: Routes = [
   {
@@ -106,6 +107,10 @@ const routes: Routes = [
     path: 'html',
     component: HtmlComponent,
   },
+  {
+    path: 'gltf-model',
+    component: GltfModelComponent
+  }
 ];
 
 @NgModule({
@@ -130,6 +135,7 @@ const routes: Routes = [
     LevelOfDetailsComponent,
     DocsHomepageComponent,
     HtmlComponent,
+    GltfModelComponent
   ],
   imports: [
     BrowserModule,
@@ -171,6 +177,7 @@ const routes: Routes = [
     ThreeColorPipeModule,
     RouterModule.forRoot(routes),
     HtmlModule,
+    ThreePrimitiveModule
   ],
   providers: [],
   bootstrap: [AppComponent],

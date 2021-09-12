@@ -56,6 +56,7 @@ export class AppComponent {
     'shaders-boxes',
     'suzanne',
     'html',
+    'gltf-model'
   ];
 
   render() {
