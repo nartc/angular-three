@@ -79,6 +79,7 @@
     "@types/three": "0.130.1",
     "@typescript-eslint/eslint-plugin": "4.29.0",
     "@typescript-eslint/parser": "4.29.0",
+    "angular-cli-ghpages": "1.0.0-rc.2",
     "commitizen": "4.2.4",
     "cz-conventional-changelog": "^3.3.0",
     "dotenv": "10.0.0",

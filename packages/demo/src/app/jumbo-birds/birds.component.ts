@@ -32,7 +32,7 @@ export class BirdsComponent {
       x,
       y,
       z,
-      bird: `/assets/${bird}.glb`,
+      bird: `./assets/${bird}.glb`,
       speed,
       factor,
     };

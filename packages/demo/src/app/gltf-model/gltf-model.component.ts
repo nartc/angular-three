@@ -20,7 +20,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GltfModelComponent {
-  model$ = this.loaderService.use(GLTFLoader, '/assets/locdo.gltf');
+  model$ = this.loaderService.use(GLTFLoader, './assets/locdo.gltf');
 
   constructor(private readonly loaderService: LoaderService) {
   }

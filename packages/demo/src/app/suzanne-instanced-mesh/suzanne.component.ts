@@ -10,7 +10,7 @@ import { BufferGeometryLoader, InstancedMesh, Object3D } from 'three';
       o3d
       [geometry]="geometry$ | async"
       [args]="[1000]"
-      (animateReady)="onReady($event)"
+      (animateReady)="onAnimateReady($event)"
     >
       <ngt-mesh-normal-material></ngt-mesh-normal-material>
     </ngt-instanced-mesh>
@@ -19,7 +19,7 @@ import { BufferGeometryLoader, InstancedMesh, Object3D } from 'three';
 })
 export class SuzanneComponent {
   geometry$ = this.loaderService
-    .use(BufferGeometryLoader, '/assets/model.json')
+    .use(BufferGeometryLoader, './assets/model.json')
     .pipe(
       tap((geometry) => {
         geometry.computeVertexNormals();
@@ -31,7 +31,7 @@ export class SuzanneComponent {
 
   constructor(private readonly loaderService: LoaderService) {}
 
-  onReady({
+  onAnimateReady({
     animateObject,
     renderState: { clock },
   }: AnimationReady<InstancedMesh>) {

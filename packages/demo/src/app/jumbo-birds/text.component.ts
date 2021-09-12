@@ -42,7 +42,7 @@ export class TextComponent {
   @Input() size = 1;
   @Input() color = '#000000';
 
-  font$ = this.loaderService.use(FontLoader, '/assets/bold.blob');
+  font$ = this.loaderService.use(FontLoader, './assets/bold.blob');
 
   constructor(private readonly loaderService: LoaderService) {}
 

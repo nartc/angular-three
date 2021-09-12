@@ -77,6 +77,13 @@
           "packages/demo/src/**/*.html"
         ]
       }
+    },
+    "deploy": {
+      "executor": "angular-cli-ghpages:deploy",
+      "options": {
+        "baseHref": "/angular-three/",
+        "cname": ""
+      }
     }
   },
   "tags": [],
