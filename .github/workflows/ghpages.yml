@@ -21,5 +21,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm install --only=development
+          npm install
           npm run ng -- deploy --name="Chau Tran" --email="nartc7789@gmail.com"
