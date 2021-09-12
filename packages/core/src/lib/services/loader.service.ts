@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { defer, forkJoin, Observable, of, throwError } from 'rxjs';
+import { defer, forkJoin, Observable, of, shareReplay, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import type { Material, Object3D, Scene } from 'three';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -54,11 +54,11 @@ export class LoaderService implements OnDestroy {
       BranchingReturn<TReturnType, GLTF, GLTF & ThreeObjectMap>[]
     >;
 
-    return (
+    return defer(() =>
       Array.isArray(input)
         ? results$
         : results$.pipe(map((results) => results[0]))
-    ) as TUrl extends any[]
+    ).pipe(shareReplay({ bufferSize: 1, refCount: true })) as TUrl extends any[]
       ? Observable<BranchingReturn<TReturnType, GLTF, GLTF & ThreeObjectMap>[]>
       : Observable<BranchingReturn<TReturnType, GLTF, GLTF & ThreeObjectMap>>;
   }
