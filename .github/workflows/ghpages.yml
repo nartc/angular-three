@@ -16,6 +16,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
+
+      - name: Prepare and deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm install --only=development
           npm run ng -- deploy --name="Chau Tran" --email="nartc7789@gmail.com"
