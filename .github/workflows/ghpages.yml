@@ -1,4 +1,4 @@
-name: Docusaurus
+name: Github Pages
 on:
   push:
     branches: [ main ]
