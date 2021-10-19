@@ -76,7 +76,8 @@
           "packages/demo/src/**/*.ts",
           "packages/demo/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     },
     "deploy": {
       "executor": "angular-cli-ghpages:deploy",

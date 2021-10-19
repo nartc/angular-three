@@ -23,7 +23,8 @@
           "packages/controls/src/**/*.ts",
           "packages/controls/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nrwl/jest:jest",

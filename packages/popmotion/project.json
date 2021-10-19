@@ -23,7 +23,8 @@
           "packages/popmotion/src/**/*.ts",
           "packages/popmotion/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nrwl/jest:jest",

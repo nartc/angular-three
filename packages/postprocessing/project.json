@@ -23,7 +23,8 @@
           "packages/postprocessing/src/**/*.ts",
           "packages/postprocessing/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nrwl/jest:jest",
