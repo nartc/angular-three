@@ -69,7 +69,11 @@ import { tap } from 'rxjs';
     </ng-template>
 
     <ng-template #domTemplate>
-      <div #renderedRef [class]="domClass$ | async" [style]="transformStyles$ | async">
+      <div
+        #renderedRef
+        [class]="domClass$ | async"
+        [style]="transformStyles$ | async"
+      >
         <ng-content></ng-content>
       </div>
     </ng-template>

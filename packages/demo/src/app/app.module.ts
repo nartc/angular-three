@@ -4,7 +4,8 @@ import {
   ThreeColorPipeModule,
   ThreeCoreModule,
   ThreeFogPipeModule,
-  ThreeMathConstantPipeModule, ThreePrimitiveModule
+  ThreeMathConstantPipeModule,
+  ThreePrimitiveModule,
 } from '@angular-three/core';
 import { ThreeInstancedBufferAttributeModule } from '@angular-three/core/attributes';
 import {
@@ -109,8 +110,8 @@ const routes: Routes = [
   },
   {
     path: 'gltf-model',
-    component: GltfModelComponent
-  }
+    component: GltfModelComponent,
+  },
 ];
 
 @NgModule({
@@ -135,7 +136,7 @@ const routes: Routes = [
     LevelOfDetailsComponent,
     DocsHomepageComponent,
     HtmlComponent,
-    GltfModelComponent
+    GltfModelComponent,
   ],
   imports: [
     BrowserModule,
@@ -177,7 +178,7 @@ const routes: Routes = [
     ThreeColorPipeModule,
     RouterModule.forRoot(routes),
     HtmlModule,
-    ThreePrimitiveModule
+    ThreePrimitiveModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

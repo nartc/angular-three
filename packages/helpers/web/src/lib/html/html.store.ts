@@ -101,7 +101,7 @@ export class HtmlStore extends ComponentStore<HtmlState> {
         domStyle,
         fullscreen,
         size,
-      }),
+      })
   );
 
   $occlude = new Subject<boolean>();
