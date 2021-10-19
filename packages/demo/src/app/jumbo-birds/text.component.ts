@@ -1,7 +1,8 @@
 import type { ThreeVector3 } from '@angular-three/core';
 import { LoaderService } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FontLoader, Mesh, Vector3 } from 'three';
+import { Mesh, Vector3 } from 'three';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 
 @Component({
   selector: 'demo-text',
