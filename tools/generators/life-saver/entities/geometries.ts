@@ -11,17 +11,25 @@ export const geometries = [
   'IcosahedronBufferGeometry',
   'LatheBufferGeometry',
   'OctahedronBufferGeometry',
-  'ParametricBufferGeometry',
   'PlaneBufferGeometry',
   'PolyhedronBufferGeometry',
   'RingBufferGeometry',
   'ShapeBufferGeometry',
   'SphereBufferGeometry',
   'TetrahedronBufferGeometry',
-  'TextBufferGeometry',
   'TorusBufferGeometry',
   'TorusKnotBufferGeometry',
   'TubeBufferGeometry',
   'WireframeGeometry',
   'EdgesGeometry',
+];
+
+export const exampleGeometries = [
+  'BoxLineGeometry',
+  'ConvexGeometry',
+  'DecalGeometry',
+  'ParametricGeometry',
+  'RoundedBoxGeometry',
+  'TeapotGeometry',
+  'TextGeometry',
 ];

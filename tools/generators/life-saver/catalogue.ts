@@ -1,7 +1,7 @@
 import { attributes } from './entities/attributes';
 import { cameras } from './entities/cameras';
 import { curves } from './entities/curves';
-import { geometries } from './entities/geometries';
+import { exampleGeometries, geometries } from './entities/geometries';
 import { helpers } from './entities/helpers';
 import { lights } from './entities/lights';
 import { lines } from './entities/lines';
@@ -17,6 +17,7 @@ export const catalogue = {
     withThreeObject3d: false,
     templateType: Template.WithArgs,
     type: 'attributeType',
+    examples: []
   },
   geometries: {
     items: geometries,
@@ -24,6 +25,7 @@ export const catalogue = {
     withThreeObject3d: false,
     templateType: Template.WithArgs,
     type: 'geometryType',
+    examples: exampleGeometries
   },
   materials: {
     items: materials,
@@ -31,6 +33,7 @@ export const catalogue = {
     withThreeObject3d: false,
     templateType: Template.WithParams,
     type: 'materialType',
+    examples: []
   },
   lights: {
     items: lights,
@@ -38,6 +41,7 @@ export const catalogue = {
     withThreeObject3d: true,
     templateType: Template.WithArgs,
     type: 'lightType',
+    examples: []
   },
   curves: {
     items: curves,
@@ -45,6 +49,7 @@ export const catalogue = {
     withThreeObject3d: false,
     templateType: Template.WithArgs,
     type: 'curveType',
+    examples: []
   },
   helpers: {
     items: helpers,
@@ -52,6 +57,7 @@ export const catalogue = {
     withThreeObject3d: true,
     templateType: Template.WithArgs,
     type: 'helperType',
+    examples: []
   },
   textures: {
     items: textures,
@@ -59,6 +65,7 @@ export const catalogue = {
     withThreeObject3d: false,
     templateType: Template.WithArgs,
     type: 'textureType',
+    examples: []
   },
   lines: {
     items: lines,
@@ -66,6 +73,7 @@ export const catalogue = {
     withThreeObject3d: true,
     templateType: Template.WithNoArgsNoParams,
     type: 'lineType',
+    examples: []
   },
   sprites: {
     items: sprites,
@@ -73,6 +81,7 @@ export const catalogue = {
     withThreeObject3d: true,
     templateType: Template.WithNoArgsNoParams,
     type: 'spriteType',
+    examples: []
   },
   cameras: {
     items: cameras,
@@ -80,5 +89,6 @@ export const catalogue = {
     withThreeObject3d: true,
     templateType: Template.WithArgs,
     type: 'cameraType',
+    examples: []
   },
 };

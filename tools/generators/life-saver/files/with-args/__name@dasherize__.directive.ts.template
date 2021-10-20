@@ -2,7 +2,7 @@
 <% if (withThreeObject3d) { %>
 import { <%= abstract %>, ThreeObject3d, OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';<% } else { %>import { <%= abstract %> } from '@angular-three/core';<% } %>
 import { Directive, Input } from '@angular/core';
-import { <%= name %> } from 'three';
+import { <%= name %> } from <% if (!isExample) { %>'three';<% } else { %>'three/examples/jsm/<%= catalogueKey %>/<%= alternative || name %>';<% } %>
 
 @Directive({
   selector: 'ngt-<%= dasherize(name) %><% if (alternative) { %>,ngt-<%= dasherize(alternative) %><% } %>',

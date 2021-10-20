@@ -15,6 +15,14 @@ import { controls } from './entities/controls';
 import { passes } from './entities/passes';
 import { Template } from './models/template.enum';
 
+function getDasherizedItem(item: string, withThreeObject3d: boolean, derivedObject3Ds: string[]) {
+  const dasherizedItem = dasherize(item);
+  if (withThreeObject3d) {
+    derivedObject3Ds.push(`ngt-${dasherizedItem}`);
+  }
+  return dasherizedItem;
+}
+
 export default function (): Rule {
   return (tree, context) => {
     const derivedObject3Ds = [];
@@ -24,7 +32,7 @@ export default function (): Rule {
 
     for (const [
       key,
-      { items, abstract, type, withThreeObject3d, templateType },
+      { items, abstract, type, withThreeObject3d, templateType, examples },
     ] of Object.entries(catalogue)) {
       context.logger.info(`Generating THREE ${classify(key)}`);
       let fileDir = 'with-no-args-no-parameters';
@@ -39,10 +47,7 @@ export default function (): Rule {
       }
 
       const keyTemplates = items.map((item) => {
-        const dasherizedItem = dasherize(item);
-        if (withThreeObject3d) {
-          derivedObject3Ds.push(`ngt-${dasherizedItem}`);
-        }
+        const dasherizedItem = getDasherizedItem(item, withThreeObject3d, derivedObject3Ds);
         return objectLibTemplate(
           fileDir,
           item,
@@ -53,6 +58,21 @@ export default function (): Rule {
           dasherizedItem
         );
       });
+
+      examples.forEach(example => {
+        const dasherizedItem = getDasherizedItem(example, withThreeObject3d, derivedObject3Ds);
+
+        keyTemplates.push(objectLibTemplate(
+          fileDir,
+          example,
+          withThreeObject3d,
+          abstract,
+          type,
+          key,
+          dasherizedItem,
+          true
+        ));
+      })
 
       let extras = [];
 
@@ -65,7 +85,7 @@ export default function (): Rule {
           break;
       }
 
-      templates.push(...keyTemplates, mainIndexTemplate(items, extras, key));
+      templates.push(...keyTemplates, mainIndexTemplate(items.concat(examples), extras, key));
     }
 
     context.logger.info('Generating Object3dController');
@@ -144,8 +164,9 @@ function objectLibTemplate(
   withThreeObject3d: boolean,
   abstract: string,
   type: string,
-  key: string,
-  dasherizedItem: string
+  catalogueKey: string,
+  dasherizedItem: string,
+  isExample = false
 ): Rule {
   return mergeWith(
     apply(url(`./files/${fileDir}`), [
@@ -159,8 +180,10 @@ function objectLibTemplate(
         abstract,
         type,
         dasherize,
+        isExample,
+        catalogueKey
       }),
-      move(path.normalize(`./packages/core/${key}/src/lib/${dasherizedItem}`)),
+      move(path.normalize(`./packages/core/${catalogueKey}/src/lib/${dasherizedItem}`)),
     ]),
     MergeStrategy.Overwrite
   );

@@ -2,7 +2,7 @@
 
 import { <%= abstract %> } from '@angular-three/core';
 import { Directive } from '@angular/core';
-import { <%= name %>, <% if (name === 'RawShaderMaterial') { %>ShaderMaterial<% } else { %><%= name %><% } %>Parameters } from 'three';
+import { <%= name %>, <% if (name === 'RawShaderMaterial') { %>ShaderMaterial<% } else { %><%= name %><% } %>Parameters } from <% if (!isExample) { %>'three';<% } else { %>'three/examples/jsm/<%= catalogueKey %>/<%= alternative || name %>';<% } %>
 
 @Directive({
   selector: 'ngt-<%= dasherize(name) %>',

@@ -12,7 +12,7 @@ import {
   ThreeBoxBufferGeometryModule,
   ThreeIcosahedronBufferGeometryModule,
   ThreeSphereBufferGeometryModule,
-  ThreeTextBufferGeometryModule,
+  ThreeTextGeometryModule,
 } from '@angular-three/core/geometries';
 import { ThreeGroupModule } from '@angular-three/core/group';
 import {
@@ -158,7 +158,7 @@ const routes: Routes = [
     ThreeUnrealBloomPassModule,
     ThreeShaderPassModule,
     ThreeGroupModule,
-    ThreeTextBufferGeometryModule,
+    ThreeTextGeometryModule,
     ThreeSceneModule,
     ThreeDirectionalLightModule,
     ThreeIcosahedronBufferGeometryModule,
