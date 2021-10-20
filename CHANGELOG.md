@@ -1,3 +1,20 @@
+## [1.0.0-beta.45](https://github.com/nartc/angular-three/compare/1.0.0-beta.44...1.0.0-beta.45) (2021-10-20)
+
+
+### Features
+
+* **core:** update THREE .133.1 ([e364c0a](https://github.com/nartc/angular-three/commit/e364c0a59a0909737db5d2bd90a015642f9e7c0c))
+
+
+### Documentations
+
+* fix FontLoader import ([fcce561](https://github.com/nartc/angular-three/commit/fcce561986b3c6557bb3d5fb36548ca1ff06aee4))
+
+
+### Refactor
+
+* update packages peerDeps ([405b779](https://github.com/nartc/angular-three/commit/405b779f48625816bde1862b12646fc9fa40d239))
+
 ## [1.0.0-beta.44](https://github.com/nartc/angular-three/compare/1.0.0-beta.43...1.0.0-beta.44) (2021-09-12)
 
 
