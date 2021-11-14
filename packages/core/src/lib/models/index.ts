@@ -14,3 +14,4 @@ export * from './scene';
 export * from './camera';
 export * from './common';
 export * from './loader';
+export * from './object-map';
