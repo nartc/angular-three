@@ -40,7 +40,7 @@ export abstract class NgtObject3d<
 
   private readonly changesSubscription?: Subscription;
 
-  protected constructor(
+  constructor(
     @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
     protected object3dController: NgtObject3dController,
     protected canvasStore: CanvasStore,

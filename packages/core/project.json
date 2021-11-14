@@ -33,7 +33,9 @@
       "options": {
         "lintFilePatterns": [
           "packages/core/src/**/*.ts",
-          "packages/core/src/**/*.html"
+          "packages/core/src/**/*.html",
+          "packages/core/scene/**/*.ts",
+          "packages/core/scene/**/*.html"
         ]
       }
     }
