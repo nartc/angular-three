@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@angular-three/controls": ["packages/controls/src/index.ts"],
       "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/core/audio": ["packages/core/audio/src/index.ts"],
       "@angular-three/core/camera": ["packages/core/camera/src/index.ts"],

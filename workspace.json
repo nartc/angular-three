@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "controls": "packages/controls",
     "core": "packages/core"
   }
 }

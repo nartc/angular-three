@@ -1,0 +1,46 @@
+import * as THREE from 'three';
+import type { EntityCollection } from '../models/entity-collection.model';
+
+export const geometries: EntityCollection = {
+  core: [
+    THREE.BufferGeometry,
+    THREE.InstancedBufferGeometry,
+    THREE.BoxBufferGeometry,
+    THREE.CircleBufferGeometry,
+    THREE.ConeBufferGeometry,
+    THREE.CylinderBufferGeometry,
+    THREE.DodecahedronBufferGeometry,
+    THREE.ExtrudeBufferGeometry,
+    THREE.IcosahedronBufferGeometry,
+    THREE.LatheBufferGeometry,
+    THREE.OctahedronBufferGeometry,
+    THREE.PlaneBufferGeometry,
+    THREE.PolyhedronBufferGeometry,
+    THREE.RingBufferGeometry,
+    THREE.ShapeBufferGeometry,
+    THREE.SphereBufferGeometry,
+    THREE.TetrahedronBufferGeometry,
+    THREE.TorusBufferGeometry,
+    THREE.TorusKnotBufferGeometry,
+    THREE.TubeBufferGeometry,
+    THREE.WireframeGeometry,
+    THREE.EdgesGeometry,
+  ].map((m) => m.name),
+  examples: [
+    'BoxLineGeometry',
+    'ConvexGeometry',
+    'DecalGeometry',
+    'ParametricGeometry',
+    'RoundedBoxGeometry',
+    'TeapotGeometry',
+    'TextGeometry',
+    'LineGeometry',
+    'LineSegmentsGeometry',
+    'WireframeGeometry2',
+  ],
+  from: {
+    LineGeometry: 'lines',
+    LineSegmentsGeometry: 'lines',
+    WireframeGeometry2: 'lines',
+  },
+};

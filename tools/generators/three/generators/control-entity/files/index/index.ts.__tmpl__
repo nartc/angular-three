@@ -1,0 +1,5 @@
+// GENERATED
+<% for (const fileName of controls) { %>
+export * from './lib/<%= fileName %>/<%= fileName %>.module';
+export * from './lib/<%= fileName %>/<%= fileName %>.directive';
+<% } %>
