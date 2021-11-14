@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { DestroyedService } from '../services/destroyed.service';
-import { NgtObject3dControllerDirective } from './object-3d.controller';
+import { NgtObject3dController } from './object-3d.controller';
 
 export const NGT_OBJECT_3D_WATCHED_CONTROLLER = new InjectionToken(
   'Watched Object3D Controller'
@@ -17,7 +17,7 @@ export const NGT_OBJECT_3D_CONTROLLER_PROVIDER: Provider[] = [
   {
     provide: NGT_OBJECT_3D_WATCHED_CONTROLLER,
     deps: [
-      [new Optional(), NgtObject3dControllerDirective],
+      [new Optional(), NgtObject3dController],
       ChangeDetectorRef,
       DestroyedService,
     ],
@@ -26,7 +26,7 @@ export const NGT_OBJECT_3D_CONTROLLER_PROVIDER: Provider[] = [
 ];
 
 export function object3dWatchedControllerFactory(
-  controller: NgtObject3dControllerDirective | null,
+  controller: NgtObject3dController | null,
   changeDetectorRef: ChangeDetectorRef,
   destroy$: DestroyedService
 ) {

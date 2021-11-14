@@ -22,15 +22,15 @@ import { CanvasStore } from '../stores/canvas.store';
 import { EventsStore } from '../stores/events.store';
 import { InstancesStore } from '../stores/instances.store';
 import { applyProps } from '../utils/apply-props.util';
-import { NgtAnimationLoopParticipant } from './animation-participant';
+import { NgtAnimationParticipant } from './animation-participant';
 import { NGT_OBJECT_3D_WATCHED_CONTROLLER } from './object-3d-watched-controller.di';
-import { NgtObject3dControllerDirective } from './object-3d.controller';
+import { NgtObject3dController } from './object-3d.controller';
 
 @Directive()
 export abstract class NgtObject3d<
     TObject extends THREE.Object3D = THREE.Object3D
   >
-  extends NgtAnimationLoopParticipant<TObject>
+  extends NgtAnimationParticipant<TObject>
   implements OnDestroy, OnChanges
 {
   private $object3d = new BehaviorSubject<TObject | null>(null);
@@ -42,7 +42,7 @@ export abstract class NgtObject3d<
 
   protected constructor(
     @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
-    protected object3dController: NgtObject3dControllerDirective,
+    protected object3dController: NgtObject3dController,
     protected canvasStore: CanvasStore,
     protected instancesStore: InstancesStore,
     protected eventsStore: EventsStore,

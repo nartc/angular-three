@@ -10,7 +10,7 @@ import type { NgtAnimationReady } from '../models';
 import { AnimationStore } from '../stores/animation.store';
 
 @Directive()
-export abstract class NgtAnimationLoopParticipant<TObject = unknown>
+export abstract class NgtAnimationParticipant<TObject = unknown>
   implements OnDestroy
 {
   @Output() animateReady = new EventEmitter<NgtAnimationReady<TObject>>();

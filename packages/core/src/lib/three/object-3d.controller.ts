@@ -65,7 +65,7 @@ import type {
   `,
   exportAs: 'ngtObject3dController',
 })
-export class NgtObject3dControllerDirective implements OnChanges {
+export class NgtObject3dController implements OnChanges {
   @Input() name?: string;
   @Input() position?: NgtVector3;
   @Input() rotation?: NgtEuler;
