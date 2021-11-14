@@ -43,7 +43,9 @@
           "packages/core/points/**/*.ts",
           "packages/core/points/**/*.html",
           "packages/core/mesh/**/*.ts",
-          "packages/core/mesh/**/*.html"
+          "packages/core/mesh/**/*.html",
+          "packages/core/lod/**/*.ts",
+          "packages/core/lod/**/*.html"
         ]
       }
     }
