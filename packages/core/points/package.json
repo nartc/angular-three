@@ -3,7 +3,7 @@
     "lib": {
       "entryFile": "src/index.ts",
       "umdModuleIds": {
-        "three/examples/jsm/libs/stats.module": "three/examples/jsm/libs/stats.module"
+        "three": "three"
       }
     }
   }

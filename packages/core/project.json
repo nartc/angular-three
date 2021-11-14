@@ -39,7 +39,9 @@
           "packages/core/audio/**/*.ts",
           "packages/core/audio/**/*.html",
           "packages/core/stats/**/*.ts",
-          "packages/core/stats/**/*.html"
+          "packages/core/stats/**/*.html",
+          "packages/core/points/**/*.ts",
+          "packages/core/points/**/*.html"
         ]
       }
     }
