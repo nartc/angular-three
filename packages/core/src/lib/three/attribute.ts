@@ -13,7 +13,9 @@ import { NgtGeometry } from './geometry';
 
 @Directive()
 export abstract class NgtAttribute<
-  TAttribute extends THREE.BufferAttribute = THREE.BufferAttribute
+  TAttribute extends
+    | THREE.BufferAttribute
+    | THREE.InterleavedBufferAttribute = THREE.BufferAttribute
 > implements OnInit, OnChanges, OnDestroy
 {
   @Input() attach?: THREE.BuiltinShaderAttributeName;
