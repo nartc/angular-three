@@ -47,7 +47,9 @@
           "packages/core/lod/**/*.ts",
           "packages/core/lod/**/*.html",
           "packages/core/group/**/*.ts",
-          "packages/core/group/**/*.html"
+          "packages/core/group/**/*.html",
+          "packages/core/camera/**/*.ts",
+          "packages/core/camera/**/*.html"
         ]
       }
     }

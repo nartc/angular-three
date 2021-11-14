@@ -17,6 +17,7 @@
     "paths": {
       "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/core/audio": ["packages/core/audio/src/index.ts"],
+      "@angular-three/core/camera": ["packages/core/camera/src/index.ts"],
       "@angular-three/core/group": ["packages/core/group/src/index.ts"],
       "@angular-three/core/lod": ["packages/core/lod/src/index.ts"],
       "@angular-three/core/mesh": ["packages/core/mesh/src/index.ts"],
