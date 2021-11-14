@@ -4,7 +4,8 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "three": "three"
+      "three": "three",
+      "@angular-three/core": "@angular-three/core"
     }
   }
 }

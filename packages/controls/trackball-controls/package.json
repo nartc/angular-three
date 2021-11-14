@@ -1,0 +1,11 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "three/examples/jsm/controls/TrackballControls": "three/examples/jsm/controls/TrackballControls",
+        "@angular-three/core": "@angular-three/core"
+      }
+    }
+  }
+}

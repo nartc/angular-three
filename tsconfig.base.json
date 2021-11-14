@@ -16,6 +16,30 @@
     "baseUrl": ".",
     "paths": {
       "@angular-three/controls": ["packages/controls/src/index.ts"],
+      "@angular-three/controls/arcball-controls": [
+        "packages/controls/arcball-controls/src/index.ts"
+      ],
+      "@angular-three/controls/drag-controls": [
+        "packages/controls/drag-controls/src/index.ts"
+      ],
+      "@angular-three/controls/first-person-controls": [
+        "packages/controls/first-person-controls/src/index.ts"
+      ],
+      "@angular-three/controls/fly-controls": [
+        "packages/controls/fly-controls/src/index.ts"
+      ],
+      "@angular-three/controls/orbit-controls": [
+        "packages/controls/orbit-controls/src/index.ts"
+      ],
+      "@angular-three/controls/pointer-lock-controls": [
+        "packages/controls/pointer-lock-controls/src/index.ts"
+      ],
+      "@angular-three/controls/trackball-controls": [
+        "packages/controls/trackball-controls/src/index.ts"
+      ],
+      "@angular-three/controls/transform-controls": [
+        "packages/controls/transform-controls/src/index.ts"
+      ],
       "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/core/audio": ["packages/core/audio/src/index.ts"],
       "@angular-three/core/camera": ["packages/core/camera/src/index.ts"],

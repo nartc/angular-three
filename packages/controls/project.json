@@ -33,7 +33,23 @@
       "options": {
         "lintFilePatterns": [
           "packages/controls/src/**/*.ts",
-          "packages/controls/src/**/*.html"
+          "packages/controls/src/**/*.html",
+          "packages/controls/arcball-controls/**/*.ts",
+          "packages/controls/arcball-controls/**/*.html",
+          "packages/controls/orbit-controls/**/*.ts",
+          "packages/controls/orbit-controls/**/*.html",
+          "packages/controls/fly-controls/**/*.ts",
+          "packages/controls/fly-controls/**/*.html",
+          "packages/controls/first-person-controls/**/*.ts",
+          "packages/controls/first-person-controls/**/*.html",
+          "packages/controls/pointer-lock-controls/**/*.ts",
+          "packages/controls/pointer-lock-controls/**/*.html",
+          "packages/controls/drag-controls/**/*.ts",
+          "packages/controls/drag-controls/**/*.html",
+          "packages/controls/trackball-controls/**/*.ts",
+          "packages/controls/trackball-controls/**/*.html",
+          "packages/controls/transform-controls/**/*.ts",
+          "packages/controls/transform-controls/**/*.html"
         ]
       }
     }

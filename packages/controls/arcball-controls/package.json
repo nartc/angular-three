@@ -1,0 +1,11 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "three/examples/jsm/controls/ArcballControls": "three/examples/jsm/controls/ArcballControls",
+        "@angular-three/core": "@angular-three/core"
+      }
+    }
+  }
+}

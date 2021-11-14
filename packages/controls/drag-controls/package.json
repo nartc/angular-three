@@ -1,0 +1,12 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "three/examples/jsm/controls/DragControls": "three/examples/jsm/controls/DragControls",
+        "three": "three",
+        "@angular-three/core": "@angular-three/core"
+      }
+    }
+  }
+}

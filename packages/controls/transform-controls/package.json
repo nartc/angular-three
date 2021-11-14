@@ -1,0 +1,11 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "three/examples/jsm/controls/TransformControls": "three/examples/jsm/controls/TransformControls",
+        "@angular-three/core": "@angular-three/core"
+      }
+    }
+  }
+}

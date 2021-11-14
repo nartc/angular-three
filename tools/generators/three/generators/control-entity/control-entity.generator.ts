@@ -57,7 +57,7 @@ function createPackageJsonFile(
 ) {
   generateFiles(
     tree,
-    join(__dirname, './files/package'),
+    join(__dirname, './files/packageJson'),
     join(controlLibPath),
     {
       ...normalizedNames,
