@@ -30,6 +30,7 @@
     "@angular/language-service": "12.2.13",
     "@nrwl/angular": "13.1.4",
     "@nrwl/cli": "13.1.4",
+    "@nrwl/devkit": "13.1.4",
     "@nrwl/eslint-plugin-nx": "13.1.4",
     "@nrwl/jest": "13.1.4",
     "@nrwl/linter": "13.1.4",
