@@ -7,7 +7,7 @@ import { NgtMaterial } from './material';
 import { NgtObject3dMaterialGeometry } from './object-3d-material-geometry';
 
 @Directive()
-export abstract class NgtMesh<
+export abstract class NgtCommonMesh<
   TMesh extends THREE.Mesh = THREE.Mesh
 > extends NgtObject3dMaterialGeometry<TMesh> {
   @ContentChildren(NgtMaterial) set materialDirectives(

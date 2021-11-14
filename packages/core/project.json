@@ -41,7 +41,9 @@
           "packages/core/stats/**/*.ts",
           "packages/core/stats/**/*.html",
           "packages/core/points/**/*.ts",
-          "packages/core/points/**/*.html"
+          "packages/core/points/**/*.html",
+          "packages/core/mesh/**/*.ts",
+          "packages/core/mesh/**/*.html"
         ]
       }
     }
