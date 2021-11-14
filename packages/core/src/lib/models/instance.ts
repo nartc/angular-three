@@ -7,6 +7,7 @@ export interface NgtInstanceInternal {
   canvasStateGetter: () => CanvasStoreState;
   eventsStateGetter: () => EventsStoreState;
   handlers?: NgtEventHandlers;
+  eventCount: number;
 }
 
 export type NgtInstance = THREE.Object3D & { __ngt?: NgtInstanceInternal };

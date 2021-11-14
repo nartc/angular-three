@@ -18,3 +18,8 @@ export interface NgtIntersectionEvent<TSourceEvent> extends NgtIntersection {
   nativeEvent: TSourceEvent;
   delta: number;
 }
+
+export interface NgtPointerCaptureTarget {
+  intersection: NgtIntersection;
+  target: Element;
+}

@@ -1,6 +1,6 @@
-import type { Object3D } from 'three';
-import type { NgtDomEvent } from './events';
-import type { NgtIntersection } from './intersection';
+import * as THREE from 'three';
+import type { NgtDomEvent, NgtEvent } from './events';
+import type { NgtPointerCaptureTarget } from './intersection';
 
 export type NgtSupportedEvents =
   | 'click'
@@ -12,17 +12,19 @@ export type NgtSupportedEvents =
   | 'pointerleave'
   | 'pointermove'
   | 'pointercancel'
+  | 'pointermissed'
   | 'lostpointercapture';
 
 export interface NgtEventsInternal {
-  interaction: Object3D[];
+  interaction: THREE.Object3D[];
   hovered: Map<string, NgtDomEvent>;
-  capturedMap: Map<number, Map<Object3D, NgtIntersection>>;
+  capturedMap: Map<number, Map<THREE.Object3D, NgtPointerCaptureTarget>>;
   initialClick: [x: number, y: number];
-  initialHits: Object3D[];
+  initialHits: THREE.Object3D[];
 }
 
 export interface EventsStoreState {
+  pointermissed?: (event: NgtEvent<PointerEvent>) => void;
   connected: false | HTMLElement;
   internal: NgtEventsInternal;
   handlers?: Record<NgtSupportedEvents, EventListener>;
