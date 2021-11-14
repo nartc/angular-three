@@ -2,13 +2,10 @@
   "name": "angular-three",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-  },
+  "scripts": {},
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-     
     "@nrwl/tao": "13.1.4",
     "@nrwl/cli": "13.1.4",
     "@nrwl/workspace": "13.1.4",
