@@ -1,6 +1,15 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { defer, forkJoin, Observable, of, shareReplay, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import {
+  catchError,
+  defer,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  tap,
+  throwError,
+} from 'rxjs';
 import * as THREE from 'three';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import type {

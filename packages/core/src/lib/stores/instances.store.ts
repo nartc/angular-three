@@ -26,7 +26,7 @@ export class InstancesStore extends EnhancedComponentStore<InstancesStoreState> 
     };
   });
 
-  readonly saveBufferGeometry = this.updater<{
+  readonly saveGeometry = this.updater<{
     geometry: THREE.BufferGeometry;
     id?: string;
   }>((state, { geometry, id = geometry.uuid }) => ({
@@ -34,7 +34,7 @@ export class InstancesStore extends EnhancedComponentStore<InstancesStoreState> 
     bufferGeometries: { ...state.geometries, [id]: geometry },
   }));
 
-  readonly removeBufferGeometry = this.updater<string>((state, id) => {
+  readonly removeGeometry = this.updater<string>((state, id) => {
     const { [id]: _, ...geometries } = state.geometries;
 
     return {
