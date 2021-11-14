@@ -1,9 +1,8 @@
-import { Tree, formatFiles, installPackagesTask } from '@nrwl/devkit';
-import { libraryGenerator } from '@nrwl/workspace/generators';
+import { installPackagesTask, Tree } from '@nrwl/devkit';
+import controlEntityGenerator from './generators/control-entity/control-entity.generator';
 
-export default async function (tree: Tree, schema: any) {
-  await libraryGenerator(tree, { name: schema.name });
-  await formatFiles(tree);
+export default async function (tree: Tree) {
+  await controlEntityGenerator(tree);
   return () => {
     installPackagesTask(tree);
   };

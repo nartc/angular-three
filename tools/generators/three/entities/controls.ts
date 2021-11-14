@@ -55,7 +55,7 @@ export const controls: ControlCollection = [
     inputs: [
       {
         name: 'objects',
-        import: 'Object3D',
+        import: 'THREE.Object3D',
         isOptional: false,
         isArray: true,
         default: '[]',

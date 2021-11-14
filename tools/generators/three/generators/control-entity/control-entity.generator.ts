@@ -3,6 +3,7 @@ import {
   formatFiles,
   generateFiles,
   getWorkspaceLayout,
+  logger,
   names,
   Tree,
 } from '@nrwl/devkit';
@@ -30,9 +31,41 @@ function createControlFiles(
   );
 }
 
-function createIndexFile(tree: Tree, control: ControlEntity) {}
+function createIndexFile(
+  tree: Tree,
+  control: ControlEntity,
+  normalizedNames: ReturnType<typeof names>,
+  controlLibPath: string
+) {
+  generateFiles(
+    tree,
+    join(__dirname, './files/index'),
+    join(controlLibPath, 'src'),
+    {
+      ...normalizedNames,
+      ...control,
+      tmpl: '',
+    }
+  );
+}
 
-function createConfigFiles(tree: Tree, control: ControlEntity) {}
+function createPackageJsonFile(
+  tree: Tree,
+  control: ControlEntity,
+  normalizedNames: ReturnType<typeof names>,
+  controlLibPath: string
+) {
+  generateFiles(
+    tree,
+    join(__dirname, './files/package'),
+    join(controlLibPath),
+    {
+      ...normalizedNames,
+      ...control,
+      tmpl: '',
+    }
+  );
+}
 
 function createFiles(
   tree: Tree,
@@ -41,8 +74,8 @@ function createFiles(
   controlLibPath: string
 ) {
   createControlFiles(tree, control, normalizedNames, controlLibPath);
-  createIndexFile(tree, control);
-  createConfigFiles(tree, control);
+  createIndexFile(tree, control, normalizedNames, controlLibPath);
+  createPackageJsonFile(tree, control, normalizedNames, controlLibPath);
 }
 
 async function controlEntityGenerator(tree: Tree) {
@@ -50,7 +83,7 @@ async function controlEntityGenerator(tree: Tree) {
   const controlsDir = `${libsDir}/controls`;
   const currentEntityDirs = new Map(
     readdirSync(controlsDir, { withFileTypes: true })
-      .filter((dir) => dir.isDirectory())
+      .filter((dir) => dir.isDirectory() && dir.name !== 'src')
       .map((dir) => [
         dir.name,
         {
@@ -63,6 +96,9 @@ async function controlEntityGenerator(tree: Tree) {
 
   for (const control of controls) {
     const normalizedNames = names(control.name);
+
+    logger.info(`Generating control ${normalizedNames.className}...`);
+
     const entityLibDir = currentEntityDirs.get(normalizedNames.fileName);
 
     if (!!entityLibDir) {
@@ -80,36 +116,11 @@ async function controlEntityGenerator(tree: Tree) {
         tree,
         control,
         normalizedNames,
-        `${controlsDir}/${normalizedNames.fileName}`
+        join(controlsDir, normalizedNames.fileName)
       );
     }
 
-    // const entityLibDir = currentEntityDirs.get(normalizedNames.fileName);
-    // if (!!entityLibDir) {
-    //   currentEntityDirs.set(normalizedNames.fileName, {
-    //     ...entityLibDir,
-    //     isChecked: true,
-    //   });
-    //   createFiles(tree, control, normalizedNames, entityLibDir.fullPath);
-    // } else {
-    // await angularLibraryGenerator(tree, {
-    //   name: normalizedNames.fileName,
-    //   buildable: true,
-    //   publishable: true,
-    //   directory: 'controls',
-    //   tags: `"scope:controls","type:library","context:${normalizedNames.fileName}"`,
-    //   enableIvy: true,
-    //   standaloneConfig: true,
-    //   prefix: 'ngt',
-    //   importPath: `@angular-three/controls/${normalizedNames.fileName}`,
-    //   simpleModuleName: true,
-    // });
-    // createFiles(
-    //   tree,
-    //   control,
-    //   normalizedNames,
-    //   `${join(controlsDir, 'src', 'lib')}/${normalizedNames.fileName}`
-    // );
+    logger.info(`Generated control ${normalizedNames.className}`);
   }
 
   currentEntityDirs.forEach((entityLibDir) => {
@@ -123,7 +134,7 @@ async function controlEntityGenerator(tree: Tree) {
       });
 
       updateJsonFile(join(controlsDir, 'project.json'), (json) => {
-        if (json.target.lint?.options?.lintFilePatterns) {
+        if (json.target?.lint?.options?.lintFilePatterns) {
           json.target.lint.options.lintFilePatterns =
             json.target.lint.options.lintFilePatterns.filter(
               (pattern) =>

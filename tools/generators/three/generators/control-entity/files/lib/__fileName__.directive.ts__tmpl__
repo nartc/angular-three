@@ -1,12 +1,11 @@
 // GENERATED
+import { NgtControls } from '@angular-three/controls';
 import type { NgtCamera } from '@angular-three/core';
 import { DestroyedService<% if (injectDocument) { %>, CanvasStore, AnimationStore<% } %> } from '@angular-three/core';<% if (injectDocument) { %>
 import { DOCUMENT } from '@angular/common';<% } %>
-import { Directive<% if (inputs.length) { %>, Input<% } %><% if (injectDocument) { %>, NgZone, Inject, SkipSelf<% }%> } from '@angular/core';<% if (useRenderer || inputs.length) { %>
-import type { <% if (useRenderer) { %>WebGLRenderer, <% } %><% if (useScene) { %>Scene, <% } %><% for (const input of inputs) {%><%= input.import %>, <% } %> } from 'three';<% } %>
-import * as THREE from 'three';
+import { Directive<% if (inputs.length) { %>, Input<% } %><% if (injectDocument) { %>, NgZone, Inject, SkipSelf<% }%> } from '@angular/core';<% if (useRenderer || useScene || inputs.length) { %>
+import * as THREE from 'three';<% } %>
 import { <%= name %> } from 'three/examples/jsm/controls/<%= name %>';
-import { NgtControls } from '../../../src/lib/controls.abstract';
 
 @Directive({
   selector: 'ngt-<%= fileName %>',
