@@ -17,7 +17,8 @@
     "paths": {
       "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/core/audio": ["packages/core/audio/src/index.ts"],
-      "@angular-three/core/scene": ["packages/core/scene/src/index.ts"]
+      "@angular-three/core/scene": ["packages/core/scene/src/index.ts"],
+      "@angular-three/core/stats": ["packages/core/stats/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
