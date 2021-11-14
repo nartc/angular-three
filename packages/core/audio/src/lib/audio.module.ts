@@ -5,4 +5,4 @@ import { NgtAudioListener } from './audio-listener.directive';
   declarations: [NgtAudioListener],
   exports: [NgtAudioListener],
 })
-export class AudioModule {}
+export class NgtAudioModule {}
