@@ -58,7 +58,7 @@ import { InstancesStore } from './stores/instances.store';
     DestroyedService,
   ],
 })
-export class CanvasComponent implements OnInit {
+export class NgtCanvasComponent implements OnInit {
   @HostBinding('class.ngt-canvas') hostClass = true;
 
   @Input() set orthographic(v: boolean) {

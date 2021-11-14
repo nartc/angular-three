@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { CanvasComponent } from './canvas.component';
+import { NgtCanvasComponent } from './canvas.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [CanvasComponent],
-  exports: [CanvasComponent],
+  declarations: [NgtCanvasComponent],
+  exports: [NgtCanvasComponent],
 })
-export class CoreModule {}
+export class NgtCoreModule {}
