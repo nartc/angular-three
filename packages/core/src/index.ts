@@ -25,6 +25,7 @@ export * from './lib/three/texture';
 export * from './lib/utils/apply-props.util';
 
 export * from './lib/services/loader.service';
+export * from './lib/services/destroyed.service';
 
 export * from './lib/stores/animation.store';
 export * from './lib/stores/canvas.store';

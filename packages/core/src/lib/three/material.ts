@@ -36,7 +36,7 @@ export abstract class NgtMaterial<
 
   private _parameters?: TMaterialParameters;
 
-  protected constructor(
+  constructor(
     protected ngZone: NgZone,
     @SkipSelf() protected instancesStore: InstancesStore,
     @SkipSelf() protected canvasStore: CanvasStore

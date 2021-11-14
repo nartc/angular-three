@@ -21,7 +21,7 @@ export abstract class NgtCurve<
     });
   }
 
-  protected constructor(
+  constructor(
     protected ngZone: NgZone,
     @Optional() protected geometryDirective?: NgtGeometry
   ) {}

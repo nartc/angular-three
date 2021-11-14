@@ -8,7 +8,7 @@ export abstract class NgtTexture<TTexture extends THREE.Texture = THREE.Texture>
 {
   abstract textureType: AnyConstructor<TTexture>;
 
-  protected constructor(protected ngZone: NgZone) {}
+  constructor(protected ngZone: NgZone) {}
 
   private _extraArgs: unknown[] = [];
 

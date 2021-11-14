@@ -17,7 +17,7 @@ export abstract class NgtGeometry<
 {
   @Input() ngtId?: string;
 
-  protected constructor(
+  constructor(
     @SkipSelf() protected instancesStore: InstancesStore,
     protected ngZone: NgZone
   ) {}

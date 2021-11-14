@@ -35,7 +35,9 @@
           "packages/core/src/**/*.ts",
           "packages/core/src/**/*.html",
           "packages/core/scene/**/*.ts",
-          "packages/core/scene/**/*.html"
+          "packages/core/scene/**/*.html",
+          "packages/core/audio/**/*.ts",
+          "packages/core/audio/**/*.html"
         ]
       }
     }

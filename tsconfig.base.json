@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@angular-three/core": ["packages/core/src/index.ts"],
+      "@angular-three/core/audio": ["packages/core/audio/src/index.ts"],
       "@angular-three/core/scene": ["packages/core/scene/src/index.ts"]
     }
   },

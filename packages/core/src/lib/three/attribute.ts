@@ -22,7 +22,7 @@ export abstract class NgtAttribute<
 
   abstract attributeType: AnyConstructor<TAttribute>;
 
-  protected constructor(
+  constructor(
     protected ngZone: NgZone,
     @Optional() protected geometryDirective?: NgtGeometry
   ) {}
