@@ -85,7 +85,7 @@ export const catalogue = {
   },
   sprites: {
     items: sprites.core,
-    abstract: 'NgtSprite',
+    abstract: 'NgtCommonSprite',
     withThreeObject3d: true,
     templateType: CoreEntityTemplate.WithNoArgsNoParams,
     type: 'spriteType',

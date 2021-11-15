@@ -10,7 +10,9 @@ import { NgtMaterial } from './material';
 import { NgtObject3d } from './object-3d';
 
 @Directive()
-export abstract class NgtSprite<TSprite extends THREE.Sprite = THREE.Sprite>
+export abstract class NgtCommonSprite<
+    TSprite extends THREE.Sprite = THREE.Sprite
+  >
   extends NgtObject3d<TSprite>
   implements AfterContentInit
 {
