@@ -1,5 +1,6 @@
 import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
 import {
+  formatFiles,
   generateFiles,
   getWorkspaceLayout,
   logger,
@@ -8,11 +9,13 @@ import {
 } from '@nrwl/devkit';
 import { join } from 'path';
 import { CoreEntityTemplate } from '../../models/core-entity-template.enum';
+import object3dGenerator from '../object-3d/object-3d.generator';
 import { catalogue } from './catalogue';
 
 async function coreEntityGenerator(tree: Tree) {
   const { libsDir } = getWorkspaceLayout(tree);
   const coreDir = join(libsDir, 'core');
+  const derivedObject3Ds = [];
 
   for (const [catalogueKey, catalogueItem] of Object.entries(catalogue)) {
     const catalogueIndex = [];
@@ -51,6 +54,9 @@ async function coreEntityGenerator(tree: Tree) {
       );
 
       catalogueIndex.push(normalizedNames.fileName);
+      if (catalogueItem.withThreeObject3d) {
+        derivedObject3Ds.push(normalizedNames.fileName);
+      }
     }
 
     for (const example of catalogueItem.examples) {
@@ -75,6 +81,9 @@ async function coreEntityGenerator(tree: Tree) {
         catalogue: catalogueItem.from[example] || catalogueKey,
         name: example,
       });
+      if (catalogueItem.withThreeObject3d) {
+        derivedObject3Ds.push(normalizedNames.fileName);
+      }
     }
 
     let extras = [];
@@ -109,6 +118,13 @@ async function coreEntityGenerator(tree: Tree) {
       examples: examplesIndex,
     });
   }
+
+  logger.info('Generating derived object3Ds...');
+  await object3dGenerator(tree, derivedObject3Ds);
+
+  return async () => {
+    await formatFiles(tree);
+  };
 }
 
 export default coreEntityGenerator;
