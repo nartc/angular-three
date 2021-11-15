@@ -24,6 +24,7 @@ async function coreEntityGenerator(tree: Tree) {
       await librarySecondaryEntryPointGenerator(tree, {
         name: catalogueKey,
         library: 'core',
+        skipModule: true,
       });
     }
 
@@ -89,6 +90,10 @@ async function coreEntityGenerator(tree: Tree) {
         tmpl: '',
       }
     );
+
+    generateFiles(tree, join(__dirname, 'files', 'packageJson'), catalogueDir, {
+      tmpl: '',
+    });
   }
 }
 

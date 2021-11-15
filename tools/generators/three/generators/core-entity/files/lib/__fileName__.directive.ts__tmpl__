@@ -2,7 +2,7 @@
 <% if (withThreeObject3d) { %>
 import { <%= abstract %>, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';<% } else { %>import { <%= abstract %> } from '@angular-three/core';<% } %>
 import { Directive, Input } from '@angular/core';<% if (isExample) { %>
-import { <% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %>NURBSCurve<% } else { %><%= name %><% } %><% } else { %><%= name %><% } %><% if (withParameters) { %>,<% if (name === 'RawShaderMaterial') { %>ShaderMaterial<% } else { %><%= name %><% } %>Parameters<% } %>  } from 'three/examples/jsm/<%= catalogueKey %>/<% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %>NURBSCurve<% } else { %><%= name %><% } %><% } else { %><%= name %><% } %>';<% } else {%>import * as THREE from 'three';<% } %>
+import { <% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %><%= name %><% } else { %>Curves<% } %><% } else { %><%= name %><% } %><% if (withParameters) { %>,<% if (name === 'RawShaderMaterial') { %>ShaderMaterial<% } else { %><%= name %><% } %>Parameters<% } %>  } from 'three/examples/jsm/<%= catalogueKey %>/<% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %><%= name %><% } else { %>CurveExtras<% } %><% } else { %><%= name %><% } %>';<% } else {%>import * as THREE from 'three';<% } %>
 
 @Directive({
   selector: 'ngt-<%= fileName %>',
@@ -15,14 +15,14 @@ import { <% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %
     NGT_OBJECT_3D_CONTROLLER_PROVIDER,<% } %>
   ],
 })
-export class Ngt<%= name %> extends <%= abstract %><<% if (withParameters) { %><%= name %>, <% if (name === 'RawShaderMaterial') { %>THREE.ShaderMaterial<% } else { %>THREE.<%= name %><% } %>Parameters<% } else { %><% if (isExample) { %><%= name %><% } else { %>THREE.<%= name %><% } %><% } %>> {
+export class Ngt<%= name %> extends <%= abstract %><<% if (withParameters) { %><% if (isExample) { %><% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %><%= name %><% } else { %>Curves.<%= name %><% } %><% } else { %><%= name %><% } %><% } else { %>THREE.<%= name %><% } %>, <% if (name === 'RawShaderMaterial') { %>THREE.ShaderMaterial<% } else { %>THREE.<%= name %><% } %>Parameters<% } else { %><% if (isExample) { %><% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %><%= name %><% } else { %>Curves.<%= name %><% } %><% } else { %><%= name %><% } %><% } else { %>THREE.<%= name %><% } %><% } %>> {
   <% if (withArgs) { %>
-  static ngAcceptInputType_args: ConstructorParameters<typeof <% if (isExample) { %><%= name %><% } else { %>THREE.<%= name %><% } %>> | undefined;
+  static ngAcceptInputType_args: ConstructorParameters<typeof <% if (isExample) { %><% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %><%= name %><% } else { %>Curves.<%= name %><% } %><% } else { %><%= name %><% } %><% } else { %>THREE.<%= name %><% } %>> | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof <% if (isExample) { %><%= name %><% } else { %>THREE.<%= name %><% } %>>) {
+  @Input() set args(v: ConstructorParameters<typeof <% if (isExample) { %><% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %><%= name %><% } else { %>Curves.<%= name %><% } %><% } else { %><%= name %><% } %><% } else { %>THREE.<%= name %><% } %>>) {
     this.extraArgs = v;
   }<% } %><% if (withParameters) { %>
   static ngAcceptInputType_parameters: <% if (name === 'RawShaderMaterial') { %>THREE.ShaderMaterial<% } else { %>THREE.<%= name %><% } %>Parameters | undefined;<% } %>
 
-  <%= type %> = <% if (isExample) { %><%= name %><% } else { %>THREE.<%= name %><% } %>;
+  <%= type %> = <% if (isExample) { %><% if (catalogueKey === 'curves') { %><% if (name === 'NURBSCurve') { %><%= name %><% } else { %>Curves.<%= name %><% } %><% } else { %><%= name %><% } %><% } else { %>THREE.<%= name %><% } %>;
 }
