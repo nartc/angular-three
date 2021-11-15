@@ -14,13 +14,10 @@ import * as THREE from 'three';
   ],
 })
 export class NgtInterleavedBufferAttribute extends NgtAttribute<THREE.InterleavedBufferAttribute> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.InterleavedBufferAttribute>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.InterleavedBufferAttribute> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.InterleavedBufferAttribute>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof THREE.InterleavedBufferAttribute>) {
     this.extraArgs = v;
   }
 

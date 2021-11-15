@@ -12,10 +12,8 @@ import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonCont
   providers: [DestroyedService],
 })
 export class NgtFirstPersonControls extends NgtControls<FirstPersonControls> {
-  initControls(
-    camera: NgtCamera,
-    renderer: THREE.WebGLRenderer
-  ): FirstPersonControls {
+
+  initControls(camera: NgtCamera, renderer: THREE.WebGLRenderer): FirstPersonControls {
     return new FirstPersonControls(camera, renderer.domElement);
   }
 }

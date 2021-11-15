@@ -1,5 +1,7 @@
 // GENERATED
-import type { UnknownRecord } from '@angular-three/core';
+import type {
+  UnknownRecord,
+} from '@angular-three/core';
 import { NgtPass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -18,7 +20,7 @@ export class NgtGlitchPass extends NgtPass<GlitchPass> {
   @Input() set args(v: ConstructorParameters<typeof GlitchPass>) {
     this.extraArgs = v;
   }
-
+  
   @Input() uniforms?: UnknownRecord;
   @Input() material?: THREE.ShaderMaterial;
   @Input() fsQuad?: UnknownRecord;
@@ -27,5 +29,12 @@ export class NgtGlitchPass extends NgtPass<GlitchPass> {
   @Input() randX?: number;
 
   passType = GlitchPass;
-  extraInputs = ['uniforms', 'material', 'fsQuad', 'goWild', 'curF', 'randX'];
+  extraInputs = [
+    'uniforms',
+    'material',
+    'fsQuad',
+    'goWild',
+    'curF',
+    'randX',
+  ];
 }

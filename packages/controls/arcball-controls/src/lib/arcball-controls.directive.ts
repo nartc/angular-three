@@ -12,11 +12,8 @@ import { ArcballControls } from 'three/examples/jsm/controls/ArcballControls';
   providers: [DestroyedService],
 })
 export class NgtArcballControls extends NgtControls<ArcballControls> {
-  initControls(
-    camera: NgtCamera,
-    renderer: THREE.WebGLRenderer,
-    scene: THREE.Scene
-  ): ArcballControls {
+
+  initControls(camera: NgtCamera, renderer: THREE.WebGLRenderer, scene: THREE.Scene): ArcballControls {
     return new ArcballControls(camera, renderer.domElement, scene);
   }
 }

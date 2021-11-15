@@ -17,6 +17,7 @@ export class NgtClearPass extends NgtPass<ClearPass> {
   @Input() set args(v: ConstructorParameters<typeof ClearPass>) {
     this.extraArgs = v;
   }
+  
 
   passType = ClearPass;
 }

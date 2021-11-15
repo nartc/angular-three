@@ -6,7 +6,9 @@ import type {
 import { NgtPass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import type { SSAOPassOUTPUT } from 'three/examples/jsm/postprocessing/SSAOPass';
+import type {
+ SSAOPassOUTPUT,
+} from 'three/examples/jsm/postprocessing/SSAOPass';
 import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass';
 
 @Directive({
@@ -16,15 +18,13 @@ import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass';
 })
 export class NgtSSAOPass extends NgtPass<SSAOPass> {
   static ngAcceptInputType_args:
-    | LessFirstTwoConstructorParameters<ConstructorParameters<typeof SSAOPass>>
+    | LessFirstTwoConstructorParameters<ConstructorParameters<typeof SSAOPass>> 
     | undefined;
 
-  @Input() set args(
-    v: LessFirstTwoConstructorParameters<ConstructorParameters<typeof SSAOPass>>
-  ) {
+  @Input() set args(v: LessFirstTwoConstructorParameters<ConstructorParameters<typeof SSAOPass>> ) {
     this.extraArgs = v;
   }
-
+  
   @Input() clear?: boolean;
   @Input() kernelRadius?: number;
   @Input() kernelSize?: number;

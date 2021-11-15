@@ -6,7 +6,9 @@ import type {
 import { NgtPass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import type { SAOPassParams } from 'three/examples/jsm/postprocessing/SAOPass';
+import type {
+ SAOPassParams,
+} from 'three/examples/jsm/postprocessing/SAOPass';
 import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass';
 
 @Directive({
@@ -16,15 +18,13 @@ import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass';
 })
 export class NgtSAOPass extends NgtPass<SAOPass> {
   static ngAcceptInputType_args:
-    | LessFirstTwoConstructorParameters<ConstructorParameters<typeof SAOPass>>
+    | LessFirstTwoConstructorParameters<ConstructorParameters<typeof SAOPass>> 
     | undefined;
 
-  @Input() set args(
-    v: LessFirstTwoConstructorParameters<ConstructorParameters<typeof SAOPass>>
-  ) {
+  @Input() set args(v: LessFirstTwoConstructorParameters<ConstructorParameters<typeof SAOPass>> ) {
     this.extraArgs = v;
   }
-
+  
   @Input() supportsDepthTextureExtension?: boolean;
   @Input() supportsNormalTexture?: boolean;
   @Input() originalClearColor?: THREE.Color;

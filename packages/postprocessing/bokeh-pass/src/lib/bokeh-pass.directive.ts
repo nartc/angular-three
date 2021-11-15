@@ -15,17 +15,13 @@ import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass';
 })
 export class NgtBokehPass extends NgtPass<BokehPass> {
   static ngAcceptInputType_args:
-    | LessFirstTwoConstructorParameters<ConstructorParameters<typeof BokehPass>>
+    | LessFirstTwoConstructorParameters<ConstructorParameters<typeof BokehPass>> 
     | undefined;
 
-  @Input() set args(
-    v: LessFirstTwoConstructorParameters<
-      ConstructorParameters<typeof BokehPass>
-    >
-  ) {
+  @Input() set args(v: LessFirstTwoConstructorParameters<ConstructorParameters<typeof BokehPass>> ) {
     this.extraArgs = v;
   }
-
+  
   @Input() renderTargetColor?: THREE.WebGLRenderTarget;
   @Input() renderTargetDepth?: THREE.WebGLRenderTarget;
   @Input() materialDepth?: THREE.MeshDepthMaterial;

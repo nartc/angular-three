@@ -16,19 +16,13 @@ import { TAARenderPass } from 'three/examples/jsm/postprocessing/TAARenderPass';
 })
 export class NgtTAARenderPass extends NgtPass<TAARenderPass> {
   static ngAcceptInputType_args:
-    | LessFirstTwoConstructorParameters<
-        ConstructorParameters<typeof TAARenderPass>
-      >
+    | LessFirstTwoConstructorParameters<ConstructorParameters<typeof TAARenderPass>> 
     | undefined;
 
-  @Input() set args(
-    v: LessFirstTwoConstructorParameters<
-      ConstructorParameters<typeof TAARenderPass>
-    >
-  ) {
+  @Input() set args(v: LessFirstTwoConstructorParameters<ConstructorParameters<typeof TAARenderPass>> ) {
     this.extraArgs = v;
   }
-
+  
   @Input() sampleLevel?: number;
   @Input() unbiased?: boolean;
   @Input() clearColor?: NgtColor;

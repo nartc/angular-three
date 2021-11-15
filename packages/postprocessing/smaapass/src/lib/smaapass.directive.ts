@@ -1,5 +1,7 @@
 // GENERATED
-import type { UnknownRecord } from '@angular-three/core';
+import type {
+  UnknownRecord,
+} from '@angular-three/core';
 import { NgtPass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -18,7 +20,7 @@ export class NgtSMAAPass extends NgtPass<SMAAPass> {
   @Input() set args(v: ConstructorParameters<typeof SMAAPass>) {
     this.extraArgs = v;
   }
-
+  
   @Input() edgesRT?: THREE.WebGLRenderTarget;
   @Input() weightsRT?: THREE.WebGLRenderTarget;
   @Input() areaTexture?: THREE.Texture;

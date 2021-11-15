@@ -15,19 +15,13 @@ import { CubeTexturePass } from 'three/examples/jsm/postprocessing/CubeTexturePa
 })
 export class NgtCubeTexturePass extends NgtPass<CubeTexturePass> {
   static ngAcceptInputType_args:
-    | LessFirstConstructorParameters<
-        ConstructorParameters<typeof CubeTexturePass>
-      >
+    | LessFirstConstructorParameters<ConstructorParameters<typeof CubeTexturePass>>
     | undefined;
 
-  @Input() set args(
-    v: LessFirstConstructorParameters<
-      ConstructorParameters<typeof CubeTexturePass>
-    >
-  ) {
+  @Input() set args(v: LessFirstConstructorParameters<ConstructorParameters<typeof CubeTexturePass>>) {
     this.extraArgs = v;
   }
-
+  
   @Input() cubeShader?: UnknownRecord;
   @Input() cubeMesh?: THREE.Mesh;
   @Input() envMap?: THREE.CubeTexture;
@@ -35,7 +29,13 @@ export class NgtCubeTexturePass extends NgtPass<CubeTexturePass> {
   @Input() cubeCamera?: THREE.PerspectiveCamera;
 
   passType = CubeTexturePass;
-  extraInputs = ['cubeShader', 'cubeMesh', 'envMap', 'cubeScene', 'cubeCamera'];
+  extraInputs = [
+    'cubeShader',
+    'cubeMesh',
+    'envMap',
+    'cubeScene',
+    'cubeCamera',
+  ];
   protected get useSceneAndCamera():
     | 'scene'
     | 'camera'

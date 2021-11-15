@@ -1,5 +1,7 @@
 // GENERATED
-import type { UnknownRecord } from '@angular-three/core';
+import type {
+  UnknownRecord,
+} from '@angular-three/core';
 import { NgtPass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -18,7 +20,7 @@ export class NgtBloomPass extends NgtPass<BloomPass> {
   @Input() set args(v: ConstructorParameters<typeof BloomPass>) {
     this.extraArgs = v;
   }
-
+  
   @Input() renderTargetX?: THREE.WebGLRenderTarget;
   @Input() renderTargetY?: THREE.WebGLRenderTarget;
   @Input() copyUniforms?: UnknownRecord;

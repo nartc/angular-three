@@ -1,5 +1,7 @@
 // GENERATED
-import type { UnknownRecord } from '@angular-three/core';
+import type {
+  UnknownRecord,
+} from '@angular-three/core';
 import { NgtPass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -18,7 +20,7 @@ export class NgtOutlinePass extends NgtPass<OutlinePass> {
   @Input() set args(v: ConstructorParameters<typeof OutlinePass>) {
     this.extraArgs = v;
   }
-
+  
   @Input() renderScene?: THREE.Scene;
   @Input() renderCamera?: THREE.Camera;
   @Input() selectedObjects?: THREE.Object3D[];

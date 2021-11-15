@@ -14,13 +14,10 @@ import * as THREE from 'three';
   ],
 })
 export class NgtFloat32BufferAttribute extends NgtAttribute<THREE.Float32BufferAttribute> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.Float32BufferAttribute>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.Float32BufferAttribute> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.Float32BufferAttribute>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof THREE.Float32BufferAttribute>) {
     this.extraArgs = v;
   }
 

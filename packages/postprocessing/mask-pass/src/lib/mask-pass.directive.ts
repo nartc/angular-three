@@ -1,5 +1,7 @@
 // GENERATED
-import type { LessFirstTwoConstructorParameters } from '@angular-three/core';
+import type {
+  LessFirstTwoConstructorParameters,
+} from '@angular-three/core';
 import { NgtPass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import { MaskPass } from 'three/examples/jsm/postprocessing/MaskPass';
@@ -11,19 +13,19 @@ import { MaskPass } from 'three/examples/jsm/postprocessing/MaskPass';
 })
 export class NgtMaskPass extends NgtPass<MaskPass> {
   static ngAcceptInputType_args:
-    | LessFirstTwoConstructorParameters<ConstructorParameters<typeof MaskPass>>
+    | LessFirstTwoConstructorParameters<ConstructorParameters<typeof MaskPass>> 
     | undefined;
 
-  @Input() set args(
-    v: LessFirstTwoConstructorParameters<ConstructorParameters<typeof MaskPass>>
-  ) {
+  @Input() set args(v: LessFirstTwoConstructorParameters<ConstructorParameters<typeof MaskPass>> ) {
     this.extraArgs = v;
   }
-
+  
   @Input() inverse?: boolean;
 
   passType = MaskPass;
-  extraInputs = ['inverse'];
+  extraInputs = [
+    'inverse',
+  ];
   protected get useSceneAndCamera():
     | 'scene'
     | 'camera'

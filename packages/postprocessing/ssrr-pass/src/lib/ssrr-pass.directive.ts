@@ -19,7 +19,7 @@ export class NgtSSRrPass extends NgtPass<SSRrPass> {
   @Input() set args(v: ConstructorParameters<typeof SSRrPass>) {
     this.extraArgs = v;
   }
-
+  
   @Input() width?: number;
   @Input() height?: number;
   @Input() clear?: boolean;

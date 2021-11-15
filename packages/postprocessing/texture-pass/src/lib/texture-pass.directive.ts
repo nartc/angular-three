@@ -1,5 +1,7 @@
 // GENERATED
-import type { UnknownRecord } from '@angular-three/core';
+import type {
+  UnknownRecord,
+} from '@angular-three/core';
 import { NgtPass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -18,11 +20,15 @@ export class NgtTexturePass extends NgtPass<TexturePass> {
   @Input() set args(v: ConstructorParameters<typeof TexturePass>) {
     this.extraArgs = v;
   }
-
+  
   @Input() uniforms?: UnknownRecord;
   @Input() material?: THREE.ShaderMaterial;
   @Input() fsQuad?: UnknownRecord;
 
   passType = TexturePass;
-  extraInputs = ['uniforms', 'material', 'fsQuad'];
+  extraInputs = [
+    'uniforms',
+    'material',
+    'fsQuad',
+  ];
 }

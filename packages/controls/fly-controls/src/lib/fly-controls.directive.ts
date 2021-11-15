@@ -12,6 +12,7 @@ import { FlyControls } from 'three/examples/jsm/controls/FlyControls';
   providers: [DestroyedService],
 })
 export class NgtFlyControls extends NgtControls<FlyControls> {
+
   initControls(camera: NgtCamera, renderer: THREE.WebGLRenderer): FlyControls {
     return new FlyControls(camera, renderer.domElement);
   }

@@ -12,10 +12,8 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
   providers: [DestroyedService],
 })
 export class NgtTrackballControls extends NgtControls<TrackballControls> {
-  initControls(
-    camera: NgtCamera,
-    renderer: THREE.WebGLRenderer
-  ): TrackballControls {
+
+  initControls(camera: NgtCamera, renderer: THREE.WebGLRenderer): TrackballControls {
     return new TrackballControls(camera, renderer.domElement);
   }
 }

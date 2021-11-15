@@ -1,5 +1,7 @@
 // GENERATED
-import type { UnknownRecord } from '@angular-three/core';
+import type {
+  UnknownRecord,
+} from '@angular-three/core';
 import { NgtPass } from '@angular-three/postprocessing';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -18,7 +20,7 @@ export class NgtAdaptiveToneMappingPass extends NgtPass<AdaptiveToneMappingPass>
   @Input() set args(v: ConstructorParameters<typeof AdaptiveToneMappingPass>) {
     this.extraArgs = v;
   }
-
+  
   @Input() needsInit?: number;
   @Input() luminanceRT?: THREE.WebGLRenderTarget;
   @Input() previousLuminanceRT?: THREE.WebGLRenderTarget;
