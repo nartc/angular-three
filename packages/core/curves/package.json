@@ -1,0 +1,26 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "three": "three",
+        "three/examples/jsm/curves/GrannyKnot": "three/examples/jsm/curves/GrannyKnot",
+        "three/examples/jsm/curves/HeartCurve": "three/examples/jsm/curves/HeartCurve",
+        "three/examples/jsm/curves/VivianiCurve": "three/examples/jsm/curves/VivianiCurve",
+        "three/examples/jsm/curves/KnotCurve": "three/examples/jsm/curves/KnotCurve",
+        "three/examples/jsm/curves/HelixCurve": "three/examples/jsm/curves/HelixCurve",
+        "three/examples/jsm/curves/TrefoilKnot": "three/examples/jsm/curves/TrefoilKnot",
+        "three/examples/jsm/curves/TorusKnot": "three/examples/jsm/curves/TorusKnot",
+        "three/examples/jsm/curves/CinquefoilKnot": "three/examples/jsm/curves/CinquefoilKnot",
+        "three/examples/jsm/curves/TrefoilPolynomialKnot": "three/examples/jsm/curves/TrefoilPolynomialKnot",
+        "three/examples/jsm/curves/FigureEightPolynomialKnot": "three/examples/jsm/curves/FigureEightPolynomialKnot",
+        "three/examples/jsm/curves/DecoratedTorusKnot4a": "three/examples/jsm/curves/DecoratedTorusKnot4a",
+        "three/examples/jsm/curves/DecoratedTorusKnot4b": "three/examples/jsm/curves/DecoratedTorusKnot4b",
+        "three/examples/jsm/curves/DecoratedTorusKnot5a": "three/examples/jsm/curves/DecoratedTorusKnot5a",
+        "three/examples/jsm/curves/DecoratedTorusKnot5c": "three/examples/jsm/curves/DecoratedTorusKnot5c",
+        "three/examples/jsm/curves/NURBSCurve": "three/examples/jsm/curves/NURBSCurve",
+        "three/examples/jsm/curves/CurveExtras": "three/examples/jsm/curves/CurveExtras"
+      }
+    }
+  }
+}
