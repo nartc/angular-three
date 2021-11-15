@@ -1,12 +1,8 @@
 // GENERATED
 
-import {
-  NgtHelper,
-  NgtObject3d,
-  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
-} from '@angular-three/core';
+import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { VertexNormalsHelper } from 'three/examples/jsm/helpers/VertexNormalsHelper';
+import { VertexNormalsHelper  } from 'three/examples/jsm/helpers/VertexNormalsHelper';
 
 @Directive({
   selector: 'ngt-vertex-normals-helper',
@@ -20,9 +16,8 @@ import { VertexNormalsHelper } from 'three/examples/jsm/helpers/VertexNormalsHel
   ],
 })
 export class NgtVertexNormalsHelper extends NgtHelper<VertexNormalsHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof VertexNormalsHelper>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof VertexNormalsHelper> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof VertexNormalsHelper>) {
     this.extraArgs = v;

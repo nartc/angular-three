@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtTorusKnotGeometry extends NgtGeometry<THREE.TorusKnotGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.TorusKnotGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.TorusKnotGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.TorusKnotGeometry>) {
     this.extraArgs = v;

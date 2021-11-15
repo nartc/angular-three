@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtTubeGeometry extends NgtGeometry<THREE.TubeGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.TubeGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.TubeGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.TubeGeometry>) {
     this.extraArgs = v;

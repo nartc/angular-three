@@ -1,10 +1,6 @@
 // GENERATED
 
-import {
-  NgtHelper,
-  NgtObject3d,
-  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
-} from '@angular-three/core';
+import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -20,9 +16,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtAxesHelper extends NgtHelper<THREE.AxesHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.AxesHelper>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.AxesHelper> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.AxesHelper>) {
     this.extraArgs = v;

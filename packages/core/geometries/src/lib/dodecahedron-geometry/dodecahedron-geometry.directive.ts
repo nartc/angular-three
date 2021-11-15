@@ -14,13 +14,10 @@ import * as THREE from 'three';
   ],
 })
 export class NgtDodecahedronGeometry extends NgtGeometry<THREE.DodecahedronGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.DodecahedronGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.DodecahedronGeometry> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.DodecahedronGeometry>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof THREE.DodecahedronGeometry>) {
     this.extraArgs = v;
   }
 

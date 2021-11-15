@@ -1,3 +1,5 @@
+// GENERATED
+
 import {
   Directive,
   EventEmitter,
@@ -24,6 +26,9 @@ import type {
     ngt-instanced-mesh,
     ngt-skinned-mesh,
     ngt-bone,
+    ngt-line2,
+    ngt-line-segments2,
+    ngt-wireframe,
     ngt-group,
     ngt-lod,
     ngt-scene,
@@ -53,6 +58,11 @@ import type {
     ngt-polar-grid-helper,
     ngt-skeleton-helper,
     ngt-spot-light-helper,
+    ngt-light-probe-helper,
+    ngt-positional-audio-helper,
+    ngt-rect-area-light-helper,
+    ngt-vertex-normals-helper,
+    ngt-vertex-tangents-helper,
     ngt-line,
     ngt-line-loop,
     ngt-line-segments,

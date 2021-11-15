@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtWireframeGeometry extends NgtGeometry<THREE.WireframeGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.WireframeGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.WireframeGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.WireframeGeometry>) {
     this.extraArgs = v;

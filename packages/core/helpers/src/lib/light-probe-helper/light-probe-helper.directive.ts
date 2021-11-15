@@ -1,12 +1,8 @@
 // GENERATED
 
-import {
-  NgtHelper,
-  NgtObject3d,
-  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
-} from '@angular-three/core';
+import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { LightProbeHelper } from 'three/examples/jsm/helpers/LightProbeHelper';
+import { LightProbeHelper  } from 'three/examples/jsm/helpers/LightProbeHelper';
 
 @Directive({
   selector: 'ngt-light-probe-helper',
@@ -20,9 +16,8 @@ import { LightProbeHelper } from 'three/examples/jsm/helpers/LightProbeHelper';
   ],
 })
 export class NgtLightProbeHelper extends NgtHelper<LightProbeHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof LightProbeHelper>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof LightProbeHelper> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof LightProbeHelper>) {
     this.extraArgs = v;

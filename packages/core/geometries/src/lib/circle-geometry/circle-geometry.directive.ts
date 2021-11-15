@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtCircleGeometry extends NgtGeometry<THREE.CircleGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.CircleGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CircleGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.CircleGeometry>) {
     this.extraArgs = v;

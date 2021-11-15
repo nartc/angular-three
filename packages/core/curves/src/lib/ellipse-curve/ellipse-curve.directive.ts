@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtEllipseCurve extends NgtCurve<THREE.EllipseCurve> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.EllipseCurve>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.EllipseCurve> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.EllipseCurve>) {
     this.extraArgs = v;

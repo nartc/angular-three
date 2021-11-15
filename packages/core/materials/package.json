@@ -4,7 +4,8 @@
       "entryFile": "src/index.ts",
       "umdModuleIds": {
         "three": "three",
-        "three/examples/jsm/lines/LineMaterial": "three/examples/jsm/lines/LineMaterial"
+        "three/examples/jsm/lines/LineMaterial": "three/examples/jsm/lines/LineMaterial",
+        
       }
     }
   }

@@ -1,7 +1,7 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry';
+import { LineSegmentsGeometry  } from 'three/examples/jsm/lines/LineSegmentsGeometry';
 
 @Directive({
   selector: 'ngt-line-segments-geometry',
@@ -14,9 +14,8 @@ import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeome
   ],
 })
 export class NgtLineSegmentsGeometry extends NgtGeometry<LineSegmentsGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof LineSegmentsGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof LineSegmentsGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof LineSegmentsGeometry>) {
     this.extraArgs = v;

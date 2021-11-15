@@ -14,13 +14,10 @@ import * as THREE from 'three';
   ],
 })
 export class NgtUint8ClampedBufferAttribute extends NgtAttribute<THREE.Uint8ClampedBufferAttribute> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.Uint8ClampedBufferAttribute>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.Uint8ClampedBufferAttribute> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.Uint8ClampedBufferAttribute>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof THREE.Uint8ClampedBufferAttribute>) {
     this.extraArgs = v;
   }
 

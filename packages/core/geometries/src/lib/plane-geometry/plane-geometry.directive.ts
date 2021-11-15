@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtPlaneGeometry extends NgtGeometry<THREE.PlaneGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.PlaneGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.PlaneGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.PlaneGeometry>) {
     this.extraArgs = v;

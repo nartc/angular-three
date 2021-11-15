@@ -1,11 +1,7 @@
 // GENERATED
 import { NgtControls } from '@angular-three/controls';
 import type { NgtCamera } from '@angular-three/core';
-import {
-  DestroyedService,
-  CanvasStore,
-  AnimationStore,
-} from '@angular-three/core';
+import { DestroyedService, CanvasStore, AnimationStore } from '@angular-three/core';
 import { DOCUMENT } from '@angular/common';
 import { Directive, NgZone, Inject, SkipSelf } from '@angular/core';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
@@ -16,6 +12,7 @@ import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockCont
   providers: [DestroyedService],
 })
 export class NgtPointerLockControls extends NgtControls<PointerLockControls> {
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     ngZone: NgZone,

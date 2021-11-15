@@ -14,13 +14,10 @@ import * as THREE from 'three';
   ],
 })
 export class NgtIcosahedronGeometry extends NgtGeometry<THREE.IcosahedronGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.IcosahedronGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.IcosahedronGeometry> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.IcosahedronGeometry>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof THREE.IcosahedronGeometry>) {
     this.extraArgs = v;
   }
 

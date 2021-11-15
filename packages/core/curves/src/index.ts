@@ -1,5 +1,6 @@
 // GENERATED
 
+
 export * from './lib/catmull-rom-curve3/catmull-rom-curve3.directive';
 export * from './lib/catmull-rom-curve3/catmull-rom-curve3.module';
 export * from './lib/cubic-bezier-curve/cubic-bezier-curve.directive';

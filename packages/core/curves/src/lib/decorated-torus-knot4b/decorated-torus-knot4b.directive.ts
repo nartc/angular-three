@@ -1,7 +1,7 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { Curves } from 'three/examples/jsm/curves/CurveExtras';
+import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
 
 @Directive({
   selector: 'ngt-decorated-torus-knot4b',
@@ -14,13 +14,10 @@ import { Curves } from 'three/examples/jsm/curves/CurveExtras';
   ],
 })
 export class NgtDecoratedTorusKnot4b extends NgtCurve<Curves.DecoratedTorusKnot4b> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof Curves.DecoratedTorusKnot4b>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof Curves.DecoratedTorusKnot4b> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof Curves.DecoratedTorusKnot4b>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof Curves.DecoratedTorusKnot4b>) {
     this.extraArgs = v;
   }
 

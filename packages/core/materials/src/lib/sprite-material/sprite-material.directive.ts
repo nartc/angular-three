@@ -13,13 +13,9 @@ import * as THREE from 'three';
     },
   ],
 })
-export class NgtSpriteMaterial extends NgtMaterial<
-  THREE.SpriteMaterial,
-  THREE.SpriteMaterialParameters
-> {
-  static ngAcceptInputType_parameters:
-    | THREE.SpriteMaterialParameters
-    | undefined;
+export class NgtSpriteMaterial extends NgtMaterial<THREE.SpriteMaterial, THREE.SpriteMaterialParameters> {
+  
+  static ngAcceptInputType_parameters: THREE.SpriteMaterialParameters | undefined;
 
   materialType = THREE.SpriteMaterial;
 }

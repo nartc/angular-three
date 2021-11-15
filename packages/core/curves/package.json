@@ -19,7 +19,8 @@
         "three/examples/jsm/curves/DecoratedTorusKnot5a": "three/examples/jsm/curves/DecoratedTorusKnot5a",
         "three/examples/jsm/curves/DecoratedTorusKnot5c": "three/examples/jsm/curves/DecoratedTorusKnot5c",
         "three/examples/jsm/curves/NURBSCurve": "three/examples/jsm/curves/NURBSCurve",
-        "three/examples/jsm/curves/CurveExtras": "three/examples/jsm/curves/CurveExtras"
+        "three/examples/jsm/curves/CurveExtras": "three/examples/jsm/curves/CurveExtras",
+        
       }
     }
   }

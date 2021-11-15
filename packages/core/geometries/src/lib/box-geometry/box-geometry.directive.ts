@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtBoxGeometry extends NgtGeometry<THREE.BoxGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.BoxGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.BoxGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.BoxGeometry>) {
     this.extraArgs = v;

@@ -1,7 +1,7 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { NURBSCurve } from 'three/examples/jsm/curves/NURBSCurve';
+import { NURBSCurve  } from 'three/examples/jsm/curves/NURBSCurve';
 
 @Directive({
   selector: 'ngt-nurbscurve',
@@ -14,9 +14,8 @@ import { NURBSCurve } from 'three/examples/jsm/curves/NURBSCurve';
   ],
 })
 export class NgtNURBSCurve extends NgtCurve<NURBSCurve> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof NURBSCurve>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof NURBSCurve> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof NURBSCurve>) {
     this.extraArgs = v;

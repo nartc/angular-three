@@ -1,7 +1,7 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { Curves } from 'three/examples/jsm/curves/CurveExtras';
+import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
 
 @Directive({
   selector: 'ngt-helix-curve',
@@ -14,9 +14,8 @@ import { Curves } from 'three/examples/jsm/curves/CurveExtras';
   ],
 })
 export class NgtHelixCurve extends NgtCurve<Curves.HelixCurve> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof Curves.HelixCurve>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof Curves.HelixCurve> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof Curves.HelixCurve>) {
     this.extraArgs = v;

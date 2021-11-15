@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtSplineCurve extends NgtCurve<THREE.SplineCurve> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.SplineCurve>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.SplineCurve> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.SplineCurve>) {
     this.extraArgs = v;

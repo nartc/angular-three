@@ -13,13 +13,9 @@ import * as THREE from 'three';
     },
   ],
 })
-export class NgtPointsMaterial extends NgtMaterial<
-  THREE.PointsMaterial,
-  THREE.PointsMaterialParameters
-> {
-  static ngAcceptInputType_parameters:
-    | THREE.PointsMaterialParameters
-    | undefined;
+export class NgtPointsMaterial extends NgtMaterial<THREE.PointsMaterial, THREE.PointsMaterialParameters> {
+  
+  static ngAcceptInputType_parameters: THREE.PointsMaterialParameters | undefined;
 
   materialType = THREE.PointsMaterial;
 }

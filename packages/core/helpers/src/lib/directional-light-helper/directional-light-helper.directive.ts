@@ -1,10 +1,6 @@
 // GENERATED
 
-import {
-  NgtHelper,
-  NgtObject3d,
-  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
-} from '@angular-three/core';
+import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -20,13 +16,10 @@ import * as THREE from 'three';
   ],
 })
 export class NgtDirectionalLightHelper extends NgtHelper<THREE.DirectionalLightHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.DirectionalLightHelper>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.DirectionalLightHelper> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.DirectionalLightHelper>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof THREE.DirectionalLightHelper>) {
     this.extraArgs = v;
   }
 

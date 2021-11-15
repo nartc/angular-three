@@ -14,13 +14,10 @@ import * as THREE from 'three';
   ],
 })
 export class NgtUint16BufferAttribute extends NgtAttribute<THREE.Uint16BufferAttribute> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.Uint16BufferAttribute>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.Uint16BufferAttribute> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.Uint16BufferAttribute>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof THREE.Uint16BufferAttribute>) {
     this.extraArgs = v;
   }
 

@@ -1,10 +1,6 @@
 // GENERATED
 
-import {
-  NgtLight,
-  NgtObject3d,
-  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
-} from '@angular-three/core';
+import { NgtLight, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -20,9 +16,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtHemisphereLight extends NgtLight<THREE.HemisphereLight> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.HemisphereLight>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.HemisphereLight> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.HemisphereLight>) {
     this.extraArgs = v;

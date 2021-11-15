@@ -14,13 +14,10 @@ import * as THREE from 'three';
   ],
 })
 export class NgtQuadraticBezierCurve3 extends NgtCurve<THREE.QuadraticBezierCurve3> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.QuadraticBezierCurve3>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.QuadraticBezierCurve3> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.QuadraticBezierCurve3>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof THREE.QuadraticBezierCurve3>) {
     this.extraArgs = v;
   }
 

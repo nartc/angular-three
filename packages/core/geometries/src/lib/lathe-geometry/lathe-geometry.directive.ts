@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtLatheGeometry extends NgtGeometry<THREE.LatheGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.LatheGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.LatheGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.LatheGeometry>) {
     this.extraArgs = v;

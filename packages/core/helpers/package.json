@@ -8,7 +8,8 @@
         "three/examples/jsm/helpers/PositionalAudioHelper": "three/examples/jsm/helpers/PositionalAudioHelper",
         "three/examples/jsm/helpers/RectAreaLightHelper": "three/examples/jsm/helpers/RectAreaLightHelper",
         "three/examples/jsm/helpers/VertexNormalsHelper": "three/examples/jsm/helpers/VertexNormalsHelper",
-        "three/examples/jsm/helpers/VertexTangentsHelper": "three/examples/jsm/helpers/VertexTangentsHelper"
+        "three/examples/jsm/helpers/VertexTangentsHelper": "three/examples/jsm/helpers/VertexTangentsHelper",
+        
       }
     }
   }

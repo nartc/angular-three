@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtLineCurve extends NgtCurve<THREE.LineCurve> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.LineCurve>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.LineCurve> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.LineCurve>) {
     this.extraArgs = v;

@@ -13,7 +13,8 @@
         "three/examples/jsm/geometries/TextGeometry": "three/examples/jsm/geometries/TextGeometry",
         "three/examples/jsm/lines/LineGeometry": "three/examples/jsm/lines/LineGeometry",
         "three/examples/jsm/lines/LineSegmentsGeometry": "three/examples/jsm/lines/LineSegmentsGeometry",
-        "three/examples/jsm/lines/WireframeGeometry2": "three/examples/jsm/lines/WireframeGeometry2"
+        "three/examples/jsm/lines/WireframeGeometry2": "three/examples/jsm/lines/WireframeGeometry2",
+        
       }
     }
   }

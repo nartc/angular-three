@@ -13,13 +13,9 @@ import * as THREE from 'three';
     },
   ],
 })
-export class NgtMeshDepthMaterial extends NgtMaterial<
-  THREE.MeshDepthMaterial,
-  THREE.MeshDepthMaterialParameters
-> {
-  static ngAcceptInputType_parameters:
-    | THREE.MeshDepthMaterialParameters
-    | undefined;
+export class NgtMeshDepthMaterial extends NgtMaterial<THREE.MeshDepthMaterial, THREE.MeshDepthMaterialParameters> {
+  
+  static ngAcceptInputType_parameters: THREE.MeshDepthMaterialParameters | undefined;
 
   materialType = THREE.MeshDepthMaterial;
 }

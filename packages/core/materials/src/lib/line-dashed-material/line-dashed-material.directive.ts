@@ -13,13 +13,9 @@ import * as THREE from 'three';
     },
   ],
 })
-export class NgtLineDashedMaterial extends NgtMaterial<
-  THREE.LineDashedMaterial,
-  THREE.LineDashedMaterialParameters
-> {
-  static ngAcceptInputType_parameters:
-    | THREE.LineDashedMaterialParameters
-    | undefined;
+export class NgtLineDashedMaterial extends NgtMaterial<THREE.LineDashedMaterial, THREE.LineDashedMaterialParameters> {
+  
+  static ngAcceptInputType_parameters: THREE.LineDashedMaterialParameters | undefined;
 
   materialType = THREE.LineDashedMaterial;
 }

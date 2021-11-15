@@ -1,7 +1,7 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { WireframeGeometry2 } from 'three/examples/jsm/lines/WireframeGeometry2';
+import { WireframeGeometry2  } from 'three/examples/jsm/lines/WireframeGeometry2';
 
 @Directive({
   selector: 'ngt-wireframe-geometry2',
@@ -14,9 +14,8 @@ import { WireframeGeometry2 } from 'three/examples/jsm/lines/WireframeGeometry2'
   ],
 })
 export class NgtWireframeGeometry2 extends NgtGeometry<WireframeGeometry2> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof WireframeGeometry2>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof WireframeGeometry2> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof WireframeGeometry2>) {
     this.extraArgs = v;

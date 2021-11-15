@@ -1,7 +1,7 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
+import { RoundedBoxGeometry  } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
 
 @Directive({
   selector: 'ngt-rounded-box-geometry',
@@ -14,9 +14,8 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
   ],
 })
 export class NgtRoundedBoxGeometry extends NgtGeometry<RoundedBoxGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof RoundedBoxGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof RoundedBoxGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof RoundedBoxGeometry>) {
     this.extraArgs = v;

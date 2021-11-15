@@ -1,7 +1,7 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry';
+import { LineGeometry  } from 'three/examples/jsm/lines/LineGeometry';
 
 @Directive({
   selector: 'ngt-line-geometry',
@@ -14,9 +14,8 @@ import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry';
   ],
 })
 export class NgtLineGeometry extends NgtGeometry<LineGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof LineGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof LineGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof LineGeometry>) {
     this.extraArgs = v;

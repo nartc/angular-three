@@ -14,13 +14,10 @@ import * as THREE from 'three';
   ],
 })
 export class NgtInstancedBufferGeometry extends NgtGeometry<THREE.InstancedBufferGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.InstancedBufferGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.InstancedBufferGeometry> | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.InstancedBufferGeometry>
-  ) {
+  @Input() set args(v: ConstructorParameters<typeof THREE.InstancedBufferGeometry>) {
     this.extraArgs = v;
   }
 

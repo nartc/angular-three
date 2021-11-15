@@ -1,7 +1,7 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { Curves } from 'three/examples/jsm/curves/CurveExtras';
+import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
 
 @Directive({
   selector: 'ngt-viviani-curve',
@@ -14,9 +14,8 @@ import { Curves } from 'three/examples/jsm/curves/CurveExtras';
   ],
 })
 export class NgtVivianiCurve extends NgtCurve<Curves.VivianiCurve> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof Curves.VivianiCurve>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof Curves.VivianiCurve> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof Curves.VivianiCurve>) {
     this.extraArgs = v;

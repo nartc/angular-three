@@ -12,10 +12,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
   providers: [DestroyedService],
 })
 export class NgtOrbitControls extends NgtControls<OrbitControls> {
-  initControls(
-    camera: NgtCamera,
-    renderer: THREE.WebGLRenderer
-  ): OrbitControls {
+
+  initControls(camera: NgtCamera, renderer: THREE.WebGLRenderer): OrbitControls {
     return new OrbitControls(camera, renderer.domElement);
   }
 }

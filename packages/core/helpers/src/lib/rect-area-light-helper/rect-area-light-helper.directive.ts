@@ -1,12 +1,8 @@
 // GENERATED
 
-import {
-  NgtHelper,
-  NgtObject3d,
-  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
-} from '@angular-three/core';
+import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
-import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper';
+import { RectAreaLightHelper  } from 'three/examples/jsm/helpers/RectAreaLightHelper';
 
 @Directive({
   selector: 'ngt-rect-area-light-helper',
@@ -20,9 +16,8 @@ import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHel
   ],
 })
 export class NgtRectAreaLightHelper extends NgtHelper<RectAreaLightHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof RectAreaLightHelper>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof RectAreaLightHelper> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof RectAreaLightHelper>) {
     this.extraArgs = v;

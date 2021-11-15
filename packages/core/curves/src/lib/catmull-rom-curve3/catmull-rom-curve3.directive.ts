@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtCatmullRomCurve3 extends NgtCurve<THREE.CatmullRomCurve3> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.CatmullRomCurve3>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CatmullRomCurve3> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.CatmullRomCurve3>) {
     this.extraArgs = v;

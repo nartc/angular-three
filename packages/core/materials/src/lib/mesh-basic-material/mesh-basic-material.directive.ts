@@ -13,13 +13,9 @@ import * as THREE from 'three';
     },
   ],
 })
-export class NgtMeshBasicMaterial extends NgtMaterial<
-  THREE.MeshBasicMaterial,
-  THREE.MeshBasicMaterialParameters
-> {
-  static ngAcceptInputType_parameters:
-    | THREE.MeshBasicMaterialParameters
-    | undefined;
+export class NgtMeshBasicMaterial extends NgtMaterial<THREE.MeshBasicMaterial, THREE.MeshBasicMaterialParameters> {
+  
+  static ngAcceptInputType_parameters: THREE.MeshBasicMaterialParameters | undefined;
 
   materialType = THREE.MeshBasicMaterial;
 }

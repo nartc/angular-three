@@ -13,13 +13,9 @@ import * as THREE from 'three';
     },
   ],
 })
-export class NgtShaderMaterial extends NgtMaterial<
-  THREE.ShaderMaterial,
-  THREE.ShaderMaterialParameters
-> {
-  static ngAcceptInputType_parameters:
-    | THREE.ShaderMaterialParameters
-    | undefined;
+export class NgtShaderMaterial extends NgtMaterial<THREE.ShaderMaterial, THREE.ShaderMaterialParameters> {
+  
+  static ngAcceptInputType_parameters: THREE.ShaderMaterialParameters | undefined;
 
   materialType = THREE.ShaderMaterial;
 }

@@ -14,9 +14,8 @@ import * as THREE from 'three';
   ],
 })
 export class NgtCylinderGeometry extends NgtGeometry<THREE.CylinderGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.CylinderGeometry>
-    | undefined;
+  
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CylinderGeometry> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.CylinderGeometry>) {
     this.extraArgs = v;
