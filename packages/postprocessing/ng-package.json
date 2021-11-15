@@ -2,6 +2,11 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/packages/postprocessing",
   "lib": {
-    "entryFile": "src/index.ts"
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "three/examples/jsm/postprocessing/EffectComposer": "three/examples/jsm/postprocessing/EffectComposer",
+      "@ngrx/component-store": "@ngrx/component-store",
+      "@angular-three/core": "@angular-three/core"
+    }
   }
 }
