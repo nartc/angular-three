@@ -3,6 +3,7 @@
   "projects": {
     "controls": "packages/controls",
     "core": "packages/core",
+    "docs": "packages/docs",
     "postprocessing": "packages/postprocessing"
   }
 }

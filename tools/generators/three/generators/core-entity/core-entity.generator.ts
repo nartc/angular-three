@@ -115,7 +115,10 @@ async function coreEntityGenerator(tree: Tree) {
 
     generateFiles(tree, join(__dirname, 'files', 'packageJson'), catalogueDir, {
       tmpl: '',
-      examples: examplesIndex,
+      examples: examplesIndex.map((example, index) => ({
+        ...example,
+        isLast: index === examplesIndex.length - 1,
+      })),
     });
   }
 
