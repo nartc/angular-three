@@ -61,7 +61,8 @@
       "@angular-three/core/scene": ["packages/core/scene/src/index.ts"],
       "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"],
       "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
-      "@angular-three/core/textures": ["packages/core/textures/src/index.ts"]
+      "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
+      "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
