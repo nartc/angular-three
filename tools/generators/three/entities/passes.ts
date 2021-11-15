@@ -194,7 +194,7 @@ export const passes: PassCollection = [
     name: 'BokehPass',
     threeCoreImports: [
       ThreeCoreImports.UnknownRecord,
-      ThreeCoreImports.WithoutSceneCameraConstructorParameters,
+      ThreeCoreImports.LessFirstTwoConstructorParameters,
     ],
     threeImports: [
       ThreeImports.WebGLRenderTarget,
@@ -254,7 +254,7 @@ export const passes: PassCollection = [
     name: 'CubeTexturePass',
     threeCoreImports: [
       ThreeCoreImports.UnknownRecord,
-      ThreeCoreImports.WithoutCameraConstructorParameters,
+      ThreeCoreImports.LessFirstConstructorParameters,
     ],
     threeImports: [
       ThreeImports.Mesh,
@@ -428,9 +428,7 @@ export const passes: PassCollection = [
   },
   {
     name: 'MaskPass',
-    threeCoreImports: [
-      ThreeCoreImports.WithoutSceneCameraConstructorParameters,
-    ],
+    threeCoreImports: [ThreeCoreImports.LessFirstTwoConstructorParameters],
     threeImports: [],
     passImports: [],
     inputs: [
@@ -643,9 +641,7 @@ export const passes: PassCollection = [
   },
   {
     name: 'RenderPass',
-    threeCoreImports: [
-      ThreeCoreImports.WithoutSceneCameraConstructorParameters,
-    ],
+    threeCoreImports: [ThreeCoreImports.LessFirstTwoConstructorParameters],
     threeImports: [],
     passImports: [],
     inputs: [
@@ -660,7 +656,7 @@ export const passes: PassCollection = [
   {
     name: 'SAOPass',
     threeCoreImports: [
-      ThreeCoreImports.WithoutSceneCameraConstructorParameters,
+      ThreeCoreImports.LessFirstTwoConstructorParameters,
       ThreeCoreImports.UnknownRecord,
     ],
     threeImports: [
@@ -885,9 +881,9 @@ export const passes: PassCollection = [
   {
     name: 'SSAARenderPass',
     threeCoreImports: [
-      ThreeCoreImports.ThreeColor,
+      ThreeCoreImports.NgtColor,
       ThreeCoreImports.UnknownRecord,
-      ThreeCoreImports.WithoutSceneCameraConstructorParameters,
+      ThreeCoreImports.LessFirstTwoConstructorParameters,
     ],
     threeImports: [ThreeImports.ShaderMaterial, ThreeImports.WebGLRenderTarget],
     passImports: [],
@@ -904,7 +900,7 @@ export const passes: PassCollection = [
       },
       {
         name: 'clearColor',
-        import: ThreeCoreImports.ThreeColor,
+        import: ThreeCoreImports.NgtColor,
         isArray: false,
       },
       {
@@ -938,7 +934,7 @@ export const passes: PassCollection = [
   {
     name: 'SSAOPass',
     threeCoreImports: [
-      ThreeCoreImports.WithoutSceneCameraConstructorParameters,
+      ThreeCoreImports.LessFirstTwoConstructorParameters,
       ThreeCoreImports.UnknownRecord,
     ],
     threeImports: [
@@ -1410,9 +1406,9 @@ export const passes: PassCollection = [
   {
     name: 'TAARenderPass',
     threeCoreImports: [
-      ThreeCoreImports.ThreeColor,
+      ThreeCoreImports.NgtColor,
       ThreeCoreImports.UnknownRecord,
-      ThreeCoreImports.WithoutSceneCameraConstructorParameters,
+      ThreeCoreImports.LessFirstTwoConstructorParameters,
     ],
     threeImports: [ThreeImports.ShaderMaterial, ThreeImports.WebGLRenderTarget],
     passImports: [],
@@ -1429,7 +1425,7 @@ export const passes: PassCollection = [
       },
       {
         name: 'clearColor',
-        import: ThreeCoreImports.ThreeColor,
+        import: ThreeCoreImports.NgtColor,
         isArray: false,
       },
       {

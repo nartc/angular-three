@@ -5,7 +5,7 @@
   "prefix": "ngt",
   "targets": {
     "build": {
-      "executor": "@nrwl/angular:ng-packagr-lite",
+      "executor": "@nrwl/angular:package",
       "outputs": ["dist/packages/postprocessing"],
       "options": {
         "project": "packages/postprocessing/ng-package.json"

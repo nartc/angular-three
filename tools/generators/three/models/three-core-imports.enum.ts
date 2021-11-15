@@ -1,6 +1,6 @@
 export enum ThreeCoreImports {
   UnknownRecord = 'UnknownRecord',
-  WithoutCameraConstructorParameters = 'WithoutCameraConstructorParameters',
-  WithoutSceneCameraConstructorParameters = 'WithoutSceneCameraConstructorParameters',
-  ThreeColor = 'ThreeColor',
+  LessFirstConstructorParameters = 'LessFirstConstructorParameters',
+  LessFirstTwoConstructorParameters = 'LessFirstTwoConstructorParameters',
+  NgtColor = 'NgtColor',
 }
