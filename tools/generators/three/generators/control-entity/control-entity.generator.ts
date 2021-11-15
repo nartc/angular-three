@@ -21,7 +21,7 @@ function createControlFiles(
 ) {
   generateFiles(
     tree,
-    join(__dirname, './files/lib'),
+    join(__dirname, 'files', 'lib'),
     join(controlLibPath, 'src', 'lib'),
     {
       ...normalizedNames,
@@ -39,7 +39,7 @@ function createIndexFile(
 ) {
   generateFiles(
     tree,
-    join(__dirname, './files/index'),
+    join(__dirname, 'files', 'index'),
     join(controlLibPath, 'src'),
     {
       ...normalizedNames,
@@ -57,7 +57,7 @@ function createPackageJsonFile(
 ) {
   generateFiles(
     tree,
-    join(__dirname, './files/packageJson'),
+    join(__dirname, 'files', 'packageJson'),
     join(controlLibPath),
     {
       ...normalizedNames,
@@ -80,7 +80,7 @@ function createFiles(
 
 async function controlEntityGenerator(tree: Tree) {
   const { libsDir } = getWorkspaceLayout(tree);
-  const controlsDir = `${libsDir}/controls`;
+  const controlsDir = join(libsDir, 'controls');
   const currentEntityDirs = new Map(
     readdirSync(controlsDir, { withFileTypes: true })
       .filter((dir) => dir.isDirectory() && dir.name !== 'src')

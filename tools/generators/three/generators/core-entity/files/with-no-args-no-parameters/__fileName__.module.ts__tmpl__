@@ -1,0 +1,10 @@
+// GENERATED
+
+import { NgModule } from '@angular/core';
+import { <%= name %>Directive } from './<%= dasherize(name) %>.directive';
+
+@NgModule({
+  declarations: [<%= name %>Directive],
+  exports: [<%= name %>Directive],
+})
+export class Three<%= name %>Module {}

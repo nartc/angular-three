@@ -1,0 +1,28 @@
+// GENERATED
+<% if (withThreeObject3d) { %>
+import { <%= abstract %>, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';<% } else { %>import { <%= abstract %> } from '@angular-three/core';<% } %>
+import { Directive, Input } from '@angular/core';<% if (isExample) { %>
+import { <%= name %><% if (withParameters) { %>,<% if (name === 'RawShaderMaterial') { %>ShaderMaterial<% } else { %><%= name %><% } %>Parameters<% } %>  } from 'three/examples/jsm/<%= catalogueKey %>/<%= name %>;'<% } else {%>import * as THREE from 'three';<% } %>
+
+@Directive({
+  selector: 'ngt-<%= fileName %>',
+  exportAs: 'ngt<%= name %>',
+  providers: [
+    {
+      provide: <% if (withThreeObject3d) { %>NgtObject3d<% } else { %><%= abstract %><% } %>,
+      useExisting: Ngt<%= name %>,
+    },<% if (withThreeObject3d) { %>
+    NGT_OBJECT_3D_CONTROLLER_PROVIDER,<% } %>
+  ],
+})
+export class Ngt<%= name %> extends <%= abstract %><<% if (withParameters) { %><%= name %>, <% if (name === 'RawShaderMaterial') { %>THREE.ShaderMaterial<% } else { %>THREE.<%= name %><% } %>Parameters<% } else { %><% if (isExample) { %><%= name %><% } else { %>THREE.<%= name %><% } %><% } %>> {
+  <% if (withArgs) { %>
+  static ngAcceptInputType_args: ConstructorParameters<typeof <% if (isExample) { %><%= name %><% } else { %>THREE.<%= name %><% } %>> | undefined;
+
+  @Input() set args(v: ConstructorParameters<typeof <% if (isExample) { %><%= name %><% } else { %>THREE.<%= name %><% } %>>) {
+    this.extraArgs = v;
+  }<% } %><% if (withParameters) { %>
+  static ngAcceptInputType_parameters: <% if (name === 'RawShaderMaterial') { %>THREE.ShaderMaterial<% } else { %>THREE.<%= name %><% } %>Parameters | undefined;<% } %>
+
+  <%= type %> = <% if (isExample) { %><%= name %><% } else { %>THREE.<%= name %><% } %>;
+}
