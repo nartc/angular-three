@@ -1,5 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { filter, isObservable, Observable, tap, withLatestFrom } from 'rxjs';
+import {
+  filter,
+  isObservable,
+  Observable,
+  skip,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
 import * as THREE from 'three';
 import type {
   AnimationStoreState,
@@ -21,6 +28,7 @@ export class AnimationStore
       animationCallbacks: [],
       hasPriority: false,
     });
+    this.animationsChangedEffect(this.selectors.animations$.pipe(skip(1)));
   }
 
   readonly animationsChangedEffect = this.effect<
@@ -104,7 +112,6 @@ export class AnimationStore
     priority = 0
   ) {
     if (objOrObsOrCallback === undefined) return;
-
     if (typeof objOrObsOrCallback === 'function') {
       const id = makeId();
       this.patchState((state) => ({
