@@ -1,0 +1,12 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "three/examples/jsm/postprocessing/ShaderPass": "three/examples/jsm/postprocessing/ShaderPass",
+        "three": "three",
+        "@angular-three/core": "@angular-three/core"
+      }
+    }
+  }
+}

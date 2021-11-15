@@ -1,0 +1,12 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "three/examples/jsm/postprocessing/AfterimagePass": "three/examples/jsm/postprocessing/AfterimagePass",
+        "three": "three",
+        "@angular-three/core": "@angular-three/core"
+      }
+    }
+  }
+}

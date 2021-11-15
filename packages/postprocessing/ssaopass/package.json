@@ -1,0 +1,12 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "three/examples/jsm/postprocessing/SSAOPass": "three/examples/jsm/postprocessing/SSAOPass",
+        "three": "three",
+        "@angular-three/core": "@angular-three/core"
+      }
+    }
+  }
+}

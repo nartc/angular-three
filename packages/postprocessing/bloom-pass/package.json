@@ -1,0 +1,12 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "three/examples/jsm/postprocessing/BloomPass": "three/examples/jsm/postprocessing/BloomPass",
+        "three": "three",
+        "@angular-three/core": "@angular-three/core"
+      }
+    }
+  }
+}
