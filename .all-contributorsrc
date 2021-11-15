@@ -9,6 +9,16 @@
   "imageSize": 100,
   "commit": true,
   "commitConvention": "angular",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "nartc",
+      "name": "Chau Tran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25516557?v=4",
+      "profile": "https://nartc.me/",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
   "contributorsPerLine": 7
 }
