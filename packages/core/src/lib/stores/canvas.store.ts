@@ -40,6 +40,10 @@ export class CanvasStore
       shadows: false,
       mouse: new THREE.Vector2(),
       clock: new THREE.Clock(),
+      renderer: undefined,
+      scene: undefined,
+      camera: undefined,
+      raycaster: undefined,
       internal: {
         active: false,
         size: { width: 0, height: 0 },

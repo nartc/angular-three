@@ -31,6 +31,7 @@ export class EventsStore
   constructor(private canvasStore: CanvasStore) {
     super({
       connected: false,
+      handlers: {} as EventsStoreState['handlers'],
       internal: {
         interaction: [],
         hovered: new Map<string, NgtDomEvent>(),
@@ -42,6 +43,7 @@ export class EventsStore
         initialHits: [],
       },
     });
+    this.initHandlersEffect();
   }
 
   readonly initHandlersEffect = this.effect(($) =>
@@ -64,6 +66,26 @@ export class EventsStore
       })
     )
   );
+
+  readonly addInteraction = this.updater<THREE.Object3D>(
+    (state, interaction) => ({
+      ...state,
+      internal: {
+        ...state.internal,
+        interaction: [...state.internal.interaction, interaction],
+      },
+    })
+  );
+
+  readonly removeInteraction = this.updater<string>((state, uuid) => ({
+    ...state,
+    internal: {
+      ...state.internal,
+      interaction: state.internal.interaction.filter(
+        (obj) => obj.uuid !== uuid
+      ),
+    },
+  }));
 
   readonly connectEffect = this.effect<HTMLElement>((element$) =>
     element$.pipe(
