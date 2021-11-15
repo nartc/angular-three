@@ -124,7 +124,7 @@ export function createEvents(
       ['move', 'over', 'enter', 'out', 'leave'].some(
         (name) =>
           (obj as unknown as NgtInstance).__ngt?.handlers?.[
-            ('onPointer' + name) as keyof NgtEventHandlers
+            ('pointer' + name) as keyof NgtEventHandlers
           ]
       )
     );
@@ -383,10 +383,10 @@ export function createEvents(
         name === 'click' || name === 'contextmenu' || name === 'dblclick';
       const filter = isPointerMove ? filterPointerEvents : undefined;
       const hits = patchIntersects(intersect(filter), event);
-      const delta = isClickEvent ? calculateDistance(event) : 0;
 
+      const delta = isClickEvent ? calculateDistance(event) : 0;
       // Save initial coordinates on pointer-down
-      if (name === 'onPointerDown') {
+      if (name === 'pointerdown') {
         internal.initialClick = [event.offsetX, event.offsetY];
         internal.initialHits = hits.map((hit) => hit.eventObject);
       }
@@ -399,7 +399,6 @@ export function createEvents(
           if (pointermissed) pointermissed(event as NgtEvent<PointerEvent>);
         }
       }
-
       // Take care of unhover
       if (isPointerMove) cancelPointer(hits);
 
@@ -407,6 +406,7 @@ export function createEvents(
         const eventObject = data.eventObject;
         const instance = (eventObject as unknown as NgtInstance).__ngt;
         const handlers = instance?.handlers;
+
         // Check presence of handlers
         if (!instance?.eventCount) return;
 
