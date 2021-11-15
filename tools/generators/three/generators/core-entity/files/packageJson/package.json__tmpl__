@@ -3,7 +3,9 @@
     "lib": {
       "entryFile": "src/index.ts",
       "umdModuleIds": {
-        "three": "three"
+        "three": "three"<% if (examples && examples.length) { %>,
+        <% for (const example of examples) { %>"three/examples/jsm/<%= example.catalogue %>/<%= example.name %>": "three/examples/jsm/<%= example.catalogue %>/<%= example.name %>",
+        <% } %><% } %>
       }
     }
   }

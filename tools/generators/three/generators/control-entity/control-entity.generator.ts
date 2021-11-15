@@ -119,8 +119,6 @@ async function controlEntityGenerator(tree: Tree) {
         join(controlsDir, normalizedNames.fileName)
       );
     }
-
-    logger.info(`Generated control ${normalizedNames.className}`);
   }
 
   currentEntityDirs.forEach((entityLibDir) => {

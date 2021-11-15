@@ -16,6 +16,7 @@ async function coreEntityGenerator(tree: Tree) {
 
   for (const [catalogueKey, catalogueItem] of Object.entries(catalogue)) {
     const catalogueIndex = [];
+    const examplesIndex = [];
     logger.info(`Generating ${catalogueKey}...`);
     const catalogueDir = join(coreDir, catalogueKey);
     const isCatalogueExists = tree.exists(catalogueDir);
@@ -70,6 +71,10 @@ async function coreEntityGenerator(tree: Tree) {
       );
 
       catalogueIndex.push(normalizedNames.fileName);
+      examplesIndex.push({
+        catalogue: catalogueItem.from[example] || catalogueKey,
+        name: example,
+      });
     }
 
     let extras = [];
@@ -77,6 +82,14 @@ async function coreEntityGenerator(tree: Tree) {
     switch (catalogueKey) {
       case 'cameras':
         extras = ['cube-camera'];
+        break;
+      case 'curves':
+        if (catalogueItem.examples.length) {
+          examplesIndex.push({
+            catalogue: catalogueKey,
+            name: 'CurveExtras',
+          });
+        }
         break;
     }
 
@@ -93,6 +106,7 @@ async function coreEntityGenerator(tree: Tree) {
 
     generateFiles(tree, join(__dirname, 'files', 'packageJson'), catalogueDir, {
       tmpl: '',
+      examples: examplesIndex,
     });
   }
 }
