@@ -48,8 +48,8 @@
           "packages/core/lod/**/*.html",
           "packages/core/group/**/*.ts",
           "packages/core/group/**/*.html",
-          "packages/core/camera/**/*.ts",
-          "packages/core/camera/**/*.html"
+          "packages/core/cameras/**/*.ts",
+          "packages/core/cameras/**/*.html"
         ]
       }
     }
