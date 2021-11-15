@@ -14,8 +14,9 @@ import * as THREE from 'three';
   ],
 })
 export class NgtVideoTexture extends NgtTexture<THREE.VideoTexture> {
-  
-  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.VideoTexture> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof THREE.VideoTexture>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.VideoTexture>) {
     this.extraArgs = v;

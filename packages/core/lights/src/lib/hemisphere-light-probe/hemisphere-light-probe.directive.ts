@@ -1,6 +1,10 @@
 // GENERATED
 
-import { NgtLight, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
+import {
+  NgtLight,
+  NgtObject3d,
+  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
+} from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -16,10 +20,13 @@ import * as THREE from 'three';
   ],
 })
 export class NgtHemisphereLightProbe extends NgtLight<THREE.HemisphereLightProbe> {
-  
-  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.HemisphereLightProbe> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof THREE.HemisphereLightProbe>
+    | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof THREE.HemisphereLightProbe>) {
+  @Input() set args(
+    v: ConstructorParameters<typeof THREE.HemisphereLightProbe>
+  ) {
     this.extraArgs = v;
   }
 

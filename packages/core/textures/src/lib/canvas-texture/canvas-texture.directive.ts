@@ -14,8 +14,9 @@ import * as THREE from 'three';
   ],
 })
 export class NgtCanvasTexture extends NgtTexture<THREE.CanvasTexture> {
-  
-  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CanvasTexture> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof THREE.CanvasTexture>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.CanvasTexture>) {
     this.extraArgs = v;

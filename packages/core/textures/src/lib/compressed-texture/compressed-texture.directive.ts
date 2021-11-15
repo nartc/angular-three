@@ -14,8 +14,9 @@ import * as THREE from 'three';
   ],
 })
 export class NgtCompressedTexture extends NgtTexture<THREE.CompressedTexture> {
-  
-  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CompressedTexture> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof THREE.CompressedTexture>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.CompressedTexture>) {
     this.extraArgs = v;

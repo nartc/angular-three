@@ -1,6 +1,5 @@
 // GENERATED
 
-
 export * from './lib/canvas-texture/canvas-texture.directive';
 export * from './lib/canvas-texture/canvas-texture.module';
 export * from './lib/compressed-texture/compressed-texture.directive';

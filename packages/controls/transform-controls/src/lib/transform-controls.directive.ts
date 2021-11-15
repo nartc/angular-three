@@ -12,8 +12,10 @@ import { TransformControls } from 'three/examples/jsm/controls/TransformControls
   providers: [DestroyedService],
 })
 export class NgtTransformControls extends NgtControls<TransformControls> {
-
-  initControls(camera: NgtCamera, renderer: THREE.WebGLRenderer): TransformControls {
+  initControls(
+    camera: NgtCamera,
+    renderer: THREE.WebGLRenderer
+  ): TransformControls {
     return new TransformControls(camera, renderer.domElement);
   }
 }

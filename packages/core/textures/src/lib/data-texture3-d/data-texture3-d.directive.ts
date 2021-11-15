@@ -14,8 +14,9 @@ import * as THREE from 'three';
   ],
 })
 export class NgtDataTexture3D extends NgtTexture<THREE.DataTexture3D> {
-  
-  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.DataTexture3D> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof THREE.DataTexture3D>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.DataTexture3D>) {
     this.extraArgs = v;

@@ -14,8 +14,9 @@ import * as THREE from 'three';
   ],
 })
 export class NgtCubeTexture extends NgtTexture<THREE.CubeTexture> {
-  
-  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CubeTexture> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof THREE.CubeTexture>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.CubeTexture>) {
     this.extraArgs = v;

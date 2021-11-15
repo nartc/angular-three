@@ -1,6 +1,10 @@
 // GENERATED
 
-import { NgtCommonCamera, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
+import {
+  NgtCommonCamera,
+  NgtObject3d,
+  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
+} from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -16,8 +20,9 @@ import * as THREE from 'three';
   ],
 })
 export class NgtArrayCamera extends NgtCommonCamera<THREE.ArrayCamera> {
-  
-  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.ArrayCamera> | undefined;
+  static ngAcceptInputType_args:
+    | ConstructorParameters<typeof THREE.ArrayCamera>
+    | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.ArrayCamera>) {
     this.extraArgs = v;
