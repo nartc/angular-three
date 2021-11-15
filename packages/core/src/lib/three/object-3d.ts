@@ -26,6 +26,22 @@ import { NgtAnimationParticipant } from './animation-participant';
 import { NGT_OBJECT_3D_WATCHED_CONTROLLER } from './object-3d-watched-controller.di';
 import { NgtObject3dController } from './object-3d.controller';
 
+const supportedEvents = [
+  'click',
+  'contextmenu',
+  'dblclick',
+  'pointerup',
+  'pointerdown',
+  'pointerover',
+  'pointerout',
+  'pointerenter',
+  'pointerleave',
+  'pointermove',
+  'pointermissed',
+  'pointercancel',
+  'wheel',
+] as const;
+
 @Directive()
 export abstract class NgtObject3d<
     TObject extends THREE.Object3D = THREE.Object3D
@@ -77,11 +93,31 @@ export abstract class NgtObject3d<
       if (this.object3d) {
         this.applyCustomProps();
 
+        const observedEvents = supportedEvents.reduce(
+          (result, event) => {
+            if (this.object3dController[event].observed) {
+              result.handlers[event] = this.eventNameToHandler(event);
+              result.eventCount += 1;
+            }
+            return result;
+          },
+          { handlers: {}, eventCount: 0 } as {
+            handlers: NgtEventHandlers;
+            eventCount: number;
+          }
+        );
+
+        // add as an interaction if there are events observed
+        if (observedEvents.eventCount > 0) {
+          this.eventsStore.addInteraction(this.object3d);
+        }
+
         applyProps(this.object3d, {
           __ngt: {
             canvasStateGetter: () => this.canvasStore.getImperativeState(),
             eventsStateGetter: () => this.eventsStore.getImperativeState(),
-            handlers: this.applyEvents(),
+            handlers: observedEvents.handlers,
+            eventCount: observedEvents.eventCount,
           } as NgtInstanceInternal,
         });
 
@@ -212,40 +248,16 @@ export abstract class NgtObject3d<
     });
   }
 
-  private applyEvents(): NgtEventHandlers {
-    const handlers: NgtEventHandlers = {};
-
-    (
-      [
-        'click',
-        'contextmenu',
-        'dblclick',
-        'pointerup',
-        'pointerdown',
-        'pointerover',
-        'pointerout',
-        'pointerenter',
-        'pointerleave',
-        'pointermove',
-        'pointermissed',
-        'pointercancel',
-        'wheel',
-      ] as const
-    ).forEach((eventName) => {
-      if (this.object3dController[eventName].observed) {
-        handlers[eventName] = (
-          event: Parameters<
-            Exclude<NgtEventHandlers[typeof eventName], undefined>
-          >[0]
-        ) => {
-          this.ngZone.run(() => {
-            this.object3dController[eventName].emit(event as NgtEvent<any>);
-          });
-        };
-      }
-    });
-
-    return handlers;
+  private eventNameToHandler(eventName: typeof supportedEvents[number]) {
+    return (
+      event: Parameters<
+        Exclude<NgtEventHandlers[typeof eventName], undefined>
+      >[0]
+    ) => {
+      this.ngZone.run(() => {
+        this.object3dController[eventName].emit(event as NgtEvent<any>);
+      });
+    };
   }
 
   private appendToParent(): void {
@@ -273,6 +285,7 @@ export abstract class NgtObject3d<
       if (this.object3d) {
         this.remove();
         this.instancesStore.removeObject(this.object3d.uuid);
+        this.eventsStore.removeInteraction(this.object3d.uuid);
         this.animationStore.unregisterAnimationEffect(this.object3d.uuid);
       }
     });
