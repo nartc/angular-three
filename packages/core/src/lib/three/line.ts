@@ -7,7 +7,7 @@ import { NgtMaterial } from './material';
 import { NgtObject3dMaterialGeometry } from './object-3d-material-geometry';
 
 @Directive()
-export abstract class NgtLine<
+export abstract class NgtCommonLine<
   TLine extends THREE.Line = THREE.Line
 > extends NgtObject3dMaterialGeometry<TLine> {
   @ContentChildren(NgtMaterial) set materialDirectives(

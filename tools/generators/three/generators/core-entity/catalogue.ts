@@ -76,7 +76,7 @@ export const catalogue = {
   },
   lines: {
     items: lines.core,
-    abstract: 'NgtLine',
+    abstract: 'NgtCommonLine',
     withThreeObject3d: true,
     templateType: CoreEntityTemplate.WithNoArgsNoParams,
     type: 'lineType',
