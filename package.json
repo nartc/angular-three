@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "postinstall": "ngcc --properties es2015 browser module main"
+    "postinstall": "ngcc --properties es2015 browser module main",
+    "commit": "git-cz",
+    "release": "dotenv release-it --",
+    "build": "nx run-many --target=build --all --verbose",
+    "publish": "nx run-many --target=publish --all --parallel"
   },
   "private": true,
   "dependencies": {
@@ -63,7 +67,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "./node_modules/cz-customizable"
     }
   }
 }
