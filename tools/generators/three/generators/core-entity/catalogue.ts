@@ -94,7 +94,7 @@ export const catalogue = {
   },
   cameras: {
     items: cameras.core,
-    abstract: 'NgtCamera',
+    abstract: 'NgtCommonCamera',
     withThreeObject3d: true,
     templateType: CoreEntityTemplate.WithArgs,
     type: 'cameraType',

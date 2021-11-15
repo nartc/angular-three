@@ -13,6 +13,7 @@ export * from './lib/three/object-3d-material-geometry';
 export * from './lib/three/animation-participant';
 export * from './lib/three/attribute';
 export * from './lib/three/curve';
+export * from './lib/three/camera';
 export * from './lib/three/geometry';
 export * from './lib/three/helper';
 export * from './lib/three/light';
