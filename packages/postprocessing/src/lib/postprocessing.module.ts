@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgtEffectComposer } from './effect-composer.directive';
 
 @NgModule({
-  imports: [CommonModule],
+  declarations: [NgtEffectComposer],
+  exports: [NgtEffectComposer],
 })
-export class PostprocessingModule {}
+export class NgtPostprocessingModule {}
