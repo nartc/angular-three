@@ -8,7 +8,7 @@
     "release": "dotenv release-it --",
     "contributors:init": "all-contributors init",
     "contributors:add": "all-contributors add",
-    "build": "nx run-many --target=build --all --verbose",
+    "build": "nx run-many --target=build --all --verbose --exclude=docs",
     "publish": "nx run-many --target=publish --all --parallel"
   },
   "private": true,
