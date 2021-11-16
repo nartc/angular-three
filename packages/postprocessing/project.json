@@ -86,6 +86,13 @@
           "packages/postprocessing/unreal-bloom-pass/**/*.html"
         ]
       }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm publish",
+        "cwd": "dist/packages/postprocessing"
+      }
     }
   },
   "tags": ["scope:postprocessing", "type:library"]

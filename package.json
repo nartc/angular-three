@@ -8,7 +8,8 @@
     "release": "dotenv release-it --",
     "contributors:init": "all-contributors init",
     "contributors:add": "all-contributors add",
-    "build": "nx run-many --target=build --all --verbose --exclude=docs",
+    "build": "nx run-many --target=build --all --exclude=docs",
+    "postbuild": "cp -R packages/cannon/src/lib/utils dist/packages/cannon/fesm2015 & cp -R packages/cannon/src/lib/utils dist/packages/cannon/esm2015/lib",
     "publish": "nx run-many --target=publish --all --parallel"
   },
   "private": true,

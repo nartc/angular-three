@@ -3,7 +3,10 @@
     "lib": {
       "entryFile": "src/index.ts",
       "umdModuleIds": {
-        "three": "three"
+        "three": "three",
+        "three/examples/jsm/lines/Line2": "three/examples/jsm/lines/Line2",
+        "three/examples/jsm/lines/LineSegments2": "three/examples/jsm/lines/LineSegments2",
+        "three/examples/jsm/lines/Wireframe": "three/examples/jsm/lines/Wireframe"
       }
     }
   }

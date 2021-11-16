@@ -52,6 +52,13 @@
           "packages/controls/transform-controls/**/*.html"
         ]
       }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm publish",
+        "cwd": "dist/packages/controls"
+      }
     }
   },
   "tags": ["scope:controls", "type:library"]
