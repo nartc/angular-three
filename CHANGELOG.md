@@ -1,3 +1,66 @@
+## 1.0.0-beta.46 (2021-11-16)
+
+### Features
+
+- add object 3d controller generator ([83c195e](https://github.com/nartc/angular-three/commit/83c195e0230fb8b1771c9b18e27c73141f8f3f78))
+- add pass generator ([d87b9bb](https://github.com/nartc/angular-three/commit/d87b9bbdccf6ec3d15c9e35f646e99527ae2fe63))
+- add three generator ([36ad852](https://github.com/nartc/angular-three/commit/36ad8522c8bbb150bb6eafb856dbb24c0716c243))
+- **cannon:** add physics directive (wip) ([d6ff318](https://github.com/nartc/angular-three/commit/d6ff3182c95d1837850e6a3f3c3768d064b07bc9))
+- **cannon:** init cannon lib ([aa3ebab](https://github.com/nartc/angular-three/commit/aa3ebaba473c0daaa0b55b2b24fa0f5715c7b36d))
+- **controls:** add controls and testing out generator ([d02c7ce](https://github.com/nartc/angular-three/commit/d02c7ce3863254e6e6a03229307e4028b747141a))
+- **controls:** generate all controls ([db7637f](https://github.com/nartc/angular-three/commit/db7637feb6297b3b4d77bac53459697167f9904e))
+- **core:** add abstracts ([abca9b5](https://github.com/nartc/angular-three/commit/abca9b57b7eda1df1b7d979ee82ece460a710c09))
+- **core:** add Audio ([7f4eda7](https://github.com/nartc/angular-three/commit/7f4eda724a4b9e46bc77def36c68d3b42ff6e710))
+- **core:** add CanvasComponent ([c423223](https://github.com/nartc/angular-three/commit/c4232239ae889000a350f52572d4cc85996c68d8))
+- **core:** add CanvasComponent and setup abstract componentStore ([cbf80f8](https://github.com/nartc/angular-three/commit/cbf80f82abf45670e55e262d3959ae2eddb93dda))
+- **core:** add component stores ([3afb6a1](https://github.com/nartc/angular-three/commit/3afb6a18c16e04ab77385432c9eaa7417dac3707))
+- **core:** add core ([d34e496](https://github.com/nartc/angular-three/commit/d34e496ab8eaa3ce64b77b158e3bcfc39bb9e7cd))
+- **core:** add Cube Camera ([8c2c461](https://github.com/nartc/angular-three/commit/8c2c461973de86eff67b620f000e2b15708d3c2e))
+- **core:** add Group ([5dc8f38](https://github.com/nartc/angular-three/commit/5dc8f385d75fdaea35de66e0d1db7889e573b4cb))
+- **core:** add LOD ([06b928f](https://github.com/nartc/angular-three/commit/06b928f62841c3d3c3b0d77638e44cdef8500a46))
+- **core:** add Mesh ([91ae4cf](https://github.com/nartc/angular-three/commit/91ae4cf936fecee4205b9b17f22b11d099dc015b))
+- **core:** add models ([1792a28](https://github.com/nartc/angular-three/commit/1792a28aa9f6b8e4057a6d86ea189f01c5cbfe24))
+- **core:** add more examples meshes ([5cffc38](https://github.com/nartc/angular-three/commit/5cffc3838b47f738547aa1d82ba0f41c5584abf3))
+- **core:** add Points ([5074703](https://github.com/nartc/angular-three/commit/50747039f9a3665161462b824b73868b8c801b2b))
+- **core:** add primitive ([f4ca383](https://github.com/nartc/angular-three/commit/f4ca383f186f6ced5cffd63168dca1fb4e6ccffe))
+- **core:** add Scene ([f44117a](https://github.com/nartc/angular-three/commit/f44117aebaf76b5ad73c951e581db30a5b609ec6))
+- **core:** add services ([1ba1092](https://github.com/nartc/angular-three/commit/1ba1092f38816fcd23c37d88bf4bffa79663acb4))
+- **core:** add Stats ([3754f87](https://github.com/nartc/angular-three/commit/3754f87c1fd701236226204c255626029c8ea990))
+- **core:** add util directives and pipes ([9b29d39](https://github.com/nartc/angular-three/commit/9b29d39d89f90df977edf52f037cc3042b7e1864))
+- **core:** generate all core entities ([fdaf072](https://github.com/nartc/angular-three/commit/fdaf072b47cc326cbc057fab3e085df175561c8d))
+- **core:** generate object 3d controller ([ff9c1e0](https://github.com/nartc/angular-three/commit/ff9c1e074bc2366540353f5e9f7b9bd26e48748f))
+- **core:** port r3f events ([5f61884](https://github.com/nartc/angular-three/commit/5f618846cab669505c5c6b420a026f17ce9116ce))
+- **postprocessing:** add abstract pass ([54adeae](https://github.com/nartc/angular-three/commit/54adeaefea7eb0510520666123856d6db9a6f661))
+- **postprocessing:** add abstract Pass and EffectComposer ([6bd9259](https://github.com/nartc/angular-three/commit/6bd92595dfcd62e98e6e4cf0ed6351d9ce7824dc))
+- **postprocessing:** generate passes ([de01a06](https://github.com/nartc/angular-three/commit/de01a062d1a406eeb64ab1e9efab09d4eaaf88ea))
+- **postprocessing:** init postprocessing ([7d5a0f8](https://github.com/nartc/angular-three/commit/7d5a0f86fc5f2ba321514a996a266d63e8319ddf))
+
+### Bug Fixes
+
+- adjust core template ([2d286b2](https://github.com/nartc/angular-three/commit/2d286b28c84c71d7f680c07f5a3cbe882725c390))
+- **core:** add camera abstract ([20bb11c](https://github.com/nartc/angular-three/commit/20bb11c20de6ccdad714418acb185dcf3458a683))
+- **core:** add InterleavedBufferAttribute to NgtAttribute ([20d3dbf](https://github.com/nartc/angular-three/commit/20d3dbf10c9de4e2e88b38391622b6474e7a5334))
+- **core:** adjust events util (from r3f) to work with Angular ([0bcb9cb](https://github.com/nartc/angular-three/commit/0bcb9cbc95664529c7b592f8c0352f9edfc4caa1))
+- **core:** adjust public api of Audio ([162d11e](https://github.com/nartc/angular-three/commit/162d11ea1be1a697d7befd6a8fe7652d9c10cab9))
+- **core:** change NgtLine to NgtCommonLine ([0b3ddd7](https://github.com/nartc/angular-three/commit/0b3ddd7770ded04955e28fb2972a4aa39d4cb7c5))
+- **core:** initialize the store state with default values ([b19b612](https://github.com/nartc/angular-three/commit/b19b61248ffb1a364e5970fe63958afc5b0e5443))
+- **core:** make sure to set interaction correctly based on observed events ([5bdb306](https://github.com/nartc/angular-three/commit/5bdb306251bbc8c274b38412436bf03bb03ad823))
+- **core:** rename AudioModule to NgtAudioModule ([d9ff581](https://github.com/nartc/angular-three/commit/d9ff5811150c0555e45a3bdec33c1b523ea3789e))
+- **core:** rename camera to cameras ([de472cc](https://github.com/nartc/angular-three/commit/de472cc39c9f79209c62a2bdc0bcd8b5eb310804))
+- **core:** rename mesh to meshes ([39d3706](https://github.com/nartc/angular-three/commit/39d3706f7775eb4b0ee1df84b1ca09bfc258548f))
+- **core:** rename sprite to common sprite ([d023df8](https://github.com/nartc/angular-three/commit/d023df83ae09cb3bf66c17120082553bb8022437))
+- **core:** run animatiosn changed effect to update the animations callbacks ([dc32dcd](https://github.com/nartc/angular-three/commit/dc32dcd9af3c8c431d08e50fec8feac07cdd33f1))
+- handle comma in packageJson ([f4f1557](https://github.com/nartc/angular-three/commit/f4f155718e10c3c6c4f7a2b2876b1b9c199fe528))
+- handle packageJson for umd ids ([bec9108](https://github.com/nartc/angular-three/commit/bec9108249f7dc41c7fc85bb86c3ef3c554685cb))
+- regenerate ([22c31e9](https://github.com/nartc/angular-three/commit/22c31e9ba623d7d86f9624bfa6f65a2b70908978))
+- remove line examples ([0e3c5ba](https://github.com/nartc/angular-three/commit/0e3c5bad661e6a2b48a6694c279306b2d4794a2f))
+
+### Documentations
+
+- add [@nartc](https://github.com/nartc) as a contributor ([f7cd072](https://github.com/nartc/angular-three/commit/f7cd072aa77aa7e04983f84ab05029e5ac2d8bb9))
+- **docs:** add documentations app ([b879cd3](https://github.com/nartc/angular-three/commit/b879cd349cfaa6b30bce3808f55c1d00e45a02ff))
+- **docs:** continue working on docs ([27a5dd3](https://github.com/nartc/angular-three/commit/27a5dd3c0173c59f534f1c82087109b5fa0f01f2))
+
 ## [1.0.0-beta.45](https://github.com/nartc/angular-three/compare/1.0.0-beta.44...1.0.0-beta.45) (2021-10-20)
 
 ### Features
