@@ -439,4 +439,10 @@ export class PhysicsStore extends EnhancedComponentStore<PhysicsStoreState> {
     }
     super.ngOnDestroy();
   }
+
+  get context() {
+    const { worker, buffers, events, subscriptions, bodies, refs } =
+      this.getImperativeState();
+    return { worker, buffers, events, subscriptions, bodies, refs };
+  }
 }

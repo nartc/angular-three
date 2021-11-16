@@ -6,7 +6,8 @@
     "umdModuleIds": {
       "three": "three",
       "cannon-es": "cannon-es",
-      "@angular-three/core": "@angular-three/core"
+      "@angular-three/core": "@angular-three/core",
+      "@ngrx/component-store": "@ngrx/component-store"
     }
   }
 }
