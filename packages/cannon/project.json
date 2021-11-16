@@ -33,7 +33,11 @@
       "options": {
         "lintFilePatterns": [
           "packages/cannon/src/**/*.ts",
-          "packages/cannon/src/**/*.html"
+          "packages/cannon/src/**/*.html",
+          "packages/cannon/box/**/*.ts",
+          "packages/cannon/box/**/*.html",
+          "packages/cannon/plane/**/*.ts",
+          "packages/cannon/plane/**/*.html"
         ]
       }
     },

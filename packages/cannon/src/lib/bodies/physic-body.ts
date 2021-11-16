@@ -1,7 +1,22 @@
-import { NgtObject3d, NgtTriplet } from '@angular-three/core';
-import { Directive, NgZone, OnChanges, Optional } from '@angular/core';
+import {
+  NGT_OBJECT_3D_WATCHED_CONTROLLER,
+  NgtObject3d,
+  NgtObject3dController,
+  NgtTriplet,
+  Object3dProps,
+} from '@angular-three/core';
+import {
+  Directive,
+  Inject,
+  Input,
+  NgZone,
+  OnChanges,
+  OnInit,
+  Optional,
+  SimpleChanges,
+} from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { Subscription, tap } from 'rxjs';
+import { filter, Observable, Subscription, tap } from 'rxjs';
 import * as THREE from 'three';
 import { WorkerApi } from '../models/api';
 import { AtomicName } from '../models/atomic';
@@ -50,21 +65,24 @@ function subscribe<T extends SubscriptionName>(
   };
 }
 
-@Directive({
-  selector: '[ngtBody]',
-  exportAs: 'ngtBody',
-})
-export abstract class NgtBody<B extends BodyProps>
+interface WorkerMessageEffectParams {
+  object3dProps: Object3dProps;
+  object3d: THREE.Object3D;
+}
+
+@Directive()
+export abstract class NgtPhysicBody<B extends BodyProps>
   extends ComponentStore<{}>
-  implements OnChanges
+  implements OnChanges, OnInit
 {
+  @Input() getPhysicProps?: GetByIndex<B>;
+
   protected ngtObject3d: NgtObject3d;
-  protected object3d: THREE.Object3D;
+  protected ngtObject3dController: NgtObject3dController;
+  protected object3d!: THREE.Object3D;
   protected physicsStore: PhysicsStore;
 
   protected abstract get type(): BodyShapeType;
-
-  protected abstract get getByIndexFn(): GetByIndex<B>;
 
   protected abstract get argsFn(): ArgFn<B['args']>;
 
@@ -72,16 +90,18 @@ export abstract class NgtBody<B extends BodyProps>
 
   constructor(
     protected ngZone: NgZone,
+    @Optional()
+    @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
+    object3dController?: NgtObject3dController,
     @Optional() object3d?: NgtObject3d,
     @Optional() physicsStore?: PhysicsStore
   ) {
     super({});
-    if (!object3d) {
+    if (!object3d || !object3dController) {
       throw new Error('[ngtBody] directive can only be used on an Object3D');
     }
     this.ngtObject3d = object3d;
-    this.object3d = object3d.object3d || new THREE.Object3D();
-
+    this.ngtObject3dController = object3dController;
     if (!physicsStore) {
       throw new Error(
         '[ngtBody] directive can only be used inside of <ngt-physics>'
@@ -90,12 +110,28 @@ export abstract class NgtBody<B extends BodyProps>
     this.physicsStore = physicsStore;
   }
 
-  ngOnChanges() {
+  private getByIndex(index: number): B & Object3dProps {
+    const physicsProps = this.getPhysicProps
+      ? this.getPhysicProps(index)
+      : ({} as B);
+    return {
+      ...physicsProps,
+      ...this.ngtObject3dController.object3dProps,
+    };
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
     if (this.initSub) {
       this.initSub.unsubscribe();
     }
 
-    this.initSub = this.initWorkerMessageEffect() as unknown as Subscription;
+    this.runInit();
+  }
+
+  ngOnInit() {
+    if (!this.initSub) {
+      this.runInit();
+    }
   }
 
   get api() {
@@ -198,7 +234,7 @@ export abstract class NgtBody<B extends BodyProps>
         userData: makeAtomic('userData', index),
         // Apply functions
         applyForce(
-          this: NgtBody<B>,
+          this: NgtPhysicBody<B>,
           force: NgtTriplet,
           worldPoint: NgtTriplet
         ) {
@@ -211,7 +247,7 @@ export abstract class NgtBody<B extends BodyProps>
             });
         },
         applyImpulse(
-          this: NgtBody<B>,
+          this: NgtPhysicBody<B>,
           impulse: NgtTriplet,
           worldPoint: NgtTriplet
         ) {
@@ -224,7 +260,7 @@ export abstract class NgtBody<B extends BodyProps>
             });
         },
         applyLocalForce(
-          this: NgtBody<B>,
+          this: NgtPhysicBody<B>,
           force: NgtTriplet,
           localPoint: NgtTriplet
         ) {
@@ -237,7 +273,7 @@ export abstract class NgtBody<B extends BodyProps>
             });
         },
         applyLocalImpulse(
-          this: NgtBody<B>,
+          this: NgtPhysicBody<B>,
           impulse: NgtTriplet,
           localPoint: NgtTriplet
         ) {
@@ -249,17 +285,17 @@ export abstract class NgtBody<B extends BodyProps>
               uuid,
             });
         },
-        applyTorque(this: NgtBody<B>, torque: NgtTriplet) {
+        applyTorque(this: NgtPhysicBody<B>, torque: NgtTriplet) {
           const uuid = getUUID(this.object3d, index);
           uuid &&
             worker.postMessage({ op: 'applyTorque', props: [torque], uuid });
         },
         // force particular sleep state
-        sleep(this: NgtBody<B>) {
+        sleep(this: NgtPhysicBody<B>) {
           const uuid = getUUID(this.object3d, index);
           uuid && worker.postMessage({ op: 'sleep', uuid });
         },
-        wakeUp(this: NgtBody<B>) {
+        wakeUp(this: NgtPhysicBody<B>) {
           const uuid = getUUID(this.object3d, index);
           uuid && worker.postMessage({ op: 'wakeUp', uuid });
         },
@@ -273,98 +309,113 @@ export abstract class NgtBody<B extends BodyProps>
     };
   }
 
-  private readonly initWorkerMessageEffect = this.effect(($) => {
-    let currentWorker: CannonWorker;
-    let uuid: string[] = [];
-    let refs: PhysicsStoreState['refs'] = {};
-    let events: PhysicsStoreState['events'] = {};
+  private readonly initWorkerMessageEffect = this.effect<THREE.Object3D>(
+    (object3d$) => {
+      let currentWorker: CannonWorker;
+      let uuid: string[] = [];
+      let refs: PhysicsStoreState['refs'] = {};
+      let events: PhysicsStoreState['events'] = {};
 
-    const cleanUp = () => {
-      if (currentWorker) {
-        this.ngZone.runOutsideAngular(() => {
-          uuid.forEach((id) => {
-            delete refs[id];
-            // if (debugApi) debugApi.remove(id)
-            delete events[id];
-          });
-          currentWorker.postMessage({ op: 'removeBodies', uuid });
-        });
-      }
-    };
-
-    return $.pipe(
-      tap({
-        next: () => {
+      const cleanUp = () => {
+        if (currentWorker) {
           this.ngZone.runOutsideAngular(() => {
-            const {
-              worker,
-              refs: _refs,
-              events: _events,
-            } = this.physicsStore.context;
-            refs = _refs;
-            events = _events;
-
-            const object = this.object3d;
-            currentWorker = worker;
-
-            const objectCount =
-              object instanceof THREE.InstancedMesh
-                ? (object.instanceMatrix.setUsage(THREE.DynamicDrawUsage),
-                  object.count)
-                : 1;
-
-            uuid =
-              object instanceof THREE.InstancedMesh
-                ? new Array(objectCount)
-                    .fill(0)
-                    .map((_, i) => `${object.uuid}/${i}`)
-                : [object.uuid];
-
-            const props: (B & { args: unknown })[] =
-              object instanceof THREE.InstancedMesh
-                ? uuid.map((id, i) => {
-                    const props = this.getByIndexFn(i);
-                    prepare(temp, props);
-                    object.setMatrixAt(i, temp.matrix);
-                    object.instanceMatrix.needsUpdate = true;
-                    refs[id] = object;
-                    // if (debugApi) debugApi.add(id, props, type);
-                    setupCollision(events, props, id);
-                    return { ...props, args: this.argsFn(props.args) };
-                  })
-                : uuid.map((id, i) => {
-                    const props = this.getByIndexFn(i);
-                    prepare(object, props);
-                    refs[id] = object;
-                    // if (debugApi) debugApi.add(id, props, type);
-                    setupCollision(events, props, id);
-                    return { ...props, args: this.argsFn(props.args) };
-                  });
-
-            // Register on mount, unregister on unmount
-            currentWorker.postMessage({
-              op: 'addBodies',
-              type: this.type,
-              uuid,
-              props: props.map(
-                ({
-                  onCollide,
-                  onCollideBegin,
-                  onCollideEnd,
-                  ...serializableProps
-                }) => {
-                  return {
-                    onCollide: Boolean(onCollide),
-                    ...serializableProps,
-                  };
-                }
-              ),
+            uuid.forEach((id) => {
+              delete refs[id];
+              // if (debugApi) debugApi.remove(id)
+              delete events[id];
             });
+            currentWorker.postMessage({ op: 'removeBodies', uuid });
           });
-        },
-        complete: cleanUp,
-        unsubscribe: cleanUp,
-      })
-    );
-  });
+        }
+      };
+
+      return object3d$.pipe(
+        tap({
+          next: () => {
+            this.ngZone.runOutsideAngular(() => {
+              const {
+                worker,
+                refs: _refs,
+                events: _events,
+              } = this.physicsStore.context;
+              refs = _refs;
+              events = _events;
+
+              const object = this.object3d;
+              currentWorker = worker;
+
+              const objectCount =
+                object instanceof THREE.InstancedMesh
+                  ? (object.instanceMatrix.setUsage(THREE.DynamicDrawUsage),
+                    object.count)
+                  : 1;
+
+              uuid =
+                object instanceof THREE.InstancedMesh
+                  ? new Array(objectCount)
+                      .fill(0)
+                      .map((_, i) => `${object.uuid}/${i}`)
+                  : [object.uuid];
+
+              const props: (B & { args: unknown })[] =
+                object instanceof THREE.InstancedMesh
+                  ? uuid.map((id, i) => {
+                      const props = this.getByIndex(i);
+                      prepare(temp, props);
+                      object.setMatrixAt(i, temp.matrix);
+                      object.instanceMatrix.needsUpdate = true;
+                      refs[id] = object;
+                      // if (debugApi) debugApi.add(id, props, type);
+                      setupCollision(events, props, id);
+                      return { ...props, args: this.argsFn(props.args) };
+                    })
+                  : uuid.map((id, i) => {
+                      const props = this.getByIndex(i);
+                      prepare(object, props);
+                      refs[id] = object;
+                      // if (debugApi) debugApi.add(id, props, type);
+                      setupCollision(events, props, id);
+                      return { ...props, args: this.argsFn(props.args) };
+                    });
+
+              // Register on mount, unregister on unmount
+              currentWorker.postMessage({
+                op: 'addBodies',
+                type: this.type,
+                uuid,
+                props: props.map(
+                  ({
+                    onCollide,
+                    onCollideBegin,
+                    onCollideEnd,
+                    ...serializableProps
+                  }) => {
+                    return {
+                      onCollide: Boolean(onCollide),
+                      ...serializableProps,
+                    };
+                  }
+                ),
+              });
+            });
+          },
+          complete: cleanUp,
+          unsubscribe: cleanUp,
+        })
+      );
+    }
+  );
+
+  private runInit() {
+    this.initSub = this.initWorkerMessageEffect(
+      (this.ngtObject3d.object3d$ as Observable<THREE.Object3D>).pipe(
+        filter(Boolean),
+        tap((object3d) => {
+          this.ngZone.runOutsideAngular(() => {
+            this.object3d = object3d;
+          });
+        })
+      )
+    ) as unknown as Subscription;
+  }
 }
