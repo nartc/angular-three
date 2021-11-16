@@ -65,11 +65,6 @@ function subscribe<T extends SubscriptionName>(
   };
 }
 
-interface WorkerMessageEffectParams {
-  object3dProps: Object3dProps;
-  object3d: THREE.Object3D;
-}
-
 @Directive()
 export abstract class NgtPhysicBody<B extends BodyProps>
   extends ComponentStore<{}>
