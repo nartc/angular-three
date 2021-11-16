@@ -16,6 +16,7 @@ export class LoopService implements OnDestroy {
   ) {}
 
   start() {
+    this.stop();
     const { renderer } = this.canvasStore.getImperativeState();
     if (renderer) {
       renderer.setAnimationLoop(() => {

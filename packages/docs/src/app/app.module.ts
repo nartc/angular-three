@@ -1,3 +1,4 @@
+import { NgtCannonModule } from '@angular-three/cannon';
 import { NgtCoreModule } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import {
@@ -23,6 +24,7 @@ import { AppComponent } from './app.component';
     NgtDirectionalLightModule,
     NgtBoxGeometryModule,
     NgtMeshPhongMaterialModule,
+    NgtCannonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

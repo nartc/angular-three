@@ -5,6 +5,9 @@ export type NonFunctionKeys<T> = {
 }[keyof T];
 export type Overwrite<T, O> = Omit<T, NonFunctionKeys<O>> & O;
 
+export type NgtTriplet = [x: number, y: number, z: number];
+export type NgtQuad = [x: number, y: number, z: number, w: number];
+
 export type NgtEuler = THREE.Euler | Parameters<THREE.Euler['set']>;
 export type NgtMatrix4 = THREE.Matrix4 | Parameters<THREE.Matrix4['set']>;
 export type NgtVector2 =

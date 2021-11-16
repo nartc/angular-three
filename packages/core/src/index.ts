@@ -27,7 +27,9 @@ export * from './lib/utils/apply-props.util';
 
 export * from './lib/services/loader.service';
 export * from './lib/services/destroyed.service';
+export * from './lib/services/loop.service';
 
+export * from './lib/stores/enhanced-component-store.abstract';
 export * from './lib/stores/animation.store';
 export * from './lib/stores/canvas.store';
 export * from './lib/stores/events.store';

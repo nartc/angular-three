@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgtPhysics } from './physics.directive';
 
 @NgModule({
-  imports: [CommonModule],
+  declarations: [NgtPhysics],
+  exports: [NgtPhysics],
 })
-export class CannonModule {}
+export class NgtCannonModule {}
