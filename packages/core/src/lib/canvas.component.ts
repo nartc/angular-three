@@ -73,6 +73,10 @@ export class NgtCanvasComponent implements OnInit {
     this.canvasStore.setShadows(v);
   }
 
+  @Input() set alpha(v: boolean) {
+    this.canvasStore.setAlpha(v);
+  }
+
   @Input() camera?: NgtCameraOptions;
   @Input() scene?: NgtSceneOptions;
   @Input() raycaster?: NgtRaycasterOptions = {};

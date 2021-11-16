@@ -38,6 +38,7 @@ export class CanvasStore
       isOrthographic: false,
       isLinear: false,
       shadows: false,
+      alpha: true,
       mouse: new THREE.Vector2(),
       clock: new THREE.Clock(),
       renderer: undefined,
@@ -120,6 +121,11 @@ export class CanvasStore
     })
   );
 
+  readonly setAlpha = this.updater<boolean>((state, alpha) => ({
+    ...state,
+    alpha,
+  }));
+
   readonly setSize = this.updater<NgtSize>((state, size) => ({
     ...state,
     internal: { ...state.internal, size },
@@ -156,15 +162,16 @@ export class CanvasStore
       withLatestFrom(
         this.selectors.internal$,
         this.selectors.isLinear$,
-        this.selectors.shadows$
+        this.selectors.shadows$,
+        this.selectors.alpha$
       ),
-      tap(([canvas, { size, dpr }, isLinear, shadows]) => {
+      tap(([canvas, { size, dpr }, isLinear, shadows, alpha]) => {
         // TODO: custom renderer
         const renderer = new THREE.WebGLRenderer({
           canvas,
           antialias: true,
           powerPreference: 'high-performance',
-          alpha: true,
+          alpha,
         });
 
         if (shadows) {

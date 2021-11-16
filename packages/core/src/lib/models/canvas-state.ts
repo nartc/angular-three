@@ -21,6 +21,7 @@ export interface CanvasStoreState {
   isOrthographic: boolean;
   isLinear: boolean;
   shadows: boolean | Partial<THREE.WebGLShadowMap>;
+  alpha: boolean;
   clock: THREE.Clock;
   mouse: THREE.Vector2;
   internal: CanvasInternal;

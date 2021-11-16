@@ -16,6 +16,7 @@ import type {
   NgtEvent,
   NgtQuaternion,
   NgtVector3,
+  Object3dProps,
   UnknownRecord,
 } from '../models';
 
@@ -111,5 +112,22 @@ export class NgtObject3dController implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.change$.next(changes);
+  }
+
+  get object3dProps(): Object3dProps {
+    return {
+      name: this.name,
+      position: this.position,
+      rotation: this.rotation,
+      quaternion: this.quaternion,
+      scale: this.scale,
+      color: this.color,
+      userData: this.userData,
+      dispose: this.dispose,
+      castShadow: this.castShadow,
+      receiveShadow: this.receiveShadow,
+      visible: this.visible,
+      matrixAutoUpdate: this.matrixAutoUpdate,
+    };
   }
 }
