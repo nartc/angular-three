@@ -1,0 +1,3 @@
+// GENERATED
+export * from './lib/<%= fileName %>.module';
+export * from './lib/<%= fileName %>.directive';

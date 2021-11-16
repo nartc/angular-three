@@ -1,0 +1,26 @@
+import {
+  ArgFn,
+  BodyShapeType,
+  <%= props %>,
+  GetByIndex,
+  NgtPhysicBody,<% for (const additionalImport of additionalImports) { %>
+  <%= additionalImport %>,<% }%>
+} from '@angular-three/cannon';
+import { Directive } from '@angular/core';
+
+@Directive({
+  selector: '[ngtPhysic<%= name %>]',
+  exportAs: 'ngtPhysic<%= name %>',
+  providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysic<%= name %> }],
+})
+export class NgtPhysic<%= name %> extends NgtPhysicBody<<%= props %>> {
+  static ngAcceptInputType_getPropsByIndex: GetByIndex<<%= props %>> | undefined;
+
+  protected get type(): BodyShapeType {
+    return '<%= name %>';
+  }
+
+  protected get argsFn(): ArgFn<<%= props %>['args']> {
+    return (<% if (argsFn.withArgs) { %>args<% if (argsFn.defaultArgs) { %> = <%= argsFn.defaultArgs %><% } %><% } %>) => <%- argsFn.body %>;
+  }
+}

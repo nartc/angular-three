@@ -1,0 +1,8 @@
+import { NgModule } from '@angular/core';
+import { NgtPhysic<%= name %> } from './<%= fileName %>.directive';
+
+@NgModule({
+  declarations: [NgtPhysic<%= name %>],
+  exports: [NgtPhysic<%= name %>],
+})
+export class NgtPhysic<%= name %>Module {}
