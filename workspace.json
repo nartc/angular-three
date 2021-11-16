@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "cannon": "packages/cannon",
     "controls": "packages/controls",
     "core": "packages/core",
     "docs": "packages/docs",

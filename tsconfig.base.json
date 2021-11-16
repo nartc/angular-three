@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@angular-three/cannon": ["packages/cannon/src/index.ts"],
       "@angular-three/controls": ["packages/controls/src/index.ts"],
       "@angular-three/controls/arcball-controls": [
         "packages/controls/arcball-controls/src/index.ts"
