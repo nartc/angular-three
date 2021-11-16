@@ -16,6 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@angular-three/cannon": ["packages/cannon/src/index.ts"],
+      "@angular-three/cannon/box": ["packages/cannon/box/src/index.ts"],
+      "@angular-three/cannon/plane": ["packages/cannon/plane/src/index.ts"],
       "@angular-three/controls": ["packages/controls/src/index.ts"],
       "@angular-three/controls/arcball-controls": [
         "packages/controls/arcball-controls/src/index.ts"

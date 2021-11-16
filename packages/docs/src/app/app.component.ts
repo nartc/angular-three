@@ -1,38 +1,75 @@
-import { Component } from '@angular/core';
-import * as THREE from 'three';
+import { BoxProps } from '@angular-three/cannon';
+import { NgtVector3 } from '@angular-three/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'ngt-root',
   template: `
-    <ngt-canvas>
-      <ngt-physics>
-        <ngt-ambient-light></ngt-ambient-light>
-        <ngt-directional-light></ngt-directional-light>
+    <ngt-canvas
+      [shadows]="true"
+      [alpha]="false"
+      [camera]="{ position: [-1, 5, 5], fov: 45 }"
+      (created)="$event.gl.setClearColor('lightblue')"
+    >
+      <ngt-ambient-light></ngt-ambient-light>
+      <ngt-directional-light
+        [position]="[10, 10, 10]"
+        [castShadow]="true"
+      ></ngt-directional-light>
 
-        <ngt-mesh
-          (click)="active = !active"
-          (pointerover)="hover = true"
-          (pointerout)="hover = false"
-          (animateReady)="onAnimateReady($event.animateObject)"
-          [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
-        >
-          <ngt-mesh-phong-material
-            [parameters]="{ color: hover ? 'hotpink' : 'orange' }"
-          ></ngt-mesh-phong-material>
-          <ngt-box-geometry></ngt-box-geometry>
-        </ngt-mesh>
+      <ngt-physics>
+        <app-plane></app-plane>
+        <app-box [position]="[0.1, 5, 0]"></app-box>
+        <app-box [position]="[0, 10, -1]"></app-box>
+        <app-box [position]="[0, 20, -2]"></app-box>
       </ngt-physics>
     </ngt-canvas>
   `,
-  styles: [``],
 })
-export class AppComponent {
-  title = 'docs';
+export class AppComponent {}
 
-  hover = false;
-  active = false;
+@Component({
+  selector: 'app-plane',
+  template: `
+    <ngt-mesh
+      ngtPhysicPlane
+      [rotation]="[-(1 | mathConst: 'PI') / 2, 0, 0]"
+      [position]="[0, -2.5, 0]"
+      [receiveShadow]="true"
+    >
+      <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
+      <ngt-shadow-material
+        [parameters]="{ color: '#171717', transparent: true, opacity: 0.4 }"
+      ></ngt-shadow-material>
+    </ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class PlaneComponent {}
 
-  onAnimateReady(cube: THREE.Mesh) {
-    cube.rotation.x = cube.rotation.y += 0.01;
+@Component({
+  selector: 'app-box',
+  template: `
+    <ngt-mesh
+      ngtPhysicBox
+      [getPhysicProps]="getBoxProps"
+      [castShadow]="true"
+      [receiveShadow]="true"
+      [rotation]="[0.4, 0.2, 0.5]"
+      [position]="position"
+    >
+      <ngt-box-geometry></ngt-box-geometry>
+      <ngt-mesh-phong-material
+        [parameters]="{ color: 'hotpink' }"
+      ></ngt-mesh-phong-material>
+    </ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BoxComponent {
+  @Input() position?: NgtVector3;
+
+  getBoxProps(): BoxProps {
+    return { mass: 1 };
   }
 }
