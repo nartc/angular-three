@@ -5,7 +5,7 @@ export interface PhysicBodyEntity {
     withArgs: boolean;
     defaultArgs: string;
     body: string;
-    shorthandReturn: boolean;
+    asUnknown: boolean;
   };
   additionalImports: string[];
 }

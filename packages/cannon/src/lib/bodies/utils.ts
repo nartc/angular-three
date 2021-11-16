@@ -3,6 +3,10 @@ import * as THREE from 'three';
 import { BodyProps } from '../models/body';
 import { PhysicsStoreState } from '../models/physics-state';
 
+export function makeTriplet(v: THREE.Vector3 | NgtTriplet): NgtTriplet {
+  return v instanceof THREE.Vector3 ? [v.x, v.y, v.z] : v;
+}
+
 export function prepare(object: THREE.Object3D, props: BodyProps) {
   object.userData = props.userData || {};
   object.position.set(...(props.position || [0, 0, 0]));

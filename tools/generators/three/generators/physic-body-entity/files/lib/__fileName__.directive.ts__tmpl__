@@ -21,6 +21,6 @@ export class NgtPhysic<%= name %> extends NgtPhysicBody<<%= props %>> {
   }
 
   protected get argsFn(): ArgFn<<%= props %>['args']> {
-    return (<% if (argsFn.withArgs) { %>args<% if (argsFn.defaultArgs) { %> = <%= argsFn.defaultArgs %><% } %><% } %>) => <%- argsFn.body %>;
+    return (<% if (argsFn.withArgs) { %>args<% if (argsFn.defaultArgs) { %> = <%= argsFn.defaultArgs %><% } %><% } %>) => <%- argsFn.body %><% if (argsFn.asUnknown) { %> as unknown[]<% } %>;
   }
 }

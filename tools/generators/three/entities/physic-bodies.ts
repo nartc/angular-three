@@ -5,7 +5,7 @@ export const physicBodies: PhysicBodyCollection = [
     name: 'Box',
     props: 'BoxProps',
     argsFn: {
-      shorthandReturn: true,
+      asUnknown: false,
       withArgs: true,
       defaultArgs: '[1, 1, 1]',
       body: 'args',
@@ -16,7 +16,7 @@ export const physicBodies: PhysicBodyCollection = [
     name: 'Plane',
     props: 'PlaneProps',
     argsFn: {
-      shorthandReturn: true,
+      asUnknown: false,
       withArgs: false,
       defaultArgs: '',
       body: '[]',
@@ -27,7 +27,7 @@ export const physicBodies: PhysicBodyCollection = [
     name: 'Cylinder',
     props: 'CylinderProps',
     argsFn: {
-      shorthandReturn: true,
+      asUnknown: false,
       withArgs: true,
       defaultArgs: '[]',
       body: 'args',
@@ -38,7 +38,7 @@ export const physicBodies: PhysicBodyCollection = [
     name: 'Heightfield',
     props: 'HeightfieldProps',
     argsFn: {
-      shorthandReturn: true,
+      asUnknown: false,
       withArgs: true,
       defaultArgs: '',
       body: 'args',
@@ -49,7 +49,7 @@ export const physicBodies: PhysicBodyCollection = [
     name: 'Particle',
     props: 'ParticleProps',
     argsFn: {
-      shorthandReturn: true,
+      asUnknown: false,
       withArgs: false,
       defaultArgs: '',
       body: '[]',
@@ -60,7 +60,7 @@ export const physicBodies: PhysicBodyCollection = [
     name: 'Sphere',
     props: 'SphereProps',
     argsFn: {
-      shorthandReturn: false,
+      asUnknown: false,
       withArgs: true,
       defaultArgs: '[1]',
       body: `{
@@ -74,7 +74,7 @@ export const physicBodies: PhysicBodyCollection = [
     name: 'Trimesh',
     props: 'TrimeshProps',
     argsFn: {
-      shorthandReturn: true,
+      asUnknown: false,
       withArgs: true,
       defaultArgs: '',
       body: 'args',
@@ -85,7 +85,7 @@ export const physicBodies: PhysicBodyCollection = [
     name: 'ConvexPolyhedron',
     props: 'ConvexPolyhedronProps',
     argsFn: {
-      shorthandReturn: false,
+      asUnknown: false,
       withArgs: true,
       defaultArgs: '[]',
       body: `{
@@ -104,7 +104,7 @@ export const physicBodies: PhysicBodyCollection = [
     name: 'Compound',
     props: 'CompoundBodyProps',
     argsFn: {
-      shorthandReturn: true,
+      asUnknown: true,
       withArgs: true,
       defaultArgs: '',
       body: 'args',
