@@ -25,7 +25,12 @@
       "infile": "CHANGELOG.md"
     },
     "@release-it/bumper": {
-      "out": ["packages/**/package*.json"]
+      "out": [
+        "packages/cannon/package*.json",
+        "packages/core/package*.json",
+        "packages/controls/package*.json",
+        "packages/postprocessing/package*.json"
+      ]
     }
   },
   "git": {
