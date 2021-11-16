@@ -1,2 +1,3 @@
-export * from './lib/physic-plane.directive';
-export * from './lib/physic-plane.module';
+// GENERATED
+export * from './lib/plane.module';
+export * from './lib/plane.directive';

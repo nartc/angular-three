@@ -17,7 +17,24 @@
     "paths": {
       "@angular-three/cannon": ["packages/cannon/src/index.ts"],
       "@angular-three/cannon/box": ["packages/cannon/box/src/index.ts"],
+      "@angular-three/cannon/compound": [
+        "packages/cannon/compound/src/index.ts"
+      ],
+      "@angular-three/cannon/convex-polyhedron": [
+        "packages/cannon/convex-polyhedron/src/index.ts"
+      ],
+      "@angular-three/cannon/cylinder": [
+        "packages/cannon/cylinder/src/index.ts"
+      ],
+      "@angular-three/cannon/heightfield": [
+        "packages/cannon/heightfield/src/index.ts"
+      ],
+      "@angular-three/cannon/particle": [
+        "packages/cannon/particle/src/index.ts"
+      ],
       "@angular-three/cannon/plane": ["packages/cannon/plane/src/index.ts"],
+      "@angular-three/cannon/sphere": ["packages/cannon/sphere/src/index.ts"],
+      "@angular-three/cannon/trimesh": ["packages/cannon/trimesh/src/index.ts"],
       "@angular-three/controls": ["packages/controls/src/index.ts"],
       "@angular-three/controls/arcball-controls": [
         "packages/controls/arcball-controls/src/index.ts"

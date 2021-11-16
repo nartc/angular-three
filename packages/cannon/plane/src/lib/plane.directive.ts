@@ -1,15 +1,16 @@
 import {
   ArgFn,
   BodyShapeType,
+  PlaneProps,
   GetByIndex,
   NgtPhysicBody,
-  PlaneProps,
 } from '@angular-three/cannon';
 import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[ngtPhysicPlane]',
   exportAs: 'ngtPhysicPlane',
+  providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysicPlane }],
 })
 export class NgtPhysicPlane extends NgtPhysicBody<PlaneProps> {
   static ngAcceptInputType_getPropsByIndex: GetByIndex<PlaneProps> | undefined;

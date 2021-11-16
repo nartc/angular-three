@@ -16,7 +16,6 @@ import type {
   NgtEvent,
   NgtQuaternion,
   NgtVector3,
-  Object3dProps,
   UnknownRecord,
 } from '../models';
 
@@ -114,7 +113,7 @@ export class NgtObject3dController implements OnChanges {
     this.change$.next(changes);
   }
 
-  get object3dProps(): Object3dProps {
+  get object3dProps() {
     return {
       name: this.name,
       position: this.position,

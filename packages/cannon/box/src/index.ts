@@ -1,2 +1,3 @@
-export * from './lib/physic-box.directive';
-export * from './lib/physic-box.module';
+// GENERATED
+export * from './lib/box.module';
+export * from './lib/box.directive';

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NgtPhysicPlane } from './physic-plane.directive';
+import { NgtPhysicPlane } from './plane.directive';
 
 @NgModule({
   declarations: [NgtPhysicPlane],

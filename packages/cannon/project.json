@@ -37,7 +37,21 @@
           "packages/cannon/box/**/*.ts",
           "packages/cannon/box/**/*.html",
           "packages/cannon/plane/**/*.ts",
-          "packages/cannon/plane/**/*.html"
+          "packages/cannon/plane/**/*.html",
+          "packages/cannon/cylinder/**/*.ts",
+          "packages/cannon/cylinder/**/*.html",
+          "packages/cannon/heightfield/**/*.ts",
+          "packages/cannon/heightfield/**/*.html",
+          "packages/cannon/particle/**/*.ts",
+          "packages/cannon/particle/**/*.html",
+          "packages/cannon/sphere/**/*.ts",
+          "packages/cannon/sphere/**/*.html",
+          "packages/cannon/trimesh/**/*.ts",
+          "packages/cannon/trimesh/**/*.html",
+          "packages/cannon/convex-polyhedron/**/*.ts",
+          "packages/cannon/convex-polyhedron/**/*.html",
+          "packages/cannon/compound/**/*.ts",
+          "packages/cannon/compound/**/*.html"
         ]
       }
     },
