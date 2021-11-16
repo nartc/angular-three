@@ -1,3 +1,5 @@
+* ci: adjust build script (11d4a3f)
+
 ## 1.0.0-beta.46 (2021-11-16)
 
 ### Features
