@@ -1,3 +1,26 @@
+## [2.0.0-beta.0](https://github.com/nartc/angular-three/compare/1.0.0-beta.47...2.0.0-beta.0) (2021-11-17)
+
+
+### Features
+
+* **cannon:** add and generate bodies ([0f57684](https://github.com/nartc/angular-three/commit/0f576847e95738316648571c26e275628a720991))
+* **cannon:** add box and plane ([12f3158](https://github.com/nartc/angular-three/commit/12f3158b5f14daad41f514eaf8f3931c15b3eed0))
+* **cannon:** add NgtBody ([8120521](https://github.com/nartc/angular-three/commit/812052162dd610178062cef5dc838bb292e6a5b9))
+
+
+### Bug Fixes
+
+* **cannon:** expose makeTriplet ([6786dbd](https://github.com/nartc/angular-three/commit/6786dbd7a792e5a154f1c1a0883fc4d2c0fb2dac))
+* **cannon:** remove unused params ([fa101a7](https://github.com/nartc/angular-three/commit/fa101a78afb875ee92935080685f418de0a84a10))
+* **core:** expose Object3dProps and add alpha to canvas ([42c197c](https://github.com/nartc/angular-three/commit/42c197c14607371f9f2f9c00153ebdbdbb99fdeb))
+* **core:** remove self import ([a8f0333](https://github.com/nartc/angular-three/commit/a8f0333a3a7eeef78c1a8338407835c25bc7ce38))
+
+
+### Documentations
+
+* add initial readme to all packages ([6faac0b](https://github.com/nartc/angular-three/commit/6faac0b43ab52f4d1ae3d23b7dcb75c3b3b0d810))
+* **docs:** add physics demo ([8f83434](https://github.com/nartc/angular-three/commit/8f834347050359d09062913f21d54cda5747b9ab))
+
 * ci: adjust build script (11d4a3f)
 
 ## 1.0.0-beta.46 (2021-11-16)
