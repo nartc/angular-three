@@ -1,10 +1,5 @@
-import {
-  NgtColor,
-  NgtEuler,
-  NgtQuaternion,
-  NgtVector3,
-  UnknownRecord,
-} from '@angular-three/core';
+import { UnknownRecord } from './common';
+import { NgtColor, NgtEuler, NgtQuaternion, NgtVector3 } from './three';
 
 export interface Object3dProps {
   name?: string;
