@@ -181,6 +181,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://nartc.me/"><img src="https://avatars.githubusercontent.com/u/25516557?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chau Tran</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=nartc" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/barbados-clemens"><img src="https://avatars.githubusercontent.com/u/23272162?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Caleb Ukle</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=barbados-clemens" title="Code">💻</a></td>
   </tr>
 </table>
 
