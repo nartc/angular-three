@@ -1,7 +1,9 @@
-# controls
+# `@angular-three/controls`
 
-This library was generated with [Nx](https://nx.dev).
+This package provides the external Controls like `OrbitControls`, `FlyControls`, `FirstPersonControls` etc...
 
-## Running unit tests
+## Installation
 
-Run `nx test controls` to execute the unit tests.
+```shell
+npm install @angular-three/controls
+```

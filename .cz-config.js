@@ -17,6 +17,7 @@ module.exports = {
     { name: 'core', description: 'Angular Three core' },
     { name: 'controls', description: 'THREE.js Controls' },
     { name: 'postprocessing', description: 'THREE.js Post processing' },
+    { name: 'cannon', description: 'Port of React use-cannon (cannon-es)' },
   ],
   // override the messages, defaults are as follows
   messages: {
