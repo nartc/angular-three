@@ -1,3 +1,26 @@
+## [2.0.0-beta.1](https://github.com/nartc/angular-three/compare/2.0.0-beta.0...2.0.0-beta.1) (2021-11-18)
+
+
+### Features
+
+* **cannon:** add constraints ([7532587](https://github.com/nartc/angular-three/commit/7532587bb78b81ff2f9352da957d7804aa19ed6c))
+* **cannon:** generate constraints ([83d6cad](https://github.com/nartc/angular-three/commit/83d6cad1feea13c8427620b14871eae6dab72ccd))
+* **core:** add VectorPipeModule ([d4ff85f](https://github.com/nartc/angular-three/commit/d4ff85fc154736f2f3005c8e4c938135ed6d4165))
+
+
+### Bug Fixes
+
+* **cannon:** regenerate constraints ([8c8af18](https://github.com/nartc/angular-three/commit/8c8af18ae3239967a62f5329d4d7dfcdbee5232d))
+* **core:** add Shadow input to light ([2e44307](https://github.com/nartc/angular-three/commit/2e44307bc639b0bde7f41ee4156bdd0de021f12d))
+* **core:** adjust type of shadow input for Light ([b0e2157](https://github.com/nartc/angular-three/commit/b0e2157b4804c8b87d78001037678e2d4c688c1c))
+* **core:** change outputEncoding to LinearEncoding when linear is true ([c668098](https://github.com/nartc/angular-three/commit/c6680982820fa79475d3eaaa17229b7a6c005430))
+
+
+### Documentations
+
+* add [@barbados-clemens](https://github.com/barbados-clemens) as a contributor ([4b810d4](https://github.com/nartc/angular-three/commit/4b810d43ff8024aa720abc1617f80d7f162fcda3))
+* play around with physics ([96602bf](https://github.com/nartc/angular-three/commit/96602bfe9c3c24e2a0577e68139846fe74ff5a76))
+
 ## [2.0.0-beta.0](https://github.com/nartc/angular-three/compare/1.0.0-beta.47...2.0.0-beta.0) (2021-11-17)
 
 
