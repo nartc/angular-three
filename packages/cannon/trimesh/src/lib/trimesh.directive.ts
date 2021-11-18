@@ -1,3 +1,4 @@
+//GENERATED
 import {
   ArgFn,
   BodyShapeType,

@@ -1,3 +1,4 @@
+//GENERATED
 import { NgModule } from '@angular/core';
 import { NgtPhysicTrimesh } from './trimesh.directive';
 

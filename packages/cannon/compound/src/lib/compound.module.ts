@@ -1,3 +1,4 @@
+//GENERATED
 import { NgModule } from '@angular/core';
 import { NgtPhysicCompound } from './compound.directive';
 

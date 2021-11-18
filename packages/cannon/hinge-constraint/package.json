@@ -1,0 +1,10 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "@angular-three/cannon": "@angular-three/cannon"
+      }
+    }
+  }
+}

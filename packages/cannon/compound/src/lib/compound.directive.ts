@@ -1,3 +1,4 @@
+//GENERATED
 import {
   ArgFn,
   BodyShapeType,
@@ -13,7 +14,9 @@ import { Directive } from '@angular/core';
   providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysicCompound }],
 })
 export class NgtPhysicCompound extends NgtPhysicBody<CompoundBodyProps> {
-  static ngAcceptInputType_getPropsByIndex: GetByIndex<CompoundBodyProps> | undefined;
+  static ngAcceptInputType_getPropsByIndex:
+    | GetByIndex<CompoundBodyProps>
+    | undefined;
 
   protected get type(): BodyShapeType {
     return 'Compound';

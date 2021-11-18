@@ -51,7 +51,17 @@
           "packages/cannon/convex-polyhedron/**/*.ts",
           "packages/cannon/convex-polyhedron/**/*.html",
           "packages/cannon/compound/**/*.ts",
-          "packages/cannon/compound/**/*.html"
+          "packages/cannon/compound/**/*.html",
+          "packages/cannon/point-to-point-constraint/**/*.ts",
+          "packages/cannon/point-to-point-constraint/**/*.html",
+          "packages/cannon/cone-twist-constraint/**/*.ts",
+          "packages/cannon/cone-twist-constraint/**/*.html",
+          "packages/cannon/distance-constraint/**/*.ts",
+          "packages/cannon/distance-constraint/**/*.html",
+          "packages/cannon/hinge-constraint/**/*.ts",
+          "packages/cannon/hinge-constraint/**/*.html",
+          "packages/cannon/lock-constraint/**/*.ts",
+          "packages/cannon/lock-constraint/**/*.html"
         ]
       }
     },
