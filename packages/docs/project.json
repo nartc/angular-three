@@ -13,9 +13,9 @@
         "main": "packages/docs/src/main.ts",
         "polyfills": "packages/docs/src/polyfills.ts",
         "tsConfig": "packages/docs/tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
+        "inlineStyleLanguage": "less",
         "assets": ["packages/docs/src/favicon.ico", "packages/docs/src/assets"],
-        "styles": ["packages/docs/src/styles.scss"],
+        "styles": ["packages/docs/src/styles.less"],
         "scripts": []
       },
       "configurations": {
