@@ -2,7 +2,7 @@
   "projectType": "application",
   "root": "packages/docs",
   "sourceRoot": "packages/docs/src",
-  "prefix": "ngt",
+  "prefix": "docs",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -14,8 +14,20 @@
         "polyfills": "packages/docs/src/polyfills.ts",
         "tsConfig": "packages/docs/tsconfig.app.json",
         "inlineStyleLanguage": "less",
-        "assets": ["packages/docs/src/favicon.ico", "packages/docs/src/assets"],
-        "styles": ["packages/docs/src/styles.less"],
+        "assets": [
+          "packages/docs/src/favicon.ico",
+          "packages/docs/src/assets",
+          {
+            "glob": "**/*",
+            "input": "node_modules/@taiga-ui/icons/src",
+            "output": "assets/taiga-ui/icons"
+          }
+        ],
+        "styles": [
+          "node_modules/@taiga-ui/core/styles/taiga-ui-global.less",
+          "node_modules/@taiga-ui/core/styles/taiga-ui-theme.less",
+          "packages/docs/src/styles.less"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -23,13 +35,13 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "2md",
+              "maximumError": "4mb"
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumWarning": "8kb",
+              "maximumError": "16kb"
             }
           ],
           "fileReplacements": [

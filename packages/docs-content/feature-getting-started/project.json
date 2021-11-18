@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "packages/docs-content/feature-getting-started",
+  "sourceRoot": "packages/docs-content/feature-getting-started/src",
+  "prefix": "docs",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/packages/docs-content/feature-getting-started"],
+      "options": {
+        "project": "packages/docs-content/feature-getting-started/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/docs-content/feature-getting-started/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/docs-content/feature-getting-started/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/docs-content/feature-getting-started"],
+      "options": {
+        "jestConfig": "packages/docs-content/feature-getting-started/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/docs-content/feature-getting-started/src/**/*.ts",
+          "packages/docs-content/feature-getting-started/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["scope:getting-started", "type:library", "context:docs"]
+}

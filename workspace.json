@@ -6,6 +6,8 @@
     "core": "packages/core",
     "demo": "packages/demo",
     "docs": "packages/docs",
+    "docs-content-feature-getting-started": "packages/docs-content/feature-getting-started",
+    "docs-content-feature-home": "packages/docs-content/feature-home",
     "postprocessing": "packages/postprocessing"
   }
 }
