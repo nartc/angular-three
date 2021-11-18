@@ -127,6 +127,6 @@ export class NgtObject3dController implements OnChanges {
       receiveShadow: this.receiveShadow,
       visible: this.visible,
       matrixAutoUpdate: this.matrixAutoUpdate,
-    };
+    }
   }
 }
