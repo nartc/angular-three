@@ -1,0 +1,3 @@
+// GENERATED
+export * from './lib/<%= fileName %>-constraint.module';
+export * from './lib/<%= fileName %>-constraint.directive';

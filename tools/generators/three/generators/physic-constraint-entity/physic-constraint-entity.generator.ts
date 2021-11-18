@@ -10,12 +10,12 @@ import {
 import { updateJsonFile } from '@nrwl/workspace';
 import { readdirSync } from 'fs';
 import { join } from 'path';
-import { physicBodies } from '../../entities/physic-bodies';
-import { PhysicBodyEntity } from '../../models/physic-body-collection.model';
+import { physicConstraints } from '../../entities/physic-constraints';
+import { PhysicConstraintEntity } from '../../models/physic-constraint-collection.model';
 
-function createPhysicBodyFiles(
+function createPhysicConstraintFiles(
   tree: Tree,
-  physicBody: PhysicBodyEntity,
+  physicConstraint: PhysicConstraintEntity,
   normalizedNames: ReturnType<typeof names>,
   cannonLibPath: string
 ) {
@@ -25,7 +25,7 @@ function createPhysicBodyFiles(
     join(cannonLibPath, 'src', 'lib'),
     {
       ...normalizedNames,
-      ...physicBody,
+      ...physicConstraint,
       tmpl: '',
     }
   );
@@ -33,7 +33,7 @@ function createPhysicBodyFiles(
 
 function createIndexFile(
   tree: Tree,
-  physicBody: PhysicBodyEntity,
+  physicConstraint: PhysicConstraintEntity,
   normalizedNames: ReturnType<typeof names>,
   cannonLibPath: string
 ) {
@@ -43,7 +43,7 @@ function createIndexFile(
     join(cannonLibPath, 'src'),
     {
       ...normalizedNames,
-      ...physicBody,
+      ...physicConstraint,
       tmpl: '',
     }
   );
@@ -51,7 +51,7 @@ function createIndexFile(
 
 function createPackageJsonFile(
   tree: Tree,
-  physicBody: PhysicBodyEntity,
+  physicConstraint: PhysicConstraintEntity,
   normalizedNames: ReturnType<typeof names>,
   cannonLibPath: string
 ) {
@@ -61,7 +61,7 @@ function createPackageJsonFile(
     join(cannonLibPath),
     {
       ...normalizedNames,
-      ...physicBody,
+      ...physicConstraint,
       tmpl: '',
     }
   );
@@ -69,16 +69,21 @@ function createPackageJsonFile(
 
 function createFiles(
   tree: Tree,
-  physicBody: PhysicBodyEntity,
+  physicConstraint: PhysicConstraintEntity,
   normalizedNames: ReturnType<typeof names>,
   cannonLibPath: string
 ) {
-  createPhysicBodyFiles(tree, physicBody, normalizedNames, cannonLibPath);
-  createIndexFile(tree, physicBody, normalizedNames, cannonLibPath);
-  createPackageJsonFile(tree, physicBody, normalizedNames, cannonLibPath);
+  createPhysicConstraintFiles(
+    tree,
+    physicConstraint,
+    normalizedNames,
+    cannonLibPath
+  );
+  createIndexFile(tree, physicConstraint, normalizedNames, cannonLibPath);
+  createPackageJsonFile(tree, physicConstraint, normalizedNames, cannonLibPath);
 }
 
-async function physicBodyEntityGenerator(tree: Tree) {
+async function physicConstraintEntityGenerator(tree: Tree) {
   const { libsDir } = getWorkspaceLayout(tree);
   const cannonDir = join(libsDir, 'cannon');
   const currentEntityDirs = new Map(
@@ -87,22 +92,22 @@ async function physicBodyEntityGenerator(tree: Tree) {
         (dir) =>
           dir.isDirectory() &&
           dir.name !== 'src' &&
-          !dir.name.endsWith('constraint')
+          dir.name.endsWith('constraint')
       )
       .map((dir) => [
         dir.name,
         {
           isChecked: false,
           fullPath: join(cannonDir, dir.name),
-          name: dir.name,
+          name: dir.name + '-constraint',
         },
       ])
   );
 
-  for (const physicBody of physicBodies) {
-    const normalizedNames = names(physicBody.name);
+  for (const physicConstraint of physicConstraints) {
+    const normalizedNames = names(physicConstraint.name);
 
-    logger.info(`Generating physic body ${normalizedNames.className}...`);
+    logger.info(`Generating physic constraint ${normalizedNames.className}...`);
 
     const entityLibDir = currentEntityDirs.get(normalizedNames.fileName);
 
@@ -111,17 +116,22 @@ async function physicBodyEntityGenerator(tree: Tree) {
         ...entityLibDir,
         isChecked: true,
       });
-      createFiles(tree, physicBody, normalizedNames, entityLibDir.fullPath);
+      createFiles(
+        tree,
+        physicConstraint,
+        normalizedNames,
+        entityLibDir.fullPath
+      );
     } else {
       await librarySecondaryEntryPointGenerator(tree, {
-        name: normalizedNames.fileName,
+        name: normalizedNames.fileName + '-constraint',
         library: 'cannon',
       });
       createFiles(
         tree,
-        physicBody,
+        physicConstraint,
         normalizedNames,
-        join(cannonDir, normalizedNames.fileName)
+        join(cannonDir, normalizedNames.fileName + '-constraint')
       );
     }
   }
@@ -155,4 +165,4 @@ async function physicBodyEntityGenerator(tree: Tree) {
   };
 }
 
-export default physicBodyEntityGenerator;
+export default physicConstraintEntityGenerator;

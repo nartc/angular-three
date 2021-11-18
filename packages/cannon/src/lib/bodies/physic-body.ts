@@ -74,8 +74,9 @@ export abstract class NgtPhysicBody<B extends BodyProps>
 
   protected ngtObject3d: NgtObject3d;
   protected ngtObject3dController: NgtObject3dController;
-  protected object3d!: THREE.Object3D;
   protected physicsStore: PhysicsStore;
+
+  object3d!: THREE.Object3D;
 
   protected abstract get type(): BodyShapeType;
 
@@ -99,7 +100,7 @@ export abstract class NgtPhysicBody<B extends BodyProps>
     this.ngtObject3dController = object3dController;
     if (!physicsStore) {
       throw new Error(
-        '[ngtBody] directive can only be used inside of <ngt-physics>'
+        '[ngtPhysicBody] directive can only be used inside of <ngt-physics>'
       );
     }
     this.physicsStore = physicsStore;
