@@ -4,6 +4,7 @@
     "cannon": "packages/cannon",
     "controls": "packages/controls",
     "core": "packages/core",
+    "demo": "packages/demo",
     "postprocessing": "packages/postprocessing"
   }
 }
