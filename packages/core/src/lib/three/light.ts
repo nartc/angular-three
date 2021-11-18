@@ -12,7 +12,7 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
   abstract lightType: AnyConstructor<TLight>;
 
   @Input() intensity?: number;
-  @Input() shadow?: THREE.LightShadow;
+  @Input() shadow?: Partial<THREE.LightShadow>;
 
   private _extraArgs: unknown[] = [];
   protected set extraArgs(v: unknown[]) {
