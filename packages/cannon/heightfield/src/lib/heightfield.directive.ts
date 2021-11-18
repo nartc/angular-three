@@ -14,9 +14,7 @@ import { Directive } from '@angular/core';
   providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysicHeightfield }],
 })
 export class NgtPhysicHeightfield extends NgtPhysicBody<HeightfieldProps> {
-  static ngAcceptInputType_getPropsByIndex:
-    | GetByIndex<HeightfieldProps>
-    | undefined;
+  static ngAcceptInputType_getPhysicProps: GetByIndex<HeightfieldProps> | undefined;
 
   protected get type(): BodyShapeType {
     return 'Heightfield';

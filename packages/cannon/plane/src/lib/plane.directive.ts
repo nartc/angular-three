@@ -14,7 +14,7 @@ import { Directive } from '@angular/core';
   providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysicPlane }],
 })
 export class NgtPhysicPlane extends NgtPhysicBody<PlaneProps> {
-  static ngAcceptInputType_getPropsByIndex: GetByIndex<PlaneProps> | undefined;
+  static ngAcceptInputType_getPhysicProps: GetByIndex<PlaneProps> | undefined;
 
   protected get type(): BodyShapeType {
     return 'Plane';

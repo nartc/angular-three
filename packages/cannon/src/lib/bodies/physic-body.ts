@@ -110,9 +110,10 @@ export abstract class NgtPhysicBody<B extends BodyProps>
     const physicsProps = this.getPhysicProps
       ? this.getPhysicProps(index)
       : ({} as B);
+
     return {
-      ...physicsProps,
       ...this.ngtObject3dController.object3dProps,
+      ...physicsProps,
     };
   }
 
@@ -340,11 +341,12 @@ export abstract class NgtPhysicBody<B extends BodyProps>
               const object = this.object3d;
               currentWorker = worker;
 
-              const objectCount =
-                object instanceof THREE.InstancedMesh
-                  ? (object.instanceMatrix.setUsage(THREE.DynamicDrawUsage),
-                    object.count)
-                  : 1;
+              let objectCount = 1;
+
+              if (object instanceof THREE.InstancedMesh) {
+                object.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+                objectCount = object.count;
+              }
 
               uuid =
                 object instanceof THREE.InstancedMesh

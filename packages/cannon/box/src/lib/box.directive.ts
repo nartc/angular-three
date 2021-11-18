@@ -14,7 +14,7 @@ import { Directive } from '@angular/core';
   providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysicBox }],
 })
 export class NgtPhysicBox extends NgtPhysicBody<BoxProps> {
-  static ngAcceptInputType_getPropsByIndex: GetByIndex<BoxProps> | undefined;
+  static ngAcceptInputType_getPhysicProps: GetByIndex<BoxProps> | undefined;
 
   protected get type(): BodyShapeType {
     return 'Box';

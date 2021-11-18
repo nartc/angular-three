@@ -14,9 +14,7 @@ import { Directive } from '@angular/core';
   providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysicParticle }],
 })
 export class NgtPhysicParticle extends NgtPhysicBody<ParticleProps> {
-  static ngAcceptInputType_getPropsByIndex:
-    | GetByIndex<ParticleProps>
-    | undefined;
+  static ngAcceptInputType_getPhysicProps: GetByIndex<ParticleProps> | undefined;
 
   protected get type(): BodyShapeType {
     return 'Particle';

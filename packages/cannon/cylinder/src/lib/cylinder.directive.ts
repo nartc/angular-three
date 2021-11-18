@@ -14,9 +14,7 @@ import { Directive } from '@angular/core';
   providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysicCylinder }],
 })
 export class NgtPhysicCylinder extends NgtPhysicBody<CylinderProps> {
-  static ngAcceptInputType_getPropsByIndex:
-    | GetByIndex<CylinderProps>
-    | undefined;
+  static ngAcceptInputType_getPhysicProps: GetByIndex<CylinderProps> | undefined;
 
   protected get type(): BodyShapeType {
     return 'Cylinder';

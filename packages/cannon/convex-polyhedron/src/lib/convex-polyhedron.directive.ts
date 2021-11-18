@@ -12,14 +12,10 @@ import { Directive } from '@angular/core';
 @Directive({
   selector: '[ngtPhysicConvexPolyhedron]',
   exportAs: 'ngtPhysicConvexPolyhedron',
-  providers: [
-    { provide: NgtPhysicBody, useExisting: NgtPhysicConvexPolyhedron },
-  ],
+  providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysicConvexPolyhedron }],
 })
 export class NgtPhysicConvexPolyhedron extends NgtPhysicBody<ConvexPolyhedronProps> {
-  static ngAcceptInputType_getPropsByIndex:
-    | GetByIndex<ConvexPolyhedronProps>
-    | undefined;
+  static ngAcceptInputType_getPhysicProps: GetByIndex<ConvexPolyhedronProps> | undefined;
 
   protected get type(): BodyShapeType {
     return 'ConvexPolyhedron';
@@ -27,13 +23,13 @@ export class NgtPhysicConvexPolyhedron extends NgtPhysicBody<ConvexPolyhedronPro
 
   protected get argsFn(): ArgFn<ConvexPolyhedronProps['args']> {
     return (args = []) => {
-      return [
-        args[0] ? args[0].map(makeTriplet) : undefined,
-        args[1],
-        args[2] ? args[2].map(makeTriplet) : undefined,
-        args[3] ? args[3].map(makeTriplet) : undefined,
-        args[4],
-      ];
-    };
+  return [
+    args[0] ? args[0].map(makeTriplet) : undefined,
+    args[1],
+    args[2] ? args[2].map(makeTriplet) : undefined,
+    args[3] ? args[3].map(makeTriplet) : undefined,
+    args[4],
+  ];
+};
   }
 }

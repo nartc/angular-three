@@ -10,7 +10,7 @@ import * as THREE from 'three';
 import { Broadphase } from './models/broadphase';
 import { Buffers } from './models/buffers';
 import { DefaultContactMaterial } from './models/default-contact-material';
-import { IncomingWorkerMessage } from './models/messages';
+import { IncomingWorkerMessage, WorkerFrameMessage } from './models/messages';
 import { PhysicsStoreState } from './models/physics-state';
 import { Solver } from './models/solver';
 
@@ -248,6 +248,7 @@ export class PhysicsStore extends EnhancedComponentStore<PhysicsStoreState> {
             let i = 0;
             let body: string;
             let callback;
+
             worker.onmessage = (e: IncomingWorkerMessage) => {
               const {
                 shouldInvalidate,
@@ -265,6 +266,15 @@ export class PhysicsStore extends EnhancedComponentStore<PhysicsStoreState> {
                     for (i = 0; i < e.data.bodies.length; i++) {
                       body = e.data.bodies[i];
                       bodies[body] = e.data.bodies.indexOf(body);
+                      this.patchState((state) => ({
+                        bodies: {
+                          ...state.bodies,
+                          [body]: (
+                            (e.data as WorkerFrameMessage['data'])
+                              .bodies as string[]
+                          ).indexOf(body),
+                        },
+                      }));
                     }
                   }
 

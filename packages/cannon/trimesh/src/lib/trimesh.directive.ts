@@ -14,9 +14,7 @@ import { Directive } from '@angular/core';
   providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysicTrimesh }],
 })
 export class NgtPhysicTrimesh extends NgtPhysicBody<TrimeshProps> {
-  static ngAcceptInputType_getPropsByIndex:
-    | GetByIndex<TrimeshProps>
-    | undefined;
+  static ngAcceptInputType_getPhysicProps: GetByIndex<TrimeshProps> | undefined;
 
   protected get type(): BodyShapeType {
     return 'Trimesh';
