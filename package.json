@@ -24,6 +24,7 @@
     "@angular/router": "12.2.13",
     "@ngrx/component-store": "12.5.1",
     "cannon-es": "0.18.0",
+    "nice-color-palettes": "3.0.0",
     "rxjs": "~7.4.0",
     "three": "0.134.0",
     "tslib": "2.3.1",
