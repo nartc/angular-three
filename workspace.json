@@ -5,6 +5,7 @@
     "controls": "packages/controls",
     "core": "packages/core",
     "demo": "packages/demo",
+    "docs": "packages/docs",
     "postprocessing": "packages/postprocessing"
   }
 }
