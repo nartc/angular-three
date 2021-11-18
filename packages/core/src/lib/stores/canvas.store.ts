@@ -184,6 +184,8 @@ export class CanvasStore
         if (!isLinear) {
           renderer.toneMapping = THREE.ACESFilmicToneMapping;
           renderer.outputEncoding = THREE.sRGBEncoding;
+        } else {
+          renderer.outputEncoding = THREE.LinearEncoding;
         }
 
         renderer.setClearAlpha(0);
