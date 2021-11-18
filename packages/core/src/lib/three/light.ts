@@ -1,6 +1,7 @@
 import { Directive, Input, OnInit } from '@angular/core';
 import * as THREE from 'three';
-import type { AnyConstructor } from '../models';
+import type { AnyConstructor, UnknownRecord } from '../models';
+import { applyProps } from '../utils/apply-props.util';
 import { NgtObject3d } from './object-3d';
 
 @Directive()
@@ -11,6 +12,7 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
   abstract lightType: AnyConstructor<TLight>;
 
   @Input() intensity?: number;
+  @Input() shadow?: THREE.LightShadow;
 
   private _extraArgs: unknown[] = [];
   protected set extraArgs(v: unknown[]) {
@@ -33,6 +35,9 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
       this._extraArgs[1] = this.intensity;
     }
     this._light = new this.lightType(...this._extraArgs);
+    if (this.shadow) {
+      applyProps(this._light, this.shadow as unknown as UnknownRecord);
+    }
   }
 
   get object3d(): TLight {
