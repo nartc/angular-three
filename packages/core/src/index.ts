@@ -38,6 +38,9 @@ export * from './lib/stores/instances.store';
 export * from './lib/color/color.pipe';
 export * from './lib/color/color.module';
 
+export * from './lib/vector/vector.pipe';
+export * from './lib/vector/vector.module';
+
 export * from './lib/fog/fog.pipe';
 export * from './lib/fog/fog.module';
 
