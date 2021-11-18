@@ -15,7 +15,7 @@ import { Directive } from '@angular/core';
   providers: [{ provide: NgtPhysicBody, useExisting: NgtPhysic<%= name %> }],
 })
 export class NgtPhysic<%= name %> extends NgtPhysicBody<<%= props %>> {
-  static ngAcceptInputType_getPropsByIndex: GetByIndex<<%= props %>> | undefined;
+  static ngAcceptInputType_getPhysicProps: GetByIndex<<%= props %>> | undefined;
 
   protected get type(): BodyShapeType {
     return '<%= name %>';

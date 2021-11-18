@@ -99,17 +99,21 @@ async function physicConstraintEntityGenerator(tree: Tree) {
         {
           isChecked: false,
           fullPath: join(cannonDir, dir.name),
-          name: dir.name + '-constraint',
+          name: dir.name,
         },
       ])
   );
+
+  console.log(currentEntityDirs);
 
   for (const physicConstraint of physicConstraints) {
     const normalizedNames = names(physicConstraint.name);
 
     logger.info(`Generating physic constraint ${normalizedNames.className}...`);
 
-    const entityLibDir = currentEntityDirs.get(normalizedNames.fileName);
+    const entityLibDir = currentEntityDirs.get(
+      normalizedNames.fileName + '-constraint'
+    );
 
     if (!!entityLibDir) {
       currentEntityDirs.set(normalizedNames.fileName, {
