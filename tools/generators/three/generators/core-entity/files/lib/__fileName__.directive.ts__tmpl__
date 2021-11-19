@@ -9,9 +9,13 @@ import { Directive, Input } from '@angular/core';
   exportAs: 'ngt<%= name %>',
   providers: [
     {
-      provide: <% if (withThreeObject3d) { %>NgtObject3d<% } else { %><%= abstract %><% } %>,
+      provide: <%= abstract %>,
       useExisting: Ngt<%= name %>,
-    },<% if (withThreeObject3d) { %>
+    }<% if (withThreeObject3d) { %>,
+    {
+      provide: NgtObject3d,
+      useExisting: Ngt<%= name %>,
+    },
     NGT_OBJECT_3D_CONTROLLER_PROVIDER,<% } %>
   ],
 })

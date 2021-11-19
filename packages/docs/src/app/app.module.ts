@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,6 +16,7 @@ import { ROUTES } from './app.routes';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     MarkdownModule.forRoot(),
     RouterModule.forRoot(ROUTES, { initialNavigation: 'enabledBlocking' }),
     TuiDocMainModule,
