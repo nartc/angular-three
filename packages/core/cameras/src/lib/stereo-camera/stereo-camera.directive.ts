@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtStereoCamera',
   providers: [
     {
+      provide: NgtCommonCamera,
+      useExisting: NgtStereoCamera,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtStereoCamera,
     },

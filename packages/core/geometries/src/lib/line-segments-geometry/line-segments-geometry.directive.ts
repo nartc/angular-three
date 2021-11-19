@@ -10,7 +10,7 @@ import { LineSegmentsGeometry  } from 'three/examples/jsm/lines/LineSegmentsGeom
     {
       provide: NgtGeometry,
       useExisting: NgtLineSegmentsGeometry,
-    },
+    }
   ],
 })
 export class NgtLineSegmentsGeometry extends NgtGeometry<LineSegmentsGeometry> {

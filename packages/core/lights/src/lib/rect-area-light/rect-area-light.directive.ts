@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtRectAreaLight',
   providers: [
     {
+      provide: NgtLight,
+      useExisting: NgtRectAreaLight,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtRectAreaLight,
     },

@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtCurve,
       useExisting: NgtCubicBezierCurve,
-    },
+    }
   ],
 })
 export class NgtCubicBezierCurve extends NgtCurve<THREE.CubicBezierCurve> {

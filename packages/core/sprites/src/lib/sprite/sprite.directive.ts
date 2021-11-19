@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtSprite',
   providers: [
     {
+      provide: NgtCommonSprite,
+      useExisting: NgtSprite,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtSprite,
     },

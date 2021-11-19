@@ -10,7 +10,7 @@ import { BoxLineGeometry  } from 'three/examples/jsm/geometries/BoxLineGeometry'
     {
       provide: NgtGeometry,
       useExisting: NgtBoxLineGeometry,
-    },
+    }
   ],
 })
 export class NgtBoxLineGeometry extends NgtGeometry<BoxLineGeometry> {

@@ -10,7 +10,7 @@ import { RoundedBoxGeometry  } from 'three/examples/jsm/geometries/RoundedBoxGeo
     {
       provide: NgtGeometry,
       useExisting: NgtRoundedBoxGeometry,
-    },
+    }
   ],
 })
 export class NgtRoundedBoxGeometry extends NgtGeometry<RoundedBoxGeometry> {

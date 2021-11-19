@@ -10,7 +10,7 @@ import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
     {
       provide: NgtCurve,
       useExisting: NgtFigureEightPolynomialKnot,
-    },
+    }
   ],
 })
 export class NgtFigureEightPolynomialKnot extends NgtCurve<Curves.FigureEightPolynomialKnot> {

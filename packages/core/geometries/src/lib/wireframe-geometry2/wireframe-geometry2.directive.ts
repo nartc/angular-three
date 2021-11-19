@@ -10,7 +10,7 @@ import { WireframeGeometry2  } from 'three/examples/jsm/lines/WireframeGeometry2
     {
       provide: NgtGeometry,
       useExisting: NgtWireframeGeometry2,
-    },
+    }
   ],
 })
 export class NgtWireframeGeometry2 extends NgtGeometry<WireframeGeometry2> {

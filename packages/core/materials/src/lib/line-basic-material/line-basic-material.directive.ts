@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtMaterial,
       useExisting: NgtLineBasicMaterial,
-    },
+    }
   ],
 })
 export class NgtLineBasicMaterial extends NgtMaterial<THREE.LineBasicMaterial, THREE.LineBasicMaterialParameters> {

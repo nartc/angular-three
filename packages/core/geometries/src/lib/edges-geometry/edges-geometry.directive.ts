@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtGeometry,
       useExisting: NgtEdgesGeometry,
-    },
+    }
   ],
 })
 export class NgtEdgesGeometry extends NgtGeometry<THREE.EdgesGeometry> {

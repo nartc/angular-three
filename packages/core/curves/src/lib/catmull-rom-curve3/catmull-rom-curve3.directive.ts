@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtCurve,
       useExisting: NgtCatmullRomCurve3,
-    },
+    }
   ],
 })
 export class NgtCatmullRomCurve3 extends NgtCurve<THREE.CatmullRomCurve3> {

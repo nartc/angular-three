@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtGeometry,
       useExisting: NgtWireframeGeometry,
-    },
+    }
   ],
 })
 export class NgtWireframeGeometry extends NgtGeometry<THREE.WireframeGeometry> {

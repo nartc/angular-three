@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtMaterial,
       useExisting: NgtMeshDistanceMaterial,
-    },
+    }
   ],
 })
 export class NgtMeshDistanceMaterial extends NgtMaterial<THREE.MeshDistanceMaterial, THREE.MeshDistanceMaterialParameters> {

@@ -9,6 +9,10 @@ import { VertexNormalsHelper  } from 'three/examples/jsm/helpers/VertexNormalsHe
   exportAs: 'ngtVertexNormalsHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtVertexNormalsHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtVertexNormalsHelper,
     },

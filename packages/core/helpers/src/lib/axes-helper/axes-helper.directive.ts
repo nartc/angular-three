@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtAxesHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtAxesHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtAxesHelper,
     },

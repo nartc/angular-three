@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtSkeletonHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtSkeletonHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtSkeletonHelper,
     },

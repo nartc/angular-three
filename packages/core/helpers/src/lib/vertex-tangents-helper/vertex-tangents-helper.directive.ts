@@ -9,6 +9,10 @@ import { VertexTangentsHelper  } from 'three/examples/jsm/helpers/VertexTangents
   exportAs: 'ngtVertexTangentsHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtVertexTangentsHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtVertexTangentsHelper,
     },

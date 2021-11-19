@@ -9,6 +9,10 @@ import { LightProbeHelper  } from 'three/examples/jsm/helpers/LightProbeHelper';
   exportAs: 'ngtLightProbeHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtLightProbeHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtLightProbeHelper,
     },

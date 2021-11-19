@@ -10,7 +10,7 @@ import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
     {
       provide: NgtCurve,
       useExisting: NgtHeartCurve,
-    },
+    }
   ],
 })
 export class NgtHeartCurve extends NgtCurve<Curves.HeartCurve> {

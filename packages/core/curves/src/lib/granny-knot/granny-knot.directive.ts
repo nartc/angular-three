@@ -10,7 +10,7 @@ import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
     {
       provide: NgtCurve,
       useExisting: NgtGrannyKnot,
-    },
+    }
   ],
 })
 export class NgtGrannyKnot extends NgtCurve<Curves.GrannyKnot> {

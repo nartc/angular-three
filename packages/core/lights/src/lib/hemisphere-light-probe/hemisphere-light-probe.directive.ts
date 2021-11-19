@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtHemisphereLightProbe',
   providers: [
     {
+      provide: NgtLight,
+      useExisting: NgtHemisphereLightProbe,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtHemisphereLightProbe,
     },

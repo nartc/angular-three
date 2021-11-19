@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtGeometry,
       useExisting: NgtIcosahedronGeometry,
-    },
+    }
   ],
 })
 export class NgtIcosahedronGeometry extends NgtGeometry<THREE.IcosahedronGeometry> {

@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtLine',
   providers: [
     {
+      provide: NgtCommonLine,
+      useExisting: NgtLine,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtLine,
     },

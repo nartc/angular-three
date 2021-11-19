@@ -10,7 +10,7 @@ import { NURBSCurve  } from 'three/examples/jsm/curves/NURBSCurve';
     {
       provide: NgtCurve,
       useExisting: NgtNURBSCurve,
-    },
+    }
   ],
 })
 export class NgtNURBSCurve extends NgtCurve<NURBSCurve> {

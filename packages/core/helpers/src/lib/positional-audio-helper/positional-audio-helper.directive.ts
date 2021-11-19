@@ -9,6 +9,10 @@ import { PositionalAudioHelper  } from 'three/examples/jsm/helpers/PositionalAud
   exportAs: 'ngtPositionalAudioHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtPositionalAudioHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtPositionalAudioHelper,
     },

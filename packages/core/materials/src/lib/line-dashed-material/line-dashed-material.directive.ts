@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtMaterial,
       useExisting: NgtLineDashedMaterial,
-    },
+    }
   ],
 })
 export class NgtLineDashedMaterial extends NgtMaterial<THREE.LineDashedMaterial, THREE.LineDashedMaterialParameters> {

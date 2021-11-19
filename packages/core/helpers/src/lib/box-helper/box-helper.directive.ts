@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtBoxHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtBoxHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtBoxHelper,
     },

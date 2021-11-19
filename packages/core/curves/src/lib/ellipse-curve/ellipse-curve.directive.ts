@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtCurve,
       useExisting: NgtEllipseCurve,
-    },
+    }
   ],
 })
 export class NgtEllipseCurve extends NgtCurve<THREE.EllipseCurve> {

@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtTexture,
       useExisting: NgtDataTexture,
-    },
+    }
   ],
 })
 export class NgtDataTexture extends NgtTexture<THREE.DataTexture> {

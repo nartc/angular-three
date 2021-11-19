@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtMaterial,
       useExisting: NgtPointsMaterial,
-    },
+    }
   ],
 })
 export class NgtPointsMaterial extends NgtMaterial<THREE.PointsMaterial, THREE.PointsMaterialParameters> {

@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtPolarGridHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtPolarGridHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtPolarGridHelper,
     },

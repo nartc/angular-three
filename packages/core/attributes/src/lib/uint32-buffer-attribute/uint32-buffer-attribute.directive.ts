@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtAttribute,
       useExisting: NgtUint32BufferAttribute,
-    },
+    }
   ],
 })
 export class NgtUint32BufferAttribute extends NgtAttribute<THREE.Uint32BufferAttribute> {

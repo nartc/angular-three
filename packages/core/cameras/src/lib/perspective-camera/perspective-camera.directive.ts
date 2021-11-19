@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtPerspectiveCamera',
   providers: [
     {
+      provide: NgtCommonCamera,
+      useExisting: NgtPerspectiveCamera,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtPerspectiveCamera,
     },

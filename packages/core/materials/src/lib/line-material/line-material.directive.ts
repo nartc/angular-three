@@ -10,7 +10,7 @@ import { LineMaterial,LineMaterialParameters  } from 'three/examples/jsm/lines/L
     {
       provide: NgtMaterial,
       useExisting: NgtLineMaterial,
-    },
+    }
   ],
 })
 export class NgtLineMaterial extends NgtMaterial<LineMaterial, LineMaterialParameters> {

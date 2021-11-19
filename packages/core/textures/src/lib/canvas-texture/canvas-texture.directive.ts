@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtTexture,
       useExisting: NgtCanvasTexture,
-    },
+    }
   ],
 })
 export class NgtCanvasTexture extends NgtTexture<THREE.CanvasTexture> {

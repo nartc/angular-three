@@ -10,7 +10,7 @@ import { DecalGeometry  } from 'three/examples/jsm/geometries/DecalGeometry';
     {
       provide: NgtGeometry,
       useExisting: NgtDecalGeometry,
-    },
+    }
   ],
 })
 export class NgtDecalGeometry extends NgtGeometry<DecalGeometry> {

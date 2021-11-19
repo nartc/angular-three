@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtPlaneHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtPlaneHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtPlaneHelper,
     },

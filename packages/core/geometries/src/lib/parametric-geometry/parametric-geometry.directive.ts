@@ -10,7 +10,7 @@ import { ParametricGeometry  } from 'three/examples/jsm/geometries/ParametricGeo
     {
       provide: NgtGeometry,
       useExisting: NgtParametricGeometry,
-    },
+    }
   ],
 })
 export class NgtParametricGeometry extends NgtGeometry<ParametricGeometry> {

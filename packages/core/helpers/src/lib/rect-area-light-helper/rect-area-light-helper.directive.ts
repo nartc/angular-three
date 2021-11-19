@@ -9,6 +9,10 @@ import { RectAreaLightHelper  } from 'three/examples/jsm/helpers/RectAreaLightHe
   exportAs: 'ngtRectAreaLightHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtRectAreaLightHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtRectAreaLightHelper,
     },

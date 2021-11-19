@@ -10,7 +10,7 @@ import { TeapotGeometry  } from 'three/examples/jsm/geometries/TeapotGeometry';
     {
       provide: NgtGeometry,
       useExisting: NgtTeapotGeometry,
-    },
+    }
   ],
 })
 export class NgtTeapotGeometry extends NgtGeometry<TeapotGeometry> {

@@ -10,7 +10,7 @@ import { ConvexGeometry  } from 'three/examples/jsm/geometries/ConvexGeometry';
     {
       provide: NgtGeometry,
       useExisting: NgtConvexGeometry,
-    },
+    }
   ],
 })
 export class NgtConvexGeometry extends NgtGeometry<ConvexGeometry> {

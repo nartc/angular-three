@@ -10,7 +10,7 @@ import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
     {
       provide: NgtCurve,
       useExisting: NgtDecoratedTorusKnot4a,
-    },
+    }
   ],
 })
 export class NgtDecoratedTorusKnot4a extends NgtCurve<Curves.DecoratedTorusKnot4a> {

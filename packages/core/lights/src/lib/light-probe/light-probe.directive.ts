@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtLightProbe',
   providers: [
     {
+      provide: NgtLight,
+      useExisting: NgtLightProbe,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtLightProbe,
     },

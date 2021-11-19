@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtGeometry,
       useExisting: NgtInstancedBufferGeometry,
-    },
+    }
   ],
 })
 export class NgtInstancedBufferGeometry extends NgtGeometry<THREE.InstancedBufferGeometry> {

@@ -10,7 +10,7 @@ import { TextGeometry  } from 'three/examples/jsm/geometries/TextGeometry';
     {
       provide: NgtGeometry,
       useExisting: NgtTextGeometry,
-    },
+    }
   ],
 })
 export class NgtTextGeometry extends NgtGeometry<TextGeometry> {

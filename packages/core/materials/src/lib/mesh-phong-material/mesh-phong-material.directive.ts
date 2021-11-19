@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtMaterial,
       useExisting: NgtMeshPhongMaterial,
-    },
+    }
   ],
 })
 export class NgtMeshPhongMaterial extends NgtMaterial<THREE.MeshPhongMaterial, THREE.MeshPhongMaterialParameters> {

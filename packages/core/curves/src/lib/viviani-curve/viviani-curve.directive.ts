@@ -10,7 +10,7 @@ import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
     {
       provide: NgtCurve,
       useExisting: NgtVivianiCurve,
-    },
+    }
   ],
 })
 export class NgtVivianiCurve extends NgtCurve<Curves.VivianiCurve> {

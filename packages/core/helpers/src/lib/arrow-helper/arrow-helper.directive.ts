@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtArrowHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtArrowHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtArrowHelper,
     },

@@ -10,7 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtMaterial,
       useExisting: NgtRawShaderMaterial,
-    },
+    }
   ],
 })
 export class NgtRawShaderMaterial extends NgtMaterial<THREE.RawShaderMaterial, THREE.ShaderMaterialParameters> {

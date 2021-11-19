@@ -9,6 +9,10 @@ import * as THREE from 'three';
   exportAs: 'ngtPointLightHelper',
   providers: [
     {
+      provide: NgtHelper,
+      useExisting: NgtPointLightHelper,
+    },
+    {
       provide: NgtObject3d,
       useExisting: NgtPointLightHelper,
     },
