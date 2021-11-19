@@ -85,8 +85,6 @@ async function physicConstraintEntityGenerator(tree: Tree) {
       ])
   );
 
-  console.log(currentEntityDirs);
-
   for (const physicConstraint of physicConstraints) {
     const normalizedNames = names(physicConstraint.name);
 
@@ -97,7 +95,7 @@ async function physicConstraintEntityGenerator(tree: Tree) {
     );
 
     if (!!entityLibDir) {
-      currentEntityDirs.set(normalizedNames.fileName, {
+      currentEntityDirs.set(entityLibDir.name, {
         ...entityLibDir,
         isChecked: true,
       });

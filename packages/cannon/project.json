@@ -6,9 +6,7 @@
   "targets": {
     "build": {
       "executor": "@nrwl/angular:package",
-      "outputs": [
-        "dist/packages/cannon"
-      ],
+      "outputs": ["dist/packages/cannon"],
       "options": {
         "project": "packages/cannon/ng-package.json"
       },
@@ -24,9 +22,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/packages/cannon"
-      ],
+      "outputs": ["coverage/packages/cannon"],
       "options": {
         "jestConfig": "packages/cannon/jest.config.js",
         "passWithNoTests": true
@@ -75,6 +71,16 @@
           "packages/cannon/hinge-constraint/**/*.ts",
           "packages/cannon/hinge-constraint/**/*.html",
           "packages/cannon/lock-constraint/**/*.ts",
+          "packages/cannon/lock-constraint/**/*.html",
+          "packages/cannon/point-to-point-constraint/**/*.ts",
+          "packages/cannon/point-to-point-constraint/**/*.html",
+          "packages/cannon/cone-twist-constraint/**/*.ts",
+          "packages/cannon/cone-twist-constraint/**/*.html",
+          "packages/cannon/distance-constraint/**/*.ts",
+          "packages/cannon/distance-constraint/**/*.html",
+          "packages/cannon/hinge-constraint/**/*.ts",
+          "packages/cannon/hinge-constraint/**/*.html",
+          "packages/cannon/lock-constraint/**/*.ts",
           "packages/cannon/lock-constraint/**/*.html"
         ]
       }
@@ -87,8 +93,5 @@
       }
     }
   },
-  "tags": [
-    "scope:cannon",
-    "type:library"
-  ]
+  "tags": ["scope:cannon", "type:library"]
 }

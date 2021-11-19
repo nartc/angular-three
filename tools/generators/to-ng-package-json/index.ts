@@ -40,6 +40,12 @@ function moveNgPackageJson(
   cleanPackageJson(tree, packageJsonPath);
 }
 
+function tryRemovePackageJson(tree: Tree, packageJsonPath: string) {
+  const packageJson = readJson(tree, packageJsonPath);
+  if (Object.keys(packageJson).length) return;
+  tree.delete(packageJsonPath);
+}
+
 function checkSecondaryEntryPoints(
   tree: Tree,
   projectConfiguration: ProjectConfiguration
@@ -67,7 +73,7 @@ function checkSecondaryEntryPoints(
 
     if (isNgPackageJsonExist) {
       removeUmdModuleIds(tree, ngPackageJsonPath);
-      tree.delete(packageJsonPath);
+      tryRemovePackageJson(tree, packageJsonPath);
       continue;
     }
 
@@ -77,7 +83,7 @@ function checkSecondaryEntryPoints(
     }
 
     moveNgPackageJson(tree, packageJsonPath, ngPackageJsonPath);
-    tree.delete(packageJsonPath);
+    tryRemovePackageJson(tree, packageJsonPath);
   }
 }
 
