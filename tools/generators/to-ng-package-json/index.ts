@@ -36,6 +36,8 @@ function moveNgPackageJson(
   if (!packageJson['ngPackage']) return;
 
   writeJson(tree, ngPackageJsonPath, packageJson['ngPackage']);
+  removeUmdModuleIds(tree, ngPackageJsonPath);
+  cleanPackageJson(tree, packageJsonPath);
 }
 
 function checkSecondaryEntryPoints(
@@ -49,7 +51,34 @@ function checkSecondaryEntryPoints(
       return tree.exists(join(projectConfiguration.root, path, 'package.json'));
     });
 
-  console.log(secondaryEntryDirs);
+  for (const secondaryEntryName of secondaryEntryDirs) {
+    const packageJsonPath = join(
+      projectConfiguration.root,
+      secondaryEntryName,
+      'package.json'
+    );
+    const ngPackageJsonPath = join(
+      projectConfiguration.root,
+      secondaryEntryName,
+      'ng-package.json'
+    );
+
+    const isNgPackageJsonExist = tree.exists(ngPackageJsonPath);
+
+    if (isNgPackageJsonExist) {
+      removeUmdModuleIds(tree, ngPackageJsonPath);
+      tree.delete(packageJsonPath);
+      continue;
+    }
+
+    const isPackageJsonExist = tree.exists(packageJsonPath);
+    if (!isPackageJsonExist) {
+      continue;
+    }
+
+    moveNgPackageJson(tree, packageJsonPath, ngPackageJsonPath);
+    tree.delete(packageJsonPath);
+  }
 }
 
 export default async function (tree: Tree) {
@@ -61,18 +90,19 @@ export default async function (tree: Tree) {
 
     const isNgPackageJsonExist = tree.exists(ngPackageJsonPath);
 
-    // if (isNgPackageJsonExist) {
-    //   removeUmdModuleIds(tree, ngPackageJsonPath);
-    //   cleanPackageJson(tree, packageJsonPath);
-    //   continue;
-    // }
-    //
-    // const isPackageJsonExist = tree.exists(packageJsonPath);
-    // if (!isPackageJsonExist) {
-    //   continue;
-    // }
-    //
-    // moveNgPackageJson(tree, packageJsonPath, ngPackageJsonPath);
+    if (isNgPackageJsonExist) {
+      removeUmdModuleIds(tree, ngPackageJsonPath);
+      cleanPackageJson(tree, packageJsonPath);
+      checkSecondaryEntryPoints(tree, projectConfiguration);
+      continue;
+    }
+
+    const isPackageJsonExist = tree.exists(packageJsonPath);
+    if (!isPackageJsonExist) {
+      continue;
+    }
+
+    moveNgPackageJson(tree, packageJsonPath, ngPackageJsonPath);
     checkSecondaryEntryPoints(tree, projectConfiguration);
   }
 
