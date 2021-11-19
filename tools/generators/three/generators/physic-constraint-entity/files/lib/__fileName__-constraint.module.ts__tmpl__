@@ -1,6 +1,6 @@
 //GENERATED
 import { NgModule } from '@angular/core';
-import { Ngt<%= name %>Constraint } from './<%= fileName %>.directive';
+import { Ngt<%= name %>Constraint } from './<%= fileName %>-constraint.directive';
 
 @NgModule({
   declarations: [Ngt<%= name %>Constraint],
