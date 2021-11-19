@@ -49,24 +49,6 @@ function createIndexFile(
   );
 }
 
-function createPackageJsonFile(
-  tree: Tree,
-  physicBody: PhysicBodyEntity,
-  normalizedNames: ReturnType<typeof names>,
-  cannonLibPath: string
-) {
-  generateFiles(
-    tree,
-    join(__dirname, 'files', 'packageJson'),
-    join(cannonLibPath),
-    {
-      ...normalizedNames,
-      ...physicBody,
-      tmpl: '',
-    }
-  );
-}
-
 function createFiles(
   tree: Tree,
   physicBody: PhysicBodyEntity,
@@ -75,7 +57,6 @@ function createFiles(
 ) {
   createPhysicBodyFiles(tree, physicBody, normalizedNames, cannonLibPath);
   createIndexFile(tree, physicBody, normalizedNames, cannonLibPath);
-  createPackageJsonFile(tree, physicBody, normalizedNames, cannonLibPath);
 }
 
 async function physicBodyEntityGenerator(tree: Tree) {

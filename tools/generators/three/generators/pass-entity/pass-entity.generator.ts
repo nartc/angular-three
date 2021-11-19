@@ -52,24 +52,6 @@ function createIndexFile(
   );
 }
 
-function createPackageJsonFile(
-  tree: Tree,
-  pass: PassEntity,
-  normalizedNames: ReturnType<typeof names>,
-  passLibPath: string
-) {
-  generateFiles(
-    tree,
-    join(__dirname, 'files', 'packageJson'),
-    join(passLibPath),
-    {
-      ...normalizedNames,
-      ...pass,
-      tmpl: '',
-    }
-  );
-}
-
 function createFiles(
   tree: Tree,
   pass: PassEntity,
@@ -78,7 +60,6 @@ function createFiles(
 ) {
   createPassFiles(tree, pass, normalizedNames, passLibPath);
   createIndexFile(tree, pass, normalizedNames, passLibPath);
-  createPackageJsonFile(tree, pass, normalizedNames, passLibPath);
 }
 
 async function passEntityGenerator(tree: Tree) {

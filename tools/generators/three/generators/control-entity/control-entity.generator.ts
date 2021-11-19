@@ -49,24 +49,6 @@ function createIndexFile(
   );
 }
 
-function createPackageJsonFile(
-  tree: Tree,
-  control: ControlEntity,
-  normalizedNames: ReturnType<typeof names>,
-  controlLibPath: string
-) {
-  generateFiles(
-    tree,
-    join(__dirname, 'files', 'packageJson'),
-    join(controlLibPath),
-    {
-      ...normalizedNames,
-      ...control,
-      tmpl: '',
-    }
-  );
-}
-
 function createFiles(
   tree: Tree,
   control: ControlEntity,
@@ -75,7 +57,6 @@ function createFiles(
 ) {
   createControlFiles(tree, control, normalizedNames, controlLibPath);
   createIndexFile(tree, control, normalizedNames, controlLibPath);
-  createPackageJsonFile(tree, control, normalizedNames, controlLibPath);
 }
 
 async function controlEntityGenerator(tree: Tree) {

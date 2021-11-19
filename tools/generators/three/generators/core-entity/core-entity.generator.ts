@@ -112,14 +112,6 @@ async function coreEntityGenerator(tree: Tree) {
         tmpl: '',
       }
     );
-
-    generateFiles(tree, join(__dirname, 'files', 'packageJson'), catalogueDir, {
-      tmpl: '',
-      examples: examplesIndex.map((example, index) => ({
-        ...example,
-        isLast: index === examplesIndex.length - 1,
-      })),
-    });
   }
 
   logger.info('Generating derived object3Ds...');

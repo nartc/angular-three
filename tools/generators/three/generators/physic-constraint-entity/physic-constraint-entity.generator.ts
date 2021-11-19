@@ -49,24 +49,6 @@ function createIndexFile(
   );
 }
 
-function createPackageJsonFile(
-  tree: Tree,
-  physicConstraint: PhysicConstraintEntity,
-  normalizedNames: ReturnType<typeof names>,
-  cannonLibPath: string
-) {
-  generateFiles(
-    tree,
-    join(__dirname, 'files', 'packageJson'),
-    join(cannonLibPath),
-    {
-      ...normalizedNames,
-      ...physicConstraint,
-      tmpl: '',
-    }
-  );
-}
-
 function createFiles(
   tree: Tree,
   physicConstraint: PhysicConstraintEntity,
@@ -80,7 +62,6 @@ function createFiles(
     cannonLibPath
   );
   createIndexFile(tree, physicConstraint, normalizedNames, cannonLibPath);
-  createPackageJsonFile(tree, physicConstraint, normalizedNames, cannonLibPath);
 }
 
 async function physicConstraintEntityGenerator(tree: Tree) {
