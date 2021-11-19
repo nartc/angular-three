@@ -1,3 +1,25 @@
+## [2.0.0-beta.2](https://github.com/nartc/angular-three/compare/2.0.0-beta.1...2.0.0-beta.2) (2021-11-19)
+
+
+### Features
+
+* **cannon:** generate constraints ([a2631d0](https://github.com/nartc/angular-three/commit/a2631d0ebb7bf3192b0cccc319220f65f2ba969e))
+
+
+### Bug Fixes
+
+* adjust to angular 13 ([19a923a](https://github.com/nartc/angular-three/commit/19a923a851822f6cf085df55735b516914863b4e))
+* remove packageJson generation from workspace generator ([2fee6bb](https://github.com/nartc/angular-three/commit/2fee6bb87816a42568b2654ea78dae352406e557))
+* rerun generator ([3a3402a](https://github.com/nartc/angular-three/commit/3a3402a1309a29b8738d4bb900d70c10fbba8712))
+
+
+### Documentations
+
+* **demo:** add Demo app ([6ff6eb4](https://github.com/nartc/angular-three/commit/6ff6eb4a79fd18ea7eed8c06125200e04a5c2898))
+* **docs:** add Docs app ([a239e84](https://github.com/nartc/angular-three/commit/a239e843527e88ce7f5a03d66bf95aa32e7fe09a))
+* **docs:** move to less to use TaigaUI doc engine ([0b97086](https://github.com/nartc/angular-three/commit/0b970868e50ce31d401ec764c20e5a571d67b4f3))
+* **docs:** setup docs with Taiga ([f3218b7](https://github.com/nartc/angular-three/commit/f3218b7e35c2e6570b5209159f61419686a7fd31))
+
 ## [2.0.0-beta.1](https://github.com/nartc/angular-three/compare/2.0.0-beta.0...2.0.0-beta.1) (2021-11-18)
 
 
