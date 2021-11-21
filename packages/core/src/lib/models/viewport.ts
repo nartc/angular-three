@@ -7,3 +7,5 @@ export type NgtViewport = NgtSize & {
   distance: number;
   aspect: number;
 };
+
+export type NgtCurrentViewport = Omit<NgtViewport, 'dpr' | 'initialDpr'>;

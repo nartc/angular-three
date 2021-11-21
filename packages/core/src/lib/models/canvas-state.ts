@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { NgtCamera } from './camera';
 import type { NgtRaycaster } from './raycaster';
 import type { NgtSize } from './size';
-import type { NgtViewport } from './viewport';
+import type { NgtCurrentViewport, NgtViewport } from './viewport';
 
 export interface CanvasInternal {
   active: boolean;
@@ -13,7 +13,7 @@ export interface CanvasInternal {
       camera?: NgtCamera,
       target?: THREE.Vector3,
       size?: NgtSize
-    ) => Omit<NgtViewport, 'dpr' | 'initialDpr'>;
+    ) => NgtCurrentViewport;
   };
 }
 
