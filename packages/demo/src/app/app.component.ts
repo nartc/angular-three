@@ -2,20 +2,16 @@ import { BoxProps, SphereProps } from '@angular-three/cannon';
 import { NgtPhysicBox } from '@angular-three/cannon/box';
 import {
   NgtAnimationReady,
-  NgtColor,
   NgtEuler,
   NgtTriplet,
   NgtVector3,
 } from '@angular-three/core';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  NgZone,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
 import * as THREE from 'three';
+
+console.log(niceColors[17]);
 
 @Component({
   selector: 'ngt-root',
