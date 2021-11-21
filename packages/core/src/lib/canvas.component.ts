@@ -2,7 +2,6 @@ import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ContentChild,
   ElementRef,
   EventEmitter,
   HostBinding,
@@ -29,7 +28,6 @@ import { AnimationStore } from './stores/animation.store';
 import { CanvasStore } from './stores/canvas.store';
 import { EventsStore } from './stores/events.store';
 import { InstancesStore } from './stores/instances.store';
-import { NgtCommonCamera } from './three/camera';
 
 @Component({
   selector: 'ngt-canvas',
@@ -92,8 +90,6 @@ export class NgtCanvasComponent implements OnInit {
   @ViewChild('rendererCanvas', { static: true })
   rendererCanvas!: ElementRef<HTMLCanvasElement>;
 
-  @ContentChild(NgtCommonCamera) commonCamera?: NgtCommonCamera;
-
   constructor(
     @Self() private canvasStore: CanvasStore,
     @Self() private animationStore: AnimationStore,
@@ -104,10 +100,6 @@ export class NgtCanvasComponent implements OnInit {
     @Optional() @Inject(DOCUMENT) private document: Document,
     private destroyed: DestroyedService
   ) {}
-
-  ngAfterContentInit() {
-    console.log(this.commonCamera);
-  }
 
   ngOnInit(): void {
     this.ngZone.runOutsideAngular(() => {

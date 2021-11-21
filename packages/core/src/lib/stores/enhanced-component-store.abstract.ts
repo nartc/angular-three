@@ -1,5 +1,5 @@
 import { ComponentStore } from '@ngrx/component-store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 export type StoreState<TStore extends EnhancedComponentStore> =
   TStore extends EnhancedComponentStore<infer TComponentState>
@@ -34,11 +34,27 @@ export function getSelectors<TStore extends EnhancedComponentStore>(
 }
 
 export abstract class EnhancedComponentStore<
-  TState extends object = object
+  TState extends object = any
 > extends ComponentStore<TState> {
   readonly selectors: StoreSelectors<TState> = getSelectors(this);
 
+  private readonly $imperative: BehaviorSubject<TState>;
+
+  protected constructor(state: TState) {
+    super(state);
+    this.$imperative = new BehaviorSubject<TState>(state);
+    this.watchImperativeEffect(this.state$);
+  }
+
+  private readonly watchImperativeEffect = this.effect<TState>((state$) =>
+    state$.pipe(
+      tap((state) => {
+        this.$imperative.next(state);
+      })
+    )
+  );
+
   getImperativeState(): TState {
-    return this.get();
+    return this.$imperative.getValue();
   }
 }
