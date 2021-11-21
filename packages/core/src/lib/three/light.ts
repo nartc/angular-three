@@ -31,10 +31,12 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
   }
 
   protected initObject() {
-    if (this.intensity) {
-      this._extraArgs[1] = this.intensity;
-    }
     this._light = new this.lightType(...this._extraArgs);
+
+    if (this.intensity) {
+      applyProps(this._light, { intensity: this.intensity });
+    }
+
     if (this.shadow) {
       applyProps(this._light, this.shadow as unknown as UnknownRecord);
     }
