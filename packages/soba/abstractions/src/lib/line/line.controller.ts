@@ -83,6 +83,10 @@ export class NgtSobaLineController extends Controller implements OnInit {
         this.lineWidth = this.sobaLineController.lineWidth;
         this.dashed = this.sobaLineController.dashed;
         this.materialParameters = this.sobaLineController.materialParameters;
+        this.parameters = this.sobaLineController.parameters;
+        this.line = this.sobaLineController.line;
+        this.material = this.sobaLineController.material;
+        this.geometry = this.sobaLineController.geometry;
 
         this.ready = this.sobaLineController.ready;
         this.animateReady = this.sobaLineController.animateReady;
