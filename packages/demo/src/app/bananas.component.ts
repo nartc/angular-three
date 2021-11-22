@@ -8,6 +8,7 @@ import {
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtStatsModule } from '@angular-three/core/stats';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,6 +21,7 @@ import * as THREE from 'three';
   selector: 'ngt-bananas',
   template: `
     <ngt-canvas>
+      <ngt-stats></ngt-stats>
       <ngt-box *repeat="let index of count" [z]="-index"></ngt-box>
     </ngt-canvas>
   `,
@@ -83,6 +85,7 @@ export class BoxComponent {
     NgtBoxGeometryModule,
     NgtMeshBasicMaterialModule,
     NgtRepeatModule,
+    NgtStatsModule,
   ],
 })
 export class BananasComponentModule {}
