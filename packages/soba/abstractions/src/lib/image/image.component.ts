@@ -23,30 +23,25 @@ import {
 } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import * as THREE from 'three';
-import { NgtImageShaderMaterial } from './image-shader-material.directive';
+import { NgtSobaImageShaderMaterial } from './image-shader-material.directive';
 
 @Component({
-  selector: 'ngt-image[url]',
-  exportAs: 'ngtImage',
+  selector: 'ngt-soba-image[url]',
+  exportAs: 'ngtSobaImage',
   template: `
     <ng-container *ngIf="texture$ | async as texture">
       <ngt-mesh
         [scale]="scale"
         [controller]="object3dController"
-        (ready)="ready.emit([this, $event])"
-        (animateReady)="
-          animateReady.emit({
-            renderState: $event.renderState,
-            animateObject: [this, $event.animateObject]
-          })
-        "
+        (ready)="ready.emit($event)"
+        (animateReady)="animateReady.emit($event)"
       >
         <ngt-plane-geometry
           [args]="[1, 1, segments, segments]"
         ></ngt-plane-geometry>
-        <ngt-image-shader-material
+        <ngt-soba-image-shader-material
           [parameters]="{color, map: texture, zoom, grayscale, scale: planeBounds, imageBounds}"
-        ></ngt-image-shader-material>
+        ></ngt-soba-image-shader-material>
         <ng-content></ng-content>
       </ngt-mesh>
     </ng-container>
@@ -54,7 +49,7 @@ import { NgtImageShaderMaterial } from './image-shader-material.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NGT_OBJECT_3D_CONTROLLER_PROVIDER],
 })
-export class NgtImage implements OnChanges {
+export class NgtSobaImage implements OnChanges {
   @Input() segments?: number;
   @Input() scale?: number;
   @Input() color?: NgtColor;
@@ -69,10 +64,8 @@ export class NgtImage implements OnChanges {
     );
   }
 
-  @Output() ready = new EventEmitter<[NgtImage, THREE.Mesh]>();
-  @Output() animateReady = new EventEmitter<
-    NgtAnimationReady<[NgtImage, THREE.Mesh]>
-  >();
+  @Output() ready = new EventEmitter<THREE.Mesh>();
+  @Output() animateReady = new EventEmitter<NgtAnimationReady<THREE.Mesh>>();
 
   planeBounds?: [number, number];
   imageBounds?: [number, number];
@@ -93,8 +86,8 @@ export class NgtImage implements OnChanges {
 }
 
 @NgModule({
-  declarations: [NgtImage, NgtImageShaderMaterial],
-  exports: [NgtImage, NgtImageShaderMaterial],
+  declarations: [NgtSobaImage, NgtSobaImageShaderMaterial],
+  exports: [NgtSobaImage, NgtSobaImageShaderMaterial],
   imports: [NgtCoreModule, NgtMeshModule, NgtPlaneGeometryModule, CommonModule],
 })
 export class NgtImageModule {}

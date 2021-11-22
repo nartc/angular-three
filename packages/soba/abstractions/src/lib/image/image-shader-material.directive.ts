@@ -3,14 +3,15 @@ import { Directive } from '@angular/core';
 import * as THREE from 'three';
 import { shaderMaterial } from '../shader-material/shader-material';
 
-export type ImageShaderMaterialParameters = THREE.ShaderMaterialParameters & {
-  scale?: number[];
-  imageBounds?: number[];
-  color?: NgtColor;
-  map: THREE.Texture;
-  zoom?: number;
-  grayscale?: number;
-};
+export type SobaImageShaderMaterialParameters =
+  THREE.ShaderMaterialParameters & {
+    scale?: number[];
+    imageBounds?: number[];
+    color?: NgtColor;
+    map: THREE.Texture;
+    zoom?: number;
+    grayscale?: number;
+  };
 
 export const ImageShaderMaterial = shaderMaterial(
   {
@@ -61,16 +62,18 @@ export const ImageShaderMaterial = shaderMaterial(
 );
 
 @Directive({
-  selector: 'ngt-image-shader-material',
-  exportAs: 'ngtImageShaderMaterial',
-  providers: [{ provide: NgtMaterial, useExisting: NgtImageShaderMaterial }],
+  selector: 'ngt-soba-image-shader-material',
+  exportAs: 'ngtSobaImageShaderMaterial',
+  providers: [
+    { provide: NgtMaterial, useExisting: NgtSobaImageShaderMaterial },
+  ],
 })
-export class NgtImageShaderMaterial extends NgtMaterial<
+export class NgtSobaImageShaderMaterial extends NgtMaterial<
   typeof ImageShaderMaterial.prototype,
-  ImageShaderMaterialParameters
+  SobaImageShaderMaterialParameters
 > {
   static ngAcceptInputType_parameters:
-    | ImageShaderMaterialParameters
+    | SobaImageShaderMaterialParameters
     | undefined;
 
   materialType = ImageShaderMaterial;
