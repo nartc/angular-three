@@ -6,7 +6,8 @@ import {
   map,
   Observable,
   of,
-  shareReplay,
+  ReplaySubject,
+  share,
   tap,
   throwError,
 } from 'rxjs';
@@ -17,8 +18,8 @@ import type {
   LoaderExtensions,
   NgtLoaderResult,
   NgtObjectMap,
-  UnknownRecord,
 } from '../models';
+import { buildGraph } from '../utils/build-graph.util';
 
 @Injectable({
   providedIn: 'root',
@@ -49,7 +50,7 @@ export class LoaderService implements OnDestroy {
         return defer(() => loader.loadAsync(key, onProgress)).pipe(
           tap((data) => {
             if (data.scene) {
-              Object.assign(data, this.buildGraph(data.scene as THREE.Scene));
+              Object.assign(data, buildGraph(data.scene as THREE.Scene));
             }
             this.cached.set(key, data);
           }),
@@ -65,40 +66,18 @@ export class LoaderService implements OnDestroy {
       Array.isArray(input)
         ? results$
         : results$.pipe(map((results) => results[0]))
-    ).pipe(shareReplay({ bufferSize: 1, refCount: true })) as TUrl extends any[]
+    ).pipe(
+      share({
+        connector: () => new ReplaySubject(),
+        resetOnRefCountZero: true,
+        resetOnError: true,
+      })
+    ) as TUrl extends any[]
       ? Observable<BranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>[]>
       : Observable<BranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>>;
   }
 
   ngOnDestroy() {
     this.cached.clear();
-  }
-
-  private buildGraph(object: THREE.Object3D): NgtObjectMap {
-    const data: NgtObjectMap = { nodes: {}, materials: {} };
-    if (object) {
-      object.traverse((obj) => {
-        if (obj.name) {
-          data.nodes[obj.name] = obj;
-        }
-        if (
-          (obj as unknown as UnknownRecord).material &&
-          !data.materials[
-            (
-              (obj as unknown as UnknownRecord)
-                .material as unknown as UnknownRecord
-            ).name as string
-          ]
-        ) {
-          data.materials[
-            (
-              (obj as unknown as UnknownRecord)
-                .material as unknown as UnknownRecord
-            ).name as string
-          ] = (obj as unknown as UnknownRecord).material as THREE.Material;
-        }
-      });
-    }
-    return data;
   }
 }
