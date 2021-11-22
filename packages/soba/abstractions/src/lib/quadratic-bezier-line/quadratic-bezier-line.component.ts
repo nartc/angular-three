@@ -1,8 +1,5 @@
 import {
-  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
   NGT_OBJECT_3D_WATCHED_CONTROLLER,
-  NgtAnimationReady,
-  NgtColor,
   NgtCoreModule,
   NgtObject3dController,
   NgtVector3,
@@ -10,38 +7,31 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   Inject,
   Input,
   NgModule,
   NgZone,
   OnChanges,
   OnInit,
-  Output,
   SimpleChanges,
 } from '@angular/core';
 import * as THREE from 'three';
-import { Line2 } from 'three/examples/jsm/lines/Line2';
-import { LineMaterialParameters } from 'three/examples/jsm/lines/LineMaterial';
+import { NGT_SOBA_LINE_CONTROLLER_PROVIDER } from '../line/line-watched-controller.di';
 import { NgtSobaLineModule } from '../line/line.component';
+import { NgtSobaLineController } from '../line/line.controller';
 
 @Component({
   selector: 'ngt-soba-quadratic-bezier-line[start][end]',
+  exportAs: 'ngtSobaQuadraticBezierLine',
   template: `
     <ngt-soba-line
       [points]="points"
       [controller]="object3dController"
-      [vertexColors]="vertexColors"
-      [color]="color"
-      [lineWidth]="lineWidth"
-      [dashed]="dashed"
-      [materialParameters]="materialParameters"
-      (ready)="ready.emit($event)"
-      (animateReady)="animateReady.emit($event)"
+      [sobaLineController]="sobaLineController"
     ></ngt-soba-line>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NGT_OBJECT_3D_CONTROLLER_PROVIDER],
+  providers: [NGT_SOBA_LINE_CONTROLLER_PROVIDER],
 })
 export class NgtSobaQuadraticBezierLine implements OnChanges, OnInit {
   @Input() start!: NgtVector3;
@@ -49,39 +39,18 @@ export class NgtSobaQuadraticBezierLine implements OnChanges, OnInit {
   @Input() mid?: NgtVector3;
   @Input() segments?: number = 20;
 
-  @Input() vertexColors?: Array<NgtColor>;
-
-  @Input() color: NgtColor = 'black';
-  @Input() lineWidth?: LineMaterialParameters['linewidth'];
-  @Input() dashed?: LineMaterialParameters['dashed'];
-
-  @Input() materialParameters?: Omit<
-    LineMaterialParameters,
-    'vertexColors' | 'color' | 'linewidth' | 'dashed' | 'resolution'
-  > = {};
-
-  @Output() ready = new EventEmitter<Line2>();
-  @Output() animateReady = new EventEmitter<NgtAnimationReady<Line2>>();
-
-  parameters!: LineMaterialParameters;
   points!: Array<NgtVector3>;
 
   constructor(
     @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
     public object3dController: NgtObject3dController,
+    @Inject(NGT_SOBA_LINE_CONTROLLER_PROVIDER)
+    public sobaLineController: NgtSobaLineController,
     private ngZone: NgZone
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     this.ngZone.runOutsideAngular(() => {
-      this.parameters = {
-        color: this.color as number,
-        linewidth: this.lineWidth,
-        dashed: this.dashed,
-        vertexColors: Boolean(this.vertexColors),
-        ...this.materialParameters,
-      };
-
       if (changes.start || changes.end || changes.mid || changes.segments) {
         this.buildPoints();
       }
