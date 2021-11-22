@@ -10,7 +10,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
 import * as THREE from 'three';
 import type {
   NgtColor,
@@ -49,8 +48,8 @@ import { Controller } from '../utils/controller';
   exportAs: 'ngtObject3dController',
 })
 export class NgtObject3dController
- extends Controller
- implements OnChanges, OnInit
+  extends Controller
+  implements OnChanges, OnInit
 {
   @Input() name?: string;
   @Input() position?: NgtVector3;
@@ -146,6 +145,6 @@ export class NgtObject3dController
       receiveShadow: this.receiveShadow,
       visible: this.visible,
       matrixAutoUpdate: this.matrixAutoUpdate,
-    }
+    };
   }
 }
