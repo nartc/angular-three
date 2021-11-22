@@ -4,12 +4,12 @@ import {
   Directive,
   EventEmitter,
   Input,
+  NgZone,
   OnChanges,
   OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
 import * as THREE from 'three';
 import type {
   NgtColor,
@@ -19,6 +19,7 @@ import type {
   NgtVector3,
   UnknownRecord,
 } from '../models';
+import { Controller } from '../utils/controller';
 
 @Directive({
   selector: `
@@ -41,6 +42,7 @@ import type {
     ngt-soba-text,
     ngt-soba-line,
     ngt-soba-quadratic-bezier-line,
+    ngt-soba-cubic-bezier-line,
     ngt-light-probe,
     ngt-ambient-light,
     ngt-ambient-light-probe,
@@ -80,7 +82,10 @@ import type {
   `,
   exportAs: 'ngtObject3dController',
 })
-export class NgtObject3dController implements OnChanges, OnInit {
+export class NgtObject3dController
+  extends Controller
+  implements OnChanges, OnInit
+{
   @Input() name?: string;
   @Input() position?: NgtVector3;
   @Input() rotation?: NgtEuler;
@@ -114,47 +119,51 @@ export class NgtObject3dController implements OnChanges, OnInit {
   @Output() pointercancel = new EventEmitter<NgtEvent<PointerEvent>>();
   @Output() wheel = new EventEmitter<NgtEvent<WheelEvent>>();
 
-  readonly change$ = new ReplaySubject<SimpleChanges>(1);
+  constructor(private ngZone: NgZone) {
+    super();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.controller) {
       this.controller.ngOnChanges(changes);
     } else {
-      this.change$.next(changes);
+      super.ngOnChanges(changes);
     }
   }
 
   ngOnInit() {
-    if (this.controller) {
-      this.name = this.controller.name;
-      this.position = this.controller.position;
-      this.rotation = this.controller.rotation;
-      this.quaternion = this.controller.quaternion;
-      this.scale = this.controller.scale;
-      this.color = this.controller.color;
-      this.userData = this.controller.userData;
-      this.dispose = this.controller.dispose;
-      this.castShadow = this.controller.castShadow;
-      this.receiveShadow = this.controller.receiveShadow;
-      this.visible = this.controller.visible;
-      this.matrixAutoUpdate = this.controller.matrixAutoUpdate;
-      this.appendMode = this.controller.appendMode;
-      this.appendTo = this.controller.appendTo;
+    this.ngZone.runOutsideAngular(() => {
+      if (this.controller) {
+        this.name = this.controller.name;
+        this.position = this.controller.position;
+        this.rotation = this.controller.rotation;
+        this.quaternion = this.controller.quaternion;
+        this.scale = this.controller.scale;
+        this.color = this.controller.color;
+        this.userData = this.controller.userData;
+        this.dispose = this.controller.dispose;
+        this.castShadow = this.controller.castShadow;
+        this.receiveShadow = this.controller.receiveShadow;
+        this.visible = this.controller.visible;
+        this.matrixAutoUpdate = this.controller.matrixAutoUpdate;
+        this.appendMode = this.controller.appendMode;
+        this.appendTo = this.controller.appendTo;
 
-      this.click = this.controller.click;
-      this.contextmenu = this.controller.contextmenu;
-      this.dblclick = this.controller.dblclick;
-      this.pointerup = this.controller.pointerup;
-      this.pointerdown = this.controller.pointerdown;
-      this.pointerover = this.controller.pointerover;
-      this.pointerout = this.controller.pointerout;
-      this.pointerenter = this.controller.pointerenter;
-      this.pointerleave = this.controller.pointerleave;
-      this.pointermove = this.controller.pointermove;
-      this.pointermissed = this.controller.pointermissed;
-      this.pointercancel = this.controller.pointercancel;
-      this.wheel = this.controller.wheel;
-    }
+        this.click = this.controller.click;
+        this.contextmenu = this.controller.contextmenu;
+        this.dblclick = this.controller.dblclick;
+        this.pointerup = this.controller.pointerup;
+        this.pointerdown = this.controller.pointerdown;
+        this.pointerover = this.controller.pointerover;
+        this.pointerout = this.controller.pointerout;
+        this.pointerenter = this.controller.pointerenter;
+        this.pointerleave = this.controller.pointerleave;
+        this.pointermove = this.controller.pointermove;
+        this.pointermissed = this.controller.pointermissed;
+        this.pointercancel = this.controller.pointercancel;
+        this.wheel = this.controller.wheel;
+      }
+    });
   }
 
   get object3dProps() {
