@@ -97,4 +97,4 @@ export class NgtImage implements OnChanges {
   exports: [NgtImage, NgtImageShaderMaterial],
   imports: [NgtCoreModule, NgtMeshModule, NgtPlaneGeometryModule, CommonModule],
 })
-export class NgtSobaImageModule {}
+export class NgtImageModule {}
