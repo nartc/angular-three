@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -35,12 +36,13 @@ import type {
     ngt-points,
     ngt-cube-camera,
     ngt-contact-shadows,
+    ngt-image,
     ngt-html<% if (selectors.length) { %>,<% } %><% for (const selector of selectors) { %>
     ngt-<%= selector.selector %><% if (!selector.isLast) { %>,<% } %><% } %>
   `,
   exportAs: 'ngtObject3dController',
 })
-export class NgtObject3dController implements OnChanges {
+export class NgtObject3dController implements OnChanges, OnInit {
   @Input() name?: string;
   @Input() position?: NgtVector3;
   @Input() rotation?: NgtEuler;
@@ -56,6 +58,8 @@ export class NgtObject3dController implements OnChanges {
 
   @Input() appendMode: 'immediate' | 'root' = 'immediate';
   @Input() appendTo?: THREE.Object3D;
+
+  @Input() controller?: NgtObject3dController;
 
   // events
   @Output() click = new EventEmitter<NgtEvent<MouseEvent>>();
@@ -75,7 +79,44 @@ export class NgtObject3dController implements OnChanges {
   readonly change$ = new ReplaySubject<SimpleChanges>(1);
 
   ngOnChanges(changes: SimpleChanges) {
-    this.change$.next(changes);
+    if (this.controller) {
+      this.controller.ngOnChanges(changes);
+    } else {
+      this.change$.next(changes);
+    }
+  }
+
+  ngOnInit() {
+    if (this.controller) {
+      this.name = this.controller.name;
+      this.position = this.controller.position;
+      this.rotation = this.controller.rotation;
+      this.quaternion = this.controller.quaternion;
+      this.scale = this.controller.scale;
+      this.color = this.controller.color;
+      this.userData = this.controller.userData;
+      this.dispose = this.controller.dispose;
+      this.castShadow = this.controller.castShadow;
+      this.receiveShadow = this.controller.receiveShadow;
+      this.visible = this.controller.visible;
+      this.matrixAutoUpdate = this.controller.matrixAutoUpdate;
+      this.appendMode = this.controller.appendMode;
+      this.appendTo = this.controller.appendTo;
+
+      this.click = this.controller.click;
+      this.contextmenu = this.controller.contextmenu;
+      this.dblclick = this.controller.dblclick;
+      this.pointerup = this.controller.pointerup;
+      this.pointerdown = this.controller.pointerdown;
+      this.pointerover = this.controller.pointerover;
+      this.pointerout = this.controller.pointerout;
+      this.pointerenter = this.controller.pointerenter;
+      this.pointerleave = this.controller.pointerleave;
+      this.pointermove = this.controller.pointermove;
+      this.pointermissed = this.controller.pointermissed;
+      this.pointercancel = this.controller.pointercancel;
+      this.wheel = this.controller.wheel;
+    }
   }
 
   get object3dProps() {
