@@ -1,9 +1,11 @@
 import {
   Directive,
+  EventEmitter,
   Input,
   NgZone,
   OnDestroy,
   OnInit,
+  Output,
   SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
@@ -16,6 +18,7 @@ export abstract class NgtGeometry<
 > implements OnInit, OnDestroy
 {
   @Input() ngtId?: string;
+  @Output() ready = new EventEmitter<TGeometry>();
 
   constructor(
     @SkipSelf() protected instancesStore: InstancesStore,
@@ -47,6 +50,8 @@ export abstract class NgtGeometry<
       id: this.ngtId,
       geometry: this._geometry,
     });
+
+    this.ready.emit(this._geometry);
   }
 
   private _geometry!: TGeometry;

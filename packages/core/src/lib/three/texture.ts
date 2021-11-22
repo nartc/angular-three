@@ -1,4 +1,11 @@
-import { Directive, NgZone, OnDestroy, OnInit } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import * as THREE from 'three';
 import type { AnyConstructor } from '../models';
 
@@ -6,6 +13,8 @@ import type { AnyConstructor } from '../models';
 export abstract class NgtTexture<TTexture extends THREE.Texture = THREE.Texture>
   implements OnInit, OnDestroy
 {
+  @Output() ready = new EventEmitter<TTexture>();
+
   abstract textureType: AnyConstructor<TTexture>;
 
   constructor(protected ngZone: NgZone) {}
@@ -25,6 +34,7 @@ export abstract class NgtTexture<TTexture extends THREE.Texture = THREE.Texture>
     this.ngZone.runOutsideAngular(() => {
       if (!this.texture) {
         this._texture = new this.textureType(...this._extraArgs);
+        this.ready.emit(this._texture);
       }
     });
   }

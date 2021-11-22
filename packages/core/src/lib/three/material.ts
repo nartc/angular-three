@@ -1,9 +1,11 @@
 import {
   Directive,
+  EventEmitter,
   Input,
   NgZone,
   OnDestroy,
   OnInit,
+  Output,
   SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
@@ -30,6 +32,8 @@ export abstract class NgtMaterial<
     }
   }
 
+  @Output() ready = new EventEmitter<TMaterial>();
+
   get parameters(): TMaterialParameters | undefined {
     return this._parameters;
   }
@@ -54,6 +58,8 @@ export abstract class NgtMaterial<
         id: this.ngtId,
         material: this._material,
       });
+
+      this.ready.emit(this._material);
     });
   }
 
