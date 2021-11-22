@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { BananasComponentModule } from './bananas.component';
+import { DeleteMeComponentModule } from './delete-me.component';
 import { KinematicCubeComponentModule } from './kinematic-cube.component';
 
 @NgModule({
@@ -11,6 +12,7 @@ import { KinematicCubeComponentModule } from './kinematic-cube.component';
     BrowserModule,
     KinematicCubeComponentModule,
     BananasComponentModule,
+    DeleteMeComponentModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
