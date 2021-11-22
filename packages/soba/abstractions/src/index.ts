@@ -7,4 +7,7 @@ export * from './lib/text/text.component';
 export * from './lib/text/text-content.directive';
 
 export * from './lib/line/line.component';
+export * from './lib/line/line.controller';
+export * from './lib/line/line-watched-controller.di';
 export * from './lib/quadratic-bezier-line/quadratic-bezier-line.component';
+export * from './lib/cubic-bezier-line/cubic-bezier-line.component';
