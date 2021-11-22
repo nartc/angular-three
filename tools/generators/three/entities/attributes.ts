@@ -16,5 +16,5 @@ export const attributes: EntityCollection = {
     THREE.Uint16BufferAttribute,
     THREE.Uint32BufferAttribute,
     THREE.Uint8ClampedBufferAttribute,
-  ].map((m) => m.name),
+  ].map((m) => ({ name: m.name })),
 };

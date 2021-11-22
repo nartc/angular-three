@@ -8,5 +8,5 @@ export const cameras: EntityCollection = {
     THREE.OrthographicCamera,
     THREE.ArrayCamera,
     THREE.StereoCamera,
-  ].map((m) => m.name),
+  ].map((m) => ({ name: m.name })),
 };

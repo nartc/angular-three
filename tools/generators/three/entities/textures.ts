@@ -11,5 +11,5 @@ export const textures: EntityCollection = {
     THREE.DataTexture3D,
     THREE.DepthTexture,
     THREE.VideoTexture,
-  ].map((m) => m.name),
+  ].map((m) => ({ name: m.name })),
 };

@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtMaterial } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { Directive } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -10,12 +10,16 @@ import * as THREE from 'three';
     {
       provide: NgtMaterial,
       useExisting: NgtShadowMaterial,
-    }
+    },
   ],
 })
-export class NgtShadowMaterial extends NgtMaterial<THREE.ShadowMaterial, THREE.ShadowMaterialParameters> {
-  
-  static ngAcceptInputType_parameters: THREE.ShadowMaterialParameters | undefined;
+export class NgtShadowMaterial extends NgtMaterial<
+  THREE.ShadowMaterialParameters,
+  THREE.ShadowMaterial
+> {
+  static ngAcceptInputType_parameters:
+    | THREE.ShadowMaterialParameters
+    | undefined;
 
   materialType = THREE.ShadowMaterial;
 }

@@ -43,6 +43,8 @@ import { Controller } from '../utils/controller';
     ngt-soba-quadratic-bezier-line,
     ngt-soba-cubic-bezier-line,
     ngt-html,
+    ngt-audio,
+    ngt-positional-audio,
     ngt-light-probe,
     ngt-ambient-light,
     ngt-ambient-light-probe,

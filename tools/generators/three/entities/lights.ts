@@ -12,5 +12,5 @@ export const lights: EntityCollection = {
     THREE.PointLight,
     THREE.SpotLight,
     THREE.RectAreaLight,
-  ].map((m) => m.name),
+  ].map((m) => ({ name: m.name })),
 };

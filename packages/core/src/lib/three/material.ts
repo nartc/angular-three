@@ -15,8 +15,8 @@ import { InstancesStore } from '../stores/instances.store';
 
 @Directive()
 export abstract class NgtMaterial<
-  TMaterial extends THREE.Material = THREE.Material,
-  TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters
+  TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
+  TMaterial extends THREE.Material = THREE.Material
 > implements OnInit, OnDestroy
 {
   @Input() ngtId?: string;

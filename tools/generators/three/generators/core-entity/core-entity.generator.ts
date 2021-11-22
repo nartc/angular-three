@@ -9,8 +9,92 @@ import {
 } from '@nrwl/devkit';
 import { join } from 'path';
 import { CoreEntityTemplate } from '../../models/core-entity-template.enum';
+import { Entity } from '../../models/entity-collection.model';
 import object3dGenerator from '../object-3d/object-3d.generator';
 import { catalogue } from './catalogue';
+
+function getTemplateAdditionalProps(
+  isExample: boolean,
+  catalogueKey: string,
+  normalizedNames: ReturnType<typeof names>,
+  abstractGenerics?: Entity['abstractGenerics']
+) {
+  if (isExample) {
+    let mainGeneric = abstractGenerics
+      ? abstractGenerics.main
+      : normalizedNames.name;
+    let argsName = normalizedNames.name;
+    let typeName = normalizedNames.name;
+    const paramsName = normalizedNames.name;
+    if (catalogueKey === 'curves') {
+      if (normalizedNames.name === 'NURBSCurve') {
+        argsName = normalizedNames.name;
+        typeName = normalizedNames.name;
+      } else {
+        argsName = `Curves.${normalizedNames.name}`;
+        typeName = `Curves.${normalizedNames.name}`;
+        mainGeneric = `Curves.${mainGeneric}`;
+      }
+    }
+
+    return {
+      argsName,
+      typeName,
+      paramsName,
+      mainGeneric,
+      secondaryGeneric: abstractGenerics
+        ? abstractGenerics.secondary
+        : undefined,
+    };
+  }
+
+  const threeName = `THREE.${normalizedNames.name}`;
+
+  return {
+    argsName: threeName,
+    paramsName:
+      normalizedNames.name === 'RawShaderMaterial'
+        ? 'THREE.ShaderMaterial'
+        : threeName,
+    typeName: threeName,
+    mainGeneric: abstractGenerics
+      ? `THREE.${abstractGenerics.main}`
+      : `THREE.${normalizedNames.name}`,
+    secondaryGeneric: abstractGenerics
+      ? normalizedNames.name.includes('Audio')
+        ? abstractGenerics.secondary
+        : `THREE.${abstractGenerics.secondary}`
+      : undefined,
+  };
+}
+
+function removeModuleFile(
+  tree: Tree,
+  catalogueDir: string,
+  normalizedNames: ReturnType<typeof names>
+) {
+  if (
+    tree.exists(
+      join(
+        catalogueDir,
+        'src',
+        'lib',
+        normalizedNames.fileName,
+        `${normalizedNames.fileName}.module.ts`
+      )
+    )
+  ) {
+    tree.delete(
+      join(
+        catalogueDir,
+        'src',
+        'lib',
+        normalizedNames.fileName,
+        `${normalizedNames.fileName}.module.ts`
+      )
+    );
+  }
+}
 
 async function coreEntityGenerator(tree: Tree) {
   const { libsDir } = getWorkspaceLayout(tree);
@@ -36,8 +120,9 @@ async function coreEntityGenerator(tree: Tree) {
       catalogueItem.templateType === CoreEntityTemplate.WithParams;
     const withArgs = catalogueItem.templateType === CoreEntityTemplate.WithArgs;
 
-    for (const item of catalogueItem.items) {
-      const normalizedNames = names(item);
+    for (const { name, abstractGenerics } of catalogueItem.items) {
+      const _catalogueKey = catalogueItem.from[name] || catalogueKey;
+      const normalizedNames = names(name);
       generateFiles(
         tree,
         join(__dirname, 'files', 'lib'),
@@ -45,11 +130,17 @@ async function coreEntityGenerator(tree: Tree) {
         {
           ...normalizedNames,
           ...catalogueItem,
-          catalogueKey: catalogueItem.from[item] || catalogueKey,
+          catalogueKey: _catalogueKey,
           isExample: false,
           withParameters,
           withArgs,
           tmpl: '',
+          ...getTemplateAdditionalProps(
+            false,
+            _catalogueKey,
+            normalizedNames,
+            abstractGenerics
+          ),
         }
       );
 
@@ -57,10 +148,13 @@ async function coreEntityGenerator(tree: Tree) {
       if (catalogueItem.withThreeObject3d) {
         derivedObject3Ds.push(normalizedNames.fileName);
       }
+
+      removeModuleFile(tree, catalogueDir, normalizedNames);
     }
 
-    for (const example of catalogueItem.examples) {
-      const normalizedNames = names(example);
+    for (const { name, abstractGenerics } of catalogueItem.examples) {
+      const normalizedNames = names(name);
+      const _catalogueKey = catalogueItem.from[name] || catalogueKey;
       generateFiles(
         tree,
         join(__dirname, 'files', 'lib'),
@@ -68,22 +162,30 @@ async function coreEntityGenerator(tree: Tree) {
         {
           ...normalizedNames,
           ...catalogueItem,
-          catalogueKey: catalogueItem.from[example] || catalogueKey,
+          catalogueKey: catalogueItem.from[name] || catalogueKey,
           isExample: true,
           withParameters,
           withArgs,
           tmpl: '',
+          ...getTemplateAdditionalProps(
+            true,
+            _catalogueKey,
+            normalizedNames,
+            abstractGenerics
+          ),
         }
       );
 
       catalogueIndex.push(normalizedNames.fileName);
       examplesIndex.push({
-        catalogue: catalogueItem.from[example] || catalogueKey,
-        name: example,
+        catalogue: catalogueItem.from[name] || catalogueKey,
+        name,
       });
       if (catalogueItem.withThreeObject3d) {
         derivedObject3Ds.push(normalizedNames.fileName);
       }
+
+      removeModuleFile(tree, catalogueDir, normalizedNames);
     }
 
     let extras = [];
@@ -99,6 +201,9 @@ async function coreEntityGenerator(tree: Tree) {
             name: 'CurveExtras',
           });
         }
+        break;
+      case 'audios':
+        extras = ['audio-listener'];
         break;
     }
 

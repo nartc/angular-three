@@ -16,12 +16,12 @@ export const helpers: EntityCollection = {
     THREE.PolarGridHelper,
     THREE.SkeletonHelper,
     THREE.SpotLightHelper,
-  ].map((m) => m.name),
+  ].map((m) => ({ name: m.name })),
   examples: [
     'LightProbeHelper',
     'PositionalAudioHelper',
     'RectAreaLightHelper',
     'VertexNormalsHelper',
     'VertexTangentsHelper',
-  ],
+  ].map((name) => ({ name })),
 };

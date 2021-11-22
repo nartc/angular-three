@@ -3,6 +3,7 @@ import {
   Directive,
   EventEmitter,
   Input,
+  NgModule,
   NgZone,
   OnInit,
   Output,
@@ -60,3 +61,9 @@ export class NgtAudioListener implements OnInit {
     return this._listener;
   }
 }
+
+@NgModule({
+  declarations: [NgtAudioListener],
+  exports: [NgtAudioListener],
+})
+export class NgtAudioListenerModule {}

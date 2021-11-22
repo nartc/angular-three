@@ -12,7 +12,7 @@ export const curves: EntityCollection = {
     THREE.QuadraticBezierCurve,
     THREE.QuadraticBezierCurve3,
     THREE.SplineCurve,
-  ].map((m) => m.name),
+  ].map((m) => ({ name: m.name })),
   examples: [
     'GrannyKnot',
     'HeartCurve',
@@ -29,5 +29,5 @@ export const curves: EntityCollection = {
     'DecoratedTorusKnot5a',
     'DecoratedTorusKnot5c',
     'NURBSCurve',
-  ],
+  ].map((name) => ({ name })),
 };

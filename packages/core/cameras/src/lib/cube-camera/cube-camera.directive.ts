@@ -2,7 +2,7 @@ import {
   NGT_OBJECT_3D_CONTROLLER_PROVIDER,
   NgtObject3d,
 } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -37,3 +37,9 @@ export class NgtCubeCamera extends NgtObject3d<THREE.CubeCamera> {
     return this._camera;
   }
 }
+
+@NgModule({
+  declarations: [NgtCubeCamera],
+  exports: [NgtCubeCamera],
+})
+export class CubeCameraModule {}

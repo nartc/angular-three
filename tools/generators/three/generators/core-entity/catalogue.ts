@@ -1,4 +1,5 @@
 import { attributes } from '../../entities/attributes';
+import { audios } from '../../entities/audios';
 import { cameras } from '../../entities/cameras';
 import { curves } from '../../entities/curves';
 import { geometries } from '../../entities/geometries';
@@ -19,6 +20,15 @@ export const catalogue = {
     type: 'attributeType',
     examples: attributes.examples || [],
     from: attributes.from || {},
+  },
+  audios: {
+    items: audios.core,
+    abstract: 'NgtCommonAudio',
+    withThreeObject3d: true,
+    templateType: CoreEntityTemplate.WithNoArgsNoParams,
+    type: 'audioType',
+    examples: audios.examples || [],
+    from: audios.from || [],
   },
   geometries: {
     items: geometries.core,

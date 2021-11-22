@@ -25,7 +25,7 @@ export const geometries: EntityCollection = {
     THREE.TubeBufferGeometry,
     THREE.WireframeGeometry,
     THREE.EdgesGeometry,
-  ].map((m) => m.name),
+  ].map((m) => ({ name: m.name })),
   examples: [
     'BoxLineGeometry',
     'ConvexGeometry',
@@ -37,7 +37,7 @@ export const geometries: EntityCollection = {
     'LineGeometry',
     'LineSegmentsGeometry',
     'WireframeGeometry2',
-  ],
+  ].map((name) => ({ name })),
   from: {
     LineGeometry: 'lines',
     LineSegmentsGeometry: 'lines',
