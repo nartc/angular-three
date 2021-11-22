@@ -1,10 +1,10 @@
 import { Directive, ElementRef, NgZone, OnInit } from '@angular/core';
 
 @Directive({
-  selector: 'ngt-text-content',
-  exportAs: 'ngtTextContent',
+  selector: 'ngt-soba-text-content',
+  exportAs: 'ngtSobaTextContent',
 })
-export class NgtTextContent implements OnInit {
+export class NgtSobaTextContent implements OnInit {
   private _text = '';
 
   constructor(

@@ -22,11 +22,11 @@ import {
 } from '@angular/core';
 // @ts-ignore
 import { Text as TextMeshImpl } from 'troika-three-text';
-import { NgtTextContent } from './text-content.directive';
+import { NgtSobaTextContent } from './text-content.directive';
 
 @Component({
-  selector: 'ngt-text',
-  exportAs: 'ngtText',
+  selector: 'ngt-soba-text',
+  exportAs: 'ngtSobaText',
   template: `
     <ng-container *ngIf="object3d">
       <ngt-primitive
@@ -37,11 +37,11 @@ import { NgtTextContent } from './text-content.directive';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    { provide: NgtObject3d, useExisting: NgtText },
+    { provide: NgtObject3d, useExisting: NgtSobaText },
     NGT_OBJECT_3D_CONTROLLER_PROVIDER,
   ],
 })
-export class NgtText
+export class NgtSobaText
   extends NgtCommonMesh<TextMeshImpl>
   implements OnChanges, OnDestroy, OnInit
 {
@@ -79,12 +79,13 @@ export class NgtText
 
   @Output() sync = new EventEmitter<TextMeshImpl>();
 
-  @ContentChild(NgtTextContent, { static: true }) textContent!: NgtTextContent;
+  @ContentChild(NgtSobaTextContent, { static: true })
+  textContent!: NgtSobaTextContent;
 
   ngOnInit() {
     if (!this.textContent) {
       console.warn(
-        '<ngt-text> should have a <ngt-text-content> as a content child.'
+        '<ngt-text> should have a <ngt-soba-text-content> as a content child.'
       );
     }
   }
@@ -146,8 +147,8 @@ export class NgtText
 }
 
 @NgModule({
-  declarations: [NgtText, NgtTextContent],
-  exports: [NgtText, NgtTextContent],
+  declarations: [NgtSobaText, NgtSobaTextContent],
+  exports: [NgtSobaText, NgtSobaTextContent],
   imports: [NgtPrimitiveModule, NgtCoreModule, CommonModule],
 })
-export class NgtTextModule {}
+export class NgtSobaTextModule {}
