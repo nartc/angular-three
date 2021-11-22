@@ -1,3 +1,5 @@
+## [2.0.0-beta.4](https://github.com/nartc/angular-three/compare/2.0.0-beta.3...2.0.0-beta.4) (2021-11-22)
+
 ## [2.0.0-beta.3](https://github.com/nartc/angular-three/compare/2.0.0-beta.2...2.0.0-beta.3) (2021-11-22)
 
 
