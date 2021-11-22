@@ -10,20 +10,13 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@angular-three/cannon": [
-        "packages/cannon/src/index.ts"
-      ],
-      "@angular-three/cannon/box": [
-        "packages/cannon/box/src/index.ts"
-      ],
+      "@angular-three/cannon": ["packages/cannon/src/index.ts"],
+      "@angular-three/cannon/box": ["packages/cannon/box/src/index.ts"],
       "@angular-three/cannon/compound": [
         "packages/cannon/compound/src/index.ts"
       ],
@@ -51,21 +44,13 @@
       "@angular-three/cannon/particle": [
         "packages/cannon/particle/src/index.ts"
       ],
-      "@angular-three/cannon/plane": [
-        "packages/cannon/plane/src/index.ts"
-      ],
+      "@angular-three/cannon/plane": ["packages/cannon/plane/src/index.ts"],
       "@angular-three/cannon/point-to-point-constraint": [
         "packages/cannon/point-to-point-constraint/src/index.ts"
       ],
-      "@angular-three/cannon/sphere": [
-        "packages/cannon/sphere/src/index.ts"
-      ],
-      "@angular-three/cannon/trimesh": [
-        "packages/cannon/trimesh/src/index.ts"
-      ],
-      "@angular-three/controls": [
-        "packages/controls/src/index.ts"
-      ],
+      "@angular-three/cannon/sphere": ["packages/cannon/sphere/src/index.ts"],
+      "@angular-three/cannon/trimesh": ["packages/cannon/trimesh/src/index.ts"],
+      "@angular-three/controls": ["packages/controls/src/index.ts"],
       "@angular-three/controls/arcball-controls": [
         "packages/controls/arcball-controls/src/index.ts"
       ],
@@ -90,69 +75,35 @@
       "@angular-three/controls/transform-controls": [
         "packages/controls/transform-controls/src/index.ts"
       ],
-      "@angular-three/core": [
-        "packages/core/src/index.ts"
-      ],
+      "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/core/attributes": [
         "packages/core/attributes/src/index.ts"
       ],
-      "@angular-three/core/audio": [
-        "packages/core/audio/src/index.ts"
-      ],
-      "@angular-three/core/cameras": [
-        "packages/core/cameras/src/index.ts"
-      ],
-      "@angular-three/core/curves": [
-        "packages/core/curves/src/index.ts"
-      ],
+      "@angular-three/core/audio": ["packages/core/audio/src/index.ts"],
+      "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"],
+      "@angular-three/core/curves": ["packages/core/curves/src/index.ts"],
       "@angular-three/core/geometries": [
         "packages/core/geometries/src/index.ts"
       ],
-      "@angular-three/core/group": [
-        "packages/core/group/src/index.ts"
-      ],
-      "@angular-three/core/helpers": [
-        "packages/core/helpers/src/index.ts"
-      ],
-      "@angular-three/core/lights": [
-        "packages/core/lights/src/index.ts"
-      ],
-      "@angular-three/core/lines": [
-        "packages/core/lines/src/index.ts"
-      ],
-      "@angular-three/core/lod": [
-        "packages/core/lod/src/index.ts"
-      ],
-      "@angular-three/core/materials": [
-        "packages/core/materials/src/index.ts"
-      ],
-      "@angular-three/core/meshes": [
-        "packages/core/meshes/src/index.ts"
-      ],
-      "@angular-three/core/points": [
-        "packages/core/points/src/index.ts"
-      ],
-      "@angular-three/core/scene": [
-        "packages/core/scene/src/index.ts"
-      ],
-      "@angular-three/core/sprites": [
-        "packages/core/sprites/src/index.ts"
-      ],
-      "@angular-three/core/stats": [
-        "packages/core/stats/src/index.ts"
-      ],
-      "@angular-three/core/textures": [
-        "packages/core/textures/src/index.ts"
-      ],
+      "@angular-three/core/group": ["packages/core/group/src/index.ts"],
+      "@angular-three/core/helpers": ["packages/core/helpers/src/index.ts"],
+      "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
+      "@angular-three/core/lines": ["packages/core/lines/src/index.ts"],
+      "@angular-three/core/lod": ["packages/core/lod/src/index.ts"],
+      "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
+      "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
+      "@angular-three/core/points": ["packages/core/points/src/index.ts"],
+      "@angular-three/core/scene": ["packages/core/scene/src/index.ts"],
+      "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"],
+      "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
+      "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
       "@angular-three/docs-content/feature-getting-started": [
         "packages/docs-content/feature-getting-started/src/index.ts"
       ],
       "@angular-three/docs-content/feature-home": [
         "packages/docs-content/feature-home/src/index.ts"
       ],
-      "@angular-three/postprocessing": [
-        "packages/postprocessing/src/index.ts"
-      ],
+      "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
       "@angular-three/postprocessing/adaptive-tone-mapping-pass": [
         "packages/postprocessing/adaptive-tone-mapping-pass/src/index.ts"
       ],
@@ -227,11 +178,13 @@
       ],
       "@angular-three/postprocessing/unreal-bloom-pass": [
         "packages/postprocessing/unreal-bloom-pass/src/index.ts"
-      ]
+      ],
+      "@angular-three/soba": ["packages/soba/src/index.ts"],
+      "@angular-three/soba/abstractions": [
+        "packages/soba/abstractions/src/index.ts"
+      ],
+      "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

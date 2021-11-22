@@ -9,7 +9,7 @@
     "release": "dotenv release-it --",
     "contributors:init": "all-contributors init",
     "contributors:add": "all-contributors add",
-    "build": "nx run-many --target=build --projects=core,cannon,postprocessing,controls",
+    "build": "nx run-many --target=build --projects=core,cannon,postprocessing,controls,soba",
     "postbuild": "cp -R packages/cannon/src/lib/utils dist/packages/cannon/fesm2015 & cp -R packages/cannon/src/lib/utils dist/packages/cannon/fesm2020 & cp -R packages/cannon/src/lib/utils dist/packages/cannon/esm2020/lib",
     "publish": "nx run-many --target=publish --all --parallel"
   },
