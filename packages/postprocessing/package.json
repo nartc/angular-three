@@ -1,6 +1,6 @@
 {
   "name": "@angular-three/postprocessing",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.3",
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0"

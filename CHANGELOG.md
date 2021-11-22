@@ -1,3 +1,56 @@
+## [2.0.0-beta.3](https://github.com/nartc/angular-three/compare/2.0.0-beta.2...2.0.0-beta.3) (2021-11-22)
+
+
+### Features
+
+* add cubic bezier line to object3d ([b44a5f4](https://github.com/nartc/angular-three/commit/b44a5f4af2edcfccefeabeb5c9e58241b28630fa))
+* add ngt-soba-line to object-3d template ([e425911](https://github.com/nartc/angular-three/commit/e425911ac7d3b870ec790a5bdfb5c33f7072d7a4))
+* add ngt-text and ngt-image to object-3d-controller template ([e4932b6](https://github.com/nartc/angular-three/commit/e4932b65be0e440bea86677674c8d4eaffd8df34))
+* add QuadraticBezierLine to object3d controller ([49b6c7c](https://github.com/nartc/angular-three/commit/49b6c7c7cfa6ae3147f3dfa9465bac62e9c4cbe1))
+* adjust object3dcontroller template ([c761430](https://github.com/nartc/angular-three/commit/c7614307bab29efb4c593aad726e1483e9860044))
+* **core:** abstract Controller ([aa4d285](https://github.com/nartc/angular-three/commit/aa4d285bf63b815c1364dcea54e58995b1764b2d))
+* **core:** add [controller] to Object3dController so that it can accept the whole controller for easy merging inputs ([6eae231](https://github.com/nartc/angular-three/commit/6eae23134ccf7d3932b5a45cf3e7e83721eb0f16))
+* **core:** add ready output to geometry, material, and texture ([4a1cf22](https://github.com/nartc/angular-three/commit/4a1cf221e6680693c6a8a627203268773476655e))
+* **core:** ensure the THREE entities also added to DI with their abstract token ([a4b1bb6](https://github.com/nartc/angular-three/commit/a4b1bb6aebb96bb490f1c46ccdd44803e793fa7d))
+* **core:** expose buildGraph util ([7ab8588](https://github.com/nartc/angular-three/commit/7ab8588cf26b53680d2dbfc125930cf71cb78664))
+* **soba:** add CubicBezierLine ([a11526d](https://github.com/nartc/angular-three/commit/a11526d4c8b2a6d3323d8182fe4bdad73d963bd3))
+* **soba:** add NgtSobaLine ([1604279](https://github.com/nartc/angular-three/commit/160427959933b1d066f896689be0462d39c8c64e))
+* **soba:** add QuadraticBezierLine ([68c108c](https://github.com/nartc/angular-three/commit/68c108c150207d01e414e3a05239390e52f6a49d))
+* **soba:** add soba lib ([d113bca](https://github.com/nartc/angular-three/commit/d113bca73b77402e63cc478285e1d2a586fef80b))
+* **soba:** add SobaLineController for abstraction ([2181e96](https://github.com/nartc/angular-three/commit/2181e9692d576b912689c3df84635b1a16113b69))
+* **soba:** add Text component ([46b1dae](https://github.com/nartc/angular-three/commit/46b1dae5045a6a39a86aa4c756d768b97988c381))
+* update core peerDep ([9b6c3d5](https://github.com/nartc/angular-three/commit/9b6c3d50443685bae3dcef0fb58483daf2de81c9))
+* update peerDep on Angular ([dfc77e1](https://github.com/nartc/angular-three/commit/dfc77e1cb04def0f7e53b6236a7ace0e8806db14))
+
+
+### Bug Fixes
+
+* **core:** add NgtCurrentViewport type alias for reuse ([483380b](https://github.com/nartc/angular-three/commit/483380b69c655c40ed24bc717f0d9ad053270242))
+* **core:** change how getImperativeState() get the state from ([0a3e678](https://github.com/nartc/angular-three/commit/0a3e678e6bf63248146c6ac045be20227882ee1b))
+* **core:** make sure intensity on Light is set correctly if passed in ([b96aa5e](https://github.com/nartc/angular-three/commit/b96aa5eb9bd40aa8d145004837c5b6afd6200da9))
+* **core:** make sure primitive provides the underlying object3d for NgtObject3d instead of itself ([19d59ed](https://github.com/nartc/angular-three/commit/19d59ed3e4943522a8ab7e4dd33d9b5326425322))
+* **core:** move buildGraph to a util fn ([8c2f8d1](https://github.com/nartc/angular-three/commit/8c2f8d1583f50033a75785b05092c4e6399d7ef6))
+* **core:** reset attribute to default value if it's there on destroy ([09da731](https://github.com/nartc/angular-three/commit/09da731db99d2e7c54c20b1923fff2c57fa96fb1))
+* **soba:** make sure lineController forward all props from passed in lineController ([ed602c9](https://github.com/nartc/angular-three/commit/ed602c9e3f95a2d18204a0ef0f7f4465766fdb5e))
+* **soba:** rename image.directive to image.component ([03425af](https://github.com/nartc/angular-three/commit/03425af2ec494c9094fbbd35613eca721f951450))
+* **soba:** rename NgtImage to NgtSobaImage ([c00acdc](https://github.com/nartc/angular-three/commit/c00acdc9371a727dbfef77dc683211f9fd340082))
+* **soba:** rename NgtText to NgtSobaText ([1d716c6](https://github.com/nartc/angular-three/commit/1d716c6bfa182629e262f6b482a157d2d8926251))
+* **soba:** use aliases for THREE types ([064b585](https://github.com/nartc/angular-three/commit/064b58500ea6622e526c2de1c828060be2d46c09))
+* **soba:** use line controller for quadratic line ([d8e5b41](https://github.com/nartc/angular-three/commit/d8e5b414f929bbef7793e8acafbc7c56950ff65f))
+* update object-3d ([260c371](https://github.com/nartc/angular-three/commit/260c3713ac25d50d95af020b295b3821acb8b7a9))
+
+
+### Documentations
+
+* **demo:** add kinematic cube demo ([1ffccb3](https://github.com/nartc/angular-three/commit/1ffccb34c061777ab55464c6fdde35507191b334))
+* **demo:** clean up ([9dd9048](https://github.com/nartc/angular-three/commit/9dd9048528acd54be55194f8bfd79b44c755a88e))
+* **demo:** fix light ([ff09f02](https://github.com/nartc/angular-three/commit/ff09f023e38e8f4a32d81285303de9ad8914e573))
+* **demo:** testing out Line ([d46aaa2](https://github.com/nartc/angular-three/commit/d46aaa217e0e26bc4513777d57108ee464dd51cd))
+* **demo:** try vertexColors ([cb487c3](https://github.com/nartc/angular-three/commit/cb487c3fdbbb369ada32c375bd31b040c5aaf414))
+* **demo:** working on banana ([701f456](https://github.com/nartc/angular-three/commit/701f4560d34e0e0a2fbb66e06314c0c2cfa22e3f))
+* **docs:** wip home page ([644c7ee](https://github.com/nartc/angular-three/commit/644c7eeae46e1e7867c71a0bca89ade94b24ea49))
+* try out Text ([54cc16a](https://github.com/nartc/angular-three/commit/54cc16a7a1e46393005cd1e48fa9a73a17fdc936))
+
 ## [2.0.0-beta.2](https://github.com/nartc/angular-three/compare/2.0.0-beta.1...2.0.0-beta.2) (2021-11-19)
 
 
