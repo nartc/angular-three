@@ -1,8 +1,6 @@
 import {
-  NGT_OBJECT_3D_CONTROLLER_PROVIDER,
+  DestroyedService,
   NGT_OBJECT_3D_WATCHED_CONTROLLER,
-  NgtAnimationReady,
-  NgtColor,
   NgtCoreModule,
   NgtObject3dController,
   NgtVector3,
@@ -13,149 +11,105 @@ import { NgtLine2Module } from '@angular-three/core/meshes';
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   Inject,
   Input,
   NgModule,
   NgZone,
   OnChanges,
-  Output,
+  OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { merge, ReplaySubject, takeUntil } from 'rxjs';
 import * as THREE from 'three';
-import { Line2 } from 'three/examples/jsm/lines/Line2';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry';
 import {
-  LineMaterial,
-  LineMaterialParameters,
-} from 'three/examples/jsm/lines/LineMaterial';
+  NGT_SOBA_LINE_CONTROLLER_PROVIDER,
+  NGT_SOBA_LINE_WATCHED_CONTROLLER,
+} from './line-watched-controller.di';
+import { NgtSobaLineController } from './line.controller';
 
 @Component({
   selector: 'ngt-soba-line[points]',
   exportAs: 'ngtSobaLine',
   template: `
     <ngt-line2
-      (ready)="onLineReady($event)"
-      (animateReady)="animateReady.emit($event)"
+      (ready)="sobaLineController.onLineReady($event)"
+      (animateReady)="sobaLineController.animateReady.emit($event)"
       [controller]="object3dController"
     >
       <ngt-line-geometry (ready)="onGeometryReady($event)"></ngt-line-geometry>
       <ngt-line-material
-        (ready)="onMaterialReady($event)"
-        [parameters]="parameters"
+        (ready)="sobaLineController.onMaterialReady($event)"
+        [parameters]="sobaLineController.parameters"
       ></ngt-line-material>
     </ngt-line2>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NGT_OBJECT_3D_CONTROLLER_PROVIDER],
+  providers: [NGT_SOBA_LINE_CONTROLLER_PROVIDER],
 })
-export class NgtSobaLine implements OnChanges {
+export class NgtSobaLine implements OnChanges, OnInit {
   @Input() points!: Array<NgtVector3>;
-  @Input() vertexColors?: Array<NgtColor>;
-
-  @Input() color: NgtColor = 'black';
-  @Input() lineWidth?: LineMaterialParameters['linewidth'];
-  @Input() dashed?: LineMaterialParameters['dashed'];
-
-  @Input() materialParameters?: Omit<
-    LineMaterialParameters,
-    'vertexColors' | 'color' | 'linewidth' | 'dashed' | 'resolution'
-  > = {};
-
-  @Output() ready = new EventEmitter<Line2>();
-  @Output() animateReady = new EventEmitter<NgtAnimationReady<Line2>>();
 
   resolution = new THREE.Vector2(512, 512);
-  parameters!: LineMaterialParameters;
-  line!: Line2;
-  geometry!: LineGeometry;
-  material!: LineMaterial;
+
+  private pointsChange$ = new ReplaySubject<SimpleChanges>(1);
 
   constructor(
     @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
     public object3dController: NgtObject3dController,
-    private ngZone: NgZone
+    @Inject(NGT_SOBA_LINE_WATCHED_CONTROLLER)
+    public sobaLineController: NgtSobaLineController,
+    private ngZone: NgZone,
+    private destroyed: DestroyedService
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     this.ngZone.runOutsideAngular(() => {
-      this.parameters = {
-        color: this.color as number,
-        linewidth: this.lineWidth,
-        dashed: this.dashed,
-        vertexColors: Boolean(this.vertexColors),
-        resolution: this.resolution,
-        ...this.materialParameters,
-      };
+      this.sobaLineController.mergeParameters({ resolution: this.resolution });
 
-      if (changes.points || changes.vertexColors) {
-        if (this.geometry) {
-          this.setupGeometry();
-        }
-
-        if (this.line) {
-          this.line.computeLineDistances();
-        }
-      }
-
-      if (changes.dashed) {
-        if (this.material) {
-          this.dasherize();
-        }
+      if (changes.points) {
+        this.pointsChange$.next(changes);
       }
     });
+  }
+
+  ngOnInit() {
+    merge(this.pointsChange$, this.sobaLineController.change$)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((changes) => {
+        if (changes.point || changes.vertexColors) {
+          if (this.sobaLineController.geometry) {
+            this.setupGeometry();
+          }
+        }
+      });
   }
 
   onGeometryReady(geometry: LineGeometry) {
     this.ngZone.runOutsideAngular(() => {
-      this.geometry = geometry;
+      this.sobaLineController.geometry = geometry;
       this.setupGeometry();
     });
-  }
-
-  onLineReady(line: Line2) {
-    this.ngZone.runOutsideAngular(() => {
-      this.line = line;
-      this.line.computeLineDistances();
-      this.ngZone.run(() => {
-        this.ready.emit(line);
-      });
-    });
-  }
-
-  onMaterialReady(material: LineMaterial) {
-    this.ngZone.runOutsideAngular(() => {
-      this.material = material;
-      this.dasherize();
-    });
-  }
-
-  private dasherize() {
-    if (this.dashed) {
-      this.material.defines.USE_DASH = '';
-    } else {
-      delete this.material.defines.USE_DASH;
-    }
   }
 
   private setupGeometry() {
     const pointValues = this.points.map((p) =>
       p instanceof THREE.Vector3 ? p.toArray() : p
     );
-    this.geometry.setPositions((pointValues as any).flat());
+    this.sobaLineController.geometry.setPositions((pointValues as any).flat());
 
-    if (this.vertexColors) {
-      const colorValues = this.vertexColors.map((c) =>
+    if (this.sobaLineController.vertexColors) {
+      const colorValues = this.sobaLineController.vertexColors.map((c) =>
         c instanceof THREE.Color ? c.toArray() : c
       );
-      this.geometry.setColors((colorValues as any).flat());
+      this.sobaLineController.geometry.setColors((colorValues as any).flat());
     }
   }
 }
 
 @NgModule({
-  declarations: [NgtSobaLine],
-  exports: [NgtSobaLine],
+  declarations: [NgtSobaLine, NgtSobaLineController],
+  exports: [NgtSobaLine, NgtSobaLineController],
   imports: [
     NgtCoreModule,
     NgtLine2Module,
