@@ -37,6 +37,8 @@ import type {
     ngt-cube-camera,
     ngt-contact-shadows,
     ngt-html,
+    ngt-image,
+    ngt-text,
     ngt-light-probe,
     ngt-ambient-light,
     ngt-ambient-light-probe,

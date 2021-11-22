@@ -37,6 +37,7 @@ import type {
     ngt-cube-camera,
     ngt-contact-shadows,
     ngt-image,
+    ngt-text,
     ngt-html<% if (selectors.length) { %>,<% } %><% for (const selector of selectors) { %>
     ngt-<%= selector.selector %><% if (!selector.isLast) { %>,<% } %><% } %>
   `,
