@@ -1,8 +1,17 @@
+import { NgtOrbitControlsModule } from '@angular-three/controls/orbit-controls';
 import { NgtCoreModule } from '@angular-three/core';
+import { NgtLineGeometryModule } from '@angular-three/core/geometries';
+import { NgtLineMaterialModule } from '@angular-three/core/materials';
+import { NgtLine2Module } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
-import { NgtTextModule } from '@angular-three/soba/abstractions';
+import {
+  NgtSobaLineModule,
+  NgtSobaTextModule,
+} from '@angular-three/soba/abstractions';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
+// @ts-ignore
+import { hilbert3D } from 'three/examples/jsm/utils/GeometryUtils';
 
 /**
  *       color={'#EC2D2D'}
@@ -19,9 +28,17 @@ import * as THREE from 'three';
 @Component({
   selector: 'ngt-delete-me',
   template: `
-    <ngt-canvas [camera]="{ position: [0, 0, 200] }">
+    <ngt-canvas>
       <ngt-stats></ngt-stats>
-      <ngt-text
+      <ngt-orbit-controls></ngt-orbit-controls>
+      <!--      <ngt-soba-line-->
+      <!--        [points]="points"-->
+      <!--        color="red"-->
+      <!--        [lineWidth]="3"-->
+      <!--        [dashed]="true"-->
+      <!--      ></ngt-soba-line>-->
+
+      <ngt-soba-text
         color="#EC2D2D"
         [fontSize]="12"
         [maxWidth]="200"
@@ -33,7 +50,7 @@ import * as THREE from 'three';
         anchorY="middle"
         (animateReady)="onTextAnimate($event.animateObject)"
       >
-        <ngt-text-content>
+        <ngt-soba-text-content>
           LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO
           EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE MAGNA ALIQUA. UT ENIM AD
           MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT
@@ -41,13 +58,19 @@ import * as THREE from 'three';
           REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA
           PARIATUR. EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN
           CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.
-        </ngt-text-content>
-      </ngt-text>
+        </ngt-soba-text-content>
+      </ngt-soba-text>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteMeComponent {
+  points = hilbert3D(new THREE.Vector3(0), 5).map((p: any) => [
+    p.x,
+    p.y,
+    p.z,
+  ]) as [number, number, number][];
+
   onTextAnimate(text: any) {
     (text as THREE.Mesh).rotation.y += 0.01;
   }
@@ -56,6 +79,15 @@ export class DeleteMeComponent {
 @NgModule({
   declarations: [DeleteMeComponent],
   exports: [DeleteMeComponent],
-  imports: [NgtCoreModule, NgtTextModule, NgtStatsModule],
+  imports: [
+    NgtCoreModule,
+    NgtSobaTextModule,
+    NgtStatsModule,
+    NgtLine2Module,
+    NgtLineGeometryModule,
+    NgtLineMaterialModule,
+    NgtSobaLineModule,
+    NgtOrbitControlsModule,
+  ],
 })
 export class DeleteMeComponentModule {}
