@@ -1,0 +1,6 @@
+{
+  "name": "@angular-three/soba/abstractions",
+  "peerDependencies": {
+    "troika-three-text": "~0.44.0"
+  }
+}
