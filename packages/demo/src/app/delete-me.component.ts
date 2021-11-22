@@ -13,18 +13,6 @@ import * as THREE from 'three';
 // @ts-ignore
 import { hilbert3D } from 'three/examples/jsm/utils/GeometryUtils';
 
-/**
- *       color={'#EC2D2D'}
- *       fontSize={12}
- *       maxWidth={200}
- *       lineHeight={1}
- *       letterSpacing={0.02}
- *       textAlign={'left'}
- *       font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
- *       anchorX="center"
- *       anchorY="middle"
- */
-
 @Component({
   selector: 'ngt-delete-me',
   template: `
@@ -37,7 +25,6 @@ import { hilbert3D } from 'three/examples/jsm/utils/GeometryUtils';
       <!--        [lineWidth]="3"-->
       <!--        [dashed]="true"-->
       <!--      ></ngt-soba-line>-->
-
       <ngt-soba-text
         color="#EC2D2D"
         [fontSize]="12"
