@@ -40,6 +40,7 @@ import type {
     ngt-soba-image,
     ngt-soba-text,
     ngt-soba-line,
+    ngt-soba-quadratic-bezier-line,
     ngt-light-probe,
     ngt-ambient-light,
     ngt-ambient-light-probe,
