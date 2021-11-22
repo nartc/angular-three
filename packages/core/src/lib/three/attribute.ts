@@ -37,6 +37,7 @@ export abstract class NgtAttribute<
   }
 
   private _attribute?: TAttribute;
+  private defaultValue?: TAttribute;
 
   ngOnChanges() {
     this.ngZone.runOutsideAngular(() => {
@@ -58,6 +59,9 @@ export abstract class NgtAttribute<
     if (this.geometryDirective && this.attach) {
       this._attribute = new this.attributeType(...this._extraArgs);
       if (this.attribute) {
+        this.defaultValue = this.geometryDirective.geometry.attributes[
+          this.attach
+        ] as TAttribute;
         this.geometryDirective.geometry.setAttribute(
           this.attach,
           this.attribute
@@ -69,7 +73,14 @@ export abstract class NgtAttribute<
   ngOnDestroy() {
     this.ngZone.runOutsideAngular(() => {
       if (this.geometryDirective && this.attach) {
-        this.geometryDirective.geometry.deleteAttribute(this.attach);
+        if (this.defaultValue !== undefined) {
+          this.geometryDirective.geometry.setAttribute(
+            this.attach,
+            this.defaultValue
+          );
+        } else {
+          this.geometryDirective.geometry.deleteAttribute(this.attach);
+        }
       }
     });
   }
