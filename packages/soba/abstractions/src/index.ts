@@ -5,3 +5,5 @@ export * from './lib/image/image-shader-material.directive';
 
 export * from './lib/text/text.component';
 export * from './lib/text/text-content.directive';
+
+export * from './lib/line/line.component';
