@@ -8,6 +8,7 @@ import {
   OnInit,
   Optional,
   Output,
+  Self,
   SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
@@ -27,7 +28,8 @@ import { NgtObject3dController } from '../three/object-3d.controller';
   providers: [
     {
       provide: NgtObject3d,
-      useExisting: NgtPrimitive,
+      useFactory: (primitive: NgtPrimitive) => primitive.object3d,
+      deps: [[new Self(), NgtPrimitive]],
     },
     NGT_OBJECT_3D_CONTROLLER_PROVIDER,
   ],
@@ -104,7 +106,10 @@ export class NgtPrimitive<TObject = unknown>
       }
 
       if (this.object3dController.appendMode === 'immediate') {
-        if (this.parentObjectDirective) {
+        if (
+          this.parentObjectDirective &&
+          this.parentObjectDirective.object3d !== this.object3d
+        ) {
           this.parentObjectDirective.object3d.add(this.object3d);
         } else {
           if (scene) {
