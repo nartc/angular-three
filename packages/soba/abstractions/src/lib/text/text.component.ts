@@ -6,6 +6,7 @@ import {
   NgtCoreModule,
   NgtObject3d,
   NgtPrimitiveModule,
+  NgtVector4,
 } from '@angular-three/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -60,7 +61,7 @@ export class NgtSobaText
     | 'middle'
     | 'bottom-baseline'
     | 'bottom' = 'middle';
-  @Input() clipRect?: [number, number, number, number];
+  @Input() clipRect?: NgtVector4;
   @Input() depthOffset?: number;
   @Input() direction?: 'auto' | 'ltr' | 'rtl';
   @Input() overflowWrap?: 'normal' | 'break-word';

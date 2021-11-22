@@ -5,6 +5,7 @@ import {
   NgtColor,
   NgtCoreModule,
   NgtObject3dController,
+  NgtVector3,
 } from '@angular-three/core';
 import { NgtLineGeometryModule } from '@angular-three/core/geometries';
 import { NgtLineMaterialModule } from '@angular-three/core/materials';
@@ -49,8 +50,8 @@ import {
   providers: [NGT_OBJECT_3D_CONTROLLER_PROVIDER],
 })
 export class NgtSobaLine implements OnChanges {
-  @Input() points!: Array<THREE.Vector3 | [number, number, number]>;
-  @Input() vertexColors?: Array<THREE.Color | [number, number, number]>;
+  @Input() points!: Array<NgtVector3>;
+  @Input() vertexColors?: Array<NgtColor>;
 
   @Input() color: NgtColor = 'black';
   @Input() lineWidth?: LineMaterialParameters['linewidth'];
