@@ -62,19 +62,19 @@ export class NgtCanvasComponent implements OnInit {
   @HostBinding('class.ngt-canvas') hostClass = true;
 
   @Input() set orthographic(v: boolean) {
-    this.canvasStore.setIsOrthographic(v);
+    this.canvasStore.updaters.setIsOrthographic(v);
   }
 
   @Input() set linear(v: boolean) {
-    this.canvasStore.setIsLinear(v);
+    this.canvasStore.updaters.setIsLinear(v);
   }
 
   @Input() set shadows(v: boolean | Partial<THREE.WebGLShadowMap>) {
-    this.canvasStore.setShadows(v);
+    this.canvasStore.updaters.setShadows(v);
   }
 
   @Input() set alpha(v: boolean) {
-    this.canvasStore.setAlpha(v);
+    this.canvasStore.updaters.setAlpha(v);
   }
 
   @Input() camera?: NgtCameraOptions;
