@@ -69,8 +69,8 @@ export const ImageShaderMaterial = shaderMaterial(
   ],
 })
 export class NgtSobaImageShaderMaterial extends NgtMaterial<
-  typeof ImageShaderMaterial.prototype,
-  SobaImageShaderMaterialParameters
+  SobaImageShaderMaterialParameters,
+  typeof ImageShaderMaterial.prototype
 > {
   static ngAcceptInputType_parameters:
     | SobaImageShaderMaterialParameters
