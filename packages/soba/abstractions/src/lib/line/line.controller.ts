@@ -4,7 +4,6 @@ import {
   EventEmitter,
   Input,
   NgZone,
-  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -20,7 +19,7 @@ import {
     'ngt-soba-line,ngt-soba-quadratic-bezier-line,ngt-soba-cubic-bezier-line',
   exportAs: 'ngtSobaLineController',
 })
-export class NgtSobaLineController extends Controller implements OnInit {
+export class NgtSobaLineController extends Controller {
   @Input() vertexColors?: Array<NgtColor>;
 
   @Input() color: NgtColor = 'black';
@@ -42,16 +41,32 @@ export class NgtSobaLineController extends Controller implements OnInit {
   geometry!: LineGeometry;
   material!: LineMaterial;
 
-  constructor(private ngZone: NgZone) {
-    super();
+  get props(): string[] {
+    return [
+      'vertexColors',
+      'color',
+      'lineWidth',
+      'dashed',
+      'materialParameters',
+      'ready',
+      'animateReady',
+      'parameters',
+      'line',
+      'geometry',
+      'material',
+    ];
+  }
+
+  get controller(): Controller | undefined {
+    return this.sobaLineController;
+  }
+
+  constructor(ngZone: NgZone) {
+    super(ngZone);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.sobaLineController) {
-      this.sobaLineController.ngOnChanges(changes);
-    } else {
-      super.ngOnChanges(changes);
-    }
+    super.ngOnChanges(changes);
     this.ngZone.runOutsideAngular(() => {
       this.parameters = {
         color: this.color as number,
@@ -71,25 +86,6 @@ export class NgtSobaLineController extends Controller implements OnInit {
         if (this.material) {
           this.dasherize();
         }
-      }
-    });
-  }
-
-  ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      if (this.sobaLineController) {
-        this.vertexColors = this.sobaLineController.vertexColors;
-        this.color = this.sobaLineController.color;
-        this.lineWidth = this.sobaLineController.lineWidth;
-        this.dashed = this.sobaLineController.dashed;
-        this.materialParameters = this.sobaLineController.materialParameters;
-        this.parameters = this.sobaLineController.parameters;
-        this.line = this.sobaLineController.line;
-        this.material = this.sobaLineController.material;
-        this.geometry = this.sobaLineController.geometry;
-
-        this.ready = this.sobaLineController.ready;
-        this.animateReady = this.sobaLineController.animateReady;
       }
     });
   }
