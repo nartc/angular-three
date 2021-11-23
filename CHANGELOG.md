@@ -1,3 +1,24 @@
+## [2.0.0-beta.6](https://github.com/nartc/angular-three/compare/2.0.0-beta.5...2.0.0-beta.6) (2021-11-23)
+
+
+### Features
+
+* **core:** add AudioController ([b01b8fb](https://github.com/nartc/angular-three/commit/b01b8fb85e6f7e4147afb642e7e7ae2874aea12a))
+* **core:** expose AudioController ([b387f2e](https://github.com/nartc/angular-three/commit/b387f2e5a1674d2968acbd7b68b2f1ee93e22791))
+* **soba:** add PositionalAudio component ([1fb916c](https://github.com/nartc/angular-three/commit/1fb916cb902c0d9ca77ea800a2f66138f6e56d58))
+
+
+### Bug Fixes
+
+* add additionalSobaSelectors to object-3d generator ([1e20bc9](https://github.com/nartc/angular-three/commit/1e20bc966ce6302198a469078b07d5ca54b0b411))
+* adjust core-entity generator for AudioController ([490e705](https://github.com/nartc/angular-three/commit/490e7050f280f58002111cb13a33e3eec39a8c3e))
+* **core:** add updaters to enhanced store and have canvas store use those ([5925b25](https://github.com/nartc/angular-three/commit/5925b25218a3ff639b6a2b038038659f72ed6ce8))
+* **core:** make sure to reconstruct geometry on args changed ([d3e1ae4](https://github.com/nartc/angular-three/commit/d3e1ae4ab5f044cbd621106a73a0653cb6942f04))
+* **core:** move props assign to abstract Controller; have the sub controllers provide a list of props to assign instead ([47184bd](https://github.com/nartc/angular-three/commit/47184bd1f6ba9fe79162259350a22a2622a31b39))
+* **core:** rename controller to object3dController for clearer intent ([f58f682](https://github.com/nartc/angular-three/commit/f58f682fcda676427b6fb99580b1433eb6a90799))
+* **core:** use the updaters from enhanced store for updaters ([2ef1a2e](https://github.com/nartc/angular-three/commit/2ef1a2e1e44796720dd1e67e8583239f52c7148a))
+* **soba:** adapt LineController to the new Controller ([139098f](https://github.com/nartc/angular-three/commit/139098f513dacbc2f9efb94f7fb2f1293d4caaa7))
+
 ## [2.0.0-beta.5](https://github.com/nartc/angular-three/compare/2.0.0-beta.4...2.0.0-beta.5) (2021-11-23)
 
 
