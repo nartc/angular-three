@@ -1,3 +1,15 @@
+## [2.0.0-beta.5](https://github.com/nartc/angular-three/compare/2.0.0-beta.4...2.0.0-beta.5) (2021-11-23)
+
+
+### Features
+
+* **core:** clean up core generators ([b1a9829](https://github.com/nartc/angular-three/commit/b1a98293bad9e1012f800ae7aa5027568f22081a))
+
+
+### Bug Fixes
+
+* **soba:** fix image shader material due to change to NgtMaterial ([4a63397](https://github.com/nartc/angular-three/commit/4a63397d3274654a1eb4ff19333a8f278d7abcb9))
+
 ## [2.0.0-beta.4](https://github.com/nartc/angular-three/compare/2.0.0-beta.3...2.0.0-beta.4) (2021-11-22)
 
 ## [2.0.0-beta.3](https://github.com/nartc/angular-three/compare/2.0.0-beta.2...2.0.0-beta.3) (2021-11-22)
