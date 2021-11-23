@@ -5,12 +5,14 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
+  Optional,
   Output,
   SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
-import type { AnyConstructor } from '../models';
+import type { AnyConstructor, UnknownRecord } from '../models';
 import { InstancesStore } from '../stores/instances.store';
+import { NgtObject3d } from './object-3d';
 
 @Directive()
 export abstract class NgtGeometry<
@@ -22,7 +24,8 @@ export abstract class NgtGeometry<
 
   constructor(
     @SkipSelf() protected instancesStore: InstancesStore,
-    protected ngZone: NgZone
+    protected ngZone: NgZone,
+    @Optional() protected parent?: NgtObject3d
   ) {}
 
   abstract geometryType: AnyConstructor<TGeometry>;
@@ -44,10 +47,33 @@ export abstract class NgtGeometry<
   }
 
   private init() {
+    // geometry has changed. reconstruct
+    if (this.geometry) {
+      // cleanup
+      this.instancesStore.removeGeometry(this.ngtId || this.geometry.uuid);
+      if (this.parent) {
+        const object3d = this.parent.object3d as unknown as UnknownRecord;
+        if (object3d.geometry) {
+          (object3d.geometry as THREE.BufferGeometry).dispose();
+        }
+      }
+
+      // reconstruct
+      this.construct();
+      if (this.parent) {
+        const object3d = this.parent.object3d as unknown as UnknownRecord;
+        object3d.geometry = this.geometry;
+      }
+    } else {
+      this.construct();
+    }
+  }
+
+  private construct() {
     this._geometry = new this.geometryType(...this._extraArgs);
 
     this.instancesStore.saveGeometry({
-      id: this.ngtId,
+      id: this.ngtId || this.geometry.uuid,
       geometry: this._geometry,
     });
 
