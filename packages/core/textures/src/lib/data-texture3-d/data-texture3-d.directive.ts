@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtTexture } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtDataTexture3D extends NgtTexture<THREE.DataTexture3D> {
 
   textureType = THREE.DataTexture3D;
 }
+
+@NgModule({
+  declarations: [NgtDataTexture3D],
+  exports: [NgtDataTexture3D],
+})
+export class NgtDataTexture3DModule {}
+

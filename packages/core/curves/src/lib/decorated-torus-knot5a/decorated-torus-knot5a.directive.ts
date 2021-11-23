@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtDecoratedTorusKnot5a extends NgtCurve<Curves.DecoratedTorusKnot5
 
   curveType = Curves.DecoratedTorusKnot5a;
 }
+
+@NgModule({
+  declarations: [NgtDecoratedTorusKnot5a],
+  exports: [NgtDecoratedTorusKnot5a],
+})
+export class NgtDecoratedTorusKnot5aModule {}
+

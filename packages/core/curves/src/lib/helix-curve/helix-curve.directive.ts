@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtHelixCurve extends NgtCurve<Curves.HelixCurve> {
 
   curveType = Curves.HelixCurve;
 }
+
+@NgModule({
+  declarations: [NgtHelixCurve],
+  exports: [NgtHelixCurve],
+})
+export class NgtHelixCurveModule {}
+

@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtBoxGeometry extends NgtGeometry<THREE.BoxGeometry> {
 
   geometryType = THREE.BoxGeometry;
 }
+
+@NgModule({
+  declarations: [NgtBoxGeometry],
+  exports: [NgtBoxGeometry],
+})
+export class NgtBoxGeometryModule {}
+

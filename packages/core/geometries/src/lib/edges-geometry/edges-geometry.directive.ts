@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtEdgesGeometry extends NgtGeometry<THREE.EdgesGeometry> {
 
   geometryType = THREE.EdgesGeometry;
 }
+
+@NgModule({
+  declarations: [NgtEdgesGeometry],
+  exports: [NgtEdgesGeometry],
+})
+export class NgtEdgesGeometryModule {}
+

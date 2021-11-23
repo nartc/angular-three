@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { TeapotGeometry  } from 'three/examples/jsm/geometries/TeapotGeometry';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtTeapotGeometry extends NgtGeometry<TeapotGeometry> {
 
   geometryType = TeapotGeometry;
 }
+
+@NgModule({
+  declarations: [NgtTeapotGeometry],
+  exports: [NgtTeapotGeometry],
+})
+export class NgtTeapotGeometryModule {}
+

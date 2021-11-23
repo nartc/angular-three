@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtAttribute } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtInterleavedBufferAttribute extends NgtAttribute<THREE.Interleave
 
   attributeType = THREE.InterleavedBufferAttribute;
 }
+
+@NgModule({
+  declarations: [NgtInterleavedBufferAttribute],
+  exports: [NgtInterleavedBufferAttribute],
+})
+export class NgtInterleavedBufferAttributeModule {}
+

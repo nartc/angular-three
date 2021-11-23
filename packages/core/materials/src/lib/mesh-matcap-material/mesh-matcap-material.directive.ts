@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtMaterial } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -13,9 +13,16 @@ import * as THREE from 'three';
     }
   ],
 })
-export class NgtMeshMatcapMaterial extends NgtMaterial<THREE.MeshMatcapMaterial, THREE.MeshMatcapMaterialParameters> {
+export class NgtMeshMatcapMaterial extends NgtMaterial<THREE.MeshMatcapMaterialParameters, THREE.MeshMatcapMaterial> {
   
   static ngAcceptInputType_parameters: THREE.MeshMatcapMaterialParameters | undefined;
 
   materialType = THREE.MeshMatcapMaterial;
 }
+
+@NgModule({
+  declarations: [NgtMeshMatcapMaterial],
+  exports: [NgtMeshMatcapMaterial],
+})
+export class NgtMeshMatcapMaterialModule {}
+

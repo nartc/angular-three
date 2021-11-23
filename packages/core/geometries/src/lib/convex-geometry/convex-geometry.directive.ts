@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { ConvexGeometry  } from 'three/examples/jsm/geometries/ConvexGeometry';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtConvexGeometry extends NgtGeometry<ConvexGeometry> {
 
   geometryType = ConvexGeometry;
 }
+
+@NgModule({
+  declarations: [NgtConvexGeometry],
+  exports: [NgtConvexGeometry],
+})
+export class NgtConvexGeometryModule {}
+

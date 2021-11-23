@@ -1,7 +1,7 @@
 // GENERATED
 
 import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -29,3 +29,10 @@ export class NgtGridHelper extends NgtHelper<THREE.GridHelper> {
 
   helperType = THREE.GridHelper;
 }
+
+@NgModule({
+  declarations: [NgtGridHelper],
+  exports: [NgtGridHelper],
+})
+export class NgtGridHelperModule {}
+

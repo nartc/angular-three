@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtCatmullRomCurve3 extends NgtCurve<THREE.CatmullRomCurve3> {
 
   curveType = THREE.CatmullRomCurve3;
 }
+
+@NgModule({
+  declarations: [NgtCatmullRomCurve3],
+  exports: [NgtCatmullRomCurve3],
+})
+export class NgtCatmullRomCurve3Module {}
+

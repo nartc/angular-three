@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtAttribute } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtInt32BufferAttribute extends NgtAttribute<THREE.Int32BufferAttri
 
   attributeType = THREE.Int32BufferAttribute;
 }
+
+@NgModule({
+  declarations: [NgtInt32BufferAttribute],
+  exports: [NgtInt32BufferAttribute],
+})
+export class NgtInt32BufferAttributeModule {}
+

@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtMaterial } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -13,9 +13,16 @@ import * as THREE from 'three';
     }
   ],
 })
-export class NgtSpriteMaterial extends NgtMaterial<THREE.SpriteMaterial, THREE.SpriteMaterialParameters> {
+export class NgtSpriteMaterial extends NgtMaterial<THREE.SpriteMaterialParameters, THREE.SpriteMaterial> {
   
   static ngAcceptInputType_parameters: THREE.SpriteMaterialParameters | undefined;
 
   materialType = THREE.SpriteMaterial;
 }
+
+@NgModule({
+  declarations: [NgtSpriteMaterial],
+  exports: [NgtSpriteMaterial],
+})
+export class NgtSpriteMaterialModule {}
+

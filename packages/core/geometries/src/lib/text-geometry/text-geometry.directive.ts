@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { TextGeometry  } from 'three/examples/jsm/geometries/TextGeometry';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtTextGeometry extends NgtGeometry<TextGeometry> {
 
   geometryType = TextGeometry;
 }
+
+@NgModule({
+  declarations: [NgtTextGeometry],
+  exports: [NgtTextGeometry],
+})
+export class NgtTextGeometryModule {}
+

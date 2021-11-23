@@ -1,7 +1,7 @@
 // GENERATED
 
 import { NgtLight, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -29,3 +29,10 @@ export class NgtSpotLight extends NgtLight<THREE.SpotLight> {
 
   lightType = THREE.SpotLight;
 }
+
+@NgModule({
+  declarations: [NgtSpotLight],
+  exports: [NgtSpotLight],
+})
+export class NgtSpotLightModule {}
+

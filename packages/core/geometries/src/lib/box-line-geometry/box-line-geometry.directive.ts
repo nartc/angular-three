@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { BoxLineGeometry  } from 'three/examples/jsm/geometries/BoxLineGeometry';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtBoxLineGeometry extends NgtGeometry<BoxLineGeometry> {
 
   geometryType = BoxLineGeometry;
 }
+
+@NgModule({
+  declarations: [NgtBoxLineGeometry],
+  exports: [NgtBoxLineGeometry],
+})
+export class NgtBoxLineGeometryModule {}
+

@@ -1,7 +1,7 @@
 // GENERATED
 
 import { NgtCommonLine, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -24,3 +24,10 @@ export class NgtLineSegments extends NgtCommonLine<THREE.LineSegments> {
 
   lineType = THREE.LineSegments;
 }
+
+@NgModule({
+  declarations: [NgtLineSegments],
+  exports: [NgtLineSegments],
+})
+export class NgtLineSegmentsModule {}
+

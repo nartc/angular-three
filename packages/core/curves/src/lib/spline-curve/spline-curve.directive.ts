@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtSplineCurve extends NgtCurve<THREE.SplineCurve> {
 
   curveType = THREE.SplineCurve;
 }
+
+@NgModule({
+  declarations: [NgtSplineCurve],
+  exports: [NgtSplineCurve],
+})
+export class NgtSplineCurveModule {}
+

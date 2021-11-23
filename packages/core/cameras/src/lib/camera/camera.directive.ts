@@ -1,7 +1,7 @@
 // GENERATED
 
 import { NgtCommonCamera, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -29,3 +29,10 @@ export class NgtCamera extends NgtCommonCamera<THREE.Camera> {
 
   cameraType = THREE.Camera;
 }
+
+@NgModule({
+  declarations: [NgtCamera],
+  exports: [NgtCamera],
+})
+export class NgtCameraModule {}
+

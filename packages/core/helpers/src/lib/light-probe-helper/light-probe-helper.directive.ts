@@ -1,7 +1,7 @@
 // GENERATED
 
 import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { LightProbeHelper  } from 'three/examples/jsm/helpers/LightProbeHelper';
 
 @Directive({
@@ -29,3 +29,10 @@ export class NgtLightProbeHelper extends NgtHelper<LightProbeHelper> {
 
   helperType = LightProbeHelper;
 }
+
+@NgModule({
+  declarations: [NgtLightProbeHelper],
+  exports: [NgtLightProbeHelper],
+})
+export class NgtLightProbeHelperModule {}
+

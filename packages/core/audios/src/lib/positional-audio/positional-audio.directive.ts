@@ -1,7 +1,7 @@
 // GENERATED
 
 import { NgtCommonAudio, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -19,8 +19,15 @@ import * as THREE from 'three';
     NGT_OBJECT_3D_CONTROLLER_PROVIDER,
   ],
 })
-export class NgtPositionalAudio extends NgtCommonAudio<THREE.PositionalAudio> {
+export class NgtPositionalAudio extends NgtCommonAudio<PannerNode, THREE.PositionalAudio> {
   
 
   audioType = THREE.PositionalAudio;
 }
+
+@NgModule({
+  declarations: [NgtPositionalAudio],
+  exports: [NgtPositionalAudio],
+})
+export class NgtPositionalAudioModule {}
+

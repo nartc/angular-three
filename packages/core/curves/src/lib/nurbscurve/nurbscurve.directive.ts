@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { NURBSCurve  } from 'three/examples/jsm/curves/NURBSCurve';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtNURBSCurve extends NgtCurve<NURBSCurve> {
 
   curveType = NURBSCurve;
 }
+
+@NgModule({
+  declarations: [NgtNURBSCurve],
+  exports: [NgtNURBSCurve],
+})
+export class NgtNURBSCurveModule {}
+

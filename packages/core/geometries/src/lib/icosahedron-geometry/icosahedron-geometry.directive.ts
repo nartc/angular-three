@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtIcosahedronGeometry extends NgtGeometry<THREE.IcosahedronGeometr
 
   geometryType = THREE.IcosahedronGeometry;
 }
+
+@NgModule({
+  declarations: [NgtIcosahedronGeometry],
+  exports: [NgtIcosahedronGeometry],
+})
+export class NgtIcosahedronGeometryModule {}
+

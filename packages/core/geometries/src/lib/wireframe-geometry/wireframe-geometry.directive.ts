@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtWireframeGeometry extends NgtGeometry<THREE.WireframeGeometry> {
 
   geometryType = THREE.WireframeGeometry;
 }
+
+@NgModule({
+  declarations: [NgtWireframeGeometry],
+  exports: [NgtWireframeGeometry],
+})
+export class NgtWireframeGeometryModule {}
+

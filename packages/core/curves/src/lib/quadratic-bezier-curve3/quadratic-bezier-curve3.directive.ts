@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtQuadraticBezierCurve3 extends NgtCurve<THREE.QuadraticBezierCurv
 
   curveType = THREE.QuadraticBezierCurve3;
 }
+
+@NgModule({
+  declarations: [NgtQuadraticBezierCurve3],
+  exports: [NgtQuadraticBezierCurve3],
+})
+export class NgtQuadraticBezierCurve3Module {}
+

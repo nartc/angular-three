@@ -1,7 +1,7 @@
 // GENERATED
 
 import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { VertexNormalsHelper  } from 'three/examples/jsm/helpers/VertexNormalsHelper';
 
 @Directive({
@@ -29,3 +29,10 @@ export class NgtVertexNormalsHelper extends NgtHelper<VertexNormalsHelper> {
 
   helperType = VertexNormalsHelper;
 }
+
+@NgModule({
+  declarations: [NgtVertexNormalsHelper],
+  exports: [NgtVertexNormalsHelper],
+})
+export class NgtVertexNormalsHelperModule {}
+

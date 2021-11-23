@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtMaterial } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -13,9 +13,16 @@ import * as THREE from 'three';
     }
   ],
 })
-export class NgtMeshDepthMaterial extends NgtMaterial<THREE.MeshDepthMaterial, THREE.MeshDepthMaterialParameters> {
+export class NgtMeshDepthMaterial extends NgtMaterial<THREE.MeshDepthMaterialParameters, THREE.MeshDepthMaterial> {
   
   static ngAcceptInputType_parameters: THREE.MeshDepthMaterialParameters | undefined;
 
   materialType = THREE.MeshDepthMaterial;
 }
+
+@NgModule({
+  declarations: [NgtMeshDepthMaterial],
+  exports: [NgtMeshDepthMaterial],
+})
+export class NgtMeshDepthMaterialModule {}
+

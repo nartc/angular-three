@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtMaterial } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -13,9 +13,16 @@ import * as THREE from 'three';
     }
   ],
 })
-export class NgtPointsMaterial extends NgtMaterial<THREE.PointsMaterial, THREE.PointsMaterialParameters> {
+export class NgtPointsMaterial extends NgtMaterial<THREE.PointsMaterialParameters, THREE.PointsMaterial> {
   
   static ngAcceptInputType_parameters: THREE.PointsMaterialParameters | undefined;
 
   materialType = THREE.PointsMaterial;
 }
+
+@NgModule({
+  declarations: [NgtPointsMaterial],
+  exports: [NgtPointsMaterial],
+})
+export class NgtPointsMaterialModule {}
+

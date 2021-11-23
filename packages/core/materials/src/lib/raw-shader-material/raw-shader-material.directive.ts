@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtMaterial } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { Directive, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -10,12 +10,22 @@ import * as THREE from 'three';
     {
       provide: NgtMaterial,
       useExisting: NgtRawShaderMaterial,
-    }
+    },
   ],
 })
-export class NgtRawShaderMaterial extends NgtMaterial<THREE.RawShaderMaterial, THREE.ShaderMaterialParameters> {
-  
-  static ngAcceptInputType_parameters: THREE.ShaderMaterialParameters | undefined;
+export class NgtRawShaderMaterial extends NgtMaterial<
+  THREE.ShaderMaterialParameters,
+  THREE.RawShaderMaterial
+> {
+  static ngAcceptInputType_parameters:
+    | THREE.ShaderMaterialParameters
+    | undefined;
 
   materialType = THREE.RawShaderMaterial;
 }
+
+@NgModule({
+  declarations: [NgtRawShaderMaterial],
+  exports: [NgtRawShaderMaterial],
+})
+export class NgtRawShaderMaterialModule {}

@@ -1,7 +1,7 @@
 // GENERATED
 
 import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { VertexTangentsHelper  } from 'three/examples/jsm/helpers/VertexTangentsHelper';
 
 @Directive({
@@ -29,3 +29,10 @@ export class NgtVertexTangentsHelper extends NgtHelper<VertexTangentsHelper> {
 
   helperType = VertexTangentsHelper;
 }
+
+@NgModule({
+  declarations: [NgtVertexTangentsHelper],
+  exports: [NgtVertexTangentsHelper],
+})
+export class NgtVertexTangentsHelperModule {}
+

@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { DecalGeometry  } from 'three/examples/jsm/geometries/DecalGeometry';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtDecalGeometry extends NgtGeometry<DecalGeometry> {
 
   geometryType = DecalGeometry;
 }
+
+@NgModule({
+  declarations: [NgtDecalGeometry],
+  exports: [NgtDecalGeometry],
+})
+export class NgtDecalGeometryModule {}
+

@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { ParametricGeometry  } from 'three/examples/jsm/geometries/ParametricGeometry';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtParametricGeometry extends NgtGeometry<ParametricGeometry> {
 
   geometryType = ParametricGeometry;
 }
+
+@NgModule({
+  declarations: [NgtParametricGeometry],
+  exports: [NgtParametricGeometry],
+})
+export class NgtParametricGeometryModule {}
+

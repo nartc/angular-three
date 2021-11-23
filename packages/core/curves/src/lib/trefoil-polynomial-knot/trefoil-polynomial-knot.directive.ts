@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtCurve } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { Curves  } from 'three/examples/jsm/curves/CurveExtras';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtTrefoilPolynomialKnot extends NgtCurve<Curves.TrefoilPolynomialK
 
   curveType = Curves.TrefoilPolynomialKnot;
 }
+
+@NgModule({
+  declarations: [NgtTrefoilPolynomialKnot],
+  exports: [NgtTrefoilPolynomialKnot],
+})
+export class NgtTrefoilPolynomialKnotModule {}
+

@@ -1,7 +1,7 @@
 // GENERATED
 
 import { NgtHelper, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { PositionalAudioHelper  } from 'three/examples/jsm/helpers/PositionalAudioHelper';
 
 @Directive({
@@ -29,3 +29,10 @@ export class NgtPositionalAudioHelper extends NgtHelper<PositionalAudioHelper> {
 
   helperType = PositionalAudioHelper;
 }
+
+@NgModule({
+  declarations: [NgtPositionalAudioHelper],
+  exports: [NgtPositionalAudioHelper],
+})
+export class NgtPositionalAudioHelperModule {}
+

@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { RoundedBoxGeometry  } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtRoundedBoxGeometry extends NgtGeometry<RoundedBoxGeometry> {
 
   geometryType = RoundedBoxGeometry;
 }
+
+@NgModule({
+  declarations: [NgtRoundedBoxGeometry],
+  exports: [NgtRoundedBoxGeometry],
+})
+export class NgtRoundedBoxGeometryModule {}
+

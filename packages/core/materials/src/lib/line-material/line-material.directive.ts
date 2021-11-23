@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtMaterial } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { LineMaterial,LineMaterialParameters  } from 'three/examples/jsm/lines/LineMaterial';
 
 @Directive({
@@ -13,9 +13,16 @@ import { LineMaterial,LineMaterialParameters  } from 'three/examples/jsm/lines/L
     }
   ],
 })
-export class NgtLineMaterial extends NgtMaterial<LineMaterial, LineMaterialParameters> {
+export class NgtLineMaterial extends NgtMaterial<LineMaterialParameters, LineMaterial> {
   
   static ngAcceptInputType_parameters: LineMaterialParameters | undefined;
 
   materialType = LineMaterial;
 }
+
+@NgModule({
+  declarations: [NgtLineMaterial],
+  exports: [NgtLineMaterial],
+})
+export class NgtLineMaterialModule {}
+

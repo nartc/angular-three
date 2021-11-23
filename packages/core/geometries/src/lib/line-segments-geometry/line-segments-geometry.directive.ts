@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtGeometry } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import { LineSegmentsGeometry  } from 'three/examples/jsm/lines/LineSegmentsGeometry';
 
 @Directive({
@@ -23,3 +23,10 @@ export class NgtLineSegmentsGeometry extends NgtGeometry<LineSegmentsGeometry> {
 
   geometryType = LineSegmentsGeometry;
 }
+
+@NgModule({
+  declarations: [NgtLineSegmentsGeometry],
+  exports: [NgtLineSegmentsGeometry],
+})
+export class NgtLineSegmentsGeometryModule {}
+

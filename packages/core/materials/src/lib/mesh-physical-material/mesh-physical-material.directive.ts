@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtMaterial } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -13,9 +13,16 @@ import * as THREE from 'three';
     }
   ],
 })
-export class NgtMeshPhysicalMaterial extends NgtMaterial<THREE.MeshPhysicalMaterial, THREE.MeshPhysicalMaterialParameters> {
+export class NgtMeshPhysicalMaterial extends NgtMaterial<THREE.MeshPhysicalMaterialParameters, THREE.MeshPhysicalMaterial> {
   
   static ngAcceptInputType_parameters: THREE.MeshPhysicalMaterialParameters | undefined;
 
   materialType = THREE.MeshPhysicalMaterial;
 }
+
+@NgModule({
+  declarations: [NgtMeshPhysicalMaterial],
+  exports: [NgtMeshPhysicalMaterial],
+})
+export class NgtMeshPhysicalMaterialModule {}
+

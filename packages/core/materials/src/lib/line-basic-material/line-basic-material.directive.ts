@@ -1,6 +1,6 @@
 // GENERATED
 import { NgtMaterial } from '@angular-three/core';
-import { Directive, Input } from '@angular/core';
+import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -13,9 +13,16 @@ import * as THREE from 'three';
     }
   ],
 })
-export class NgtLineBasicMaterial extends NgtMaterial<THREE.LineBasicMaterial, THREE.LineBasicMaterialParameters> {
+export class NgtLineBasicMaterial extends NgtMaterial<THREE.LineBasicMaterialParameters, THREE.LineBasicMaterial> {
   
   static ngAcceptInputType_parameters: THREE.LineBasicMaterialParameters | undefined;
 
   materialType = THREE.LineBasicMaterial;
 }
+
+@NgModule({
+  declarations: [NgtLineBasicMaterial],
+  exports: [NgtLineBasicMaterial],
+})
+export class NgtLineBasicMaterialModule {}
+
