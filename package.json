@@ -73,7 +73,7 @@
     "eslint-config-prettier": "8.3.0",
     "jest": "27.3.1",
     "jest-preset-angular": "11.0.1",
-    "ng-packagr": "13.0.6",
+    "ng-packagr": "13.0.7",
     "postcss": "8.3.11",
     "postcss-import": "14.0.2",
     "postcss-preset-env": "7.0.1",

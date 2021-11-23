@@ -6,6 +6,8 @@ export * from './lib/canvas.component';
 export * from './lib/primitive/primitive.directive';
 export * from './lib/primitive/primitive.module';
 
+export * from './lib/three/audio.controller';
+export * from './lib/three/audio-watched-controller.di';
 export * from './lib/three/object-3d';
 export * from './lib/three/object-3d.controller';
 export * from './lib/three/object-3d-watched-controller.di';
