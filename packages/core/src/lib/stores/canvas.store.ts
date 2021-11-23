@@ -105,27 +105,6 @@ export class CanvasStore
     );
   }
 
-  readonly setIsOrthographic = this.updater<boolean>(
-    (state, isOrthographic) => ({ ...state, isOrthographic })
-  );
-
-  readonly setIsLinear = this.updater<boolean>((state, isLinear) => ({
-    ...state,
-    isLinear,
-  }));
-
-  readonly setShadows = this.updater<boolean | Partial<THREE.WebGLShadowMap>>(
-    (state, shadows) => ({
-      ...state,
-      shadows,
-    })
-  );
-
-  readonly setAlpha = this.updater<boolean>((state, alpha) => ({
-    ...state,
-    alpha,
-  }));
-
   readonly setSize = this.updater<NgtSize>((state, size) => ({
     ...state,
     internal: { ...state.internal, size },
