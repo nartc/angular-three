@@ -1,15 +1,6 @@
 // GENERATED
 
-import {
-  Directive,
-  EventEmitter,
-  Input,
-  NgZone,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { Directive, EventEmitter, Input, NgZone, Output } from '@angular/core';
 import * as THREE from 'three';
 import type {
   NgtColor,
@@ -84,10 +75,7 @@ import { Controller } from '../utils/controller';
   `,
   exportAs: 'ngtObject3dController',
 })
-export class NgtObject3dController
-  extends Controller
-  implements OnChanges, OnInit
-{
+export class NgtObject3dController extends Controller {
   @Input() name?: string;
   @Input() position?: NgtVector3;
   @Input() rotation?: NgtEuler;
@@ -104,7 +92,7 @@ export class NgtObject3dController
   @Input() appendMode: 'immediate' | 'root' = 'immediate';
   @Input() appendTo?: THREE.Object3D;
 
-  @Input() controller?: NgtObject3dController;
+  @Input() object3dController?: NgtObject3dController;
 
   // events
   @Output() click = new EventEmitter<NgtEvent<MouseEvent>>();
@@ -121,51 +109,44 @@ export class NgtObject3dController
   @Output() pointercancel = new EventEmitter<NgtEvent<PointerEvent>>();
   @Output() wheel = new EventEmitter<NgtEvent<WheelEvent>>();
 
-  constructor(private ngZone: NgZone) {
-    super();
+  get props(): string[] {
+    return [
+      'name',
+      'position',
+      'rotation',
+      'quaternion',
+      'scale',
+      'color',
+      'userData',
+      'dispose',
+      'castShadow',
+      'receiveShadow',
+      'visible',
+      'matrixAutoUpdate',
+      'appendMode',
+      'appendTo',
+      'click',
+      'contextmenu',
+      'dblclick',
+      'pointerup',
+      'pointerdown',
+      'pointerover',
+      'pointerout',
+      'pointerenter',
+      'pointerleave',
+      'pointermove',
+      'pointermissed',
+      'pointercancel',
+      'wheel',
+    ];
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.controller) {
-      this.controller.ngOnChanges(changes);
-    } else {
-      super.ngOnChanges(changes);
-    }
+  get controller(): Controller | undefined {
+    return this.object3dController;
   }
 
-  ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      if (this.controller) {
-        this.name = this.controller.name;
-        this.position = this.controller.position;
-        this.rotation = this.controller.rotation;
-        this.quaternion = this.controller.quaternion;
-        this.scale = this.controller.scale;
-        this.color = this.controller.color;
-        this.userData = this.controller.userData;
-        this.dispose = this.controller.dispose;
-        this.castShadow = this.controller.castShadow;
-        this.receiveShadow = this.controller.receiveShadow;
-        this.visible = this.controller.visible;
-        this.matrixAutoUpdate = this.controller.matrixAutoUpdate;
-        this.appendMode = this.controller.appendMode;
-        this.appendTo = this.controller.appendTo;
-
-        this.click = this.controller.click;
-        this.contextmenu = this.controller.contextmenu;
-        this.dblclick = this.controller.dblclick;
-        this.pointerup = this.controller.pointerup;
-        this.pointerdown = this.controller.pointerdown;
-        this.pointerover = this.controller.pointerover;
-        this.pointerout = this.controller.pointerout;
-        this.pointerenter = this.controller.pointerenter;
-        this.pointerleave = this.controller.pointerleave;
-        this.pointermove = this.controller.pointermove;
-        this.pointermissed = this.controller.pointermissed;
-        this.pointercancel = this.controller.pointercancel;
-        this.wheel = this.controller.wheel;
-      }
-    });
+  constructor(ngZone: NgZone) {
+    super(ngZone);
   }
 
   get object3dProps() {

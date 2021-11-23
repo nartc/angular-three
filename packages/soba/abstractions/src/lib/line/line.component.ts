@@ -35,7 +35,7 @@ import { NgtSobaLineController } from './line.controller';
     <ngt-line2
       (ready)="sobaLineController.onLineReady($event)"
       (animateReady)="sobaLineController.animateReady.emit($event)"
-      [controller]="object3dController"
+      [object3dController]="object3dController"
     >
       <ngt-line-geometry (ready)="onGeometryReady($event)"></ngt-line-geometry>
       <ngt-line-material

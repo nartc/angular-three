@@ -29,7 +29,7 @@ import { NgtSobaLineController } from '../line/line.controller';
   template: `
     <ngt-soba-line
       [points]="points"
-      [controller]="object3dController"
+      [object3dController]="object3dController"
       [sobaLineController]="sobaLineController"
     ></ngt-soba-line>
   `,

@@ -32,7 +32,7 @@ import { NgtSobaImageShaderMaterial } from './image-shader-material.directive';
     <ng-container *ngIf="texture$ | async as texture">
       <ngt-mesh
         [scale]="scale"
-        [controller]="object3dController"
+        [object3dController]="object3dController"
         (ready)="ready.emit($event)"
         (animateReady)="animateReady.emit($event)"
       >
