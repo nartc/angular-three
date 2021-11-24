@@ -26,12 +26,12 @@ import * as THREE from 'three';
       (ready)="ready.emit($event)"
       (animateReady)="animateReady.emit($event)"
       [object3dController]="object3dController"
+      [material]="material?.material"
     >
       <ngt-plane-geometry *ngIf="args;else withoutArgs" [args]="args"></ngt-plane-geometry>
       <ng-template #withoutArgs>
         <ngt-plane-geometry></ngt-plane-geometry>
       </ng-template>
-      <ng-content></ng-content>
     </ngt-mesh>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

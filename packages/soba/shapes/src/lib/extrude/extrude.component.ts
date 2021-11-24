@@ -26,12 +26,12 @@ import * as THREE from 'three';
       (ready)="ready.emit($event)"
       (animateReady)="animateReady.emit($event)"
       [object3dController]="object3dController"
+      [material]="material?.material"
     >
       <ngt-extrude-geometry *ngIf="args;else withoutArgs" [args]="args"></ngt-extrude-geometry>
       <ng-template #withoutArgs>
         <ngt-extrude-geometry></ngt-extrude-geometry>
       </ng-template>
-      <ng-content></ng-content>
     </ngt-mesh>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
