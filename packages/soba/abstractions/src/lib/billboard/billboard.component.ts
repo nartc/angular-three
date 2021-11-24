@@ -1,11 +1,11 @@
 import {
   NGT_OBJECT_3D_CONTROLLER_PROVIDER,
   NGT_OBJECT_3D_WATCHED_CONTROLLER,
+  NgtAnimationReady,
   NgtCoreModule,
   NgtObject3dController,
-  NgtRender,
 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
+import { NgtGroup, NgtGroupModule } from '@angular-three/core/group';
 import { NgtSobaExtender } from '@angular-three/soba';
 import {
   ChangeDetectionStrategy,
@@ -13,18 +13,17 @@ import {
   Inject,
   Input,
   NgModule,
+  ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-  selector: 'ngt-soba-bill-board',
+  selector: 'ngt-soba-billboard',
   exportAs: 'ngtSobaBillboard',
   template: `
     <ngt-group
-      (ready)="ready.emit($event); local = $event"
-      (animateReady)="
-        animateReady.emit($event); onAnimateReady($event.renderState)
-      "
+      (ready)="ready.emit($event)"
+      (animateReady)="animateReady.emit($event); onAnimateReady($event)"
       [object3dController]="object3dController"
     >
       <ng-content></ng-content>
@@ -39,7 +38,7 @@ export class NgtSobaBillboard extends NgtSobaExtender<THREE.Group> {
   @Input() lockY = false;
   @Input() lockZ = false;
 
-  local?: THREE.Group;
+  @ViewChild(NgtGroup, { static: true }) group!: NgtGroup;
 
   constructor(
     @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
@@ -48,19 +47,22 @@ export class NgtSobaBillboard extends NgtSobaExtender<THREE.Group> {
     super();
   }
 
-  onAnimateReady({ camera }: NgtRender) {
-    if (!this.follow || !this.local) return;
+  onAnimateReady({
+    animateObject,
+    renderState: { camera },
+  }: NgtAnimationReady<THREE.Group>) {
+    if (!this.follow) return;
 
     // save previous rotation in case we're locking an axis
-    const prevRotation = this.local.rotation.clone();
+    const prevRotation = animateObject.rotation.clone();
 
     // always face the camera
-    this.local.quaternion.copy(camera.quaternion);
+    animateObject.quaternion.copy(camera.quaternion);
 
     // readjust any axis that is locked
-    if (this.lockX) this.local.rotation.x = prevRotation.x;
-    if (this.lockY) this.local.rotation.y = prevRotation.y;
-    if (this.lockZ) this.local.rotation.z = prevRotation.z;
+    if (this.lockX) animateObject.rotation.x = prevRotation.x;
+    if (this.lockY) animateObject.rotation.y = prevRotation.y;
+    if (this.lockZ) animateObject.rotation.z = prevRotation.z;
   }
 }
 
