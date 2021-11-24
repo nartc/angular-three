@@ -1,1 +1,21 @@
-export const additionalSobaShapesSelectors = ['ngt-soba-plane'];
+// GENERATED
+export const additionalSobaShapesSelectors = [
+  'ngt-soba-plane',
+  'ngt-soba-box',
+  'ngt-soba-cylinder',
+  'ngt-soba-cone',
+  'ngt-soba-circle',
+  'ngt-soba-sphere',
+  'ngt-soba-tube',
+  'ngt-soba-torus',
+  'ngt-soba-tetrahedron',
+  'ngt-soba-ring',
+  'ngt-soba-polyhedron',
+  'ngt-soba-octahedron',
+  'ngt-soba-dodecahedron',
+  'ngt-soba-icosahedron',
+  'ngt-soba-extrude',
+  'ngt-soba-lathe',
+  'ngt-soba-parametric',
+  'ngt-soba-torus-knot',
+];

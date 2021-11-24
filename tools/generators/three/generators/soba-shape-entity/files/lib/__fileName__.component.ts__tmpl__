@@ -15,7 +15,7 @@ import {
   Input,
   NgModule,
 } from '@angular/core';
-<% if (isExample) { %>import { <%= geometryClassName %> } from 'three/examples/jsm/geometries/<%= geometryClassName %>'<% } else { %>import * as THREE from 'three';<% } %>
+<% if (isExample) { %>import { <%= geometryClassName %> } from 'three/examples/jsm/geometries/<%= geometryClassName %>';<% } else { %>import * as THREE from 'three';<% } %>
 
 @Component({
   selector: 'ngt-soba-<%= fileName %>',

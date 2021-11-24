@@ -5,7 +5,7 @@ import {
   NgtCoreModule,
   NgtObject3dController,
 } from '@angular-three/core';
-import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
+import { NgtSphereGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaExtender } from '@angular-three/soba';
 import {
@@ -18,23 +18,23 @@ import {
 import * as THREE from 'three';
 
 @Component({
-  selector: 'ngt-soba-plane',
-  exportAs: 'ngtSobaPlane',
+  selector: 'ngt-soba-sphere',
+  exportAs: 'ngtSobaSphere',
   template: `
     <ngt-mesh
       (ready)="ready.emit($event)"
       (animateReady)="animateReady.emit($event)"
       [object3dController]="object3dController"
     >
-      <ngt-plane-geometry [args]="args"></ngt-plane-geometry>
+      <ngt-sphere-geometry [args]="args"></ngt-sphere-geometry>
       <ng-content></ng-content>
     </ngt-mesh>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NGT_OBJECT_3D_CONTROLLER_PROVIDER],
 })
-export class NgtSobaPlane extends NgtSobaExtender<THREE.Mesh> {
-  @Input() args?: ConstructorParameters<typeof THREE.PlaneGeometry>;
+export class NgtSobaSphere extends NgtSobaExtender<THREE.Mesh> {
+  @Input() args?: ConstructorParameters<typeof THREE.SphereGeometry>;
 
   constructor(
     @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
@@ -45,8 +45,8 @@ export class NgtSobaPlane extends NgtSobaExtender<THREE.Mesh> {
 }
 
 @NgModule({
-  declarations: [NgtSobaPlane],
-  exports: [NgtSobaPlane],
-  imports: [NgtCoreModule, NgtMeshModule, NgtPlaneGeometryModule],
+  declarations: [NgtSobaSphere],
+  exports: [NgtSobaSphere],
+  imports: [NgtCoreModule, NgtMeshModule, NgtSphereGeometryModule],
 })
-export class NgtSobaPlaneModule {}
+export class NgtSobaSphereModule {}
