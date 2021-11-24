@@ -78,7 +78,7 @@ export class BoxComponent {
 
 @NgModule({
   declarations: [BananasComponent, BoxComponent],
-  exports: [BananasComponent],
+  exports: [BananasComponent, BoxComponent],
   imports: [
     NgtCoreModule,
     NgtMeshModule,
