@@ -21,6 +21,7 @@ export abstract class Controller implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (this.controller) {
       this.controller.ngOnChanges(changes);
+      this.change$.next(changes);
     } else {
       this.change$.next(changes);
     }

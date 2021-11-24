@@ -55,10 +55,11 @@ export abstract class NgtObject3d<
   @Output() ready = this.object3d$.pipe(filter(Boolean)) as Observable<TObject>;
 
   private readonly changesSubscription?: Subscription;
+  protected object3dController: NgtObject3dController;
 
   constructor(
     @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
-    protected object3dController: NgtObject3dController,
+    object3dController: NgtObject3dController,
     protected canvasStore: CanvasStore,
     protected instancesStore: InstancesStore,
     protected eventsStore: EventsStore,
@@ -69,15 +70,25 @@ export abstract class NgtObject3d<
     protected parentObjectDirective?: NgtObject3d
   ) {
     super(animationStore, ngZone);
+    // Wrapper objects can pass in the whole object3dController to avoid
+    // inputs drilling. Here, we grab the correct object3dController to handle
+    this.object3dController =
+      object3dController.object3dController ?? object3dController;
 
-    this.changesSubscription = object3dController.change$.subscribe(() => {
-      if (this.object3d) {
-        this.applyCustomProps();
+    this.changesSubscription = object3dController.change$.subscribe(
+      (changes) => {
+        if (changes.object3dController) {
+          this.object3dController = object3dController.object3dController!;
+        }
+
+        if (this.object3d) {
+          this.applyCustomProps();
+        }
+        if (this.inputChangeHandler) {
+          this.inputChangeHandler();
+        }
       }
-      if (this.inputChangeHandler) {
-        this.inputChangeHandler();
-      }
-    });
+    );
   }
 
   ngOnChanges() {
@@ -234,7 +245,8 @@ export abstract class NgtObject3d<
                 'receiveShadow',
                 'visible',
                 'matrixAutoUpdate',
-              ].includes(inputName) // skip 12 common inputs
+                'object3dController',
+              ].includes(inputName) // skip 13 common inputs
             ) {
               continue;
             }
@@ -261,19 +273,23 @@ export abstract class NgtObject3d<
   }
 
   private appendToParent(): void {
-    if (this.object3dController.appendTo) {
-      this.object3dController.appendTo.add(this.object3d);
-      return;
-    }
+    // Schedule this in the next loop to allow for all appendTo's to settle
+    // TODO: find better way
+    setTimeout(() => {
+      if (this.object3dController.appendTo) {
+        this.object3dController.appendTo.add(this.object3d);
+        return;
+      }
 
-    if (this.object3dController.appendMode === 'root') {
-      this.addToScene();
-      return;
-    }
+      if (this.object3dController.appendMode === 'root') {
+        this.addToScene();
+        return;
+      }
 
-    if (this.object3dController.appendMode === 'immediate') {
-      this.addToParent();
-    }
+      if (this.object3dController.appendMode === 'immediate') {
+        this.addToParent();
+      }
+    });
   }
 
   ngOnDestroy(): void {
