@@ -1,6 +1,6 @@
 // GENERATED
 
-import { NgtCommonAudio, NgtObject3d, NGT_OBJECT_3D_CONTROLLER_PROVIDER } from '@angular-three/core';
+import { NgtCommonAudio, NgtObject3d, NGT_AUDIO_CONTROLLER_PROVIDER } from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -16,7 +16,7 @@ import * as THREE from 'three';
       provide: NgtObject3d,
       useExisting: NgtAudio,
     },
-    NGT_OBJECT_3D_CONTROLLER_PROVIDER,
+    NGT_AUDIO_CONTROLLER_PROVIDER,
   ],
 })
 export class NgtAudio extends NgtCommonAudio<GainNode, THREE.Audio> {

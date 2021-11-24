@@ -9,8 +9,8 @@ import sobaShapeEntityGenerator from './generators/soba-shape-entity/soba-shape-
 export default async function (tree: Tree) {
   await Promise.all([
     sobaShapeEntityGenerator(tree),
-    controlEntityGenerator(tree),
     coreEntityGenerator(tree),
+    controlEntityGenerator(tree),
     passEntityGenerator(tree),
     physicBodyEntityGenerator(tree),
     physicConstraintEntityGenerator(tree),

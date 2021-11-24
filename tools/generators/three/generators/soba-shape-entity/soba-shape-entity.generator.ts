@@ -53,7 +53,7 @@ async function sobaShapeEntityGenerator(tree: Tree) {
     join('tools', 'generators', 'three', 'generators', 'object-3d'),
     {
       tmpl: '',
-      selectors: sobaShapesIndex.map((fileName) => `ngt-soba-${fileName}`),
+      selectors: sobaShapesIndex.map((fileName) => `soba-${fileName}`),
     }
   );
 }
