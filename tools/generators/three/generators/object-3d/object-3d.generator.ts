@@ -1,5 +1,6 @@
 import { generateFiles, getWorkspaceLayout, Tree } from '@nrwl/devkit';
 import { join } from 'path';
+import { additionalSobaShapesSelectors } from './soba-shapes-selectors';
 
 const additionalSobaSelectors = [
   'ngt-soba-image',
@@ -8,6 +9,7 @@ const additionalSobaSelectors = [
   'ngt-soba-quadratic-bezier-line',
   'ngt-soba-cubic-bezier-line',
   'ngt-soba-positional-audio',
+  'ngt-soba-billboard',
 ] as const;
 
 async function object3dGenerator(tree: Tree, derivedObject3Ds: string[]) {
@@ -17,12 +19,14 @@ async function object3dGenerator(tree: Tree, derivedObject3Ds: string[]) {
     join(__dirname, 'files'),
     join(libsDir, 'core', 'src', 'lib', 'three'),
     {
-      selectors: [...derivedObject3Ds, ...additionalSobaSelectors].map(
-        (selector, index) => ({
-          selector,
-          isLast: index === derivedObject3Ds.length - 1,
-        })
-      ),
+      selectors: [
+        ...derivedObject3Ds,
+        ...additionalSobaSelectors,
+        ...additionalSobaShapesSelectors,
+      ].map((selector, index) => ({
+        selector,
+        isLast: index === derivedObject3Ds.length - 1,
+      })),
       tmpl: '',
     }
   );
