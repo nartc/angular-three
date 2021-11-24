@@ -27,6 +27,7 @@ async function sobaShapeEntityGenerator(tree: Tree) {
     }
 
     generateFiles(tree, join(__dirname, 'files', 'lib'), sobaShapeDir, {
+      ...sobaShape,
       ...normalizedNames,
       tmpl: '',
       geometryClassName: normalizedGeometryNames.className,
@@ -49,7 +50,7 @@ async function sobaShapeEntityGenerator(tree: Tree) {
   generateFiles(
     tree,
     join(__dirname, 'files', 'selectors'),
-    join(__dirname, '../', 'object-3d'),
+    join('tools', 'generators', 'three', 'generators', 'object-3d'),
     {
       tmpl: '',
       selectors: sobaShapesIndex.map((fileName) => `ngt-soba-${fileName}`),

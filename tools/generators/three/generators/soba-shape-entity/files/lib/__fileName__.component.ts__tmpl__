@@ -15,7 +15,7 @@ import {
   Input,
   NgModule,
 } from '@angular/core';
-import * as THREE from 'three';
+<% if (isExample) { %>import { <%= geometryClassName %> } from 'three/examples/jsm/geometries/<%= geometryClassName %>'<% } else { %>import * as THREE from 'three';<% } %>
 
 @Component({
   selector: 'ngt-soba-<%= fileName %>',
@@ -34,7 +34,7 @@ import * as THREE from 'three';
   providers: [NGT_OBJECT_3D_CONTROLLER_PROVIDER],
 })
 export class NgtSoba<%= className %> extends NgtSobaExtender<THREE.Mesh> {
-  @Input() args?: ConstructorParameters<typeof THREE.<%= geometryClassName %>>;
+  @Input() args?: ConstructorParameters<typeof <% if ( isExample) { %><%= geometryClassName %><% } else { %>THREE.<%= geometryClassName %><% } %>>;
 
   constructor(
     @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
