@@ -27,13 +27,14 @@ import { SobaPositionalAudioStore } from './positional-audio.store';
   exportAs: 'ngtSobaPositionalAudio',
   template: `
     <ngt-positional-audio
+      *ngIf="listener$ | async as listener"
       (ready)="onAudioReady($event)"
       (animateReady)="animateReady.emit($event)"
-      [listener]="listener$ | async"
+      [listener]="listener"
       [object3dController]="object3dController"
       [audioController]="audioController"
     >
-      <ngt-content></ngt-content>
+      <ng-content></ng-content>
     </ngt-positional-audio>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
