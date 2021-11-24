@@ -8,6 +8,7 @@ import {
 import { NgtTorusKnotGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaExtender } from '@angular-three/soba';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -50,6 +51,6 @@ export class NgtSobaTorusKnot extends NgtSobaExtender<THREE.Mesh> {
 @NgModule({
   declarations: [NgtSobaTorusKnot],
   exports: [NgtSobaTorusKnot],
-  imports: [NgtCoreModule, NgtMeshModule, NgtTorusKnotGeometryModule],
+  imports: [CommonModule, NgtCoreModule, NgtMeshModule, NgtTorusKnotGeometryModule],
 })
 export class NgtSobaTorusKnotModule {}

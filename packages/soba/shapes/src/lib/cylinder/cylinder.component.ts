@@ -8,6 +8,7 @@ import {
 import { NgtCylinderGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaExtender } from '@angular-three/soba';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -50,6 +51,6 @@ export class NgtSobaCylinder extends NgtSobaExtender<THREE.Mesh> {
 @NgModule({
   declarations: [NgtSobaCylinder],
   exports: [NgtSobaCylinder],
-  imports: [NgtCoreModule, NgtMeshModule, NgtCylinderGeometryModule],
+  imports: [CommonModule, NgtCoreModule, NgtMeshModule, NgtCylinderGeometryModule],
 })
 export class NgtSobaCylinderModule {}

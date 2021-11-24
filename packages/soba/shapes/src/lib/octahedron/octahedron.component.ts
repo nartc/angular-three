@@ -8,6 +8,7 @@ import {
 import { NgtOctahedronGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaExtender } from '@angular-three/soba';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -50,6 +51,6 @@ export class NgtSobaOctahedron extends NgtSobaExtender<THREE.Mesh> {
 @NgModule({
   declarations: [NgtSobaOctahedron],
   exports: [NgtSobaOctahedron],
-  imports: [NgtCoreModule, NgtMeshModule, NgtOctahedronGeometryModule],
+  imports: [CommonModule, NgtCoreModule, NgtMeshModule, NgtOctahedronGeometryModule],
 })
 export class NgtSobaOctahedronModule {}

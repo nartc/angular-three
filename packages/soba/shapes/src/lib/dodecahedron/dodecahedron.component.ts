@@ -8,6 +8,7 @@ import {
 import { NgtDodecahedronGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaExtender } from '@angular-three/soba';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -50,6 +51,6 @@ export class NgtSobaDodecahedron extends NgtSobaExtender<THREE.Mesh> {
 @NgModule({
   declarations: [NgtSobaDodecahedron],
   exports: [NgtSobaDodecahedron],
-  imports: [NgtCoreModule, NgtMeshModule, NgtDodecahedronGeometryModule],
+  imports: [CommonModule, NgtCoreModule, NgtMeshModule, NgtDodecahedronGeometryModule],
 })
 export class NgtSobaDodecahedronModule {}

@@ -8,6 +8,7 @@ import {
 import { NgtParametricGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaExtender } from '@angular-three/soba';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -50,6 +51,6 @@ export class NgtSobaParametric extends NgtSobaExtender<THREE.Mesh> {
 @NgModule({
   declarations: [NgtSobaParametric],
   exports: [NgtSobaParametric],
-  imports: [NgtCoreModule, NgtMeshModule, NgtParametricGeometryModule],
+  imports: [CommonModule, NgtCoreModule, NgtMeshModule, NgtParametricGeometryModule],
 })
 export class NgtSobaParametricModule {}

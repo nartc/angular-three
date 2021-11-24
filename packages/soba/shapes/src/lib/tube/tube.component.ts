@@ -8,6 +8,7 @@ import {
 import { NgtTubeGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaExtender } from '@angular-three/soba';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -50,6 +51,6 @@ export class NgtSobaTube extends NgtSobaExtender<THREE.Mesh> {
 @NgModule({
   declarations: [NgtSobaTube],
   exports: [NgtSobaTube],
-  imports: [NgtCoreModule, NgtMeshModule, NgtTubeGeometryModule],
+  imports: [CommonModule, NgtCoreModule, NgtMeshModule, NgtTubeGeometryModule],
 })
 export class NgtSobaTubeModule {}

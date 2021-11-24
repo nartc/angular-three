@@ -8,6 +8,7 @@ import {
 import { NgtCircleGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaExtender } from '@angular-three/soba';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -50,6 +51,6 @@ export class NgtSobaCircle extends NgtSobaExtender<THREE.Mesh> {
 @NgModule({
   declarations: [NgtSobaCircle],
   exports: [NgtSobaCircle],
-  imports: [NgtCoreModule, NgtMeshModule, NgtCircleGeometryModule],
+  imports: [CommonModule, NgtCoreModule, NgtMeshModule, NgtCircleGeometryModule],
 })
 export class NgtSobaCircleModule {}
