@@ -50,6 +50,15 @@ export class SobaPositionalAudioStore extends EnhancedComponentStore<SobaPositio
     super(initialSobaPositionalAudioState);
   }
 
+  readonly initEffect = this.effect<boolean>((autoplay$) =>
+    autoplay$.pipe(
+      tap((autoplay) => {
+        this.initListenerEffect(autoplay);
+        this.changesEffect(this.changes$);
+      })
+    )
+  );
+
   readonly changesEffect = this.effect<{
     buffer: AudioBuffer;
     camera: NgtCamera | undefined;
@@ -71,7 +80,7 @@ export class SobaPositionalAudioStore extends EnhancedComponentStore<SobaPositio
     )
   );
 
-  readonly initEffect = this.effect<boolean>((autoplay$) =>
+  readonly initListenerEffect = this.effect<boolean>((autoplay$) =>
     autoplay$.pipe(
       withLatestFrom(
         this.canvasStore.selectors.camera$,

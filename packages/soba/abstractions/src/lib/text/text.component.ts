@@ -30,10 +30,9 @@ import { NgtSobaTextContent } from './text-content.directive';
   exportAs: 'ngtSobaText',
   template: `
     <ng-container *ngIf="object3d">
-      <ngt-primitive
-        [object]="object3d"
-        (ready)="onTroikaTextReady($event)"
-      ></ngt-primitive>
+      <ngt-primitive [object]="object3d" (ready)="onTroikaTextReady($event)">
+        <ng-content></ng-content>
+      </ngt-primitive>
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

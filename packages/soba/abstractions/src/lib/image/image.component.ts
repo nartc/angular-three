@@ -1,24 +1,22 @@
 import {
   NGT_OBJECT_3D_CONTROLLER_PROVIDER,
   NGT_OBJECT_3D_WATCHED_CONTROLLER,
-  NgtAnimationReady,
   NgtColor,
   NgtCoreModule,
   NgtObject3dController,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtSobaExtender } from '@angular-three/soba';
 import { TextureLoaderService } from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   Inject,
   Input,
   NgModule,
   OnChanges,
-  Output,
   SimpleChanges,
 } from '@angular/core';
 import { Observable, tap } from 'rxjs';
@@ -49,7 +47,10 @@ import { NgtSobaImageShaderMaterial } from './image-shader-material.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NGT_OBJECT_3D_CONTROLLER_PROVIDER],
 })
-export class NgtSobaImage implements OnChanges {
+export class NgtSobaImage
+  extends NgtSobaExtender<THREE.Mesh>
+  implements OnChanges
+{
   @Input() segments?: number;
   @Input() scale?: number;
   @Input() color?: NgtColor;
@@ -64,9 +65,6 @@ export class NgtSobaImage implements OnChanges {
     );
   }
 
-  @Output() ready = new EventEmitter<THREE.Mesh>();
-  @Output() animateReady = new EventEmitter<NgtAnimationReady<THREE.Mesh>>();
-
   planeBounds?: [number, number];
   imageBounds?: [number, number];
 
@@ -76,7 +74,9 @@ export class NgtSobaImage implements OnChanges {
     private textureLoaderService: TextureLoaderService,
     @Inject(NGT_OBJECT_3D_WATCHED_CONTROLLER)
     public object3dController: NgtObject3dController
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     this.planeBounds = Array.isArray(this.scale)

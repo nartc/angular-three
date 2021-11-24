@@ -5,4 +5,4 @@ import { NgtGroup } from './group.directive';
   declarations: [NgtGroup],
   exports: [NgtGroup],
 })
-export class GroupModule {}
+export class NgtGroupModule {}

@@ -11,3 +11,7 @@ export * from './lib/line/line.controller';
 export * from './lib/line/line-watched-controller.di';
 export * from './lib/quadratic-bezier-line/quadratic-bezier-line.component';
 export * from './lib/cubic-bezier-line/cubic-bezier-line.component';
+
+export * from './lib/positional-audio/positional-audio.component';
+
+export * from './lib/billboard/billboard.component';

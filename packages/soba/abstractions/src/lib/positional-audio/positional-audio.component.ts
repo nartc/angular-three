@@ -2,24 +2,22 @@ import {
   NGT_AUDIO_CONTROLLER_PROVIDER,
   NGT_AUDIO_WATCHED_CONTROLLER,
   NGT_OBJECT_3D_WATCHED_CONTROLLER,
-  NgtAnimationReady,
   NgtAudioController,
   NgtCoreModule,
   NgtObject3dController,
 } from '@angular-three/core';
 import { NgtPositionalAudioModule } from '@angular-three/core/audios';
+import { NgtSobaExtender } from '@angular-three/soba';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   Inject,
   Input,
   NgModule,
   NgZone,
   OnDestroy,
   OnInit,
-  Output,
 } from '@angular/core';
 import * as THREE from 'three';
 import { SobaPositionalAudioStore } from './positional-audio.store';
@@ -34,12 +32,17 @@ import { SobaPositionalAudioStore } from './positional-audio.store';
       [listener]="listener$ | async"
       [object3dController]="object3dController"
       [audioController]="audioController"
-    ></ngt-positional-audio>
+    >
+      <ngt-content></ngt-content>
+    </ngt-positional-audio>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NGT_AUDIO_CONTROLLER_PROVIDER, SobaPositionalAudioStore],
 })
-export class NgtSobaPositionalAudio implements OnInit, OnDestroy {
+export class NgtSobaPositionalAudio
+  extends NgtSobaExtender<THREE.PositionalAudio>
+  implements OnInit, OnDestroy
+{
   @Input() set url(v: string) {
     this.sobaPositionalAudioStore.updaters.setUrl(v);
   }
@@ -52,11 +55,6 @@ export class NgtSobaPositionalAudio implements OnInit, OnDestroy {
     this.sobaPositionalAudioStore.updaters.setLoop(v);
   }
 
-  @Output() ready = new EventEmitter<THREE.PositionalAudio>();
-  @Output() animateReady = new EventEmitter<
-    NgtAnimationReady<THREE.PositionalAudio>
-  >();
-
   readonly listener$ = this.sobaPositionalAudioStore.selectors.listener$;
 
   constructor(
@@ -66,14 +64,13 @@ export class NgtSobaPositionalAudio implements OnInit, OnDestroy {
     public audioController: NgtAudioController,
     private ngZone: NgZone,
     private sobaPositionalAudioStore: SobaPositionalAudioStore
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.sobaPositionalAudioStore.initEffect(
       this.audioController.autoplay || false
-    );
-    this.sobaPositionalAudioStore.changesEffect(
-      this.sobaPositionalAudioStore.changes$
     );
   }
 
