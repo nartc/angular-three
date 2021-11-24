@@ -183,7 +183,8 @@
       "@angular-three/soba/abstractions": [
         "packages/soba/abstractions/src/index.ts"
       ],
-      "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"]
+      "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"],
+      "@angular-three/soba/shapes": ["packages/soba/shapes/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
