@@ -10,7 +10,7 @@ import { NgtObject3dMaterialGeometry } from './object-3d-material-geometry';
 export abstract class NgtCommonMesh<
   TMesh extends THREE.Mesh = THREE.Mesh
 > extends NgtObject3dMaterialGeometry<TMesh> {
-  @ContentChildren(NgtMaterial) set materialDirectives(
+  @ContentChildren(NgtMaterial, { descendants: true }) set materialDirectives(
     v: QueryList<NgtMaterial>
   ) {
     if (this.material == null && v) {
