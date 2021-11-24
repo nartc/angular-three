@@ -1,3 +1,10 @@
+## [2.0.0-beta.8](https://github.com/nartc/angular-three/compare/2.0.0-beta.7...2.0.0-beta.8) (2021-11-24)
+
+
+### Bug Fixes
+
+* **soba:** readd shapes ngPackage ([7326c94](https://github.com/nartc/angular-three/commit/7326c94010fbb27083fdc272570a7f9cbe85bd38))
+
 ## [2.0.0-beta.7](https://github.com/nartc/angular-three/compare/2.0.0-beta.6...2.0.0-beta.7) (2021-11-24)
 
 
