@@ -26,7 +26,10 @@ import * as THREE from 'three';
       (animateReady)="animateReady.emit($event)"
       [object3dController]="object3dController"
     >
-      <ngt-icosahedron-geometry [args]="args"></ngt-icosahedron-geometry>
+      <ngt-icosahedron-geometry *ngIf="args;else withoutArgs" [args]="args"></ngt-icosahedron-geometry>
+      <ng-template #withoutArgs>
+        <ngt-icosahedron-geometry></ngt-icosahedron-geometry>
+      </ng-template>
       <ng-content></ng-content>
     </ngt-mesh>
   `,

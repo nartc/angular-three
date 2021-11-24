@@ -26,7 +26,10 @@ import * as THREE from 'three';
       (animateReady)="animateReady.emit($event)"
       [object3dController]="object3dController"
     >
-      <ngt-box-geometry [args]="args"></ngt-box-geometry>
+      <ngt-box-geometry *ngIf="args;else withoutArgs" [args]="args"></ngt-box-geometry>
+      <ng-template #withoutArgs>
+        <ngt-box-geometry></ngt-box-geometry>
+      </ng-template>
       <ng-content></ng-content>
     </ngt-mesh>
   `,

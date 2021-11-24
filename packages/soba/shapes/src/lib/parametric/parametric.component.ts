@@ -26,7 +26,10 @@ import { ParametricGeometry } from 'three/examples/jsm/geometries/ParametricGeom
       (animateReady)="animateReady.emit($event)"
       [object3dController]="object3dController"
     >
-      <ngt-parametric-geometry [args]="args"></ngt-parametric-geometry>
+      <ngt-parametric-geometry *ngIf="args;else withoutArgs" [args]="args"></ngt-parametric-geometry>
+      <ng-template #withoutArgs>
+        <ngt-parametric-geometry></ngt-parametric-geometry>
+      </ng-template>
       <ng-content></ng-content>
     </ngt-mesh>
   `,

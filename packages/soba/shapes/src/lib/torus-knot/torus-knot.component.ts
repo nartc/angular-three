@@ -26,7 +26,10 @@ import * as THREE from 'three';
       (animateReady)="animateReady.emit($event)"
       [object3dController]="object3dController"
     >
-      <ngt-torus-knot-geometry [args]="args"></ngt-torus-knot-geometry>
+      <ngt-torus-knot-geometry *ngIf="args;else withoutArgs" [args]="args"></ngt-torus-knot-geometry>
+      <ng-template #withoutArgs>
+        <ngt-torus-knot-geometry></ngt-torus-knot-geometry>
+      </ng-template>
       <ng-content></ng-content>
     </ngt-mesh>
   `,
