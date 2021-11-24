@@ -1,3 +1,33 @@
+## [2.0.0-beta.7](https://github.com/nartc/angular-three/compare/2.0.0-beta.6...2.0.0-beta.7) (2021-11-24)
+
+
+### Features
+
+* add soba shapes generator ([9eaaa8d](https://github.com/nartc/angular-three/commit/9eaaa8dbf5159994fd1cd58672b332df75ab7969))
+* **soba:** add all Shapes ([1499d09](https://github.com/nartc/angular-three/commit/1499d0983fe3c23f62b7ad8140b6328929cfe6c2))
+* **soba:** add Billboard ([320d4ed](https://github.com/nartc/angular-three/commit/320d4ed44f3f830c014e999d0c13f842c7087024))
+* **soba:** init shapes ([ff6b141](https://github.com/nartc/angular-three/commit/ff6b14166f4d32daba09a4146e143d8347d78c84))
+
+
+### Bug Fixes
+
+* adjust generators ([7aff31f](https://github.com/nartc/angular-three/commit/7aff31f7b99c9799c988540503d8ba59a671c206))
+* adjust soba shapes selectors generator ([125b491](https://github.com/nartc/angular-three/commit/125b49189d93406ffca4cb6895709b3ddf9e4f0f))
+* adjust soba template with ngIf ([7c0ba91](https://github.com/nartc/angular-three/commit/7c0ba918b34ab75b6c78c4599b10adb03399088e))
+* **core:** make sure material query look at descendants as well ([f0be3f1](https://github.com/nartc/angular-three/commit/f0be3f1aec21ed4f99815f9b303102e2328f095d))
+* **core:** use the correct object3dController in Object3d class; ([4b39ecf](https://github.com/nartc/angular-three/commit/4b39ecfcc270baa130e29891850b4c7d5cd840c7))
+* make sure to import CommonModule for ngIF ([2f3d4c2](https://github.com/nartc/angular-three/commit/2f3d4c2fd40050112d11b9376f9334fb43f6076c))
+* **soba:** expose Group in Billboard for appending ([15ccc22](https://github.com/nartc/angular-three/commit/15ccc22f0f36adefff0b4b341ac3e95f7af614a3))
+* **soba:** remove ng-content and use [material] on mesh instead ([2dae492](https://github.com/nartc/angular-three/commit/2dae4924ea320b20f5123ac7b567a05ed90840fa))
+* **soba:** rerun soba shape generator with commonModule ([5ed26dd](https://github.com/nartc/angular-three/commit/5ed26dd47bee4fca1f50e8033be6c76d0d057371))
+* **soba:** rerun soba shape generators with ngIf ([0c42ea0](https://github.com/nartc/angular-three/commit/0c42ea046adaf81f4b6a499be6aae54c38c4e831))
+* **soba:** update shapes with generator ([e8a26b1](https://github.com/nartc/angular-three/commit/e8a26b12bf6ffbb9672722e3cf3f8d2fd2694aca))
+
+
+### Documentations
+
+* **demo:** testing billboards ([043d393](https://github.com/nartc/angular-three/commit/043d39355d8eed5c8ea5a0cb7bfa413d47bdb3fa))
+
 ## [2.0.0-beta.6](https://github.com/nartc/angular-three/compare/2.0.0-beta.5...2.0.0-beta.6) (2021-11-23)
 
 
