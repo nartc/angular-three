@@ -37,7 +37,9 @@
           "packages/soba/abstractions/**/*.ts",
           "packages/soba/abstractions/**/*.html",
           "packages/soba/loaders/**/*.ts",
-          "packages/soba/loaders/**/*.html"
+          "packages/soba/loaders/**/*.html",
+          "packages/soba/cameras/**/*.ts",
+          "packages/soba/cameras/**/*.html"
         ]
       }
     },
