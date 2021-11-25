@@ -132,7 +132,6 @@ export class PlaneComponent {
       [getPhysicProps]="getBoxProps"
       [castShadow]="true"
       [receiveShadow]="true"
-      (click)="onClick()"
       (pointerover)="hover = true"
       (pointerout)="hover = false"
       (animateReady)="onBoxAnimate($event, physicBox)"
@@ -148,12 +147,6 @@ export class PlaneComponent {
 export class BoxComponent {
   boxSize: NgtTriplet = [4, 4, 4];
   hover = false;
-  active = false;
-
-  onClick() {
-    this.active = !this.active;
-    this.boxSize = !this.active ? [4, 4, 4] : [5, 5, 5];
-  }
 
   getBoxProps = (): BoxProps => ({
     mass: 1,
