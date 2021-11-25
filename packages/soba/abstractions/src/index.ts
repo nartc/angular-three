@@ -15,3 +15,5 @@ export * from './lib/cubic-bezier-line/cubic-bezier-line.component';
 export * from './lib/positional-audio/positional-audio.component';
 
 export * from './lib/billboard/billboard.component';
+
+export * from './lib/environment/environment.directive';
