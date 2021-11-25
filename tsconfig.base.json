@@ -185,7 +185,8 @@
       ],
       "@angular-three/soba/cameras": ["packages/soba/cameras/src/index.ts"],
       "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"],
-      "@angular-three/soba/shapes": ["packages/soba/shapes/src/index.ts"]
+      "@angular-three/soba/shapes": ["packages/soba/shapes/src/index.ts"],
+      "@angular-three/storybook": ["packages/storybook/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -26,11 +26,14 @@ import { ROUTES } from './app.routes';
     {
       provide: HIGHLIGHT_OPTIONS,
       useValue: {
+        // @ts-ignore
         coreLibraryLoader: () => import('highlight.js/lib/core'),
         // @ts-ignore
         lineNumbersLoader: () => import('highlightjs-line-numbers.js'), // Optional, only if you want the line numbers
         languages: {
+          // @ts-ignore
           typescript: () => import('highlight.js/lib/languages/typescript'),
+          // @ts-ignore
           xml: () => import('highlight.js/lib/languages/xml'),
         },
       },

@@ -9,6 +9,7 @@
     "docs-content-feature-getting-started": "packages/docs-content/feature-getting-started",
     "docs-content-feature-home": "packages/docs-content/feature-home",
     "postprocessing": "packages/postprocessing",
-    "soba": "packages/soba"
+    "soba": "packages/soba",
+    "storybook": "packages/storybook"
   }
 }
