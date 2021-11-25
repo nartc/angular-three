@@ -98,9 +98,7 @@ export class NgtSobaLineController extends Controller {
     this.ngZone.runOutsideAngular(() => {
       this.line = line;
       this.line.computeLineDistances();
-      this.ngZone.run(() => {
-        this.ready.emit(line);
-      });
+      this.ready.emit(line);
     });
   }
 
