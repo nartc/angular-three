@@ -1,3 +1,22 @@
+## [2.0.0-beta.9](https://github.com/nartc/angular-three/compare/2.0.0-beta.8...2.0.0-beta.9) (2021-11-25)
+
+
+### Features
+
+* **soba:** add Environment ([8114e37](https://github.com/nartc/angular-three/commit/8114e37c95b0c1b1f06707c7915d21bbebe29786))
+* **soba:** init cameras secondary ([0addf06](https://github.com/nartc/angular-three/commit/0addf060a2a49cf051e6f589d9cd77d877d0d42f))
+* **storybook:** add storyboo ([793d415](https://github.com/nartc/angular-three/commit/793d415cb97c216ca943ae021ce4333c063c7397))
+
+
+### Bug Fixes
+
+* **core:** ensure to only listen for specific prop on canvas internal ([db52245](https://github.com/nartc/angular-three/commit/db5224554f83ecf357c1a13be686d566ccdd0a8e))
+
+
+### Documentations
+
+* **storybook:** add compodoc for controls ([82c568f](https://github.com/nartc/angular-three/commit/82c568f4c38566418c9c693a503380761c66395f))
+
 ## [2.0.0-beta.8](https://github.com/nartc/angular-three/compare/2.0.0-beta.7...2.0.0-beta.8) (2021-11-24)
 
 
