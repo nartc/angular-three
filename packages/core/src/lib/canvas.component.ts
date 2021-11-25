@@ -28,6 +28,7 @@ import { AnimationStore } from './stores/animation.store';
 import { CanvasStore } from './stores/canvas.store';
 import { EventsStore } from './stores/events.store';
 import { InstancesStore } from './stores/instances.store';
+import { distinctKeyMap } from './utils/distinct-key-map.operator';
 
 @Component({
   selector: 'ngt-canvas',
@@ -140,8 +141,12 @@ export class NgtCanvasComponent implements OnInit {
 
   private initActiveListener() {
     this.canvasStore.selectors.internal$
-      .pipe(takeUntil(this.destroyed), observeOn(asapScheduler))
-      .subscribe(({ active }) => {
+      .pipe(
+        distinctKeyMap('active'),
+        takeUntil(this.destroyed),
+        observeOn(asapScheduler)
+      )
+      .subscribe((active) => {
         this.ngZone.runOutsideAngular(() => {
           if (active) {
             const { renderer, camera, scene } =

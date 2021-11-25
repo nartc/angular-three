@@ -1,19 +1,13 @@
 import {
   CanvasStore,
+  distinctKeyMap,
   EnhancedComponentStore,
   NGT_OBJECT_3D_WATCHED_CONTROLLER,
   NgtObject3dController,
   NgtSize,
 } from '@angular-three/core';
 import { Inject, Injectable, NgZone, SimpleChanges } from '@angular/core';
-import {
-  distinctUntilKeyChanged,
-  map,
-  Observable,
-  of,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { Observable, of, tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
 
 export interface SobaOrthographicCameraState {
@@ -44,8 +38,7 @@ export const initialSobaOrthographicCameraState: SobaOrthographicCameraState =
 @Injectable()
 export class SobaOrthographicCameraStore extends EnhancedComponentStore<SobaOrthographicCameraState> {
   readonly size$ = this.canvasStore.selectors.internal$.pipe(
-    distinctUntilKeyChanged('size'),
-    map((internal) => internal.size)
+    distinctKeyMap('size')
   );
 
   readonly projectMatrixParams$ = this.select(

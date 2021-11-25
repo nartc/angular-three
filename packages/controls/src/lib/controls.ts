@@ -2,6 +2,7 @@ import {
   AnimationStore,
   CanvasStore,
   DestroyedService,
+  distinctKeyMap,
   NgtAnimationParticipant,
   NgtCamera,
   UnknownRecord,
@@ -39,8 +40,8 @@ export abstract class NgtControls<TControls = unknown>
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.canvasStore.selectors.internal$
-        .pipe(takeUntil(this.destroyed))
-        .subscribe(({ active }) => {
+        .pipe(distinctKeyMap('active'), takeUntil(this.destroyed))
+        .subscribe((active) => {
           this.ngZone.runOutsideAngular(() => {
             const { camera, renderer, scene } =
               this.canvasStore.getImperativeState();

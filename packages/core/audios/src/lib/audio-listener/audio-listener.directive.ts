@@ -1,4 +1,8 @@
-import { CanvasStore, DestroyedService } from '@angular-three/core';
+import {
+  CanvasStore,
+  DestroyedService,
+  distinctKeyMap,
+} from '@angular-three/core';
 import {
   Directive,
   EventEmitter,
@@ -44,8 +48,8 @@ export class NgtAudioListener implements OnInit {
       }
 
       this.canvasStore.selectors.internal$
-        .pipe(takeUntil(this.destroyed))
-        .subscribe(({ active }) => {
+        .pipe(distinctKeyMap('active'), takeUntil(this.destroyed))
+        .subscribe((active) => {
           this.ngZone.runOutsideAngular(() => {
             const { camera } = this.canvasStore.getImperativeState();
             if (active && camera) {

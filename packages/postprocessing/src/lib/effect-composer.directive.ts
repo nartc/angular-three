@@ -1,4 +1,4 @@
-import { CanvasStore } from '@angular-three/core';
+import { CanvasStore, distinctKeyMap } from '@angular-three/core';
 import {
   Directive,
   EventEmitter,
@@ -9,14 +9,7 @@ import {
   SkipSelf,
 } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import {
-  distinctUntilKeyChanged,
-  EMPTY,
-  map,
-  switchMap,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { EMPTY, switchMap, tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 
@@ -45,10 +38,7 @@ export class NgtEffectComposer extends ComponentStore<{}> implements OnInit {
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.initComposer(
-        this.canvasStore.selectors.internal$.pipe(
-          distinctUntilKeyChanged('active'),
-          map((internal) => internal.active)
-        )
+        this.canvasStore.selectors.internal$.pipe(distinctKeyMap('active'))
       );
     });
   }
@@ -63,8 +53,7 @@ export class NgtEffectComposer extends ComponentStore<{}> implements OnInit {
 
           if (this.watchSizeChanged) {
             return this.canvasStore.selectors.internal$.pipe(
-              distinctUntilKeyChanged('size'),
-              map((internal) => internal.size),
+              distinctKeyMap('size'),
               tap(({ width, height }) => {
                 this.ngZone.runOutsideAngular(() => {
                   this._composer.setSize(width, height);
