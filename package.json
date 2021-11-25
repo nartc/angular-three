@@ -50,6 +50,7 @@
     "@angular/cli": "13.0.3",
     "@angular/compiler-cli": "13.0.2",
     "@angular/language-service": "13.0.2",
+    "@compodoc/compodoc": "1.1.16",
     "@nrwl/angular": "13.2.2",
     "@nrwl/cli": "13.2.2",
     "@nrwl/devkit": "13.2.2",

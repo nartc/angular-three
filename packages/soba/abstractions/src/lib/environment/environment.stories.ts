@@ -43,6 +43,7 @@ export default {
 
 export const Default: Story<NgtSobaEnvironment> = (args) => {
   return {
+    props: args,
     template: `
     <ngt-canvas [camera]='{position: [0, 0, 10]}'>
       <ngt-stats></ngt-stats>
@@ -52,7 +53,7 @@ export const Default: Story<NgtSobaEnvironment> = (args) => {
         <ngt-torus-knot-geometry [args]='[1, 0.5, 128, 32]'></ngt-torus-knot-geometry>
         <ngt-mesh-standard-material [parameters]='{metalness: 1, roughness: 0}'></ngt-mesh-standard-material>
       </ngt-mesh>
-      <ngt-soba-environment preset='warehouse' [background]='true'></ngt-soba-environment>
+      <ngt-soba-environment [preset]='preset' [background]='background'></ngt-soba-environment>
 
       <ngt-orbit-controls
         (ready)='$event.autoRotate = true;'
@@ -61,4 +62,9 @@ export const Default: Story<NgtSobaEnvironment> = (args) => {
     </ngt-canvas>
   `,
   };
+};
+
+Default.args = {
+  preset: 'sunset',
+  background: true,
 };
