@@ -17,3 +17,5 @@ export * from './lib/positional-audio/positional-audio.component';
 export * from './lib/billboard/billboard.component';
 
 export * from './lib/environment/environment.directive';
+
+export * from './lib/gizmo-helper/gizmo-helper.component';
