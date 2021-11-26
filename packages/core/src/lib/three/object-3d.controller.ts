@@ -75,6 +75,7 @@ import { Controller } from '../utils/controller';
     ngt-soba-positional-audio,
     ngt-soba-billboard,
     ngt-soba-orthographic-camera,
+    ngt-soba-gizmo-helper,
     ngt-soba-plane,
     ngt-soba-box,
     ngt-soba-cylinder,
