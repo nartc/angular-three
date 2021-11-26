@@ -74,6 +74,7 @@ import { Controller } from '../utils/controller';
     ngt-soba-cubic-bezier-line,
     ngt-soba-positional-audio,
     ngt-soba-billboard,
+    ngt-soba-orthographic-camera,
     ngt-soba-plane,
     ngt-soba-box,
     ngt-soba-cylinder,

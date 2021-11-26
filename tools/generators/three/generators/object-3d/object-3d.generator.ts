@@ -10,6 +10,8 @@ const additionalSobaSelectors = [
   'soba-cubic-bezier-line',
   'soba-positional-audio',
   'soba-billboard',
+  'soba-orthographic-camera',
+  'soba-gizmo-helper',
 ] as const;
 
 async function object3dGenerator(tree: Tree, derivedObject3Ds: string[]) {
