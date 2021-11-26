@@ -38,6 +38,7 @@ export class CanvasStore
       isOrthographic: false,
       isLinear: false,
       shadows: false,
+      controls: null,
       alpha: true,
       mouse: new THREE.Vector2(),
       clock: new THREE.Clock(),
