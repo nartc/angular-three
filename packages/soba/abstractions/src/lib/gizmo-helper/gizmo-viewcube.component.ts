@@ -235,13 +235,13 @@ export class NgtSobaEdgeCube extends NgtSobaExtender<THREE.Mesh> {
         *repeat="let index of 6"
         [hover]="hover === index"
         [index]="index"
-        [color]="color"
-        [font]="font"
-        [faces]="faces"
-        [hoverColor]="hoverColor"
-        [opacity]="opacity"
-        [strokeColor]="strokeColor"
-        [textColor]="textColor"
+        [color]="color!"
+        [font]="font!"
+        [faces]="faces!"
+        [hoverColor]="hoverColor!"
+        [opacity]="opacity!"
+        [strokeColor]="strokeColor!"
+        [textColor]="textColor!"
       ></ngt-soba-face-material>
     </ngt-mesh>
   `,
