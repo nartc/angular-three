@@ -3,6 +3,7 @@ import {
   NgtCoreModule,
 } from '@angular-three/core';
 import { NgtOrthographicCameraModule } from '@angular-three/core/cameras';
+import { NgtSobaExtender } from '@angular-three/soba';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -11,6 +12,7 @@ import {
   NgModule,
   OnInit,
 } from '@angular/core';
+import * as THREE from 'three';
 import { SobaOrthographicCameraStore } from './orthographic-camera.store';
 
 @Component({
@@ -21,6 +23,8 @@ import { SobaOrthographicCameraStore } from './orthographic-camera.store';
       <ngt-orthographic-camera
         [args]="[vm.left, vm.right, vm.top, vm.bottom, vm.near, vm.far]"
         [object3dController]="vm.object3dController"
+        (ready)="ready.emit($event)"
+        (animateReady)="animateReady.emit($event)"
       >
         <ng-content></ng-content>
       </ngt-orthographic-camera>
@@ -29,7 +33,10 @@ import { SobaOrthographicCameraStore } from './orthographic-camera.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NGT_OBJECT_3D_CONTROLLER_PROVIDER, SobaOrthographicCameraStore],
 })
-export class NgtSobaOrthographicCamera implements OnInit {
+export class NgtSobaOrthographicCamera
+  extends NgtSobaExtender<THREE.OrthographicCamera>
+  implements OnInit
+{
   @Input() set makeDefault(v: boolean) {
     this.sobaOrthographicCameraStore.updaters.setMakeDefault(v);
   }
@@ -50,7 +57,9 @@ export class NgtSobaOrthographicCamera implements OnInit {
 
   constructor(
     private sobaOrthographicCameraStore: SobaOrthographicCameraStore
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.sobaOrthographicCameraStore.initEffect();
