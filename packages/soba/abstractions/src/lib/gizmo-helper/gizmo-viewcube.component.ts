@@ -30,7 +30,7 @@ import {
 } from '@angular/core';
 import { filter, Observable, tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
-import { SobaGizmoHelperContext } from './gizmo-helper.context';
+// import { SobaGizmoHelperContext } from './gizmo-helper.context';
 
 type XYZ = [number, number, number];
 
@@ -67,6 +67,8 @@ const edges: THREE.Vector3[] = [
   [-1, -1, 0],
 ].map(makePositionVector);
 
+console.log(edges);
+
 const edgeDimensions = edges.map(
   (edge) =>
     edge
@@ -92,6 +94,7 @@ interface ViewcubeProps {
       (ready)="ready.emit($event)"
       (animateReady)="animateReady.emit($event)"
       [scale]="[60, 60, 60]"
+      [appendTo]="appendTo"
     >
       <ngt-soba-face-cube
         [font]="font"
@@ -105,7 +108,7 @@ interface ViewcubeProps {
       ></ngt-soba-face-cube>
       <ngt-soba-edge-cube
         *ngFor="let edge of edges; index as i"
-        [position]="edge"
+        [position]="edge.toArray()"
         [dimensions]="edgeDimensions[i]"
         [hoverColor]="hoverColor"
         [faces]="faces"
@@ -116,7 +119,7 @@ interface ViewcubeProps {
       ></ngt-soba-edge-cube>
       <ngt-soba-edge-cube
         *ngFor="let corner of corners"
-        [position]="corner"
+        [position]="corner.toArray()"
         [dimensions]="cornerDimensions"
         [hoverColor]="hoverColor"
         [faces]="faces"
@@ -136,6 +139,8 @@ interface ViewcubeProps {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgtSobaGizmoViewcube extends NgtSobaExtender<THREE.Group> {
+  @Input() appendTo?: THREE.Object3D;
+
   @Input() font?: string;
   @Input() opacity?: number;
   @Input() color?: string;
@@ -162,7 +167,7 @@ export class NgtSobaGizmoViewcube extends NgtSobaExtender<THREE.Group> {
       (click)="onClick($event)"
       (pointerover)="onPointerOver($event)"
       (pointerout)="onPointerOut($event)"
-      [scale]="1.01"
+      [scale]="[1.01, 1, 1]"
       [position]="position"
     >
       <ngt-box-geometry [args]="dimensions"></ngt-box-geometry>
@@ -190,12 +195,12 @@ export class NgtSobaEdgeCube extends NgtSobaExtender<THREE.Mesh> {
 
   hover = false;
 
-  constructor(private sobaGizmoHelperContext: SobaGizmoHelperContext) {
-    super();
-  }
+  // constructor(private sobaGizmoHelperContext: SobaGizmoHelperContext) {
+  //   super();
+  // }
 
   onCubeReady(cube: THREE.Mesh) {
-    cube.raycast = this.sobaGizmoHelperContext.raycast;
+    // cube.raycast = this.sobaGizmoHelperContext.raycast;
   }
 
   onClick($event: NgtEvent<MouseEvent>) {
@@ -203,9 +208,9 @@ export class NgtSobaEdgeCube extends NgtSobaExtender<THREE.Mesh> {
       this.click.emit($event);
     } else {
       $event.stopPropagation();
-      this.sobaGizmoHelperContext.tweenCamera(
-        new THREE.Vector3(...(this.position as number[]))
-      );
+      // this.sobaGizmoHelperContext.tweenCamera(
+      //   new THREE.Vector3(...(this.position as number[]))
+      // );
     }
   }
 
@@ -259,12 +264,12 @@ export class NgtSobaFaceCube extends NgtSobaExtender<THREE.Mesh> {
 
   hover: number | null = null;
 
-  constructor(private sobaGizmoHelperContext: SobaGizmoHelperContext) {
-    super();
-  }
+  // constructor(private sobaGizmoHelperContext: SobaGizmoHelperContext) {
+  //   super();
+  // }
 
   onCubeReady(cube: THREE.Mesh) {
-    cube.raycast = this.sobaGizmoHelperContext.raycast;
+    // cube.raycast = this.sobaGizmoHelperContext.raycast;
   }
 
   onClick($event: NgtEvent<MouseEvent>) {
@@ -272,7 +277,7 @@ export class NgtSobaFaceCube extends NgtSobaExtender<THREE.Mesh> {
       this.click.emit($event);
     } else {
       $event.stopPropagation();
-      this.sobaGizmoHelperContext.tweenCamera($event.face!.normal);
+      // this.sobaGizmoHelperContext.tweenCamera($event.face!.normal);
     }
   }
 
@@ -319,31 +324,31 @@ export class NgtSobaFaceMaterial extends EnhancedComponentStore<
   }
 
   @Input() set font(v: string) {
-    this.updaters.setFont(v);
+    this.updaters.setFont(v || '20px Inter var, Arial, sans-serif');
   }
 
   @Input() set opacity(v: number) {
-    this.updaters.setOpacity(v);
+    this.updaters.setOpacity(v || 1);
   }
 
   @Input() set color(v: string) {
-    this.updaters.setColor(v);
+    this.updaters.setColor(v || colors.bg);
   }
 
   @Input() set hoverColor(v: string) {
-    this.updaters.setHoverColor(v);
+    this.updaters.setHoverColor(v || colors.hover);
   }
 
   @Input() set textColor(v: string) {
-    this.updaters.setTextColor(v);
+    this.updaters.setTextColor(v || colors.text);
   }
 
   @Input() set strokeColor(v: string) {
-    this.updaters.setStrokeColor(v);
+    this.updaters.setStrokeColor(v || colors.stroke);
   }
 
   @Input() set faces(v: string[]) {
-    this.updaters.setFaces(v);
+    this.updaters.setFaces(v || defaultFaces);
   }
 
   readonly parameters$: Observable<{

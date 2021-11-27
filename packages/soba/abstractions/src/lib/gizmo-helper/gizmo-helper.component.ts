@@ -11,7 +11,7 @@ import { NgtGroupModule } from '@angular-three/core/group';
 import { NgtSceneModule } from '@angular-three/core/scene';
 import { NgtSobaExtender } from '@angular-three/soba';
 import { NgtSobaOrthographicCameraModule } from '@angular-three/soba/cameras';
-import { PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -22,9 +22,6 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import * as THREE from 'three';
 import { gizmoHelperConstants } from './constants';
@@ -38,30 +35,28 @@ import {
   selector: 'ngt-soba-gizmo-helper',
   exportAs: 'ngtSobaGizmoHelper',
   template: `
-    <ng-template #gizmoTemplate>
-      <ng-container *ngIf="dimensions$ | async as dimension">
-        <ngt-soba-orthographic-camera
-          [makeDefault]="false"
-          [position]="[0, 0, 200]"
-          (ready)="onVirtualCameraReady($event)"
-        ></ngt-soba-orthographic-camera>
-        <ngt-group
-          [position]="[dimension.x, dimension.y, 0]"
-          (ready)="ready.emit($event); gizmo = $event"
-          (animateReady)="animateReady.emit($event)"
-        >
-          <ng-content></ng-content>
-        </ngt-group>
-      </ng-container>
-    </ng-template>
-
-    <ngt-scene (ready)="virtualScene = $event">
-      <ng-template [cdkPortalOutlet]="gizmoPortal"></ng-template>
+    <ngt-scene appendMode="none" (ready)="onVirtualSceneReady($event)">
+      <ngt-soba-orthographic-camera
+        [makeDefault]="false"
+        [position]="[0, 0, 200]"
+        (ready)="onVirtualCameraReady($event)"
+      ></ngt-soba-orthographic-camera>
+      <ngt-group
+        *ngIf="dimensions$ | async as dimension"
+        [position]="[dimension.x, dimension.y, 0]"
+        (ready)="ready.emit($event); gizmo = $event"
+        (animateReady)="animateReady.emit($event)"
+      >
+        <ng-content></ng-content>
+      </ngt-group>
     </ngt-scene>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NGT_OBJECT_3D_CONTROLLER_PROVIDER, SobaGizmoHelperContext],
-  viewProviders: [InternalSobaGizmoHelperContext],
+  providers: [
+    NGT_OBJECT_3D_CONTROLLER_PROVIDER,
+    SobaGizmoHelperContext,
+    InternalSobaGizmoHelperContext,
+  ],
 })
 export class NgtSobaGizmoHelper
   extends NgtSobaExtender<THREE.Group>
@@ -86,17 +81,17 @@ export class NgtSobaGizmoHelper
     this.internalSobaGizmoHelperContext.updaters.setOnTarget(v);
   }
 
-  @ViewChild('gizmoTemplate', { static: true }) set gizmoTemplate(
-    v: TemplateRef<unknown>
-  ) {
-    if (!this.gizmoPortal) {
-      this.gizmoPortal = new TemplatePortal<unknown>(v, this.viewContainerRef);
-    }
-  }
+  // @ViewChild('gizmoTemplate', { static: true }) set gizmoTemplate(
+  //   v: TemplateRef<unknown>
+  // ) {
+  //   if (!this.gizmoPortal && v) {
+  //     this.gizmoPortal = new TemplatePortal<unknown>(v, this.viewContainerRef);
+  //   }
+  // }
 
   readonly dimensions$ = this.internalSobaGizmoHelperContext.dimension$;
 
-  gizmoPortal!: TemplatePortal<unknown>;
+  // gizmoPortal!: TemplatePortal<unknown>;
 
   mainBackground?: THREE.Scene['background'];
 
@@ -113,22 +108,23 @@ export class NgtSobaGizmoHelper
     private canvasStore: CanvasStore,
     private animationStore: AnimationStore,
     private loopService: LoopService,
-    private ngZone: NgZone,
-    private viewContainerRef: ViewContainerRef
+    private ngZone: NgZone
   ) {
     super();
   }
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      const { scene } = this.canvasStore.getImperativeState();
-      if (scene!.background) {
-        this.mainBackground = scene!.background;
-        scene!.background = null;
-        this.virtualScene.background = this.mainBackground;
-      }
+      setTimeout(() => {
+        const { scene } = this.canvasStore.getImperativeState();
+        if (scene!.background) {
+          this.mainBackground = scene!.background;
+          scene!.background = null;
+          this.virtualScene.background = this.mainBackground;
+        }
 
-      this.setupAnimation();
+        this.setupAnimation();
+      });
     });
   }
 
@@ -212,6 +208,11 @@ export class NgtSobaGizmoHelper
   onVirtualCameraReady(camera: THREE.OrthographicCamera) {
     this.virtualCamera = camera;
     this.internalSobaGizmoHelperContext.initRaycastEffect(camera);
+  }
+
+  onVirtualSceneReady(scene: THREE.Scene) {
+    this.virtualScene = scene;
+    console.log({ virtualScene: this.virtualScene });
   }
 }
 

@@ -40,6 +40,7 @@ export * from './lib/stores/animation.store';
 export * from './lib/stores/canvas.store';
 export * from './lib/stores/events.store';
 export * from './lib/stores/instances.store';
+export * from './lib/stores/performance.store';
 
 export * from './lib/color/color.pipe';
 export * from './lib/color/color.module';

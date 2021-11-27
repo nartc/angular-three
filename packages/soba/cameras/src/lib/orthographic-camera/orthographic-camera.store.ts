@@ -32,8 +32,14 @@ interface UpdateCameraEffectParams {
   makeDefault: boolean;
 }
 
-export const initialSobaOrthographicCameraState: SobaOrthographicCameraState =
-  {};
+export const initialSobaOrthographicCameraState: SobaOrthographicCameraState = {
+  makeDefault: undefined,
+  manual: undefined,
+  near: undefined,
+  far: undefined,
+  orthographicCamera: undefined,
+  oldOrthographicCamera: undefined,
+};
 
 @Injectable()
 export class SobaOrthographicCameraStore extends EnhancedComponentStore<SobaOrthographicCameraState> {
@@ -99,6 +105,7 @@ export class SobaOrthographicCameraStore extends EnhancedComponentStore<SobaOrth
     private ngZone: NgZone
   ) {
     super(initialSobaOrthographicCameraState);
+    console.log(this);
   }
 
   readonly initEffect = this.effect(($) =>

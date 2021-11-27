@@ -1,6 +1,17 @@
 import { ComponentStore } from '@ngrx/component-store';
 // import { names } from '@nrwl/devkit';
-import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  isObservable,
+  MonoTypeOperatorFunction,
+  noop,
+  Observable,
+  of,
+  Subject,
+  Subscription,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { UnknownRecord } from '../models';
 
 export type StoreState<TStore extends EnhancedComponentStore> =
@@ -74,6 +85,16 @@ export function getUpdaters<TStore extends EnhancedComponentStore>(
   }, {} as StoreUpdaters<StoreState<TStore>> & AsyncStoreUpdaters<StoreState<TStore>>);
 }
 
+export interface EnhancedEffectReturn<ObservableType> {
+  get hasRunOnce(): boolean;
+
+  set hasRunOnce(v: boolean);
+
+  setCleanupFn: (
+    cleanupFn: (value: ObservableType | undefined) => void
+  ) => void;
+}
+
 export abstract class EnhancedComponentStore<
   TState extends object = any
 > extends ComponentStore<TState> {
@@ -98,7 +119,116 @@ export abstract class EnhancedComponentStore<
     )
   );
 
+  enhancedEffect<
+    // This type quickly became part of effect 'API'
+    ProvidedType = void,
+    // The actual origin$ type, which could be unknown, when not specified
+    OriginType extends
+      | Observable<ProvidedType>
+      | unknown = Observable<ProvidedType>,
+    // Unwrapped actual type of the origin$ Observable, after default was applied
+    ObservableType = OriginType extends Observable<infer A> ? A : never,
+    // Return either an empty callback or a function requiring specific types as inputs
+    ReturnType = ProvidedType | ObservableType extends void
+      ? () => void
+      : (
+          observableOrValue: ObservableType | Observable<ObservableType>
+        ) => Subscription
+  >(
+    generator: (origin$: OriginType) => Observable<unknown>
+  ): ReturnType & EnhancedEffectReturn<ObservableType> {
+    const origin$ = new Subject<ObservableType>();
+    generator(origin$ as OriginType)
+      // tied to the lifecycle 👇 of ComponentStore
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
+
+    let cleanupFn: (value: ObservableType | undefined) => void;
+    let latestValue: ObservableType | undefined;
+
+    const fn = ((
+      observableOrValue?: ObservableType | Observable<ObservableType>
+    ): Subscription => {
+      const observable$ = isObservable(observableOrValue)
+        ? observableOrValue
+        : of(observableOrValue);
+      return observable$
+        .pipe(
+          tap({
+            next: (value) => {
+              // if effect has run at least once, and cleanup is defined,
+              // run cleanup first with the previous value
+              if (fn.hasRunOnce && cleanupFn) {
+                cleanupFn(latestValue);
+              }
+
+              latestValue = value;
+              // any new 👇 value is pushed into a stream
+              origin$.next(value as ObservableType);
+
+              // flip hasRunOnce after origin$ emits the first value
+              if (!fn.hasRunOnce) {
+                fn.hasRunOnce = true;
+              }
+            },
+            unsubscribe: () => {
+              if (cleanupFn) {
+                cleanupFn(latestValue);
+              }
+            },
+          }),
+          takeUntil(this.destroy$)
+        )
+        .subscribe();
+    }) as unknown as ReturnType & EnhancedEffectReturn<ObservableType>;
+
+    // init w/ false meaning that the effectFn has not been invoked yet upon creation
+    fn.hasRunOnce = false;
+
+    // always define setCleanupFn
+    fn.setCleanupFn = (cleanup) => {
+      cleanupFn = cleanup;
+    };
+
+    return fn;
+  }
+
   getImperativeState(): TState {
     return this.$imperative.getValue();
   }
+}
+
+export function tapEffect<T>(
+  effectFn: (
+    value: T,
+    firstRun: boolean
+  ) => ((previousValue: T | undefined) => void) | void
+): MonoTypeOperatorFunction<T> {
+  let cleanupFn: (previousValue: T | undefined) => void = noop;
+  let firstRun = false;
+  let latestValue: T | undefined = undefined;
+
+  return tap<T>({
+    next: (value: T) => {
+      if (cleanupFn && firstRun) {
+        cleanupFn(latestValue);
+      }
+
+      const cleanUpOrVoid = effectFn(value, firstRun);
+      if (cleanUpOrVoid) {
+        cleanupFn = cleanUpOrVoid;
+      }
+
+      latestValue = value;
+
+      if (!firstRun) {
+        firstRun = true;
+      }
+    },
+    unsubscribe: () => {
+      if (cleanupFn) {
+        cleanupFn(latestValue);
+      }
+    },
+  });
 }

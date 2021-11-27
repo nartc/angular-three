@@ -2,6 +2,7 @@ export * from './canvas-state';
 export * from './events-state';
 export * from './animation-state';
 export * from './instances-state';
+export * from './performance-state';
 export * from './events';
 export * from './three';
 export * from './render';

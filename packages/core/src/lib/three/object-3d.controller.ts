@@ -111,7 +111,7 @@ export class NgtObject3dController extends Controller {
   @Input() visible = true;
   @Input() matrixAutoUpdate = true;
 
-  @Input() appendMode: 'immediate' | 'root' = 'immediate';
+  @Input() appendMode: 'immediate' | 'root' | 'none' = 'immediate';
   @Input() appendTo?: THREE.Object3D;
 
   @Input() object3dController?: NgtObject3dController;

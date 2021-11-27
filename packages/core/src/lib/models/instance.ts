@@ -8,6 +8,7 @@ export interface NgtInstanceInternal {
   eventsStateGetter: () => EventsStoreState;
   handlers?: NgtEventHandlers;
   eventCount: number;
+  linear: boolean;
 }
 
 export type NgtInstance = THREE.Object3D & { __ngt?: NgtInstanceInternal };

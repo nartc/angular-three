@@ -129,12 +129,15 @@ export abstract class NgtObject3d<
             eventsStateGetter: () => this.eventsStore.getImperativeState(),
             handlers: observedEvents.handlers,
             eventCount: observedEvents.eventCount,
+            linear: this.canvasStore.getImperativeState().isLinear,
           } as NgtInstanceInternal,
         });
 
         this.instancesStore.saveObject(this.object3d as unknown as NgtInstance);
 
-        this.appendToParent();
+        if (this.object3dController.appendMode !== 'none') {
+          this.appendToParent();
+        }
         this.objectReady();
       }
     });

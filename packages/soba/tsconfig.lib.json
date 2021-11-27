@@ -10,9 +10,7 @@
   "exclude": [
     "src/test-setup.ts",
     "**/*.spec.ts",
-    "**/*.test.ts",
-    "**/*.stories.ts",
-    "**/*.stories.js"
+    "**/*.test.ts"
   ],
   "include": ["**/*.ts"]
 }

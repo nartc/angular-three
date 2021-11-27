@@ -3,14 +3,18 @@ export function setupCanvas({
   cameraFov = 75,
   lights = true,
   controls = true,
+  black = false,
 }: Partial<{
   cameraPosition: [number, number, number];
   cameraFov: number;
   controls: boolean;
   lights: boolean;
+  black: boolean;
 }> = {}) {
   return (story: string) => `
-    <ngt-canvas [camera]='{position: [${cameraPosition}], fov: ${cameraFov}}'>
+    <ngt-canvas [camera]='{position: [${cameraPosition}], fov: ${cameraFov}}' (created)='$event.gl.setClearAlpha(${
+    black ? 'black' : 'white'
+  })'>
       <ngt-stats></ngt-stats>
 
       <ng-container *ngIf='${lights}'>

@@ -23,7 +23,7 @@ import {
 import { NgtObject3dController } from '../three/object-3d.controller';
 
 @Directive({
-  selector: 'ngt-primitive',
+  selector: 'ngt-primitive[object]',
   exportAs: 'ngtPrimitive',
   providers: [
     {
@@ -91,33 +91,35 @@ export class NgtPrimitive<TObject = unknown>
   }
 
   private appendToParent() {
-    if (this.object3d && this.object3d instanceof THREE.Object3D) {
-      if (this.object3dController.appendTo) {
-        this.object3dController.appendTo.add(this.object3d);
-        return;
-      }
-
-      const { scene } = this.canvasStore.getImperativeState();
-      if (this.object3dController.appendMode === 'root') {
-        if (scene) {
-          scene.add(this.object3d);
+    setTimeout(() => {
+      if (this.object3d && this.object3d instanceof THREE.Object3D) {
+        if (this.object3dController.appendTo) {
+          this.object3dController.appendTo.add(this.object3d);
+          return;
         }
-        return;
-      }
 
-      if (this.object3dController.appendMode === 'immediate') {
-        if (
-          this.parentObjectDirective &&
-          this.parentObjectDirective.object3d !== this.object3d
-        ) {
-          this.parentObjectDirective.object3d.add(this.object3d);
-        } else {
+        const { scene } = this.canvasStore.getImperativeState();
+        if (this.object3dController.appendMode === 'root') {
           if (scene) {
             scene.add(this.object3d);
           }
+          return;
+        }
+
+        if (this.object3dController.appendMode === 'immediate') {
+          if (
+            this.parentObjectDirective &&
+            this.parentObjectDirective.object3d !== this.object3d
+          ) {
+            this.parentObjectDirective.object3d.add(this.object3d);
+          } else {
+            if (scene) {
+              scene.add(this.object3d);
+            }
+          }
         }
       }
-    }
+    });
   }
 
   protected remove() {

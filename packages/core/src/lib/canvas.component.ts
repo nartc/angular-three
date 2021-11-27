@@ -19,6 +19,7 @@ import * as THREE from 'three';
 import type {
   NgtCamera,
   NgtCameraOptions,
+  NgtPerformance,
   NgtRaycasterOptions,
   NgtSceneOptions,
 } from './models';
@@ -28,6 +29,7 @@ import { AnimationStore } from './stores/animation.store';
 import { CanvasStore } from './stores/canvas.store';
 import { EventsStore } from './stores/events.store';
 import { InstancesStore } from './stores/instances.store';
+import { PerformanceStore } from './stores/performance.store';
 import { distinctKeyMap } from './utils/distinct-key-map.operator';
 
 @Component({
@@ -55,6 +57,7 @@ import { distinctKeyMap } from './utils/distinct-key-map.operator';
     EventsStore,
     InstancesStore,
     AnimationStore,
+    PerformanceStore,
     LoopService,
     DestroyedService,
   ],
@@ -78,6 +81,10 @@ export class NgtCanvasComponent implements OnInit {
     this.canvasStore.updaters.setAlpha(v);
   }
 
+  @Input() set performance(v: NgtPerformance) {
+    this.performanceStore.setPerformance(v);
+  }
+
   @Input() camera?: NgtCameraOptions;
   @Input() scene?: NgtSceneOptions;
   @Input() raycaster?: NgtRaycasterOptions = {};
@@ -95,6 +102,7 @@ export class NgtCanvasComponent implements OnInit {
     @Self() private canvasStore: CanvasStore,
     @Self() private animationStore: AnimationStore,
     @Self() private eventsStore: EventsStore,
+    @Self() private performanceStore: PerformanceStore,
     @Self() private loopService: LoopService,
     private ngZone: NgZone,
     private hostElement: ElementRef<HTMLElement>,
