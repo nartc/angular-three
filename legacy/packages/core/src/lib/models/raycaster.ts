@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'packages/core/src/lib/models/three';
 import type { NgtRender } from './render';
 import type { NgtVector3 } from './three';
 

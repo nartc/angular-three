@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'packages/core/src/lib/models/three';
 
 export interface NgtLoader<T> extends THREE.Loader {
   load(

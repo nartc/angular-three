@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'packages/core/src/lib/models/three';
 import type { NgtCommonParameters, Overwrite } from './three';
 
 export type NgtSceneOptions = Overwrite<

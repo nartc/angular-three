@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'packages/core/src/lib/models/three';
 
 export type NonFunctionKeys<T> = {
   [K in keyof T]: T[K] extends Function ? never : K;

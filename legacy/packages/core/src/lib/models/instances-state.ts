@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'packages/core/src/lib/models/three';
 import type { NgtInstance } from './instance';
 
 export interface InstancesStoreState {

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'packages/core/src/lib/models/three';
 import type { CanvasStoreState } from './canvas-state';
 import type { NgtEventHandlers } from './events';
 import type { EventsStoreState } from './events-state';

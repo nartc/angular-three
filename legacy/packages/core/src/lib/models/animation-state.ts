@@ -1,5 +1,5 @@
+import * as THREE from 'packages/core/src/lib/models/three';
 import type { Subscription } from 'rxjs';
-import * as THREE from 'three';
 import type { NgtRender } from './render';
 
 export interface NgtAnimationReady<TObject = any> {
