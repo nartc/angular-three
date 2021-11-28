@@ -1,7 +1,7 @@
 import type { NgtIntersectionEvent } from './intersection';
 
-export type NgtEvent<TEvent> = TEvent & NgtIntersectionEvent<TEvent>;
-export type NgtDomEvent = NgtEvent<PointerEvent | MouseEvent | WheelEvent>;
+export type NgtEvent<TEvent> = NgtIntersectionEvent<TEvent>;
+export type NgtDomEvent = PointerEvent | MouseEvent | WheelEvent;
 
 export interface NgtEventHandlers {
   click?: (event: NgtEvent<MouseEvent>) => void;
@@ -14,7 +14,7 @@ export interface NgtEventHandlers {
   pointerenter?: (event: NgtEvent<PointerEvent>) => void;
   pointerleave?: (event: NgtEvent<PointerEvent>) => void;
   pointermove?: (event: NgtEvent<PointerEvent>) => void;
-  pointermissed?: (event: NgtEvent<PointerEvent>) => void;
+  pointermissed?: (event: MouseEvent) => void;
   pointercancel?: (event: NgtEvent<PointerEvent>) => void;
   wheel?: (event: NgtEvent<WheelEvent>) => void;
 }

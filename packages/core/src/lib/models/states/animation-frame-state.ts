@@ -1,11 +1,6 @@
 import * as THREE from 'three';
 import type { NgtRender } from '../render';
 
-export interface NgtAnimationReady<TObject = any> {
-  animateObject: TObject;
-  renderState: NgtRender;
-}
-
 export type NgtAnimationCallback<TObject> = (
   state: NgtRender,
   obj: TObject

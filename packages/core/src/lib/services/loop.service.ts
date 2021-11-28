@@ -5,8 +5,8 @@ import { NgtStore } from '../stores/store';
 
 @Injectable()
 export class NgtLoopService {
-  private running = false;
-  private repeat?: number;
+  #running = false;
+  #repeat?: number;
 
   constructor(
     private store: NgtStore,
@@ -68,24 +68,24 @@ export class NgtLoopService {
 
   loop(timestamp: number): number | undefined {
     return this.ngZone.runOutsideAngular(() => {
-      this.running = true;
-      this.repeat = 0;
+      this.#running = true;
+      this.#repeat = 0;
 
       const state = this.store.getImperativeState();
       if (
         state.ready &&
         (state.frameloop === 'always' || this.store.frames > 0)
       ) {
-        this.repeat += this.render(
+        this.#repeat += this.render(
           timestamp,
           state,
           this.animationFrameStore.getImperativeState()
         );
       }
 
-      if (this.repeat > 0) return requestAnimationFrame(this.loop.bind(this));
+      if (this.#repeat > 0) return requestAnimationFrame(this.loop.bind(this));
 
-      this.running = false;
+      this.#running = false;
       return;
     });
   }
@@ -96,8 +96,8 @@ export class NgtLoopService {
     // Increase frames, do not go higher than 60
     this.store.frames = Math.min(60, this.store.frames + 1);
     // If the render-loop isn't active, start it
-    if (!this.running) {
-      this.running = true;
+    if (!this.#running) {
+      this.#running = true;
       requestAnimationFrame(this.loop.bind(this));
     }
   }

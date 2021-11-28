@@ -18,7 +18,7 @@ export class NgtAnimationFrameStore extends EnhancedComponentStore<NgtAnimationF
     $.pipe(
       tapEffect(() => {
         this.ngZone.runOutsideAngular(() => {
-          this.updateSubscribers(this.selectors.animations$);
+          this.#updateSubscribers(this.selectors.animations$);
         });
 
         return () => {
@@ -40,19 +40,32 @@ export class NgtAnimationFrameStore extends EnhancedComponentStore<NgtAnimationF
           }));
         });
 
-        return () => {
-          this.ngZone.runOutsideAngular(() => {
-            this.patchState((state) => {
-              const { [uuid]: _, ...animations } = state.animations;
-              return { animations };
-            });
-          });
+        return (prevAnimation, isUnsub) => {
+          if (
+            (prevAnimation && prevAnimation.obj !== animation.obj) ||
+            isUnsub
+          ) {
+            this.unregister(uuid);
+          }
         };
       })
     )
   );
 
-  private readonly updateSubscribers = this.effect<
+  readonly unregister = this.effect<string>((uuid$) =>
+    uuid$.pipe(
+      tap((uuid) => {
+        this.ngZone.runOutsideAngular(() => {
+          this.patchState((state) => {
+            const { [uuid]: _, ...animations } = state.animations;
+            return { animations };
+          });
+        });
+      })
+    )
+  );
+
+  readonly #updateSubscribers = this.effect<
     NgtAnimationFrameStoreState['animations']
   >((animations$) =>
     animations$.pipe(

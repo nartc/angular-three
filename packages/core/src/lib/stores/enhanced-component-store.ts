@@ -102,18 +102,18 @@ export abstract class EnhancedComponentStore<
     getUpdaters(this) as unknown as StoreUpdaters<TState> &
       AsyncStoreUpdaters<TState>;
 
-  private readonly $imperative: BehaviorSubject<TState>;
+  readonly #imperative$: BehaviorSubject<TState>;
 
   protected constructor(state: TState) {
     super(state);
-    this.$imperative = new BehaviorSubject<TState>(state);
-    this.watchImperative(this.state$);
+    this.#imperative$ = new BehaviorSubject<TState>(state);
+    this.#watchImperative(this.state$);
   }
 
-  private readonly watchImperative = this.effect<TState>((state$) =>
+  readonly #watchImperative = this.effect<TState>((state$) =>
     state$.pipe(
       tap((state) => {
-        this.$imperative.next(state);
+        this.#imperative$.next(state);
       })
     )
   );
@@ -197,7 +197,7 @@ export abstract class EnhancedComponentStore<
   }
 
   getImperativeState(): TState {
-    return this.$imperative.getValue();
+    return this.#imperative$.getValue();
   }
 }
 
@@ -228,16 +228,19 @@ export function tapEffect<T>(
   effectFn: (
     value: T,
     firstRun: boolean
-  ) => ((previousValue: T | undefined) => void) | void
+  ) => ((previousValue: T | undefined, isUnsubscribed: boolean) => void) | void
 ): MonoTypeOperatorFunction<T> {
-  let cleanupFn: (previousValue: T | undefined) => void = noop;
+  let cleanupFn: (
+    previousValue: T | undefined,
+    isUnsubscribed: boolean
+  ) => void = noop;
   let firstRun = false;
   let latestValue: T | undefined = undefined;
 
   return tap<T>({
     next: (value: T) => {
       if (cleanupFn && firstRun) {
-        cleanupFn(latestValue);
+        cleanupFn(latestValue, false);
       }
 
       const cleanUpOrVoid = effectFn(value, firstRun);
@@ -253,7 +256,7 @@ export function tapEffect<T>(
     },
     unsubscribe: () => {
       if (cleanupFn) {
-        cleanupFn(latestValue);
+        cleanupFn(latestValue, true);
       }
     },
   });

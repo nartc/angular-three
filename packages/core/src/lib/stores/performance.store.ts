@@ -19,24 +19,23 @@ export class NgtPerformanceStore extends EnhancedComponentStore<NgtPerformance> 
     $.pipe(
       tap(() => {
         this.ngZone.runOutsideAngular(() => {
-          this.setPerformance(this.canvasInputsStore.selectors.performance$);
+          this.#setPerformance(this.canvasInputsStore.selectors.performance$);
         });
       })
     )
   );
 
-  private readonly setPerformance = this.effect<NgtPerformance>(
-    (performance$) =>
-      performance$.pipe(
-        tap(({ min, max, debounce, current }) => {
-          this.ngZone.runOutsideAngular(() => {
-            this.updaters.setCurrent(current);
-            this.updaters.setMin(min);
-            this.updaters.setMax(max);
-            this.updaters.setDebounce(debounce);
-          });
-        })
-      )
+  readonly #setPerformance = this.effect<NgtPerformance>((performance$) =>
+    performance$.pipe(
+      tap(({ min, max, debounce, current }) => {
+        this.ngZone.runOutsideAngular(() => {
+          this.updaters.setCurrent(current);
+          this.updaters.setMin(min);
+          this.updaters.setMax(max);
+          this.updaters.setDebounce(debounce);
+        });
+      })
+    )
   );
 
   readonly regress = this.effect(($) =>

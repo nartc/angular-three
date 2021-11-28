@@ -36,7 +36,7 @@ import { NgtStore } from './stores/store';
 @Component({
   selector: 'ngt-canvas',
   exportAs: 'ngtCanvas',
-  template: ` <canvas #rendererCanvas></canvas>`,
+  template: ` <canvas #rendererCanvas></canvas> `,
   styles: [
     `
       :host {
@@ -126,6 +126,7 @@ export class NgtCanvas extends EnhancedComponentStore implements OnInit {
   }
 
   @Output() created = new EventEmitter<NgtCreatedState>();
+  @Output() pointermissed = new EventEmitter<MouseEvent>();
 
   @ViewChild('rendererCanvas', { static: true })
   rendererCanvas!: ElementRef<HTMLCanvasElement>;
@@ -149,11 +150,22 @@ export class NgtCanvas extends EnhancedComponentStore implements OnInit {
       this.eventsStore.init();
       this.animationFrameStore.init();
 
-      this.ready(this.store.selectors.ready$);
+      // if there is handler to pointermissed on the canvas
+      // update pointermissed in events store so that
+      // events util will handle it
+      if (this.pointermissed.observed) {
+        this.eventsStore.updaters.setPointermissed((event) => {
+          this.ngZone.runOutsideAngular(() => {
+            this.pointermissed.emit(event);
+          });
+        });
+      }
+
+      this.#ready(this.store.selectors.ready$);
     });
   }
 
-  readonly ready = this.effect<boolean>((ready$) =>
+  readonly #ready = this.effect<boolean>((ready$) =>
     ready$.pipe(
       tap((ready) => {
         this.ngZone.runOutsideAngular(() => {
@@ -171,42 +183,3 @@ export class NgtCanvas extends EnhancedComponentStore implements OnInit {
     )
   );
 }
-
-/**
- * gl?: GLProps
- *   events?: (store: UseStore<RootState>) => EventManager<TCanvas>
- *   size?: Size
- *   mode?: typeof modes[number]
- *   onCreated?: (state: RootState) => void
- */
-
-/**
- * gl: THREE.WebGLRenderer
- *   size: Size
- *   vr?: boolean
- *   shadows?: boolean | Partial<THREE.WebGLShadowMap>
- *   linear?: boolean
- *   flat?: boolean
- *   orthographic?: boolean
- *   frameloop?: 'always' | 'demand' | 'never'
- *   performance?: Partial<Omit<Performance, 'regress'>>
- *   dpr?: Dpr
- *   clock?: THREE.Clock
- *   raycaster?: Partial<Raycaster>
- *   camera?:
- *     | Camera
- *     | Partial<
- *         ReactThreeFiber.Object3DNode<THREE.Camera, typeof THREE.Camera> &
- *           ReactThreeFiber.Object3DNode<THREE.PerspectiveCamera, typeof THREE.PerspectiveCamera> &
- *           ReactThreeFiber.Object3DNode<THREE.OrthographicCamera, typeof THREE.OrthographicCamera>
- *       >
- *   onPointerMissed?: (event: ThreeEvent<PointerEvent>) => void
- */
-
-/**
- * type GLProps =
- *   | Renderer
- *   | ((canvas: HTMLCanvasElement) => Renderer)
- *   | Partial<Properties<THREE.WebGLRenderer> | THREE.WebGLRendererParameters>
- *   | undefined
- */

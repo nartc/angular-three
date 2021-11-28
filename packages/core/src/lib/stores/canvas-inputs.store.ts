@@ -1,7 +1,6 @@
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import * as THREE from 'three';
-import { NgtPerformance } from '../models';
-import { NgtCanvasInputsState } from '../models/states/canvas-inputs-state';
+import { NgtCanvasInputsState, NgtPerformance } from '../models';
 import { NGT_PERFORMANCE_OPTIONS } from '../performance/tokens';
 import { EnhancedComponentStore } from './enhanced-component-store';
 

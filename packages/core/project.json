@@ -33,7 +33,23 @@
       "options": {
         "lintFilePatterns": [
           "packages/core/src/**/*.ts",
-          "packages/core/src/**/*.html"
+          "packages/core/src/**/*.html",
+          "packages/core/meshes/**/*.ts",
+          "packages/core/meshes/**/*.html",
+          "packages/core/materials/**/*.ts",
+          "packages/core/materials/**/*.html",
+          "packages/core/geometries/**/*.ts",
+          "packages/core/geometries/**/*.html",
+          "packages/core/stats/**/*.ts",
+          "packages/core/stats/**/*.html",
+          "packages/core/points/**/*.ts",
+          "packages/core/points/**/*.html",
+          "packages/core/group/**/*.ts",
+          "packages/core/group/**/*.html",
+          "packages/core/cameras/**/*.ts",
+          "packages/core/cameras/**/*.html",
+          "packages/core/audios/**/*.ts",
+          "packages/core/audios/**/*.html"
         ]
       }
     }

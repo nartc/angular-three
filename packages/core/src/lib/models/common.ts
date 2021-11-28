@@ -1,5 +1,6 @@
 export type UnknownRecord = Record<string, unknown>;
 export type AnyConstructor<TObject> = new (...args: any[]) => TObject;
+export type AnyExtenderFunction<TObject> = (object: TObject) => void;
 
 export type Properties<T> = Pick<
   T,
@@ -17,10 +18,12 @@ export type BranchingReturn<
 > = ConditionalType<T, Parent, Coerced, T>;
 
 export type LessFirstConstructorParameters<
-  T,
-  TReturn = T extends [infer First, ...infer Rest] ? Rest : T
-> = TReturn;
+  T extends AnyConstructor<any>,
+  TConstructor = ConstructorParameters<T>
+> = TConstructor extends [infer First, ...infer Rest] ? Rest : TConstructor;
 export type LessFirstTwoConstructorParameters<
-  T,
-  TReturn = T extends [infer First, infer Second, ...infer Rest] ? Rest : T
-> = TReturn;
+  T extends AnyConstructor<any>,
+  TConstructor = ConstructorParameters<T>
+> = TConstructor extends [infer First, infer Second, ...infer Rest]
+  ? Rest
+  : TConstructor;

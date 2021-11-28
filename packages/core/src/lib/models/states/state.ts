@@ -10,6 +10,7 @@ export interface NgtState {
   frameloop: 'always' | 'demand' | 'never';
   ready: boolean;
   vr: boolean;
+  linear: boolean;
   size: NgtSize;
   viewport: NgtViewport & {
     getCurrentViewport: (

@@ -1,8 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
-import { tap, withLatestFrom } from 'rxjs';
+import { noop, tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
 import {
   NgtDomEvent,
+  NgtEvent,
   NgtEventsStoreState,
   NgtPointerCaptureTarget,
 } from '../models';
@@ -27,11 +28,12 @@ const names = {
 export class NgtEventsStore extends EnhancedComponentStore<NgtEventsStoreState> {
   constructor(private store: NgtStore, private ngZone: NgZone) {
     super({
+      pointermissed: noop,
       connected: false,
       handlers: {} as NgtEventsStoreState['handlers'],
       internal: {
         interaction: [],
-        hovered: new Map<string, NgtDomEvent>(),
+        hovered: new Map<string, NgtEvent<NgtDomEvent>>(),
         capturedMap: new Map<
           number,
           Map<THREE.Object3D, NgtPointerCaptureTarget>

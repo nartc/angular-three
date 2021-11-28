@@ -136,11 +136,11 @@ export class NgtResize extends Observable<NgtResizeResult> {
           })
             .pipe(debounceAndDestroy(scrollDebounce))
             .subscribe(boundEntriesCallback);
-
-          fromEvent(document.defaultView as Window, 'resize')
-            .pipe(debounceAndDestroy(resizeDebounce))
-            .subscribe(boundEntriesCallback);
         }
+
+        fromEvent(document.defaultView as Window, 'resize')
+          .pipe(debounceAndDestroy(resizeDebounce))
+          .subscribe(boundEntriesCallback);
       });
 
       return () => {

@@ -17,14 +17,14 @@ export type NgtSupportedEvents =
 
 export interface NgtEventsInternal {
   interaction: THREE.Object3D[];
-  hovered: Map<string, NgtDomEvent>;
+  hovered: Map<string, NgtEvent<NgtDomEvent>>;
   capturedMap: Map<number, Map<THREE.Object3D, NgtPointerCaptureTarget>>;
   initialClick: [x: number, y: number];
   initialHits: THREE.Object3D[];
 }
 
 export interface NgtEventsStoreState {
-  pointermissed?: (event: NgtEvent<PointerEvent>) => void;
+  pointermissed?: (event: MouseEvent) => void;
   connected: false | HTMLElement;
   internal: NgtEventsInternal;
   handlers?: Record<NgtSupportedEvents, EventListener>;

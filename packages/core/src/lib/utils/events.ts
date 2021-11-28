@@ -213,7 +213,7 @@ export function createEvents(
     intersections: NgtIntersection[],
     event: NgtDomEvent,
     delta: number,
-    callback: (event: NgtDomEvent) => void
+    callback: (event: NgtEvent<NgtDomEvent>) => void
   ) {
     const { raycaster, mouse, camera } = stateGetter();
     const { internal } = eventsStateGetter();
@@ -331,7 +331,7 @@ export function createEvents(
         };
 
         // Call subscribers
-        callback(raycastEvent as NgtDomEvent);
+        callback(raycastEvent);
         // Event bubbling may be interrupted by stopPropagation
         if (localState.stopped) break;
       }
@@ -384,13 +384,13 @@ export function createEvents(
       if (isClickEvent && !hits.length) {
         if (delta <= 2) {
           pointerMissed(event, internal.interaction);
-          if (pointermissed) pointermissed(event as NgtEvent<PointerEvent>);
+          if (pointermissed) pointermissed(event);
         }
       }
       // Take care of unhover
       if (isPointerMove) cancelPointer(hits);
 
-      handleIntersects(hits, event, delta, (data: NgtDomEvent) => {
+      handleIntersects(hits, event, delta, (data: NgtEvent<NgtDomEvent>) => {
         const eventObject = data.eventObject;
         const instance = (eventObject as unknown as NgtInstance).__ngt;
         const handlers = instance?.handlers;
@@ -448,9 +448,7 @@ export function createEvents(
 
   function pointerMissed(event: MouseEvent, objects: THREE.Object3D[]) {
     objects.forEach((object: THREE.Object3D) =>
-      (object as unknown as NgtInstance).__ngt?.handlers?.pointermissed?.(
-        event as NgtEvent<PointerEvent>
-      )
+      (object as unknown as NgtInstance).__ngt?.handlers?.pointermissed?.(event)
     );
   }
 

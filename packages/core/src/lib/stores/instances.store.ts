@@ -31,7 +31,7 @@ export class NgtInstancesStore extends EnhancedComponentStore<NgtInstancesStoreS
     id?: string;
   }>((state, { geometry, id = geometry.uuid }) => ({
     ...state,
-    bufferGeometries: { ...state.geometries, [id]: geometry },
+    geometries: { ...state.geometries, [id]: geometry },
   }));
 
   readonly removeGeometry = this.updater<string>((state, id) => {

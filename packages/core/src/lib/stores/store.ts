@@ -21,7 +21,7 @@ const defaultTarget = new THREE.Vector3();
 
 @Injectable()
 export class NgtStore extends EnhancedComponentStore<NgtState> {
-  private readonly sizeResult$ = this.select(
+  readonly #sizeResult$ = this.select(
     this.resizeResult$,
     ({ width, height }) => ({
       width,
@@ -30,14 +30,14 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
     { debounce: true }
   );
 
-  private readonly dprResult$ = this.select(
+  readonly #dprResult$ = this.select(
     this.resizeResult$,
     this.selectors.viewport$,
     ({ dpr }, viewport) => ({ ...viewport, dpr }),
     { debounce: true }
   );
 
-  private readonly allReady$ = this.select(
+  readonly #allReady$ = this.select(
     this.selectors.scene$,
     this.selectors.camera$,
     this.selectors.renderer$,
@@ -47,7 +47,7 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
     { debounce: true }
   );
 
-  private readonly dimensions$ = this.select(
+  readonly #dimensions$ = this.select(
     this.selectors.size$,
     this.selectors.viewport$,
     (size, viewport) => ({ size, viewport }),
@@ -69,6 +69,7 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
       clock: canvasInputsStore.getImperativeState().clock,
       frameloop: canvasInputsStore.getImperativeState().frameloop,
       vr: canvasInputsStore.getImperativeState().vr,
+      linear: canvasInputsStore.getImperativeState().linear,
       viewport: {
         initialDpr: calculateDpr(canvasInputsStore.getImperativeState().dpr),
         dpr: calculateDpr(canvasInputsStore.getImperativeState().dpr),
@@ -120,20 +121,21 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
     canvas$.pipe(
       tapEffect((canvasElement) => {
         this.ngZone.runOutsideAngular(() => {
-          this.updaters.setReady(this.allReady$);
-          this.updaters.setSize(this.sizeResult$);
-          this.updaters.setViewport(this.dprResult$);
+          this.updaters.setReady(this.#allReady$);
+          this.updaters.setSize(this.#sizeResult$);
+          this.updaters.setViewport(this.#dprResult$);
           this.updaters.setFrameloop(
             this.canvasInputsStore.selectors.frameloop$
           );
           this.updaters.setVr(this.canvasInputsStore.selectors.vr$);
+          this.updaters.setLinear(this.canvasInputsStore.selectors.linear$);
 
           this.initRenderer(canvasElement);
           this.initScene();
           this.initCamera();
           this.initRaycaster();
 
-          this.updateDimensions(this.dimensions$);
+          this.updateDimensions(this.#dimensions$);
         });
 
         return () => {

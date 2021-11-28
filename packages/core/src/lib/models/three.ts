@@ -22,11 +22,7 @@ export type NgtVector4 =
   | THREE.Vector4
   | Parameters<THREE.Vector4['set']>
   | Parameters<THREE.Vector4['setScalar']>[0];
-export type NgtColor =
-  | ConstructorParameters<typeof THREE.Color>
-  | THREE.Color
-  | number
-  | string; // Parameters<T> will not work here because of multiple function signatures in three.js types
+export type NgtColor = THREE.ColorRepresentation | NgtTriplet;
 export type NgtColorArray = typeof THREE.Color | Parameters<THREE.Color['set']>;
 export type NgtLayers = THREE.Layers | Parameters<THREE.Layers['set']>[0];
 export type NgtQuaternion =
