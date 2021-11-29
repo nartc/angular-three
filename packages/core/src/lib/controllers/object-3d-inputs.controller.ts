@@ -1,3 +1,4 @@
+// GENERATED
 import {
   Directive,
   EventEmitter,
@@ -19,7 +20,17 @@ import { makeColor, makeForSet, makeVector3 } from '../utils/make';
 import { Controller, createControllerProviderFactory } from './controller';
 
 @Directive({
-  selector: 'ngt-mesh',
+  selector: `
+    ngt-primitive,
+    ngt-bone,
+    ngt-group,
+    ngt-points,
+    ngt-mesh,
+    ngt-instanced-mesh
+    ngt-skinned-mesh,
+    ngt-audio,
+    ngt-positional-audio,
+  `,
   exportAs: 'ngtObject3dInputsController',
 })
 export class NgtObject3dInputsController extends Controller {

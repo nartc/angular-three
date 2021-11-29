@@ -1,3 +1,4 @@
+// GENERATED
 import {
   Directive,
   EventEmitter,
@@ -51,7 +52,17 @@ const supportedEvents = [
 ] as const;
 
 @Directive({
-  selector: 'ngt-mesh',
+  selector: `
+    ngt-primitive,
+    ngt-bone,
+    ngt-group,
+    ngt-points,
+    ngt-mesh,
+    ngt-instanced-mesh
+    ngt-skinned-mesh,
+    ngt-audio,
+    ngt-positional-audio,
+  `,
   exportAs: 'ngtObject3dController',
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,

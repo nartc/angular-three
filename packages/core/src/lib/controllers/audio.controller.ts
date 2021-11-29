@@ -1,8 +1,12 @@
+// GENERATED
 import { Directive, Input, NgModule } from '@angular/core';
 import { Controller, createControllerProviderFactory } from './controller';
 
 @Directive({
-  selector: 'ngt-audio, ngt-positional-audio, ngt-soba-positional-audio',
+  selector: `
+    ngt-audio,
+    ngt-positional-audio,
+  `,
   exportAs: 'ngtAudioController',
 })
 export class NgtAudioController extends Controller {

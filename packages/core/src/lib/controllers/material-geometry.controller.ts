@@ -1,3 +1,4 @@
+// GENERATED
 import {
   AfterContentInit,
   ContentChild,
@@ -25,7 +26,11 @@ import {
 } from './object-3d.controller';
 
 @Directive({
-  selector: 'ngt-mesh',
+  selector: `
+    ngt-mesh,
+    ngt-instanced-mesh,
+    ngt-skinned-mesh,
+  `,
   exportAs: 'ngtMaterialGeometryController',
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
