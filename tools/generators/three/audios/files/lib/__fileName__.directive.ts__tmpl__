@@ -1,0 +1,29 @@
+// GENERATED
+import { NgtCommonAudio, NGT_AUDIO_CONTROLLER_PROVIDER, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
+import { NgModule, Directive } from '@angular/core';
+import * as THREE from 'three';
+
+@Directive({
+  selector: 'ngt-<%= fileName %>',
+  exportAs: 'ngt<%= name %>',
+  providers: [
+    {
+      provide: NgtCommonAudio,
+      useExisting: Ngt<%= name %>,
+    },
+    NGT_AUDIO_CONTROLLER_PROVIDER,
+    NGT_OBJECT_CONTROLLER_PROVIDER
+  ],
+})
+export class Ngt<%= name %> extends NgtCommonAudio<<%= audioNode %>, THREE.<%= name %>> {
+
+
+  audioType = THREE.<%= name %>;
+}
+
+@NgModule({
+  declarations: [Ngt<%= name %>],
+  exports: [Ngt<%= name %>],
+})
+export class Ngt<%= name %>Module {}
+
