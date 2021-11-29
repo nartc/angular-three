@@ -26,10 +26,19 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-group,
     ngt-points,
     ngt-mesh,
-    ngt-instanced-mesh
+    ngt-instanced-mesh,
     ngt-skinned-mesh,
     ngt-audio,
     ngt-positional-audio,
+    ngt-light-probe,
+    ngt-ambient-light,
+    ngt-ambient-light-probe,
+    ngt-hemisphere-light
+    ngt-hemisphere-light-probe,
+    ngt-directional-light,
+    ngt-point-light,
+    ngt-spot-light,
+    ngt-rect-area-light,
   `,
   exportAs: 'ngtObject3dInputsController',
 })

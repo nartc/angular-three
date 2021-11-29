@@ -53,7 +53,9 @@
           "packages/core/attributes/**/*.ts",
           "packages/core/attributes/**/*.html",
           "packages/core/primitive/**/*.ts",
-          "packages/core/primitive/**/*.html"
+          "packages/core/primitive/**/*.html",
+          "packages/core/lights/**/*.ts",
+          "packages/core/lights/**/*.html"
         ]
       }
     }
