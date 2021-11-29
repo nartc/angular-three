@@ -1,5 +1,4 @@
 // GENERATED
-
 import { NgtMaterial } from '@angular-three/core';
 import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';

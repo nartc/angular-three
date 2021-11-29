@@ -1,5 +1,4 @@
 // GENERATED
-
 export * from './lib/shadow-material/shadow-material.directive';
 export * from './lib/sprite-material/sprite-material.directive';
 export * from './lib/raw-shader-material/raw-shader-material.directive';
