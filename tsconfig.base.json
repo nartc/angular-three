@@ -28,6 +28,7 @@
       "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
       "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
       "@angular-three/core/points": ["packages/core/points/src/index.ts"],
+      "@angular-three/core/primitive": ["packages/core/primitive/src/index.ts"],
       "@angular-three/core/stats": ["packages/core/stats/src/index.ts"]
     }
   },

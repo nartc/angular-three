@@ -51,7 +51,9 @@
           "packages/core/audios/**/*.ts",
           "packages/core/audios/**/*.html",
           "packages/core/attributes/**/*.ts",
-          "packages/core/attributes/**/*.html"
+          "packages/core/attributes/**/*.html",
+          "packages/core/primitive/**/*.ts",
+          "packages/core/primitive/**/*.html"
         ]
       }
     }
