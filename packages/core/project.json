@@ -49,7 +49,9 @@
           "packages/core/cameras/**/*.ts",
           "packages/core/cameras/**/*.html",
           "packages/core/audios/**/*.ts",
-          "packages/core/audios/**/*.html"
+          "packages/core/audios/**/*.html",
+          "packages/core/attributes/**/*.ts",
+          "packages/core/attributes/**/*.html"
         ]
       }
     }

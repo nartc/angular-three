@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@angular-three/core": ["packages/core/src/index.ts"],
+      "@angular-three/core/attributes": [
+        "packages/core/attributes/src/index.ts"
+      ],
       "@angular-three/core/audios": ["packages/core/audios/src/index.ts"],
       "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"],
       "@angular-three/core/geometries": [
