@@ -46,8 +46,8 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-axes-helper,
     ngt-box-helper,
     ngt-box3-helper,
-    ngt-grid-helper
-    ngt-camera-helper,
+    ngt-grid-helper,
+    ngt-camera-helper
     ngt-directional-light-helper,
     ngt-hemisphere-light-helper,
     ngt-plane-helper,
@@ -55,6 +55,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-polar-grid-helper,
     ngt-skeleton-helper,
     ngt-spot-light-helper,
+    ngt-sprite,
   `,
   exportAs: 'ngtObject3dInputsController',
 })

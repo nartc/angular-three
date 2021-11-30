@@ -63,7 +63,9 @@
           "packages/core/textures/**/*.ts",
           "packages/core/textures/**/*.html",
           "packages/core/lines/**/*.ts",
-          "packages/core/lines/**/*.html"
+          "packages/core/lines/**/*.html",
+          "packages/core/sprites/**/*.ts",
+          "packages/core/sprites/**/*.html"
         ]
       }
     }
