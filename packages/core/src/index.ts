@@ -22,6 +22,7 @@ export * from './lib/three/helper';
 export * from './lib/three/material';
 export * from './lib/three/mesh';
 export * from './lib/three/sprite';
+export * from './lib/three/camera';
 
 export * from './lib/resize/tokens';
 export * from './lib/performance/tokens';

@@ -1,6 +1,7 @@
 import { Tree } from '@nrwl/devkit';
 import attributesGenerator from './attributes/attributes';
 import audiosGenerator from './audios/audios';
+import camerasGenerator from './cameras/cameras';
 import controllersGenerator from './controllers/controllers';
 import curvesGenerator from './curves/curves';
 import geometriesGenerator from './geometries/geometries';
@@ -26,17 +27,24 @@ export default async function (tree: Tree) {
     helperSelectors,
     lineSelectors,
     spriteSelectors,
+    cameraSelectors,
   ] = await Promise.all([
     audiosGenerator(tree),
     lightsGenerator(tree),
     helpersGenerator(tree),
     linesGenerator(tree),
     spritesGenerator(tree),
+    camerasGenerator(tree),
   ]);
 
   await controllersGenerator(
     tree,
-    [...lightSelectors, ...helperSelectors, ...spriteSelectors],
+    [
+      ...lightSelectors,
+      ...helperSelectors,
+      ...spriteSelectors,
+      ...cameraSelectors,
+    ],
     audioSelectors,
     lineSelectors
   );
