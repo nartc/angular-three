@@ -4,7 +4,7 @@ import {
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
 } from '../controllers/object-3d.controller';
-import type { AnyConstructor } from '../models';
+import type { AnyConstructor, UnknownRecord } from '../models';
 import { applyProps } from '../utils/apply-props';
 
 @Directive()
@@ -37,9 +37,13 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
       return this.ngZone.runOutsideAngular(() => {
         this.#light = new this.lightType(...this.#lightArgs);
         const props = {
-          intensity: this.intensity,
           shadow: this.shadow,
-        };
+        } as UnknownRecord;
+
+        if (this.intensity !== undefined) {
+          props['intensity'] = this.intensity;
+        }
+
         applyProps(this.#light, props);
 
         return this.#light;
