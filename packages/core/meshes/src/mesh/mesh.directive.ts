@@ -10,6 +10,7 @@ import * as THREE from 'three';
   selector: 'ngt-mesh',
   exportAs: 'ngtMesh',
   providers: [
+    { provide: NgtCommonMesh, useExisting: NgtMesh },
     NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
     { provide: NGT_OBJECT_TYPE, useValue: THREE.Mesh },
   ],
