@@ -55,7 +55,9 @@
           "packages/core/primitive/**/*.ts",
           "packages/core/primitive/**/*.html",
           "packages/core/lights/**/*.ts",
-          "packages/core/lights/**/*.html"
+          "packages/core/lights/**/*.html",
+          "packages/core/curves/**/*.ts",
+          "packages/core/curves/**/*.html"
         ]
       }
     }

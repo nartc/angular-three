@@ -21,6 +21,7 @@
       ],
       "@angular-three/core/audios": ["packages/core/audios/src/index.ts"],
       "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"],
+      "@angular-three/core/curves": ["packages/core/curves/src/index.ts"],
       "@angular-three/core/geometries": [
         "packages/core/geometries/src/index.ts"
       ],
