@@ -29,9 +29,7 @@ export abstract class NgtHelper<THelper extends THREE.Object3D>
 
   ngOnChanges() {
     this.ngZone.runOutsideAngular(() => {
-      if (!this.#helper) {
-        this.objectController.init();
-      }
+      this.objectController.init();
     });
   }
 
