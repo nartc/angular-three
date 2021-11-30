@@ -79,15 +79,21 @@ const supportedEvents = [
     ngt-box-helper,
     ngt-box3-helper,
     ngt-grid-helper,
-    ngt-camera-helper
+    ngt-camera-helper,
     ngt-directional-light-helper,
     ngt-hemisphere-light-helper,
     ngt-plane-helper,
     ngt-point-light-helper,
     ngt-polar-grid-helper,
-    ngt-skeleton-helper,
+    ngt-skeleton-helper
     ngt-spot-light-helper,
     ngt-sprite,
+    ngt-camera,
+    ngt-perspective-camera,
+    ngt-orthographic-camera,
+    ngt-array-camera,
+    ngt-stereo-camera,
+    ngt-cube-camera,
   `,
   exportAs: 'ngtObject3dController',
   providers: [
