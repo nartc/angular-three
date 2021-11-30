@@ -15,7 +15,7 @@ const names = {
   click: false,
   contextmenu: false,
   dblclick: false,
-  wheel: true,
+  wheel: false, // passive wheel errors with OrbitControls
   pointerdown: true,
   pointerup: true,
   pointerleave: true,
