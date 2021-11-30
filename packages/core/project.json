@@ -61,7 +61,9 @@
           "packages/core/helpers/**/*.ts",
           "packages/core/helpers/**/*.html",
           "packages/core/textures/**/*.ts",
-          "packages/core/textures/**/*.html"
+          "packages/core/textures/**/*.html",
+          "packages/core/lines/**/*.ts",
+          "packages/core/lines/**/*.html"
         ]
       }
     }

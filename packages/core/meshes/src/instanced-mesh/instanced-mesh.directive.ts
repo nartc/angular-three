@@ -11,6 +11,7 @@ import * as THREE from 'three';
   selector: 'ngt-instanced-mesh',
   exportAs: 'ngtInstancedMesh',
   providers: [
+    { provide: NgtCommonMesh, useExisting: NgtInstancedMesh },
     NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
     { provide: NGT_OBJECT_TYPE, useValue: THREE.InstancedMesh },
     {

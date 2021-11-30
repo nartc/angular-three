@@ -30,6 +30,9 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-skinned-mesh,
     ngt-audio,
     ngt-positional-audio,
+    ngt-line,
+    ngt-line-loop,
+    ngt-line-segments,
     ngt-light-probe,
     ngt-ambient-light,
     ngt-ambient-light-probe,
@@ -43,10 +46,10 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-axes-helper,
     ngt-box-helper,
     ngt-box3-helper,
-    ngt-grid-helper,
+    ngt-grid-helper
     ngt-camera-helper,
     ngt-directional-light-helper,
-    ngt-hemisphere-light-helper
+    ngt-hemisphere-light-helper,
     ngt-plane-helper,
     ngt-point-light-helper,
     ngt-polar-grid-helper,

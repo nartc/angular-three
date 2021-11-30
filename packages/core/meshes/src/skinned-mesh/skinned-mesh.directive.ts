@@ -117,6 +117,7 @@ export class NgtSkeleton implements OnInit {
   selector: 'ngt-skinned-mesh',
   exportAs: 'ngtSkinnedMesh',
   providers: [
+    { provide: NgtCommonMesh, useExisting: NgtSkinnedMesh },
     NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
     { provide: NGT_OBJECT_TYPE, useValue: THREE.SkinnedMesh },
   ],
