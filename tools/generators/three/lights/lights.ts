@@ -51,11 +51,12 @@ export default async function lightsGenerator(tree: Tree): Promise<string[]> {
     );
 
     generatedLights.push(normalizedNames.fileName);
-    generateFiles(tree, join(__dirname, 'files/index'), join(lightDir, 'src'), {
-      items: generatedLights,
-      tmpl: '',
-    });
   }
+
+  generateFiles(tree, join(__dirname, 'files/index'), join(lightDir, 'src'), {
+    items: generatedLights,
+    tmpl: '',
+  });
 
   await formatFiles(tree);
 

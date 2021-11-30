@@ -64,16 +64,17 @@ export default async function geometriesGenerator(tree: Tree) {
     );
 
     generatedGeometries.push(normalizedNames.fileName);
-    generateFiles(
-      tree,
-      join(__dirname, 'files/index'),
-      join(geometryDir, 'src'),
-      {
-        items: generatedGeometries,
-        tmpl: '',
-      }
-    );
   }
+
+  generateFiles(
+    tree,
+    join(__dirname, 'files/index'),
+    join(geometryDir, 'src'),
+    {
+      items: generatedGeometries,
+      tmpl: '',
+    }
+  );
 
   await formatFiles(tree);
 }

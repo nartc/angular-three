@@ -45,11 +45,12 @@ export default async function audiosGenerator(tree: Tree): Promise<string[]> {
     );
 
     generatedAudios.push(normalizedNames.fileName);
-    generateFiles(tree, join(__dirname, 'files/index'), join(audioDir, 'src'), {
-      items: [...generatedAudios, 'audio-listener'],
-      tmpl: '',
-    });
   }
+
+  generateFiles(tree, join(__dirname, 'files/index'), join(audioDir, 'src'), {
+    items: [...generatedAudios, 'audio-listener'],
+    tmpl: '',
+  });
 
   await formatFiles(tree);
 

@@ -55,16 +55,17 @@ export default async function attributesGenerator(tree: Tree) {
     );
 
     generatedAttributes.push(normalizedNames.fileName);
-    generateFiles(
-      tree,
-      join(__dirname, 'files/index'),
-      join(attributeDir, 'src'),
-      {
-        items: generatedAttributes,
-        tmpl: '',
-      }
-    );
   }
+
+  generateFiles(
+    tree,
+    join(__dirname, 'files/index'),
+    join(attributeDir, 'src'),
+    {
+      items: generatedAttributes,
+      tmpl: '',
+    }
+  );
 
   await formatFiles(tree);
 }

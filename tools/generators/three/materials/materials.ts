@@ -61,16 +61,17 @@ export default async function materialsGenerator(tree: Tree) {
     );
 
     generatedMaterials.push(normalizedNames.fileName);
-    generateFiles(
-      tree,
-      join(__dirname, 'files/index'),
-      join(materialDir, 'src'),
-      {
-        items: generatedMaterials,
-        tmpl: '',
-      }
-    );
   }
+
+  generateFiles(
+    tree,
+    join(__dirname, 'files/index'),
+    join(materialDir, 'src'),
+    {
+      items: generatedMaterials,
+      tmpl: '',
+    }
+  );
 
   await formatFiles(tree);
 }
