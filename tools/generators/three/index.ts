@@ -8,6 +8,7 @@ import helpersGenerator from './helpers/helpers';
 import lightsGenerator from './lights/lights';
 import linesGenerator from './lines/lines';
 import materialsGenerator from './materials/materials';
+import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
 
 export default async function (tree: Tree) {
@@ -19,17 +20,23 @@ export default async function (tree: Tree) {
     texturesGenerator(tree),
   ]);
 
-  const [audioSelectors, lightSelectors, helperSelectors, lineSelectors] =
-    await Promise.all([
-      audiosGenerator(tree),
-      lightsGenerator(tree),
-      helpersGenerator(tree),
-      linesGenerator(tree),
-    ]);
+  const [
+    audioSelectors,
+    lightSelectors,
+    helperSelectors,
+    lineSelectors,
+    spriteSelectors,
+  ] = await Promise.all([
+    audiosGenerator(tree),
+    lightsGenerator(tree),
+    helpersGenerator(tree),
+    linesGenerator(tree),
+    spritesGenerator(tree),
+  ]);
 
   await controllersGenerator(
     tree,
-    [...lightSelectors, ...helperSelectors],
+    [...lightSelectors, ...helperSelectors, ...spriteSelectors],
     audioSelectors,
     lineSelectors
   );
