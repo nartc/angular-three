@@ -6,7 +6,8 @@
   },
   "peerDependencies": {
     "@angular/common": "^13.0.0",
-    "@angular/core": "^13.0.0"
+    "@angular/core": "^13.0.0",
+    "three-stdlib": "~2.5.11"
   },
   "dependencies": {
     "tslib": "^2.3.0"

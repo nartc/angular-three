@@ -33,7 +33,9 @@
       "options": {
         "lintFilePatterns": [
           "packages/soba/src/**/*.ts",
-          "packages/soba/src/**/*.html"
+          "packages/soba/src/**/*.html",
+          "packages/soba/controls/**/*.ts",
+          "packages/soba/controls/**/*.html"
         ]
       }
     }
