@@ -6,9 +6,9 @@ import {
   NgtInstance,
   NgtRaycaster,
   NgtSize,
+  NgtState,
   UnknownRecord,
 } from '../models';
-import { NgtState } from '../models/states/state';
 import { NgtResize, NgtResizeResult } from '../resize/resize.service';
 import { applyProps } from '../utils/apply-props';
 import { calculateDpr } from '../utils/calculate-dpr';
@@ -110,6 +110,7 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
           };
         },
       },
+      controls: null,
       camera: undefined,
       raycaster: undefined,
       renderer: undefined,

@@ -19,6 +19,7 @@ export interface NgtState {
       size?: NgtSize
     ) => NgtCurrentViewport;
   };
+  controls: THREE.EventDispatcher | null;
   renderer?: THREE.WebGLRenderer;
   camera?: NgtCamera;
   scene?: THREE.Scene;
