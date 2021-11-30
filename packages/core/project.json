@@ -59,7 +59,9 @@
           "packages/core/curves/**/*.ts",
           "packages/core/curves/**/*.html",
           "packages/core/helpers/**/*.ts",
-          "packages/core/helpers/**/*.html"
+          "packages/core/helpers/**/*.html",
+          "packages/core/textures/**/*.ts",
+          "packages/core/textures/**/*.html"
         ]
       }
     }
