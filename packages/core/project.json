@@ -57,7 +57,9 @@
           "packages/core/lights/**/*.ts",
           "packages/core/lights/**/*.html",
           "packages/core/curves/**/*.ts",
-          "packages/core/curves/**/*.html"
+          "packages/core/curves/**/*.html",
+          "packages/core/helpers/**/*.ts",
+          "packages/core/helpers/**/*.html"
         ]
       }
     }
