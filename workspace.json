@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "core": "packages/core",
-    "demo": "packages/demo"
+    "demo": "packages/demo",
+    "soba": "packages/soba"
   }
 }
