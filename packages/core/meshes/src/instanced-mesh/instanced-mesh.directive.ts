@@ -1,10 +1,19 @@
 import {
   NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
+  NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER,
   NGT_OBJECT_POST_INIT,
   NGT_OBJECT_TYPE,
   NgtCommonMesh,
+  NgtMaterialGeometryController,
 } from '@angular-three/core';
-import { Directive, NgModule } from '@angular/core';
+import {
+  Directive,
+  Inject,
+  Input,
+  NgModule,
+  NgZone,
+  Optional,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -22,7 +31,22 @@ import * as THREE from 'three';
     },
   ],
 })
-export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {}
+export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {
+  @Input() set args(value: [number]) {
+    if (this.materialGeometryController) {
+      this.materialGeometryController.meshArgs = value;
+    }
+  }
+
+  constructor(
+    @Optional()
+    @Inject(NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER)
+    materialGeometryController: NgtMaterialGeometryController | null,
+    ngZone: NgZone
+  ) {
+    super(materialGeometryController, ngZone);
+  }
+}
 
 @NgModule({
   declarations: [NgtInstancedMesh],
