@@ -20,6 +20,7 @@
       "@angular-three/cannon/constraints": [
         "packages/cannon/constraints/src/index.ts"
       ],
+      "@angular-three/cannon/debug": ["packages/cannon/debug/src/index.ts"],
       "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/core/attributes": [
         "packages/core/attributes/src/index.ts"

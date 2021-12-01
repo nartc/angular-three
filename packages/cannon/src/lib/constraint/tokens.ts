@@ -1,5 +1,5 @@
-import { ConstraintTypes } from '@angular-three/cannon';
 import { InjectionToken } from '@angular/core';
+import { ConstraintTypes } from '../models/constraints';
 
 export const NGT_PHYSIC_CONSTRAINT_TYPE = new InjectionToken<
   'Hinge' | ConstraintTypes
