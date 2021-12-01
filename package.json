@@ -18,6 +18,7 @@
     "@ngrx/component-store": "13.0.1",
     "cannon-es": "0.18.0",
     "cannon-es-debugger": "0.1.4",
+    "nice-color-palettes": "3.0.0",
     "rxjs": "~7.4.0",
     "three": "0.134.0",
     "three-stdlib": "2.5.11",
