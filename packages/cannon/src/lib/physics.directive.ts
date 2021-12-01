@@ -1,6 +1,6 @@
 import { NgtTriplet } from '@angular-three/core';
 import { Directive, Input, NgModule, OnInit } from '@angular/core';
-import { NgtPhysicBodyControllerModule } from './bodies/body.controller';
+import { NgtPhysicBodyControllerModule } from './body/body.controller';
 import { Broadphase } from './models/broadphase';
 import { DefaultContactMaterial } from './models/default-contact-material';
 import { Solver } from './models/solver';
@@ -9,7 +9,7 @@ import { NgtPhysicsStore } from './physics.store';
 @Directive({
   selector: 'ngt-physics',
   exportAs: 'ngtPhysics',
-  providers: [NgtPhysicsStore]
+  providers: [NgtPhysicsStore],
 })
 export class NgtPhysics implements OnInit {
   @Input() set size(value: number) {
@@ -64,8 +64,7 @@ export class NgtPhysics implements OnInit {
     this.physicsStore.updaters.setDefaultContactMaterial(value);
   }
 
-  constructor(private physicsStore: NgtPhysicsStore) {
-  }
+  constructor(private physicsStore: NgtPhysicsStore) {}
 
   ngOnInit() {
     this.physicsStore.initEffect();
@@ -74,7 +73,6 @@ export class NgtPhysics implements OnInit {
 
 @NgModule({
   declarations: [NgtPhysics],
-  exports: [NgtPhysics, NgtPhysicBodyControllerModule]
+  exports: [NgtPhysics, NgtPhysicBodyControllerModule],
 })
-export class NgtPhysicsModule {
-}
+export class NgtPhysicsModule {}

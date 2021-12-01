@@ -35,7 +35,9 @@
           "packages/cannon/src/**/*.ts",
           "packages/cannon/src/**/*.html",
           "packages/cannon/bodies/**/*.ts",
-          "packages/cannon/bodies/**/*.html"
+          "packages/cannon/bodies/**/*.html",
+          "packages/cannon/constraints/**/*.ts",
+          "packages/cannon/constraints/**/*.html"
         ]
       }
     }
