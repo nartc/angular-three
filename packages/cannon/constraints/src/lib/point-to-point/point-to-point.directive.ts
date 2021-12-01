@@ -1,6 +1,6 @@
 // GENERATED
 import {
-  ConeTwistConstraintOpts,
+  PointToPointConstraintOpts,
   NGT_PHYSIC_CONSTRAINT_CONTROLLER_PROVIDER,
   NGT_PHYSIC_CONSTRAINT_TYPE,
   NGT_PHYSIC_CONSTRAINT_WATCHED_CONTROLLER,
@@ -9,15 +9,15 @@ import {
 import { Directive, Inject, NgModule } from '@angular/core';
 
 @Directive({
-  selector: 'ng-container[ngtPhysicConeTwistConstraint]',
-  exportAs: 'ngtPhysicConeTwistConstraint',
+  selector: 'ng-container[ngtPhysicPointToPointConstraint]',
+  exportAs: 'ngtPhysicPointToPointConstraint',
   providers: [
     NGT_PHYSIC_CONSTRAINT_CONTROLLER_PROVIDER,
-    { provide: NGT_PHYSIC_CONSTRAINT_TYPE, useValue: 'ConeTwist' },
+    { provide: NGT_PHYSIC_CONSTRAINT_TYPE, useValue: 'PointToPoint' },
   ],
 })
-export class NgtPhysicConeTwistConstraint {
-  static ngAcceptInputType_options: ConeTwistConstraintOpts | undefined;
+export class NgtPhysicPointToPointConstraint {
+  static ngAcceptInputType_options: PointToPointConstraintOpts | undefined;
 
   constructor(
     @Inject(NGT_PHYSIC_CONSTRAINT_WATCHED_CONTROLLER)
@@ -30,7 +30,7 @@ export class NgtPhysicConeTwistConstraint {
 }
 
 @NgModule({
-  declarations: [NgtPhysicConeTwistConstraint],
-  exports: [NgtPhysicConeTwistConstraint],
+  declarations: [NgtPhysicPointToPointConstraint],
+  exports: [NgtPhysicPointToPointConstraint],
 })
-export class NgtPhysicConeTwistConstraintModule {}
+export class NgtPhysicPointToPointConstraintModule {}

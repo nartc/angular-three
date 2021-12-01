@@ -1,6 +1,6 @@
 // GENERATED
 import {
-  ConeTwistConstraintOpts,
+  LockConstraintOpts,
   NGT_PHYSIC_CONSTRAINT_CONTROLLER_PROVIDER,
   NGT_PHYSIC_CONSTRAINT_TYPE,
   NGT_PHYSIC_CONSTRAINT_WATCHED_CONTROLLER,
@@ -9,15 +9,15 @@ import {
 import { Directive, Inject, NgModule } from '@angular/core';
 
 @Directive({
-  selector: 'ng-container[ngtPhysicConeTwistConstraint]',
-  exportAs: 'ngtPhysicConeTwistConstraint',
+  selector: 'ng-container[ngtPhysicLockConstraint]',
+  exportAs: 'ngtPhysicLockConstraint',
   providers: [
     NGT_PHYSIC_CONSTRAINT_CONTROLLER_PROVIDER,
-    { provide: NGT_PHYSIC_CONSTRAINT_TYPE, useValue: 'ConeTwist' },
+    { provide: NGT_PHYSIC_CONSTRAINT_TYPE, useValue: 'Lock' },
   ],
 })
-export class NgtPhysicConeTwistConstraint {
-  static ngAcceptInputType_options: ConeTwistConstraintOpts | undefined;
+export class NgtPhysicLockConstraint {
+  static ngAcceptInputType_options: LockConstraintOpts | undefined;
 
   constructor(
     @Inject(NGT_PHYSIC_CONSTRAINT_WATCHED_CONTROLLER)
@@ -30,7 +30,7 @@ export class NgtPhysicConeTwistConstraint {
 }
 
 @NgModule({
-  declarations: [NgtPhysicConeTwistConstraint],
-  exports: [NgtPhysicConeTwistConstraint],
+  declarations: [NgtPhysicLockConstraint],
+  exports: [NgtPhysicLockConstraint],
 })
-export class NgtPhysicConeTwistConstraintModule {}
+export class NgtPhysicLockConstraintModule {}

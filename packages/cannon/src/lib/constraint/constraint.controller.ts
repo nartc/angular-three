@@ -1,3 +1,4 @@
+// GENERATED
 import {
   Controller,
   createControllerProviderFactory,
@@ -16,7 +17,13 @@ import { NgtPhysicBodyController } from '../body/body.controller';
 import { NgtPhysicConstraintStore } from './constraint.store';
 
 @Directive({
-  selector: '',
+  selector: `
+    ng-container[ngtPhysicPointToPointConstraint],
+    ng-container[ngtPhysicConeTwistConstraint],
+    ng-container[ngtPhysicDistanceConstraint],
+    ng-container[ngtPhysicHingeConstraint],
+    ng-container[ngtPhysicLockConstraint]
+  `,
   exportAs: 'ngtPhysicsConstraintController',
   providers: [NgtPhysicConstraintStore],
 })
