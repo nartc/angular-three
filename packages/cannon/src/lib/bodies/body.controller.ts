@@ -4,27 +4,36 @@ import {
   createControllerProviderFactory,
   NGT_OBJECT_CONTROLLER_PROVIDER,
 } from '@angular-three/core';
-import { Directive, Input, NgModule, NgZone } from '@angular/core';
+import {
+  AfterContentInit,
+  Directive,
+  Input,
+  NgModule,
+  NgZone,
+} from '@angular/core';
 import { BodyProps } from '../models/body';
 import { GetByIndex } from '../models/types';
 import { NgtPhysicBodyStore } from './body.store';
 
 @Directive({
   selector: `
-  [ngtPhysicBox],
-  [ngtPhysicPlane],
-  [ngtPhysicCylinder],
-  [ngtPhysicHeightfield],
-  [ngtPhysicParticle],
-  [ngtPhysicSphere],
-  [ngtPhysicTrimesh],
-  [ngtPhysicConvexPolyhedron],
-  [ngtPhysicCompound]
+    [ngtPhysicBox],
+    [ngtPhysicPlane],
+    [ngtPhysicCylinder],
+    [ngtPhysicHeightfield],
+    [ngtPhysicParticle],
+    [ngtPhysicSphere],
+    [ngtPhysicTrimesh],
+    [ngtPhysicConvexPolyhedron],
+    [ngtPhysicCompound]
   `,
   exportAs: 'ngtPhysicBody',
-  providers: [NgtPhysicBodyStore, NGT_OBJECT_CONTROLLER_PROVIDER],
+  providers: [NgtPhysicBodyStore],
 })
-export class NgtPhysicBodyController extends Controller {
+export class NgtPhysicBodyController
+  extends Controller
+  implements AfterContentInit
+{
   @Input() set getPhysicProps(fn: GetByIndex<BodyProps> | undefined) {
     this.physicBodyStore.updaters.setGetPhysicProps(fn);
   }
@@ -33,9 +42,10 @@ export class NgtPhysicBodyController extends Controller {
     super(ngZone);
   }
 
-  ngOnInit() {
-    super.ngOnInit();
-    this.physicBodyStore.initEffect();
+  ngAfterContentInit() {
+    this.ngZone.runOutsideAngular(() => {
+      this.physicBodyStore.initEffect();
+    });
   }
 
   get api() {

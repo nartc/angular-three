@@ -8,9 +8,11 @@ export function makeTriplet(v: THREE.Vector3 | NgtTriplet): NgtTriplet {
 }
 
 export function prepare(object: THREE.Object3D, props: BodyProps) {
+  const defaultXYZ: [number, number, number] = [0, 0, 0];
+
   object.userData = props.userData || {};
-  object.position.set(...(props.position || [0, 0, 0]));
-  object.rotation.set(...(props.rotation || [0, 0, 0]));
+  object.position.set(...(props.position || defaultXYZ));
+  object.rotation.set(...(props.rotation || defaultXYZ));
   object.updateMatrix();
 }
 
@@ -22,12 +24,8 @@ export function setupCollision(
   events[uuid] = {
     collide: onCollide,
     collideBegin: onCollideBegin,
-    collideEnd: onCollideEnd
+    collideEnd: onCollideEnd,
   };
-}
-
-export function capitalize<T extends string>(str: T): Capitalize<T> {
-  return (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>;
 }
 
 export function getUUID(ref: THREE.Object3D, index?: number): string | null {

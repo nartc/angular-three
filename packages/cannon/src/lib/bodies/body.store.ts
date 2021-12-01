@@ -129,6 +129,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
 
         this.ngZone.runOutsideAngular(() => {
           const object = this.objectController.object3d;
+
           currentWorker = worker;
 
           let objectCount = 1;

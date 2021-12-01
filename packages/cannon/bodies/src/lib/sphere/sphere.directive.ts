@@ -5,8 +5,10 @@ import {
   NGT_PHYSIC_BODY_ARGS_FN,
   NGT_PHYSIC_BODY_CONTROLLER_PROVIDER,
   NGT_PHYSIC_BODY_TYPE,
+  NGT_PHYSIC_BODY_WATCHED_CONTROLLER,
+  NgtPhysicBodyController,
 } from '@angular-three/cannon';
-import { Directive, NgModule } from '@angular/core';
+import { Directive, Inject, NgModule } from '@angular/core';
 
 @Directive({
   selector: '[ngtPhysicSphere]',
@@ -26,6 +28,15 @@ import { Directive, NgModule } from '@angular/core';
 })
 export class NgtPhysicSphere {
   static ngAcceptInputType_getPhysicProps: GetByIndex<SphereProps> | undefined;
+
+  constructor(
+    @Inject(NGT_PHYSIC_BODY_WATCHED_CONTROLLER)
+    private physicBodyController: NgtPhysicBodyController
+  ) {}
+
+  get api() {
+    return this.physicBodyController.api;
+  }
 }
 
 @NgModule({

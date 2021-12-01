@@ -3,7 +3,7 @@ import {
   NgtAnimationFrameStore,
   NgtLoopService,
   NgtStore,
-  tapEffect
+  tapEffect,
 } from '@angular-three/core';
 import { Injectable, NgZone } from '@angular/core';
 import { map, noop, tap, withLatestFrom } from 'rxjs';
@@ -35,7 +35,6 @@ function apply(index: number, buffers: Buffers, object?: THREE.Object3D) {
 
 @Injectable()
 export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState> {
-
   #initProps$ = this.select(
     this.selectors.gravity$,
     this.selectors.tolerance$,
@@ -71,9 +70,8 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
       defaultContactMaterial,
       quatNormalizeFast,
       quatNormalizeSkip,
-      solver
-    }),
-    { debounce: true }
+      solver,
+    })
   );
 
   constructor(
@@ -89,7 +87,7 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
       refs: {},
       buffers: {
         positions: new Float32Array(1000 * 3),
-        quaternions: new Float32Array(1000 * 4)
+        quaternions: new Float32Array(1000 * 4),
       },
       events: {},
       subscriptions: {},
@@ -106,183 +104,191 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
       quatNormalizeSkip: 0,
       solver: 'GS',
       defaultContactMaterial: { contactEquationStiffness: 1e6 },
-      size: 1000
+      size: 1000,
     });
   }
 
-  readonly initEffect = this.effect($ => $.pipe(
-    tap(() => {
-      this.updaters.setBuffers(
-        this.selectors.size$.pipe(
-          map((size) => ({
-            positions: new Float32Array((size as number) * 3),
-            quaternions: new Float32Array((size as number) * 4)
-          }))
-        )
-      );
+  readonly initEffect = this.effect(($) =>
+    $.pipe(
+      tap(() => {
+        this.updaters.setBuffers(
+          this.selectors.size$.pipe(
+            map((size) => ({
+              positions: new Float32Array((size as number) * 3),
+              quaternions: new Float32Array((size as number) * 4),
+            }))
+          )
+        );
 
-      this.#initLoopEffect();
-      this.#initPhysicsWorkerEffect();
-      this.#updateWorldPropsEffect();
-    })
-  ));
+        this.#initLoopEffect();
+        this.#initPhysicsWorkerEffect();
+        this.#updateWorldPropsEffect();
+      })
+    )
+  );
 
-  #initLoopEffect = this.effect($ => $.pipe(
-    tapEffect(() => {
-      const animationSubscription = this.ngZone.runOutsideAngular(() => {
-        return this.animationFrameStore.register({
-          callback: () => {
-            const { worker, buffers } = this.getImperativeState();
-            if (
-              buffers.positions.byteLength !== 0 &&
-              buffers.quaternions.byteLength !== 0
-            ) {
-              worker.postMessage({ op: 'step', ...buffers }, [
-                buffers.positions.buffer,
-                buffers.quaternions.buffer
-              ]);
-            }
-          },
-          obj: null
-        });
-      });
-
-      return () => {
-        animationSubscription.unsubscribe();
-      };
-    })
-  ));
-
-  #initPhysicsWorkerEffect = this.effect($ => $.pipe(
-    withLatestFrom(this.selectors.worker$, this.#initProps$),
-    tap(([, worker, initProps]) => {
-      this.ngZone.runOutsideAngular(() => {
-        worker.postMessage({
-          op: 'init',
-          props: initProps
-        });
-
-        let i = 0;
-        let body: string;
-        let callback;
-
-        worker.onmessage = (e: IncomingWorkerMessage) => {
-          const {
-            shouldInvalidate,
-            buffers,
-            bodies,
-            subscriptions,
-            events,
-            refs
-          } = this.getImperativeState();
-          switch (e.data.op) {
-            case 'frame':
-              buffers.positions = e.data.positions;
-              buffers.quaternions = e.data.quaternions;
-              if (e.data.bodies) {
-                for (i = 0; i < e.data.bodies.length; i++) {
-                  body = e.data.bodies[i];
-                  bodies[body] = e.data.bodies.indexOf(body);
-                  this.patchState((state) => ({
-                    bodies: {
-                      ...state.bodies,
-                      [body]: (
-                        (e.data as WorkerFrameMessage['data'])
-                          .bodies as string[]
-                      ).indexOf(body)
-                    }
-                  }));
-                }
+  #initLoopEffect = this.effect(($) =>
+    $.pipe(
+      tapEffect(() => {
+        const animationSubscription = this.ngZone.runOutsideAngular(() => {
+          return this.animationFrameStore.register({
+            callback: () => {
+              const { worker, buffers } = this.getImperativeState();
+              if (
+                buffers.positions.byteLength !== 0 &&
+                buffers.quaternions.byteLength !== 0
+              ) {
+                worker.postMessage({ op: 'step', ...buffers }, [
+                  buffers.positions.buffer,
+                  buffers.quaternions.buffer,
+                ]);
               }
+            },
+            obj: null,
+          });
+        });
 
-              e.data.observations.forEach(([id, value, type]) => {
-                const subscription = subscriptions[id] || {};
-                callback = subscription[type] || noop;
-                // HELP: We clearly know the type of the callback, but typescript can't deal with it
-                callback(value as never);
-              });
+        return () => {
+          animationSubscription.unsubscribe();
+        };
+      })
+    )
+  );
 
-              if (e.data.active) {
-                for (const ref of Object.values(refs)) {
-                  if (ref instanceof THREE.InstancedMesh) {
-                    for (let i = 0; i < ref.count; i++) {
-                      const index = bodies[`${ref.uuid}/${i}`];
-                      if (index !== undefined) {
-                        ref.setMatrixAt(i, apply(index, buffers));
-                      }
-                      ref.instanceMatrix.needsUpdate = true;
-                    }
-                  } else {
-                    apply(bodies[ref.uuid], buffers, ref);
+  #initPhysicsWorkerEffect = this.effect(($) =>
+    $.pipe(
+      withLatestFrom(this.selectors.worker$, this.#initProps$),
+      tap(([, worker, initProps]) => {
+        this.ngZone.runOutsideAngular(() => {
+          worker.postMessage({
+            op: 'init',
+            props: initProps,
+          });
+
+          let i = 0;
+          let body: string;
+          let callback;
+
+          worker.onmessage = (e: IncomingWorkerMessage) => {
+            const {
+              shouldInvalidate,
+              buffers,
+              bodies,
+              subscriptions,
+              events,
+              refs,
+            } = this.getImperativeState();
+            switch (e.data.op) {
+              case 'frame':
+                buffers.positions = e.data.positions;
+                buffers.quaternions = e.data.quaternions;
+                if (e.data.bodies) {
+                  for (i = 0; i < e.data.bodies.length; i++) {
+                    body = e.data.bodies[i];
+                    bodies[body] = e.data.bodies.indexOf(body);
+                    this.patchState((state) => ({
+                      bodies: {
+                        ...state.bodies,
+                        [body]: (
+                          (e.data as WorkerFrameMessage['data'])
+                            .bodies as string[]
+                        ).indexOf(body),
+                      },
+                    }));
                   }
                 }
-                if (shouldInvalidate) {
-                  this.loopService.invalidate(this.store.getImperativeState());
-                }
-              }
 
-              break;
-            case 'event':
-              switch (e.data.type) {
-                case 'collide':
-                  callback = events[e.data.target]?.collide || noop;
-                  callback({
-                    ...e.data,
-                    target: refs[e.data.target],
-                    body: refs[e.data.body],
-                    contact: {
-                      ...e.data.contact,
-                      bi: refs[e.data.contact.bi],
-                      bj: refs[e.data.contact.bj]
+                e.data.observations.forEach(([id, value, type]) => {
+                  const subscription = subscriptions[id] || {};
+                  callback = subscription[type] || noop;
+                  // HELP: We clearly know the type of the callback, but typescript can't deal with it
+                  callback(value as never);
+                });
+
+                if (e.data.active) {
+                  for (const ref of Object.values(refs)) {
+                    if (ref instanceof THREE.InstancedMesh) {
+                      for (let i = 0; i < ref.count; i++) {
+                        const index = bodies[`${ref.uuid}/${i}`];
+                        if (index !== undefined) {
+                          ref.setMatrixAt(i, apply(index, buffers));
+                        }
+                        ref.instanceMatrix.needsUpdate = true;
+                      }
+                    } else {
+                      apply(bodies[ref.uuid], buffers, ref);
                     }
-                  });
-                  break;
-                case 'collideBegin':
-                  callback = events[e.data.bodyA]?.collideBegin || noop;
-                  callback({
-                    op: 'event',
-                    type: 'collideBegin',
-                    target: refs[e.data.bodyA],
-                    body: refs[e.data.bodyB]
-                  });
-                  callback = events[e.data.bodyB]?.collideBegin || noop;
-                  callback({
-                    op: 'event',
-                    type: 'collideBegin',
-                    target: refs[e.data.bodyB],
-                    body: refs[e.data.bodyA]
-                  });
-                  break;
-                case 'collideEnd':
-                  callback = events[e.data.bodyA]?.collideEnd || noop;
-                  callback({
-                    op: 'event',
-                    type: 'collideEnd',
-                    target: refs[e.data.bodyA],
-                    body: refs[e.data.bodyB]
-                  });
-                  callback = events[e.data.bodyB]?.collideEnd || noop;
-                  callback({
-                    op: 'event',
-                    type: 'collideEnd',
-                    target: refs[e.data.bodyB],
-                    body: refs[e.data.bodyA]
-                  });
-                  break;
-                case 'rayhit':
-                  callback = events[e.data.ray.uuid]?.rayhit || noop;
-                  callback({
-                    ...e.data,
-                    body: e.data.body ? refs[e.data.body] : null
-                  });
-                  break;
-              }
-              break;
-          }
-        };
-      });
-    })
-  ));
+                  }
+                  if (shouldInvalidate) {
+                    this.loopService.invalidate(
+                      this.store.getImperativeState()
+                    );
+                  }
+                }
+
+                break;
+              case 'event':
+                switch (e.data.type) {
+                  case 'collide':
+                    callback = events[e.data.target]?.collide || noop;
+                    callback({
+                      ...e.data,
+                      target: refs[e.data.target],
+                      body: refs[e.data.body],
+                      contact: {
+                        ...e.data.contact,
+                        bi: refs[e.data.contact.bi],
+                        bj: refs[e.data.contact.bj],
+                      },
+                    });
+                    break;
+                  case 'collideBegin':
+                    callback = events[e.data.bodyA]?.collideBegin || noop;
+                    callback({
+                      op: 'event',
+                      type: 'collideBegin',
+                      target: refs[e.data.bodyA],
+                      body: refs[e.data.bodyB],
+                    });
+                    callback = events[e.data.bodyB]?.collideBegin || noop;
+                    callback({
+                      op: 'event',
+                      type: 'collideBegin',
+                      target: refs[e.data.bodyB],
+                      body: refs[e.data.bodyA],
+                    });
+                    break;
+                  case 'collideEnd':
+                    callback = events[e.data.bodyA]?.collideEnd || noop;
+                    callback({
+                      op: 'event',
+                      type: 'collideEnd',
+                      target: refs[e.data.bodyA],
+                      body: refs[e.data.bodyB],
+                    });
+                    callback = events[e.data.bodyB]?.collideEnd || noop;
+                    callback({
+                      op: 'event',
+                      type: 'collideEnd',
+                      target: refs[e.data.bodyB],
+                      body: refs[e.data.bodyA],
+                    });
+                    break;
+                  case 'rayhit':
+                    callback = events[e.data.ray.uuid]?.rayhit || noop;
+                    callback({
+                      ...e.data,
+                      body: e.data.body ? refs[e.data.body] : null,
+                    });
+                    break;
+                }
+                break;
+            }
+          };
+        });
+      })
+    )
+  );
 
   #updateWorldPropsEffect = this.effect(($) =>
     $.pipe(
@@ -307,13 +313,14 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
       )
   );
 
-  #updateBroadphaseEffect = this.effect<NgtPhysicsStoreState['broadphase']>((broadphase$) =>
-    broadphase$.pipe(
-      withLatestFrom(this.selectors.worker$),
-      tap(([broadphase, worker]) => {
-        void worker.postMessage({ op: 'setBroadphase', props: broadphase });
-      })
-    )
+  #updateBroadphaseEffect = this.effect<NgtPhysicsStoreState['broadphase']>(
+    (broadphase$) =>
+      broadphase$.pipe(
+        withLatestFrom(this.selectors.worker$),
+        tap(([broadphase, worker]) => {
+          void worker.postMessage({ op: 'setBroadphase', props: broadphase });
+        })
+      )
   );
 
   #updateGravityEffect = this.effect<NgtPhysicsStoreState['gravity']>(
@@ -326,13 +333,14 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
       )
   );
 
-  #updateIterationsEffect = this.effect<NgtPhysicsStoreState['iterations']>((iterations$) =>
-    iterations$.pipe(
-      withLatestFrom(this.selectors.worker$),
-      tap(([iterations, worker]) => {
-        void worker.postMessage({ op: 'setIterations', props: iterations });
-      })
-    )
+  #updateIterationsEffect = this.effect<NgtPhysicsStoreState['iterations']>(
+    (iterations$) =>
+      iterations$.pipe(
+        withLatestFrom(this.selectors.worker$),
+        tap(([iterations, worker]) => {
+          void worker.postMessage({ op: 'setIterations', props: iterations });
+        })
+      )
   );
 
   #updateStepEffect = this.effect<NgtPhysicsStoreState['step']>((step$) =>
