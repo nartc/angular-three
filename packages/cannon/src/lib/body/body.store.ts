@@ -61,6 +61,7 @@ function subscribe<T extends SubscriptionName>(
 
 export interface NgtPhysicBodyStoreState {
   getPhysicProps?: GetByIndex<BodyProps>;
+  object3d?: THREE.Object3D;
 }
 
 @Injectable()
@@ -83,7 +84,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
     private physicsStore: NgtPhysicsStore,
     private ngZone: NgZone
   ) {
-    super({ getPhysicProps: undefined });
+    super({ getPhysicProps: undefined, object3d: objectController.object3d });
     if (!type) {
       throw new Error('NGT_PHYSIC_BODY_TYPE is required');
     }
@@ -105,6 +106,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
     $.pipe(
       tap(() => {
         this.#initWorkerMessageEffect(this.#workerEffectChanges$);
+        this.updaters.setObject3d(this.objectController.object3d);
       })
     )
   );

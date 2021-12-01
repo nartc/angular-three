@@ -2,7 +2,6 @@
 import {
   Controller,
   createControllerProviderFactory,
-  NGT_OBJECT_CONTROLLER_PROVIDER,
 } from '@angular-three/core';
 import {
   AfterContentInit,
@@ -11,6 +10,7 @@ import {
   NgModule,
   NgZone,
 } from '@angular/core';
+import * as THREE from 'three';
 import { BodyProps } from '../models/body';
 import { GetByIndex } from '../models/types';
 import { NgtPhysicBodyStore } from './body.store';
@@ -38,6 +38,10 @@ export class NgtPhysicBodyController
     this.ngZone.runOutsideAngular(() => {
       this.physicBodyStore.initEffect();
     });
+  }
+
+  get object3d(): THREE.Object3D {
+    return this.physicBodyStore.getImperativeState().object3d as THREE.Object3D;
   }
 
   get api() {

@@ -11,7 +11,7 @@ export default async function physicBodyControllerGenerator(
   physicBodySelectors: string[]
 ) {
   const { libsDir } = getWorkspaceLayout(tree);
-  const bodyControllerDir = join(libsDir, 'cannon', 'src', 'lib', 'bodies');
+  const bodyControllerDir = join(libsDir, 'cannon', 'src', 'lib', 'body');
 
   generateFiles(tree, join(__dirname, 'files'), bodyControllerDir, {
     tmpl: '',
