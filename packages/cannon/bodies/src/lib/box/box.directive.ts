@@ -1,3 +1,4 @@
+// GENERATED
 import {
   BoxProps,
   GetByIndex,
@@ -13,7 +14,10 @@ import { Directive, NgModule } from '@angular/core';
   providers: [
     NGT_PHYSIC_BODY_CONTROLLER_PROVIDER,
     { provide: NGT_PHYSIC_BODY_TYPE, useValue: 'Box' },
-    { provide: NGT_PHYSIC_BODY_ARGS_FN, useValue: (args = [1, 1, 1]) => args },
+    {
+      provide: NGT_PHYSIC_BODY_ARGS_FN,
+      useValue: (args: BoxProps['args'] = [1, 1, 1]) => args,
+    },
   ],
 })
 export class NgtPhysicBox {

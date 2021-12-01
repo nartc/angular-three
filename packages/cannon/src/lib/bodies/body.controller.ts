@@ -1,3 +1,4 @@
+// GENERATED
 import {
   Controller,
   createControllerProviderFactory,
@@ -9,7 +10,17 @@ import { GetByIndex } from '../models/types';
 import { NgtPhysicBodyStore } from './body.store';
 
 @Directive({
-  selector: '[ngtPhysicBox], [ngtPhysicPlane], [ngtPhysicSphere]',
+  selector: `
+  [ngtPhysicBox],
+  [ngtPhysicPlane],
+  [ngtPhysicCylinder],
+  [ngtPhysicHeightfield],
+  [ngtPhysicParticle],
+  [ngtPhysicSphere],
+  [ngtPhysicTrimesh],
+  [ngtPhysicConvexPolyhedron],
+  [ngtPhysicCompound]
+  `,
   exportAs: 'ngtPhysicBody',
   providers: [NgtPhysicBodyStore, NGT_OBJECT_CONTROLLER_PROVIDER],
 })

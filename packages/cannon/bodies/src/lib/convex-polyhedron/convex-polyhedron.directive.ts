@@ -1,0 +1,42 @@
+// GENERATED
+import {
+  ConvexPolyhedronProps,
+  GetByIndex,
+  NGT_PHYSIC_BODY_ARGS_FN,
+  NGT_PHYSIC_BODY_CONTROLLER_PROVIDER,
+  NGT_PHYSIC_BODY_TYPE,
+  makeTriplet,
+} from '@angular-three/cannon';
+import { Directive, NgModule } from '@angular/core';
+
+@Directive({
+  selector: '[ngtPhysicConvexPolyhedron]',
+  exportAs: 'ngtPhysicConvexPolyhedron',
+  providers: [
+    NGT_PHYSIC_BODY_CONTROLLER_PROVIDER,
+    { provide: NGT_PHYSIC_BODY_TYPE, useValue: 'ConvexPolyhedron' },
+    {
+      provide: NGT_PHYSIC_BODY_ARGS_FN,
+      useValue: (args: ConvexPolyhedronProps['args'] = []) => {
+        return [
+          args[0] ? args[0].map(makeTriplet) : undefined,
+          args[1],
+          args[2] ? args[2].map(makeTriplet) : undefined,
+          args[3] ? args[3].map(makeTriplet) : undefined,
+          args[4],
+        ];
+      },
+    },
+  ],
+})
+export class NgtPhysicConvexPolyhedron {
+  static ngAcceptInputType_getPhysicProps:
+    | GetByIndex<ConvexPolyhedronProps>
+    | undefined;
+}
+
+@NgModule({
+  declarations: [NgtPhysicConvexPolyhedron],
+  exports: [NgtPhysicConvexPolyhedron],
+})
+export class NgtPhysicConvexPolyhedronModule {}
