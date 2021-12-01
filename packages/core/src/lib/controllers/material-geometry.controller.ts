@@ -53,7 +53,7 @@ export class NgtMaterialGeometryController
   }
 
   @ContentChild(NgtGeometry)
-  set bufferGeometryDirective(v: NgtGeometry) {
+  set geometryDirective(v: NgtGeometry) {
     if (this.geometry == null && v) {
       this.geometry = v.geometry;
     }
@@ -62,8 +62,10 @@ export class NgtMaterialGeometryController
   #geometryInput?: string | THREE.BufferGeometry | undefined;
 
   @Input() set geometry(v: string | THREE.BufferGeometry | undefined) {
-    this.#geometryInput = v;
-    this.#geometry = this.#getGeometry(v);
+    if (v) {
+      this.#geometryInput = v;
+      this.#geometry = this.#getGeometry(v);
+    }
   }
 
   get geometry() {
@@ -82,10 +84,12 @@ export class NgtMaterialGeometryController
   @Input() set material(
     v: string | string[] | THREE.Material | THREE.Material[] | undefined
   ) {
-    if (!(Array.isArray(v) && !v.length)) {
-      this.#materialInput = v;
+    if (v) {
+      if (!(Array.isArray(v) && !v.length)) {
+        this.#materialInput = v;
+      }
+      this.#material = this.#getMaterial(v);
     }
-    this.#material = this.#getMaterial(v);
   }
 
   get material() {
@@ -115,11 +119,7 @@ export class NgtMaterialGeometryController
     public objectPostInit: AnyExtenderFunction<THREE.Object3D> | undefined
   ) {
     super(ngZone);
-  }
-
-  ngOnInit() {
-    super.ngOnInit();
-    this.objectController.initFn = () => {
+    objectController.initFn = () => {
       if (!this.geometry) {
         this.#geometry = this.#getGeometry(this.#geometryInput);
       }

@@ -80,7 +80,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
 
   get initFn() {
     if (!this.#initFn) {
-      throw new Error('initFn needs to be set');
+      this.initFn = () => this.object3d;
     }
     return this.#initFn as () => THREE.Object3D;
   }

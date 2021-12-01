@@ -153,10 +153,10 @@ export class NgtObject3dInputsController extends Controller {
   get object3dProps(): NgtObject3dProps {
     return {
       name: this.name,
-      position: this.position,
-      rotation: this.rotation,
-      quaternion: this.quaternion,
-      scale: this.scale,
+      position: this.#position?.toArray(),
+      rotation: this.#rotation?.toArray() as NgtEuler,
+      quaternion: this.#quaternion?.toArray() as NgtQuaternion,
+      scale: this.#scale?.toArray(),
       color: this.color,
       userData: this.userData,
       dispose: this.dispose,
