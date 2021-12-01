@@ -9,7 +9,7 @@ import {
   Subject,
   Subscription,
   takeUntil,
-  tap,
+  tap
 } from 'rxjs';
 import { UnknownRecord } from '../models';
 
@@ -18,9 +18,7 @@ export type StoreState<TStore extends EnhancedComponentStore> =
     ? TComponentState
     : {};
 
-export type StoreStateKeys<TState extends object> = Array<
-  keyof TState & string
->;
+export type StoreStateKeys<TState extends object> = Array<keyof TState & string>;
 
 export type StoreSelectors<TState extends object> = {
   [K in StoreStateKeys<TState>[number] as `${K}$`]: Observable<TState[K]>;
@@ -76,7 +74,7 @@ export function getUpdaters<TStore extends EnhancedComponentStore>(
     (updaters as UnknownRecord)[`set${capitalize(key)}`] = store.updater(
       (state, value) => ({
         ...state,
-        [key]: value,
+        [key]: value
       })
     );
 
@@ -94,9 +92,7 @@ export interface EnhancedEffectReturn<ObservableType> {
   ) => void;
 }
 
-export abstract class EnhancedComponentStore<
-  TState extends object = any
-> extends ComponentStore<TState> {
+export abstract class EnhancedComponentStore<TState extends object = any> extends ComponentStore<TState> {
   readonly selectors: StoreSelectors<TState> = getSelectors(this);
   readonly updaters: StoreUpdaters<TState> & AsyncStoreUpdaters<TState> =
     getUpdaters(this) as unknown as StoreUpdaters<TState> &
@@ -122,12 +118,10 @@ export abstract class EnhancedComponentStore<
    *
    * @deprecated use {@link tapEffect} with {@link ComponentStore.prototype.effect} instead
    */
-  enhancedEffect<
-    // This type quickly became part of effect 'API'
+  enhancedEffect<// This type quickly became part of effect 'API'
     ProvidedType = void,
     // The actual origin$ type, which could be unknown, when not specified
-    OriginType extends
-      | Observable<ProvidedType>
+    OriginType extends | Observable<ProvidedType>
       | unknown = Observable<ProvidedType>,
     // Unwrapped actual type of the origin$ Observable, after default was applied
     ObservableType = OriginType extends Observable<infer A> ? A : never,
@@ -135,9 +129,8 @@ export abstract class EnhancedComponentStore<
     ReturnType = ProvidedType | ObservableType extends void
       ? () => void
       : (
-          observableOrValue: ObservableType | Observable<ObservableType>
-        ) => Subscription
-  >(
+        observableOrValue: ObservableType | Observable<ObservableType>
+      ) => Subscription>(
     generator: (origin$: OriginType) => Observable<unknown>
   ): ReturnType & EnhancedEffectReturn<ObservableType> {
     const origin$ = new Subject<ObservableType>();
@@ -178,7 +171,7 @@ export abstract class EnhancedComponentStore<
               if (cleanupFn) {
                 cleanupFn(latestValue);
               }
-            },
+            }
           }),
           takeUntil(this.destroy$)
         )
@@ -258,6 +251,6 @@ export function tapEffect<T>(
       if (cleanupFn) {
         cleanupFn(latestValue, true);
       }
-    },
+    }
   });
 }
