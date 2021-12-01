@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "cannon": "packages/cannon",
     "core": "packages/core",
     "demo": "packages/demo",
     "soba": "packages/soba"
