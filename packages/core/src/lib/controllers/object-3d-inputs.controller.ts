@@ -1,21 +1,7 @@
 // GENERATED
-import {
-  Directive,
-  EventEmitter,
-  Input,
-  NgModule,
-  NgZone,
-  Output,
-} from '@angular/core';
+import { Directive, EventEmitter, Input, NgModule, NgZone, Output } from '@angular/core';
 import * as THREE from 'three';
-import {
-  NgtColor,
-  NgtEuler,
-  NgtEvent,
-  NgtQuaternion,
-  NgtVector3,
-  UnknownRecord,
-} from '../models';
+import { NgtColor, NgtEuler, NgtEvent, NgtObject3dProps, NgtQuaternion, NgtVector3, UnknownRecord } from '../models';
 import { makeColor, makeForSet, makeVector3 } from '../utils/make';
 import { Controller, createControllerProviderFactory } from './controller';
 
@@ -63,7 +49,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-stereo-camera,
     ngt-cube-camera,
   `,
-  exportAs: 'ngtObject3dInputsController',
+  exportAs: 'ngtObject3dInputsController'
 })
 export class NgtObject3dInputsController extends Controller {
   @Input() name?: string;
@@ -173,7 +159,7 @@ export class NgtObject3dInputsController extends Controller {
       'pointermove',
       'pointermissed',
       'pointercancel',
-      'wheel',
+      'wheel'
     ];
   }
 
@@ -185,7 +171,7 @@ export class NgtObject3dInputsController extends Controller {
     super(ngZone);
   }
 
-  get object3dProps() {
+  get object3dProps(): NgtObject3dProps {
     return {
       name: this.name,
       position: this.position,
@@ -198,21 +184,22 @@ export class NgtObject3dInputsController extends Controller {
       castShadow: this.castShadow,
       receiveShadow: this.receiveShadow,
       visible: this.visible,
-      matrixAutoUpdate: this.matrixAutoUpdate,
+      matrixAutoUpdate: this.matrixAutoUpdate
     };
   }
 }
 
 @NgModule({
   declarations: [NgtObject3dInputsController],
-  exports: [NgtObject3dInputsController],
+  exports: [NgtObject3dInputsController]
 })
-export class NgtObject3dInputsControllerModule {}
+export class NgtObject3dInputsControllerModule {
+}
 
 export const [
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-  NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
+  NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER
 ] = createControllerProviderFactory({
   watchedControllerTokenName: 'Watched Object3dInputsController',
-  controller: NgtObject3dInputsController,
+  controller: NgtObject3dInputsController
 });

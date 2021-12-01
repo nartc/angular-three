@@ -1,7 +1,7 @@
 import { UnknownRecord } from './common';
 import { NgtColor, NgtEuler, NgtQuaternion, NgtVector3 } from './three';
 
-export interface Object3dProps {
+export interface NgtObject3dProps {
   name?: string;
   position?: NgtVector3;
   rotation?: NgtEuler;

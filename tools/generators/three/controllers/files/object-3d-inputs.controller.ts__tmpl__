@@ -12,6 +12,7 @@ import {
   NgtColor,
   NgtEuler,
   NgtEvent,
+  NgtObject3dProps,
   NgtQuaternion,
   NgtVector3,
   UnknownRecord,
@@ -149,7 +150,7 @@ export class NgtObject3dInputsController extends Controller {
     super(ngZone);
   }
 
-  get object3dProps() {
+  get object3dProps(): NgtObject3dProps {
     return {
       name: this.name,
       position: this.position,

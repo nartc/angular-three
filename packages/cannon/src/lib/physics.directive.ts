@@ -1,5 +1,6 @@
 import { NgtTriplet } from '@angular-three/core';
 import { Directive, Input, NgModule, OnInit } from '@angular/core';
+import { NgtPhysicBodyControllerModule } from './bodies/body.controller';
 import { Broadphase } from './models/broadphase';
 import { DefaultContactMaterial } from './models/default-contact-material';
 import { Solver } from './models/solver';
@@ -73,7 +74,7 @@ export class NgtPhysics implements OnInit {
 
 @NgModule({
   declarations: [NgtPhysics],
-  exports: [NgtPhysics]
+  exports: [NgtPhysics, NgtPhysicBodyControllerModule]
 })
 export class NgtPhysicsModule {
 }

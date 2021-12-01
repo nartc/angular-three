@@ -65,6 +65,20 @@ function subscribe<T extends SubscriptionName>(
   };
 }
 
+/**
+ * @Directive({
+ *   selector: '[ngtPhysicBody]'
+ * })
+ * export class NgtPhysicBox extends NgtPhysicBody<BoxProps> {
+ *
+ * }
+ *
+ * @Directive({
+ *   selector: '[]'
+ * })
+ * export class NgtPhysicBodyController {}
+ */
+
 @Directive()
 export abstract class NgtPhysicBody<B extends BodyProps>
   extends ComponentStore<{}>
