@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@angular-three/cannon": ["packages/cannon/src/index.ts"],
+      "@angular-three/cannon/bodies": ["packages/cannon/bodies/src/index.ts"],
       "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/core/attributes": [
         "packages/core/attributes/src/index.ts"

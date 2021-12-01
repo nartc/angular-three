@@ -1,3 +1,4 @@
+// GENERATED
 import {
   Controller,
   createControllerProviderFactory,
@@ -9,7 +10,9 @@ import { GetByIndex } from '../models/types';
 import { NgtPhysicBodyStore } from './body.store';
 
 @Directive({
-  selector: '[ngtPhysicBox], [ngtPhysicPlane], [ngtPhysicSphere]',
+  selector: `<% if (selectors.length) { %><% for (const selector of selectors) { %>
+  [ngtPhysic<%= selector.selector %>]<% if (!selector.isLast) { %>,<% } %><% } %><% } %>
+  `,
   exportAs: 'ngtPhysicBody',
   providers: [NgtPhysicBodyStore, NGT_OBJECT_CONTROLLER_PROVIDER],
 })

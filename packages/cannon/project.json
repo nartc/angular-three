@@ -33,7 +33,9 @@
       "options": {
         "lintFilePatterns": [
           "packages/cannon/src/**/*.ts",
-          "packages/cannon/src/**/*.html"
+          "packages/cannon/src/**/*.html",
+          "packages/cannon/bodies/**/*.ts",
+          "packages/cannon/bodies/**/*.html"
         ]
       }
     }
