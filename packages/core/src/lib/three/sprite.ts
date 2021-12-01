@@ -5,7 +5,6 @@ import {
   Inject,
   Input,
   NgZone,
-  OnInit,
 } from '@angular/core';
 import * as THREE from 'three';
 import {
@@ -18,7 +17,7 @@ import { NgtMaterial } from './material';
 @Directive()
 export abstract class NgtCommonSprite<
   TSprite extends THREE.Sprite = THREE.Sprite
-> implements AfterContentInit, OnInit
+> implements AfterContentInit
 {
   @Input() material?: THREE.SpriteMaterial;
 
@@ -32,10 +31,8 @@ export abstract class NgtCommonSprite<
     @Inject(NGT_OBJECT_CONTROLLER_PROVIDER)
     protected objectController: NgtObject3dController,
     protected ngZone: NgZone
-  ) {}
-
-  ngOnInit() {
-    this.objectController.initFn = () => {
+  ) {
+    objectController.initFn = () => {
       return this.ngZone.runOutsideAngular(() => {
         if (this.material) {
           this.#sprite = new this.spriteType(this.material);
@@ -51,7 +48,9 @@ export abstract class NgtCommonSprite<
   }
 
   ngAfterContentInit() {
-    this.objectController.init();
+    this.ngZone.runOutsideAngular(() => {
+      this.objectController.init();
+    });
   }
 
   get sprite() {

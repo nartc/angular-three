@@ -1,4 +1,10 @@
-import { Directive, Inject, NgZone, OnChanges, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  Directive,
+  Inject,
+  NgZone,
+  OnChanges,
+} from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -8,7 +14,7 @@ import { AnyConstructor } from '../models';
 
 @Directive()
 export abstract class NgtHelper<THelper extends THREE.Object3D>
-  implements OnInit, OnChanges
+  implements AfterContentInit, OnChanges
 {
   abstract helperType: AnyConstructor<THelper>;
 
@@ -25,7 +31,14 @@ export abstract class NgtHelper<THelper extends THREE.Object3D>
     @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
     protected objectController: NgtObject3dController,
     protected ngZone: NgZone
-  ) {}
+  ) {
+    objectController.initFn = () => {
+      return this.ngZone.runOutsideAngular(() => {
+        this.#helper = new this.helperType(...this.#helperArgs);
+        return this.#helper;
+      });
+    };
+  }
 
   ngOnChanges() {
     this.ngZone.runOutsideAngular(() => {
@@ -33,14 +46,7 @@ export abstract class NgtHelper<THelper extends THREE.Object3D>
     });
   }
 
-  ngOnInit() {
-    this.objectController.initFn = () => {
-      return this.ngZone.runOutsideAngular(() => {
-        this.#helper = new this.helperType(...this.#helperArgs);
-        return this.#helper;
-      });
-    };
-
+  ngAfterContentInit() {
     this.ngZone.runOutsideAngular(() => {
       if (!this.#helper) {
         this.objectController.init();

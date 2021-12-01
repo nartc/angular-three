@@ -10,6 +10,7 @@ import {
   NgtObject3dInputsController,
 } from '@angular-three/core';
 import {
+  AfterContentInit,
   ContentChildren,
   Directive,
   EventEmitter,
@@ -29,7 +30,7 @@ import * as THREE from 'three';
   exportAs: 'ngtBone',
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
-export class NgtBone implements OnInit {
+export class NgtBone implements AfterContentInit {
   #bone?: THREE.Bone;
   get bone() {
     return this.#bone;
@@ -48,15 +49,18 @@ export class NgtBone implements OnInit {
       throw new Error('ngt-bone must be used within a ngt-skinned-mesh');
     }
     objectInputsController.appendTo = parentSkinnedMesh.mesh;
-  }
-
-  ngOnInit() {
-    this.objectController.initFn = () => {
+    objectController.initFn = () => {
       return this.ngZone.runOutsideAngular(() => {
         this.#bone = new THREE.Bone();
         return this.#bone;
       });
     };
+  }
+
+  ngAfterContentInit() {
+    this.ngZone.runOutsideAngular(() => {
+      this.objectController.init();
+    });
   }
 }
 

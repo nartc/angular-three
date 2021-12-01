@@ -3,7 +3,13 @@ import {
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
 } from '@angular-three/core';
-import { Directive, Inject, NgModule, NgZone, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  Directive,
+  Inject,
+  NgModule,
+  NgZone,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -11,7 +17,7 @@ import * as THREE from 'three';
   exportAs: 'ngtGroup',
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
-export class NgtGroup implements OnInit {
+export class NgtGroup implements AfterContentInit {
   #group?: THREE.Group;
   get group() {
     return this.#group;
@@ -21,15 +27,19 @@ export class NgtGroup implements OnInit {
     @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
     private objectController: NgtObject3dController,
     private ngZone: NgZone
-  ) {}
-
-  ngOnInit() {
-    this.objectController.initFn = () => {
+  ) {
+    objectController.initFn = () => {
       return this.ngZone.runOutsideAngular(() => {
         this.#group = new THREE.Group();
         return this.#group;
       });
     };
+  }
+
+  ngAfterContentInit() {
+    this.ngZone.runOutsideAngular(() => {
+      this.objectController.init();
+    });
   }
 }
 

@@ -1,4 +1,10 @@
-import { Directive, Inject, Input, NgZone, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  Directive,
+  Inject,
+  Input,
+  NgZone,
+} from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -10,7 +16,7 @@ import { AnyConstructor } from '../models';
 export abstract class NgtCommonAudio<
   TAudioNode extends AudioNode = GainNode,
   TAudio extends THREE.Audio<TAudioNode> = THREE.Audio<TAudioNode>
-> implements OnInit
+> implements AfterContentInit
 {
   @Input() listener!: THREE.AudioListener;
 
@@ -26,14 +32,8 @@ export abstract class NgtCommonAudio<
     @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
     protected objectController: NgtObject3dController,
     protected ngZone: NgZone
-  ) {}
-
-  abstract audioType: AnyConstructor<TAudio>;
-
-  #audio!: TAudio;
-
-  ngOnInit() {
-    this.objectController.initFn = () => {
+  ) {
+    objectController.initFn = () => {
       return this.ngZone.runOutsideAngular(() => {
         if (!this.listener) {
           throw new Error('Cannot initialize Audio without an AudioListener');
@@ -43,6 +43,13 @@ export abstract class NgtCommonAudio<
         return this.#audio;
       });
     };
+  }
+
+  abstract audioType: AnyConstructor<TAudio>;
+
+  #audio!: TAudio;
+
+  ngAfterContentInit() {
     this.ngZone.runOutsideAngular(() => {
       if (!this.#audio) {
         this.objectController.init();

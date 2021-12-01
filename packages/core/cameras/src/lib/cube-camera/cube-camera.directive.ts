@@ -4,12 +4,12 @@ import {
   NgtObject3dController,
 } from '@angular-three/core';
 import {
+  AfterContentInit,
   Directive,
   Inject,
   Input,
   NgModule,
   NgZone,
-  OnInit,
 } from '@angular/core';
 import * as THREE from 'three';
 
@@ -18,7 +18,7 @@ import * as THREE from 'three';
   exportAs: 'ngtCubeCamera',
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
-export class NgtCubeCamera implements OnInit {
+export class NgtCubeCamera implements AfterContentInit {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CubeCamera>;
 
   #cubeCamera?: THREE.CubeCamera;
@@ -32,15 +32,19 @@ export class NgtCubeCamera implements OnInit {
     @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
     private objectController: NgtObject3dController,
     private ngZone: NgZone
-  ) {}
-
-  ngOnInit() {
-    this.objectController.initFn = () => {
+  ) {
+    objectController.initFn = () => {
       return this.ngZone.runOutsideAngular(() => {
         this.#cubeCamera = new THREE.CubeCamera(...this.args);
         return this.#cubeCamera;
       });
     };
+  }
+
+  ngAfterContentInit() {
+    this.ngZone.runOutsideAngular(() => {
+      this.objectController.init();
+    });
   }
 }
 

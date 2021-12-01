@@ -1,4 +1,10 @@
-import { Directive, Inject, Input, NgZone, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  Directive,
+  Inject,
+  Input,
+  NgZone,
+} from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -9,7 +15,7 @@ import { applyProps } from '../utils/apply-props';
 
 @Directive()
 export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
-  implements OnInit
+  implements AfterContentInit
 {
   abstract lightType: AnyConstructor<TLight>;
 
@@ -20,7 +26,22 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
     @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
     protected objectController: NgtObject3dController,
     protected ngZone: NgZone
-  ) {}
+  ) {
+    objectController.initFn = () => {
+      return this.ngZone.runOutsideAngular(() => {
+        this.#light = new this.lightType(...this.#lightArgs);
+        if (this.intensity) {
+          applyProps(this.light, { intensity: this.intensity });
+        }
+
+        if (this.shadow) {
+          applyProps(this.light, this.shadow as unknown as UnknownRecord);
+        }
+
+        return this.#light;
+      });
+    };
+  }
 
   #lightArgs: unknown[] = [];
   protected set lightArgs(v: unknown | unknown[]) {
@@ -32,24 +53,7 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
 
   #light!: TLight;
 
-  ngOnInit() {
-    this.objectController.initFn = () => {
-      return this.ngZone.runOutsideAngular(() => {
-        this.#light = new this.lightType(...this.#lightArgs);
-        const props = {
-          shadow: this.shadow,
-        } as UnknownRecord;
-
-        if (this.intensity !== undefined) {
-          props['intensity'] = this.intensity;
-        }
-
-        applyProps(this.#light, props);
-
-        return this.#light;
-      });
-    };
-
+  ngAfterContentInit() {
     this.ngZone.runOutsideAngular(() => {
       if (!this.#light) {
         this.objectController.init();
