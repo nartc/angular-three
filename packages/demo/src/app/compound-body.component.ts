@@ -32,6 +32,7 @@ import {
   NgtShadowMaterialModule,
 } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtStatsModule } from '@angular-three/core/stats';
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
@@ -53,6 +54,7 @@ import { mapTo, startWith, timer } from 'rxjs';
       [camera]="{ position: [-2, 1, 7], fov: 50 }"
       [scene]="{ background: '#f6d186' | color }"
     >
+      <ngt-stats></ngt-stats>
       <ngt-hemisphere-light [intensity]="0.35"></ngt-hemisphere-light>
       <ngt-spot-light
         [intensity]="2"
@@ -239,6 +241,7 @@ export class CompoundComponent implements AfterViewInit {
     NgtSpotLightModule,
     NgtCannonDebugModule,
     CommonModule,
+    NgtStatsModule,
   ],
 })
 export class CompoundBodyComponentModule {}
