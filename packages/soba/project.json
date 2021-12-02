@@ -37,7 +37,9 @@
           "packages/soba/controls/**/*.ts",
           "packages/soba/controls/**/*.html",
           "packages/soba/shapes/**/*.ts",
-          "packages/soba/shapes/**/*.html"
+          "packages/soba/shapes/**/*.html",
+          "packages/soba/loaders/**/*.ts",
+          "packages/soba/loaders/**/*.html"
         ]
       }
     }

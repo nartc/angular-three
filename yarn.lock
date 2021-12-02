@@ -9168,10 +9168,10 @@ text-table@0.2.0, text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-three-stdlib@2.5.11:
-  version "2.5.11"
-  resolved "https://registry.yarnpkg.com/three-stdlib/-/three-stdlib-2.5.11.tgz#d80123d56524b262017de8e648c92a1eee98a183"
-  integrity sha512-CUWduL98tYD69x+mwdrOXDnvazZLs/Zn42RzkpNSJIdoKc8lz6Fu36bD1bwUVMgSzoZFEJLG+KOndKa5GYZmGQ==
+three-stdlib@~2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/three-stdlib/-/three-stdlib-2.6.0.tgz#6cf6fd6a2f49913628298b4dfee971f88b926f20"
+  integrity sha512-m9ch3WwJC+npiGuBsEhQv4l7WEb+UHXpGvNxq9MXPQmhJAQt3lubG2XkY8EwVqi3YMrk3zD1+0aQCeaJHSZQdQ==
   dependencies:
     "@babel/runtime" "^7.14.6"
     "@webgpu/glslang" "^0.0.15"
