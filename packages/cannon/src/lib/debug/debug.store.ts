@@ -11,6 +11,8 @@ import { tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
 import { BodyProps, BodyShapeType } from '../models/body';
 import { NgtPhysicsStore } from '../physics.store';
+// @ts-ignore
+import propsToBody from '../utils/props-to-body';
 import { NgtCannonDebugApi, NgtCannonDebugStoreState } from './models/debug';
 
 const v = new THREE.Vector3();
@@ -97,12 +99,9 @@ export class NgtCannonDebugStore extends EnhancedComponentStore<NgtCannonDebugSt
     const { bodies, refs } = this.getImperativeState();
     return {
       add(id: string, props: BodyProps, type: BodyShapeType) {
-        // @ts-ignore
-        import('../utils/props-to-body').then(({ default: propsToBody }) => {
-          const body = propsToBody(id, props, type);
-          bodies.push(body);
-          refs[id] = body;
-        });
+        const body = propsToBody(id, props, type);
+        bodies.push(body);
+        refs[id] = body;
       },
       remove(id: string) {
         const debugBodyIndex = bodies.indexOf(refs[id]);
