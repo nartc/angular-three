@@ -12,4 +12,6 @@ export * from './lib/models/body';
 export * from './lib/models/types';
 export * from './lib/models/constraints';
 
-export { default as propsToBody } from './lib/utils/props-to-body';
+export * from './lib/debug/debug.component';
+export * from './lib/debug/debug.store';
+export * from './lib/debug/models/debug';
