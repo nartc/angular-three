@@ -5,6 +5,8 @@ export * from './lib/core.module';
 export * from './lib/canvas.component';
 
 export * from './lib/vector/vector.pipe';
+export * from './lib/color/color.pipe';
+export * from './lib/math/math.pipe';
 
 export * from './lib/controllers/controller';
 export * from './lib/controllers/object-3d.controller';
