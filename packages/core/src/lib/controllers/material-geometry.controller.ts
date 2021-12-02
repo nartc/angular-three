@@ -56,6 +56,9 @@ export class NgtMaterialGeometryController
   @Input() morphTargetInfluences?: number[];
   @Input() morphTargetDictionary?: { [key: string]: number };
 
+  #contentMaterialController: NgtContentMaterialController;
+  #contentGeometryController: NgtContentGeometryController;
+
   constructor(
     ngZone: NgZone,
     @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
@@ -65,23 +68,31 @@ export class NgtMaterialGeometryController
     @Inject(NGT_OBJECT_POST_INIT)
     public objectPostInit: AnyExtenderFunction<THREE.Object3D> | undefined,
     @Inject(NGT_CONTENT_MATERIAL_WATCHED_CONTROLLER)
-    private contentMaterialController: NgtContentMaterialController,
+    contentMaterialController: NgtContentMaterialController,
     @Inject(NGT_CONTENT_GEOMETRY_WATCHED_CONTROLLER)
-    private contentGeometryController: NgtContentGeometryController
+    contentGeometryController: NgtContentGeometryController
   ) {
     super(ngZone);
+
+    this.#contentMaterialController =
+      contentMaterialController.contentMaterialController ??
+      contentMaterialController;
+    this.#contentGeometryController =
+      contentGeometryController.contentGeometryController ??
+      contentGeometryController;
+
     objectController.initFn = () => {
-      if (!this.contentGeometryController.geometry) {
-        this.contentGeometryController.construct();
+      if (!this.#contentGeometryController.geometry) {
+        this.#contentGeometryController.construct();
       }
 
-      if (!this.contentMaterialController.material) {
-        this.contentMaterialController.construct();
+      if (!this.#contentMaterialController.material) {
+        this.#contentMaterialController.construct();
       }
 
       const object = new this.objectType(
-        this.contentGeometryController.geometry,
-        this.contentMaterialController.material,
+        this.#contentGeometryController.geometry,
+        this.#contentMaterialController.material,
         ...this.#meshArgs
       );
 

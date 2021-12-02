@@ -53,6 +53,8 @@ export class NgtContentMaterialController extends Controller {
     }
   }
 
+  @Input() contentMaterialController?: NgtContentMaterialController;
+
   get material() {
     return this.#material;
   }
@@ -95,11 +97,11 @@ export class NgtContentMaterialController extends Controller {
   }
 
   get controller(): Controller | undefined {
-    return undefined;
+    return this.contentMaterialController;
   }
 
   get props(): string[] {
-    return [];
+    return ['material'];
   }
 }
 

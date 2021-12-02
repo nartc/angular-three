@@ -39,6 +39,8 @@ export class NgtContentGeometryController extends Controller {
     }
   }
 
+  @Input() contentGeometryController?: NgtContentGeometryController;
+
   get geometry() {
     return this.#geometry;
   }
@@ -68,11 +70,11 @@ export class NgtContentGeometryController extends Controller {
   }
 
   get controller(): Controller | undefined {
-    return undefined;
+    return this.contentGeometryController;
   }
 
   get props(): string[] {
-    return [];
+    return ['geometry'];
   }
 }
 
