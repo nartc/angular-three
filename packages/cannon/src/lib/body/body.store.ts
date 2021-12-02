@@ -10,8 +10,9 @@ import {
   tapEffect,
 } from '@angular-three/core';
 import { Inject, Injectable, NgZone, Optional } from '@angular/core';
-import { tap } from 'rxjs';
+import { startWith, tap } from 'rxjs';
 import * as THREE from 'three';
+import { NgtCannonDebugStore } from '../debug/debug.store';
 import { WorkerApi } from '../models/api';
 import { AtomicName } from '../models/atomic';
 import { BodyProps, BodyShapeType } from '../models/body';
@@ -68,7 +69,7 @@ export interface NgtPhysicBodyStoreState {
 export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStoreState> {
   #workerEffectChanges$ = this.select(
     this.selectors.getPhysicProps$,
-    this.objectInputsController.change$,
+    this.objectInputsController.change$.pipe(startWith({})),
     () => ({})
   );
 
@@ -82,6 +83,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
     @Inject(NGT_PHYSIC_BODY_ARGS_FN) private argsFn: ArgFn<unknown>,
     @Optional() @Inject(NGT_PHYSIC_BODY_TYPE) private type: BodyShapeType,
     private physicsStore: NgtPhysicsStore,
+    @Optional() private cannonDebugStore: NgtCannonDebugStore | null,
     private ngZone: NgZone
   ) {
     super({ getPhysicProps: undefined, object3d: objectController.object3d });
@@ -156,7 +158,9 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
                   object.setMatrixAt(i, temp.matrix);
                   object.instanceMatrix.needsUpdate = true;
                   refs[id] = object;
-                  // if (debugApi) debugApi.add(id, props, type);
+                  if (this.cannonDebugStore) {
+                    this.cannonDebugStore.api.add(id, props, this.type);
+                  }
                   setupCollision(events, props, id);
                   return { ...props, args: this.argsFn(props.args) };
                 })
@@ -164,7 +168,9 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
                   const props = this.#getByIndex(i);
                   prepare(object, props);
                   refs[id] = object;
-                  // if (debugApi) debugApi.add(id, props, type);
+                  if (this.cannonDebugStore) {
+                    this.cannonDebugStore.api.add(id, props, this.type);
+                  }
                   setupCollision(events, props, id);
                   return { ...props, args: this.argsFn(props.args) };
                 });
@@ -195,7 +201,9 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
             this.ngZone.runOutsideAngular(() => {
               uuid.forEach((id) => {
                 delete refs[id];
-                // if (debugApi) debugApi.remove(id)
+                if (this.cannonDebugStore) {
+                  this.cannonDebugStore.api.remove(id);
+                }
                 delete events[id];
               });
               currentWorker.postMessage({ op: 'removeBodies', uuid });
@@ -208,20 +216,15 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
 
   get api() {
     const { worker, subscriptions } = this.physicsStore.getImperativeState();
+    const object3d = this.objectController.object3d;
     const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
       const op: SetOpName<T> = `set${capitalize(type)}`;
       return {
         set: (value: PropValue<T>) => {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid && worker.postMessage({ op, props: value, uuid });
         },
-        subscribe: subscribe(
-          this.objectController.object3d,
-          worker,
-          subscriptions,
-          type,
-          index
-        ),
+        subscribe: subscribe(object3d, worker, subscriptions, type, index),
       };
     };
 
@@ -230,20 +233,14 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
       const type = 'quaternion';
       return {
         set: (x: number, y: number, z: number, w: number) => {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid && worker.postMessage({ op, props: [x, y, z, w], uuid });
         },
         copy: ({ w, x, y, z }: THREE.Quaternion) => {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid && worker.postMessage({ op, props: [x, y, z, w], uuid });
         },
-        subscribe: subscribe(
-          this.objectController.object3d,
-          worker,
-          subscriptions,
-          type,
-          index
-        ),
+        subscribe: subscribe(object3d, worker, subscriptions, type, index),
       };
     };
 
@@ -251,18 +248,18 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
       const op = 'setRotation';
       return {
         set: (x: number, y: number, z: number) => {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid && worker.postMessage({ op, props: [x, y, z], uuid });
         },
         copy: ({ x, y, z }: THREE.Vector3 | THREE.Euler) => {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid && worker.postMessage({ op, props: [x, y, z], uuid });
         },
         subscribe: (callback: (value: NgtTriplet) => void) => {
           const id = incrementingId++;
           const target = 'bodies';
           const type = 'quaternion';
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
 
           subscriptions[id] = { [type]: quaternionToRotation(callback) };
           uuid &&
@@ -283,20 +280,14 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
       const op: SetOpName<VectorName> = `set${capitalize(type)}`;
       return {
         set: (x: number, y: number, z: number) => {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid && worker.postMessage({ op, props: [x, y, z], uuid });
         },
         copy: ({ x, y, z }: THREE.Vector3 | THREE.Euler) => {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid && worker.postMessage({ op, props: [x, y, z], uuid });
         },
-        subscribe: subscribe(
-          this.objectController.object3d,
-          worker,
-          subscriptions,
-          type,
-          index
-        ),
+        subscribe: subscribe(object3d, worker, subscriptions, type, index),
       };
     };
 
@@ -328,7 +319,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
           force: NgtTriplet,
           worldPoint: NgtTriplet
         ) {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid &&
             worker.postMessage({
               op: 'applyForce',
@@ -341,7 +332,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
           impulse: NgtTriplet,
           worldPoint: NgtTriplet
         ) {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid &&
             worker.postMessage({
               op: 'applyImpulse',
@@ -354,7 +345,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
           force: NgtTriplet,
           localPoint: NgtTriplet
         ) {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid &&
             worker.postMessage({
               op: 'applyLocalForce',
@@ -367,7 +358,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
           impulse: NgtTriplet,
           localPoint: NgtTriplet
         ) {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid &&
             worker.postMessage({
               op: 'applyLocalImpulse',
@@ -376,17 +367,17 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
             });
         },
         applyTorque(this: NgtPhysicBodyStore, torque: NgtTriplet) {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid &&
             worker.postMessage({ op: 'applyTorque', props: [torque], uuid });
         },
         // force particular sleep state
         sleep(this: NgtPhysicBodyStore) {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid && worker.postMessage({ op: 'sleep', uuid });
         },
         wakeUp(this: NgtPhysicBodyStore) {
-          const uuid = getUUID(this.objectController.object3d, index);
+          const uuid = getUUID(object3d, index);
           uuid && worker.postMessage({ op: 'wakeUp', uuid });
         },
       };
