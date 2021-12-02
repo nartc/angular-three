@@ -63,6 +63,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-array-camera,
     ngt-stereo-camera,
     ngt-cube-camera,
+    ngt-soba-box
   `,
   exportAs: 'ngtObject3dInputsController',
 })
