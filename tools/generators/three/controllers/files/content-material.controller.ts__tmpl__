@@ -15,7 +15,8 @@ import { Controller, createControllerProviderFactory } from './controller';
 @Directive({
   selector: `<% for (const mesh of meshSelectors) { %>
     ngt-<%= mesh %>,<% } %><% for (const line of lineSelectors) { %>
-    ngt-<%= line %>,<% } %>
+    ngt-<%= line %>,<% } %><% for (const shape of sobaShapeSelectors) { %>
+    ngt-soba-<%= shape %>,<% } %>
   `,
   exportAs: 'ngtContentMaterialController',
 })

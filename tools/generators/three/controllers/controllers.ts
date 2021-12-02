@@ -10,7 +10,8 @@ export default async function controllersGenerator(
   tree: Tree,
   object3dSelectors: string[],
   audioSelectors: string[],
-  lineSelectors: string[]
+  lineSelectors: string[],
+  sobaShapeSelectors: string[]
 ) {
   const meshSelectors = ['mesh', 'instanced-mesh', 'skinned-mesh'];
   const { libsDir } = getWorkspaceLayout(tree);
@@ -21,12 +22,14 @@ export default async function controllersGenerator(
     audioSelectors,
     meshSelectors,
     lineSelectors,
+    sobaShapeSelectors,
     selectors: Array.from(
       new Set([
         ...meshSelectors,
         ...audioSelectors,
         ...lineSelectors,
         ...object3dSelectors,
+        ...sobaShapeSelectors,
       ])
     ).map((selector, index) => ({
       selector,
