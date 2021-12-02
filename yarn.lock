@@ -8065,6 +8065,11 @@ postcss@^8.2.15, postcss@^8.2.4, postcss@^8.3, postcss@^8.3.7, postcss@^8.4.4:
     picocolors "^1.0.0"
     source-map-js "^1.0.1"
 
+postprocessing@6.23.2:
+  version "6.23.2"
+  resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-6.23.2.tgz#51b0e0265fa2b70ff5ed043d3c53970e177d1ee1"
+  integrity sha512-DnkWnZzVPXMl3/fhqWDDRZ2BnD08OCxqNpOx2xaj04sg5ShjMj4Gq1pNfUJZqzoUzr3IVJJD7UZP9DWGFp6jyw==
+
 potpack@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/potpack/-/potpack-1.0.2.tgz#23b99e64eb74f5741ffe7656b5b5c4ddce8dfc14"

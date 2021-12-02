@@ -1,0 +1,15 @@
+{
+  "name": "@angular-three/postprocessing",
+  "version": "2.0.0-beta.9",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@angular/common": "^13.0.0",
+    "@angular/core": "^13.0.0"
+  },
+  "dependencies": {
+    "postprocessing": "~6.23.2",
+    "tslib": "^2.3.0"
+  }
+}
