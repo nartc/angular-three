@@ -1,5 +1,11 @@
 import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
-import { generateFiles, getWorkspaceLayout, names, Tree } from '@nrwl/devkit';
+import {
+  generateFiles,
+  getWorkspaceLayout,
+  logger,
+  names,
+  Tree,
+} from '@nrwl/devkit';
 import { join } from 'path';
 
 export const sobaShapes = [
@@ -85,6 +91,8 @@ export default async function sobaShapesGenerator(
   const { libsDir } = getWorkspaceLayout(tree);
   const sobaShapesDir = join(libsDir, 'soba', 'shapes');
 
+  logger.log('Generating Soba shapes...');
+
   if (!tree.exists(sobaShapesDir)) {
     await librarySecondaryEntryPointGenerator(tree, {
       name: 'shapes',
@@ -128,7 +136,7 @@ export default async function sobaShapesGenerator(
     generateFiles(
       tree,
       join(__dirname, 'files', 'lib'),
-      join(sobaShapesDir, 'src', 'lib', shapeNames.shapeName),
+      join(sobaShapesDir, 'src', 'lib', shapeNames.shapeFileName),
       {
         ...shapeNames,
         ...geometryNames,

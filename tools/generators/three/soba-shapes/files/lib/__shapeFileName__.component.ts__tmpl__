@@ -66,4 +66,4 @@ export class NgtSoba<%= shapeClassName %> extends NgtSobaExtender<THREE.Mesh> {
   exports: [NgtSoba<%= shapeClassName %>],
   imports: [NgtCoreModule, NgtMeshModule, Ngt<%= geometryClassName %>Module, CommonModule],
 })
-export class NgtSoba<%= shapeClassName %> {}
+export class NgtSoba<%= shapeClassName %>Module {}
