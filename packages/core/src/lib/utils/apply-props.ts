@@ -7,7 +7,11 @@ import {
 } from '../models';
 
 function checkNeedsUpdate(value: unknown) {
-  if (typeof value === 'object' && 'needsUpdate' in (value as UnknownRecord)) {
+  if (
+    value !== null &&
+    typeof value === 'object' &&
+    'needsUpdate' in (value as UnknownRecord)
+  ) {
     (value as UnknownRecord)['needsUpdate'] = true;
   }
 }
