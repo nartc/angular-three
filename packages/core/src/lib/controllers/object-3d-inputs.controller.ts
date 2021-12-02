@@ -54,7 +54,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-plane-helper,
     ngt-point-light-helper,
     ngt-polar-grid-helper,
-    ngt-skeleton-helper
+    ngt-skeleton-helper,
     ngt-spot-light-helper,
     ngt-sprite,
     ngt-camera,
@@ -63,7 +63,23 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-array-camera,
     ngt-stereo-camera,
     ngt-cube-camera,
-    ngt-soba-box
+    ngt-soba-plane,
+    ngt-soba-box,
+    ngt-soba-cylinder,
+    ngt-soba-cone,
+    ngt-soba-circle,
+    ngt-soba-sphere,
+    ngt-soba-tube,
+    ngt-soba-torus,
+    ngt-soba-tetrahedron,
+    ngt-soba-ring,
+    ngt-soba-polyhedron,
+    ngt-soba-octahedron,
+    ngt-soba-dodecahedron,
+    ngt-soba-icosahedron,
+    ngt-soba-extrude,
+    ngt-soba-lathe,
+    ngt-soba-torus-knot
   `,
   exportAs: 'ngtObject3dInputsController',
 })

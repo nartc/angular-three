@@ -85,7 +85,7 @@ const supportedEvents = [
     ngt-plane-helper,
     ngt-point-light-helper,
     ngt-polar-grid-helper,
-    ngt-skeleton-helper
+    ngt-skeleton-helper,
     ngt-spot-light-helper,
     ngt-sprite,
     ngt-camera,
@@ -93,7 +93,7 @@ const supportedEvents = [
     ngt-orthographic-camera,
     ngt-array-camera,
     ngt-stereo-camera,
-    ngt-cube-camera,
+    ngt-cube-camera
   `,
   exportAs: 'ngtObject3dController',
   providers: [

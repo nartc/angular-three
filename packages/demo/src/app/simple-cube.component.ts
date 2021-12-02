@@ -8,6 +8,7 @@ import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
+import { NgtSobaBoxModule } from '@angular-three/soba/shapes';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -20,17 +21,16 @@ import * as THREE from 'three';
       <ngt-ambient-light></ngt-ambient-light>
       <ngt-spot-light [position]="[1, 1, 1]"></ngt-spot-light>
 
-      <ngt-mesh
-        #mesh="ngtMesh"
-        (animateReady)="onAnimateReady(mesh.mesh)"
+      <ngt-soba-box
+        #sobaBox="ngtSobaBox"
+        (animateReady)="onAnimateReady(sobaBox.object)"
         (pointerover)="hover = true"
         (pointerout)="hover = false"
       >
         <ngt-mesh-standard-material
           [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
         ></ngt-mesh-standard-material>
-        <ngt-box-geometry></ngt-box-geometry>
-      </ngt-mesh>
+      </ngt-soba-box>
 
       <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
     </ngt-canvas>
@@ -57,6 +57,7 @@ export class SimpleCubeComponent {
     NgtMeshStandardMaterialModule,
     NgtBoxGeometryModule,
     NgtSobaOrbitControlsModule,
+    NgtSobaBoxModule,
   ],
 })
 export class SimpleCubeComponentModule {}

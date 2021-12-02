@@ -24,25 +24,32 @@ export default async function controllersGenerator(
     (selector) => `soba-${selector}`
   );
 
+  const selectors = [
+    ...meshSelectors,
+    ...audioSelectors,
+    ...lineSelectors,
+    ...object3dSelectors,
+  ];
+
+  // Object3dInputs includes the Soba shapes but Object3d does not
+  const inputsSelectors = [...selectors, ...prefixedSobaSelectors];
+
   generateFiles(tree, join(__dirname, 'files'), controllersDir, {
     tmpl: '',
     audioSelectors,
     meshSelectors,
     lineSelectors,
     sobaShapeSelectors: prefixedSobaSelectors,
-    selectors: Array.from(
-      new Set([
-        ...meshSelectors,
-        ...audioSelectors,
-        ...lineSelectors,
-        ...object3dSelectors,
-        ...prefixedSobaSelectors,
-      ])
-    ).map((selector, index) => ({
-      selector,
-      isLast: index === object3dSelectors.length - 1,
-    })),
+    selectors: Array.from(new Set(selectors)).map(mapIsLast),
+    inputsSelectors: Array.from(new Set(inputsSelectors)).map(mapIsLast),
   });
 
   await formatFiles(tree);
+}
+
+function mapIsLast(selector: string, index: number, list: string[]) {
+  return {
+    selector,
+    isLast: index === list.length - 1,
+  };
 }

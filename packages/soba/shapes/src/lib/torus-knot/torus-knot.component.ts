@@ -8,7 +8,7 @@ import {
   NgtCoreModule,
   NgtObject3dInputsController,
 } from '@angular-three/core';
-import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
+import { NgtTorusKnotGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaExtender } from '@angular-three/soba';
 import { CommonModule } from '@angular/common';
@@ -22,8 +22,8 @@ import {
 import * as THREE from 'three';
 
 @Component({
-  selector: 'ngt-soba-box',
-  exportAs: 'ngtSobaBox',
+  selector: 'ngt-soba-torus-knot',
+  exportAs: 'ngtSobaTorusKnot',
   template: `
     <ngt-mesh
       #ngtMesh="ngtMesh"
@@ -32,12 +32,12 @@ import * as THREE from 'three';
       [object3dInputsController]="objectInputsController"
       [contentMaterialController]="contentMaterialController"
     >
-      <ngt-box-geometry
+      <ngt-torus-knot-geometry
         *ngIf="args; else withoutArgs"
         [args]="args"
-      ></ngt-box-geometry>
+      ></ngt-torus-knot-geometry>
       <ng-template #withoutArgs>
-        <ngt-box-geometry></ngt-box-geometry>
+        <ngt-torus-knot-geometry></ngt-torus-knot-geometry>
       </ng-template>
     </ngt-mesh>
     <ng-content></ng-content>
@@ -48,8 +48,8 @@ import * as THREE from 'three';
     NGT_CONTENT_MATERIAL_CONTROLLER_PROVIDER,
   ],
 })
-export class NgtSobaBox extends NgtSobaExtender<THREE.Mesh> {
-  @Input() args?: ConstructorParameters<typeof THREE.BoxGeometry>;
+export class NgtSobaTorusKnot extends NgtSobaExtender<THREE.Mesh> {
+  @Input() args?: ConstructorParameters<typeof THREE.TorusKnotGeometry>;
 
   constructor(
     @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
@@ -62,8 +62,13 @@ export class NgtSobaBox extends NgtSobaExtender<THREE.Mesh> {
 }
 
 @NgModule({
-  declarations: [NgtSobaBox],
-  exports: [NgtSobaBox],
-  imports: [NgtCoreModule, NgtMeshModule, NgtBoxGeometryModule, CommonModule],
+  declarations: [NgtSobaTorusKnot],
+  exports: [NgtSobaTorusKnot],
+  imports: [
+    NgtCoreModule,
+    NgtMeshModule,
+    NgtTorusKnotGeometryModule,
+    CommonModule,
+  ],
 })
-export class NgtSobaBoxModule {}
+export class NgtSobaTorusKnotModule {}

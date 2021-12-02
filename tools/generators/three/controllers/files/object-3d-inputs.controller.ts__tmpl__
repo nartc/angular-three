@@ -25,7 +25,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-primitive,
     ngt-bone,
     ngt-group,
-    ngt-points<% if (selectors.length) { %>,<% } %><% for (const selector of selectors) { %>
+    ngt-points<% if (inputsSelectors.length) { %>,<% } %><% for (const selector of inputsSelectors) { %>
     ngt-<%= selector.selector %><% if (!selector.isLast) { %>,<% } %><% } %>
   `,
   exportAs: 'ngtObject3dInputsController',
