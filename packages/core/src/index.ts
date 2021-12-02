@@ -11,6 +11,8 @@ export * from './lib/math/math.pipe';
 export * from './lib/controllers/controller';
 export * from './lib/controllers/object-3d.controller';
 export * from './lib/controllers/material-geometry.controller';
+export * from './lib/controllers/content-material.controller';
+export * from './lib/controllers/content-geometry.controller';
 export * from './lib/controllers/object-3d-inputs.controller';
 export * from './lib/controllers/animation-subscriber.controller';
 export * from './lib/controllers/audio.controller';
