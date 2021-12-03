@@ -1,0 +1,38 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title={'Introduction/Introduction'} parameters={{ viewMode: 'docs' }} />
+
+## What is Angular Three (NGT)?
+
+**Angular Three** is a **Component Library** that wraps around [THREE.js](https://threejs.org/) to provide a declarative approach to building 3D applications using [Angular](https://angular.io/) capabilities.
+
+> Both Angular and THREE.js skills are required to use NGT. Fundamental understanding of both will help you to understand the concepts and the implementation of NGT.
+
+## Why is it good to use NGT?
+
+Utilizing Template-less Directives to build 3D scenes declaratively with accessing to Angular Dependency Injection, Inputs, Outputs, and other common Directives while keeping the DOM clean.
+
+## How does NGT work?
+
+NGT relies heavily on [Hierarchical Dependency Injection](https://angular.io/guide/hierarchical-dependency-injection) to allow for declarative creation of THREE.js objects on the template. Take a look at the [SimpleCube example](?path=/story/introduction-examples--simple-cube).
+
+Now that you've seen the `SimpleCube` in action, let's examine its code:
+
+```html
+<ngt-canvas>
+  <ngt-mesh
+    #mesh="ngtMesh"
+    (animateReady)="
+        mesh.mesh.rotation.x = mesh.mesh.rotation.x + 0.01;
+        mesh.mesh.rotation.y = mesh.mesh.rotation.y + 0.01
+      "
+  >
+    <ngt-mesh-basic-material
+      [parameters]="{ color: 'turquoise' }"
+    ></ngt-mesh-basic-material>
+    <ngt-box-geometry></ngt-box-geometry>
+  </ngt-mesh>
+</ngt-canvas>
+```
+
+> Due to Storybook limitation, the `(animateReady)` is handled inline, but you should make a method (eg: `onAnimateReady(mesh.mesh)`) to handle this Output
