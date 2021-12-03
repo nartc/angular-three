@@ -1,4 +1,3 @@
-const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const rootMain = require('../../../.storybook/main');
 
 module.exports = {
@@ -17,15 +16,6 @@ module.exports = {
     if (rootMain.webpackFinal) {
       config = await rootMain.webpackFinal(config, { configType });
     }
-
-    // add your own webpack tweaks if needed
-    const tsPaths = new TsConfigPathsPlugin({
-      configFile: './tsconfig.base.json',
-    });
-
-    config.resolve.plugins
-      ? config.resolve.plugins.push(tsPaths)
-      : (config.resolve.plugins = [tsPaths]);
 
     return config;
   },
