@@ -50,3 +50,4 @@ export * from './lib/utils/array-partition';
 export * from './lib/utils/build-graph';
 export * from './lib/utils/make-id';
 export * from './lib/utils/make';
+export * from './lib/utils/is-webgl-available';
