@@ -100,7 +100,20 @@ export class NgtEffectStore extends EnhancedComponentStore<NgtEffectStoreState> 
 }
 
 @Directive({
-  selector: 'ngt-bloom,ngt-noise',
+  selector: `
+    ngt-bloom,
+    ngt-brightness-contrast,
+    ngt-color-depth,
+    ngt-depth,
+    ngt-dot-screen,
+    ngt-hue-saturation,
+    ngt-noise,
+    ngt-scanline,
+    ngt-sepia,
+    ngt-shock-wave,
+    ngt-tone-mapping,
+    ngt-vignette
+  `,
   exportAs: 'ngtEffectController',
   providers: [NgtEffectStore],
 })

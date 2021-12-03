@@ -5,7 +5,6 @@ import {
 } from '@angular-three/core/primitive';
 import {
   NGT_EFFECT_CONTROLLER_PROVIDER,
-  NGT_EFFECT_DEFAULT_BLEND_FUNCTION,
   NGT_EFFECT_TYPE,
   NGT_EFFECT_WATCH_CONTROLLER,
   NgtEffectComposerModule,
@@ -20,11 +19,11 @@ import {
   ViewChild,
 } from '@angular/core';
 // @ts-ignore
-import { BlendFunction, BloomEffect } from 'postprocessing';
+import { VignetteEffect } from 'postprocessing';
 
 @Component({
-  selector: 'ngt-bloom',
-  exportAs: 'ngtBloom',
+  selector: 'ngt-vignette',
+  exportAs: 'ngtVignette',
   template: `
     <ngt-primitive
       *ngIf="effect"
@@ -36,16 +35,12 @@ import { BlendFunction, BloomEffect } from 'postprocessing';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NGT_EFFECT_CONTROLLER_PROVIDER,
-    { provide: NGT_EFFECT_TYPE, useValue: BloomEffect },
-    {
-      provide: NGT_EFFECT_DEFAULT_BLEND_FUNCTION,
-      useValue: BlendFunction.SCREEN,
-    },
+    { provide: NGT_EFFECT_TYPE, useValue: VignetteEffect },
   ],
 })
-export class NgtBloom {
+export class NgtVignette {
   static ngAcceptInputType_options:
-    | ConstructorParameters<AnyConstructor<BloomEffect>>[0]
+    | ConstructorParameters<AnyConstructor<VignetteEffect>>[0]
     | undefined;
 
   @ViewChild(NgtPrimitive) primitive?: NgtPrimitive;
@@ -61,8 +56,8 @@ export class NgtBloom {
 }
 
 @NgModule({
-  declarations: [NgtBloom],
-  exports: [NgtBloom],
+  declarations: [NgtVignette],
+  exports: [NgtVignette],
   imports: [
     NgtCoreModule,
     NgtPrimitiveModule,
@@ -70,4 +65,4 @@ export class NgtBloom {
     CommonModule,
   ],
 })
-export class NgtBloomModule {}
+export class NgtVignetteModule {}

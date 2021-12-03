@@ -28,7 +28,6 @@ import * as THREE from 'three';
     <ngt-mesh
       #ngtMesh="ngtMesh"
       (ready)="object = ngtMesh.mesh"
-      (animateReady)="animateReady.emit($event)"
       [object3dInputsController]="objectInputsController"
       [contentMaterialController]="contentMaterialController"
     >

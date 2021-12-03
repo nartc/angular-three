@@ -20,11 +20,11 @@ import {
   ViewChild,
 } from '@angular/core';
 // @ts-ignore
-import { BlendFunction, BloomEffect } from 'postprocessing';
+import { BlendFunction, ScanlineEffect } from 'postprocessing';
 
 @Component({
-  selector: 'ngt-bloom',
-  exportAs: 'ngtBloom',
+  selector: 'ngt-scanline',
+  exportAs: 'ngtScanline',
   template: `
     <ngt-primitive
       *ngIf="effect"
@@ -36,16 +36,16 @@ import { BlendFunction, BloomEffect } from 'postprocessing';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NGT_EFFECT_CONTROLLER_PROVIDER,
-    { provide: NGT_EFFECT_TYPE, useValue: BloomEffect },
+    { provide: NGT_EFFECT_TYPE, useValue: ScanlineEffect },
     {
       provide: NGT_EFFECT_DEFAULT_BLEND_FUNCTION,
-      useValue: BlendFunction.SCREEN,
+      useValue: BlendFunction.OVERLAY,
     },
   ],
 })
-export class NgtBloom {
+export class NgtScanline {
   static ngAcceptInputType_options:
-    | ConstructorParameters<AnyConstructor<BloomEffect>>[0]
+    | ConstructorParameters<AnyConstructor<ScanlineEffect>>[0]
     | undefined;
 
   @ViewChild(NgtPrimitive) primitive?: NgtPrimitive;
@@ -61,8 +61,8 @@ export class NgtBloom {
 }
 
 @NgModule({
-  declarations: [NgtBloom],
-  exports: [NgtBloom],
+  declarations: [NgtScanline],
+  exports: [NgtScanline],
   imports: [
     NgtCoreModule,
     NgtPrimitiveModule,
@@ -70,4 +70,4 @@ export class NgtBloom {
     CommonModule,
   ],
 })
-export class NgtBloomModule {}
+export class NgtScanlineModule {}

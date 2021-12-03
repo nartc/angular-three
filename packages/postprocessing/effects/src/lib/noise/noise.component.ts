@@ -1,4 +1,4 @@
-import { NgtCoreModule } from '@angular-three/core';
+import { AnyConstructor, NgtCoreModule } from '@angular-three/core';
 import {
   NgtPrimitive,
   NgtPrimitiveModule,
@@ -44,6 +44,10 @@ import { BlendFunction, NoiseEffect } from 'postprocessing';
   ],
 })
 export class NgtNoise {
+  static ngAcceptInputType_options:
+    | ConstructorParameters<AnyConstructor<NoiseEffect>>[0]
+    | undefined;
+
   @ViewChild(NgtPrimitive) primitive?: NgtPrimitive;
 
   constructor(
