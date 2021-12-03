@@ -130,7 +130,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
     private objectInputsController: NgtObject3dInputsController,
     @Inject(NGT_ANIMATION_SUBSCRIBER_WATCHED_CONTROLLER)
     private animationSubscriberController: NgtAnimationSubscriberController,
-    @Optional() @SkipSelf() private parentObject3d: NgtObject3dController | null
+    @Optional() @SkipSelf() private parentObject3d: NgtObject3dController
   ) {
     super(ngZone);
 

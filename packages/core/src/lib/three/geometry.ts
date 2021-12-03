@@ -24,7 +24,7 @@ export abstract class NgtGeometry<
   constructor(
     protected instancesStore: NgtInstancesStore,
     protected ngZone: NgZone,
-    @Optional() private parentObject: NgtObject3dController | null
+    @Optional() private parentObject: NgtObject3dController
   ) {}
 
   abstract geometryType: AnyConstructor<TGeometry>;
