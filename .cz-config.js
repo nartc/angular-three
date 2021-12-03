@@ -15,9 +15,16 @@ module.exports = {
 
   scopes: [
     { name: 'core', description: 'Angular Three core' },
-    { name: 'controls', description: 'THREE.js Controls' },
+    {
+      name: 'soba',
+      description: 'Angular Three helpers and utilities (port from R3F Drei)',
+    },
     { name: 'postprocessing', description: 'THREE.js Post processing' },
-    { name: 'cannon', description: 'Port of React use-cannon (cannon-es)' },
+    {
+      name: 'cannon',
+      description:
+        'Angular Three Physics (port of React use-cannon (cannon-es))',
+    },
   ],
   // override the messages, defaults are as follows
   messages: {

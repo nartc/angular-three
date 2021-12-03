@@ -4,7 +4,11 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "ngcc --properties es2015 browser module main",
-    "build": "nx run-many --target=build --projects=core,cannon,soba",
+    "commit": "git-cz",
+    "release": "dotenv release-it --",
+    "contributors:init": "all-contributors init",
+    "contributors:add": "all-contributors add",
+    "build": "nx run-many --target=build --projects=core,cannon,soba,postprocessing",
     "postbuild": "cp -R packages/cannon/src/lib/utils dist/packages/cannon/fesm2015 & cp -R packages/cannon/src/lib/utils dist/packages/cannon/fesm2020 & cp -R packages/cannon/src/lib/utils dist/packages/cannon/esm2020/lib"
   },
   "private": true,
@@ -49,6 +53,11 @@
     "@types/three": "0.134.0",
     "@typescript-eslint/eslint-plugin": "~5.5.0",
     "@typescript-eslint/parser": "~5.5.0",
+    "all-contributors-cli": "6.20.0",
+    "commitizen": "4.2.4",
+    "cz-conventional-changelog": "3.3.0",
+    "cz-customizable": "6.3.0",
+    "dotenv-cli": "4.1.1",
     "eslint": "8.3.0",
     "eslint-config-prettier": "8.3.0",
     "jest": "27.3.1",
@@ -61,5 +70,10 @@
     "prettier": "^2.5.0",
     "ts-jest": "27.0.7",
     "typescript": "~4.4.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    }
   }
 }
