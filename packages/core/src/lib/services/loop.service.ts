@@ -7,6 +7,7 @@ import { NgtStore } from '../stores/store';
 export class NgtLoopService {
   #running = false;
   #repeat?: number;
+  #frames = 0;
 
   constructor(
     private store: NgtStore,
@@ -61,8 +62,8 @@ export class NgtLoopService {
         }
       }
 
-      this.store.frames = Math.max(0, this.store.frames - 1);
-      return state.frameloop === 'always' ? 1 : this.store.frames;
+      this.#frames = Math.max(0, this.#frames - 1);
+      return state.frameloop === 'always' ? 1 : this.#frames;
     });
   }
 
@@ -72,10 +73,7 @@ export class NgtLoopService {
       this.#repeat = 0;
 
       const state = this.store.getImperativeState();
-      if (
-        state.ready &&
-        (state.frameloop === 'always' || this.store.frames > 0)
-      ) {
+      if (state.ready && (state.frameloop === 'always' || this.#frames > 0)) {
         this.#repeat += this.render(
           timestamp,
           state,
@@ -94,7 +92,7 @@ export class NgtLoopService {
     if (state.vr || !state.ready || state.frameloop === 'never') return;
 
     // Increase frames, do not go higher than 60
-    this.store.frames = Math.min(60, this.store.frames + 1);
+    this.#frames = Math.min(60, this.#frames + 1);
     // If the render-loop isn't active, start it
     if (!this.#running) {
       this.#running = true;

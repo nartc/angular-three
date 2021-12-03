@@ -54,8 +54,6 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
     { debounce: true }
   );
 
-  frames = 0;
-
   constructor(
     @Inject(NgtResize)
     private resizeResult$: Observable<NgtResizeResult>,
