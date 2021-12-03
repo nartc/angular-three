@@ -9,7 +9,7 @@ export interface NgtObject3dProps {
   scale?: NgtVector3;
   color?: NgtColor;
   userData?: UnknownRecord;
-  dispose?: () => void;
+  dispose?: (() => void) | null;
   castShadow?: boolean;
   receiveShadow?: boolean;
   visible?: boolean;
