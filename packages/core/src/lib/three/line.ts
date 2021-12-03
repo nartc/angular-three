@@ -2,9 +2,9 @@ import { Directive, Inject, Optional } from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER,
-  NGT_OBJECT_TYPE,
   NgtMaterialGeometryController,
 } from '../controllers/material-geometry.controller';
+import { NGT_OBJECT_TYPE } from '../tokens';
 
 @Directive({
   providers: [{ provide: NGT_OBJECT_TYPE, useValue: THREE.Line }],

@@ -3,7 +3,6 @@ import {
   AfterContentInit,
   Directive,
   Inject,
-  InjectionToken,
   Input,
   NgModule,
   NgZone,
@@ -11,6 +10,7 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 import { AnyConstructor, AnyExtenderFunction, UnknownRecord } from '../models';
+import { NGT_OBJECT_POST_INIT, NGT_OBJECT_TYPE } from '../tokens';
 import {
   NGT_CONTENT_GEOMETRY_CONTROLLER_PROVIDER,
   NGT_CONTENT_GEOMETRY_WATCHED_CONTROLLER,
@@ -139,14 +139,4 @@ export const [
 ] = createControllerProviderFactory({
   watchedControllerTokenName: 'Watched MaterialGeometryController',
   controller: NgtMaterialGeometryController,
-});
-
-export const NGT_OBJECT_TYPE = new InjectionToken('Object3d Type', {
-  providedIn: 'root',
-  factory: () => THREE.Object3D,
-});
-
-export const NGT_OBJECT_POST_INIT = new InjectionToken('Object3d PostInit', {
-  providedIn: 'root',
-  factory: () => undefined,
 });
