@@ -42,6 +42,9 @@
       "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
       "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
       "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
+      "@angular-three/postprocessing/effects": [
+        "packages/postprocessing/effects/src/index.ts"
+      ],
       "@angular-three/soba": ["packages/soba/src/index.ts"],
       "@angular-three/soba/controls": ["packages/soba/controls/src/index.ts"],
       "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"],

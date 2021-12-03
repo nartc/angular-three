@@ -88,7 +88,7 @@ export class NgtObject3dInputsController extends Controller {
   @Input() receiveShadow = false;
   @Input() visible = true;
   @Input() matrixAutoUpdate = true;
-  @Input() dispose?: () => void;
+  @Input() dispose?: (() => void) | null;
 
   @Input() appendMode: 'immediate' | 'root' | 'none' = 'immediate';
   @Input() appendTo?: THREE.Object3D;

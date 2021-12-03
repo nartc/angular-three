@@ -13,6 +13,8 @@ import physicBodiesGenerator from './physic-bodies/physic-bodies';
 import physicBodyControllerGenerator from './physic-body-controller/physic-body-controller';
 import physicConstraintControllerGenerator from './physic-constraint-controller/physic-constraint-controller';
 import physicConstraintsGenerator from './physic-constraints/physic-constraints';
+import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
+import simpleEffectsGenerator from './postprocessing/simple-effects';
 import sobaShapesGenerator from './soba-shapes/soba-shapes';
 import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
@@ -36,6 +38,7 @@ export default async function (tree: Tree) {
     physicBodySelectors,
     physicConstraintSelectors,
     sobaShapeSelectors,
+    simpleEffectSelectors,
   ] = await Promise.all([
     audiosGenerator(tree),
     lightsGenerator(tree),
@@ -46,6 +49,7 @@ export default async function (tree: Tree) {
     physicBodiesGenerator(tree),
     physicConstraintsGenerator(tree),
     sobaShapesGenerator(tree),
+    simpleEffectsGenerator(tree),
   ]);
 
   const additionalSobaSelectors = [];
@@ -72,5 +76,6 @@ export default async function (tree: Tree) {
       tree,
       physicConstraintSelectors.map(({ name }) => name)
     ),
+    simpleEffectControllerGenerator(tree, simpleEffectSelectors),
   ]);
 }
