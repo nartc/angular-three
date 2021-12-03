@@ -17,7 +17,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Observable, Subscription, tap } from 'rxjs';
+import { Observable, Subscription, tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
 import { OrbitControls } from 'three-stdlib/controls/OrbitControls';
 
@@ -133,12 +133,13 @@ export class NgtSobaOrbitControls
   readonly setControlsEffect = this.effect<THREE.Camera | undefined>(
     (params$) =>
       params$.pipe(
-        tap((camera) => {
+        withLatestFrom(this.selectors.enableDamping$),
+        tap(([camera, enableDamping]) => {
           this.ngZone.runOutsideAngular(() => {
             if (camera) {
-              this.patchState({
-                controls: new OrbitControls(camera),
-              });
+              const controls = new OrbitControls(camera);
+              controls.enableDamping = enableDamping;
+              this.patchState({ controls });
               this.ready.emit();
             }
           });
