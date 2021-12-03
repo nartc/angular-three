@@ -1,0 +1,24 @@
+{
+  "projectName": "angular-three",
+  "projectOwner": "nartc",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "barbados-clemens",
+      "name": "Caleb Ukle",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23272162?v=4",
+      "profile": "https://github.com/barbados-clemens",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
