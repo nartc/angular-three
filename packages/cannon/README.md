@@ -1,7 +1,19 @@
-# cannon
+# `@angular-three/cannon`
 
-This library was generated with [Nx](https://nx.dev).
+This package provides the `ngt-physics` directive that you can then apply physics to any `NgtObject3d` inside of it.
 
-## Running unit tests
+```html
+<ngt-canvas>
+  <ngt-mesh> <!-- no physics --> </ngt-mesh>
 
-Run `nx test cannon` to execute the unit tests.
+  <ngt-physics>
+    <ngt-mesh ngtPhysicBox> <!-- with physics --> </ngt-mesh>
+  </ngt-physics>
+</ngt-canvas>
+```
+
+## Installation
+
+```shell
+npm install @angular-three/cannon
+```

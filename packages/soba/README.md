@@ -1,7 +1,11 @@
-# soba
+# `@angular-three/soba`
 
-This library was generated with [Nx](https://nx.dev).
+This package provides some helpers and utilities, ported from [react-three/drei](https://github.com/pmndrs/drei)
 
-## Running unit tests
+## Installation
 
-Run `nx test soba` to execute the unit tests.
+```shell
+npm install @angular-three/soba
+```
+
+Some of the components in `soba` might need other 3rd party libraries. Please check each secondary README for more info.

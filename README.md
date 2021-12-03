@@ -1,100 +1,177 @@
+# Declarative THREE.js in Angular
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+🔥 Leverage your [Angular](https://angular.io) skill to build mind-blowing 3D applications with [THREE.js](https://threejs.org) 🔥
 
-# AngularThree
+## Attention
 
-This project was generated using [Nx](https://nx.dev).
+This package is still in development
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+## Packages
 
-🔎 **Smart, Extensible Build Framework**
+**Angular Three** is a collection of packages that provide different **THREE.js** functionalities
 
-## Adding capabilities to your workspace
+| Package                                                                                    | Version                                                                     | Links                                                                                                                                                                                                               |
+| ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@angular-three/core`](https://npmjs.com/package/@angular-three/core)                     | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/core)           | [![README](https://img.shields.io/badge/README--green.svg)](/legacy/packagesackages/core/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/core)                     |
+| [`@angular-three/postprocessing`](https://npmjs.com/package/@angular-three/postprocessing) | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/postprocessing) | [![README](https://img.shields.io/badge/README--green.svg)](/legacy/packagesackages/postprocessing/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/postprocessing) |
+| [`@angular-three/cannon`](https://npmjs.com/package/@angular-three/cannon)                 | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/cannon)         | [![README](https://img.shields.io/badge/README--green.svg)](/legacy/packagesackages/cannon/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/cannon)                 |
+| [`@angular-three/soba`](https://npmjs.com/package/@angular-three/soba)                     | ![npm (scoped)](https://img.shields.io/npm/v/@angular-three/soba)           | [![README](https://img.shields.io/badge/README--green.svg)](/legacy/packagesackages/soba/README.md) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@angular-three/soba)                     |
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+### Peer Dependencies
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+- `three@0.134`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js** is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.134`
+  - Make sure to also have `@types/three` installed as well
 
-Below are our core plugins:
+```bash
+npm install -E three@0.134
+npm install -DE @types/three
+```
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+- `@ngrx/component-store`: **Angular Three** uses `ComponentStore` to manage internal states. `ComponentStore` is a stand-alone (separate from `@ngrx/store`), small, and feature-packed local state management solution (~300LOC).
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+```bash
+npm install @ngrx/component-store
+```
 
-## Generate an application
+> **Q: Why don't you roll your own `ComponentStore` to prevent consumers from having to install another external package?**
+>
+> A: `@ngrx/component-store` is extremely lightweight. It is also well-tested. I decided to keep it as a `peerDependency` because the consumers can actually **make use** of `@ngrx/component-store` if they find a need for it. After all, it's just a **Subject-as-a-Service**, but supercharged. The consumers will definitely gain more than what they have to pay for `@ngrx/component-store`.
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+## Overview
 
-> You can use any of the plugins above to generate applications as well.
+Q: Is there a better way to do this in Angular?
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+```ts
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 
-## Generate a library
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
 
-> You can also use any of the plugins above to generate libraries as well.
+camera.position.z = 5;
 
-Libraries are shareable across libraries and applications. They can be imported from `@angular-three/mylib`.
+const animate = function () {
+  requestAnimationFrame(animate);
 
-## Development server
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+  renderer.render(scene, camera);
+};
 
-## Code scaffolding
+animate();
+```
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+A: YES!
 
-## Build
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <ngt-mesh (animateReady)="onMeshAnimateReady($event.animateObject)">
+        <ngt-box-geometry></ngt-box-geometry>
+        <ngt-mesh-basic-material
+          [parameters]="{ color: '#00ff00' }"
+        ></ngt-mesh-basic-material>
+      </ngt-mesh>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {
+  onMeshAnimateReady(cube: THREE.Mesh) {
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+  }
+}
+```
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+and voila...
 
-## Running unit tests
+> NOTE: There are **modules** that are needed to add to the Module that declares this `AppComponent`
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+**Angular Three** provides **Directives** to build our 3D scene declaratively, and in a performant way. There is nothing attached to the DOM except for `ngt-canvas` component.
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+### Canvas
 
-## Running end-to-end tests
+`ngt-canvas` is the main building block of **Angular Three**. Normally when working with **THREE.js**, we need to set up a `Renderer`, `Scene`, and `Camera`. `ngt-canvas` sets these up with some defaults:
 
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+- `WebGLRenderer` with the following
+  - antialias: true
+  - powerPreference: 'high-performance'
+  - alpha: true
+  - `setClearAlpha(0)`
+  - If `shadows` is provided, `shadowMap` will be enabled, and a _default_ `PCFSoftShadowMap` will be assigned.
+  - If `linear` is `false` (which is the default), the colorspace on the Renderer will be set to `sRGB` and all colors/textures will be converted automatically.
+- A _default_ `PerspectiveCamera` with: `fov: 75, near: 0.1, far: 1000, z: 5`
+  - If `isOrthographic` is set to true, a _default_ `OrthographicCamera` will be initialized instead, and with: `near: 0.1, far: 1000, z: 5`
+  - By default, `Camera` will look at `[0, 0, 0]` (center)
+- A _default_ `Scene` and `Raycaster`
+- A `window:resize` event listener to recalculate the `Renderer#size` and `Camera#aspect` on resize.
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+### Component Stores
 
-## Understand your workspace
+As mentioned, **Angular Three** utilizes `ngrx/component-store` to manage internal state even though most state usages in the library are _imperative_.
 
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
+There are 4 stores in **Angular Three**
 
-## Further help
+- `NgtStore`: state of the `Renderer`, `Camera`, `Scene` etc...
+- `NgtCanvasInputsStore`: this store only holds and handles changes of the inputs to the `ngt-canvas`
+- `NgtAnimationFrameStore`: state of the registered animations (to subscribe to the Animation Loop)
+- `NgtInstancesStore`: state of the instances of Materials, Geometries, and Objects at the moment. Materials and Geometries instances are mainly for reuse purposes.
+- `NgtEventsStore`: this store is somewhat _internal_ though we can use it to see all the current interactions through pointer events (mainly via the `Raycaster`)
+- `NgtPerformanceStore`
 
-Visit the [Nx Documentation](https://nx.dev) to learn more.
+These 6 stores are provided on `ngt-canvas` which will allow all children of `ngt-canvas` to have access to the same instances of these 6 stores that `ngt-canvas` initialized.
 
+### Services
 
+- `NgtLoopService`: `NgtLoopService` is internal. This service takes care of actually starting and stopping the Animation Loop.
+- `NgtLoaderService`: An Observable-based to load external data.
 
-## ☁ Nx Cloud
+```ts
+this.loaderService.use(GLTFLoader, '/assets/bird.gltf'); // Observable<GLTF>
+```
 
-### Distributed Computation Caching & Distributed Task Execution
+For more information, please check out the [Documentations](#documentations)
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+### Structure
 
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
+```
+.
+├── packages/
+│   ├── soba
+│   ├── core
+│   ├── cannon
+│   └── postprocessing
+└── tools/
+    └── generators/
+        └── three
+```
 
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
+- `packages`
+  - `cannon`: Cannon.js physics engine (ported from `use-cannon`)
+  - `soba`: A collection of useful utilities for THREE.js (ported from `react-three/drei`)
+  - `core`: **THREE.js** core is in this package. There are too many to list (and also changing based on **THREE.js** version) so feel free to explore the directory and find out what's missing.
+  - `postprocessing`: `EffectComposer` and Passes from `postprocessing`
+  - `tools`
+    - `generators`
+      - `three`: A `workspace-generator` that generates some wrappers for **THREE.js** classes instead of creating these manually. See CONTRIBUTING's [Generators](./CONTRIBUTING.md#generators)
 
-Visit [Nx Cloud](https://nx.app/) to learn more.
+## Documentations
+
+TBD
 
 ## Contributors ✨
 
@@ -105,6 +182,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
+    <td align="center"><a href="https://nartc.me/"><img src="https://avatars.githubusercontent.com/u/25516557?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chau Tran</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=nartc" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/barbados-clemens"><img src="https://avatars.githubusercontent.com/u/23272162?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Caleb Ukle</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=barbados-clemens" title="Code">💻</a></td>
   </tr>
 </table>
