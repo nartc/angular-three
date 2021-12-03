@@ -342,7 +342,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
       });
 
       applyProps(this.object3d, customProps);
-      this.object3d.updateMatrix();
+      this.object3d.updateMatrix?.();
     });
   }
 
