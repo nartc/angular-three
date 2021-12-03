@@ -101,8 +101,8 @@ export class NgtEffectStore extends EnhancedComponentStore<NgtEffectStoreState> 
 
 @Directive({
   selector: `<% for (const selector of selectors) { %>
-    ngt-<%= selector.selector %><% if (!selector.isLast) { %>,<% } %>
-  `,<% } %>
+    ngt-<%= selector.selector %><% if (!selector.isLast) { %>,<% } %><% } %>
+  `,
   exportAs: 'ngtEffectController',
   providers: [NgtEffectStore],
 })

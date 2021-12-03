@@ -76,6 +76,7 @@ export default async function simpleEffectsGenerator(
       join(__dirname, 'files', 'lib'),
       join(effectsDir, 'src', 'lib', normalizedNames.fileName),
       {
+        blendFunction: undefined,
         ...simpleEffect,
         ...normalizedNames,
         tmpl: '',
