@@ -89,7 +89,18 @@ export class NgtLoopService {
   }
 
   invalidate(state: NgtState) {
-    if (state.vr || !state.ready || state.frameloop === 'never') return;
+    if (state.vr) {
+      state.renderer?.setAnimationLoop((timestamp) => {
+        this.render(
+          timestamp,
+          this.store.getImperativeState(),
+          this.animationFrameStore.getImperativeState()
+        );
+      });
+    }
+    return;
+
+    if (!state.ready || state.frameloop === 'never') return;
 
     // Increase frames, do not go higher than 60
     this.#frames = Math.min(60, this.#frames + 1);

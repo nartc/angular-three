@@ -138,11 +138,17 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
         });
 
         return () => {
-          const renderer = this.getImperativeState().renderer;
-          if (renderer) {
-            renderer.renderLists.dispose();
-            renderer.forceContextLoss();
-          }
+          this.ngZone.runOutsideAngular(() => {
+            const { renderer, vr } = this.getImperativeState();
+            if (renderer) {
+              renderer.renderLists.dispose();
+              renderer.forceContextLoss();
+
+              if (vr) {
+                renderer.setAnimationLoop(null);
+              }
+            }
+          });
         };
       })
     )
@@ -153,12 +159,13 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
       withLatestFrom(
         this.selectors.size$,
         this.selectors.viewport$,
+        this.selectors.vr$,
         this.canvasInputsStore.selectors.linear$,
         this.canvasInputsStore.selectors.flat$,
         this.canvasInputsStore.selectors.shadows$,
         this.canvasInputsStore.selectors.glOptions$
       ),
-      tap(([canvas, size, { dpr }, linear, flat, shadows, glOptions]) => {
+      tap(([canvas, size, { dpr }, vr, linear, flat, shadows, glOptions]) => {
         this.ngZone.runOutsideAngular(() => {
           const customRenderer = (
             typeof glOptions === 'function' ? glOptions(canvas) : glOptions
@@ -207,6 +214,10 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
           renderer.setClearAlpha(0);
           renderer.setPixelRatio(calculateDpr(dpr));
           renderer.setSize(size.width, size.height);
+
+          if (vr) {
+            renderer.xr.enabled = true;
+          }
 
           this.patchState({ renderer });
         });
