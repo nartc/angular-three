@@ -5,5 +5,7 @@ This package provides the external Post-processing like `EffectComposer`, and th
 ## Installation
 
 ```shell
-npm install @angular-three/postprocessing
+npm install @angular-three/postprocessing postprocessing
 ```
+
+`skipLibCheck: false`

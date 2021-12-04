@@ -15,5 +15,5 @@ This package provides the `ngt-physics` directive that you can then apply physic
 ## Installation
 
 ```shell
-npm install @angular-three/cannon
+npm install @angular-three/cannon cannon-es cannon-es-debugger
 ```
