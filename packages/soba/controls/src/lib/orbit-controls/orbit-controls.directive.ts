@@ -236,7 +236,8 @@ export class NgtSobaOrbitControls
   }
 
   get controls() {
-    return this.store.getImperativeState().controls;
+    return (this.store.getImperativeState().controls ||
+      this.getImperativeState().controls) as OrbitControls;
   }
 }
 
