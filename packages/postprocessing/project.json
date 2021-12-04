@@ -43,7 +43,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "npm publish",
-        "cwd": "dist/packages/core"
+        "cwd": "dist/packages/postprocessing"
       }
     }
   },
