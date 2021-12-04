@@ -8,6 +8,7 @@ export * from './lib/body/utils';
 export * from './lib/constraint/constraint.controller';
 export * from './lib/constraint/tokens';
 
+export * from './lib/models/api';
 export * from './lib/models/body';
 export * from './lib/models/types';
 export * from './lib/models/constraints';
