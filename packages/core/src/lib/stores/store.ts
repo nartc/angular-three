@@ -129,12 +129,12 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
           this.updaters.setVr(this.canvasInputsStore.selectors.vr$);
           this.updaters.setLinear(this.canvasInputsStore.selectors.linear$);
 
-          this.initRenderer(canvasElement);
-          this.initScene();
-          this.initCamera();
-          this.initRaycaster();
+          this.#initRenderer(canvasElement);
+          this.#initScene();
+          this.#initCamera();
+          this.#initRaycaster();
 
-          this.updateDimensions(this.#dimensions$);
+          this.#updateDimensions(this.#dimensions$);
         });
 
         return () => {
@@ -148,7 +148,7 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
     )
   );
 
-  readonly initRenderer = this.effect<HTMLCanvasElement>((canvas$) =>
+  #initRenderer = this.effect<HTMLCanvasElement>((canvas$) =>
     canvas$.pipe(
       withLatestFrom(
         this.selectors.size$,
@@ -214,7 +214,7 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
     )
   );
 
-  readonly initScene = this.effect(($) =>
+  #initScene = this.effect(($) =>
     $.pipe(
       withLatestFrom(this.canvasInputsStore.selectors.sceneOptions$),
       tap(([, sceneOptions]) => {
@@ -227,7 +227,7 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
     )
   );
 
-  readonly initCamera = this.effect(($) =>
+  #initCamera = this.effect(($) =>
     $.pipe(
       withLatestFrom(
         this.canvasInputsStore.selectors.cameraOptions$,
@@ -264,7 +264,7 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
     )
   );
 
-  readonly initRaycaster = this.effect(($) =>
+  #initRaycaster = this.effect(($) =>
     $.pipe(
       withLatestFrom(this.canvasInputsStore.selectors.raycaster$),
       tap(([, raycastOptions]) => {
@@ -283,7 +283,7 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
     )
   );
 
-  readonly updateDimensions = this.effect<{
+  #updateDimensions = this.effect<{
     size: NgtSize;
     viewport: NgtState['viewport'];
   }>((dimensions$) =>

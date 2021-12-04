@@ -45,14 +45,14 @@ export class NgtAnimationFrameStore extends EnhancedComponentStore<NgtAnimationF
             (prevAnimation && prevAnimation.obj !== animation.obj) ||
             isUnsub
           ) {
-            this.unregister(uuid);
+            this.#unregister(uuid);
           }
         };
       })
     )
   );
 
-  readonly unregister = this.effect<string>((uuid$) =>
+  #unregister = this.effect<string>((uuid$) =>
     uuid$.pipe(
       tap((uuid) => {
         this.ngZone.runOutsideAngular(() => {
@@ -65,18 +65,17 @@ export class NgtAnimationFrameStore extends EnhancedComponentStore<NgtAnimationF
     )
   );
 
-  readonly #updateSubscribers = this.effect<
-    NgtAnimationFrameStoreState['animations']
-  >((animations$) =>
-    animations$.pipe(
-      tap((animations) => {
-        this.ngZone.runOutsideAngular(() => {
-          const subscribers = Object.values(animations);
-          subscribers.sort((a, b) => (a.priority || 0) - (b.priority || 0));
-          const hasPriority = subscribers.some(({ priority }) => !!priority);
-          this.patchState({ subscribers, hasPriority });
-        });
-      })
-    )
+  #updateSubscribers = this.effect<NgtAnimationFrameStoreState['animations']>(
+    (animations$) =>
+      animations$.pipe(
+        tap((animations) => {
+          this.ngZone.runOutsideAngular(() => {
+            const subscribers = Object.values(animations);
+            subscribers.sort((a, b) => (a.priority || 0) - (b.priority || 0));
+            const hasPriority = subscribers.some(({ priority }) => !!priority);
+            this.patchState({ subscribers, hasPriority });
+          });
+        })
+      )
   );
 }
