@@ -2,6 +2,106 @@ import { Meta } from '@storybook/addon-docs';
 
 <Meta title={'API/Objects'} parameters={{ viewMode: 'docs' }} />
 
-This page talks about the objects that NGT exposes, how to use them.
+# Objects
 
-TBD
+In NGT, Objects are:
+
+- Anything that can be added to the `Scene`, aka `THREE.Object3D`
+- Non-Object3D objects like `Material`, `Geometry`, `Effect` etc...
+
+## Usage
+
+Any THREE.js entities can be _referenced_ by NGT by the convention: `ngt-<kebab-case-entity-name>`. For example:
+
+- `ngt-mesh` creates `THREE.Mesh`
+- `ngt-box-geometry` creates `THREE.BoxGeometry`
+- `ngt-sphere-geometry` creates `THREE.SphereGeometry`
+- `ngt-mesh-basic-material` creates `THREE.MeshBasicMaterial`
+- `ngt-ambient-light` creates `THREE.AmbientLight`
+- ...
+
+Most, if not all, NGT objects are provided by their own Module. For example:
+
+- `ngt-mesh` is provided by `NgtMeshModule`
+- `ngt-box-geometry` is provided by `NgtBoxGeometryModule`
+- `ngt-sphere-geometry` is provided by `NgtSphereGeometryModule`
+- `ngt-mesh-basic-material` is provided by `NgtMeshBasicMaterialModule`
+- `ngt-ambient-light` is provided by `NgtAmbientLightModule`
+- ...
+
+For THREE.js core entities, symbols that can be imported from `three`, NGT groups them under `@angular-three/core/<plural-entity-type>`. For example:
+
+- Meshes are imported from `@angular-three/core/meshes`
+- Geometries are imported from `@angular-three/core/geometries`
+- Materials are imported from `@angular-three/core/materials`
+- Lights are imported from `@angular-three/core/lights`
+- ...
+
+## How to reference NGT objects in component code?
+
+There are two approaches to reference NGT objects in component code:
+
+- `ViewChild`
+- Template Variable via `exportAs`
+
+Let's take a look at both approach:
+
+#### `ViewChild`
+
+All NGT objects are mostly Directives, sometimes Components, and they are used on the template like any other component/directive. Hence, we can leverage `ViewChild` to reference them in our component code
+
+```ts
+@Component({
+  selector: 'app-my-component',
+  template: ` <ngt-mesh></ngt-mesh> `,
+})
+export class MyComponent {
+  @ViewChild(NgtMeshDirective, { static: true }) mesh: NgtMeshDirective;
+}
+```
+
+#### `exportAs`
+
+All NGT objects are exposed on the template via `exportAs` so we can assign a Template Variable to them. Most NGT objects have `(ready)` event which we can leverage to assign the object as soon as they are constructed and ready.
+
+```ts
+@Component({
+  selector: 'app-my-component',
+  template: `
+    <ngt-mesh #ngtMesh="ngtMesh" (ready)="mesh = ngtMesh.mesh"></ngt-mesh>
+  `,
+})
+export class MyComponent {
+  mesh: THREE.Mesh;
+}
+```
+
+`exportAs` will always be `camelCase` with `ngt-` prefix. Eg: `ngt-mesh` is exported as `ngtMesh`, `ngt-ambient-light` is exported as `ngtAmbientLight`.
+
+There are no recommended approaches as they are situational, and have both pros and cons to each.
+
+## How to put existing objects in the Angular component tree?
+
+More often than not, we want load 3D models from an external source and put them on the scene so that we can interact with them in the similar manner to other objects that NGT supports. In these cases, NGT provides a `ngt-primitive` directive that can be used to create a primitive object from an existing THREE.js object.
+
+```ts
+@Component({
+  selector: 'some',
+  template: `
+    <ng-container *ngIf="model$ | async as model">
+                    <!-- 👇 NgtPrimitive exposes this object instead of itself like a NgtMesh -->
+      <ngt-primitive [object]="model.scene"></ng-primitive>
+    </ng-container>
+  `,
+})
+export class SomeComponent {
+  model$ = this.loaderService.use(GLTFLoader, 'path/to/model.gltf');
+
+  constructor(private loaderService: NgtLoaderService) {}
+}
+
+@NgModule({
+  imports: [NgtPrimitiveModule],
+})
+export class SomeComponentModule {}
+```

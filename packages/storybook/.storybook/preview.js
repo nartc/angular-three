@@ -12,6 +12,8 @@ export const parameters = {
           'Stores',
           'Controllers',
           'Services',
+          'Pipes',
+          'Extra Exports',
           'Events',
           'Generators',
         ],

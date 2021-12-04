@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title={'API/Pipes'} parameters={{ viewMode: 'docs' }} />
+
+# Pipes
+
+NGT provides the following pipes to help the consumers stay on the declarative side of things (aka the Template) as much as possible:
+
+## `NgtColorPipe`
+
+There are cases where an object's parameters/arguments require an actual instance of `THREE.Color` instead of a `THREE.ColorRepresentation`. This pipe helps with this
+
+```html
+<!-- ❌ the following usage will error out because scene.background is not a THREE.Color -->
+<ngt-canvas [scene]='{ background: "black" }'></ngt-canvas>
+
+<!-- ✅ the following will work -->
+<ngt-canvas [scene]='{ background: "black" | color }'></ngt-canvas>
+```
+
+## `NgtVectorPipe`
+
+Same as `NgtColorPipe` above, but for `THREE.Vector2`, `THREE.Vector3`, and `THREE.Vector4`, there are three respective pipes: `vector2`, `vector3`, and `vector4`.
+
+## `NgtMathPipe`
+
+This pipe acts as a helper to use the `Math` object in the template. When working with 3D scene, more often than not you will need to use the `Math` object to calculate angles and such for objects. We can do the following:
+
+```ts
+export class SomeComponent {
+  // expose Math object
+  MATH = Math;
+}
+```
+
+or we can use `math` and `mathConst` pipes:
+
+```html
+<!-- 👇 this equals to -(Math.PI / 2) -->
+<ngt-mesh [rotation]='[-(0.5 | mathConst:"PI"), 0, 0]'>
+  <ngt-plane-geometry></ngt-plane-geometry>
+</ngt-mesh>
+```
+
+- `mathConst`: the value passed in will be used as a multiplier. Eg: `0.5 | mathConst:'PI'` will return `Math.PI * 0.5` (or `Math.PI / 2`)
+- `math`: the value passed in will be used as arguments to the `Math` object. Eg: `0.5 | math:'sin'` will return `Math.sin(0.5)`
