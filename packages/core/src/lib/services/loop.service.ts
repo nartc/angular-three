@@ -7,7 +7,7 @@ import { NgtStore } from '../stores/store';
 export class NgtLoopService {
   #running = false;
   #repeat?: number;
-  #frames = 0;
+  #frames = 1;
 
   constructor(
     private store: NgtStore,
@@ -97,8 +97,8 @@ export class NgtLoopService {
           this.animationFrameStore.getImperativeState()
         );
       });
+      return;
     }
-    return;
 
     if (!state.ready || state.frameloop === 'never') return;
 
