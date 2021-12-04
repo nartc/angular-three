@@ -1,3 +1,10 @@
+## [2.0.0-beta.11](https://github.com/nartc/angular-three/compare/2.0.0-beta.10...2.0.0-beta.11) (2021-12-04)
+
+
+### Bug Fixes
+
+* **cannon:** expose missing api models ([edb276c](https://github.com/nartc/angular-three/commit/edb276c9e6585f917b181f2bd236ec775a7bdfdb))
+
 ## [2.0.0-beta.10](https://github.com/nartc/angular-three/compare/2.0.0-beta.9...2.0.0-beta.10) (2021-12-04)
 
 
