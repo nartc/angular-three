@@ -42,6 +42,13 @@
           "packages/soba/loaders/**/*.html"
         ]
       }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm publish",
+        "cwd": "dist/packages/core"
+      }
     }
   },
   "tags": ["scope:soba", "type:lib"]
