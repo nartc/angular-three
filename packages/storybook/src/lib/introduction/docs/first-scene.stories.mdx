@@ -1,0 +1,388 @@
+import { Meta, Story } from '@storybook/addon-docs';
+
+<Meta title={'Introduction/First Scene'} parameters={{ viewMode: 'docs' }} />
+
+We are going to create our simple first scene using NGT. To make it easier to follow, we will have inline-template for our `AppComponent`.
+
+## TLDR;
+
+I know that this is a bit long, so here is the TLDR version of this tutorial:
+
+- We setup a Canvas with `ngt-canvas`
+- We use `ngt-mesh` along with `ngt-box-geometry` and `ngt-mesh-basic-material` to construct our cube, and animate it
+- We separate `ngt-mesh` into a reusable `CubeComponent`
+- We add states to the `CubeComponent` to make it interactive, and we "clone" it.
+
+Full code:
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <app-cube [position]="[2, 0, 0]"></app-cube>
+      <app-cube [position]="[-2, 0, 0]"></app-cube>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+
+@Component({
+  selector: 'app-cube',
+  template: `
+    <ngt-mesh
+      #mesh="ngtMesh"
+      (animateReady)="onAnimate(mesh.mesh)"
+      (click)="active = !active"
+      (pointerover)="hover = true"
+      (pointerout)="hover = false"
+      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
+      [position]="position"
+    >
+      <ngt-box-geometry></ngt-box-geometry>
+      <ngt-mesh-basic-material
+        [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
+      ></ngt-mesh-basic-material>
+    </ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CubeComponent {
+  @Input() position?: NgtVector3; // imported from @angular-three/core
+
+  hover = false;
+  active = false;
+
+  onAnimate(mesh: THREE.Mesh) {
+    mesh.rotation.x = mesh.rotation.y += 0.01;
+  }
+}
+
+@NgModule({
+  declarations: [AppComponent, CubeComponent],
+  imports: [
+    BrowserModule,
+    NgtCoreModule,
+    NgtMeshModule,
+    NgtBoxGeometryModule,
+    NgtMeshBasicMaterialModule,
+  ],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+
+## Setting up the Canvas
+
+Everything in NGT starts with the `CanvasComponent`. Let's start by putting `ngt-canvas` on our `AppComponent` template, and also import `NgtCoreModule` from `@angular-three/core`
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <!-- 👇 render the CanvasComponent -->
+    <ngt-canvas></ngt-canvas>
+  `,
+})
+export class AppComponent {}
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    // 👇 import NgtCoreModule which provides the CanvasComponent
+    NgtCoreModule,
+  ],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+
+`ngt-canvas` sets up the following:
+
+- A `WebGLRenderer`, `Scene`, and `Camera` which are the basic building blocks of THREE.js
+- A render loop that will render the scene every frame.
+- A `window:resize` event listener that will resize the renderer and camera when the window is resized. The event listener will get automatically removed when the component is destroyed.
+
+`ngt-canvas` takes up the dimensions of the parent element. Here, we are rendering the `ngt-canvas` in our `AppComponent` host element (`app-root`). We can wrap `ngt-canvas` with a `div` and give the `div` a fixed size.
+
+> For specific of the defaults set, please check out [CanvasComponent API]()
+
+## Adding a Mesh
+
+Now that we have the Canvas setup, we can start adding THREE.js objects to the scene. Let's add a `ngt-mesh` to the scene, which wraps `THREE.js#Mesh`
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <!-- 👇 put the Mesh in the scene -->
+      <ngt-mesh></ngt-mesh>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    NgtCoreModule,
+    // 👇 import NgtMeshModule which provides the NgtMesh
+    NgtMeshModule,
+  ],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+
+`ngt-mesh` is provided by `NgtMeshModule` which is imported from `@angular-three/core/meshes`. NGT follows best practice for an Angular Component Library which exposes modules as secondary entry points to help with Tree-Shakability.
+
+`THREE.js#Mesh` is one of the most basic object in THREE.js. It is used to hold a Geometry and a Material to represent a specific shape in the 3D space. We'll use a `ngt-box-geometry` and a `ngt-mesh-basic-material` to create a cube with our Mesh.
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <ngt-mesh>
+        <!-- 👇 put the Geometry and Material in the Mesh -->
+        <ngt-box-geometry></ngt-box-geometry>
+        <ngt-mesh-basic-material></ngt-mesh-basic-material>
+      </ngt-mesh>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    NgtCoreModule,
+    NgtMeshModule,
+    // 👇 import the required modules
+    NgtBoxGeometryModule,
+    NgtMeshBasicMaterialModule,
+  ],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+
+At this point, we have something on the scene that we can finally see; a Cube.
+
+<Story id="introduction-examples-first-scene--cube" height={480} />
+
+Minus the imports (which sometimes are helped by our IDEs), our scene is 7 lines of code of HTML template. Let's take a look at the equivalent code in vanilla THREE.js.
+
+```ts
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  document.clientWidth / document.clientHeight,
+  0.1,
+  1000
+);
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(document.clientWidth, document.clientHeight);
+document.querySelector('app-root').appendChild(renderer.domElement);
+
+const mesh = new THREE.Mesh();
+mesh.geometry = new THREE.BoxGeometry();
+mesh.material = new THREE.MeshStandardMaterial();
+
+scene.add(mesh);
+
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+
+animate();
+```
+
+## Animation
+
+3D scene is boring without animation. Let's see how we can spin our cube to show that it is truly an object in 3D
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+                <!-- 👇 we grab the reference of NgtMesh -->
+                <!-- 👇          👇 listen for (animateReady) 👇 pass in the actual THREE.Mesh that NgtMesh creates
+      <ngt-mesh #mesh="ngtMesh" (animateReady)="onAnimate(mesh.mesh)">
+        <ngt-box-geometry></ngt-box-geometry>
+        <ngt-mesh-basic-material></ngt-mesh-basic-material>
+      </ngt-mesh>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {
+  onAnimate(mesh: THREE.Mesh) {
+    // 👇 now we can animate the mesh by incrementing the mesh's rotation
+    mesh.rotation.x = mesh.rotation.y += 0.01;
+  }
+}
+```
+
+<Story id="introduction-examples-first-scene--spinning-cube" height={480} />
+
+> Note: The code in `onAnimate()` is being invoked outside of Angular Zone for performance reasons. Try to avoid updating the component's state in the `onAnimate()` method.
+
+## Separate into a reusable Angular component
+
+That was great, and easy! But what if we want to reuse the same code for multiple cubes? Let's make our `ngt-mesh` into a `CubeComponent`
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <app-cube></app-cube>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+
+@Component({
+  selector: 'app-cube',
+  template: `
+    <ngt-mesh #mesh="ngtMesh" (animateReady)="onAnimate(mesh.mesh)">
+      <ngt-box-geometry></ngt-box-geometry>
+      <ngt-mesh-basic-material></ngt-mesh-basic-material>
+    </ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CubeComponent {
+  // Don't forget to add CubeComponent to AppModule's declarations
+  onAnimate(mesh: THREE.Mesh) {
+    mesh.rotation.x = mesh.rotation.y += 0.01;
+  }
+}
+```
+
+Everything still works as expected thanks to Angular Hierarchical Dependency Injection and Content Projection. However, we now have a `CubeComponent` that we can add states to, to customize the Cube.
+
+## Add Component state
+
+We will add two states: `hover` and `active` to our `CubeComponent`.
+
+```ts
+@Component({
+  selector: 'app-cube',
+  template: `
+    <!-- 👇 add the event handler to change the states -->
+    <ngt-mesh
+      #mesh="ngtMesh"
+      (animateReady)="onAnimate(mesh.mesh)"
+      (click)="active = !active"
+      (pointerover)="hover = true"
+      (pointerout)="hover = false"
+      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
+    >
+      <!-- 👆 we use the active state to change the scale of the Mesh -->
+      <ngt-box-geometry></ngt-box-geometry>
+      <!-- 👇 we use the hover state to change the color of the Material -->
+      <ngt-mesh-basic-material
+        [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
+      ></ngt-mesh-basic-material>
+    </ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CubeComponent {
+  hover = false; // <-- default to false
+  active = false; // <-- default to false
+
+  onAnimate(mesh: THREE.Mesh) {
+    mesh.rotation.x = mesh.rotation.y += 0.01;
+  }
+}
+```
+
+Interactive with the cube and see the magic 🤯!
+
+<Story
+  id="introduction-examples-first-scene--spinning-cube-states"
+  height={480}
+/>
+
+There is quite a lot to take in here:
+
+- `(click)`, `(pointerover)`, and `(pointerout)` _look like_ DOM events, but they're not. Remember, these objects are inside a Canvas which means they do not have a DOM representation, so they do not trigger DOM events.
+- These events can update the state and trigger a change detection cycle. This is because NGT gets back into Angular Zone when these events happen. Most of the time, NGT will bail out of Angular Zone and not trigger a change detection cycle.
+
+## Here's why a component framework is needed
+
+What's better than a reactive-animated cube? TWO reactive-animated cubes!
+
+```ts
+@Component({
+  selector: 'app-cube',
+  template: `
+    <ngt-mesh
+      #mesh="ngtMesh"
+      (animateReady)="onAnimate(mesh.mesh)"
+      (click)="active = !active"
+      (pointerover)="hover = true"
+      (pointerout)="hover = false"
+      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
+      [position]="position"
+    >
+      <!-- 👆 we bind our position input to the Mesh's [position] -->
+      <ngt-box-geometry></ngt-box-geometry>
+      <ngt-mesh-basic-material
+        [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
+      ></ngt-mesh-basic-material>
+    </ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CubeComponent {
+  // 👇 add a position Input so that we can customize the position from outside
+  @Input() position?: NgtVector3; // imported from @angular-three/core
+
+  hover = false;
+  active = false;
+
+  onAnimate(mesh: THREE.Mesh) {
+    mesh.rotation.x = mesh.rotation.y += 0.01;
+  }
+}
+```
+
+Let's update our `AppComponent`
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <!--                  👇 let's move this one 2 units to the right (X axis) -->
+      <app-cube [position]="[2, 0, 0]"></app-cube>
+      <!--                  👇 let's move this one 2 units to the left (X axis) -->
+      <app-cube [position]="[-2, 0, 0]"></app-cube>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+```
+
+and voila!
+
+<Story
+  id="introduction-examples-first-scene--two-spinning-cubes"
+  height={480}
+/>
+
+## Exercise
+
+- Try playing with the colors
+- Try using a different Geometry to display something other than a cube
+- Try placing more objects using different positions

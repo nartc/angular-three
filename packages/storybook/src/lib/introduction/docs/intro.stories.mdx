@@ -1,4 +1,4 @@
-import { Canvas, Meta, Story } from '@storybook/addon-docs';
+import { Meta, Story } from '@storybook/addon-docs';
 
 <Meta title={'Introduction/Introduction'} parameters={{ viewMode: 'docs' }} />
 
@@ -25,10 +25,6 @@ import { Canvas, Meta, Story } from '@storybook/addon-docs';
   </em>
 </div>
 
-<Canvas>
-  <Story id="introduction-examples--simple-cube" height="480px" />
-</Canvas>
-
 ## What is Angular Three (NGT)?
 
 **Angular Three** is a **Component Library** that wraps around [THREE.js](https://threejs.org/) to provide a declarative approach to building 3D applications using [Angular](https://angular.io/) capabilities.
@@ -40,6 +36,8 @@ Utilizing Template-less Directives to build 3D scenes declaratively with accessi
 ## How does NGT work?
 
 NGT relies heavily on [Hierarchical Dependency Injection](https://angular.io/guide/hierarchical-dependency-injection) to allow for declarative creation of THREE.js objects on the template. Take a look at the [SimpleCube example](?path=/story/introduction-examples--simple-cube). We will explore in more detailed what is happening under the hood.
+
+<Story id="introduction-examples--simple-cube" height="480px" />
 
 ## What is the difference between NGT and React Three Fiber?
 

@@ -21,7 +21,7 @@ export default {
 
 export const SimpleCube = () => ({
   template: `
-    <ngt-canvas>
+    <ngt-canvas [camera]='{position: [0, 0, 2]}'>
       <ngt-mesh #mesh='ngtMesh' (animateReady)='
         mesh.mesh.rotation.x = mesh.mesh.rotation.x + 0.01;
         mesh.mesh.rotation.y = mesh.mesh.rotation.y + 0.01
