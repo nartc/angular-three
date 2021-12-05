@@ -17,12 +17,20 @@ import { Meta, Story } from '@storybook/addon-docs';
     height={320}
     alt={'Angular Three Logo'}
   />
-  <em>
+  <em style={{marginTop: '1rem'}}>
     <small>
       "What happened to Angular 3.0? Well, it became Angular Three" - Mike
       Hartington
     </small>
   </em>
+
+  <div style={{display: 'flex', gap: '1rem', alignItems: 'center', margin: '1rem 0'}}>
+    <a href='https://github.com/nartc/angular-three' target="_blank" style={{lineHeight: 0}}>
+      <img alt='github repo' src='https://img.shields.io/badge/github-angular--three-green' />
+    </a>
+    <img alt="npm (scoped)" src="https://img.shields.io/npm/v/@angular-three/core"/>
+    <img alt="npm bundle size (scoped)" src="https://img.shields.io/bundlephobia/minzip/@angular-three/core"/>
+  </div>
 </div>
 
 ## What is Angular Three (NGT)?
