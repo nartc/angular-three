@@ -12,6 +12,7 @@ export default {
   ],
   parameters: {
     docs: { page: keenBloomDocs },
+    viewMode: 'story',
   },
 } as Meta;
 

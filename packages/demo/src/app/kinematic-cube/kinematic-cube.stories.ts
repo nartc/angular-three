@@ -11,9 +11,8 @@ export default {
     }),
   ],
   parameters: {
-    docs: {
-      page: kinematicCubeDocs,
-    },
+    docs: { page: kinematicCubeDocs },
+    viewMode: 'story',
   },
 } as Meta;
 

@@ -12,6 +12,7 @@ export default {
   ],
   parameters: {
     docs: { page: compoundBodyDocs },
+    viewMode: 'story',
   },
 } as Meta;
 

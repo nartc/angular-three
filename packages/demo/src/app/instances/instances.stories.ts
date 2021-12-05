@@ -11,9 +11,8 @@ export default {
     }),
   ],
   parameters: {
-    docs: {
-      page: InstancesDocs,
-    },
+    docs: { page: InstancesDocs },
+    viewMode: 'story',
   },
 } as Meta;
 

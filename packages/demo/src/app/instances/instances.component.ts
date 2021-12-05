@@ -16,19 +16,20 @@ import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import niceColors from 'nice-color-palettes';
 import * as THREE from 'three';
 
+const niceColor = niceColors[Math.floor(Math.random() * 100)];
+
 const size = 125000;
 const tempObject = new THREE.Object3D();
 const tempColor = new THREE.Color();
 const colors = new Array(size)
   .fill(undefined)
-  .map(() => niceColors[17][Math.floor(Math.random() * 5)]);
+  .map(() => niceColor[Math.floor(Math.random() * 5)]);
 
 const colorArray = Float32Array.from(
   new Array(size).fill(undefined).reduce((result, _, i) => {
     result.push(...tempColor.set(colors[i]).toArray());
     return result;
   }, [])
-  // .flatMap((_, i) => this.tempColor.set(this.colors[i]).toArray())
 );
 
 @Component({
