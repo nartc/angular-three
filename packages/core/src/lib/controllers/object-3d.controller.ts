@@ -256,7 +256,9 @@ export class NgtObject3dController extends Controller implements OnDestroy {
       }
     }
 
-    this.object3d.clear();
+    if (this.object3d.clear) {
+      this.object3d.clear();
+    }
   }
 
   #eventNameToHandler(eventName: typeof supportedEvents[number]) {
