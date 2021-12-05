@@ -1,3 +1,32 @@
+## [2.0.0](https://github.com/nartc/angular-three/compare/2.0.0-beta.11...2.0.0) (2021-12-05)
+
+
+### Features
+
+* **repo:** add missing GENERATED comment to some generators ([c90bea9](https://github.com/nartc/angular-three/commit/c90bea9930b69c229fd9daa70bcf88a104e934c4))
+
+
+### Bug Fixes
+
+* **cannon:** fix DI token ([4154797](https://github.com/nartc/angular-three/commit/41547975372a24cdb40e67da5b41464809248082))
+* **core:** adjust DI token (remove null) ([ed5277c](https://github.com/nartc/angular-three/commit/ed5277c3c3b9bf8afdcfc0654bdb1a040aa41785))
+* **core:** ensure clear method is available before invoking ([e9694e7](https://github.com/nartc/angular-three/commit/e9694e7c6e9ee1768a91ba9b76c50c13d22445cc))
+* **core:** handle vr by setAnimationLoop on the renderer if it's true ([694255f](https://github.com/nartc/angular-three/commit/694255fad0005f0a1ad6a04ac3e193b0de5bad4e))
+* **core:** misplace return statement, and frames start out at 1 ([6682f52](https://github.com/nartc/angular-three/commit/6682f52c3d3368989332ccbcfb0d43c30ce77cad))
+* **core:** remove InjectionToken from material-geometry-controller template ([c8930af](https://github.com/nartc/angular-three/commit/c8930af424c10794673beed2899acf8b59dd2dcf))
+* **postprocessing:** move InjectionToken to beginnig of file ([3e2742f](https://github.com/nartc/angular-three/commit/3e2742fb920c532b2f838334427a6df9f22640a2))
+* **soba:** return the correct controls for Orbitcontrols ([4e5f4fb](https://github.com/nartc/angular-three/commit/4e5f4fb76eed0bbbb0a8ca42e71d8c9e50de1918))
+
+
+### Documentations
+
+* **demo:** clean up ([73ed59c](https://github.com/nartc/angular-three/commit/73ed59c132ee8afcef5ca1bb4fdb1526f65aaf79))
+* **repo:** add peerDeps to soba and postprocessing README ([aa7a8ab](https://github.com/nartc/angular-three/commit/aa7a8aba5c5eb38f02cd0bcb2ed407c6c728db96))
+* **storybook:** add meta tags to manager-head ([bc1effa](https://github.com/nartc/angular-three/commit/bc1effa533c85cefc4203cbb4573676a04330ba0))
+* **storybook:** adjust the examples to show story mode on activated ([7a715af](https://github.com/nartc/angular-three/commit/7a715af909bf7a86b6aaebb7ca9feebc499c4cde))
+* **storybook:** make simple cube more interesting with lights ([d578651](https://github.com/nartc/angular-three/commit/d5786516313e8fa024e9835e2f776580ecdc4cf3))
+* **storybook:** reorganize and add examples from demo to storybook as Examples ([6a50c80](https://github.com/nartc/angular-three/commit/6a50c80639fee5a80cd75d792586302ae230a23e))
+
 ## [2.0.0-beta.11](https://github.com/nartc/angular-three/compare/2.0.0-beta.10...2.0.0-beta.11) (2021-12-04)
 
 
