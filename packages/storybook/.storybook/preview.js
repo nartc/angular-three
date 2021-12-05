@@ -17,6 +17,7 @@ export const parameters = {
           'Events',
           'Generators',
         ],
+        'Examples',
       ],
     },
   },

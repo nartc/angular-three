@@ -2,6 +2,8 @@ import { Meta, Story } from '@storybook/addon-docs';
 
 <Meta title={'Introduction/First Scene'} parameters={{ viewMode: 'docs' }} />
 
+# Our first 3D scene
+
 We are going to create our simple first scene using NGT. To make it easier to follow, we will have inline-template for our `AppComponent`.
 
 ## TLDR;
@@ -16,6 +18,11 @@ I know that this is a bit long, so here is the TLDR version of this tutorial:
 Full code:
 
 ```ts
+import { NgtCoreModule } from '@angular-three/core';
+import { NgtMeshodule } from '@angular-three/core/meshes';
+import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
+import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
+
 @Component({
   selector: 'app-root',
   template: `
@@ -77,6 +84,9 @@ export class AppModule {}
 Everything in NGT starts with the `CanvasComponent`. Let's start by putting `ngt-canvas` on our `AppComponent` template, and also import `NgtCoreModule` from `@angular-three/core`
 
 ```ts
+//         👇 import NgtCoreModule from '@angular-three/core';
+import { NgtCoreModule } from '@angular-three/core';
+
 @Component({
   selector: 'app-root',
   template: `
@@ -113,6 +123,9 @@ export class AppModule {}
 Now that we have the Canvas setup, we can start adding THREE.js objects to the scene. Let's add a `ngt-mesh` to the scene, which wraps `THREE.js#Mesh`
 
 ```ts
+//         👇 import NgtMeshModule from '@angular-three/core/meshes';
+import { NgtMeshModule } from '@angular-three/core/meshes';
+
 @Component({
   selector: 'app-root',
   template: `
@@ -142,6 +155,11 @@ export class AppModule {}
 `THREE.js#Mesh` is one of the most basic object in THREE.js. It is used to hold a Geometry and a Material to represent a specific shape in the 3D space. We'll use a `ngt-box-geometry` and a `ngt-mesh-basic-material` to create a cube with our Mesh.
 
 ```ts
+//          👇 import NgtBoxGeometryModule from '@angular-three/core/geometries';
+import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
+//          👇 import NgtMeshBasicMaterialModule from '@angular-three/core/materials';
+import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
+
 @Component({
   selector: 'app-root',
   template: `

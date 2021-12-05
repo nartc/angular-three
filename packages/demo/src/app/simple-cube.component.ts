@@ -54,7 +54,7 @@ export class CubeComponent {
 
 @NgModule({
   declarations: [SimpleCubeComponent, CubeComponent],
-  exports: [SimpleCubeComponent],
+  exports: [SimpleCubeComponent, CubeComponent],
   imports: [
     NgtCoreModule,
     NgtStatsModule,
