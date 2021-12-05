@@ -83,7 +83,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
     @Inject(NGT_PHYSIC_BODY_ARGS_FN) private argsFn: ArgFn<unknown>,
     @Optional() @Inject(NGT_PHYSIC_BODY_TYPE) private type: BodyShapeType,
     private physicsStore: NgtPhysicsStore,
-    @Optional() private cannonDebugStore: NgtCannonDebugStore | null,
+    @Optional() private cannonDebugStore: NgtCannonDebugStore,
     private ngZone: NgZone
   ) {
     super({ getPhysicProps: undefined, object3d: objectController.object3d });
