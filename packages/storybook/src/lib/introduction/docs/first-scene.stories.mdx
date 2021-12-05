@@ -399,8 +399,178 @@ and voila!
   height={480}
 />
 
+## Make it more dynamic
+
+Our cubes are animated and reactive. But they look bland. In fact, they don't even look like cubes at the moment. It is because they are lacking Light Reflection. Let's change it up a bit.
+
+```ts
+@Component({
+  selector: 'app-cube',
+  template: `
+    <ngt-mesh
+      #mesh="ngtMesh"
+      (animateReady)="onAnimate(mesh.mesh)"
+      (click)="active = !active"
+      (pointerover)="hover = true"
+      (pointerout)="hover = false"
+      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
+      [position]="position"
+    >
+      <ngt-box-geometry></ngt-box-geometry>
+      <!--      👇 change from BasicMaterial to StandardMaterial -->
+      <ngt-mesh-standard-material
+        [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
+      ></ngt-mesh-standard-material>
+    </ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CubeComponent {}
+
+@NgModule({
+  /* ... */
+  imports: [
+    ,
+    /* ... */ // 👇 Don't forget to import and add NgtMeshStandardMaterialModule (from @angular-three/core/materials)
+    NgtMeshStandardMaterialModule,
+  ],
+})
+export class AppModule {}
+```
+
+This is the result:
+
+<Story
+  id="introduction-examples-first-scene--standard-material-cubes"
+  height={480}
+/>
+
+What happened to our scene? The cubes are all "black". This is because `MeshStandardMaterial` is a material that needs to be lit up by some light sources. Imagine these cubes are inside a dark room, there is no light, so they appear black.
+
+Let's add some lights to our scene to fix this.
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <ngt-ambient-light></ngt-ambient-light>
+      <ngt-spot-light [position]="[2, 2, 2]"></ngt-spot-light>
+
+      <app-cube [position]="[2, 0, 0]"></app-cube>
+      <app-cube [position]="[-2, 0, 0]"></app-cube>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+
+@NgModule({
+  /* ... */
+  imports: [
+    ,
+    /* ... */ // 👇 Don't forget to import and add NgtAmbientLightModule, NgtSpotLightModule (from @angular-three/core/lights)
+    NgtAmbientLightModule,
+    NgtSpotLightModule,
+  ],
+})
+export class AppModule {}
+```
+
+- `ngt-ambient-light` is a light source that emits light in all directions, effectively makes our scene "bright".
+- `ngt-spot-light` is a light source that emits light from a single point in a specific direction, and the light gets wider and weaker as it travels. Imagine a flashlight.
+
+Our cubes look so much better now, with dimensionality, showing that they are real 3D objects.
+
+<Story
+  id="introduction-examples-first-scene--real-standard-material-cubes"
+  height={480}
+/>
+
+## Take controls of the camera
+
+If you're like me, you have probably tried to "grab" the scene and move it around. Right now, our scene, or more like the camera, is static in its position. Let's take over the camera's controls with `ngt-soba-orbit-controls`. To do that, we'd need to install another package from `@angular-three`:
+
+```bash
+npm install @angular-three/soba
+# or
+yarn add @angular-three/soba
+```
+
+`@angular-three/soba` is a collection (still a WIP) of helpers and utilities that make it easier to work with our 3D scene. One of those is `OrbitControls`.
+
+> All `@angular-three/soba` directives/components have `ngt-soba-` prefix.
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <ngt-ambient-light></ngt-ambient-light>
+      <ngt-spot-light [position]="[2, 2, 2]"></ngt-spot-light>
+
+      <app-cube [position]="[2, 0, 0]"></app-cube>
+      <app-cube [position]="[-2, 0, 0]"></app-cube>
+
+      <!--👇 -->
+      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+
+@NgModule({
+  /* ... */
+  imports: [
+    ,
+    /* ... */ // 👇 Don't forget to import and add NgtSobaOrbitControlsModule (from @angular-three/soba/controls)
+    NgtSobaOrbitControlsModule,
+  ],
+})
+export class AppModule {}
+```
+
+Let's also add a `GridHelper`, with `ngt-grid-helper`, to our scene to makes it easier to pinpoint our cubes in 3D space.
+
+```ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <ngt-canvas>
+      <ngt-ambient-light></ngt-ambient-light>
+      <ngt-spot-light [position]="[2, 2, 2]"></ngt-spot-light>
+
+      <!--👇 -->
+      <ngt-grid-helper></ngt-grid-helper>
+
+      <app-cube [position]="[2, 0, 0]"></app-cube>
+      <app-cube [position]="[-2, 0, 0]"></app-cube>
+
+      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+    </ngt-canvas>
+  `,
+})
+export class AppComponent {}
+
+@NgModule({
+  /* ... */
+  imports: [
+    ,
+    /* ... */ // 👇 Don't forget to import and add NgtGridHelperModule (from @angular-three/core/helpers)
+    NgtGridHelperModule,
+  ],
+})
+export class AppModule {}
+```
+
+VOILA!!
+
+<Story id="introduction-examples-first-scene--controls-camera" height={480} />
+
+> The order of the objects added to the Canvas does not matter much. However, I'd like to put my light sources first, then helpers, then the objects, then the controls.
+
 ## Exercise
 
 - Try playing with the colors
 - Try using a different Geometry to display something other than a cube
 - Try placing more objects using different positions
+- Try different lights
