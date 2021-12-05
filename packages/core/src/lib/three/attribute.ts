@@ -24,7 +24,7 @@ export abstract class NgtAttribute<
 
   constructor(
     protected ngZone: NgZone,
-    @Optional() protected geometryDirective: NgtGeometry | null
+    @Optional() protected geometryDirective: NgtGeometry
   ) {}
 
   #attributeArgs: unknown[] = [];
