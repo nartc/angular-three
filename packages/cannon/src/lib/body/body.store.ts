@@ -132,7 +132,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
         const { worker, refs, events } = this.physicsStore.getImperativeState();
 
         this.ngZone.runOutsideAngular(() => {
-          const object = this.objectController.object3d;
+          const object = this.objectController.object3d || new THREE.Object3D();
 
           currentWorker = worker;
 
