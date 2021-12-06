@@ -44,6 +44,8 @@ import {
 import niceColors from 'nice-color-palettes';
 import * as THREE from 'three';
 
+const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
+
 @Component({
   selector: 'ngt-kinematic-cube',
   template: `
@@ -64,24 +66,24 @@ import * as THREE from 'three';
       ></ngt-point-light>
 
       <ngt-physics [gravity]="[0, 0, -30]">
-        <app-plane [color]="niceColors[17][4]"></app-plane>
+        <app-plane [color]="niceColor[4]"></app-plane>
         <app-plane
-          [color]="niceColors[17][1]"
+          [color]="niceColor[1]"
           [position]="[-6, 0, 0]"
           [rotation]="[0, 0.9, 0]"
         ></app-plane>
         <app-plane
-          [color]="niceColors[17][2]"
+          [color]="niceColor[2]"
           [position]="[6, 0, 0]"
           [rotation]="[0, -0.9, 0]"
         ></app-plane>
         <app-plane
-          [color]="niceColors[17][3]"
+          [color]="niceColor[3]"
           [position]="[0, 6, 0]"
           [rotation]="[0.9, 0, 0]"
         ></app-plane>
         <app-plane
-          [color]="niceColors[17][0]"
+          [color]="niceColor[0]"
           [position]="[0, -6, 0]"
           [rotation]="[-0.9, 0, 0]"
         ></app-plane>
@@ -94,7 +96,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KinematicCubeComponent {
-  niceColors = niceColors;
+  niceColor = niceColor;
 }
 
 @Component({
@@ -187,7 +189,7 @@ export class InstancedSpheresComponent {
 
     for (let i = 0; i < this.number; i++) {
       color
-        .set(niceColors[17][Math.floor(Math.random() * 5)])
+        .set(niceColor[Math.floor(Math.random() * 5)])
         .convertSRGBToLinear()
         .toArray(this.colors, i * 3);
     }
