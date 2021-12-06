@@ -1,3 +1,10 @@
+### [2.0.4](https://github.com/nartc/angular-three/compare/2.0.3...2.0.4) (2021-12-06)
+
+
+### Bug Fixes
+
+* **core:** add nrwl/devkit as devDependencies ([ed9273c](https://github.com/nartc/angular-three/commit/ed9273cc87c23a9a2bff158b5d27b18f947f9059))
+
 ### [2.0.3](https://github.com/nartc/angular-three/compare/2.0.2...2.0.3) (2021-12-06)
 
 
