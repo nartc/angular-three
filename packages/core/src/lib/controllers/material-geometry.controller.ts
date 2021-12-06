@@ -3,14 +3,13 @@ import {
   AfterContentInit,
   Directive,
   Inject,
+  InjectionToken,
   Input,
   NgModule,
   NgZone,
-  OnInit,
 } from '@angular/core';
 import * as THREE from 'three';
 import { AnyConstructor, AnyExtenderFunction, UnknownRecord } from '../models';
-import { NGT_OBJECT_POST_INIT, NGT_OBJECT_TYPE } from '../tokens';
 import {
   NGT_CONTENT_GEOMETRY_CONTROLLER_PROVIDER,
   NGT_CONTENT_GEOMETRY_WATCHED_CONTROLLER,
@@ -27,6 +26,16 @@ import {
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
 } from './object-3d.controller';
+
+export const NGT_OBJECT_TYPE = new InjectionToken('Object3d Type', {
+  providedIn: 'root',
+  factory: () => THREE.Object3D,
+});
+
+export const NGT_OBJECT_POST_INIT = new InjectionToken('Object3d PostInit', {
+  providedIn: 'root',
+  factory: () => undefined,
+});
 
 @Directive({
   selector: `
@@ -46,7 +55,7 @@ import {
 })
 export class NgtMaterialGeometryController
   extends Controller
-  implements AfterContentInit, OnInit
+  implements AfterContentInit
 {
   #meshArgs: unknown[] = [];
   set meshArgs(v: unknown | unknown[]) {
@@ -115,7 +124,9 @@ export class NgtMaterialGeometryController
   }
 
   ngAfterContentInit() {
-    this.objectController.init();
+    this.ngZone.runOutsideAngular(() => {
+      this.objectController.init();
+    });
   }
 
   get controller(): Controller | undefined {
