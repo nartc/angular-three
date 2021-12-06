@@ -1,3 +1,4 @@
+// GENERATED
 import { AnyConstructor, NgtCoreModule } from '@angular-three/core';
 import {
   NgtPrimitive,
