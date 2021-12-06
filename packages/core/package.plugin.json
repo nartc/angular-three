@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "generators": "./plugins/generators.json",
+  "generators": "./generators.json",
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",

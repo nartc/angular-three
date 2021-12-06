@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "angular-three/core",
+  "version": "2.0.1",
+  "generators": {
+    "init": {
+      "factory": "./src/generators/init/generator",
+      "schema": "./src/generators/init/schema.json",
+      "description": "Init Angular Three"
+    }
+  },
+  "schematics": {
+    "ng-add": {
+      "factory": "./src/generators/init/compat",
+      "schema": "./src/generators/init/schema.json",
+      "description": "Add Angular Three"
+    }
+  }
+}

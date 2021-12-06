@@ -1,0 +1,16 @@
+{
+  "root": "packages/core-plugin-e2e",
+  "projectType": "application",
+  "sourceRoot": "packages/core-plugin-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/nx-plugin:e2e",
+      "options": {
+        "target": "core:build-plugin",
+        "jestConfig": "packages/core-plugin-e2e/jest.config.js"
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["core"]
+}

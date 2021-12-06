@@ -5,6 +5,17 @@
   "prefix": "ngt",
   "targets": {
     "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run core:build-lib",
+          "nx run core:build-plugin",
+          "rm dist/packages/core/plugins/package.json"
+        ],
+        "parallel": false
+      }
+    },
+    "build-lib": {
       "executor": "@nrwl/angular:package",
       "outputs": ["dist/packages/core"],
       "options": {
@@ -19,6 +30,38 @@
         }
       },
       "defaultConfiguration": "production"
+    },
+    "build-plugin": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/core/plugins",
+        "tsConfig": "packages/core/tsconfig.plugin.json",
+        "main": "packages/core/src/plugins.ts",
+        "deleteOutputPath": false,
+        "assets": [
+          {
+            "input": "./packages/core/src/generators",
+            "glob": "**/!(*.ts)",
+            "output": "./src/generators"
+          },
+          {
+            "input": "./packages/core/src/generators",
+            "glob": "**/*.d.ts",
+            "output": "./src/generators"
+          },
+          {
+            "input": "./packages/core",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./packages/core",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
