@@ -1,3 +1,10 @@
+### [2.0.3](https://github.com/nartc/angular-three/compare/2.0.2...2.0.3) (2021-12-06)
+
+
+### Bug Fixes
+
+* **core:** expose generators via schematics in packageJson ([ab65903](https://github.com/nartc/angular-three/commit/ab6590346adda106fcac662a8d5f03e4ccc72584))
+
 ### [2.0.2](https://github.com/nartc/angular-three/compare/2.0.1...2.0.2) (2021-12-06)
 
 
