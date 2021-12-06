@@ -107,8 +107,8 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
   readonly init = this.effect(($) =>
     $.pipe(
       tap(() => {
-        this.#initWorkerMessage(this.#workerEffectChanges$);
         this.updaters.setObject3d(this.objectController.object3d);
+        this.#initWorkerMessage(this.#workerEffectChanges$);
       })
     )
   );
@@ -127,14 +127,16 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
   #initWorkerMessage = this.effect<{}>(($) =>
     $.pipe(
       tapEffect(() => {
-        let currentWorker: CannonWorker;
         let uuid: string[] = [];
-        const { worker, refs, events } = this.physicsStore.getImperativeState();
+        const {
+          worker: currentWorker,
+          refs,
+          events,
+        } = this.physicsStore.getImperativeState();
 
         this.ngZone.runOutsideAngular(() => {
-          const object = this.objectController.object3d || new THREE.Object3D();
-
-          currentWorker = worker;
+          const object =
+            this.getImperativeState().object3d || new THREE.Object3D();
 
           let objectCount = 1;
 
@@ -150,30 +152,20 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
                   .map((_, i) => `${object.uuid}/${i}`)
               : [object.uuid];
 
-          const props: (BodyProps & { args: unknown })[] =
-            object instanceof THREE.InstancedMesh
-              ? uuid.map((id, i) => {
-                  const props = this.#getByIndex(i);
-                  prepare(temp, props);
-                  object.setMatrixAt(i, temp.matrix);
-                  object.instanceMatrix.needsUpdate = true;
-                  refs[id] = object;
-                  if (this.cannonDebugStore) {
-                    this.cannonDebugStore.api.add(id, props, this.type);
-                  }
-                  setupCollision(events, props, id);
-                  return { ...props, args: this.argsFn(props.args) };
-                })
-              : uuid.map((id, i) => {
-                  const props = this.#getByIndex(i);
-                  prepare(object, props);
-                  refs[id] = object;
-                  if (this.cannonDebugStore) {
-                    this.cannonDebugStore.api.add(id, props, this.type);
-                  }
-                  setupCollision(events, props, id);
-                  return { ...props, args: this.argsFn(props.args) };
-                });
+          const props: (BodyProps & { args: unknown })[] = uuid.map((id, i) => {
+            const physicProps = this.#getByIndex(i);
+            prepare(temp, physicProps);
+            if (object instanceof THREE.InstancedMesh) {
+              object.setMatrixAt(i, temp.matrix);
+              object.instanceMatrix.needsUpdate = true;
+            }
+            refs[id] = object;
+            if (this.cannonDebugStore) {
+              this.cannonDebugStore.api.add(id, physicProps, this.type);
+            }
+            setupCollision(events, physicProps, id);
+            return { ...physicProps, args: this.argsFn(physicProps.args) };
+          });
 
           // Register on mount, unregister on unmount
           currentWorker.postMessage({
