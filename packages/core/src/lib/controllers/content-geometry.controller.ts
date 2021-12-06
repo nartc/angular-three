@@ -23,7 +23,7 @@ import { Controller, createControllerProviderFactory } from './controller';
   exportAs: 'ngtContentGeometryController',
 })
 export class NgtContentGeometryController extends Controller {
-  @ContentChild(NgtGeometry, { static: true })
+  @ContentChild(NgtGeometry)
   set geometryDirective(v: NgtGeometry) {
     if (this.geometry == null && v) {
       this.geometry = v.geometry;
