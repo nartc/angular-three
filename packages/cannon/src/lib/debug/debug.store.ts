@@ -40,15 +40,15 @@ export class NgtCannonDebugStore extends EnhancedComponentStore<NgtCannonDebugSt
     }
   }
 
-  readonly initEffect = this.effect(($) =>
+  readonly init = this.effect(($) =>
     $.pipe(
       tap(() => {
-        this.#registerAnimationEffect();
+        this.#registerAnimation();
       })
     )
   );
 
-  #registerAnimationEffect = this.effect(($) =>
+  #registerAnimation = this.effect(($) =>
     $.pipe(
       withLatestFrom(
         this.selectors.impl$,

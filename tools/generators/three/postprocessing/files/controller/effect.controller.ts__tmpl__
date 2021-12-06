@@ -56,16 +56,16 @@ export class NgtEffectStore extends EnhancedComponentStore<NgtEffectStoreState> 
     }
   }
 
-  readonly initEffect = this.effect(($) =>
+  readonly init = this.effect(($) =>
     $.pipe(
       tap(() => {
-        this.#constructEffect(this.selectors.options$);
-        this.#blendChangeEffect(this.#blendChanges$);
+        this.#construct(this.selectors.options$);
+        this.#blendChange(this.#blendChanges$);
       })
     )
   );
 
-  #constructEffect = this.effect<
+  #construct = this.effect<
     ConstructorParameters<AnyConstructor<Effect>>[0]
   >((options$) =>
     options$.pipe(
@@ -79,7 +79,7 @@ export class NgtEffectStore extends EnhancedComponentStore<NgtEffectStoreState> 
     )
   );
 
-  #blendChangeEffect = this.effect<{
+  #blendChange = this.effect<{
     blendFunction: BlendFunction;
     opacity?: number;
     effect?: Effect;
@@ -129,7 +129,9 @@ export class NgtEffectController extends Controller implements OnInit {
   }
 
   ngOnInit() {
-    this.effectStore.initEffect();
+    this.ngZone.runOutsideAngular(() => {
+      this.effectStore.init();
+    });
   }
 
   get controller(): Controller | undefined {

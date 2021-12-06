@@ -115,7 +115,7 @@ export class NgtSobaOrbitControls
           ? (this.eventsStore.getImperativeState().connected as HTMLElement)
           : this.store.getImperativeState().renderer?.domElement
       );
-      this.setControlsEffect(this.selectors.camera$);
+      this.#setControls(this.selectors.camera$);
       this.animationSubscription = this.animationFrameStore.register({
         callback: () => {
           const { controls } = this.getImperativeState();
@@ -125,29 +125,28 @@ export class NgtSobaOrbitControls
         },
         obj: null,
       });
-      this.setControlsEventsEffect(this.controlsEffectChanges$);
-      this.makeDefaultEffect(this.makeDefaultParams$);
+      this.#setControlsEvents(this.controlsEffectChanges$);
+      this.#makeDefault(this.makeDefaultParams$);
     });
   }
 
-  readonly setControlsEffect = this.effect<THREE.Camera | undefined>(
-    (params$) =>
-      params$.pipe(
-        withLatestFrom(this.selectors.enableDamping$),
-        tap(([camera, enableDamping]) => {
-          this.ngZone.runOutsideAngular(() => {
-            if (camera) {
-              const controls = new OrbitControls(camera);
-              controls.enableDamping = enableDamping;
-              this.patchState({ controls });
-              this.ready.emit();
-            }
-          });
-        })
-      )
+  #setControls = this.effect<THREE.Camera | undefined>((params$) =>
+    params$.pipe(
+      withLatestFrom(this.selectors.enableDamping$),
+      tap(([camera, enableDamping]) => {
+        this.ngZone.runOutsideAngular(() => {
+          if (camera) {
+            const controls = new OrbitControls(camera);
+            controls.enableDamping = enableDamping;
+            this.patchState({ controls });
+            this.ready.emit();
+          }
+        });
+      })
+    )
   );
 
-  readonly setControlsEventsEffect = this.effect<{
+  #setControlsEvents = this.effect<{
     controls?: OrbitControls;
     regress?: boolean;
     domElement?: HTMLElement;
@@ -206,7 +205,7 @@ export class NgtSobaOrbitControls
     )
   );
 
-  readonly makeDefaultEffect = this.effect<{
+  #makeDefault = this.effect<{
     makeDefault: boolean;
     controls?: OrbitControls;
   }>((params$) =>

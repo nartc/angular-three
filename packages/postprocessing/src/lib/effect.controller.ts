@@ -1,3 +1,4 @@
+// GENERATED
 import {
   AnyConstructor,
   Controller,
@@ -18,16 +19,6 @@ import {
 // @ts-ignore
 import { BlendFunction, Effect } from 'postprocessing';
 import { tap } from 'rxjs';
-
-export const NGT_EFFECT_TYPE = new InjectionToken<AnyConstructor<Effect>>(
-  'Effect Type'
-);
-
-export const NGT_EFFECT_DEFAULT_BLEND_FUNCTION =
-  new InjectionToken<BlendFunction>('Effect Blend Function', {
-    providedIn: 'root',
-    factory: () => BlendFunction.NORMAL,
-  });
 
 interface NgtEffectStoreState {
   options: ConstructorParameters<AnyConstructor<Effect>>[0];
@@ -65,30 +56,29 @@ export class NgtEffectStore extends EnhancedComponentStore<NgtEffectStoreState> 
     }
   }
 
-  readonly initEffect = this.effect(($) =>
+  readonly init = this.effect(($) =>
     $.pipe(
       tap(() => {
-        this.#constructEffect(this.selectors.options$);
-        this.#blendChangeEffect(this.#blendChanges$);
+        this.#construct(this.selectors.options$);
+        this.#blendChange(this.#blendChanges$);
       })
     )
   );
 
-  #constructEffect = this.effect<
-    ConstructorParameters<AnyConstructor<Effect>>[0]
-  >((options$) =>
-    options$.pipe(
-      tap((options) => {
-        this.ngZone.runOutsideAngular(() => {
-          this.patchState({
-            effect: new this.effectType(options),
+  #construct = this.effect<ConstructorParameters<AnyConstructor<Effect>>[0]>(
+    (options$) =>
+      options$.pipe(
+        tap((options) => {
+          this.ngZone.runOutsideAngular(() => {
+            this.patchState({
+              effect: new this.effectType(options),
+            });
           });
-        });
-      })
-    )
+        })
+      )
   );
 
-  #blendChangeEffect = this.effect<{
+  #blendChange = this.effect<{
     blendFunction: BlendFunction;
     opacity?: number;
     effect?: Effect;
@@ -149,7 +139,9 @@ export class NgtEffectController extends Controller implements OnInit {
   }
 
   ngOnInit() {
-    this.effectStore.initEffect();
+    this.ngZone.runOutsideAngular(() => {
+      this.effectStore.init();
+    });
   }
 
   get controller(): Controller | undefined {
@@ -171,4 +163,14 @@ export const [NGT_EFFECT_WATCH_CONTROLLER, NGT_EFFECT_CONTROLLER_PROVIDER] =
   createControllerProviderFactory({
     controller: NgtEffectController,
     watchedControllerTokenName: 'Watched EffectController',
+  });
+
+export const NGT_EFFECT_TYPE = new InjectionToken<AnyConstructor<Effect>>(
+  'Effect Type'
+);
+
+export const NGT_EFFECT_DEFAULT_BLEND_FUNCTION =
+  new InjectionToken<BlendFunction>('Effect Blend Function', {
+    providedIn: 'root',
+    factory: () => BlendFunction.NORMAL,
   });

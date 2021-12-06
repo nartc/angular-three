@@ -39,15 +39,15 @@ export class NgtPhysicConstraintStore extends EnhancedComponentStore<NgtPhysicCo
     }
   }
 
-  readonly initEffect = this.effect(($) =>
+  readonly init = this.effect(($) =>
     $.pipe(
       tap(() => {
-        this.#initConstraintEffect();
+        this.#initConstraint();
       })
     )
   );
 
-  #initConstraintEffect = this.effect(($) =>
+  #initConstraint = this.effect(($) =>
     $.pipe(
       withLatestFrom(this.selectors.bodies$, this.selectors.options$),
       tapEffect(([, bodies, options]) => {

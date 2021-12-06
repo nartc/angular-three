@@ -6,6 +6,7 @@ import {
   ContentChildren,
   Input,
   NgModule,
+  NgZone,
   OnInit,
   QueryList,
   ViewChild,
@@ -65,7 +66,7 @@ export class NgtEffectComposer implements OnInit {
     this.effectComposerStore.updaters.setScene(v);
   }
 
-  @ViewChild(NgtGroup, { static: true }) set groupDirective(v: NgtGroup) {
+  @ViewChild(NgtGroup) set groupDirective(v: NgtGroup) {
     this.#group = v.group as THREE.Group;
   }
 
@@ -85,10 +86,15 @@ export class NgtEffectComposer implements OnInit {
     );
   }
 
-  constructor(private effectComposerStore: NgtEffectComposerStore) {}
+  constructor(
+    private ngZone: NgZone,
+    private effectComposerStore: NgtEffectComposerStore
+  ) {}
 
   ngOnInit() {
-    this.effectComposerStore.initEffect();
+    this.ngZone.runOutsideAngular(() => {
+      this.effectComposerStore.init();
+    });
   }
 }
 

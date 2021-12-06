@@ -127,21 +127,21 @@ export class NgtEffectComposerStore extends EnhancedComponentStore<NgtEffectComp
     });
   }
 
-  readonly initEffect = this.effect(($) =>
+  readonly init = this.effect(($) =>
     $.pipe(
       tap(() => {
         this.updaters.setCamera(this.store.getImperativeState().camera);
         this.updaters.setScene(this.store.getImperativeState().scene);
 
-        this.#initComposerEffect(this.#composerInitChanges$);
-        this.#composeSizeChangeEffect(this.#composerSizeChanges$);
-        this.#registerAnimationEffect(this.#registerAnimationChanges$);
-        this.#renderPassesEffect(this.#renderPassesChanges$);
+        this.#initComposer(this.#composerInitChanges$);
+        this.#composeSizeChange(this.#composerSizeChanges$);
+        this.#registerAnimation(this.#registerAnimationChanges$);
+        this.#listenEffectsChange(this.#renderPassesChanges$);
       })
     )
   );
 
-  #initComposerEffect = this.effect<ComposerInitChanges>((changes$) =>
+  #initComposer = this.effect<ComposerInitChanges>((changes$) =>
     changes$.pipe(
       withLatestFrom(this.store.selectors.renderer$),
       tap(
@@ -186,7 +186,7 @@ export class NgtEffectComposerStore extends EnhancedComponentStore<NgtEffectComp
     )
   );
 
-  #composeSizeChangeEffect = this.effect<{
+  #composeSizeChange = this.effect<{
     composer: EffectComposer;
     size: NgtSize;
   }>((changes$) =>
@@ -201,7 +201,7 @@ export class NgtEffectComposerStore extends EnhancedComponentStore<NgtEffectComp
     )
   );
 
-  #renderPassesEffect = this.effect<{
+  #listenEffectsChange = this.effect<{
     camera?: THREE.Camera;
     effects: Effect[];
     composer?: EffectComposer;
@@ -229,7 +229,7 @@ export class NgtEffectComposerStore extends EnhancedComponentStore<NgtEffectComp
     )
   );
 
-  #registerAnimationEffect = this.effect<{
+  #registerAnimation = this.effect<{
     composer: EffectComposer;
     autoClear: boolean;
     renderPriority: number;

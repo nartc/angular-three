@@ -6,6 +6,7 @@ import {
   Component,
   Input,
   NgModule,
+  NgZone,
 } from '@angular/core';
 import { NgtCannonDebugStore } from './debug.store';
 import { NgtCannonDebuggerInterface } from './models/debug';
@@ -32,10 +33,15 @@ export class NgtCannonDebug implements AfterContentInit {
     this.cannonDebugStore.updaters.setImpl(v);
   }
 
-  constructor(private cannonDebugStore: NgtCannonDebugStore) {}
+  constructor(
+    private ngZone: NgZone,
+    private cannonDebugStore: NgtCannonDebugStore
+  ) {}
 
   ngAfterContentInit() {
-    this.cannonDebugStore.initEffect();
+    this.ngZone.runOutsideAngular(() => {
+      this.cannonDebugStore.init();
+    });
   }
 
   get scene() {

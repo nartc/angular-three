@@ -108,7 +108,7 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
     });
   }
 
-  readonly initEffect = this.effect(($) =>
+  readonly init = this.effect(($) =>
     $.pipe(
       tap(() => {
         this.updaters.setBuffers(
@@ -120,14 +120,14 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
           )
         );
 
-        this.#initLoopEffect();
-        this.#initPhysicsWorkerEffect();
-        this.#updateWorldPropsEffect();
+        this.#initLoop();
+        this.#initPhysicsWorker();
+        this.#updateWorldProps();
       })
     )
   );
 
-  #initLoopEffect = this.effect(($) =>
+  #initLoop = this.effect(($) =>
     $.pipe(
       tapEffect(() => {
         const animationSubscription = this.ngZone.runOutsideAngular(() => {
@@ -155,7 +155,7 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
     )
   );
 
-  #initPhysicsWorkerEffect = this.effect(($) =>
+  #initPhysicsWorker = this.effect(($) =>
     $.pipe(
       withLatestFrom(this.selectors.worker$, this.#initProps$),
       tap(([, worker, initProps]) => {
@@ -290,20 +290,20 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
     )
   );
 
-  #updateWorldPropsEffect = this.effect(($) =>
+  #updateWorldProps = this.effect(($) =>
     $.pipe(
       tap(() => {
-        this.#updateAxisIndexEffect(this.selectors.axisIndex$);
-        this.#updateBroadphaseEffect(this.selectors.broadphase$);
-        this.#updateGravityEffect(this.selectors.gravity$);
-        this.#updateIterationsEffect(this.selectors.iterations$);
-        this.#updateStepEffect(this.selectors.step$);
-        this.#updateToleranceEffect(this.selectors.tolerance$);
+        this.#updateAxisIndex(this.selectors.axisIndex$);
+        this.#updateBroadphase(this.selectors.broadphase$);
+        this.#updateGravity(this.selectors.gravity$);
+        this.#updateIterations(this.selectors.iterations$);
+        this.#updateStep(this.selectors.step$);
+        this.#updateTolerance(this.selectors.tolerance$);
       })
     )
   );
 
-  #updateAxisIndexEffect = this.effect<NgtPhysicsStoreState['axisIndex']>(
+  #updateAxisIndex = this.effect<NgtPhysicsStoreState['axisIndex']>(
     (axisIndex$) =>
       axisIndex$.pipe(
         withLatestFrom(this.selectors.worker$),
@@ -313,7 +313,7 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
       )
   );
 
-  #updateBroadphaseEffect = this.effect<NgtPhysicsStoreState['broadphase']>(
+  #updateBroadphase = this.effect<NgtPhysicsStoreState['broadphase']>(
     (broadphase$) =>
       broadphase$.pipe(
         withLatestFrom(this.selectors.worker$),
@@ -323,17 +323,16 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
       )
   );
 
-  #updateGravityEffect = this.effect<NgtPhysicsStoreState['gravity']>(
-    (gravity$) =>
-      gravity$.pipe(
-        withLatestFrom(this.selectors.worker$),
-        tap(([gravity, worker]) => {
-          void worker.postMessage({ op: 'setGravity', props: gravity });
-        })
-      )
+  #updateGravity = this.effect<NgtPhysicsStoreState['gravity']>((gravity$) =>
+    gravity$.pipe(
+      withLatestFrom(this.selectors.worker$),
+      tap(([gravity, worker]) => {
+        void worker.postMessage({ op: 'setGravity', props: gravity });
+      })
+    )
   );
 
-  #updateIterationsEffect = this.effect<NgtPhysicsStoreState['iterations']>(
+  #updateIterations = this.effect<NgtPhysicsStoreState['iterations']>(
     (iterations$) =>
       iterations$.pipe(
         withLatestFrom(this.selectors.worker$),
@@ -343,7 +342,7 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
       )
   );
 
-  #updateStepEffect = this.effect<NgtPhysicsStoreState['step']>((step$) =>
+  #updateStep = this.effect<NgtPhysicsStoreState['step']>((step$) =>
     step$.pipe(
       withLatestFrom(this.selectors.worker$),
       tap(([step, worker]) => {
@@ -352,7 +351,7 @@ export class NgtPhysicsStore extends EnhancedComponentStore<NgtPhysicsStoreState
     )
   );
 
-  #updateToleranceEffect = this.effect<NgtPhysicsStoreState['tolerance']>(
+  #updateTolerance = this.effect<NgtPhysicsStoreState['tolerance']>(
     (tolerance$) =>
       tolerance$.pipe(
         withLatestFrom(this.selectors.worker$),

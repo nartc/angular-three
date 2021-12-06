@@ -3,6 +3,7 @@ import {
   AfterContentInit,
   Directive,
   Inject,
+  InjectionToken,
   Input,
   NgModule,
   NgZone,

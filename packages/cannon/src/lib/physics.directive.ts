@@ -66,7 +66,7 @@ export class NgtPhysics {
   }
 
   constructor(private physicsStore: NgtPhysicsStore) {
-    physicsStore.initEffect();
+    physicsStore.init();
   }
 }
 

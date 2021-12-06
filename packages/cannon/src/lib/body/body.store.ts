@@ -104,10 +104,10 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
     }
   }
 
-  readonly initEffect = this.effect(($) =>
+  readonly init = this.effect(($) =>
     $.pipe(
       tap(() => {
-        this.#initWorkerMessageEffect(this.#workerEffectChanges$);
+        this.#initWorkerMessage(this.#workerEffectChanges$);
         this.updaters.setObject3d(this.objectController.object3d);
       })
     )
@@ -124,7 +124,7 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
     } as BodyProps & NgtObject3dProps;
   }
 
-  #initWorkerMessageEffect = this.effect<{}>(($) =>
+  #initWorkerMessage = this.effect<{}>(($) =>
     $.pipe(
       tapEffect(() => {
         let currentWorker: CannonWorker;
