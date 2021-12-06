@@ -1,3 +1,17 @@
+### [2.0.2](https://github.com/nartc/angular-three/compare/2.0.1...2.0.2) (2021-12-06)
+
+
+### Bug Fixes
+
+* **core:** add ng add ([9f871d3](https://github.com/nartc/angular-three/commit/9f871d3563b3f0e92048a816297f4fbb3a3d9c89))
+* **core:** adjust DI for stats ([655cb78](https://github.com/nartc/angular-three/commit/655cb7845c423111843df70222d6cf9971abc510))
+* **core:** expose NgtResize ([9116b13](https://github.com/nartc/angular-three/commit/9116b13127f97c880b935a8a4fd0748ef06b46bf))
+
+
+### Documentations
+
+* **repo:** clean up readme ([4f22591](https://github.com/nartc/angular-three/commit/4f225912f5f36d3b2fb3030bfcb6484427947973))
+
 ### [2.0.1](https://github.com/nartc/angular-three/compare/2.0.0...2.0.1) (2021-12-06)
 
 
