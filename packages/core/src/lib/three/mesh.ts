@@ -10,11 +10,11 @@ export abstract class NgtCommonMesh<TMesh extends THREE.Mesh = THREE.Mesh> {
   constructor(
     @Optional()
     @Inject(NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER)
-    protected materialGeometryController: NgtMaterialGeometryController | null,
+    protected materialGeometryController: NgtMaterialGeometryController,
     protected ngZone: NgZone
   ) {}
 
   get mesh() {
-    return this.materialGeometryController?.objectController.object3d as TMesh;
+    return this.materialGeometryController.objectController.object3d as TMesh;
   }
 }
