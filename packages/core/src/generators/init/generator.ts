@@ -1,9 +1,4 @@
-import {
-  addDependenciesToPackageJson,
-  formatFiles,
-  installPackagesTask,
-  Tree,
-} from '@nrwl/devkit';
+import { addDependenciesToPackageJson, logger, Tree } from '@nrwl/devkit';
 import {
   COMPONENT_STORE_VERSION,
   THREE_TYPES_VERSION,
@@ -11,6 +6,8 @@ import {
 } from './versions';
 
 export default async function (tree: Tree) {
+  logger.info('Initializing @angular-three/core...');
+
   addDependenciesToPackageJson(
     tree,
     {
@@ -22,6 +19,7 @@ export default async function (tree: Tree) {
     }
   );
 
-  await installPackagesTask(tree);
-  await formatFiles(tree);
+  logger.info(
+    'Dependencies added to package.json. Please run `npm install` or `yarn` to install the dependencies'
+  );
 }
