@@ -23,6 +23,21 @@ Make sure you check the compatibility table before installing the package.
 
 NGT is a collection of packages that provide difference area of THREE.js. To get started, you only need `@angular-three/core` and its `peerDependencies`
 
+### Using `ng add`
+
+`@angular-three/core` provides `ng add` schematic to quickly add it to our project
+
+```shell
+ng add @angular-three/core
+# nx
+npm install @angular-three/core
+npx nx generate @angular-three/core:init
+```
+
+All the schematic does is adding the correct dependencies to `package.json`. After the schematic finishes, run `npm install` or `yarn` to install the dependencies.
+
+### Manual
+
 ```shell
 npm install @angular-three/core
 #or yarn

@@ -10,6 +10,7 @@
 .
 ├── packages/
 │   ├── core
+│   ├── core-plugin-e2e
 │   ├── cannon
 │   ├── soba
 │   ├── postprocessing
@@ -22,6 +23,7 @@
 
 - `packages/` contains the core libraries and their dependencies
   - `core`: contains the core library. This library holds almost all core entities from THREE.js (anything you can import from `THREE` with `import * as THREE from 'three'`)
+    - `core-plugin-e2e`: contains the e2e test for Generators
   - `cannon`: contains the Cannon.js physics engine wrapper. This library exposes directives to work convert 3D objects to Cannon.js shapes and be aware of the physics environment. Uses `cannon-es` and `cannon-es-debugger`
   - `soba`: contains additional helpers and utilities directives/components. This library is mainly ported from [React Three Drei](https://github.com/pmndrs/react-three-drei)
   - `postprocessing`: contains `EffectComposer` and other effects from `[postprocessing](https://github.com/vanruesc/postprocessing)`
