@@ -13,9 +13,7 @@
     "three": "0.134.0"
   },
   "dependencies": {
+    "@nrwl/devkit": "^13.0.0",
     "tslib": "^2.3.0"
-  },
-  "devDependencies": {
-    "@nrwl/devkit": "^13.0.0"
   }
 }
