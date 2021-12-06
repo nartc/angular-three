@@ -31,6 +31,7 @@ export * from './lib/three/sprite';
 export * from './lib/three/camera';
 
 export * from './lib/resize/tokens';
+export * from './lib/resize/resize.service';
 export * from './lib/performance/tokens';
 
 export * from './lib/stores/enhanced-component-store';
