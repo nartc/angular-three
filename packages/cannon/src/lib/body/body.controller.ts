@@ -44,7 +44,7 @@ export class NgtPhysicBodyController
 
   ngAfterContentInit() {
     this.ngZone.runOutsideAngular(() => {
-      this.physicBodyStore.initEffect();
+      this.physicBodyStore.init();
     });
   }
 

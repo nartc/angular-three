@@ -55,7 +55,9 @@ export class NgtPhysicConstraintController
   }
 
   ngAfterContentInit() {
-    this.physicConstraintStore.initEffect();
+    this.ngZone.runOutsideAngular(() => {
+      this.physicConstraintStore.init();
+    });
   }
 
   get api() {
