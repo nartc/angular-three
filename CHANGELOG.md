@@ -1,3 +1,10 @@
+### [2.0.6](https://github.com/nartc/angular-three/compare/2.0.5...2.0.6) (2021-12-06)
+
+
+### Bug Fixes
+
+* **core:** log to let consumers know to install the packages instead ([31fb1d9](https://github.com/nartc/angular-three/commit/31fb1d9413abcf3410fac7c60bdfc12e4f046f38))
+
 ### [2.0.5](https://github.com/nartc/angular-three/compare/2.0.4...2.0.5) (2021-12-06)
 
 
