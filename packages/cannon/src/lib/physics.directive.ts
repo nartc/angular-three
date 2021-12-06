@@ -1,5 +1,5 @@
 import { NgtTriplet } from '@angular-three/core';
-import { AfterContentInit, Directive, Input, NgModule } from '@angular/core';
+import { Directive, Input, NgModule } from '@angular/core';
 import { NgtPhysicBodyControllerModule } from './body/body.controller';
 import { NgtPhysicConstraintControllerModule } from './constraint/constraint.controller';
 import { Broadphase } from './models/broadphase';
@@ -12,7 +12,7 @@ import { NgtPhysicsStore } from './physics.store';
   exportAs: 'ngtPhysics',
   providers: [NgtPhysicsStore],
 })
-export class NgtPhysics implements AfterContentInit {
+export class NgtPhysics {
   @Input() set size(value: number) {
     this.physicsStore.updaters.setSize(value);
   }
@@ -65,10 +65,8 @@ export class NgtPhysics implements AfterContentInit {
     this.physicsStore.updaters.setDefaultContactMaterial(value);
   }
 
-  constructor(private physicsStore: NgtPhysicsStore) {}
-
-  ngAfterContentInit() {
-    this.physicsStore.initEffect();
+  constructor(private physicsStore: NgtPhysicsStore) {
+    physicsStore.initEffect();
   }
 }
 
