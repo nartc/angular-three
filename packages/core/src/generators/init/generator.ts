@@ -1,4 +1,9 @@
-import { addDependenciesToPackageJson, formatFiles, Tree } from '@nrwl/devkit';
+import {
+  addDependenciesToPackageJson,
+  formatFiles,
+  installPackagesTask,
+  Tree,
+} from '@nrwl/devkit';
 import {
   COMPONENT_STORE_VERSION,
   THREE_TYPES_VERSION,
@@ -17,5 +22,6 @@ export default async function (tree: Tree) {
     }
   );
 
+  await installPackagesTask(tree);
   await formatFiles(tree);
 }
