@@ -1,4 +1,9 @@
-import { addDependenciesToPackageJson, logger, Tree } from '@nrwl/devkit';
+import {
+  addDependenciesToPackageJson,
+  installPackagesTask,
+  logger,
+  Tree,
+} from '@nrwl/devkit';
 import {
   COMPONENT_STORE_VERSION,
   THREE_TYPES_VERSION,
@@ -19,7 +24,5 @@ export default async function (tree: Tree) {
     }
   );
 
-  logger.info(
-    'Dependencies added to package.json. Please run `npm install` or `yarn` to install the dependencies'
-  );
+  return installPackagesTask;
 }
