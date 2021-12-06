@@ -1,3 +1,34 @@
+### [2.0.1](https://github.com/nartc/angular-three/compare/2.0.0...2.0.1) (2021-12-06)
+
+
+### Bug Fixes
+
+* **cannon:** call the correct function ([84a8377](https://github.com/nartc/angular-three/commit/84a83776ff16bff0bb8c51bdae9894bef0336331))
+* **cannon:** initialize object with a new Object3D because it still can be constrained ([63d5d03](https://github.com/nartc/angular-three/commit/63d5d0382e05cb6bc3cf910c3241c27604172cb6))
+* **cannon:** initialize Physics world as soon as possible instead of AfterContentInit ([afe1847](https://github.com/nartc/angular-three/commit/afe1847b2f0d9fa90ec8b97bcf53dc143cee32e8))
+* **core:** make ContentGeometry static. Geometry needs to be statically available for the mesh ([f7197d1](https://github.com/nartc/angular-three/commit/f7197d13c681a726cc9152f56f73d3b96dca11e3))
+* **core:** move OBJECT_TYPE token back into its controller. fix Line import ([40878d2](https://github.com/nartc/angular-three/commit/40878d256eb376a0f6d84c15304671254b7605cf))
+* **core:** remove faulty DI token in InstancedMesh ([fc9b096](https://github.com/nartc/angular-three/commit/fc9b096d7b9644fd51885acb51ae1976ff501f3b))
+* **core:** remove faulty DI token in Mesh ([09e8834](https://github.com/nartc/angular-three/commit/09e8834f7f7dab13036553751fa460c17437208f))
+* **core:** rename Canvas's pointermissed to pointerMissed ([999dfad](https://github.com/nartc/angular-three/commit/999dfad07f829fe10f33bc6060f8ae13fc1d8ebc))
+* **core:** revert static on ContentChild NgtGeometry ([db09f8b](https://github.com/nartc/angular-three/commit/db09f8bd3792f77387ac178288610110ed0c0a15))
+* **core:** use AfterContentInit for NgtSkeleton instead of OnInit for consistency ([523573b](https://github.com/nartc/angular-three/commit/523573bfcfd33978ba40b11970c353d9f9d141aa))
+* **postprocessing:** initialize EffectComposer in ngOnInit instead of AfterContentInit ([3816207](https://github.com/nartc/angular-three/commit/381620781a7f7c7a1322ec8145ff9cd5973f564b))
+* **postprocessing:** move NGT_EFFECT_TYPE token to beginning of file ([83fb115](https://github.com/nartc/angular-three/commit/83fb11553e77bed74a040d4703c1eb0109e041e2))
+
+
+### Cleanup
+
+* **cannon:** clean up body store ([8ba22fd](https://github.com/nartc/angular-three/commit/8ba22fda06e081a74fbb3ffafc3e6bd35ab02ae2))
+* **repo:** rename all Effects to omit the Effect name ([9dbc813](https://github.com/nartc/angular-three/commit/9dbc813fcf3a6c0e3136dc67e0f46dba5e515718))
+
+
+### Documentations
+
+* **demo:** use random color instead of 17 ([8de3cfa](https://github.com/nartc/angular-three/commit/8de3cfa88fda97d2ff3af98f477f31576bb4ee97))
+* **repo:** add CONTRIBUTING guide ([d44dd00](https://github.com/nartc/angular-three/commit/d44dd00b07c4fc79cbfc3b4ae9b9f2fa92a16759))
+* **storybook:** add more steps to first scene ([86fa9ff](https://github.com/nartc/angular-three/commit/86fa9ff689be2a25d9f0840528668aab8bdd1380))
+
 ## [2.0.0](https://github.com/nartc/angular-three/compare/2.0.0-beta.11...2.0.0) (2021-12-05)
 
 
