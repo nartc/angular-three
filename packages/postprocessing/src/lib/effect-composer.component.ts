@@ -1,12 +1,12 @@
 import { NgtCoreModule } from '@angular-three/core';
 import { NgtGroup, NgtGroupModule } from '@angular-three/core/group';
 import {
-  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   ContentChildren,
   Input,
   NgModule,
+  OnInit,
   QueryList,
   ViewChild,
 } from '@angular/core';
@@ -28,7 +28,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtEffectComposerStore],
 })
-export class NgtEffectComposer implements AfterContentInit {
+export class NgtEffectComposer implements OnInit {
   @Input() set depthBuffer(v: boolean) {
     this.effectComposerStore.updaters.setDepthBuffer(v);
   }
@@ -87,7 +87,7 @@ export class NgtEffectComposer implements AfterContentInit {
 
   constructor(private effectComposerStore: NgtEffectComposerStore) {}
 
-  ngAfterContentInit() {
+  ngOnInit() {
     this.effectComposerStore.initEffect();
   }
 }
