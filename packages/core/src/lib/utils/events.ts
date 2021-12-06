@@ -361,7 +361,7 @@ export function createEvents(
 
     // Any other pointer goes here ...
     return (event: NgtDomEvent) => {
-      const { pointermissed, internal } = eventsStateGetter();
+      const { pointerMissed, internal } = eventsStateGetter();
 
       prepareRay(event);
 
@@ -383,8 +383,8 @@ export function createEvents(
       // Missed events have to come first in order to establish user-land side-effect clean up
       if (isClickEvent && !hits.length) {
         if (delta <= 2) {
-          pointerMissed(event, internal.interaction);
-          if (pointermissed) pointermissed(event);
+          objectPointerMissed(event, internal.interaction);
+          if (pointerMissed) pointerMissed(event);
         }
       }
       // Take care of unhover
@@ -431,7 +431,7 @@ export function createEvents(
             // which must use the initial target
             if (!isClickEvent || internal.initialHits.includes(eventObject)) {
               // Missed events have to come first
-              pointerMissed(
+              objectPointerMissed(
                 event,
                 internal.interaction.filter(
                   (object) => !internal.initialHits.includes(object)
@@ -446,7 +446,7 @@ export function createEvents(
     };
   };
 
-  function pointerMissed(event: MouseEvent, objects: THREE.Object3D[]) {
+  function objectPointerMissed(event: MouseEvent, objects: THREE.Object3D[]) {
     objects.forEach((object: THREE.Object3D) =>
       (object as unknown as NgtInstance).__ngt?.handlers?.pointermissed?.(event)
     );

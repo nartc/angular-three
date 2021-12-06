@@ -24,7 +24,7 @@ export interface NgtEventsInternal {
 }
 
 export interface NgtEventsStoreState {
-  pointermissed?: (event: MouseEvent) => void;
+  pointerMissed?: (event: MouseEvent) => void;
   connected: false | HTMLElement;
   internal: NgtEventsInternal;
   handlers?: Record<NgtSupportedEvents, EventListener>;

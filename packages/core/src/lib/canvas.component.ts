@@ -154,7 +154,7 @@ export class NgtCanvas extends EnhancedComponentStore implements OnInit {
       // update pointermissed in events store so that
       // events util will handle it
       if (this.pointermissed.observed) {
-        this.eventsStore.updaters.setPointermissed((event) => {
+        this.eventsStore.updaters.setPointerMissed((event) => {
           this.ngZone.runOutsideAngular(() => {
             this.pointermissed.emit(event);
           });

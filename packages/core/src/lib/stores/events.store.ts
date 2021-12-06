@@ -28,7 +28,7 @@ const names = {
 export class NgtEventsStore extends EnhancedComponentStore<NgtEventsStoreState> {
   constructor(private store: NgtStore, private ngZone: NgZone) {
     super({
-      pointermissed: noop,
+      pointerMissed: noop,
       connected: false,
       handlers: {} as NgtEventsStoreState['handlers'],
       internal: {
