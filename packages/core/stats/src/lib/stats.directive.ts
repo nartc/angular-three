@@ -28,7 +28,7 @@ export class NgtStats implements OnInit, OnDestroy {
   constructor(
     private animationFrameStore: NgtAnimationFrameStore,
     private ngZone: NgZone,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) document: Document
   ) {
     this.#node = document.body;
   }
