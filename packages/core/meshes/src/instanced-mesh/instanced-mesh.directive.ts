@@ -41,7 +41,7 @@ export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {
   constructor(
     @Optional()
     @Inject(NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER)
-    materialGeometryController: NgtMaterialGeometryController | null,
+    materialGeometryController: NgtMaterialGeometryController,
     ngZone: NgZone
   ) {
     super(materialGeometryController, ngZone);
