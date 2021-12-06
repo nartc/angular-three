@@ -18,7 +18,6 @@ import {
   Input,
   NgModule,
   NgZone,
-  OnInit,
   Optional,
   Output,
   QueryList,
@@ -68,11 +67,15 @@ export class NgtBone implements AfterContentInit {
   selector: 'ngt-skeleton',
   exportAs: 'ngtSkeleton',
 })
-export class NgtSkeleton implements OnInit {
+export class NgtSkeleton implements AfterContentInit {
   @Input() boneInverses?: NgtMatrix4[];
   @Output() ready = new EventEmitter();
 
-  @ContentChildren(NgtBone) bones?: QueryList<NgtBone>;
+  @ContentChildren(NgtBone, {
+    emitDistinctChangesOnly: true,
+    descendants: true,
+  })
+  bones?: QueryList<NgtBone>;
 
   #skeleton?: THREE.Skeleton;
   get skeleton() {
@@ -88,7 +91,7 @@ export class NgtSkeleton implements OnInit {
     }
   }
 
-  ngOnInit() {
+  ngAfterContentInit() {
     this.ngZone.runOutsideAngular(() => {
       if (this.bones) {
         const boneInverses: THREE.Matrix4[] | undefined = this.boneInverses
