@@ -20,6 +20,17 @@ import {
 import { BlendFunction, Effect } from 'postprocessing';
 import { tap } from 'rxjs';
 
+export const NGT_EFFECT_TYPE = new InjectionToken<AnyConstructor<Effect>>(
+  'Effect Type'
+);
+
+export const NGT_EFFECT_DEFAULT_BLEND_FUNCTION =
+  new InjectionToken<BlendFunction>('Effect Blend Function', {
+    providedIn: 'root',
+    factory: () => BlendFunction.NORMAL,
+  });
+
+
 interface NgtEffectStoreState {
   options: ConstructorParameters<AnyConstructor<Effect>>[0];
   blendFunction: BlendFunction;
@@ -153,14 +164,4 @@ export const [NGT_EFFECT_WATCH_CONTROLLER, NGT_EFFECT_CONTROLLER_PROVIDER] =
   createControllerProviderFactory({
     controller: NgtEffectController,
     watchedControllerTokenName: 'Watched EffectController',
-  });
-
-export const NGT_EFFECT_TYPE = new InjectionToken<AnyConstructor<Effect>>(
-  'Effect Type'
-);
-
-export const NGT_EFFECT_DEFAULT_BLEND_FUNCTION =
-  new InjectionToken<BlendFunction>('Effect Blend Function', {
-    providedIn: 'root',
-    factory: () => BlendFunction.NORMAL,
   });
