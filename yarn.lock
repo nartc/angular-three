@@ -5368,6 +5368,13 @@ better-opn@^2.1.1:
   dependencies:
     open "^7.0.3"
 
+bidi-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/bidi-js/-/bidi-js-1.0.2.tgz#1a497a762c2ddea377429d2649c9ce0f8a91527f"
+  integrity sha512-rzSy/k7WdX5zOyeHHCOixGXbCHkyogkxPKL2r8QtzHmVQDiWCXUWa18bLdMWT9CYMLOYTjWpTHawuev2ouYJVw==
+  dependencies:
+    require-from-string "^2.0.2"
+
 big.js@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-5.2.2.tgz#65f0af382f578bcdc742bd9c281e9cb2d7768328"
@@ -16559,6 +16566,25 @@ trim@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/trim/-/trim-0.0.1.tgz#5858547f6b290757ee95cccc666fb50084c460dd"
   integrity sha1-WFhUf2spB1fulczMZm+1AITEYN0=
+
+troika-three-text@0.44.0:
+  version "0.44.0"
+  resolved "https://registry.yarnpkg.com/troika-three-text/-/troika-three-text-0.44.0.tgz#7c1a785c1aea9acc7631651acac97f2dbed2f26f"
+  integrity sha512-YwqXczjXQ4yq2a2ufO9icOIjeJutE/ODS8PHmmt/WAzVFqoiqeemclp/Ewiqm0+sdI1KnWRm6lj8df/zmhU3Og==
+  dependencies:
+    bidi-js "^1.0.2"
+    troika-three-utils "^0.44.0"
+    troika-worker-utils "^0.44.0"
+
+troika-three-utils@^0.44.0:
+  version "0.44.0"
+  resolved "https://registry.yarnpkg.com/troika-three-utils/-/troika-three-utils-0.44.0.tgz#c19bcbedb08bff96b8a38cf8b4a60da3b12bb44b"
+  integrity sha512-gaEpqrlWnkrVU5UgUx+YZTC8NrhsA2Tt6zEIbn3WNuom7pLtrgjuHpAM72gif7DoYdOWEyFco3Zb6rpJh9Fodg==
+
+troika-worker-utils@^0.44.0:
+  version "0.44.0"
+  resolved "https://registry.yarnpkg.com/troika-worker-utils/-/troika-worker-utils-0.44.0.tgz#a236dc004b7a3c187ae8f14a6b497e54661e12c8"
+  integrity sha512-/ETcH1rUoO9hVBL6Ifea2WOoGPw90ncrk8b8SJKTLtzcQvEWRIZ4eUxlVCtU93fLechCV+DWPs1y8+Bjh1WaJg==
 
 trough@^1.0.0:
   version "1.0.5"

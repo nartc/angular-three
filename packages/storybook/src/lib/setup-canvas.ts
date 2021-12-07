@@ -20,7 +20,7 @@ export function setupCanvas({
   black: boolean;
 }> = {}) {
   return (story: string) => `
-    <ngt-canvas [camera]='{position: [${cameraPosition}], fov: ${cameraFov}}' (created)='$event.renderer.setClearAlpha(${
+    <ngt-canvas [shadows]='true' [camera]='{position: [${cameraPosition}], fov: ${cameraFov}}' (created)='$event.renderer.setClearAlpha(${
     black ? 'black' : 'white'
   })'>
       <ngt-stats></ngt-stats>
