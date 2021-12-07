@@ -15,7 +15,10 @@ export default async function controllersGenerator(
   sobaShapeSelectors: string[]
 ) {
   const meshSelectors = ['mesh', 'instanced-mesh', 'skinned-mesh'];
+
   const sobaSelectors = ['soba-billboard'];
+  const sobaWithMaterialSelectors = ['soba-text'];
+
   const { libsDir } = getWorkspaceLayout(tree);
   const controllersDir = join(libsDir, 'core', 'src', 'lib', 'controllers');
 
@@ -37,6 +40,7 @@ export default async function controllersGenerator(
     ...selectors,
     ...prefixedSobaSelectors,
     ...sobaSelectors,
+    ...sobaWithMaterialSelectors,
   ];
 
   generateFiles(tree, join(__dirname, 'files'), controllersDir, {
@@ -44,7 +48,10 @@ export default async function controllersGenerator(
     audioSelectors,
     meshSelectors,
     lineSelectors,
-    sobaShapeSelectors: prefixedSobaSelectors,
+    sobaShapeSelectors: [
+      ...prefixedSobaSelectors,
+      ...sobaWithMaterialSelectors,
+    ],
     selectors: Array.from(new Set(selectors)).map(mapIsLast),
     inputsSelectors: Array.from(new Set(inputsSelectors)).map(mapIsLast),
   });

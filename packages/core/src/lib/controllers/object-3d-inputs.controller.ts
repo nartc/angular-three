@@ -80,7 +80,8 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-extrude,
     ngt-soba-lathe,
     ngt-soba-torus-knot,
-    ngt-soba-billboard
+    ngt-soba-billboard,
+    ngt-soba-text
   `,
   exportAs: 'ngtObject3dInputsController',
 })
