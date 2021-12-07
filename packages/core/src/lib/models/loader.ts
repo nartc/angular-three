@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 export interface NgtLoader<T> extends THREE.Loader {
   load(
-    url: string,
+    url: string | string[],
     onLoad?: (result: T) => void,
     onProgress?: (event: ProgressEvent) => void,
     onError?: (event: ErrorEvent) => void
