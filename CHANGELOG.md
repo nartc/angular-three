@@ -1,3 +1,30 @@
+## [2.1.0](https://github.com/nartc/angular-three/compare/2.0.6...2.1.0) (2021-12-07)
+
+
+### Features
+
+* **soba:** add Billboard ([95024a3](https://github.com/nartc/angular-three/commit/95024a3d5b25c59388771eba7ada9b64f225147e)), closes [#28](https://github.com/nartc/angular-three/issues/28)
+* **soba:** add billboard and text to controller generator ([a2ae80a](https://github.com/nartc/angular-three/commit/a2ae80a0158778e1ed0ad9a5dc03cc5b7b06c284))
+* **soba:** add Environment ([aec9f0a](https://github.com/nartc/angular-three/commit/aec9f0a07c05c65a0320f8385c06b2710a023476)), closes [#29](https://github.com/nartc/angular-three/issues/29)
+* **soba:** add Performances#preload ref [#26](https://github.com/nartc/angular-three/issues/26) ([22960aa](https://github.com/nartc/angular-three/commit/22960aa918851ef0ec088da74fb65e794ec4b41d))
+* **soba:** add Text ([10d2e65](https://github.com/nartc/angular-three/commit/10d2e658c20e4992b073a07bade01fa805da023f)), closes [#28](https://github.com/nartc/angular-three/issues/28)
+
+
+### Bug Fixes
+
+* **core:** return the correct value for generator ([ea1acad](https://github.com/nartc/angular-three/commit/ea1acad81a8a8f7472d9426396b9c06d5e5818d8))
+* **core:** run installPackagesTask for ng add generator ([d3637b2](https://github.com/nartc/angular-three/commit/d3637b28675fec3e6257a02c90a0c7dfefb3ead0))
+* **core:** url should be string | string[] for loader ([7a0af0e](https://github.com/nartc/angular-three/commit/7a0af0ee335d48fbe65c615b08c92ec0e536cd95))
+* **soba:** null assertion on ngtGroup.group for Billboard ([0cafd46](https://github.com/nartc/angular-three/commit/0cafd4692f3ec911ff6a73bd51d0cadf1071ff99))
+
+
+### Documentations
+
+* **core:** add ng-add to docs ([e175dbf](https://github.com/nartc/angular-three/commit/e175dbfd988288896d09a65c4609411242012f16))
+* **storybook:** adjust installation docs about generator ([0403ace](https://github.com/nartc/angular-three/commit/0403ace9eecb62f3320d39594e7d357ddbd454b3))
+* **storybook:** change API to Core API ([b6bf1ac](https://github.com/nartc/angular-three/commit/b6bf1acefb23d1f1fc012b7b8f8805449d9f6ab3))
+* **storybook:** use soba-orbit-controls ([67e6fa9](https://github.com/nartc/angular-three/commit/67e6fa9c1753627e44ad602a287c9586923f898e))
+
 ### [2.0.6](https://github.com/nartc/angular-three/compare/2.0.5...2.0.6) (2021-12-06)
 
 
