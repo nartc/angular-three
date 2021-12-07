@@ -24,5 +24,7 @@ export default async function (tree: Tree) {
     }
   );
 
-  return installPackagesTask;
+  return () => {
+    installPackagesTask(tree);
+  };
 }
