@@ -1,3 +1,11 @@
+import { NgtCoreModule } from '@angular-three/core';
+import {
+  NgtAmbientLightModule,
+  NgtPointLightModule,
+} from '@angular-three/core/lights';
+import { NgtStatsModule } from '@angular-three/core/stats';
+import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
+
 export function setupCanvas({
   cameraPosition = [-5, 5, 5],
   cameraFov = 75,
@@ -12,7 +20,7 @@ export function setupCanvas({
   black: boolean;
 }> = {}) {
   return (story: string) => `
-    <ngt-canvas [camera]='{position: [${cameraPosition}], fov: ${cameraFov}}' (created)='$event.gl.setClearAlpha(${
+    <ngt-canvas [camera]='{position: [${cameraPosition}], fov: ${cameraFov}}' (created)='$event.renderer.setClearAlpha(${
     black ? 'black' : 'white'
   })'>
       <ngt-stats></ngt-stats>
@@ -22,9 +30,17 @@ export function setupCanvas({
         <ngt-point-light [intensity]='1' [position]='[0, 6, 0]'></ngt-point-light>
       </ng-container>
 
-      <ngt-orbit-controls *ngIf='${controls}'></ngt-orbit-controls>
+      <ngt-soba-orbit-controls *ngIf='${controls}'></ngt-soba-orbit-controls>
 
       ${story}
     </ngt-canvas>
   `;
 }
+
+export const setupCanvasModules = [
+  NgtCoreModule,
+  NgtStatsModule,
+  NgtAmbientLightModule,
+  NgtPointLightModule,
+  NgtSobaOrbitControlsModule,
+];
