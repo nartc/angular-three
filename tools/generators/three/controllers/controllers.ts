@@ -15,6 +15,7 @@ export default async function controllersGenerator(
   sobaShapeSelectors: string[]
 ) {
   const meshSelectors = ['mesh', 'instanced-mesh', 'skinned-mesh'];
+  const sobaSelectors = ['soba-billboard'];
   const { libsDir } = getWorkspaceLayout(tree);
   const controllersDir = join(libsDir, 'core', 'src', 'lib', 'controllers');
 
@@ -32,7 +33,11 @@ export default async function controllersGenerator(
   ];
 
   // Object3dInputs includes the Soba shapes but Object3d does not
-  const inputsSelectors = [...selectors, ...prefixedSobaSelectors];
+  const inputsSelectors = [
+    ...selectors,
+    ...prefixedSobaSelectors,
+    ...sobaSelectors,
+  ];
 
   generateFiles(tree, join(__dirname, 'files'), controllersDir, {
     tmpl: '',

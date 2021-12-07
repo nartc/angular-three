@@ -52,8 +52,6 @@ export default async function (tree: Tree) {
     simpleEffectsGenerator(tree),
   ]);
 
-  const additionalSobaSelectors = [];
-
   await Promise.all([
     controllersGenerator(
       tree,
@@ -62,7 +60,6 @@ export default async function (tree: Tree) {
         ...helperSelectors,
         ...spriteSelectors,
         ...cameraSelectors,
-        ...additionalSobaSelectors,
       ],
       audioSelectors,
       lineSelectors,

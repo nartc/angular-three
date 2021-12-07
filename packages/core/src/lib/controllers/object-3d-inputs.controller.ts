@@ -79,7 +79,8 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-icosahedron,
     ngt-soba-extrude,
     ngt-soba-lathe,
-    ngt-soba-torus-knot
+    ngt-soba-torus-knot,
+    ngt-soba-billboard
   `,
   exportAs: 'ngtObject3dInputsController',
 })
