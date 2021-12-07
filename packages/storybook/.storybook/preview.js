@@ -4,7 +4,7 @@ export const parameters = {
       order: [
         'Introduction',
         ['Introduction', 'Installation', 'First Scene', 'Examples'],
-        'API',
+        'Core API',
         [
           'Canvas',
           'Objects',
@@ -17,6 +17,8 @@ export const parameters = {
           'Events',
           'Generators',
         ],
+        'Soba',
+        ['Abstractions', 'Staging', 'Shapes'],
         'Examples',
       ],
     },
