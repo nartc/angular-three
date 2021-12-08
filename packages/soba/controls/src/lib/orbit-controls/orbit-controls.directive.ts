@@ -1,24 +1,18 @@
 import {
   EnhancedComponentStore,
+  makeVector3,
   NgtAnimationFrameStore,
   NgtEventsStore,
   NgtLoopService,
   NgtPerformanceStore,
   NgtStore,
   NgtVector3,
-  tapEffect,
+  tapEffect
 } from '@angular-three/core';
-import {
-  Directive,
-  EventEmitter,
-  Input,
-  NgModule,
-  NgZone,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Directive, EventEmitter, Input, NgModule, NgZone, OnInit, Output } from '@angular/core';
 import { Observable, Subscription, tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
+import { Vector3 } from 'three';
 import { OrbitControls } from 'three-stdlib/controls/OrbitControls';
 
 export interface NgtSobaOrbitControlsState {
@@ -33,12 +27,11 @@ export interface NgtSobaOrbitControlsState {
 
 @Directive({
   selector: 'ngt-soba-orbit-controls',
-  exportAs: 'ngtSobaOrbitControls',
+  exportAs: 'ngtSobaOrbitControls'
 })
 export class NgtSobaOrbitControls
   extends EnhancedComponentStore<NgtSobaOrbitControlsState>
-  implements OnInit
-{
+  implements OnInit {
   @Input() set target(v: NgtVector3) {
     this.updaters.setTarget(v);
   }
@@ -103,7 +96,7 @@ export class NgtSobaOrbitControls
       makeDefault: false,
       camera: undefined,
       domElement: undefined,
-      controls: undefined,
+      controls: undefined
     });
   }
 
@@ -123,7 +116,7 @@ export class NgtSobaOrbitControls
             controls.update();
           }
         },
-        obj: null,
+        obj: null
       });
       this.#setControlsEvents(this.controlsEffectChanges$);
       this.#makeDefault(this.makeDefaultParams$);
@@ -132,12 +125,21 @@ export class NgtSobaOrbitControls
 
   #setControls = this.effect<THREE.Camera | undefined>((params$) =>
     params$.pipe(
-      withLatestFrom(this.selectors.enableDamping$),
-      tap(([camera, enableDamping]) => {
+      withLatestFrom(
+        this.selectors.enableDamping$,
+        this.selectors.target$
+      ),
+      tap(([camera, enableDamping, target]) => {
         this.ngZone.runOutsideAngular(() => {
           if (camera) {
             const controls = new OrbitControls(camera);
             controls.enableDamping = enableDamping;
+            if (target) {
+              const controlsTarget: Vector3 | undefined = makeVector3(target);
+              if (controlsTarget) {
+                controls.target = controlsTarget;
+              }
+            }
             this.patchState({ controls });
             this.ready.emit();
           }
@@ -242,6 +244,7 @@ export class NgtSobaOrbitControls
 
 @NgModule({
   declarations: [NgtSobaOrbitControls],
-  exports: [NgtSobaOrbitControls],
+  exports: [NgtSobaOrbitControls]
 })
-export class NgtSobaOrbitControlsModule {}
+export class NgtSobaOrbitControlsModule {
+}
