@@ -45,6 +45,7 @@ import * as THREE from 'three';
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_CONTENT_MATERIAL_CONTROLLER_PROVIDER,
+    { provide: NgtSobaExtender, useExisting: NgtSobaPolyhedron },
   ],
 })
 export class NgtSobaPolyhedron extends NgtSobaExtender<THREE.Mesh> {

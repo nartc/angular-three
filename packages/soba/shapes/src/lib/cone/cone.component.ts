@@ -45,6 +45,7 @@ import * as THREE from 'three';
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_CONTENT_MATERIAL_CONTROLLER_PROVIDER,
+    { provide: NgtSobaExtender, useExisting: NgtSobaCone },
   ],
 })
 export class NgtSobaCone extends NgtSobaExtender<THREE.Mesh> {
