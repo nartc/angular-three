@@ -20,7 +20,7 @@ import * as THREE from 'three';
       <ngt-ambient-light></ngt-ambient-light>
       <ngt-spot-light [position]="[1, 1, 1]"></ngt-spot-light>
       <ngt-cube></ngt-cube>
-      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+      <ngt-soba-orbit-controls [target]='[0,2,0]'></ngt-soba-orbit-controls>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
