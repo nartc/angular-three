@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 @Directive({
   selector: 'ngt-mesh-basic-material',
-  exportAs: 'ngt',
+  exportAs: 'ngtMeshBasicMaterial',
   providers: [
     {
       provide: NgtMaterial,

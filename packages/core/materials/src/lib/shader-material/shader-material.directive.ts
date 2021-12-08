@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 @Directive({
   selector: 'ngt-shader-material',
-  exportAs: 'ngt',
+  exportAs: 'ngtShaderMaterial',
   providers: [
     {
       provide: NgtMaterial,
