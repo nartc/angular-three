@@ -25,6 +25,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-primitive,
     ngt-bone,
     ngt-group,
+    ngt-lod,
     ngt-points,
     ngt-mesh,
     ngt-instanced-mesh,
@@ -81,6 +82,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-lathe,
     ngt-soba-torus-knot,
     ngt-soba-billboard,
+    ngt-soba-detailed,
     ngt-soba-text
   `,
   exportAs: 'ngtObject3dInputsController',

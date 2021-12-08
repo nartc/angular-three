@@ -34,6 +34,7 @@
       "@angular-three/core/helpers": ["packages/core/helpers/src/index.ts"],
       "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
       "@angular-three/core/lines": ["packages/core/lines/src/index.ts"],
+      "@angular-three/core/lod": ["packages/core/lod/src/index.ts"],
       "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
       "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
       "@angular-three/core/points": ["packages/core/points/src/index.ts"],

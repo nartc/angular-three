@@ -42,11 +42,9 @@ import { Controller, createControllerProviderFactory } from './controller';
   exportAs: 'ngtContentMaterialController',
 })
 export class NgtContentMaterialController extends Controller {
-  @ContentChildren(NgtMaterial, {
-    descendants: true,
-    emitDistinctChangesOnly: true,
-  })
-  set materialDirectives(v: QueryList<NgtMaterial>) {
+  @ContentChildren(NgtMaterial, { descendants: true }) set materialDirectives(
+    v: QueryList<NgtMaterial>
+  ) {
     if (this.material == null && v) {
       this.material =
         v.length === 1

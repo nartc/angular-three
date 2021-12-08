@@ -108,7 +108,9 @@
           "packages/core/lines/**/*.ts",
           "packages/core/lines/**/*.html",
           "packages/core/sprites/**/*.ts",
-          "packages/core/sprites/**/*.html"
+          "packages/core/sprites/**/*.html",
+          "packages/core/lod/**/*.ts",
+          "packages/core/lod/**/*.html"
         ]
       }
     },

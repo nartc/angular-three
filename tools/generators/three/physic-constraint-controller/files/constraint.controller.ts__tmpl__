@@ -31,10 +31,7 @@ export class NgtPhysicConstraintController
     this.physicConstraintStore.updaters.setOptions(v);
   }
 
-  @ContentChildren(NgtPhysicBodyController, {
-    descendants: true,
-    emitDistinctChangesOnly: true,
-  })
+  @ContentChildren(NgtPhysicBodyController, { descendants: true })
   set bodies(v: QueryList<NgtPhysicBodyController>) {
     this.physicConstraintStore.updaters.setBodies(
       v.changes.pipe(

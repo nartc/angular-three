@@ -56,6 +56,7 @@ const supportedEvents = [
     ngt-primitive,
     ngt-bone,
     ngt-group,
+    ngt-lod,
     ngt-points,
     ngt-mesh,
     ngt-instanced-mesh,
