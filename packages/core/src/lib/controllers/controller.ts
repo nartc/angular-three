@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Directive,
   InjectionToken,
+  Input,
   NgZone,
   OnChanges,
   OnInit,
@@ -16,6 +17,8 @@ import { NgtDestroyedService } from '../services/destroyed.service';
 
 @Directive()
 export abstract class Controller implements OnChanges, OnInit {
+  @Input() disabled = false;
+
   abstract get props(): string[];
 
   abstract get controller(): Controller | undefined;

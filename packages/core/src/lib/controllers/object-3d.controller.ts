@@ -145,7 +145,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
       this.#inputChangesSubscription =
         this.#object3dInputsController.change$.subscribe(() => {
           this.ngZone.runOutsideAngular(() => {
-            if (this.object3d) {
+            if (this.object3d && !this.disabled) {
               this.#applyCustomProps();
             }
           });
@@ -156,7 +156,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   init() {
     this.ngZone.runOutsideAngular(() => {
       this.#object3d = this.initFn();
-      if (this.object3d) {
+      if (this.object3d && !this.disabled) {
         this.#applyCustomProps();
 
         const observedEvents = supportedEvents.reduce(
