@@ -1,3 +1,10 @@
+## [2.3.0](https://github.com/nartc/angular-three/compare/2.2.0...2.3.0) (2021-12-08)
+
+
+### Features
+
+* **soba:** add FlyControls ([20320f4](https://github.com/nartc/angular-three/commit/20320f403d9538d0f3ff6b5cc8bed8d1689b2fdc))
+
 ## [2.2.0](https://github.com/nartc/angular-three/compare/2.1.0...2.2.0) (2021-12-08)
 
 
