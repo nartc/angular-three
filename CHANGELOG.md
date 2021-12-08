@@ -1,3 +1,15 @@
+## [2.4.0](https://github.com/nartc/angular-three/compare/2.3.0...2.4.0) (2021-12-08)
+
+
+### Features
+
+* **core:** add NgtRepeat ([9d35700](https://github.com/nartc/angular-three/commit/9d35700047f516a812b6c248fd5c39c445303a18))
+
+
+### Bug Fixes
+
+* **core:** fix materials generator exportAs ([ab75e06](https://github.com/nartc/angular-three/commit/ab75e0664e50bc5fd767fe25344f49489c9ddb56))
+
 ## [2.3.0](https://github.com/nartc/angular-three/compare/2.2.0...2.3.0) (2021-12-08)
 
 
