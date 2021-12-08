@@ -76,10 +76,7 @@ export class NgtEffectComposer implements OnInit {
     return this.#group;
   }
 
-  @ContentChildren(NgtEffectController, {
-    emitDistinctChangesOnly: true,
-    descendants: true,
-  })
+  @ContentChildren(NgtEffectController, { descendants: true })
   set effectControllers(v: QueryList<NgtEffectController>) {
     this.effectComposerStore.updaters.setEffects(
       v.toArray().map((item) => item.effect)
