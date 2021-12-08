@@ -1,3 +1,19 @@
+## [2.2.0](https://github.com/nartc/angular-three/compare/2.1.0...2.2.0) (2021-12-08)
+
+
+### Features
+
+* **core:** add LOD ([680986d](https://github.com/nartc/angular-three/commit/680986d38d8ca0f47e9c229b75fc40b3d272deec))
+* **soba:** add Detailed ([326d616](https://github.com/nartc/angular-three/commit/326d616b7e146de7a629fba11f6b5a12ceebcf2f)), closes [#26](https://github.com/nartc/angular-three/issues/26)
+* **soba:** provide NgtSobaExtender on soba shapes ([990dea2](https://github.com/nartc/angular-three/commit/990dea2ac41b37305e15fd57c0dddd9ee4ab7143))
+
+
+### Bug Fixes
+
+* **cannon:** add descendants true to PhysicBodyController content children query ([6397a3e](https://github.com/nartc/angular-three/commit/6397a3e903504a6961ad60f8df6ff160b3190ffe))
+* **core:** add descendants to NgtBone content children query ([eb057cc](https://github.com/nartc/angular-three/commit/eb057cc8fde23aa301e879e7f2f1ff7553a12ea0))
+* **postprocessing:** add descendants to NgtEffectController Content Children query ([8ac560e](https://github.com/nartc/angular-three/commit/8ac560e3862cce3013013958a2847409ad44de9b))
+
 ## [2.1.0](https://github.com/nartc/angular-three/compare/2.0.6...2.1.0) (2021-12-07)
 
 
