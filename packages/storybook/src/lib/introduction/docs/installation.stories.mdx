@@ -42,7 +42,7 @@ npm install @angular-three/core
 yarn add @angular-three/core
 ```
 
-#### `peerDependencies`
+Manual installation also requires that the following `peerDependencies` are installed. You will need to install the THREE.js library and its types:
 
 ```shell
 npm install three@0.134
@@ -54,11 +54,15 @@ yarn add -D @types/three@0.134
 
 > NGT will always try to stay on a version of THREE.js that has the corresponding typing definitions for.
 
+You will also need to manually install `@ngrx/component-store`:
+
 ```shell
 npm install @ngrx/component-store
 # or yarn
 yarn add @ngrx/component-store
 ```
+
+**Why?**
 
 > `@ngrx/component-store` is extremely lightweight. It is also well-tested. I decided to keep it as a peerDependency because the consumers can actually make use of `@ngrx/component-store` if they find a need for it. After all, it's just a **Subject-as-a-Service**, but supercharged. The consumers will definitely gain more than what they have to pay for `@ngrx/component-store`.
 
