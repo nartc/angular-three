@@ -71,10 +71,7 @@ export class NgtSkeleton implements AfterContentInit {
   @Input() boneInverses?: NgtMatrix4[];
   @Output() ready = new EventEmitter();
 
-  @ContentChildren(NgtBone, {
-    emitDistinctChangesOnly: true,
-    descendants: true,
-  })
+  @ContentChildren(NgtBone, { descendants: true })
   bones?: QueryList<NgtBone>;
 
   #skeleton?: THREE.Skeleton;
