@@ -12,7 +12,8 @@
     "storybook:build": "nx storybook storybook:build-storybook",
     "build": "nx run-many --target=build --projects=core,cannon,soba,postprocessing",
     "postbuild": "cp -R packages/cannon/src/lib/utils dist/packages/cannon/fesm2015 & cp -R packages/cannon/src/lib/utils dist/packages/cannon/fesm2020 & cp -R packages/cannon/src/lib/utils dist/packages/cannon/esm2020/lib",
-    "publish": "nx run-many --target=publish --all --parallel"
+    "publish": "nx run-many --target=publish --all --parallel",
+    "serve:demo": "nx serve demo"
   },
   "private": true,
   "dependencies": {
