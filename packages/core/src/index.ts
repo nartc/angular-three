@@ -8,6 +8,8 @@ export * from './lib/vector/vector.pipe';
 export * from './lib/color/color.pipe';
 export * from './lib/math/math.pipe';
 
+export * from './lib/repeat/repeat.directive';
+
 export * from './lib/controllers/controller';
 export * from './lib/controllers/object-3d.controller';
 export * from './lib/controllers/material-geometry.controller';
