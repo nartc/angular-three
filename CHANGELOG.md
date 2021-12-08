@@ -1,3 +1,10 @@
+### [2.4.1](https://github.com/nartc/angular-three/compare/2.4.0...2.4.1) (2021-12-08)
+
+
+### Bug Fixes
+
+* **core:** rerun generator ([d5495fd](https://github.com/nartc/angular-three/commit/d5495fdba60ed09c7b3d38318fec33b42d4d86d3))
+
 ## [2.4.0](https://github.com/nartc/angular-three/compare/2.3.0...2.4.0) (2021-12-08)
 
 
