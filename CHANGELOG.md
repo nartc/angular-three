@@ -1,3 +1,16 @@
+### [2.4.2](https://github.com/nartc/angular-three/compare/2.4.1...2.4.2) (2021-12-08)
+
+
+### Bug Fixes
+
+* **core:** try disabling object3d controller ([1d78075](https://github.com/nartc/angular-three/commit/1d780753a87eb8115558b01afef200efc9f2be0d))
+
+
+### Documentations
+
+* add [@joshuamorony](https://github.com/joshuamorony) as a contributor ([a956e87](https://github.com/nartc/angular-three/commit/a956e87b73135122fc3ffb47806d69d1946eaf90))
+* **storybook:** create clear distinction between ng add and manual installation ([#30](https://github.com/nartc/angular-three/issues/30)) ([cd65b25](https://github.com/nartc/angular-three/commit/cd65b253a4e10be107fe373a593631d35996b1b6))
+
 ### [2.4.1](https://github.com/nartc/angular-three/compare/2.4.0...2.4.1) (2021-12-08)
 
 

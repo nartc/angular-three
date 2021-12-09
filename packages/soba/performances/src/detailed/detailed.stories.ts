@@ -36,19 +36,28 @@ export const Default = () => ({
     },
   },
   template: `
-    <ngt-soba-detailed [distances]='[0, 50, 150]'>
+    <ngt-soba-detailed [distances]='[50, 100, 150, 200, 250]'>
 
-      <ngt-soba-icosahedron [args]='[10, 3]'>
-        <ngt-mesh-basic-material [parameters]='{color: "hotpink", wireframe: true}'></ngt-mesh-basic-material>
+      <ngt-soba-icosahedron [disabled]='true' [args]='[10, 10]' [scale]='[5, 5, 5]'>
+        <ngt-mesh-basic-material [parameters]='{color: "turquoise", wireframe: true}'></ngt-mesh-basic-material>
       </ngt-soba-icosahedron>
 
-      <ngt-soba-icosahedron [args]='[10, 2]'>
+      <ngt-soba-icosahedron [disabled]='true' [args]='[10, 5]' [scale]='[5, 5, 5]'>
         <ngt-mesh-basic-material [parameters]='{color: "lightgreen", wireframe: true}'></ngt-mesh-basic-material>
       </ngt-soba-icosahedron>
 
-      <ngt-soba-icosahedron [args]='[10, 1]'>
+      <ngt-soba-icosahedron [disabled]='true' [args]='[10, 3]' [scale]='[5, 5, 5]'>
         <ngt-mesh-basic-material [parameters]='{color: "lightblue", wireframe: true}'></ngt-mesh-basic-material>
       </ngt-soba-icosahedron>
+
+      <ngt-soba-icosahedron [disabled]='true' [args]='[10, 2]' [scale]='[5, 5, 5]'>
+        <ngt-mesh-basic-material [parameters]='{color: "hotpink", wireframe: true}'></ngt-mesh-basic-material>
+      </ngt-soba-icosahedron>
+
+      <ngt-soba-icosahedron [disabled]='true' [args]='[10, 1]' [scale]='[5, 5, 5]'>
+        <ngt-mesh-basic-material [parameters]='{color: "orange", wireframe: true}'></ngt-mesh-basic-material>
+      </ngt-soba-icosahedron>
+
 
     </ngt-soba-detailed>
 

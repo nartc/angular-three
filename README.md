@@ -19,11 +19,11 @@ This package, while stable, is still in active development.
 
 ### Peer Dependencies
 
-- `three@0.134`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js** is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.134`
+- `three@0.135`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js** is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.135`
   - Make sure to also have `@types/three` installed as well
 
 ```bash
-npm install -E three@0.134
+npm install -E three@0.135
 npm install -DE @types/three
 ```
 
@@ -50,8 +50,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://nartc.me/"><img src="https://avatars.githubusercontent.com/u/25516557?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chau Tran</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=nartc" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/barbados-clemens"><img src="https://avatars.githubusercontent.com/u/23272162?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Caleb Ukle</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=barbados-clemens" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.joshmorony.com/"><img src="https://avatars.githubusercontent.com/u/2578009?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joshua Morony</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=joshuamorony" title="Documentation">📖</a></td>
   </tr>
 </table>
 

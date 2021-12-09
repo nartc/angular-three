@@ -6,6 +6,7 @@ import { CompoundBodyComponentModule } from './compound-body/compound-body.compo
 import { InstancesComponentModule } from './instances/instances.component';
 import { KeenComponentModule } from './keen-bloom/keen-bloom.component';
 import { KinematicCubeComponentModule } from './kinematic-cube/kinematic-cube.component';
+import { LevelOfDetailsModule } from './level-of-details/level-of-details.component';
 import { SimpleCubeComponentModule } from './simple-cube.component';
 
 @NgModule({
@@ -17,6 +18,7 @@ import { SimpleCubeComponentModule } from './simple-cube.component';
     CompoundBodyComponentModule,
     KeenComponentModule,
     InstancesComponentModule,
+    LevelOfDetailsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

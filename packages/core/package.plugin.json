@@ -1,6 +1,6 @@
 {
   "name": "@angular-three/core",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "publishConfig": {
     "access": "public"
   },
@@ -9,7 +9,7 @@
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",
     "@ngrx/component-store": "^13.0.0",
-    "three": "0.134.0"
+    "three": "0.135.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

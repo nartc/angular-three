@@ -159,40 +159,44 @@ export class NgtObject3dController extends Controller implements OnDestroy {
       if (this.object3d) {
         this.#applyCustomProps();
 
-        const observedEvents = supportedEvents.reduce(
-          (result, event) => {
-            if (this.objectInputsController[event].observed) {
-              result.handlers[event] = this.#eventNameToHandler(event);
-              result.eventCount += 1;
+        if (!this.disabled) {
+          const observedEvents = supportedEvents.reduce(
+            (result, event) => {
+              if (this.objectInputsController[event].observed) {
+                result.handlers[event] = this.#eventNameToHandler(event);
+                result.eventCount += 1;
+              }
+              return result;
+            },
+            { handlers: {}, eventCount: 0 } as {
+              handlers: NgtEventHandlers;
+              eventCount: number;
             }
-            return result;
-          },
-          { handlers: {}, eventCount: 0 } as {
-            handlers: NgtEventHandlers;
-            eventCount: number;
+          );
+
+          // setup __ngt instance
+          applyProps(this.object3d, {
+            __ngt: {
+              stateGetter: () => this.store.getImperativeState(),
+              eventsStateGetter: () => this.eventsStore.getImperativeState(),
+              handlers: observedEvents.handlers,
+              eventCount: observedEvents.eventCount,
+              linear: this.store.getImperativeState().linear,
+            } as NgtInstanceInternal,
+          });
+
+          // add as an interaction if there are events observed
+          if (observedEvents.eventCount > 0) {
+            this.eventsStore.addInteraction(this.object3d);
           }
-        );
 
-        // setup __ngt instance
-        applyProps(this.object3d, {
-          __ngt: {
-            stateGetter: () => this.store.getImperativeState(),
-            eventsStateGetter: () => this.eventsStore.getImperativeState(),
-            handlers: observedEvents.handlers,
-            eventCount: observedEvents.eventCount,
-            linear: this.store.getImperativeState().linear,
-          } as NgtInstanceInternal,
-        });
+          this.instancesStore.saveObject(
+            this.object3d as unknown as NgtInstance
+          );
 
-        // add as an interaction if there are events observed
-        if (observedEvents.eventCount > 0) {
-          this.eventsStore.addInteraction(this.object3d);
-        }
-
-        this.instancesStore.saveObject(this.object3d as unknown as NgtInstance);
-
-        if (this.objectInputsController.appendMode !== 'none') {
-          this.#appendToParent();
+          if (this.objectInputsController.appendMode !== 'none') {
+            this.#appendToParent();
+          }
         }
 
         this.#objectReady();
