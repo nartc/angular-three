@@ -19,7 +19,6 @@ import {
 
 @Component({
   selector: 'ngt-effect-composer',
-  exportAs: 'ngtEffectComposer',
   template: `
     <ngt-group>
       <ng-content></ng-content>
