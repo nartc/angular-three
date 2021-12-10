@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgtCanvasInputsState } from '../models';
-import { EnhancedRxState } from './enhanced-component-store';
+import { EnhancedRxState } from './enhanced-rx-state';
 
 @Injectable()
 export class NgtCanvasInputsStore extends EnhancedRxState<NgtCanvasInputsState> {

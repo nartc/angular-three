@@ -77,7 +77,7 @@ export class NgtSobaFlyControls
       });
 
       return () => {
-        this.animationFrameStore.unregister(animationUuid);
+        this.animationFrameStore.actions.unsubscriberUuid(animationUuid);
       };
     });
   }

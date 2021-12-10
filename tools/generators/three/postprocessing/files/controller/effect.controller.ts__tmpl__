@@ -4,6 +4,7 @@ import {
   Controller,
   createControllerProviderFactory,
   EnhancedRxState,
+  getActions,
 } from '@angular-three/core';
 import {
   Directive,
@@ -40,8 +41,7 @@ interface NgtEffectStoreState {
 
 @Injectable()
 export class NgtEffectStore extends EnhancedRxState<NgtEffectStoreState> {
-  #init$ = new Subject<void>();
-  init = this.#init$.next.bind(this.#init$);
+  actions = getActions<{ init: void }>();
 
   constructor(
     @Optional()
@@ -63,9 +63,9 @@ export class NgtEffectStore extends EnhancedRxState<NgtEffectStoreState> {
       effect: undefined,
     });
 
-    this.connect('effect', this.#init$, (state) => new effectType(state.options));
+    this.connect('effect', this.actions.init$, (state) => new effectType(state.options));
 
-    this.hold(this.#init$, () => {
+    this.hold(this.actions.init$, () => {
       const { blendFunction, opacity, effect } = this.get();
       if (effect) {
         effect.blendMode.blendFunction = blendFunction || defaultBlendFunction;
@@ -107,7 +107,7 @@ export class NgtEffectController extends Controller implements OnInit {
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this.effectStore.init();
+      this.effectStore.actions.init();
     });
   }
 

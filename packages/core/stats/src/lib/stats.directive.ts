@@ -51,7 +51,7 @@ export class NgtStats implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.ngZone.runOutsideAngular(() => {
       if (this.#stats) {
-        this.animationFrameStore.unregister(this.#animationUuid);
+        this.animationFrameStore.actions.unsubscriberUuid(this.#animationUuid);
         this.#stats.end();
         this.#node.removeChild(this.#stats.dom);
       }

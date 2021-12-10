@@ -1,11 +1,12 @@
 import {
   EnhancedRxState,
+  getActions,
   NgtAnimationFrameStore,
   NgtLoopService,
   NgtStore,
 } from '@angular-three/core';
 import { Injectable } from '@angular/core';
-import { noop, Subject } from 'rxjs';
+import { noop } from 'rxjs';
 import * as THREE from 'three';
 import { Buffers } from './models/buffers';
 import { IncomingWorkerMessage, WorkerFrameMessage } from './models/messages';
@@ -34,8 +35,7 @@ function apply(index: number, buffers: Buffers, object?: THREE.Object3D) {
 
 @Injectable()
 export class NgtPhysicsStore extends EnhancedRxState<NgtPhysicsStoreState> {
-  #init$ = new Subject<void>();
-  init = this.#init$.next.bind(this.#init$);
+  actions = getActions<{ init: void }>();
 
   constructor(
     private animationFrameStore: NgtAnimationFrameStore,
@@ -75,8 +75,8 @@ export class NgtPhysicsStore extends EnhancedRxState<NgtPhysicsStoreState> {
       quaternions: new Float32Array((size as number) * 4),
     }));
 
-    this.holdEffect(this.#init$, this.#initLoop.bind(this));
-    this.holdEffect(this.#init$, this.#initWorker.bind(this));
+    this.holdEffect(this.actions.init$, this.#initLoop.bind(this));
+    this.holdEffect(this.actions.init$, this.#initWorker.bind(this));
 
     this.hold(this.select('axisIndex'), (axisIndex) => {
       const worker = this.get('worker');
@@ -126,7 +126,7 @@ export class NgtPhysicsStore extends EnhancedRxState<NgtPhysicsStoreState> {
     });
 
     return () => {
-      this.animationFrameStore.unregister(animationUuid);
+      this.animationFrameStore.actions.unsubscriberUuid(animationUuid);
     };
   }
 

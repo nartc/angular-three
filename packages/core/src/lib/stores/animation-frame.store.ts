@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
 import { NgtAnimationFrameStoreState, NgtAnimationRecord } from '../models';
 import { makeId } from '../utils/make-id';
-import { EnhancedRxState } from './enhanced-component-store';
+import { EnhancedRxState, getActions } from './enhanced-rx-state';
 
 @Injectable()
 export class NgtAnimationFrameStore extends EnhancedRxState<NgtAnimationFrameStoreState> {
-  #init$ = new Subject();
-  init = this.#init$.next.bind(this.#init$);
-
-  #animationRecord$ = new Subject<NgtAnimationRecord & { uuid: string }>();
+  actions = getActions<{
+    animationRecord: NgtAnimationRecord & { uuid: string };
+    unsubscriberUuid: string;
+  }>();
 
   register(animationRecord: NgtAnimationRecord) {
     const uuid = animationRecord.obj?.uuid || makeId();
-    this.#animationRecord$.next({ ...animationRecord, uuid });
+    this.actions.animationRecord({ ...animationRecord, uuid });
     return uuid;
   }
-
-  #subscriberUuid$ = new Subject<string>();
-  unregister = this.#subscriberUuid$.next.bind(this.#subscriberUuid$);
 
   constructor() {
     super();
@@ -30,8 +26,8 @@ export class NgtAnimationFrameStore extends EnhancedRxState<NgtAnimationFrameSto
       const hasPriority = subscribers.some(({ priority }) => !!priority);
       this.set({ hasPriority, subscribers });
     });
-    this.hold(this.#animationRecord$, this.#register.bind(this));
-    this.hold(this.#subscriberUuid$, this.#unregister.bind(this));
+    this.hold(this.actions.animationRecord$, this.#register.bind(this));
+    this.hold(this.actions.unsubscriberUuid$, this.#unregister.bind(this));
   }
 
   #register({

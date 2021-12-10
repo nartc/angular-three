@@ -26,7 +26,7 @@ import { NgtResize } from './resize/resize.service';
 import { NgtLoopService } from './services/loop.service';
 import { NgtAnimationFrameStore } from './stores/animation-frame.store';
 import { NgtCanvasInputsStore } from './stores/canvas-inputs.store';
-import { EnhancedRxState } from './stores/enhanced-component-store';
+import { EnhancedRxState } from './stores/enhanced-rx-state';
 import { NgtEventsStore } from './stores/events.store';
 import { NgtPerformanceStore } from './stores/performance.store';
 import { NgtStore } from './stores/store';
@@ -124,7 +124,7 @@ export class NgtCanvas extends EnhancedRxState implements OnInit {
 
   @ViewChild('rendererCanvas')
   set rendererCanvas(v: ElementRef<HTMLCanvasElement>) {
-    this.store.setCanvasElement(v.nativeElement);
+    this.store.actions.canvasElement(v.nativeElement);
   }
 
   constructor(
@@ -155,7 +155,7 @@ export class NgtCanvas extends EnhancedRxState implements OnInit {
       if (ready) {
         this.ngZone.runOutsideAngular(() => {
           const state = this.store.get();
-          this.eventsStore.setElement(state.renderer.domElement);
+          this.eventsStore.actions.element(state.renderer.domElement);
           this.loopService.invalidate(state);
           this.created.emit(state as NgtCreatedState);
         });

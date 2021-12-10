@@ -36,7 +36,7 @@ export * from './lib/resize/tokens';
 export * from './lib/resize/resize.service';
 export * from './lib/performance/tokens';
 
-export * from './lib/stores/enhanced-component-store';
+export * from './lib/stores/enhanced-rx-state';
 export * from './lib/stores/store';
 export * from './lib/stores/canvas-inputs.store';
 export * from './lib/stores/performance.store';

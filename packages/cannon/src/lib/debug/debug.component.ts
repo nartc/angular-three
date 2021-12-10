@@ -40,7 +40,7 @@ export class NgtCannonDebug implements OnInit {
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this.cannonDebugStore.init();
+      this.cannonDebugStore.actions.init();
     });
   }
 

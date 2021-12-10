@@ -163,7 +163,7 @@ export class NgtEffectComposerStore extends EnhancedRxState<NgtEffectComposerSta
           });
         });
         return () => {
-          animationFrameStore.unregister(animationUuid);
+          animationFrameStore.actions.unsubscriberUuid(animationUuid);
         };
       }
     );

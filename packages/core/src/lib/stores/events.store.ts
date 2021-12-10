@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { noop, Subject } from 'rxjs';
+import { noop } from 'rxjs';
 import * as THREE from 'three';
 import {
   NgtDomEvent,
@@ -9,7 +9,7 @@ import {
   UnknownRecord,
 } from '../models';
 import { createEvents } from '../utils/events';
-import { EnhancedRxState } from './enhanced-component-store';
+import { EnhancedRxState, getActions } from './enhanced-rx-state';
 import { NgtStore } from './store';
 
 const names = {
@@ -27,8 +27,7 @@ const names = {
 
 @Injectable()
 export class NgtEventsStore extends EnhancedRxState<NgtEventsStoreState> {
-  #element$ = new Subject<HTMLElement>();
-  setElement = this.#element$.next.bind(this.#element$);
+  actions = getActions<{ element: HTMLElement }>();
 
   constructor(private store: NgtStore, private ngZone: NgZone) {
     super();
@@ -64,7 +63,7 @@ export class NgtEventsStore extends EnhancedRxState<NgtEventsStoreState> {
         ) as NgtEventsStoreState['handlers'],
       });
 
-      this.holdEffect(this.#element$, this.#connect.bind(this));
+      this.holdEffect(this.actions.element$, this.#connect.bind(this));
     });
   }
 

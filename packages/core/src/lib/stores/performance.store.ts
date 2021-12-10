@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { clearTimeout, setTimeout } from '@rx-angular/cdk/zone-less';
 import { NgtPerformance } from '../models';
-import { EnhancedRxState } from './enhanced-component-store';
+import { EnhancedRxState } from './enhanced-rx-state';
 import { NgtStore } from './store';
 
 let performanceTimeout: ReturnType<typeof setTimeout> | undefined = undefined;

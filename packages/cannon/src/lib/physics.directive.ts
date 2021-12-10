@@ -68,7 +68,7 @@ export class NgtPhysics {
 
   constructor(private physicsStore: NgtPhysicsStore, ngZone: NgZone) {
     ngZone.runOutsideAngular(() => {
-      physicsStore.init();
+      physicsStore.actions.init();
     });
   }
 }

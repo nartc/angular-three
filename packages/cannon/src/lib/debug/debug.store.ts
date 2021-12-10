@@ -1,9 +1,12 @@
-import { EnhancedRxState, NgtAnimationFrameStore } from '@angular-three/core';
+import {
+  EnhancedRxState,
+  getActions,
+  NgtAnimationFrameStore,
+} from '@angular-three/core';
 import { Injectable } from '@angular/core';
 import { Vec3 } from 'cannon-es';
 import cannonDebugger from 'cannon-es-debugger';
 import { Quaternion as CQuaternion } from 'math/Quaternion';
-import { Subject } from 'rxjs';
 import * as THREE from 'three';
 import { BodyProps, BodyShapeType } from '../models/body';
 import { NgtPhysicsStore } from '../physics.store';
@@ -18,9 +21,7 @@ const q = new THREE.Quaternion();
 @Injectable()
 export class NgtCannonDebugStore extends EnhancedRxState<NgtCannonDebugStoreState> {
   #scene = new THREE.Scene();
-
-  #init$ = new Subject<void>();
-  init = this.#init$.next.bind(this.#init$);
+  actions = getActions<{ init: void }>();
 
   constructor(
     physicsStore: NgtPhysicsStore,
@@ -40,7 +41,7 @@ export class NgtCannonDebugStore extends EnhancedRxState<NgtCannonDebugStoreStat
       refs: {},
     });
 
-    this.holdEffect(this.#init$, () => {
+    this.holdEffect(this.actions.init$, () => {
       let instance: NgtCannonDebugApi;
       let lastBodies = 0;
 
@@ -70,7 +71,7 @@ export class NgtCannonDebugStore extends EnhancedRxState<NgtCannonDebugStoreStat
       });
 
       return () => {
-        animationFrameStore.unregister(animationUuid);
+        animationFrameStore.actions.unsubscriberUuid(animationUuid);
       };
     });
   }

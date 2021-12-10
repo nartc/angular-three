@@ -1,6 +1,6 @@
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
-import { map, Observable, Subject } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import * as THREE from 'three';
 import {
   NgtInstance,
@@ -17,7 +17,7 @@ import { applyProps } from '../utils/apply-props';
 import { calculateDpr } from '../utils/calculate-dpr';
 import { isOrthographicCamera } from '../utils/is-orthographic';
 import { NgtCanvasInputsStore } from './canvas-inputs.store';
-import { EnhancedRxState } from './enhanced-component-store';
+import { EnhancedRxState, getActions } from './enhanced-rx-state';
 
 const position = new THREE.Vector3();
 const defaultTarget = new THREE.Vector3();
@@ -34,8 +34,7 @@ export class NgtStore extends EnhancedRxState<NgtState> {
 
   #dimensions$ = this.select(selectSlice(['size', 'viewport']));
 
-  #canvasElement$ = new Subject<HTMLCanvasElement>();
-  setCanvasElement = this.#canvasElement$.next.bind(this.#canvasElement$);
+  actions = getActions<{ canvasElement: HTMLCanvasElement }>();
 
   constructor(
     @Inject(NGT_PERFORMANCE_OPTIONS) performance: NgtPerformance,
@@ -114,7 +113,7 @@ export class NgtStore extends EnhancedRxState<NgtState> {
     }));
 
     this.hold(this.#dimensions$, this.#updateDimensions.bind(this));
-    this.holdEffect(this.#canvasElement$, this.#init.bind(this));
+    this.holdEffect(this.actions.canvasElement$, this.#init.bind(this));
   }
 
   #init(canvasElement: HTMLCanvasElement) {

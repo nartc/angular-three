@@ -115,7 +115,7 @@ export class NgtSobaOrbitControls
         });
       }
       return () => {
-        this.animationFrameStore.unregister(animationUuid);
+        this.animationFrameStore.actions.unsubscriberUuid(animationUuid);
       };
     });
 

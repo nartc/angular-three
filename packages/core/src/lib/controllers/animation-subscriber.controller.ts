@@ -46,7 +46,7 @@ export class NgtAnimationSubscriberController
 
   ngOnDestroy() {
     if (this.#subscriber) {
-      this.animationFrameStore.unregister(this.#subscriber.uuid);
+      this.animationFrameStore.actions.unsubscriberUuid(this.#subscriber.uuid);
     }
   }
 

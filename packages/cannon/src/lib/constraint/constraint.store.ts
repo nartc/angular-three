@@ -1,6 +1,5 @@
-import { EnhancedRxState } from '@angular-three/core';
+import { EnhancedRxState, getActions } from '@angular-three/core';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { Subject } from 'rxjs';
 import * as THREE from 'three';
 import { NgtPhysicBodyController } from '../body/body.controller';
 import { ConstraintTypes } from '../models/constraints';
@@ -15,8 +14,7 @@ export interface NgtPhysicConstraintStoreState {
 @Injectable()
 export class NgtPhysicConstraintStore extends EnhancedRxState<NgtPhysicConstraintStoreState> {
   #uuid = THREE.MathUtils.generateUUID();
-  #init$ = new Subject<void>();
-  init = this.#init$.next.bind(this.#init$);
+  actions = getActions<{ init: void }>();
 
   constructor(
     @Optional()
@@ -35,7 +33,7 @@ export class NgtPhysicConstraintStore extends EnhancedRxState<NgtPhysicConstrain
       );
     }
     this.set({ options: {}, bodies: [] });
-    this.holdEffect(this.#init$, () => {
+    this.holdEffect(this.actions.init$, () => {
       const { bodies, options } = this.get();
       const worker = this.physicsStore.get('worker');
       const [bodyA, bodyB] = bodies;
