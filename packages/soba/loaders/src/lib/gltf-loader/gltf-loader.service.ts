@@ -41,7 +41,7 @@ function _extensions(
 }
 
 @Injectable({ providedIn: 'root' })
-export class GLTFLoaderService {
+export class NgtGLTFLoaderService {
   constructor(private loaderService: NgtLoaderService) {}
 
   load<TInput extends string | string[]>(

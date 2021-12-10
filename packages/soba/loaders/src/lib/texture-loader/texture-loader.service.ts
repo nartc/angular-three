@@ -7,7 +7,7 @@ export const IsObject = (url: any): url is Record<string, string> =>
   url === Object(url) && !Array.isArray(url) && typeof url !== 'function';
 
 @Injectable({ providedIn: 'root' })
-export class TextureLoaderService {
+export class NgtTextureLoaderService {
   constructor(
     private store: NgtStore,
     private loaderService: NgtLoaderService
