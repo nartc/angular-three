@@ -1,3 +1,28 @@
+## [2.6.0](https://github.com/nartc/angular-three/compare/2.5.0...2.6.0) (2021-12-10)
+
+
+### Features
+
+* **core:** add raycast to object3d ([aec28bd](https://github.com/nartc/angular-three/commit/aec28bd7406ae06db7caeffa4a2b72f980a62a52))
+* **soba:** add Loader component ([58ff9b8](https://github.com/nartc/angular-three/commit/58ff9b80a04eed9930b2de2c2708902fdf3f408b))
+* **soba:** add progress service ([ed0dedb](https://github.com/nartc/angular-three/commit/ed0dedbec93a6dfb288d85e897c8456e8aff824c))
+
+
+### Bug Fixes
+
+* **core:** ensure CustomRenderer works with other stuffs like Scene as well ([293ce31](https://github.com/nartc/angular-three/commit/293ce318624a1afc7ca471aecbede391d78e330d))
+* **core:** ensure uuid is present before adding to animations ([52ffae8](https://github.com/nartc/angular-three/commit/52ffae8226b13451fa5aa4904f761c3d29761398))
+* **core:** remove comment and return the clean up fn in AudioListener ([7f33803](https://github.com/nartc/angular-three/commit/7f33803734980b735acf1fcbfa75441120d96fdd))
+* **core:** rename animationSubscriber#subscribe to prepare for better distinction with RxJs ([b1160e6](https://github.com/nartc/angular-three/commit/b1160e663c524bebd8df2ab3c9c96104b092e2bf))
+* **core:** use getActions from rx-state ([0a8b081](https://github.com/nartc/angular-three/commit/0a8b0811a20f68c89e0be392acb1b2e7aa8314a8))
+* **soba:** rename loaders to be prefixed with Ngt ([b844f41](https://github.com/nartc/angular-three/commit/b844f4189a3b36688b309eeca20889fb0c6ff770))
+
+
+### Documentations
+
+* **demo:** adjust demo ([670526a](https://github.com/nartc/angular-three/commit/670526accf4ed400a0388c3adc1a5fb0fbf12ac5))
+* **storybook:** add Loader story ([5f57604](https://github.com/nartc/angular-three/commit/5f576040f2825393568f800a1f3b8c556c7fa6c9))
+
 ## [2.5.0](https://github.com/nartc/angular-three/compare/2.4.2...2.5.0) (2021-12-10)
 
 
