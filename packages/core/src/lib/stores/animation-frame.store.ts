@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { noop } from 'rxjs';
 import { NgtAnimationFrameStoreState, NgtAnimationRecord } from '../models';
 import { makeId } from '../utils/make-id';
 import { EnhancedRxState, getActions } from './enhanced-rx-state';
@@ -30,15 +31,19 @@ export class NgtAnimationFrameStore extends EnhancedRxState<NgtAnimationFrameSto
     this.hold(this.actions.unsubscriberUuid$, this.#unregister.bind(this));
   }
 
-  #register({
-    uuid,
-    ...animationRecord
-  }: NgtAnimationRecord & { uuid: string }) {
-    this.set((state) => {
-      return {
-        animations: { ...state.animations, [uuid]: animationRecord },
-      };
-    });
+  #register(
+    { uuid, ...animationRecord }: NgtAnimationRecord & { uuid: string } = {
+      uuid: '',
+      callback: noop,
+    }
+  ) {
+    if (uuid) {
+      this.set((state) => {
+        return {
+          animations: { ...state.animations, [uuid]: animationRecord },
+        };
+      });
+    }
 
     return (
       prevRecord: (NgtAnimationRecord & { uuid: string }) | undefined,
