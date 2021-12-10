@@ -5,6 +5,7 @@ import {
 } from '@angular-three/core/lights';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
+import { NgtSobaLoaderModule } from '@angular-three/soba/loaders';
 
 export function setupCanvas({
   cameraPosition = [-5, 5, 5],
@@ -12,12 +13,14 @@ export function setupCanvas({
   lights = true,
   controls = true,
   black = false,
+  loader = false,
 }: Partial<{
   cameraPosition: [number, number, number];
   cameraFov: number;
   controls: boolean;
   lights: boolean;
   black: boolean;
+  loader: boolean;
 }> = {}) {
   return (story: string) => `
     <ngt-canvas [shadows]='true' [camera]='{position: [${cameraPosition}], fov: ${cameraFov}}' (created)='$event.renderer.setClearAlpha(${
@@ -34,6 +37,7 @@ export function setupCanvas({
 
       ${story}
     </ngt-canvas>
+    <ngt-soba-loader *ngIf='${loader}'></ngt-soba-loader>
   `;
 }
 
@@ -43,4 +47,5 @@ export const setupCanvasModules = [
   NgtAmbientLightModule,
   NgtPointLightModule,
   NgtSobaOrbitControlsModule,
+  NgtSobaLoaderModule,
 ];

@@ -13,7 +13,7 @@ import {
 } from '@angular-three/postprocessing/effects';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import {
-  GLTFLoaderService,
+  NgtGLTFLoaderService,
   NgtSobaLoaderModule,
 } from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
@@ -73,7 +73,7 @@ export class KeenBloomComponent {}
 export class KeenComponent {
   keen$ = this.gltfLoader.load('assets/scene.gltf');
 
-  constructor(private gltfLoader: GLTFLoaderService) {}
+  constructor(private gltfLoader: NgtGLTFLoaderService) {}
 
   onGroupAnimate(group: THREE.Group) {
     group.rotation.z += 0.01;
