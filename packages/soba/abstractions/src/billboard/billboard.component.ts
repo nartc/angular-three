@@ -19,7 +19,6 @@ import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-soba-billboard',
-  exportAs: 'ngtSobaBillboard',
   template: `
     <ngt-group
       #ngtGroup="ngtGroup"
