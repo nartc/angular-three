@@ -12,7 +12,10 @@ import {
   NgtNoiseModule,
 } from '@angular-three/postprocessing/effects';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
-import { GLTFLoaderService } from '@angular-three/soba/loaders';
+import {
+  GLTFLoaderService,
+  NgtSobaLoaderModule,
+} from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
@@ -39,6 +42,7 @@ import * as THREE from 'three';
         <ngt-noise [options]="{ premultiply: true }"></ngt-noise>
       </ngt-effect-composer>
     </ngt-canvas>
+    <ngt-soba-loader></ngt-soba-loader>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -96,6 +100,7 @@ export class KeenComponent {
     NgtBloomModule,
     NgtStatsModule,
     NgtNoiseModule,
+    NgtSobaLoaderModule,
   ],
 })
 export class KeenComponentModule {}
