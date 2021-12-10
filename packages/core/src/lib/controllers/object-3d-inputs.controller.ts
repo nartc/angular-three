@@ -145,6 +145,7 @@ export class NgtObject3dInputsController extends Controller {
   @Input() visible = true;
   @Input() matrixAutoUpdate = true;
   @Input() dispose?: (() => void) | null;
+  @Input() raycast?: THREE.Object3D['raycast'];
 
   @Input() appendMode: 'immediate' | 'root' | 'none' = 'immediate';
   @Input() appendTo?: THREE.Object3D;
@@ -176,6 +177,7 @@ export class NgtObject3dInputsController extends Controller {
       'color',
       'userData',
       'dispose',
+      'raycast',
       'castShadow',
       'receiveShadow',
       'visible',
@@ -212,6 +214,7 @@ export class NgtObject3dInputsController extends Controller {
       color: this.color,
       userData: this.userData,
       dispose: this.dispose,
+      raycast: this.raycast,
       castShadow: this.castShadow,
       receiveShadow: this.receiveShadow,
       visible: this.visible,

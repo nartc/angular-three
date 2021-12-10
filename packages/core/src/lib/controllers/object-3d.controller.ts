@@ -315,6 +315,10 @@ export class NgtObject3dController extends Controller implements OnDestroy {
         customProps['dispose'] = this.objectInputsController.dispose;
       }
 
+      if (this.objectInputsController.raycast) {
+        customProps['raycast'] = this.objectInputsController.raycast;
+      }
+
       this.objectInputsController.change$.pipe(take(1)).subscribe((changes) => {
         if (changes) {
           for (const [inputName, inputChange] of Object.entries(changes)) {
@@ -329,6 +333,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
                 'userData',
                 'color',
                 'dispose',
+                'raycast',
                 'castShadow',
                 'receiveShadow',
                 'visible',
