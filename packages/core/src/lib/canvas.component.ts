@@ -33,7 +33,6 @@ import { NgtStore } from './stores/store';
 
 @Component({
   selector: 'ngt-canvas',
-  exportAs: 'ngtCanvas',
   template: ` <canvas #rendererCanvas></canvas> `,
   styles: [
     `
