@@ -2776,6 +2776,20 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@rx-angular/cdk@1.0.0-alpha.11":
+  version "1.0.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/@rx-angular/cdk/-/cdk-1.0.0-alpha.11.tgz#edefb5a994100a9937e86165e9149ed19ff82be2"
+  integrity sha512-seVkesI3Ntz0b6Q2ujkwjkGN5B9Qa3LU/Rhnd+IeZhaUdFqdYHBgT5cn3IQ3S+32ZcFSuILngQ8sMyr+vm3GMg==
+  dependencies:
+    tslib "^2.0.0"
+
+"@rx-angular/state@1.4.6":
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/@rx-angular/state/-/state-1.4.6.tgz#a32cc064fc50ba6f7fa613b5be1cfba57300f375"
+  integrity sha512-ylXJbk5Q3SMnDSOxiRNin+2XgobKq/8tk33PaitQPeHC8oSqx/yPpySzw9b2DBmJMjaDSFgGov30RwuwfPCY3A==
+  dependencies:
+    tslib "^2.0.0"
+
 "@schematics/angular@13.0.4":
   version "13.0.4"
   resolved "https://registry.yarnpkg.com/@schematics/angular/-/angular-13.0.4.tgz#e7efd26bf24abc359c902c4576451f988cc8582a"

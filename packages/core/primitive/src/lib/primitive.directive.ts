@@ -3,7 +3,7 @@ import {
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
 } from '@angular-three/core';
-import { Directive, Inject, Input, NgModule } from '@angular/core';
+import { Directive, Inject, Input, NgModule, NgZone } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -25,11 +25,14 @@ export class NgtPrimitive {
 
   constructor(
     @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
-    private objectController: NgtObject3dController
+    private objectController: NgtObject3dController,
+    private ngZone: NgZone
   ) {}
 
   ngOnChanges() {
-    this.objectController.init();
+    this.ngZone.runOutsideAngular(() => {
+      this.objectController.init();
+    });
   }
 }
 

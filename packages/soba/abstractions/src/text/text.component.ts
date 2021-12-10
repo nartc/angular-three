@@ -9,7 +9,6 @@ import {
   NgtCoreModule,
   NgtLoopService,
   NgtObject3dInputsController,
-  NgtStore,
   NgtVector4,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
@@ -106,18 +105,19 @@ export class NgtSobaText
     private contentMaterialController: NgtContentMaterialController,
     private elRef: ElementRef<HTMLElement>,
     private ngZone: NgZone,
-    private loopService: NgtLoopService,
-    private store: NgtStore
+    private loopService: NgtLoopService
   ) {
     super();
-    this.object = new TextMeshImpl();
+    ngZone.runOutsideAngular(() => {
+      this.object = new TextMeshImpl();
+    });
   }
 
   ngOnChanges() {
     this.ngZone.runOutsideAngular(() => {
       if (this.object) {
         this.object.sync(() => {
-          this.loopService.invalidate(this.store.getImperativeState());
+          this.loopService.invalidate();
           if (this.sync.observed) {
             this.sync.emit(this.object);
           }
@@ -127,56 +127,50 @@ export class NgtSobaText
   }
 
   ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      this.elRef.nativeElement.childNodes.forEach((childNode) => {
-        if (childNode instanceof Text) {
-          this.text += childNode.textContent;
-        }
-      });
+    this.elRef.nativeElement.childNodes.forEach((childNode) => {
+      if (childNode instanceof Text) {
+        this.text += childNode.textContent;
+      }
     });
   }
 
   ngOnDestroy() {
-    this.ngZone.runOutsideAngular(() => {
-      if (this.object) {
-        this.object.dispose();
-      }
-    });
+    if (this.object) {
+      this.object.dispose();
+    }
   }
 
   onTroikaTextReady(troikaText: TextMeshImpl) {
-    this.ngZone.runOutsideAngular(() => {
-      troikaText.text = this.text;
-      if (this.contentMaterialController.material) {
-        troikaText.material = this.contentMaterialController.material;
-      }
-      applyProps(troikaText, {
-        color: this.color,
-        fontSize: this.fontSize,
-        maxWidth: this.maxWidth,
-        lineHeight: this.lineHeight,
-        letterSpacing: this.letterSpacing,
-        textAlign: this.textAlign,
-        font: this.font,
-        anchorX: this.anchorX,
-        anchorY: this.anchorY,
-        clipRect: this.clipRect,
-        depthOffset: this.depthOffset,
-        direction: this.direction,
-        overflowWrap: this.overflowWrap,
-        whiteSpace: this.whiteSpace,
-        outlineWidth: this.outlineWidth,
-        outlineOffsetX: this.outlineOffsetX,
-        outlineOffsetY: this.outlineOffsetY,
-        outlineBlur: this.outlineBlur,
-        outlineColor: this.outlineColor,
-        outlineOpacity: this.outlineOpacity,
-        strokeWidth: this.strokeWidth,
-        strokeColor: this.strokeColor,
-        strokeOpacity: this.strokeOpacity,
-        fillOpacity: this.fillOpacity,
-        debugSDF: this.debugSDF,
-      });
+    troikaText.text = this.text;
+    if (this.contentMaterialController.material) {
+      troikaText.material = this.contentMaterialController.material;
+    }
+    applyProps(troikaText, {
+      color: this.color,
+      fontSize: this.fontSize,
+      maxWidth: this.maxWidth,
+      lineHeight: this.lineHeight,
+      letterSpacing: this.letterSpacing,
+      textAlign: this.textAlign,
+      font: this.font,
+      anchorX: this.anchorX,
+      anchorY: this.anchorY,
+      clipRect: this.clipRect,
+      depthOffset: this.depthOffset,
+      direction: this.direction,
+      overflowWrap: this.overflowWrap,
+      whiteSpace: this.whiteSpace,
+      outlineWidth: this.outlineWidth,
+      outlineOffsetX: this.outlineOffsetX,
+      outlineOffsetY: this.outlineOffsetY,
+      outlineBlur: this.outlineBlur,
+      outlineColor: this.outlineColor,
+      outlineOpacity: this.outlineOpacity,
+      strokeWidth: this.strokeWidth,
+      strokeColor: this.strokeColor,
+      strokeOpacity: this.strokeOpacity,
+      fillOpacity: this.fillOpacity,
+      debugSDF: this.debugSDF,
     });
   }
 }

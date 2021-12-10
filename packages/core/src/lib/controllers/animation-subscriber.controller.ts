@@ -7,7 +7,6 @@ import {
   OnDestroy,
   Output,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import * as THREE from 'three';
 import { NgtRender } from '../models';
 import { NgtAnimationFrameStore } from '../stores/animation-frame.store';
@@ -24,7 +23,7 @@ export class NgtAnimationSubscriberController
   @Input() priority = 0;
   @Output() animateReady = new EventEmitter<NgtRender>();
 
-  #animateSubscription?: Subscription;
+  #subscriber?: THREE.Object3D;
 
   constructor(
     private animationFrameStore: NgtAnimationFrameStore,
@@ -34,24 +33,21 @@ export class NgtAnimationSubscriberController
   }
 
   subscribe(obj: THREE.Object3D) {
-    this.ngZone.runOutsideAngular(() => {
-      // only subscribe to animation frame if there's an output handler
-      if (this.animateReady.observed) {
-        this.#animateSubscription = this.animationFrameStore.register({
-          obj,
-          callback: this.animateReady.emit.bind(this.animateReady),
-          priority: this.priority,
-        });
-      }
-    });
+    // only subscribe to animation frame if there's an output handler
+    if (this.animateReady.observed) {
+      this.#subscriber = obj;
+      this.animationFrameStore.register({
+        obj,
+        callback: this.animateReady.emit.bind(this.animateReady),
+        priority: this.priority,
+      });
+    }
   }
 
   ngOnDestroy() {
-    this.ngZone.runOutsideAngular(() => {
-      if (this.#animateSubscription) {
-        this.#animateSubscription.unsubscribe();
-      }
-    });
+    if (this.#subscriber) {
+      this.animationFrameStore.unregister(this.#subscriber.uuid);
+    }
   }
 
   get controller(): Controller | undefined {

@@ -1,4 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
+import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
 import { NgtAnimationFrameStoreState, NgtRender, NgtState } from '../models';
 import { NgtAnimationFrameStore } from '../stores/animation-frame.store';
 import { NgtStore } from '../stores/store';
@@ -72,12 +73,12 @@ export class NgtLoopService {
       this.#running = true;
       this.#repeat = 0;
 
-      const state = this.store.getImperativeState();
+      const state = this.store.get();
       if (state.ready && (state.frameloop === 'always' || this.#frames > 0)) {
         this.#repeat += this.render(
           timestamp,
           state,
-          this.animationFrameStore.getImperativeState()
+          this.animationFrameStore.get()
         );
       }
 
@@ -88,13 +89,13 @@ export class NgtLoopService {
     });
   }
 
-  invalidate(state: NgtState) {
+  invalidate(state: NgtState = this.store.get()) {
     if (state.vr) {
       state.renderer?.setAnimationLoop((timestamp) => {
         this.render(
           timestamp,
-          this.store.getImperativeState(),
-          this.animationFrameStore.getImperativeState()
+          this.store.get(),
+          this.animationFrameStore.get()
         );
       });
       return;

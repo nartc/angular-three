@@ -33,10 +33,8 @@ export abstract class NgtHelper<THelper extends THREE.Object3D>
     protected ngZone: NgZone
   ) {
     objectController.initFn = () => {
-      return this.ngZone.runOutsideAngular(() => {
-        this.#helper = new this.helperType(...this.#helperArgs);
-        return this.#helper;
-      });
+      this.#helper = new this.helperType(...this.#helperArgs);
+      return this.#helper;
     };
   }
 

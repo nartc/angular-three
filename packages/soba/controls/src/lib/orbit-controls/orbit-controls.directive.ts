@@ -1,12 +1,11 @@
 import {
-  EnhancedComponentStore,
+  EnhancedRxState,
   NgtAnimationFrameStore,
   NgtEventsStore,
   NgtLoopService,
   NgtPerformanceStore,
   NgtStore,
   NgtVector3,
-  tapEffect,
 } from '@angular-three/core';
 import {
   Directive,
@@ -17,7 +16,8 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Observable, Subscription, tap, withLatestFrom } from 'rxjs';
+import { selectSlice } from '@rx-angular/state';
+import { of, switchMap } from 'rxjs';
 import * as THREE from 'three';
 import { OrbitControls } from 'three-stdlib/controls/OrbitControls';
 
@@ -25,9 +25,9 @@ export interface NgtSobaOrbitControlsState {
   enableDamping: boolean;
   makeDefault: boolean;
   regress: boolean;
+  controls: OrbitControls;
   camera?: THREE.Camera;
   domElement?: HTMLElement;
-  controls?: OrbitControls;
   target?: NgtVector3;
 }
 
@@ -36,57 +36,43 @@ export interface NgtSobaOrbitControlsState {
   exportAs: 'ngtSobaOrbitControls',
 })
 export class NgtSobaOrbitControls
-  extends EnhancedComponentStore<NgtSobaOrbitControlsState>
+  extends EnhancedRxState<NgtSobaOrbitControlsState>
   implements OnInit
 {
   @Input() set target(v: NgtVector3) {
-    this.updaters.setTarget(v);
+    this.set({ target: v });
   }
 
   @Input() set camera(v: THREE.Camera) {
-    this.updaters.setCamera(v);
+    this.set({ camera: v });
   }
 
   @Input() set domElement(v: HTMLElement) {
-    this.updaters.setDomElement(v);
+    this.set({ domElement: v });
   }
 
   @Input() set regress(v: boolean) {
-    this.updaters.setRegress(v);
+    this.set({ regress: v });
   }
 
   @Input() set enableDamping(v: boolean) {
-    this.updaters.setEnableDamping(v);
+    this.set({ enableDamping: v });
   }
 
   @Input() set makeDefault(v: boolean) {
-    this.updaters.setMakeDefault(v);
+    this.set({ makeDefault: v });
   }
 
-  @Output() ready = new EventEmitter<void>();
+  @Output() ready = this.select('controls');
   @Output() change = new EventEmitter<THREE.Event>();
   @Output() start = new EventEmitter<THREE.Event>();
   @Output() end = new EventEmitter<THREE.Event>();
 
-  private animationSubscription?: Subscription;
-
-  private readonly makeDefaultParams$ = this.select(
-    this.selectors.makeDefault$,
-    this.selectors.controls$,
-    (makeDefault, controls) => ({ makeDefault, controls }),
-    { debounce: true }
+  #controlsEventsChanges$ = this.select(
+    selectSlice(['regress', 'controls', 'domElement'])
   );
 
-  private readonly controlsEffectChanges$: Observable<{
-    controls?: OrbitControls;
-    regress?: boolean;
-  }> = this.select(
-    this.selectors.regress$,
-    this.selectors.controls$,
-    this.selectors.domElement$,
-    (regress, controls, domElement) => ({ regress, controls, domElement }),
-    { debounce: true }
-  );
+  #makeDefaultParams$ = this.select(selectSlice(['makeDefault', 'controls']));
 
   constructor(
     private loopService: NgtLoopService,
@@ -96,147 +82,115 @@ export class NgtSobaOrbitControls
     private performanceStore: NgtPerformanceStore,
     private ngZone: NgZone
   ) {
-    super({
+    super();
+    this.set({
       target: undefined,
       regress: false,
       enableDamping: true,
       makeDefault: false,
       camera: undefined,
       domElement: undefined,
-      controls: undefined,
     });
   }
 
   ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      this.updaters.setCamera(this.store.getImperativeState().camera);
-      this.updaters.setDomElement(
-        typeof this.eventsStore.getImperativeState().connected !== 'boolean'
-          ? (this.eventsStore.getImperativeState().connected as HTMLElement)
-          : this.store.getImperativeState().renderer?.domElement
-      );
-      this.#setControls(this.selectors.camera$);
-      this.animationSubscription = this.animationFrameStore.register({
-        callback: () => {
-          const { controls } = this.getImperativeState();
-          if (controls && controls.enabled) {
+    this.connect('camera', this.store.select('camera'));
+    this.connect(
+      'domElement',
+      this.eventsStore.select('connected').pipe(
+        switchMap((connected) => {
+          if (typeof connected !== 'boolean') return of(connected);
+          return this.store.select('renderer', 'domElement');
+        })
+      )
+    );
+
+    this.holdEffect(this.select('controls'), (controls) => {
+      let animationUuid: string;
+      if (controls.enabled) {
+        animationUuid = this.animationFrameStore.register({
+          callback: () => {
             controls.update();
+          },
+        });
+      }
+      return () => {
+        this.animationFrameStore.unregister(animationUuid);
+      };
+    });
+
+    this.hold(this.select('camera'), (camera) => {
+      const enableDamping = this.get('enableDamping');
+      if (camera) {
+        const controls = new OrbitControls(camera);
+        controls.enableDamping = enableDamping;
+        this.set({ controls });
+      }
+    });
+
+    this.holdEffect(
+      this.#controlsEventsChanges$,
+      ({ controls, regress, domElement }) => {
+        return this.ngZone.runOutsideAngular(() => {
+          const changeCallback: (e: THREE.Event) => void = (e) => {
+            this.loopService.invalidate();
+            if (regress) {
+              this.performanceStore.regress();
+            }
+
+            if (this.change.observed) {
+              this.change.emit(e);
+            }
+          };
+          let startCallback: (e: THREE.Event) => void;
+          let endCallback: (e: THREE.Event) => void;
+
+          if (domElement) {
+            controls.connect(domElement);
           }
-        },
-        obj: null,
-      });
-      this.#setControlsEvents(this.controlsEffectChanges$);
-      this.#makeDefault(this.makeDefaultParams$);
+
+          controls.addEventListener('change', changeCallback);
+
+          if (this.start.observed) {
+            startCallback = (event: THREE.Event) => {
+              this.start.emit(event);
+            };
+            controls.addEventListener('start', startCallback);
+          }
+
+          if (this.end.observed) {
+            endCallback = (event: THREE.Event) => {
+              this.end.emit(event);
+            };
+            controls.addEventListener('end', endCallback);
+          }
+
+          return () => {
+            controls.removeEventListener('change', changeCallback);
+            if (endCallback) controls.removeEventListener('end', endCallback);
+            if (startCallback)
+              controls.removeEventListener('start', startCallback);
+            controls.dispose();
+          };
+        });
+      }
+    );
+
+    this.holdEffect(this.#makeDefaultParams$, ({ controls, makeDefault }) => {
+      const oldControls = this.store.get('controls');
+      if (makeDefault) {
+        this.store.set({ controls });
+      }
+
+      return () => {
+        this.store.set({ controls: oldControls });
+      };
     });
   }
 
-  #setControls = this.effect<THREE.Camera | undefined>((params$) =>
-    params$.pipe(
-      withLatestFrom(this.selectors.enableDamping$),
-      tap(([camera, enableDamping]) => {
-        this.ngZone.runOutsideAngular(() => {
-          if (camera) {
-            const controls = new OrbitControls(camera);
-            controls.enableDamping = enableDamping;
-            this.patchState({ controls });
-            this.ready.emit();
-          }
-        });
-      })
-    )
-  );
-
-  #setControlsEvents = this.effect<{
-    controls?: OrbitControls;
-    regress?: boolean;
-    domElement?: HTMLElement;
-  }>((changes$) =>
-    changes$.pipe(
-      tapEffect(({ controls, regress, domElement }) => {
-        const changeCallback: (e: THREE.Event) => void = (e) => {
-          this.loopService.invalidate(this.store.getImperativeState());
-          if (regress) {
-            this.performanceStore.regress();
-          }
-
-          if (this.change.observed) {
-            this.change.emit(e);
-          }
-        };
-        let startCallback: (e: THREE.Event) => void;
-        let endCallback: (e: THREE.Event) => void;
-
-        this.ngZone.runOutsideAngular(() => {
-          if (controls) {
-            if (domElement) {
-              controls.connect(domElement);
-            }
-
-            controls.addEventListener('change', changeCallback);
-
-            if (this.start.observed) {
-              startCallback = (event: THREE.Event) => {
-                this.start.emit(event);
-              };
-              controls.addEventListener('start', startCallback);
-            }
-
-            if (this.end.observed) {
-              endCallback = (event: THREE.Event) => {
-                this.end.emit(event);
-              };
-              controls.addEventListener('end', endCallback);
-            }
-          }
-        });
-
-        return () => {
-          this.ngZone.runOutsideAngular(() => {
-            if (controls) {
-              controls.removeEventListener('change', changeCallback);
-              if (endCallback) controls.removeEventListener('end', endCallback);
-              if (startCallback)
-                controls.removeEventListener('start', startCallback);
-              controls.dispose();
-            }
-          });
-        };
-      })
-    )
-  );
-
-  #makeDefault = this.effect<{
-    makeDefault: boolean;
-    controls?: OrbitControls;
-  }>((params$) =>
-    params$.pipe(
-      tapEffect(({ controls, makeDefault }) => {
-        const oldControls = this.store.getImperativeState().controls;
-        this.ngZone.runOutsideAngular(() => {
-          if (makeDefault) {
-            this.store.patchState({ controls });
-          }
-        });
-
-        return () => {
-          this.ngZone.runOutsideAngular(() => {
-            this.store.patchState({ controls: oldControls });
-          });
-        };
-      })
-    )
-  );
-
-  ngOnDestroy() {
-    if (this.animationSubscription) {
-      this.animationSubscription.unsubscribe();
-    }
-    super.ngOnDestroy();
-  }
-
   get controls() {
-    return (this.store.getImperativeState().controls ||
-      this.getImperativeState().controls) as OrbitControls;
+    return (this.store.get('controls') ||
+      this.get('controls')) as OrbitControls;
   }
 }
 

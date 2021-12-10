@@ -35,7 +35,7 @@ export class NgtPhysicBodyController
   implements AfterContentInit
 {
   @Input() set getPhysicProps(fn: GetByIndex<BodyProps> | undefined) {
-    this.physicBodyStore.updaters.setGetPhysicProps(fn);
+    this.physicBodyStore.set({ getPhysicProps: fn });
   }
 
   constructor(private physicBodyStore: NgtPhysicBodyStore, ngZone: NgZone) {
@@ -49,7 +49,7 @@ export class NgtPhysicBodyController
   }
 
   get object3d(): THREE.Object3D {
-    return this.physicBodyStore.getImperativeState().object3d as THREE.Object3D;
+    return this.physicBodyStore.get('object3d') as THREE.Object3D;
   }
 
   get api() {

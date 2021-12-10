@@ -33,17 +33,15 @@ export abstract class NgtCommonSprite<
     protected ngZone: NgZone
   ) {
     objectController.initFn = () => {
-      return this.ngZone.runOutsideAngular(() => {
-        if (this.material) {
-          this.#sprite = new this.spriteType(this.material);
-        } else if (this.materialDirective) {
-          if (this.materialDirective.material instanceof THREE.SpriteMaterial) {
-            this.#sprite = new this.spriteType(this.materialDirective.material);
-          }
+      if (this.material) {
+        this.#sprite = new this.spriteType(this.material);
+      } else if (this.materialDirective) {
+        if (this.materialDirective.material instanceof THREE.SpriteMaterial) {
+          this.#sprite = new this.spriteType(this.materialDirective.material);
         }
+      }
 
-        return this.#sprite;
-      });
+      return this.#sprite;
     };
   }
 

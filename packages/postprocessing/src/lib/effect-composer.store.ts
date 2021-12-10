@@ -1,14 +1,13 @@
 // @ts-nocheck
 import {
-  EnhancedComponentStore,
+  EnhancedRxState,
   NGT_IS_WEBGL_AVAILABLE,
   NgtAnimationFrameStore,
-  NgtSize,
   NgtStore,
-  tapEffect,
 } from '@angular-three/core';
-import { Inject, Injectable, NgZone } from '@angular/core';
-
+import { Inject, Injectable } from '@angular/core';
+import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
+import { selectSlice } from '@rx-angular/state';
 import {
   Effect,
   EffectComposer,
@@ -16,13 +15,14 @@ import {
   NormalPass,
   RenderPass,
 } from 'postprocessing';
-import { Observable, tap, withLatestFrom } from 'rxjs';
+import { combineLatest, map, startWith } from 'rxjs';
 import * as THREE from 'three';
 
 export interface NgtEffectComposerState {
   autoClear: boolean;
   multisampling: number;
   renderPriority: number;
+  composer: EffectComposer;
   depthBuffer?: boolean;
   disableNormalPass?: boolean;
   stencilBuffer?: boolean;
@@ -31,87 +31,63 @@ export interface NgtEffectComposerState {
   camera?: THREE.Camera;
   scene?: THREE.Scene;
   normalPass?: NormalPass;
-  composer?: EffectComposer;
-}
-
-interface ComposerInitChanges {
-  multisampling: number;
-  depthBuffer?: boolean;
-  disableNormalPass?: boolean;
-  stencilBuffer?: boolean;
-  frameBufferType?: THREE.TextureDataType;
-  camera?: THREE.Camera;
-  scene?: THREE.Scene;
 }
 
 @Injectable()
-export class NgtEffectComposerStore extends EnhancedComponentStore<NgtEffectComposerState> {
-  #composerInitChanges$: Observable<ComposerInitChanges> = this.select(
-    this.selectors.camera$,
-    this.selectors.depthBuffer$,
-    this.selectors.stencilBuffer$,
-    this.selectors.multisampling$,
-    this.selectors.frameBufferType$,
-    this.selectors.scene$,
-    this.selectors.disableNormalPass$,
-    (
-      camera,
-      depthBuffer,
-      stencilBuffer,
-      multisampling,
-      frameBufferType,
-      scene,
-      disableNormalPass
-    ) => ({
-      camera,
-      depthBuffer,
-      stencilBuffer,
-      multisampling,
-      frameBufferType,
-      scene,
-      disableNormalPass,
-    }),
-    { debounce: true }
+export class NgtEffectComposerStore extends EnhancedRxState<NgtEffectComposerState> {
+  #composerInitChanges$ = combineLatest([
+    this.select('camera').pipe(startWith(this.store.get('camera'))),
+    this.select('scene').pipe(startWith(this.store.get('scene'))),
+    this.select('depthBuffer').pipe(startWith(undefined)),
+    this.select('stencilBuffer').pipe(startWith(undefined)),
+    this.select('multisampling'),
+    this.select('frameBufferType').pipe(startWith(undefined)),
+    this.select('disableNormalPass').pipe(startWith(undefined)),
+  ]).pipe(
+    map(
+      ([
+        camera,
+        scene,
+        depthBuffer,
+        stencilBuffer,
+        multisampling,
+        frameBufferType,
+        disableNormalPass,
+      ]) => ({
+        camera,
+        scene,
+        depthBuffer,
+        stencilBuffer,
+        multisampling,
+        frameBufferType,
+        disableNormalPass,
+      })
+    )
   );
 
-  #composerSizeChanges$ = this.select(
-    this.store.selectors.size$,
-    this.selectors.composer$,
-    (size, composer) => ({ size, composer }),
-    { debounce: true }
-  );
+  #composerSizeChanges$ = combineLatest([
+    this.select('composer'),
+    this.store.select('size'),
+  ]).pipe(map(([composer, size]) => ({ composer, size })));
 
   #registerAnimationChanges$ = this.select(
-    this.selectors.composer$,
-    this.selectors.autoClear$,
-    this.selectors.renderPriority$,
-    (composer, autoClear, renderPriority) => ({
-      composer,
-      autoClear,
-      renderPriority,
-    }),
-    { debounce: true }
+    selectSlice(['composer', 'autoClear', 'renderPriority'])
   );
 
-  #renderPassesChanges$ = this.select(
-    this.selectors.composer$,
-    this.selectors.effects$,
-    this.selectors.camera$,
-    (composer, effects, camera) => ({
-      composer,
-      effects: effects.filter(Boolean),
-      camera,
-    }),
-    { debounce: true }
+  #renderPassesChanges$ = combineLatest([
+    this.select(selectSlice(['composer', 'effects'])),
+    this.select('camera').pipe(startWith(this.store.get('camera'))),
+  ]).pipe(
+    map(([{ composer, effects }, camera]) => ({ composer, effects, camera }))
   );
 
   constructor(
     private store: NgtStore,
-    private animationFrameStore: NgtAnimationFrameStore,
-    private ngZone: NgZone,
-    @Inject(NGT_IS_WEBGL_AVAILABLE) private isWebGLAvailable: boolean
+    animationFrameStore: NgtAnimationFrameStore,
+    @Inject(NGT_IS_WEBGL_AVAILABLE) isWebGLAvailable: boolean
   ) {
-    super({
+    super();
+    this.set({
       depthBuffer: undefined,
       disableNormalPass: undefined,
       stencilBuffer: undefined,
@@ -119,145 +95,96 @@ export class NgtEffectComposerStore extends EnhancedComponentStore<NgtEffectComp
       multisampling: 8,
       renderPriority: 1,
       frameBufferType: undefined,
-      camera: store.getImperativeState().camera,
-      scene: store.getImperativeState().scene,
+      camera: store.get('camera'),
+      scene: store.get('scene'),
       effects: [],
       normalPass: undefined,
-      composer: undefined,
     });
-  }
 
-  readonly init = this.effect(($) =>
-    $.pipe(
-      tap(() => {
-        this.updaters.setCamera(this.store.getImperativeState().camera);
-        this.updaters.setScene(this.store.getImperativeState().scene);
+    this.connect('camera', store.select('camera'));
+    this.connect('scene', store.select('scene'));
 
-        this.#initComposer(this.#composerInitChanges$);
-        this.#composeSizeChange(this.#composerSizeChanges$);
-        this.#registerAnimation(this.#registerAnimationChanges$);
-        this.#listenEffectsChange(this.#renderPassesChanges$);
-      })
-    )
-  );
-
-  #initComposer = this.effect<ComposerInitChanges>((changes$) =>
-    changes$.pipe(
-      withLatestFrom(this.store.selectors.renderer$),
-      tap(
-        ([
-          {
+    this.hold(
+      this.#composerInitChanges$,
+      ({
+        scene,
+        camera,
+        disableNormalPass,
+        frameBufferType,
+        stencilBuffer,
+        multisampling,
+        depthBuffer,
+      }) => {
+        const renderer = this.store.get('renderer');
+        if (scene && camera) {
+          const effectComposer = new EffectComposer(renderer, {
             depthBuffer,
             stencilBuffer,
-            multisampling,
+            multisampling: isWebGLAvailable ? multisampling : 0,
             frameBufferType,
-            scene,
-            disableNormalPass,
-            camera,
-          },
-          renderer,
-        ]) => {
-          this.ngZone.runOutsideAngular(() => {
-            if (scene && camera) {
-              const effectComposer = new EffectComposer(renderer, {
-                depthBuffer,
-                stencilBuffer,
-                multisampling: this.isWebGLAvailable ? multisampling : 0,
-                frameBufferType,
-              });
+          });
 
-              effectComposer.addPass(new RenderPass(scene, camera));
+          effectComposer.addPass(new RenderPass(scene, camera));
 
-              const normalPass = disableNormalPass
-                ? null
-                : new NormalPass(scene, camera);
-              if (normalPass) {
-                effectComposer.addPass(normalPass);
-              }
+          const normalPass = disableNormalPass
+            ? null
+            : new NormalPass(scene, camera);
+          if (normalPass) {
+            effectComposer.addPass(normalPass);
+          }
 
-              this.patchState({
-                composer: effectComposer,
-                normalPass,
-              });
-            }
+          this.set({
+            normalPass,
+            composer: effectComposer,
           });
         }
-      )
-    )
-  );
+      }
+    );
 
-  #composeSizeChange = this.effect<{
-    composer: EffectComposer;
-    size: NgtSize;
-  }>((changes$) =>
-    changes$.pipe(
-      tap(({ composer, size }) => {
-        this.ngZone.runOutsideAngular(() => {
-          if (composer) {
-            composer.setSize(size.width, size.height);
-          }
+    this.hold(this.#composerSizeChanges$, ({ composer, size }) => {
+      if (composer) {
+        composer.setSize(size.width, size.height);
+      }
+    });
+
+    this.holdEffect(
+      this.#registerAnimationChanges$,
+      ({ composer, autoClear, renderPriority }) => {
+        const renderer = this.store.get('renderer');
+        let animationUuid: string;
+        // TODO: for some reason, without queueing this, this animation gets registered and then removed automatically
+        requestAnimationFrame(() => {
+          animationUuid = animationFrameStore.register({
+            callback: ({ delta }) => {
+              renderer.autoClear = autoClear;
+              composer.render(delta);
+            },
+            priority: renderPriority,
+          });
         });
-      })
-    )
-  );
+        return () => {
+          animationFrameStore.unregister(animationUuid);
+        };
+      }
+    );
 
-  #listenEffectsChange = this.effect<{
-    camera?: THREE.Camera;
-    effects: Effect[];
-    composer?: EffectComposer;
-  }>((changes$) =>
-    changes$.pipe(
-      tapEffect(({ effects, camera, composer }) => {
+    this.holdEffect(
+      this.#renderPassesChanges$,
+      ({ composer, effects, camera }) => {
         let effectPass: EffectPass;
 
-        this.ngZone.runOutsideAngular(() => {
-          if (camera && composer && effects.length) {
-            effectPass = new EffectPass(camera, ...effects);
-            composer.addPass(effectPass);
-            effectPass.renderToScreen = true;
-          }
-        });
+        if (effects.length) {
+          effectPass = new EffectPass(camera, ...effects);
+          composer.addPass(effectPass);
+          effectPass.renderToScreen = true;
+        }
 
         return () => {
-          this.ngZone.runOutsideAngular(() => {
-            if (effectPass && composer) {
-              composer.removePass(effectPass);
-            }
-          });
-        };
-      })
-    )
-  );
-
-  #registerAnimation = this.effect<{
-    composer: EffectComposer;
-    autoClear: boolean;
-    renderPriority: number;
-  }>((changes$) =>
-    changes$.pipe(
-      withLatestFrom(this.store.selectors.renderer$),
-      tapEffect(([{ composer, autoClear, renderPriority }, renderer]) => {
-        const animationSubscription = this.ngZone.runOutsideAngular(() => {
-          if (composer && renderer) {
-            return this.animationFrameStore.register({
-              priority: renderPriority,
-              callback: ({ delta }) => {
-                renderer.autoClear = autoClear;
-                composer.render(delta);
-              },
-              obj: null,
-            });
-          }
-
-          return null;
-        });
-
-        return () => {
-          if (animationSubscription) {
-            animationSubscription.unsubscribe();
+          if (effectPass) {
+            composer.removePass(effectPass);
           }
         };
-      })
-    )
-  );
+      }
+    );
+  }
 }

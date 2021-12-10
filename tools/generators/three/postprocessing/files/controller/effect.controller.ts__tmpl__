@@ -3,7 +3,7 @@ import {
   AnyConstructor,
   Controller,
   createControllerProviderFactory,
-  EnhancedComponentStore,
+  EnhancedRxState,
 } from '@angular-three/core';
 import {
   Directive,
@@ -18,7 +18,7 @@ import {
 } from '@angular/core';
 // @ts-ignore
 import { BlendFunction, Effect } from 'postprocessing';
-import { tap } from 'rxjs';
+import { Subject } from 'rxjs';
 
 export const NGT_EFFECT_TYPE = new InjectionToken<AnyConstructor<Effect>>(
   'Effect Type'
@@ -39,76 +39,44 @@ interface NgtEffectStoreState {
 }
 
 @Injectable()
-export class NgtEffectStore extends EnhancedComponentStore<NgtEffectStoreState> {
-  #blendChanges$ = this.select(
-    this.selectors.blendFunction$,
-    this.selectors.opacity$,
-    this.selectors.effect$,
-    (blendFunction, opacity, effect) => ({ blendFunction, opacity, effect }),
-    { debounce: true }
-  );
+export class NgtEffectStore extends EnhancedRxState<NgtEffectStoreState> {
+  #init$ = new Subject<void>();
+  init = this.#init$.next.bind(this.#init$);
 
   constructor(
-    private ngZone: NgZone,
     @Optional()
     @Inject(NGT_EFFECT_TYPE)
-    private effectType: AnyConstructor<Effect>,
+    effectType: AnyConstructor<Effect>,
     @Inject(NGT_EFFECT_DEFAULT_BLEND_FUNCTION)
-    private defaultBlendFunction: BlendFunction
+    defaultBlendFunction: BlendFunction
   ) {
-    super({
+    super();
+
+    if (!effectType) {
+      throw new Error('NGT_EFFECT_TYPE is required');
+    }
+
+    this.set({
       opacity: undefined,
       blendFunction: defaultBlendFunction,
       options: undefined,
       effect: undefined,
     });
-    if (!effectType) {
-      throw new Error('NGT_EFFECT_TYPE is required');
-    }
+
+    this.connect('effect', this.#init$, (state) => ({
+      effect: new effectType(state.options),
+    }));
+
+    this.hold(this.#init$, () => {
+      const { blendFunction, opacity, effect } = this.get();
+      if (effect) {
+        effect.blendMode.blendFunction = blendFunction || defaultBlendFunction;
+        if (opacity !== undefined) {
+          effect.blendMode.opacity.value = opacity;
+        }
+      }
+    });
   }
-
-  readonly init = this.effect(($) =>
-    $.pipe(
-      tap(() => {
-        this.#construct(this.selectors.options$);
-        this.#blendChange(this.#blendChanges$);
-      })
-    )
-  );
-
-  #construct = this.effect<
-    ConstructorParameters<AnyConstructor<Effect>>[0]
-  >((options$) =>
-    options$.pipe(
-      tap((options) => {
-        this.ngZone.runOutsideAngular(() => {
-          this.patchState({
-            effect: new this.effectType(options),
-          });
-        });
-      })
-    )
-  );
-
-  #blendChange = this.effect<{
-    blendFunction: BlendFunction;
-    opacity?: number;
-    effect?: Effect;
-  }>((changes$) =>
-    changes$.pipe(
-      tap(({ blendFunction, opacity, effect }) => {
-        this.ngZone.runOutsideAngular(() => {
-          if (effect) {
-            effect.blendMode.blendFunction =
-              blendFunction || this.defaultBlendFunction;
-            if (opacity !== undefined) {
-              effect.blendMode.opacity.value = opacity;
-            }
-          }
-        });
-      })
-    )
-  );
 }
 
 @Directive({
@@ -120,15 +88,15 @@ export class NgtEffectStore extends EnhancedComponentStore<NgtEffectStoreState> 
 })
 export class NgtEffectController extends Controller implements OnInit {
   @Input() set opacity(v: number) {
-    this.effectStore.updaters.setOpacity(v);
+    this.effectStore.set({ opacity: v });
   }
 
   @Input() set blendFunction(v: BlendFunction) {
-    this.effectStore.updaters.setBlendFunction(v);
+    this.effectStore.set({ blendFunction: v });
   }
 
   @Input() set options(v: ConstructorParameters<AnyConstructor<Effect>>[0]) {
-    this.effectStore.updaters.setOptions(v);
+    this.effectStore.set({ options: v });
   }
 
   constructor(ngZone: NgZone, private effectStore: NgtEffectStore) {
@@ -136,7 +104,7 @@ export class NgtEffectController extends Controller implements OnInit {
   }
 
   get effect() {
-    return this.effectStore.getImperativeState().effect as Effect;
+    return this.effectStore.get('effect') as Effect;
   }
 
   ngOnInit() {

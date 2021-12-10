@@ -8,6 +8,7 @@ import {
 import { NgtMeshLambertMaterialModule } from '@angular-three/core/materials';
 import { NgtInstancedMeshModule } from '@angular-three/core/meshes';
 import {
+  NgtSobaFlyControlsModule,
   NgtSobaOrbitControls,
   NgtSobaOrbitControlsModule,
 } from '@angular-three/soba/controls';
@@ -110,6 +111,7 @@ export class SpheresComponent {
     NgtMeshLambertMaterialModule,
     NgtSobaOrbitControlsModule,
     NgtSphereGeometryModule,
+    NgtSobaFlyControlsModule,
   ],
 })
 export class InstancesComponentModule {}

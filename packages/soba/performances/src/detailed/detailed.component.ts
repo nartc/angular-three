@@ -1,5 +1,5 @@
 import {
-  EnhancedComponentStore,
+  EnhancedRxState,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtCoreModule,
@@ -18,66 +18,34 @@ import {
   Injectable,
   Input,
   NgModule,
-  NgZone,
   QueryList,
 } from '@angular/core';
-import {
-  asapScheduler,
-  combineLatest,
-  filter,
-  map,
-  observeOn,
-  startWith,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { asapScheduler } from '@rx-angular/cdk/zone-less';
+import { selectSlice } from '@rx-angular/state';
+import { combineLatest, map, observeOn, startWith } from 'rxjs';
 import * as THREE from 'three';
 
 interface NgtSobaDetailedStoreState {
-  lod: THREE.LOD | null;
+  lod: THREE.LOD;
   distances: number[];
   children: THREE.Object3D[];
 }
 
 @Injectable()
-export class NgtSobaDetailedStore extends EnhancedComponentStore<NgtSobaDetailedStoreState> {
-  #updateLodChildrenParams$ = this.select(
-    this.selectors.lod$.pipe(filter((lod): lod is THREE.LOD => lod !== null)),
-    this.selectors.children$,
-    (lod, children) => ({ lod, children }),
-    { debounce: true }
-  );
+export class NgtSobaDetailedStore extends EnhancedRxState<NgtSobaDetailedStoreState> {
+  #updateLodChildrenParams$ = this.select(selectSlice(['lod', 'children']));
 
-  constructor(private ngZone: NgZone) {
-    super({ lod: null, distances: [], children: [] });
+  constructor() {
+    super();
+    this.set({ distances: [], children: [] });
+    this.hold(this.#updateLodChildrenParams$, ({ lod, children }) => {
+      const distances = this.get('distances');
+      if (!children.length) lod.levels.length = 0;
+      children.forEach((object, index) => {
+        lod.addLevel(object, distances[index]);
+      });
+    });
   }
-
-  readonly init = this.effect(($) =>
-    $.pipe(
-      tap(() => {
-        this.#updateLodChildren(this.#updateLodChildrenParams$);
-      })
-    )
-  );
-
-  #updateLodChildren = this.effect<{
-    lod: THREE.LOD;
-    children: THREE.Object3D[];
-  }>((params$) =>
-    params$.pipe(
-      withLatestFrom(this.selectors.distances$),
-      tap(([{ children, lod }, distances]) => {
-        this.ngZone.runOutsideAngular(() => {
-          if (lod) {
-            lod.levels.length = 0;
-            children.forEach((object, index) => {
-              lod.addLevel(object, distances[index]);
-            });
-          }
-        });
-      })
-    )
-  );
 }
 
 @Component({
@@ -100,7 +68,7 @@ export class NgtSobaDetailed
   implements AfterContentInit
 {
   @Input() set distances(v: number[]) {
-    this.detailedStore.updaters.setDistances(v);
+    this.detailedStore.set({ distances: v });
   }
 
   @ContentChildren(NgtObject3dController, { descendants: true })
@@ -112,38 +80,33 @@ export class NgtSobaDetailed
   constructor(
     @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
     public objectInputsController: NgtObject3dInputsController,
-    private detailedStore: NgtSobaDetailedStore,
-    private ngZone: NgZone
+    private detailedStore: NgtSobaDetailedStore
   ) {
     super();
   }
 
   ngAfterContentInit() {
-    this.ngZone.runOutsideAngular(() => {
-      const children$ = combineLatest([
-        this.extenders.changes.pipe(
-          startWith(this.extenders),
-          observeOn(asapScheduler)
-        ),
-        this.children.changes.pipe(
-          startWith(this.children),
-          observeOn(asapScheduler)
-        ),
-      ]).pipe(
-        map(
-          ([extendersList, childrenList]: [
-            QueryList<NgtSobaExtender<THREE.Object3D>>,
-            QueryList<NgtObject3dController>
-          ]) => [
-            ...childrenList.map((child) => child.object3d),
-            ...extendersList.map((extender) => extender.object),
-          ]
-        )
-      );
-
-      this.detailedStore.init();
-      this.detailedStore.updaters.setChildren(children$);
-    });
+    const children$ = combineLatest([
+      this.extenders.changes.pipe(
+        startWith(this.extenders),
+        observeOn(asapScheduler)
+      ),
+      this.children.changes.pipe(
+        startWith(this.children),
+        observeOn(asapScheduler)
+      ),
+    ]).pipe(
+      map(
+        ([extendersList, childrenList]: [
+          QueryList<NgtSobaExtender<THREE.Object3D>>,
+          QueryList<NgtObject3dController>
+        ]) => [
+          ...childrenList.map((child) => child.object3d),
+          ...extendersList.map((extender) => extender.object),
+        ]
+      )
+    );
+    this.detailedStore.connect('children', children$);
   }
 
   onLodAnimateReady({ camera }: NgtRender, lod: THREE.LOD) {
@@ -152,7 +115,7 @@ export class NgtSobaDetailed
 
   onLodReady(lod: THREE.LOD) {
     this.object = lod;
-    this.detailedStore.updaters.setLod(lod);
+    this.detailedStore.set({ lod });
   }
 }
 

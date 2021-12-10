@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 import type { AnyConstructor, NgtColor, UnknownRecord } from '../models';
-import { NgtInstancesStore } from '../stores/instances.store';
 import { NgtStore } from '../stores/store';
 import { makeColor } from '../utils/make';
 
@@ -19,18 +18,14 @@ export abstract class NgtMaterial<
   TMaterial extends THREE.Material = THREE.Material
 > implements OnInit, OnDestroy
 {
-  @Input() ngtId?: string;
-
   @Output() ready = new EventEmitter();
 
   @Input() set parameters(v: TMaterialParameters | undefined) {
     this.#parameters = v;
     if (v && this.material) {
-      this.ngZone.runOutsideAngular(() => {
-        this.convertColorToLinear(v);
-        this.material.setValues(v);
-        this.material.needsUpdate = true;
-      });
+      this.#convertColorToLinear(v);
+      this.material.setValues(v);
+      this.material.needsUpdate = true;
     }
   }
 
@@ -40,25 +35,16 @@ export abstract class NgtMaterial<
 
   #parameters?: TMaterialParameters;
 
-  constructor(
-    protected ngZone: NgZone,
-    protected instancesStore: NgtInstancesStore,
-    protected store: NgtStore
-  ) {}
+  constructor(protected ngZone: NgZone, protected store: NgtStore) {}
 
   abstract materialType: AnyConstructor<TMaterial>;
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       if (this.parameters) {
-        this.convertColorToLinear(this.parameters);
+        this.#convertColorToLinear(this.parameters);
       }
       this.#material = new this.materialType(this.parameters);
-      this.instancesStore.saveMaterial({
-        id: this.ngtId,
-        material: this.material,
-      });
-
       this.ready.emit();
     });
   }
@@ -68,12 +54,12 @@ export abstract class NgtMaterial<
     return this.#material;
   }
 
-  private convertColorToLinear(parameters: TMaterialParameters) {
+  #convertColorToLinear(parameters: TMaterialParameters) {
     if ('color' in parameters) {
       const colorParams = (parameters as UnknownRecord)['color'] as NgtColor;
       (parameters as UnknownRecord)['color'] = makeColor(colorParams);
 
-      if (!this.store.getImperativeState().linear) {
+      if (!this.store.get('linear')) {
         (
           (parameters as UnknownRecord)['color'] as THREE.Color
         ).convertSRGBToLinear();
@@ -84,7 +70,6 @@ export abstract class NgtMaterial<
   ngOnDestroy() {
     this.ngZone.runOutsideAngular(() => {
       if (this.material) {
-        this.instancesStore.removeMaterial(this.ngtId || this.material.uuid);
         this.material.dispose();
       }
     });

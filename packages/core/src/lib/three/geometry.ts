@@ -1,7 +1,6 @@
 import {
   Directive,
   EventEmitter,
-  Input,
   NgZone,
   OnDestroy,
   OnInit,
@@ -11,18 +10,15 @@ import {
 import * as THREE from 'three';
 import { NgtObject3dController } from '../controllers/object-3d.controller';
 import type { AnyConstructor, UnknownRecord } from '../models';
-import { NgtInstancesStore } from '../stores/instances.store';
 
 @Directive()
 export abstract class NgtGeometry<
   TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
 > implements OnInit, OnDestroy
 {
-  @Input() ngtId?: string;
   @Output() ready = new EventEmitter();
 
   constructor(
-    protected instancesStore: NgtInstancesStore,
     protected ngZone: NgZone,
     @Optional() private parentObject: NgtObject3dController
   ) {}
@@ -49,7 +45,6 @@ export abstract class NgtGeometry<
     // geometry has changed. reconstruct
     if (this.geometry) {
       // cleanup
-      this.instancesStore.removeGeometry(this.ngtId || this.geometry.uuid);
       if (this.parentObject) {
         const object3d = this.parentObject.object3d as unknown as UnknownRecord;
         if (object3d.geometry) {
@@ -70,12 +65,6 @@ export abstract class NgtGeometry<
 
   #construct() {
     this.#geometry = new this.geometryType(...this.#geometryArgs);
-
-    this.instancesStore.saveGeometry({
-      id: this.ngtId || this.geometry.uuid,
-      geometry: this.geometry,
-    });
-
     this.ready.emit();
   }
 
@@ -87,7 +76,6 @@ export abstract class NgtGeometry<
   ngOnDestroy() {
     this.ngZone.runOutsideAngular(() => {
       if (this.geometry) {
-        this.instancesStore.removeGeometry(this.ngtId || this.geometry.uuid);
         this.geometry.dispose();
       }
     });

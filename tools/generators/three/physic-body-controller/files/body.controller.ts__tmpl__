@@ -3,13 +3,7 @@ import {
   Controller,
   createControllerProviderFactory,
 } from '@angular-three/core';
-import {
-  AfterContentInit,
-  Directive,
-  Input,
-  NgModule,
-  NgZone,
-} from '@angular/core';
+import { Directive, Input, NgModule, NgZone, OnInit } from '@angular/core';
 import * as THREE from 'three';
 import { BodyProps } from '../models/body';
 import { GetByIndex } from '../models/types';
@@ -22,12 +16,9 @@ import { NgtPhysicBodyStore } from './body.store';
   exportAs: 'ngtPhysicBody',
   providers: [NgtPhysicBodyStore],
 })
-export class NgtPhysicBodyController
-  extends Controller
-  implements AfterContentInit
-{
+export class NgtPhysicBodyController extends Controller implements OnInit {
   @Input() set getPhysicProps(fn: GetByIndex<BodyProps> | undefined) {
-    this.physicBodyStore.updaters.setGetPhysicProps(fn);
+    this.physicBodyStore.set({ getPhysicProps: fn });
   }
 
   constructor(private physicBodyStore: NgtPhysicBodyStore, ngZone: NgZone) {
@@ -41,7 +32,7 @@ export class NgtPhysicBodyController
   }
 
   get object3d(): THREE.Object3D {
-    return this.physicBodyStore.getImperativeState().object3d as THREE.Object3D;
+    return this.physicBodyStore.get('object3d') as THREE.Object3D;
   }
 
   get api() {

@@ -1,12 +1,12 @@
 import { NgtColor, NgtCoreModule } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
 import {
-  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   Input,
   NgModule,
   NgZone,
+  OnInit,
 } from '@angular/core';
 import { NgtCannonDebugStore } from './debug.store';
 import { NgtCannonDebuggerInterface } from './models/debug';
@@ -20,17 +20,17 @@ import { NgtCannonDebuggerInterface } from './models/debug';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtCannonDebugStore],
 })
-export class NgtCannonDebug implements AfterContentInit {
+export class NgtCannonDebug implements OnInit {
   @Input() set color(v: NgtColor) {
-    this.cannonDebugStore.updaters.setColor(v);
+    this.cannonDebugStore.set({ color: v });
   }
 
   @Input() set scale(v: number) {
-    this.cannonDebugStore.updaters.setScale(v);
+    this.cannonDebugStore.set({ scale: v });
   }
 
   @Input() set impl(v: NgtCannonDebuggerInterface) {
-    this.cannonDebugStore.updaters.setImpl(v);
+    this.cannonDebugStore.set({ impl: v });
   }
 
   constructor(
@@ -38,7 +38,7 @@ export class NgtCannonDebug implements AfterContentInit {
     private cannonDebugStore: NgtCannonDebugStore
   ) {}
 
-  ngAfterContentInit() {
+  ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.cannonDebugStore.init();
     });

@@ -1,92 +1,85 @@
-import { Inject, Injectable, NgZone } from '@angular/core';
-import { Observable, tap, withLatestFrom } from 'rxjs';
+import { ElementRef, Inject, Injectable } from '@angular/core';
+import { selectSlice } from '@rx-angular/state';
+import { map, Observable, Subject } from 'rxjs';
 import * as THREE from 'three';
 import {
-  NgtCamera,
   NgtInstance,
+  NgtPerformance,
   NgtRaycaster,
   NgtSize,
   NgtState,
+  NgtViewport,
   UnknownRecord,
 } from '../models';
+import { NGT_PERFORMANCE_OPTIONS } from '../performance/tokens';
 import { NgtResize, NgtResizeResult } from '../resize/resize.service';
 import { applyProps } from '../utils/apply-props';
 import { calculateDpr } from '../utils/calculate-dpr';
 import { isOrthographicCamera } from '../utils/is-orthographic';
 import { NgtCanvasInputsStore } from './canvas-inputs.store';
-import { EnhancedComponentStore, tapEffect } from './enhanced-component-store';
+import { EnhancedRxState } from './enhanced-component-store';
 
 const position = new THREE.Vector3();
 const defaultTarget = new THREE.Vector3();
 
 @Injectable()
-export class NgtStore extends EnhancedComponentStore<NgtState> {
-  readonly #sizeResult$ = this.select(
-    this.resizeResult$,
-    ({ width, height }) => ({
-      width,
-      height,
-    }),
-    { debounce: true }
+export class NgtStore extends EnhancedRxState<NgtState> {
+  #allReady$ = this.select(
+    selectSlice(['scene', 'camera', 'renderer', 'raycaster']),
+    map(
+      ({ scene, camera, renderer, raycaster }) =>
+        !!scene && !!camera && !!renderer && !!raycaster
+    )
   );
 
-  readonly #dprResult$ = this.select(
-    this.resizeResult$,
-    this.selectors.viewport$,
-    ({ dpr }, viewport) => ({ ...viewport, dpr }),
-    { debounce: true }
-  );
+  #dimensions$ = this.select(selectSlice(['size', 'viewport']));
 
-  readonly #allReady$ = this.select(
-    this.selectors.scene$,
-    this.selectors.camera$,
-    this.selectors.renderer$,
-    this.selectors.raycaster$,
-    (scene, camera, renderer, raycaster) =>
-      !!scene && !!camera && !!renderer && !!raycaster,
-    { debounce: true }
-  );
-
-  readonly #dimensions$ = this.select(
-    this.selectors.size$,
-    this.selectors.viewport$,
-    (size, viewport) => ({ size, viewport }),
-    { debounce: true }
-  );
+  #canvasElement$ = new Subject<HTMLCanvasElement>();
+  setCanvasElement = this.#canvasElement$.next.bind(this.#canvasElement$);
 
   constructor(
-    @Inject(NgtResize)
-    private resizeResult$: Observable<NgtResizeResult>,
+    @Inject(NGT_PERFORMANCE_OPTIONS) performance: NgtPerformance,
+    { nativeElement: canvasHost }: ElementRef<HTMLElement>,
     private canvasInputsStore: NgtCanvasInputsStore,
-    private ngZone: NgZone
+    @Inject(NgtResize)
+    private resizeResult$: Observable<NgtResizeResult>
   ) {
-    super({
+    super();
+    this.set({
       ready: false,
-      size: canvasInputsStore.getImperativeState().size,
+      vr: false,
+      orthographic: false,
+      flat: false,
+      linear: false,
+      size: {
+        height: canvasHost.clientHeight,
+        width: canvasHost.clientWidth,
+      },
       mouse: new THREE.Vector2(),
-      clock: canvasInputsStore.getImperativeState().clock,
-      frameloop: canvasInputsStore.getImperativeState().frameloop,
-      vr: canvasInputsStore.getImperativeState().vr,
-      linear: canvasInputsStore.getImperativeState().linear,
+      clock: new THREE.Clock(),
+      frameloop: 'always',
+      performance,
+      controls: null,
+      objects: {},
       viewport: {
-        initialDpr: calculateDpr(canvasInputsStore.getImperativeState().dpr),
-        dpr: calculateDpr(canvasInputsStore.getImperativeState().dpr),
-        width: 0,
-        height: 0,
-        aspect: 0,
+        initialDpr: calculateDpr(canvasInputsStore.get('dpr')),
+        dpr: calculateDpr(canvasInputsStore.get('dpr')),
+        width: canvasHost.clientWidth,
+        height: canvasHost.clientHeight,
+        aspect: canvasHost.clientWidth / canvasHost.clientHeight,
         distance: 0,
         factor: 0,
         getCurrentViewport: (
-          camera = this.getImperativeState().camera,
+          camera = this.get('camera'),
           target = defaultTarget,
-          size = this.getImperativeState().size
+          size = this.get('size')
         ) => {
           const { width, height } = size;
           const aspect = width / height;
-          const distance = camera!
-            .getWorldPosition(position)
+          const distance = camera
+            .getWorldDirection(position)
             .distanceTo(target);
-          if (isOrthographicCamera(camera!)) {
+          if (isOrthographicCamera(camera)) {
             return {
               width: width / camera.zoom,
               height: height / camera.zoom,
@@ -96,9 +89,9 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
             };
           }
 
-          const fov = (camera!.fov * Math.PI) / 180; // convert vertical fov to radians
-          const h = 2 * Math.tan(fov / 2) * distance; // visible height
-          const w = h * (width / height);
+          const fov = (camera.fov * Math.PI) / 180; // convert vertical fov to radians
+          const h = 2 * Math.tan(fov / 2) * distance; // height of viewport
+          const w = h * aspect; // width of viewport
           return {
             width: w,
             height: h,
@@ -108,241 +101,170 @@ export class NgtStore extends EnhancedComponentStore<NgtState> {
           };
         },
       },
-      controls: null,
-      camera: undefined,
-      raycaster: undefined,
-      renderer: undefined,
-      scene: undefined,
     });
+
+    this.connect('ready', this.#allReady$);
+    this.connect('size', this.resizeResult$, (_, { width, height }) => ({
+      width,
+      height,
+    }));
+    this.connect('viewport', this.resizeResult$, ({ viewport }, { dpr }) => ({
+      ...viewport,
+      dpr,
+    }));
+
+    this.hold(this.#dimensions$, this.#updateDimensions.bind(this));
+    this.holdEffect(this.#canvasElement$, this.#init.bind(this));
   }
 
-  readonly init = this.effect<HTMLCanvasElement>((canvas$) =>
-    canvas$.pipe(
-      tapEffect((canvasElement) => {
-        this.ngZone.runOutsideAngular(() => {
-          this.updaters.setReady(this.#allReady$);
-          this.updaters.setSize(this.#sizeResult$);
-          this.updaters.setViewport(this.#dprResult$);
-          this.updaters.setFrameloop(
-            this.canvasInputsStore.selectors.frameloop$
-          );
-          this.updaters.setVr(this.canvasInputsStore.selectors.vr$);
-          this.updaters.setLinear(this.canvasInputsStore.selectors.linear$);
+  #init(canvasElement: HTMLCanvasElement) {
+    const { size, viewport, vr, linear, flat, orthographic } = this.get();
+    const {
+      shadows,
+      glOptions,
+      sceneOptions,
+      cameraOptions,
+      raycaster: raycasterOptions,
+    } = this.canvasInputsStore.get();
 
-          this.#initRenderer(canvasElement);
-          this.#initScene();
-          this.#initCamera();
-          this.#initRaycaster();
+    // Renderer
+    const customRenderer = (
+      typeof glOptions === 'function' ? glOptions(canvasElement) : glOptions
+    ) as THREE.WebGLRenderer;
 
-          this.#updateDimensions(this.#dimensions$);
-        });
+    // userland custom renderer, assign as-is
+    if (!!customRenderer?.render) {
+      this.set({ renderer: customRenderer });
+      return;
+    }
 
-        return () => {
-          this.ngZone.runOutsideAngular(() => {
-            const { renderer, vr } = this.getImperativeState();
-            if (renderer) {
-              renderer.renderLists.dispose();
-              renderer.forceContextLoss();
+    const renderer = new THREE.WebGLRenderer({
+      powerPreference: 'high-performance',
+      canvas: canvasElement,
+      antialias: true,
+      alpha: true,
+      ...(glOptions || {}),
+    });
 
-              if (vr) {
-                renderer.setAnimationLoop(null);
-              }
-            }
-          });
-        };
-      })
-    )
-  );
+    if (glOptions) {
+      applyProps(
+        renderer as unknown as NgtInstance,
+        glOptions as UnknownRecord
+      );
+    }
 
-  #initRenderer = this.effect<HTMLCanvasElement>((canvas$) =>
-    canvas$.pipe(
-      withLatestFrom(
-        this.selectors.size$,
-        this.selectors.viewport$,
-        this.selectors.vr$,
-        this.canvasInputsStore.selectors.linear$,
-        this.canvasInputsStore.selectors.flat$,
-        this.canvasInputsStore.selectors.shadows$,
-        this.canvasInputsStore.selectors.glOptions$
-      ),
-      tap(([canvas, size, { dpr }, vr, linear, flat, shadows, glOptions]) => {
-        this.ngZone.runOutsideAngular(() => {
-          const customRenderer = (
-            typeof glOptions === 'function' ? glOptions(canvas) : glOptions
-          ) as THREE.WebGLRenderer;
+    if (shadows) {
+      renderer.shadowMap.enabled = true;
+      if (typeof shadows === 'object') {
+        Object.assign(renderer.shadowMap, shadows);
+      } else {
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      }
+    }
 
-          // userland custom renderer. assign as-is
-          if (!!customRenderer?.render) {
-            this.patchState({ renderer: customRenderer });
-            return;
-          }
+    if (!linear) {
+      // auto color management
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+    } else {
+      renderer.outputEncoding = THREE.LinearEncoding;
+    }
 
-          const renderer = new THREE.WebGLRenderer({
-            powerPreference: 'high-performance',
-            canvas: canvas,
-            antialias: true,
-            alpha: true,
-            ...(glOptions || {}),
-          });
+    if (flat) {
+      renderer.toneMapping = THREE.NoToneMapping;
+    }
 
-          if (glOptions) {
-            applyProps(
-              renderer as unknown as NgtInstance,
-              glOptions as UnknownRecord
-            );
-          }
+    renderer.setClearAlpha(0);
+    renderer.setPixelRatio(calculateDpr(viewport.dpr));
+    renderer.setSize(size.width, size.height);
 
-          if (shadows) {
-            renderer.shadowMap.enabled = true;
-            if (typeof shadows === 'object')
-              Object.assign(renderer.shadowMap, shadows);
-            else renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-          }
+    if (vr) {
+      renderer.xr.enabled = true;
+    }
 
-          if (!linear) {
-            // auto color management
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.outputEncoding = THREE.sRGBEncoding;
-          } else {
-            renderer.outputEncoding = THREE.LinearEncoding;
-          }
+    // Scene
+    const scene = new THREE.Scene();
+    applyProps(scene, sceneOptions as UnknownRecord);
 
-          if (flat) {
-            renderer.toneMapping = THREE.NoToneMapping;
-          }
+    // Camera
+    const isCamera = cameraOptions instanceof THREE.Camera;
+    const camera = isCamera
+      ? cameraOptions
+      : orthographic
+      ? new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000)
+      : new THREE.PerspectiveCamera(75, size.width / size.height, 0.1, 1000);
 
-          renderer.setClearAlpha(0);
-          renderer.setPixelRatio(calculateDpr(dpr));
-          renderer.setSize(size.width, size.height);
+    if (!isCamera) {
+      camera.position.z = 5;
+      if (cameraOptions) {
+        applyProps(camera, cameraOptions as UnknownRecord);
+        // Update projection matrix after applying props
+        camera.updateProjectionMatrix();
+      }
+      // look at center if initial rotation isn't set
+      if (!cameraOptions?.rotation) camera.lookAt(0, 0, 0);
+    }
 
-          if (vr) {
-            renderer.xr.enabled = true;
-          }
+    // Raycaster
+    const raycaster = new THREE.Raycaster();
+    const { params, ...options } = raycasterOptions || {};
+    applyProps(raycaster as unknown as NgtInstance, {
+      enabled: true,
+      ...options,
+      params: { ...raycaster.params, ...params },
+    });
 
-          this.patchState({ renderer });
-        });
-      })
-    )
-  );
+    this.set({
+      renderer,
+      scene,
+      camera,
+      raycaster: raycaster as NgtRaycaster,
+    });
 
-  #initScene = this.effect(($) =>
-    $.pipe(
-      withLatestFrom(this.canvasInputsStore.selectors.sceneOptions$),
-      tap(([, sceneOptions]) => {
-        this.ngZone.runOutsideAngular(() => {
-          const scene = new THREE.Scene();
-          applyProps(scene, sceneOptions as UnknownRecord);
-          this.patchState({ scene });
-        });
-      })
-    )
-  );
+    return () => {
+      const { renderer, vr } = this.get();
+      if (renderer) {
+        renderer.renderLists.dispose();
+        renderer.forceContextLoss();
 
-  #initCamera = this.effect(($) =>
-    $.pipe(
-      withLatestFrom(
-        this.canvasInputsStore.selectors.cameraOptions$,
-        this.canvasInputsStore.selectors.orthographic$,
-        this.selectors.size$
-      ),
-      tap(([, cameraOptions, orthographic, size]) => {
-        this.ngZone.runOutsideAngular(() => {
-          const isCamera = cameraOptions instanceof THREE.Camera;
-          const camera = isCamera
-            ? (cameraOptions as THREE.Camera)
-            : orthographic
-            ? new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000)
-            : new THREE.PerspectiveCamera(
-                75,
-                size.width / size.height,
-                0.1,
-                1000
-              );
-
-          if (!isCamera) {
-            camera.position.z = 5;
-            if (cameraOptions) {
-              applyProps(camera, cameraOptions as UnknownRecord);
-              // Update projection matrix after applying props
-              (camera as NgtCamera).updateProjectionMatrix();
-            }
-            if (!cameraOptions?.rotation) camera.lookAt(0, 0, 0);
-          }
-
-          this.patchState({ camera: camera as NgtCamera });
-        });
-      })
-    )
-  );
-
-  #initRaycaster = this.effect(($) =>
-    $.pipe(
-      withLatestFrom(this.canvasInputsStore.selectors.raycaster$),
-      tap(([, raycastOptions]) => {
-        this.ngZone.runOutsideAngular(() => {
-          const raycaster = new THREE.Raycaster();
-          const { params, ...options } = raycastOptions || {};
-          applyProps(raycaster as unknown as NgtInstance, {
-            enabled: true,
-            ...options,
-            params: { ...raycaster.params, ...params },
-          });
-
-          this.patchState({ raycaster: raycaster as NgtRaycaster });
-        });
-      })
-    )
-  );
-
-  #updateDimensions = this.effect<{
-    size: NgtSize;
-    viewport: NgtState['viewport'];
-  }>((dimensions$) =>
-    dimensions$.pipe(
-      withLatestFrom(
-        this.selectors.camera$,
-        this.selectors.renderer$,
-        this.selectors.ready$,
-        this.canvasInputsStore.selectors.cameraOptions$
-      ),
-      tap(
-        ([
-          {
-            viewport: { dpr },
-            size,
-          },
-          camera,
-          renderer,
-          ready,
-          cameraOptions,
-        ]) => {
-          this.ngZone.runOutsideAngular(() => {
-            // leave the userland camera alone
-            if (cameraOptions instanceof THREE.Camera) return;
-
-            // only update when the scene graph is ready
-            if (ready && camera && renderer) {
-              if (isOrthographicCamera(camera)) {
-                camera.left = size.width / -2;
-                camera.right = size.width / 2;
-                camera.top = size.height / 2;
-                camera.bottom = size.height / -2;
-              } else {
-                camera.aspect = size.width / size.height;
-              }
-
-              camera.updateProjectionMatrix();
-              // https://github.com/pmndrs/react-three-fiber/issues/178
-              // Update matrix world since the renderer is a frame late
-              camera.updateMatrixWorld();
-
-              // Update renderer
-              renderer.setPixelRatio(dpr);
-              renderer.setSize(size.width, size.height);
-            }
-          });
+        if (vr) {
+          renderer.setAnimationLoop(null);
         }
-      )
-    )
-  );
+      }
+    };
+  }
+
+  #updateDimensions({
+    size,
+    viewport,
+  }: {
+    size: NgtSize;
+    viewport: NgtViewport;
+  }) {
+    const { camera, renderer, ready } = this.get();
+    const cameraOptions = this.canvasInputsStore.get('cameraOptions');
+
+    // leave the userland camera alone
+    if (cameraOptions instanceof THREE.Camera) return;
+
+    if (ready) {
+      if (isOrthographicCamera(camera)) {
+        camera.left = size.width / -2;
+        camera.right = size.width / 2;
+        camera.top = size.height / 2;
+        camera.bottom = size.height / -2;
+      } else {
+        camera.aspect = size.width / size.height;
+      }
+
+      camera.updateProjectionMatrix();
+      // https://github.com/pmndrs/react-three-fiber/issues/178
+      // Update matrix world since the renderer is a frame late
+      camera.updateMatrixWorld();
+
+      // update renderer
+      renderer.setPixelRatio(viewport.dpr);
+      renderer.setSize(size.width, size.height);
+    }
+  }
 }

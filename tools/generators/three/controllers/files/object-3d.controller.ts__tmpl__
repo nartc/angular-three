@@ -10,17 +10,16 @@ import {
   Output,
   SkipSelf,
 } from '@angular/core';
+import { setTimeout } from '@rx-angular/cdk/zone-less';
 import { Subscription, take } from 'rxjs';
 import * as THREE from 'three';
 import {
   NgtEvent,
   NgtEventHandlers,
-  NgtInstance,
   NgtInstanceInternal,
   UnknownRecord,
 } from '../models';
 import { NgtEventsStore } from '../stores/events.store';
-import { NgtInstancesStore } from '../stores/instances.store';
 import { NgtStore } from '../stores/store';
 import { applyProps } from '../utils/apply-props';
 import {
@@ -90,7 +89,6 @@ export class NgtObject3dController extends Controller implements OnDestroy {
     ngZone: NgZone,
     private store: NgtStore,
     private eventsStore: NgtEventsStore,
-    private instancesStore: NgtInstancesStore,
     @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
     private objectInputsController: NgtObject3dInputsController,
     @Inject(NGT_ANIMATION_SUBSCRIBER_WATCHED_CONTROLLER)
@@ -105,16 +103,12 @@ export class NgtObject3dController extends Controller implements OnDestroy {
 
   ngOnInit() {
     super.ngOnInit();
-    this.ngZone.runOutsideAngular(() => {
-      this.#inputChangesSubscription =
-        this.#object3dInputsController.change$.subscribe(() => {
-          this.ngZone.runOutsideAngular(() => {
-            if (this.object3d) {
-              this.#applyCustomProps();
-            }
-          });
-        });
-    });
+    this.#inputChangesSubscription =
+      this.#object3dInputsController.change$.subscribe(() => {
+        if (this.object3d) {
+          this.#applyCustomProps();
+        }
+      });
   }
 
   init() {
@@ -123,7 +117,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
       if (this.object3d) {
         this.#applyCustomProps();
 
-        if(!this.disabled) {
+        if (!this.disabled) {
           const observedEvents = supportedEvents.reduce(
             (result, event) => {
               if (this.objectInputsController[event].observed) {
@@ -141,11 +135,11 @@ export class NgtObject3dController extends Controller implements OnDestroy {
           // setup __ngt instance
           applyProps(this.object3d, {
             __ngt: {
-              stateGetter: () => this.store.getImperativeState(),
-              eventsStateGetter: () => this.eventsStore.getImperativeState(),
+              stateGetter: () => this.store.get(),
+              eventsStateGetter: () => this.eventsStore.get(),
               handlers: observedEvents.handlers,
               eventCount: observedEvents.eventCount,
-              linear: this.store.getImperativeState().linear,
+              linear: this.store.get('linear'),
             } as NgtInstanceInternal,
           });
 
@@ -154,7 +148,10 @@ export class NgtObject3dController extends Controller implements OnDestroy {
             this.eventsStore.addInteraction(this.object3d);
           }
 
-          this.instancesStore.saveObject(this.object3d as unknown as NgtInstance);
+          this.store.set((state) => ({
+            ...state,
+            objects: { ...state.objects, [this.object3d.uuid]: this.object3d },
+          }));
 
           if (this.objectInputsController.appendMode !== 'none') {
             this.#appendToParent();
@@ -194,7 +191,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   }
 
   #addToScene() {
-    const { scene } = this.store.getImperativeState();
+    const scene = this.store.get('scene');
     if (scene) {
       scene.add(this.object3d);
     }
@@ -217,7 +214,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
     ) {
       this.parentObject3d.object3d.remove(this.object3d);
     } else {
-      const { scene } = this.store.getImperativeState();
+      const scene = this.store.get('scene');
       if (scene) {
         scene.remove(this.object3d);
       }
@@ -273,7 +270,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
 
       if (this.objectInputsController.color) {
         customProps['color'] = this.objectInputsController.color;
-        if (!this.store.getImperativeState().linear) {
+        if (!this.store.get('linear')) {
           (customProps['color'] as THREE.Color).convertSRGBToLinear();
         }
       }
@@ -316,17 +313,18 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.ngZone.runOutsideAngular(() => {
-      if (this.#inputChangesSubscription) {
-        this.#inputChangesSubscription.unsubscribe();
-      }
+    if (this.#inputChangesSubscription) {
+      this.#inputChangesSubscription.unsubscribe();
+    }
 
-      if (this.object3d) {
-        this.#remove();
-        this.instancesStore.removeObject(this.object3d.uuid);
-        this.eventsStore.removeInteraction(this.object3d.uuid);
-      }
-    });
+    if (this.object3d) {
+      this.#remove();
+      this.store.set((state) => {
+        const { [this.object3d.uuid]: _, ...objects } = state.objects;
+        return { ...state, objects };
+      });
+      this.eventsStore.removeInteraction(this.object3d.uuid);
+    }
   }
 
   get object3d(): THREE.Object3D {

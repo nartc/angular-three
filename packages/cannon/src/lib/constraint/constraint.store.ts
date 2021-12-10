@@ -1,6 +1,6 @@
-import { EnhancedComponentStore, tapEffect } from '@angular-three/core';
-import { Inject, Injectable, NgZone, Optional } from '@angular/core';
-import { tap, withLatestFrom } from 'rxjs';
+import { EnhancedRxState } from '@angular-three/core';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { Subject } from 'rxjs';
 import * as THREE from 'three';
 import { NgtPhysicBodyController } from '../body/body.controller';
 import { ConstraintTypes } from '../models/constraints';
@@ -13,21 +13,18 @@ export interface NgtPhysicConstraintStoreState {
 }
 
 @Injectable()
-export class NgtPhysicConstraintStore extends EnhancedComponentStore<NgtPhysicConstraintStoreState> {
+export class NgtPhysicConstraintStore extends EnhancedRxState<NgtPhysicConstraintStoreState> {
   #uuid = THREE.MathUtils.generateUUID();
+  #init$ = new Subject<void>();
+  init = this.#init$.next.bind(this.#init$);
 
   constructor(
     @Optional()
     @Inject(NGT_PHYSIC_CONSTRAINT_TYPE)
     private type: 'Hinge' | ConstraintTypes,
-    private physicsStore: NgtPhysicsStore,
-    private ngZone: NgZone
+    private physicsStore: NgtPhysicsStore
   ) {
-    super({
-      options: {},
-      bodies: [],
-    });
-
+    super();
     if (!type) {
       throw new Error('NGT_PHYSIC_CONSTRAINT_TYPE is required');
     }
@@ -37,88 +34,62 @@ export class NgtPhysicConstraintStore extends EnhancedComponentStore<NgtPhysicCo
         '[ngtPhysic***Constraint] directive can only be used inside of <ngt-physics>'
       );
     }
+    this.set({ options: {}, bodies: [] });
+    this.holdEffect(this.#init$, () => {
+      const { bodies, options } = this.get();
+      const worker = this.physicsStore.get('worker');
+      const [bodyA, bodyB] = bodies;
+
+      if (bodyA?.object3d && bodyB?.object3d) {
+        worker.postMessage({
+          op: 'addConstraint',
+          props: [bodyA.object3d.uuid, bodyB.object3d.uuid, options],
+          type: this.type,
+          uuid: this.#uuid,
+        });
+      }
+
+      return () => {
+        worker.postMessage({ op: 'removeConstraint', uuid: this.#uuid });
+      };
+    });
   }
 
-  readonly init = this.effect(($) =>
-    $.pipe(
-      tap(() => {
-        this.#initConstraint();
-      })
-    )
-  );
-
-  #initConstraint = this.effect(($) =>
-    $.pipe(
-      withLatestFrom(this.selectors.bodies$, this.selectors.options$),
-      tapEffect(([, bodies, options]) => {
-        const { worker } = this.physicsStore.getImperativeState();
-        const [bodyA, bodyB] = bodies;
-
-        this.ngZone.runOutsideAngular(() => {
-          if (bodyA?.object3d && bodyB?.object3d) {
-            worker.postMessage({
-              op: 'addConstraint',
-              props: [bodyA.object3d.uuid, bodyB.object3d.uuid, options],
-              type: this.type,
-              uuid: this.#uuid,
-            });
-          }
-        });
-
-        return () => {
-          worker.postMessage({ op: 'removeConstraint', uuid: this.#uuid });
-        };
-      })
-    )
-  );
-
   get api() {
-    const { worker } = this.physicsStore.getImperativeState();
+    const worker = this.physicsStore.get('worker');
 
     const enableDisable = {
       enable: () =>
-        this.ngZone.runOutsideAngular(() =>
-          worker.postMessage({ op: 'enableConstraint', uuid: this.#uuid })
-        ),
+        worker.postMessage({ op: 'enableConstraint', uuid: this.#uuid }),
       disable: () =>
-        this.ngZone.runOutsideAngular(() =>
-          worker.postMessage({ op: 'disableConstraint', uuid: this.#uuid })
-        ),
+        worker.postMessage({ op: 'disableConstraint', uuid: this.#uuid }),
     };
 
     if (this.type === 'Hinge') {
       return {
         ...enableDisable,
         enableMotor: () =>
-          this.ngZone.runOutsideAngular(() =>
-            worker.postMessage({
-              op: 'enableConstraintMotor',
-              uuid: this.#uuid,
-            })
-          ),
+          worker.postMessage({
+            op: 'enableConstraintMotor',
+            uuid: this.#uuid,
+          }),
         disableMotor: () =>
-          this.ngZone.runOutsideAngular(() =>
-            worker.postMessage({
-              op: 'disableConstraintMotor',
-              uuid: this.#uuid,
-            })
-          ),
+          worker.postMessage({
+            op: 'disableConstraintMotor',
+            uuid: this.#uuid,
+          }),
         setMotorSpeed: (value: number) =>
-          this.ngZone.runOutsideAngular(() =>
-            worker.postMessage({
-              op: 'setConstraintMotorSpeed',
-              uuid: this.#uuid,
-              props: value,
-            })
-          ),
+          worker.postMessage({
+            op: 'setConstraintMotorSpeed',
+            uuid: this.#uuid,
+            props: value,
+          }),
         setMotorMaxForce: (value: number) =>
-          this.ngZone.runOutsideAngular(() =>
-            worker.postMessage({
-              op: 'setConstraintMotorMaxForce',
-              uuid: this.#uuid,
-              props: value,
-            })
-          ),
+          worker.postMessage({
+            op: 'setConstraintMotorMaxForce',
+            uuid: this.#uuid,
+            props: value,
+          }),
       };
     }
 

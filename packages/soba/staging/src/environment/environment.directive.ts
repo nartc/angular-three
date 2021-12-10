@@ -1,12 +1,12 @@
 import {
-  EnhancedComponentStore,
+  EnhancedRxState,
   NgtLoaderService,
   NgtStore,
-  tapEffect,
 } from '@angular-three/core';
 import { presetsObj, PresetsType } from '@angular-three/soba';
 import { Directive, Input, NgModule, NgZone, OnInit } from '@angular/core';
-import { Observable, switchMap, tap, withLatestFrom } from 'rxjs';
+import { selectSlice } from '@rx-angular/state';
+import { combineLatest, map, Observable, startWith, switchMap } from 'rxjs';
 import * as THREE from 'three';
 import { RGBELoader } from 'three-stdlib';
 
@@ -15,11 +15,11 @@ const CUBEMAP_ROOT =
 
 interface NgtSobaEnvironmentState {
   background?: boolean;
+  texture: THREE.Texture;
   files?: string | string[];
   path?: string;
   scene?: THREE.Scene;
   extensions?: (loader: THREE.Loader) => void;
-  texture?: THREE.Texture;
 }
 
 @Directive({
@@ -27,19 +27,19 @@ interface NgtSobaEnvironmentState {
   exportAs: 'ngtSobaEnvironment',
 })
 export class NgtSobaEnvironment
-  extends EnhancedComponentStore<NgtSobaEnvironmentState>
+  extends EnhancedRxState<NgtSobaEnvironmentState>
   implements OnInit
 {
   @Input() set background(v: boolean) {
-    this.updaters.setBackground(v);
+    this.set({ background: v });
   }
 
   @Input() set files(v: string | string[]) {
-    this.updaters.setFiles(v);
+    this.set({ files: v });
   }
 
   @Input() set path(v: string) {
-    this.updaters.setPath(v);
+    this.set({ path: v });
   }
 
   @Input() set preset(v: PresetsType) {
@@ -48,36 +48,33 @@ export class NgtSobaEnvironment
         'Preset must be one of: ' + Object.keys(presetsObj).join(', ')
       );
     }
-    this.updaters.setFiles(presetsObj[v]);
-    this.updaters.setPath(CUBEMAP_ROOT + '/hdri/');
+    this.set({ files: presetsObj[v], path: CUBEMAP_ROOT + '/hdri/' });
   }
 
   @Input() set scene(v: THREE.Scene) {
-    this.updaters.setScene(v);
+    this.set({ scene: v });
   }
 
   @Input() set extensions(v: (loader: THREE.Loader) => void) {
-    this.updaters.setExtensions(v);
+    this.set({ extensions: v });
   }
 
-  #textureParams$ = this.select(
-    this.selectors.files$,
-    this.selectors.path$,
-    this.selectors.extensions$,
-    (files, path, extensions) => {
+  #textureParams$ = combineLatest([
+    this.select(selectSlice(['files', 'path'])),
+    this.select('extensions').pipe(startWith(undefined)),
+  ]).pipe(
+    map(([{ path, files }, extensions]) => {
       const loader = this.#isCubeMap ? THREE.CubeTextureLoader : RGBELoader;
       const urls = this.#isCubeMap ? [files] : files;
       return { loader, urls, path, extensions };
-    },
-    { debounce: true }
+    })
   );
 
-  #environmentParams$ = this.select(
-    this.selectors.texture$,
-    this.selectors.scene$,
-    this.selectors.background$,
-    (texture, scene, background) => ({ texture, scene, background }),
-    { debounce: true }
+  #environmentParams$ = combineLatest([
+    this.select(selectSlice(['texture', 'background'])),
+    this.select('scene').pipe(startWith(undefined)),
+  ]).pipe(
+    map(([{ texture, background }, scene]) => ({ texture, background, scene }))
   );
 
   constructor(
@@ -85,102 +82,74 @@ export class NgtSobaEnvironment
     private ngZone: NgZone,
     private store: NgtStore
   ) {
-    super({
+    super();
+    this.set({
       background: false,
       files: ['/px.png', '/nx.png', '/py.png', '/ny.png', '/pz.png', '/nz.png'],
       path: '',
       scene: undefined,
       extensions: undefined,
-      texture: undefined,
     });
   }
 
   ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      this.init();
-    });
-  }
+    this.hold(
+      this.#textureParams$.pipe(
+        switchMap(({ path, extensions, loader, urls }) =>
+          // @ts-ignore
+          this.loaderService.use(loader, urls, (innerLoader) => {
+            innerLoader.setPath(path!);
+            if (extensions) {
+              extensions(innerLoader);
+            }
+          })
+        )
+      ) as Observable<THREE.Texture>,
+      (textureResult) => {
+        const renderer = this.store.get('renderer');
+        const gen = new THREE.PMREMGenerator(renderer!);
+        const texture = NgtSobaEnvironment.getTexture(
+          textureResult,
+          gen,
+          this.#isCubeMap
+        ) as THREE.Texture;
+        gen.dispose();
 
-  readonly init = this.effect(($) =>
-    $.pipe(
-      tap(() => {
-        this.#updateTexture(
-          this.#textureParams$.pipe(
-            switchMap(({ extensions, path, urls, loader }) =>
-              // @ts-ignore
-              this.loaderService.use(loader, urls, (innerLoader) => {
-                innerLoader.setPath(path!);
-                if (extensions) {
-                  extensions(innerLoader);
-                }
-              })
-            )
-          ) as Observable<THREE.Texture>
-        );
+        this.set({ texture });
+      }
+    );
 
-        this.#updateEnvironment(this.#environmentParams$);
-      })
-    )
-  );
-
-  #updateTexture = this.effect<THREE.Texture>((texture$) =>
-    texture$.pipe(
-      withLatestFrom(this.store.selectors.renderer$),
-      tap(([textureResult, renderer]) => {
-        this.ngZone.runOutsideAngular(() => {
-          const gen = new THREE.PMREMGenerator(renderer!);
-          const texture = NgtSobaEnvironment.getTexture(
-            textureResult,
-            gen,
-            this.#isCubeMap
-          ) as THREE.Texture;
-          gen.dispose();
-
-          this.updaters.setTexture(texture);
-        });
-      })
-    )
-  );
-
-  #updateEnvironment = this.effect<{
-    texture?: THREE.Texture;
-    scene?: THREE.Scene;
-    background?: boolean;
-  }>((params$) =>
-    params$.pipe(
-      withLatestFrom(this.store.selectors.scene$),
-      tapEffect(([{ texture, scene, background }, defaultScene]) => {
+    this.holdEffect(
+      this.#environmentParams$,
+      ({ texture, scene, background }) => {
+        const defaultScene = this.store.get('scene');
         const oldBg = scene ? scene.background : defaultScene!.background;
         const oldEnv = scene ? scene.environment : defaultScene!.environment;
 
-        this.ngZone.runOutsideAngular(() => {
-          if (scene) {
-            scene.environment = texture!;
-            if (background) scene.background = texture!;
-          } else {
-            defaultScene!.environment = texture!;
-            if (background) defaultScene!.background = texture!;
-          }
-        });
+        if (scene) {
+          scene.environment = texture!;
+          if (background) scene.background = texture!;
+        } else {
+          defaultScene!.environment = texture!;
+          if (background) defaultScene!.background = texture!;
+        }
 
         return () => {
-          this.ngZone.runOutsideAngular(() => {
-            if (scene) {
-              scene.environment = oldEnv;
-              scene.background = oldBg;
-            } else {
-              defaultScene!.environment = oldEnv;
-              defaultScene!.background = oldBg;
-            }
-            texture?.dispose();
-          });
+          if (scene) {
+            scene.environment = oldEnv;
+            scene.background = oldBg;
+          } else {
+            defaultScene!.environment = oldEnv;
+            defaultScene!.background = oldBg;
+          }
+          texture.dispose();
         };
-      })
-    )
-  );
+      }
+    );
+  }
 
   get #isCubeMap() {
-    return Array.isArray(this.getImperativeState().files);
+    return Array.isArray(this.get('files'));
   }
 
   private static getTexture(
