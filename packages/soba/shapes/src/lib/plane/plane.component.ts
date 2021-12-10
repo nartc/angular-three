@@ -23,7 +23,6 @@ import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-soba-plane',
-  exportAs: 'ngtSobaPlane',
   template: `
     <ngt-mesh
       #ngtMesh="ngtMesh"

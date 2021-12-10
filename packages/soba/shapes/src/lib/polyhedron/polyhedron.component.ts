@@ -23,7 +23,6 @@ import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-soba-polyhedron',
-  exportAs: 'ngtSobaPolyhedron',
   template: `
     <ngt-mesh
       #ngtMesh="ngtMesh"

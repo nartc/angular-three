@@ -63,9 +63,7 @@ export class NgtEffectStore extends EnhancedRxState<NgtEffectStoreState> {
       effect: undefined,
     });
 
-    this.connect('effect', this.#init$, (state) => ({
-      effect: new effectType(state.options),
-    }));
+    this.connect('effect', this.#init$, (state) => new effectType(state.options));
 
     this.hold(this.#init$, () => {
       const { blendFunction, opacity, effect } = this.get();
