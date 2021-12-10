@@ -1,3 +1,28 @@
+## [2.5.0](https://github.com/nartc/angular-three/compare/2.4.2...2.5.0) (2021-12-10)
+
+
+### Features
+
+* **core:** migrate to RxAngular ([#37](https://github.com/nartc/angular-three/issues/37)) ([eb944ac](https://github.com/nartc/angular-three/commit/eb944ac6d3071a2248afb71b3d93fc6e85558e93)), closes [#31](https://github.com/nartc/angular-three/issues/31) [#35](https://github.com/nartc/angular-three/issues/35) [#35](https://github.com/nartc/angular-three/issues/35) [#35](https://github.com/nartc/angular-three/issues/35) [#35](https://github.com/nartc/angular-three/issues/35) [#35](https://github.com/nartc/angular-three/issues/35) [#35](https://github.com/nartc/angular-three/issues/35) [#35](https://github.com/nartc/angular-three/issues/35)
+* **core:** update THREE 0.135 ([e545086](https://github.com/nartc/angular-three/commit/e545086798bdde76d8882e00e4f653844322127e))
+
+
+### Bug Fixes
+
+* **core:** when disabled is true, only disable the events and append handler on object3d ([1b1fa9d](https://github.com/nartc/angular-three/commit/1b1fa9da95e5e06896b0d42706b385840696d19b))
+
+
+### Documentations
+
+* **demo:** adjust level of details demo ([bce4199](https://github.com/nartc/angular-three/commit/bce4199cefa470672059211ea91b4bca8049834a))
+* **storybook:** fix typo in import ([#36](https://github.com/nartc/angular-three/issues/36)) ([bf263dc](https://github.com/nartc/angular-three/commit/bf263dc47db6563eb573d389a37b2d0a711e08ad))
+* **storybook:** use disabled true on the icosahedron in detailed stories ([03baa05](https://github.com/nartc/angular-three/commit/03baa05b02c3368acf25d29c0e1a3d6491034162))
+
+
+### Cleanup
+
+* **core:** remove comments ([846c34c](https://github.com/nartc/angular-three/commit/846c34c6f350684ceefca01c5c6b6554dae642e9))
+
 ### [2.4.2](https://github.com/nartc/angular-three/compare/2.4.1...2.4.2) (2021-12-08)
 
 
