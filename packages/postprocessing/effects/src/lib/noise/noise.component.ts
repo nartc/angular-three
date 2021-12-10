@@ -25,13 +25,12 @@ import { BlendFunction, NoiseEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-noise',
-  exportAs: 'ngtNoise',
   template: `
     <ngt-primitive
       *ngIf="effect"
+      [disabled]="true"
       [object]="$any(effect)"
       [dispose]="null"
-      appendMode="none"
     ></ngt-primitive>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

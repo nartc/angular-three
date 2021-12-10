@@ -24,7 +24,8 @@
     "@angular/platform-browser": "~13.0.3",
     "@angular/platform-browser-dynamic": "~13.0.3",
     "@angular/router": "~13.0.3",
-    "@ngrx/component-store": "13.0.2",
+    "@rx-angular/cdk": "1.0.0-alpha.11",
+    "@rx-angular/state": "1.4.6",
     "cannon-es": "0.18.0",
     "cannon-es-debugger": "0.1.4",
     "nice-color-palettes": "3.0.0",
@@ -93,4 +94,3 @@
     }
   }
 }
-

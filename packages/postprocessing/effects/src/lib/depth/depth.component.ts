@@ -24,13 +24,12 @@ import { DepthEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-depth',
-  exportAs: 'ngtDepth',
   template: `
     <ngt-primitive
       *ngIf="effect"
+      [disabled]="true"
       [object]="$any(effect)"
       [dispose]="null"
-      appendMode="none"
     ></ngt-primitive>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

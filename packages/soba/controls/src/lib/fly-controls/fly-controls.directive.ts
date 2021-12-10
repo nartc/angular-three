@@ -1,9 +1,8 @@
 import {
-  EnhancedComponentStore,
+  EnhancedRxState,
   NgtAnimationFrameStore,
   NgtLoopService,
   NgtStore,
-  tapEffect,
 } from '@angular-three/core';
 import {
   Directive,
@@ -13,12 +12,12 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Subscription, tap, withLatestFrom } from 'rxjs';
+import { selectSlice } from '@rx-angular/state';
 import * as THREE from 'three';
 import { FlyControls } from 'three-stdlib';
 
 interface NgtSobaFlyControlsState {
-  controls?: FlyControls;
+  controls: FlyControls;
 }
 
 @Directive({
@@ -26,90 +25,65 @@ interface NgtSobaFlyControlsState {
   exportAs: 'ngtSobaFlyControls',
 })
 export class NgtSobaFlyControls
-  extends EnhancedComponentStore<NgtSobaFlyControlsState>
+  extends EnhancedRxState<NgtSobaFlyControlsState>
   implements OnInit
 {
+  @Output() ready = this.select('controls');
   @Output() change = new EventEmitter<THREE.Event>();
 
   constructor(
     private store: NgtStore,
-    private ngZone: NgZone,
     private loopService: NgtLoopService,
-    private animationFrameStore: NgtAnimationFrameStore
+    private animationFrameStore: NgtAnimationFrameStore,
+    private ngZone: NgZone
   ) {
-    super({ controls: undefined });
+    super();
   }
 
   ngOnInit() {
-    this.#initControls();
-    this.#initControlsEvents(this.selectors.controls$);
-    this.#registerAnimation(this.selectors.controls$);
-  }
+    this.holdEffect(this.select('controls'), (controls) => {
+      const callback = (e: THREE.Event) => {
+        this.loopService.invalidate();
+        if (this.change.observed) {
+          this.change.emit(e);
+        }
+      };
 
-  #initControls = this.effect(($) =>
-    $.pipe(
-      withLatestFrom(
-        this.store.selectors.camera$,
-        this.store.selectors.renderer$
-      ),
-      tap(([, camera, renderer]) => {
+      controls.addEventListener('change', callback);
+
+      return () => {
+        controls.removeEventListener('change', callback);
+      };
+    });
+
+    this.hold(
+      this.store.select(selectSlice(['camera', 'renderer'])),
+      ({ renderer, camera }) => {
         this.ngZone.runOutsideAngular(() => {
           if (camera && renderer) {
-            const controls = new FlyControls(camera, renderer.domElement);
-            this.patchState({ controls });
+            this.set({
+              controls: new FlyControls(camera, renderer.domElement),
+            });
           }
         });
-      })
-    )
-  );
+      }
+    );
 
-  #initControlsEvents = this.effect<FlyControls | undefined>((controls$) =>
-    controls$.pipe(
-      tapEffect((controls) => {
-        const callback = (e: THREE.Event) => {
-          this.loopService.invalidate(this.store.getImperativeState());
-          if (this.change.observed) {
-            this.change.emit(e);
-          }
-        };
+    this.holdEffect(this.select('controls'), (controls) => {
+      const animationUuid = this.animationFrameStore.register({
+        callback: ({ delta }) => {
+          controls.update(delta);
+        },
+      });
 
-        if (controls) {
-          controls.addEventListener('change', callback);
-        }
-
-        return () => {
-          if (controls) {
-            controls.removeEventListener('change', callback);
-          }
-        };
-      })
-    )
-  );
-
-  #registerAnimation = this.effect<FlyControls | undefined>((controls$) =>
-    controls$.pipe(
-      tapEffect((controls) => {
-        let animationSubscription: Subscription;
-        if (controls) {
-          animationSubscription = this.animationFrameStore.register({
-            obj: null,
-            callback: ({ delta }) => {
-              controls.update(delta);
-            },
-          });
-        }
-
-        return () => {
-          if (animationSubscription) {
-            animationSubscription.unsubscribe();
-          }
-        };
-      })
-    )
-  );
+      return () => {
+        this.animationFrameStore.unregister(animationUuid);
+      };
+    });
+  }
 
   get controls() {
-    return this.getImperativeState().controls as FlyControls;
+    return this.get('controls') as FlyControls;
   }
 }
 

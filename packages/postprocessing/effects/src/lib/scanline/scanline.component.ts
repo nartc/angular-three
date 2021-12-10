@@ -25,13 +25,12 @@ import { BlendFunction, ScanlineEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-scanline',
-  exportAs: 'ngtScanline',
   template: `
     <ngt-primitive
       *ngIf="effect"
+      [disabled]="true"
       [object]="$any(effect)"
       [dispose]="null"
-      appendMode="none"
     ></ngt-primitive>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

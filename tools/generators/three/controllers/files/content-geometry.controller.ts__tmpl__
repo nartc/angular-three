@@ -1,13 +1,6 @@
 // GENERATED
-import {
-  ContentChild,
-  Directive,
-  Input,
-  NgModule,
-  NgZone,
-} from '@angular/core';
+import { ContentChild, Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
-import { NgtInstancesStore } from '../stores/instances.store';
 import { NgtGeometry } from '../three/geometry';
 import { Controller, createControllerProviderFactory } from './controller';
 
@@ -26,9 +19,9 @@ export class NgtContentGeometryController extends Controller {
     }
   }
 
-  #geometryInput?: string | THREE.BufferGeometry | undefined;
+  #geometryInput?: THREE.BufferGeometry | undefined;
 
-  @Input() set geometry(v: string | THREE.BufferGeometry | undefined) {
+  @Input() set geometry(v: THREE.BufferGeometry | undefined) {
     if (v) {
       this.#geometryInput = v;
       this.construct();
@@ -43,23 +36,15 @@ export class NgtContentGeometryController extends Controller {
 
   #geometry: THREE.BufferGeometry | undefined = undefined;
 
-  constructor(ngZone: NgZone, private instancesStore: NgtInstancesStore) {
-    super(ngZone);
-  }
-
   construct() {
     this.#geometry = this.#getGeometry(this.#geometryInput);
   }
 
   #getGeometry(
-    input: string | THREE.BufferGeometry | undefined
+    input: THREE.BufferGeometry | undefined
   ): THREE.BufferGeometry | undefined {
-    if (input) {
-      if (input instanceof THREE.BufferGeometry) {
-        return input;
-      }
-
-      return this.instancesStore.getImperativeState().geometries[input];
+    if (input instanceof THREE.BufferGeometry) {
+      return input;
     }
 
     return undefined;

@@ -8,7 +8,6 @@
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",
-    "@ngrx/component-store": "^13.0.0",
     "three": "0.135.0"
   },
   "dependencies": {

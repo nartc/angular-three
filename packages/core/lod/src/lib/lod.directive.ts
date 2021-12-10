@@ -3,7 +3,7 @@ import {
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
 } from '@angular-three/core';
-import { Directive, Inject, NgModule, NgZone } from '@angular/core';
+import { Directive, Inject, NgModule, NgZone, OnInit } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -11,7 +11,7 @@ import * as THREE from 'three';
   exportAs: 'ngtLod',
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
-export class NgtLod {
+export class NgtLod implements OnInit {
   #lod?: THREE.LOD;
 
   get lod() {
@@ -29,7 +29,7 @@ export class NgtLod {
     };
   }
 
-  ngAfterContentInit() {
+  ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.objectController.init();
     });

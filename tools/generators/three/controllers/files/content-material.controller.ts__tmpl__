@@ -4,11 +4,9 @@ import {
   Directive,
   Input,
   NgModule,
-  NgZone,
   QueryList,
 } from '@angular/core';
 import * as THREE from 'three';
-import { NgtInstancesStore } from '../stores/instances.store';
 import { NgtMaterial } from '../three/material';
 import { Controller, createControllerProviderFactory } from './controller';
 
@@ -32,16 +30,9 @@ export class NgtContentMaterialController extends Controller {
     }
   }
 
-  #materialInput?:
-    | string
-    | string[]
-    | THREE.Material
-    | THREE.Material[]
-    | undefined;
+  #materialInput?: THREE.Material | THREE.Material[] | undefined;
 
-  @Input() set material(
-    v: string | string[] | THREE.Material | THREE.Material[] | undefined
-  ) {
+  @Input() set material(v: THREE.Material | THREE.Material[] | undefined) {
     if (v) {
       if (!(Array.isArray(v) && !v.length)) {
         this.#materialInput = v;
@@ -58,36 +49,23 @@ export class NgtContentMaterialController extends Controller {
 
   #material: THREE.Material | THREE.Material[] | undefined = undefined;
 
-  constructor(ngZone: NgZone, private instancesStore: NgtInstancesStore) {
-    super(ngZone);
-  }
-
   construct() {
     this.#material = this.#getMaterial(this.#materialInput);
   }
 
   #getMaterial(
-    input: string | string[] | THREE.Material | THREE.Material[] | undefined
+    input: THREE.Material | THREE.Material[] | undefined
   ): THREE.Material | THREE.Material[] | undefined {
-    if (input) {
-      if (Array.isArray(input)) {
-        if (!input.length) return undefined;
+    if (Array.isArray(input)) {
+      if (!input.length) return undefined;
 
-        if (input[0] instanceof THREE.Material) {
-          return input as THREE.Material[];
-        }
-
-        return (input as string[]).map(
-          (materialId) =>
-            this.instancesStore.getImperativeState().materials[materialId]
-        );
+      if (input[0] instanceof THREE.Material) {
+        return input as THREE.Material[];
       }
+    }
 
-      if (input instanceof THREE.Material) {
-        return input;
-      }
-
-      return this.instancesStore.getImperativeState().materials[input];
+    if (input instanceof THREE.Material) {
+      return input;
     }
 
     return undefined;

@@ -12,12 +12,7 @@ import {
   NgtSobaFlyControlsModule,
 } from '@angular-three/soba/controls';
 import { NgtSobaDetailedModule } from '@angular-three/soba/performances';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  NgModule,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -112,7 +107,10 @@ import * as THREE from 'three';
           [scale]="[1.5, 1.5, 1.5]"
         ></ngt-mesh>
       </ngt-soba-detailed>
-      <ngt-soba-fly-controls></ngt-soba-fly-controls>
+      <ngt-soba-fly-controls
+        #flyControls="ngtSobaFlyControls"
+        (ready)="onReady(flyControls)"
+      ></ngt-soba-fly-controls>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -120,12 +118,9 @@ import * as THREE from 'three';
 export class LevelOfDetailsComponent {
   fog = new THREE.Fog('#000000', 1, 15000);
 
-  @ViewChild(NgtSobaFlyControls, { static: true })
-  flyControls!: NgtSobaFlyControls;
-
-  ngAfterViewInit() {
-    this.flyControls.controls.movementSpeed = 1000;
-    this.flyControls.controls.rollSpeed = Math.PI / 10;
+  onReady(flyControls: NgtSobaFlyControls) {
+    flyControls.controls.movementSpeed = 1000;
+    flyControls.controls.rollSpeed = Math.PI / 10;
   }
 }
 

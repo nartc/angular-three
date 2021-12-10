@@ -1,16 +1,16 @@
 import {
   capitalize,
-  EnhancedComponentStore,
+  EnhancedRxState,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
   NgtObject3dInputsController,
   NgtObject3dProps,
   NgtTriplet,
-  tapEffect,
 } from '@angular-three/core';
-import { Inject, Injectable, NgZone, Optional } from '@angular/core';
-import { startWith, tap } from 'rxjs';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { stateful } from '@rx-angular/state';
+import { combineLatest, map, startWith } from 'rxjs';
 import * as THREE from 'three';
 import { NgtCannonDebugStore } from '../debug/debug.store';
 import { WorkerApi } from '../models/api';
@@ -66,11 +66,15 @@ export interface NgtPhysicBodyStoreState {
 }
 
 @Injectable()
-export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStoreState> {
-  #workerEffectChanges$ = this.select(
-    this.selectors.getPhysicProps$,
-    this.objectInputsController.change$.pipe(startWith({})),
-    () => ({})
+export class NgtPhysicBodyStore extends EnhancedRxState<NgtPhysicBodyStoreState> {
+  #changes$ = combineLatest([
+    this.select('getPhysicProps').pipe(startWith(undefined)),
+    this.objectInputsController.change$.pipe(stateful(startWith({}))),
+  ]).pipe(
+    map(([getPhysicProps, inputChanges]) => ({
+      getPhysicProps,
+      inputChanges,
+    }))
   );
 
   constructor(
@@ -83,10 +87,10 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
     @Inject(NGT_PHYSIC_BODY_ARGS_FN) private argsFn: ArgFn<unknown>,
     @Optional() @Inject(NGT_PHYSIC_BODY_TYPE) private type: BodyShapeType,
     private physicsStore: NgtPhysicsStore,
-    @Optional() private cannonDebugStore: NgtCannonDebugStore,
-    private ngZone: NgZone
+    @Optional() private cannonDebugStore: NgtCannonDebugStore
   ) {
-    super({ getPhysicProps: undefined, object3d: objectController.object3d });
+    super();
+
     if (!type) {
       throw new Error('NGT_PHYSIC_BODY_TYPE is required');
     }
@@ -102,112 +106,20 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
         '[ngtPhysic***] directive can only be used inside of <ngt-physics>'
       );
     }
+
+    this.set({
+      getPhysicProps: undefined,
+      object3d: objectController.object3d,
+    });
   }
 
-  readonly init = this.effect(($) =>
-    $.pipe(
-      tap(() => {
-        this.updaters.setObject3d(this.objectController.object3d);
-        this.#initWorkerMessage(this.#workerEffectChanges$);
-      })
-    )
-  );
-
-  #getByIndex(index: number): BodyProps & NgtObject3dProps {
-    const physicsProps = this.getImperativeState().getPhysicProps
-      ? this.getImperativeState().getPhysicProps?.(index)
-      : ({} as BodyProps);
-
-    return {
-      ...this.objectInputsController.object3dProps,
-      ...physicsProps,
-    } as BodyProps & NgtObject3dProps;
+  init() {
+    this.set({ object3d: this.objectController.object3d });
+    this.holdEffect(this.#changes$, this.#initWorker.bind(this));
   }
-
-  #initWorkerMessage = this.effect<{}>(($) =>
-    $.pipe(
-      tapEffect(() => {
-        let uuid: string[] = [];
-        const {
-          worker: currentWorker,
-          refs,
-          events,
-        } = this.physicsStore.getImperativeState();
-
-        this.ngZone.runOutsideAngular(() => {
-          const object =
-            this.getImperativeState().object3d || new THREE.Object3D();
-
-          let objectCount = 1;
-
-          if (object instanceof THREE.InstancedMesh) {
-            object.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-            objectCount = object.count;
-          }
-
-          uuid =
-            object instanceof THREE.InstancedMesh
-              ? new Array(objectCount)
-                  .fill(0)
-                  .map((_, i) => `${object.uuid}/${i}`)
-              : [object.uuid];
-
-          const props: (BodyProps & { args: unknown })[] = uuid.map((id, i) => {
-            const physicProps = this.#getByIndex(i);
-            prepare(temp, physicProps);
-            if (object instanceof THREE.InstancedMesh) {
-              object.setMatrixAt(i, temp.matrix);
-              object.instanceMatrix.needsUpdate = true;
-            }
-            refs[id] = object;
-            if (this.cannonDebugStore) {
-              this.cannonDebugStore.api.add(id, physicProps, this.type);
-            }
-            setupCollision(events, physicProps, id);
-            return { ...physicProps, args: this.argsFn(physicProps.args) };
-          });
-
-          // Register on mount, unregister on unmount
-          currentWorker.postMessage({
-            op: 'addBodies',
-            type: this.type,
-            uuid,
-            props: props.map(
-              ({
-                onCollide,
-                onCollideBegin,
-                onCollideEnd,
-                ...serializableProps
-              }) => {
-                return {
-                  onCollide: Boolean(onCollide),
-                  ...serializableProps,
-                };
-              }
-            ),
-          });
-        });
-
-        return () => {
-          if (currentWorker) {
-            this.ngZone.runOutsideAngular(() => {
-              uuid.forEach((id) => {
-                delete refs[id];
-                if (this.cannonDebugStore) {
-                  this.cannonDebugStore.api.remove(id);
-                }
-                delete events[id];
-              });
-              currentWorker.postMessage({ op: 'removeBodies', uuid });
-            });
-          }
-        };
-      })
-    )
-  );
 
   get api() {
-    const { worker, subscriptions } = this.physicsStore.getImperativeState();
+    const { worker, subscriptions } = this.physicsStore.get();
     const object3d = this.objectController.object3d;
     const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
       const op: SetOpName<T> = `set${capitalize(type)}`;
@@ -379,6 +291,80 @@ export class NgtPhysicBodyStore extends EnhancedComponentStore<NgtPhysicBodyStor
     return {
       ...makeApi(undefined),
       at: (index: number) => cache[index] || (cache[index] = makeApi(index)),
+    };
+  }
+
+  #getByIndex(index: number): BodyProps & NgtObject3dProps {
+    const getPhysicProps = this.get('getPhysicProps');
+    const physicsProps = getPhysicProps
+      ? getPhysicProps(index)
+      : ({} as BodyProps);
+
+    return {
+      ...this.objectInputsController.object3dProps,
+      ...physicsProps,
+    } as BodyProps & NgtObject3dProps;
+  }
+
+  #initWorker() {
+    let uuid: string[] = [];
+    const { worker: currentWorker, refs, events } = this.physicsStore.get();
+
+    const object = this.get('object3d') || new THREE.Object3D();
+
+    let objectCount = 1;
+
+    if (object instanceof THREE.InstancedMesh) {
+      object.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+      objectCount = object.count;
+    }
+
+    uuid =
+      object instanceof THREE.InstancedMesh
+        ? new Array(objectCount).fill(0).map((_, i) => `${object.uuid}/${i}`)
+        : [object.uuid];
+
+    const props: (BodyProps & { args: unknown })[] = uuid.map((id, i) => {
+      const physicProps = this.#getByIndex(i);
+      prepare(temp, physicProps);
+      if (object instanceof THREE.InstancedMesh) {
+        object.setMatrixAt(i, temp.matrix);
+        object.instanceMatrix.needsUpdate = true;
+      }
+      refs[id] = object;
+      if (this.cannonDebugStore) {
+        this.cannonDebugStore.api.add(id, physicProps, this.type);
+      }
+      setupCollision(events, physicProps, id);
+      return { ...physicProps, args: this.argsFn(physicProps.args) };
+    });
+
+    // Register on mount, unregister on unmount
+    currentWorker.postMessage({
+      op: 'addBodies',
+      type: this.type,
+      uuid,
+      props: props.map(
+        ({ onCollide, onCollideBegin, onCollideEnd, ...serializableProps }) => {
+          return {
+            onCollide: Boolean(onCollide),
+            ...serializableProps,
+          };
+        }
+      ),
+    });
+
+    return () => {
+      if (currentWorker) {
+        uuid.forEach((id) => {
+          delete refs[id];
+          if (this.cannonDebugStore) {
+            this.cannonDebugStore.api.remove(id);
+          }
+          delete events[id];
+        });
+        currentWorker.postMessage({ op: 'removeBodies', uuid });
+      }
     };
   }
 }

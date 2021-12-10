@@ -23,7 +23,6 @@ import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-soba-circle',
-  exportAs: 'ngtSobaCircle',
   template: `
     <ngt-mesh
       #ngtMesh="ngtMesh"

@@ -1,16 +1,30 @@
 import * as THREE from 'three';
 import { NgtCamera } from '../camera';
+import { NgtInstance } from '../instance';
 import { NgtRaycaster } from '../raycaster';
 import { NgtSize } from '../size';
 import { NgtCurrentViewport, NgtViewport } from '../viewport';
+import { NgtPerformance } from './performance-state';
+
+/**
+ *   dpr: NgtDpr;
+ *   raycaster: Partial<NgtRaycaster>;
+ *   shadows: boolean | Partial<THREE.WebGLShadowMap>;
+ *   cameraOptions: NgtCameraOptions;
+ *   sceneOptions: NgtSceneOptions;
+ *   glOptions: NgtGLOptions;
+ */
 
 export interface NgtState {
-  mouse: THREE.Vector2;
-  clock: THREE.Clock;
-  frameloop: 'always' | 'demand' | 'never';
   ready: boolean;
   vr: boolean;
   linear: boolean;
+  flat: boolean;
+  orthographic: boolean;
+  mouse: THREE.Vector2;
+  clock: THREE.Clock;
+  frameloop: 'always' | 'demand' | 'never';
+  performance: NgtPerformance;
   size: NgtSize;
   viewport: NgtViewport & {
     getCurrentViewport: (
@@ -20,10 +34,11 @@ export interface NgtState {
     ) => NgtCurrentViewport;
   };
   controls: THREE.EventDispatcher | null;
-  renderer?: THREE.WebGLRenderer;
-  camera?: NgtCamera;
-  scene?: THREE.Scene;
-  raycaster?: NgtRaycaster;
+  renderer: THREE.WebGLRenderer;
+  camera: NgtCamera;
+  scene: THREE.Scene;
+  raycaster: NgtRaycaster;
+  objects: Record<string, NgtInstance>;
 }
 
 export interface NgtCreatedState {

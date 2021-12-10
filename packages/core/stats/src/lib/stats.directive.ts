@@ -9,7 +9,6 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 // import Stats from minified bundle for minimizing bundle size
 // @ts-ignore
 import Stats from 'three/examples/js/libs/stats.min';
@@ -23,7 +22,7 @@ export class NgtStats implements OnInit, OnDestroy {
 
   #node: HTMLElement;
   #stats?: Stats;
-  #animationSubscription?: Subscription;
+  #animationUuid = '';
 
   constructor(
     private animationFrameStore: NgtAnimationFrameStore,
@@ -41,8 +40,7 @@ export class NgtStats implements OnInit, OnDestroy {
 
       this.#stats = new Stats();
       this.#node.appendChild(this.#stats.dom);
-      this.#animationSubscription = this.animationFrameStore.register({
-        obj: null,
+      this.#animationUuid = this.animationFrameStore.register({
         callback: () => {
           this.#stats.update();
         },
@@ -52,11 +50,8 @@ export class NgtStats implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.ngZone.runOutsideAngular(() => {
-      if (this.#animationSubscription) {
-        this.#animationSubscription.unsubscribe();
-      }
-
       if (this.#stats) {
+        this.animationFrameStore.unregister(this.#animationUuid);
         this.#stats.end();
         this.#node.removeChild(this.#stats.dom);
       }

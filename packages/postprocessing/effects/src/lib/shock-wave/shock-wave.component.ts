@@ -24,13 +24,12 @@ import { ShockWaveEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-shock-wave',
-  exportAs: 'ngtShockWave',
   template: `
     <ngt-primitive
       *ngIf="effect"
+      [disabled]="true"
       [object]="$any(effect)"
       [dispose]="null"
-      appendMode="none"
     ></ngt-primitive>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

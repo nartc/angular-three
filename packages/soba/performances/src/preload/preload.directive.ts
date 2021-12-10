@@ -1,16 +1,5 @@
-import {
-  EnhancedComponentStore,
-  NgtStore,
-  tapEffect,
-} from '@angular-three/core';
-import {
-  AfterContentInit,
-  Directive,
-  Input,
-  NgModule,
-  NgZone,
-} from '@angular/core';
-import { tap, withLatestFrom } from 'rxjs';
+import { EnhancedRxState, NgtStore } from '@angular-three/core';
+import { Directive, Input, NgModule, OnInit } from '@angular/core';
 import * as THREE from 'three';
 
 interface NgtSobaPreloadState {
@@ -24,93 +13,72 @@ interface NgtSobaPreloadState {
   exportAs: 'ngtSobaPreload',
 })
 export class NgtSobaPreload
-  extends EnhancedComponentStore<NgtSobaPreloadState>
-  implements AfterContentInit
+  extends EnhancedRxState<NgtSobaPreloadState>
+  implements OnInit
 {
   @Input() set all(v: boolean) {
-    this.updaters.setAll(v);
+    this.set({ all: v });
   }
 
   @Input() set scene(v: THREE.Object3D) {
-    this.updaters.setScene(v);
+    this.set({ scene: v });
   }
 
   @Input() set camera(v: THREE.Camera) {
-    this.updaters.setCamera(v);
+    this.set({ camera: v });
   }
 
-  #precompileParameters$ = this.select(
-    this.selectors.all$,
-    this.selectors.scene$,
-    this.selectors.camera$,
-    this.store.selectors.camera$,
-    this.store.selectors.scene$,
-    this.store.selectors.renderer$,
-    (all, scene, camera, canvasCamera, canvasScene, renderer) => ({
+  get #precompileParams() {
+    const { all, scene, camera } = this.get();
+    const {
+      camera: canvasCamera,
+      scene: canvasScene,
+      renderer,
+    } = this.store.get();
+    return {
       all,
       scene: scene || canvasScene,
       camera: camera || canvasCamera,
       renderer,
-    }),
-    { debounce: true }
-  );
+    };
+  }
 
-  constructor(private store: NgtStore, private ngZone: NgZone) {
-    super({
+  constructor(private store: NgtStore) {
+    super();
+    this.set({
       all: false,
       scene: undefined,
       camera: undefined,
     });
   }
 
-  ngAfterContentInit() {
-    this.init();
-  }
+  ngOnInit() {
+    this.hold(this.store.select('ready'), (ready) => {
+      if (ready) {
+        const { all, scene, camera, renderer } = this.#precompileParams;
+        const invisible: THREE.Object3D[] = [];
 
-  readonly init = this.effect(($) =>
-    $.pipe(
-      tap(() => {
-        this.#precompile(this.store.selectors.ready$);
-      })
-    )
-  );
-
-  #precompile = this.effect<boolean>((ready$) =>
-    ready$.pipe(
-      withLatestFrom(this.#precompileParameters$),
-      tapEffect(([ready, { camera, scene, renderer, all }]) => {
-        this.ngZone.runOutsideAngular(() => {
-          if (ready) {
-            const invisible: THREE.Object3D[] = [];
-
-            if (all) {
-              scene!.traverse((object) => {
-                if (!object.visible) {
-                  invisible.push(object);
-                  object.visible = true;
-                }
-              });
+        if (all) {
+          scene!.traverse((object) => {
+            if (!object.visible) {
+              invisible.push(object);
+              object.visible = true;
             }
+          });
+        }
 
-            // Now compile
-            renderer!.compile(scene!, camera!);
-            // And for good measure, hit it with a cube camera
-            const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(128);
-            const cubeCamera = new THREE.CubeCamera(
-              0.01,
-              100000,
-              cubeRenderTarget
-            );
-            cubeCamera.update(renderer!, scene as THREE.Scene);
-            cubeRenderTarget.dispose();
-            // Flips these objects back
-            invisible.forEach((object) => (object.visible = false));
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-          }
-        });
-      })
-    )
-  );
+        // Now compile
+        renderer!.compile(scene!, camera!);
+        // And for good measure, hit it with a cube camera
+        const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(128);
+        const cubeCamera = new THREE.CubeCamera(0.01, 100000, cubeRenderTarget);
+        cubeCamera.update(renderer!, scene as THREE.Scene);
+        cubeRenderTarget.dispose();
+        // Flips these objects back
+        invisible.forEach((object) => (object.visible = false));
+      }
+    });
+  }
 }
 
 @NgModule({

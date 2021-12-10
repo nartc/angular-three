@@ -4,7 +4,6 @@ import {
   EventEmitter,
   Input,
   NgModule,
-  NgZone,
   Output,
 } from '@angular/core';
 import * as THREE from 'three';
@@ -201,10 +200,6 @@ export class NgtObject3dInputsController extends Controller {
 
   get controller(): Controller | undefined {
     return this.object3dInputsController;
-  }
-
-  constructor(ngZone: NgZone) {
-    super(ngZone);
   }
 
   get object3dProps(): NgtObject3dProps {

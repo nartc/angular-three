@@ -2141,13 +2141,6 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@ngrx/component-store@13.0.2":
-  version "13.0.2"
-  resolved "https://registry.yarnpkg.com/@ngrx/component-store/-/component-store-13.0.2.tgz#fd254a2000851a213ee3c0ba76164055c370939e"
-  integrity sha512-zAqXuO2FT3gBJp9TWc0O8Lo4h62xbXmUxBYYTT2/BNczK+XNf/pzDWrYEtsgwP4Php0AgoY38Ht0ZS6sJkgpMQ==
-  dependencies:
-    tslib "^2.0.0"
-
 "@ngtools/webpack@13.0.4":
   version "13.0.4"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-13.0.4.tgz#9389c95fdbefb48fe061a30d81aab2f83bbf2081"
@@ -2775,6 +2768,20 @@
     "@types/estree" "0.0.39"
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
+
+"@rx-angular/cdk@1.0.0-alpha.11":
+  version "1.0.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/@rx-angular/cdk/-/cdk-1.0.0-alpha.11.tgz#edefb5a994100a9937e86165e9149ed19ff82be2"
+  integrity sha512-seVkesI3Ntz0b6Q2ujkwjkGN5B9Qa3LU/Rhnd+IeZhaUdFqdYHBgT5cn3IQ3S+32ZcFSuILngQ8sMyr+vm3GMg==
+  dependencies:
+    tslib "^2.0.0"
+
+"@rx-angular/state@1.4.6":
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/@rx-angular/state/-/state-1.4.6.tgz#a32cc064fc50ba6f7fa613b5be1cfba57300f375"
+  integrity sha512-ylXJbk5Q3SMnDSOxiRNin+2XgobKq/8tk33PaitQPeHC8oSqx/yPpySzw9b2DBmJMjaDSFgGov30RwuwfPCY3A==
+  dependencies:
+    tslib "^2.0.0"
 
 "@schematics/angular@13.0.4":
   version "13.0.4"

@@ -31,7 +31,7 @@ export class SimpleCubeComponent {}
   selector: 'ngt-cube',
   template: `
     <ngt-soba-box
-      #sobaBox="ngtSobaBox"
+      #sobaBox
       (animateReady)="onAnimateReady(sobaBox.object)"
       (pointerover)="hover = true"
       (pointerout)="hover = false"

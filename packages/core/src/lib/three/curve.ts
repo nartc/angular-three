@@ -17,7 +17,7 @@ export abstract class NgtCurve<
   protected set curveArgs(v: unknown | unknown[]) {
     this.#curveArgs = Array.isArray(v) ? v : [v];
     this.ngZone.runOutsideAngular(() => {
-      this.init();
+      this.#init();
     });
   }
 
@@ -31,12 +31,12 @@ export abstract class NgtCurve<
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       if (!this.curve) {
-        this.init();
+        this.#init();
       }
     });
   }
 
-  private init() {
+  #init() {
     this.#curve = new this.curveType(...this.#curveArgs);
     if (this.curve && this.geometryDirective) {
       const points = this.curve.getPoints(this.divisions);

@@ -6,11 +6,10 @@ import {
   ContentChildren,
   Input,
   NgModule,
-  NgZone,
-  OnInit,
   QueryList,
   ViewChild,
 } from '@angular/core';
+import { map, startWith } from 'rxjs';
 import * as THREE from 'three';
 import { NgtEffectComposerStore } from './effect-composer.store';
 import {
@@ -20,7 +19,6 @@ import {
 
 @Component({
   selector: 'ngt-effect-composer',
-  exportAs: 'ngtEffectComposer',
   template: `
     <ngt-group>
       <ng-content></ng-content>
@@ -29,41 +27,41 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtEffectComposerStore],
 })
-export class NgtEffectComposer implements OnInit {
+export class NgtEffectComposer {
   @Input() set depthBuffer(v: boolean) {
-    this.effectComposerStore.updaters.setDepthBuffer(v);
+    this.effectComposerStore.set({ depthBuffer: v });
   }
 
   @Input() set disableNormalPass(v: boolean) {
-    this.effectComposerStore.updaters.setDisableNormalPass(v);
+    this.effectComposerStore.set({ disableNormalPass: v });
   }
 
   @Input() set stencilBuffer(v: boolean) {
-    this.effectComposerStore.updaters.setStencilBuffer(v);
+    this.effectComposerStore.set({ stencilBuffer: v });
   }
 
   @Input() set autoClear(v: boolean) {
-    this.effectComposerStore.updaters.setAutoClear(v);
+    this.effectComposerStore.set({ autoClear: v });
   }
 
   @Input() set multisampling(v: number) {
-    this.effectComposerStore.updaters.setMultisampling(v);
+    this.effectComposerStore.set({ multisampling: v });
   }
 
   @Input() set renderPriority(v: number) {
-    this.effectComposerStore.updaters.setRenderPriority(v);
+    this.effectComposerStore.set({ renderPriority: v });
   }
 
   @Input() set frameBufferType(v: THREE.TextureDataType) {
-    this.effectComposerStore.updaters.setFrameBufferType(v);
+    this.effectComposerStore.set({ frameBufferType: v });
   }
 
   @Input() set camera(v: THREE.Camera) {
-    this.effectComposerStore.updaters.setCamera(v);
+    this.effectComposerStore.set({ camera: v });
   }
 
   @Input() set scene(v: THREE.Scene) {
-    this.effectComposerStore.updaters.setScene(v);
+    this.effectComposerStore.set({ scene: v });
   }
 
   @ViewChild(NgtGroup) set groupDirective(v: NgtGroup) {
@@ -78,21 +76,18 @@ export class NgtEffectComposer implements OnInit {
 
   @ContentChildren(NgtEffectController, { descendants: true })
   set effectControllers(v: QueryList<NgtEffectController>) {
-    this.effectComposerStore.updaters.setEffects(
-      v.toArray().map((item) => item.effect)
+    this.effectComposerStore.connect(
+      'effects',
+      v.changes.pipe(
+        startWith(v),
+        map((list: QueryList<NgtEffectController>) =>
+          list.toArray().map((item) => item.effect)
+        )
+      )
     );
   }
 
-  constructor(
-    private ngZone: NgZone,
-    private effectComposerStore: NgtEffectComposerStore
-  ) {}
-
-  ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      this.effectComposerStore.init();
-    });
-  }
+  constructor(private effectComposerStore: NgtEffectComposerStore) {}
 }
 
 @NgModule({

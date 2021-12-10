@@ -23,7 +23,7 @@ export class TextureLoaderService {
       : THREE.Texture
   > {
     return combineLatest([
-      this.store.selectors.renderer$,
+      this.store.select('renderer'),
       this.loaderService.use(
         THREE.TextureLoader,
         IsObject(input) ? Object.values(input) : input

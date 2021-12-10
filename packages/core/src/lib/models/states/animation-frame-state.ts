@@ -7,8 +7,8 @@ export type NgtAnimationCallback<TObject> = (
 ) => void;
 
 export interface NgtAnimationRecord {
-  obj: THREE.Object3D | null;
-  callback: NgtAnimationCallback<THREE.Object3D | null>;
+  obj?: THREE.Object3D;
+  callback: NgtAnimationCallback<THREE.Object3D | undefined>;
   priority?: number;
 }
 

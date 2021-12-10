@@ -1,4 +1,4 @@
-import { AfterContentInit, Directive, Inject, NgZone } from '@angular/core';
+import { Directive, Inject, NgZone, OnInit } from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -9,7 +9,7 @@ import { AnyConstructor } from '../models';
 @Directive()
 export abstract class NgtCommonCamera<
   TCamera extends THREE.Camera = THREE.Camera
-> implements AfterContentInit
+> implements OnInit
 {
   abstract cameraType: AnyConstructor<TCamera>;
 
@@ -19,10 +19,8 @@ export abstract class NgtCommonCamera<
     protected ngZone: NgZone
   ) {
     objectController.initFn = () => {
-      return this.ngZone.runOutsideAngular(() => {
-        this.#camera = new this.cameraType(...this.#cameraArgs);
-        return this.#camera;
-      });
+      this.#camera = new this.cameraType(...this.#cameraArgs);
+      return this.#camera;
     };
   }
 
@@ -34,7 +32,7 @@ export abstract class NgtCommonCamera<
     });
   }
 
-  ngAfterContentInit() {
+  ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       if (!this.#camera) {
         this.objectController.init();

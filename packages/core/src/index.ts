@@ -42,7 +42,6 @@ export * from './lib/stores/canvas-inputs.store';
 export * from './lib/stores/performance.store';
 export * from './lib/stores/events.store';
 export * from './lib/stores/animation-frame.store';
-export * from './lib/stores/instances.store';
 
 export * from './lib/services/loop.service';
 export * from './lib/services/destroyed.service';

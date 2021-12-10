@@ -32,12 +32,13 @@ export class NgtPhysicConstraintController
   implements AfterContentInit
 {
   @Input() set options(v: Record<string, unknown>) {
-    this.physicConstraintStore.updaters.setOptions(v);
+    this.physicConstraintStore.set({ options: v });
   }
 
   @ContentChildren(NgtPhysicBodyController, { descendants: true })
   set bodies(v: QueryList<NgtPhysicBodyController>) {
-    this.physicConstraintStore.updaters.setBodies(
+    this.physicConstraintStore.connect(
+      'bodies',
       v.changes.pipe(
         map((list: QueryList<NgtPhysicBodyController>) => list.toArray())
       )

@@ -1,14 +1,15 @@
 import { Injectable, NgZone } from '@angular/core';
-import { noop, tap, withLatestFrom } from 'rxjs';
+import { noop, Subject } from 'rxjs';
 import * as THREE from 'three';
 import {
   NgtDomEvent,
   NgtEvent,
   NgtEventsStoreState,
   NgtPointerCaptureTarget,
+  UnknownRecord,
 } from '../models';
 import { createEvents } from '../utils/events';
-import { EnhancedComponentStore, tapEffect } from './enhanced-component-store';
+import { EnhancedRxState } from './enhanced-component-store';
 import { NgtStore } from './store';
 
 const names = {
@@ -25,9 +26,13 @@ const names = {
 } as const;
 
 @Injectable()
-export class NgtEventsStore extends EnhancedComponentStore<NgtEventsStoreState> {
+export class NgtEventsStore extends EnhancedRxState<NgtEventsStoreState> {
+  #element$ = new Subject<HTMLElement>();
+  setElement = this.#element$.next.bind(this.#element$);
+
   constructor(private store: NgtStore, private ngZone: NgZone) {
-    super({
+    super();
+    this.set({
       pointerMissed: noop,
       connected: false,
       handlers: {} as NgtEventsStoreState['handlers'],
@@ -42,81 +47,68 @@ export class NgtEventsStore extends EnhancedComponentStore<NgtEventsStoreState> 
         initialHits: [],
       },
     });
+
+    ngZone.runOutsideAngular(() => {
+      const { handlePointer } = createEvents(
+        this.store.get.bind(this.store),
+        this.get.bind(this)
+      );
+
+      this.set({
+        handlers: Object.keys(names).reduce(
+          (handlers: UnknownRecord, supportedEventName) => {
+            handlers[supportedEventName] = handlePointer(supportedEventName);
+            return handlers;
+          },
+          {}
+        ) as NgtEventsStoreState['handlers'],
+      });
+
+      this.holdEffect(this.#element$, this.#connect.bind(this));
+    });
   }
 
-  readonly init = this.effect(($) =>
-    $.pipe(
-      tap(() => {
-        this.ngZone.runOutsideAngular(() => {
-          const { handlePointer } = createEvents(
-            () => this.store.getImperativeState(),
-            () => this.getImperativeState()
-          );
-
-          this.patchState({
-            handlers: Object.keys(names).reduce(
-              (handlers, supportedEventName) => {
-                handlers[supportedEventName] =
-                  handlePointer(supportedEventName);
-                return handlers;
-              },
-              {} as Record<string, unknown>
-            ) as NgtEventsStoreState['handlers'],
-          });
-        });
-      })
-    )
-  );
-
-  readonly addInteraction = this.updater<THREE.Object3D>(
-    (state, interaction) => ({
+  addInteraction(interaction: THREE.Object3D) {
+    this.set((state) => ({
       ...state,
       internal: {
         ...state.internal,
         interaction: [...state.internal.interaction, interaction],
       },
-    })
-  );
+    }));
+  }
 
-  readonly removeInteraction = this.updater<string>((state, uuid) => ({
-    ...state,
-    internal: {
-      ...state.internal,
-      interaction: state.internal.interaction.filter(
-        (obj) => obj.uuid !== uuid
-      ),
-    },
-  }));
+  removeInteraction(uuid: string) {
+    this.set((state) => ({
+      ...state,
+      internal: {
+        ...state.internal,
+        interaction: state.internal.interaction.filter(
+          (interaction) => interaction.uuid !== uuid
+        ),
+      },
+    }));
+  }
 
-  readonly connect = this.effect<HTMLElement>((element$) =>
-    element$.pipe(
-      withLatestFrom(this.selectors.handlers$),
-      tapEffect(([element, handlers]) => {
-        this.ngZone.runOutsideAngular(() => {
-          this.patchState({ connected: element });
-          Object.entries(handlers ?? {}).forEach(
-            ([eventName, eventHandler]) => {
-              const passive = names[eventName as keyof typeof names];
-              element.addEventListener(eventName, eventHandler, { passive });
-            }
-          );
-        });
+  #connect(element: HTMLElement) {
+    return this.ngZone.runOutsideAngular(() => {
+      this.set({ connected: element });
+      const handlers = this.get('handlers');
+      Object.entries(handlers ?? {}).forEach(([eventName, handler]) => {
+        const passive = names[eventName as keyof typeof names];
+        element.addEventListener(eventName, handler, { passive });
+      });
 
-        return () => {
-          this.ngZone.runOutsideAngular(() => {
-            const { connected, handlers } = this.getImperativeState();
-            if (connected) {
-              Object.entries(handlers ?? {}).forEach(
-                ([eventName, eventHandler]) => {
-                  if (connected instanceof HTMLElement) {
-                    connected.removeEventListener(eventName, eventHandler);
-                  }
-                }
-              );
+      return () => {
+        const { handlers, connected } = this.get();
+        if (connected) {
+          Object.entries(handlers ?? {}).forEach(([eventName, handler]) => {
+            if (connected instanceof HTMLElement) {
+              connected.removeEventListener(eventName, handler);
             }
           });
-        };
-      })
-    )
-  );
+        }
+      };
+    });
+  }
 }
