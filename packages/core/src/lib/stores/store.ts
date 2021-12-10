@@ -127,6 +127,38 @@ export class NgtStore extends EnhancedRxState<NgtState> {
       raycaster: raycasterOptions,
     } = this.canvasInputsStore.get();
 
+    // Scene
+    const scene = new THREE.Scene();
+    applyProps(scene, sceneOptions as UnknownRecord);
+
+    // Camera
+    const isCamera = cameraOptions instanceof THREE.Camera;
+    const camera = isCamera
+      ? cameraOptions
+      : orthographic
+      ? new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000)
+      : new THREE.PerspectiveCamera(75, size.width / size.height, 0.1, 1000);
+
+    if (!isCamera) {
+      camera.position.z = 5;
+      if (cameraOptions) {
+        applyProps(camera, cameraOptions as UnknownRecord);
+        // Update projection matrix after applying props
+        camera.updateProjectionMatrix();
+      }
+      // look at center if initial rotation isn't set
+      if (!cameraOptions?.rotation) camera.lookAt(0, 0, 0);
+    }
+
+    // Raycaster
+    const raycaster = new THREE.Raycaster();
+    const { params, ...options } = raycasterOptions || {};
+    applyProps(raycaster as unknown as NgtInstance, {
+      enabled: true,
+      ...options,
+      params: { ...raycaster.params, ...params },
+    });
+
     // Renderer
     const customRenderer = (
       typeof glOptions === 'function' ? glOptions(canvasElement) : glOptions
@@ -134,7 +166,12 @@ export class NgtStore extends EnhancedRxState<NgtState> {
 
     // userland custom renderer, assign as-is
     if (!!customRenderer?.render) {
-      this.set({ renderer: customRenderer });
+      this.set({
+        renderer: customRenderer,
+        scene,
+        camera,
+        raycaster: raycaster as NgtRaycaster,
+      });
       return;
     }
 
@@ -182,38 +219,6 @@ export class NgtStore extends EnhancedRxState<NgtState> {
       renderer.xr.enabled = true;
     }
 
-    // Scene
-    const scene = new THREE.Scene();
-    applyProps(scene, sceneOptions as UnknownRecord);
-
-    // Camera
-    const isCamera = cameraOptions instanceof THREE.Camera;
-    const camera = isCamera
-      ? cameraOptions
-      : orthographic
-      ? new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000)
-      : new THREE.PerspectiveCamera(75, size.width / size.height, 0.1, 1000);
-
-    if (!isCamera) {
-      camera.position.z = 5;
-      if (cameraOptions) {
-        applyProps(camera, cameraOptions as UnknownRecord);
-        // Update projection matrix after applying props
-        camera.updateProjectionMatrix();
-      }
-      // look at center if initial rotation isn't set
-      if (!cameraOptions?.rotation) camera.lookAt(0, 0, 0);
-    }
-
-    // Raycaster
-    const raycaster = new THREE.Raycaster();
-    const { params, ...options } = raycasterOptions || {};
-    applyProps(raycaster as unknown as NgtInstance, {
-      enabled: true,
-      ...options,
-      params: { ...raycaster.params, ...params },
-    });
-
     this.set({
       renderer,
       scene,
@@ -244,10 +249,14 @@ export class NgtStore extends EnhancedRxState<NgtState> {
     const { camera, renderer, ready } = this.get();
     const cameraOptions = this.canvasInputsStore.get('cameraOptions');
 
-    // leave the userland camera alone
-    if (cameraOptions instanceof THREE.Camera) return;
-
     if (ready) {
+      // update renderer
+      renderer.setPixelRatio(viewport.dpr);
+      renderer.setSize(size.width, size.height);
+
+      // leave the userland camera alone
+      if (cameraOptions instanceof THREE.Camera) return;
+
       if (isOrthographicCamera(camera)) {
         camera.left = size.width / -2;
         camera.right = size.width / 2;
@@ -261,10 +270,6 @@ export class NgtStore extends EnhancedRxState<NgtState> {
       // https://github.com/pmndrs/react-three-fiber/issues/178
       // Update matrix world since the renderer is a frame late
       camera.updateMatrixWorld();
-
-      // update renderer
-      renderer.setPixelRatio(viewport.dpr);
-      renderer.setSize(size.width, size.height);
     }
   }
 }
