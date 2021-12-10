@@ -25,13 +25,12 @@ import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %>Effect } fro
 
 @Component({
   selector: 'ngt-<%= fileName %>',
-  exportAs: 'ngt<%= name %>',
   template: `
     <ngt-primitive
       *ngIf="effect"
+      [disabled]="true"
       [object]="$any(effect)"
       [dispose]="null"
-      appendMode="none"
     ></ngt-primitive>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

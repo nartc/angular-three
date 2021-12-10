@@ -24,13 +24,12 @@ import { ColorDepthEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-color-depth',
-  exportAs: 'ngtColorDepth',
   template: `
     <ngt-primitive
       *ngIf="effect"
+      [disabled]="true"
       [object]="$any(effect)"
       [dispose]="null"
-      appendMode="none"
     ></ngt-primitive>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

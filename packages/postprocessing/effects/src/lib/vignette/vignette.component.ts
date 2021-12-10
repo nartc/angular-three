@@ -24,13 +24,12 @@ import { VignetteEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-vignette',
-  exportAs: 'ngtVignette',
   template: `
     <ngt-primitive
       *ngIf="effect"
+      [disabled]="true"
       [object]="$any(effect)"
       [dispose]="null"
-      appendMode="none"
     ></ngt-primitive>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
