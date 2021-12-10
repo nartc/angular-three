@@ -27,16 +27,6 @@ npm install -E three@0.135
 npm install -DE @types/three
 ```
 
-- `@ngrx/component-store`: **Angular Three** uses `ComponentStore` to manage internal states. `ComponentStore` is a stand-alone (separate from `@ngrx/store`), small, and feature-packed local state management solution (~300LOC).
-
-```bash
-npm install @ngrx/component-store
-```
-
-> **Q: Why don't you roll your own `ComponentStore` to prevent consumers from having to install another external package?**
->
-> A: `@ngrx/component-store` is extremely lightweight. It is also well-tested. I decided to keep it as a `peerDependency` because the consumers can actually **make use** of `@ngrx/component-store` if they find a need for it. After all, it's just a **Subject-as-a-Service**, but supercharged. The consumers will definitely gain more than what they have to pay for `@ngrx/component-store`.
-
 ## Documentations
 
 [Angular Three](https://angular-three.netlify.app)

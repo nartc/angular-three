@@ -2,16 +2,11 @@ import { Meta } from '@storybook/addon-docs';
 
 <Meta title={'Core API/Stores'} parameters={{ viewMode: 'docs' }} />
 
-# Component Stores
+# Stores
 
-As we have already seen, NGT makes use of `@ngrx/component-store` to provide a way to manage the state of everything happening in the Canvas. These stores are provided by the `ngt-canvas` component and are available to all children of `ngt-canvas` via [Hierarchical Dependency Injection](https://angular.io/guide/hierarchical-dependency-injection)
+NGT makes use of [@rx-angular/state](https://github.com/rx-angular/rx-angular) to provide a way to manage the state of everything happening in the Canvas. These stores are provided by the `ngt-canvas` component and are available to all children of `ngt-canvas` via [Hierarchical Dependency Injection](https://angular.io/guide/hierarchical-dependency-injection)
 
-Even though we want to avoid Imperative State Management, it is almost unavoidable such problem when working with an imperative library like THREE.js. Hence, all the component stores in NGT expose `getImperativeState()` method that can retrieve the state at the time of invoking. This is especially helpful when registering animation callbacks. Since animation callbacks are invoked on every frame, `getImperativeState()` will almost always guarantee to return the latest and freshest state.
-
-All stores also expose two objects: `updaters` and `selectors`.
-
-- `updaters` is a collection of functions that can be used to update the state of the store.
-- `selectors` is a collection of functions that can be used to retrieve the state of the store via `Observable`.
+Even though we want to avoid Imperative State Management, it is almost unavoidable such problem when working with an imperative library like THREE.js. Hence, all the stores in NGT expose `get()` method that can retrieve the state at the time of invoking. This is especially helpful when registering animation callbacks. Since animation callbacks are invoked on every frame, `get()` will almost always guarantee to return the latest and freshest state.
 
 ## `NgtStore`
 
@@ -49,13 +44,12 @@ export class TwoMeshesComponent {
   @ViewChild('meshOne') meshOne: NgtMesh;
   @ViewChild('meshTwo') meshTwo: NgtMesh;
 
-  private animationSubscription?: Subscription;
+  private animationUuid?: string;
 
   constructor(private animationFrameStore: NgtAnimationFrameStore) {}
 
   ngOnInit() {
-    this.animationSubscription = this.animationFrameStore.register({
-      obj: null,
+    this.animationUuid = this.animationFrameStore.register({
       callback: () => {
         this.meshOne.mesh.rotation.y += 0.01;
         this.meshTwo.mesh.rotation.y += 0.01;
@@ -64,67 +58,12 @@ export class TwoMeshesComponent {
   }
 
   ngOnDestroy() {
-    this.animationFrameStore?.unsubscribe();
+    this.animationFrameStore.unregister(this.animationUuid);
   }
 }
 ```
 
-`NgtAnimationFrameStore#register` returns a `Subscription` which we can use to `unsubscribe` and unregister the animation callback.
-
-## `NgtInstancesStore`
-
-This store keeps track of the object instances that were created. This store is **internal** but it is exposed to the consumers. `NgtInstancesStore` is mainly used to store the `NgtMaterial` and `NgtGeometry` instances for reuse purposes.
-
-Imagine we have three meshes with the exact same Geometry and Material. We can construct them like below:
-
-```html
-<ngt-mesh [position]="[1, 1, 1]">
-  <ngt-box-geometry></ngt-box-geometry>
-  <ngt-mesh-standard-material
-    [parameters]='{color: "red"}'
-  ></ngt-mesh-standard-material>
-</ngt-mesh>
-
-<ngt-mesh [position]="[2, 2, 2]">
-  <ngt-box-geometry></ngt-box-geometry>
-  <ngt-mesh-standard-material
-    [parameters]='{color: "red"}'
-  ></ngt-mesh-standard-material>
-</ngt-mesh>
-
-<ngt-mesh [position]="[3, 3, 3]">
-  <ngt-box-geometry></ngt-box-geometry>
-  <ngt-mesh-standard-material
-    [parameters]='{color: "red"}'
-  ></ngt-mesh-standard-material>
-</ngt-mesh>
-```
-
-This is, not the end of the world, but it is not efficient. We can construct the Geometry and Material once then reuse on the meshes.
-
-```html
-<ngt-box-geometry ngtId="boxGeometry"></ngt-box-geometry>
-<ngt-mesh-standard-material
-  ngtId="standardMaterial"
-  [parameters]='{color: "red"}'
-></ngt-mesh-standard-material>
-
-<ngt-mesh
-  [position]="[1, 1, 1]"
-  geometry="boxGeometry"
-  material="standardMaterial"
-></ngt-mesh>
-<ngt-mesh
-  [position]="[2, 2, 2]"
-  geometry="boxGeometry"
-  material="standardMaterial"
-></ngt-mesh>
-<ngt-mesh
-  [position]="[3, 3, 3]"
-  geometry="boxGeometry"
-  material="standardMaterial"
-></ngt-mesh>
-```
+`NgtAnimationFrameStore#register` returns a `string` UUID which we can use to `unregister` the animation callback.
 
 ## `NgtEventsStore`
 

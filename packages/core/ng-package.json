@@ -4,5 +4,9 @@
   "lib": {
     "entryFile": "src/index.ts"
   },
-  "allowedNonPeerDependencies": ["@nrwl/devkit"]
+  "allowedNonPeerDependencies": [
+    "@nrwl/devkit",
+    "@rx-angular/cdk",
+    "@rx-angular/state"
+  ]
 }
