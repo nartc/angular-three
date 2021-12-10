@@ -62,7 +62,7 @@ import * as THREE from 'three';
       ></ngt-icosahedron-geometry>
 
       <ngt-soba-detailed
-        #lod="ngtSobaDetailed"
+        #lod
         *repeat="let _ of 1000"
         [position]="[
           10000 * (0.5 - (1 | mathConst: 'random')),

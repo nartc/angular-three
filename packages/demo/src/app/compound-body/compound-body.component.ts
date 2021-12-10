@@ -77,23 +77,22 @@ import { mapTo, startWith, timer } from 'rxjs';
             (positionChange)="position = $event"
             (rotationChange)="rotation = $event"
           ></ngt-compound>
-          <ng-container *ngIf="{ ready: ready$ | async } as vm">
-            <ngt-compound
-              *ngIf="vm.ready"
-              [position]="[2.5, 4, 0.25]"
-              [rotation]="[1.25, -1.25, 0]"
-            ></ngt-compound>
-          </ng-container>
 
-          <ng-container *ngIf="{ copy: copy$ | async } as vm">
-            <ngt-compound
-              *ngIf="vm.copy"
-              [isTrigger]="true"
-              [mass]="0"
-              [position]="position"
-              [rotation]="rotation"
-            ></ngt-compound>
-          </ng-container>
+          <!--          async pipe reevaluates the postion/rotation of the copied?? -->
+          <!--          so it appears to be copied twice: one when copy$ emits, and one when ready$ emits-->
+          <ngt-compound
+            *ngIf="ready$ | async"
+            [position]="[2.5, 4, 0.25]"
+            [rotation]="[1.25, -1.25, 0]"
+          ></ngt-compound>
+
+          <ngt-compound
+            *ngIf="copy$ | async"
+            [isTrigger]="true"
+            [mass]="0"
+            [position]="position"
+            [rotation]="rotation"
+          ></ngt-compound>
         </ngt-cannon-debug>
       </ngt-physics>
     </ngt-canvas>
@@ -145,7 +144,12 @@ export class PlaneComponent {
 @Component({
   selector: 'ngt-compound',
   template: `
-    <ngt-group ngtPhysicCompound [getPhysicProps]="getCompoundProps">
+    <ngt-group
+      ngtPhysicCompound
+      [getPhysicProps]="getCompoundProps"
+      [position]="position"
+      [rotation]="rotation"
+    >
       <ngt-mesh [castShadow]="true">
         <ngt-box-geometry [args]="boxSize"></ngt-box-geometry>
         <ngt-mesh-normal-material></ngt-mesh-normal-material>
