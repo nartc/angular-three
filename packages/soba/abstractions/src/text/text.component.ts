@@ -33,7 +33,6 @@ import { Text as TextMeshImpl } from 'troika-three-text';
 
 @Component({
   selector: 'ngt-soba-text',
-  exportAs: 'ngtSobaText',
   template: `
     <ng-container *ngIf="object">
       <ngt-primitive

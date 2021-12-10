@@ -33,7 +33,7 @@ export const Default = () => ({
   props: { onTextAnimate },
   template: `
     <ngt-soba-text
-      #sobaText='ngtSobaText'
+      #sobaText
       [color]="'#EC2D2D'"
       [fontSize]='12'
       [maxWidth]='200'
@@ -57,7 +57,7 @@ export const Outline = () => ({
   props: { onTextAnimate },
   template: `
     <ngt-soba-text
-      #sobaText='ngtSobaText'
+      #sobaText
       [color]="'#EC2D2D'"
       [fontSize]='12'
       [maxWidth]='200'
@@ -83,7 +83,7 @@ export const TransparentWithStroke = () => ({
   props: { onTextAnimate },
   template: `
     <ngt-soba-text
-      #sobaText='ngtSobaText'
+      #sobaText
       [fontSize]='12'
       [maxWidth]='200'
       [lineHeight]='1'
@@ -109,7 +109,7 @@ export const Shadow = () => ({
   props: { onTextAnimate },
   template: `
     <ngt-soba-text
-      #sobaText='ngtSobaText'
+      #sobaText
       [color]="'#EC2D2D'"
       [fontSize]='12'
       [maxWidth]='200'
@@ -138,7 +138,7 @@ export const LTR = () => ({
   props: { onTextAnimate },
   template: `
     <ngt-soba-text
-      #sobaText='ngtSobaText'
+      #sobaText
       [color]="'#EC2D2D'"
       [fontSize]='12'
       [maxWidth]='200'
@@ -161,7 +161,7 @@ export const CustomMaterial = () => ({
   props: { onTextAnimate, DoubleSide: THREE.DoubleSide },
   template: `
     <ngt-soba-text
-      #sobaText='ngtSobaText'
+      #sobaText
       [fontSize]='12'
       [maxWidth]='200'
       [lineHeight]='1'
