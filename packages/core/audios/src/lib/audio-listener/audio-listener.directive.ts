@@ -35,7 +35,6 @@ export class NgtAudioListener extends EnhancedRxState implements OnInit {
       timeDelta: this.timeDelta,
     };
     applyProps(this.listener, props);
-    // this.#ready(this.store.selectors.ready$);
     this.holdEffect(this.store.select('ready'), (ready) => {
       const camera = this.store.get('camera');
       if (ready && camera) {
@@ -43,10 +42,12 @@ export class NgtAudioListener extends EnhancedRxState implements OnInit {
         this.ready.emit();
       }
 
-      if (ready && camera) {
-        this.listener.clear();
-        camera.remove(this.listener);
-      }
+      return () => {
+        if (ready && camera) {
+          this.listener.clear();
+          camera.remove(this.listener);
+        }
+      };
     });
   }
 }
