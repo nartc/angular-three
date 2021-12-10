@@ -202,7 +202,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   #objectReady() {
     this.ready.emit();
     if (this.animationSubscriberController) {
-      this.animationSubscriberController.subscribe(this.object3d);
+      this.animationSubscriberController.prepare(this.object3d);
     }
   }
 

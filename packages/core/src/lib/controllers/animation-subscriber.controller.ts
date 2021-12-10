@@ -32,7 +32,7 @@ export class NgtAnimationSubscriberController
     super(ngZone);
   }
 
-  subscribe(obj: THREE.Object3D) {
+  prepare(obj: THREE.Object3D) {
     // only subscribe to animation frame if there's an output handler
     if (this.animateReady.observed) {
       this.#subscriber = obj;
