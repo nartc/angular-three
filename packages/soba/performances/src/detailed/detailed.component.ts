@@ -50,7 +50,6 @@ export class NgtSobaDetailedStore extends EnhancedRxState<NgtSobaDetailedStoreSt
 
 @Component({
   selector: 'ngt-soba-detailed',
-  exportAs: 'ngtSobaDetailed',
   template: `
     <ngt-lod
       #lod="ngtLod"
