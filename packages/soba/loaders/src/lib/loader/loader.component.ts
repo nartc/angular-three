@@ -13,7 +13,7 @@ import {
   requestAnimationFrame,
 } from '@rx-angular/cdk/zone-less';
 import { selectSlice } from '@rx-angular/state';
-import { combineLatest, map } from 'rxjs';
+import { combineLatest, map, timer } from 'rxjs';
 import { NgtSobaProgress } from '../progress/progress.service';
 
 interface NgtSobaLoaderState {
@@ -144,19 +144,11 @@ export class NgtSobaLoader
     });
 
     this.holdEffect(this.#initShown$, ({ shown, active }) => {
-      let timeout: ReturnType<typeof setTimeout>;
-
       if (shown !== active) {
-        timeout = setTimeout(() => {
-          this.set({ shown: active });
-        }, 300);
+        const timer$ = timer(300).subscribe(() => this.set({ shown: active }));
+        return timer$.unsubscribe.bind(timer$);
       }
-
-      return () => {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
-      };
+      return undefined;
     });
   }
 
