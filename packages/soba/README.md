@@ -9,3 +9,5 @@ npm install @angular-three/soba
 ```
 
 Some of the components in `soba` might need other 3rd party libraries. Please check each secondary README for more info.
+
+`skipLibCheck: false`

@@ -16,7 +16,13 @@ export default async function controllersGenerator(
 ) {
   const meshSelectors = ['mesh', 'instanced-mesh', 'skinned-mesh'];
 
-  const sobaSelectors = ['soba-billboard', 'soba-detailed'];
+  const sobaSelectors = [
+    'soba-billboard',
+    'soba-detailed',
+    'soba-line',
+    'soba-quadratic-bezier-line',
+    'soba-cubic-bezier-line',
+  ];
   const sobaWithMaterialSelectors = ['soba-text'];
 
   const { libsDir } = getWorkspaceLayout(tree);

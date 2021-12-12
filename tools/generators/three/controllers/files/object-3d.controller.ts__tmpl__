@@ -70,7 +70,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
 
   #object3d?: THREE.Object3D;
   #inputChangesSubscription?: Subscription;
-  #object3dInputsController: NgtObject3dInputsController;
+  #object3dInputsController!: NgtObject3dInputsController;
 
   #initFn?: () => THREE.Object3D;
 
@@ -96,12 +96,12 @@ export class NgtObject3dController extends Controller implements OnDestroy {
     @Optional() @SkipSelf() private parentObject3d: NgtObject3dController
   ) {
     super(ngZone);
-
-    this.#object3dInputsController =
-      objectInputsController.object3dInputsController ?? objectInputsController;
   }
 
   ngOnInit() {
+    this.#object3dInputsController =
+      this.objectInputsController.object3dInputsController ??
+      this.objectInputsController;
     super.ngOnInit();
     this.#inputChangesSubscription =
       this.#object3dInputsController.change$.subscribe(() => {

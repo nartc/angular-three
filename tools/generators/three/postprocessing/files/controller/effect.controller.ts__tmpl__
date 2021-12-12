@@ -19,7 +19,6 @@ import {
 } from '@angular/core';
 // @ts-ignore
 import { BlendFunction, Effect } from 'postprocessing';
-import { Subject } from 'rxjs';
 
 export const NGT_EFFECT_TYPE = new InjectionToken<AnyConstructor<Effect>>(
   'Effect Type'
