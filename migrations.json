@@ -1,0 +1,28 @@
+{
+  "migrations": [
+    {
+      "version": "13.3.0-beta.0",
+      "description": "@nrwl/workspace:tsc is now @nrwl/js:tsc",
+      "cli": "nx",
+      "implementation": "./src/migrations/update-13-3-0/update-tsc-executor-location",
+      "package": "@nrwl/workspace",
+      "name": "13-3-0-tsc-location"
+    },
+    {
+      "cli": "nx",
+      "version": "13.3.0-beta.0",
+      "description": "In Angular version 13, the ESM became a first class citizen. This means the webpack config generated must be modified to support modules.",
+      "factory": "./src/migrations/update-13-3-0/update-mfe-webpack-config",
+      "package": "@nrwl/angular",
+      "name": "update-mfe-config-to-module-syntax"
+    },
+    {
+      "cli": "nx",
+      "version": "13.3.0-beta.0",
+      "description": "Update eslint-rules jest.config.js in order to support ESLint v8 exports mapping, remove category field",
+      "factory": "./src/migrations/update-13-3-0/eslint-8-updates",
+      "package": "@nrwl/linter",
+      "name": "eslint-8-updates"
+    }
+  ]
+}
