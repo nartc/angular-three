@@ -1,3 +1,10 @@
+### [2.7.2](https://github.com/nartc/angular-three/compare/2.7.1...2.7.2) (2021-12-13)
+
+
+### Bug Fixes
+
+* **core:** adjust enhanced rx state actions ([6804d2f](https://github.com/nartc/angular-three/commit/6804d2ff898efa7bee5b35814e90aa13c604c910))
+
 ### [2.7.1](https://github.com/nartc/angular-three/compare/2.7.0...2.7.1) (2021-12-13)
 
 
