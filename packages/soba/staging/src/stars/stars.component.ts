@@ -116,7 +116,9 @@ export class NgtSobaStarsStore extends EnhancedRxState<NgtSobaStarsState> {
             blending: this.blending,
             uniforms: {
               fade: { value: attributes.fade },
-              time: sobaStarFieldMaterial.material?.uniforms?.time
+              time: sobaStarFieldMaterial.material?.uniforms?.time || {
+                value: 0
+              }
             }
           }"
         ></ngt-soba-star-field-material>
