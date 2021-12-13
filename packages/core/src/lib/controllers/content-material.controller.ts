@@ -1,13 +1,6 @@
 // GENERATED
-import {
-  ContentChildren,
-  Directive,
-  Input,
-  NgModule,
-  QueryList,
-} from '@angular/core';
+import { Directive, Input, NgModule, NgZone } from '@angular/core';
 import * as THREE from 'three';
-import { NgtMaterial } from '../three/material';
 import { Controller, createControllerProviderFactory } from './controller';
 
 @Directive({
@@ -40,17 +33,6 @@ import { Controller, createControllerProviderFactory } from './controller';
   exportAs: 'ngtContentMaterialController',
 })
 export class NgtContentMaterialController extends Controller {
-  @ContentChildren(NgtMaterial, { descendants: true }) set materialDirectives(
-    v: QueryList<NgtMaterial>
-  ) {
-    if (this.material == null && v) {
-      this.material =
-        v.length === 1
-          ? v.first.material
-          : v.toArray().map((dir) => dir.material);
-    }
-  }
-
   #materialInput?: THREE.Material | THREE.Material[] | undefined;
 
   @Input() set material(v: THREE.Material | THREE.Material[] | undefined) {
@@ -62,7 +44,12 @@ export class NgtContentMaterialController extends Controller {
     }
   }
 
+  @Input() isMaterialArray = false;
   @Input() contentMaterialController?: NgtContentMaterialController;
+
+  constructor(ngZone: NgZone) {
+    super(ngZone);
+  }
 
   get material() {
     return this.#material;
@@ -97,7 +84,7 @@ export class NgtContentMaterialController extends Controller {
   }
 
   get props(): string[] {
-    return ['material'];
+    return ['material', 'isArrayMaterial'];
   }
 }
 

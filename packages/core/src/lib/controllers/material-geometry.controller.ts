@@ -1,12 +1,12 @@
 // GENERATED
 import {
-  AfterContentInit,
   Directive,
   Inject,
   InjectionToken,
   Input,
   NgModule,
   NgZone,
+  OnInit,
 } from '@angular/core';
 import * as THREE from 'three';
 import { AnyConstructor, AnyExtenderFunction, UnknownRecord } from '../models';
@@ -55,7 +55,7 @@ export const NGT_OBJECT_POST_INIT = new InjectionToken('Object3d PostInit', {
 })
 export class NgtMaterialGeometryController
   extends Controller
-  implements AfterContentInit
+  implements OnInit
 {
   #meshArgs: unknown[] = [];
   set meshArgs(v: unknown | unknown[]) {
@@ -100,8 +100,8 @@ export class NgtMaterialGeometryController
       }
 
       const object = new this.objectType(
-        this.#contentGeometryController.geometry,
-        this.#contentMaterialController.material,
+        this.#contentGeometryController.geometry || undefined,
+        this.#contentMaterialController.material || undefined,
         ...this.#meshArgs
       );
 
@@ -123,7 +123,8 @@ export class NgtMaterialGeometryController
     };
   }
 
-  ngAfterContentInit() {
+  ngOnInit() {
+    super.ngOnInit();
     this.ngZone.runOutsideAngular(() => {
       this.objectController.init();
     });

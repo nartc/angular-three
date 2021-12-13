@@ -1,7 +1,6 @@
 // GENERATED
-import { ContentChild, Directive, Input, NgModule } from '@angular/core';
+import { Directive, Input, NgModule, NgZone } from '@angular/core';
 import * as THREE from 'three';
-import { NgtGeometry } from '../three/geometry';
 import { Controller, createControllerProviderFactory } from './controller';
 
 @Directive({
@@ -16,13 +15,6 @@ import { Controller, createControllerProviderFactory } from './controller';
   exportAs: 'ngtContentGeometryController',
 })
 export class NgtContentGeometryController extends Controller {
-  @ContentChild(NgtGeometry)
-  set geometryDirective(v: NgtGeometry) {
-    if (this.geometry == null && v) {
-      this.geometry = v.geometry;
-    }
-  }
-
   #geometryInput?: THREE.BufferGeometry | undefined;
 
   @Input() set geometry(v: THREE.BufferGeometry | undefined) {
@@ -39,6 +31,10 @@ export class NgtContentGeometryController extends Controller {
   }
 
   #geometry: THREE.BufferGeometry | undefined = undefined;
+
+  constructor(ngZone: NgZone) {
+    super(ngZone);
+  }
 
   construct() {
     this.#geometry = this.#getGeometry(this.#geometryInput);

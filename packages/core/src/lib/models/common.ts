@@ -1,4 +1,5 @@
 export type UnknownRecord = Record<string, unknown>;
+export type AnyFunction<TObject> = () => TObject;
 export type AnyConstructor<TObject> = new (...args: any[]) => TObject;
 export type AnyExtenderFunction<TObject> = (object: TObject) => void;
 

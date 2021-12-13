@@ -31,6 +31,7 @@ export * from './lib/three/material';
 export * from './lib/three/mesh';
 export * from './lib/three/sprite';
 export * from './lib/three/camera';
+export * from './lib/three/extender';
 
 export * from './lib/resize/tokens';
 export * from './lib/resize/resize.service';
@@ -53,3 +54,5 @@ export * from './lib/utils/build-graph';
 export * from './lib/utils/make-id';
 export * from './lib/utils/make';
 export * from './lib/utils/is-webgl-available';
+
+export * from './lib/providers/object3d';

@@ -1,14 +1,24 @@
 import {
   Directive,
   EventEmitter,
+  Inject,
   Input,
   NgZone,
   OnDestroy,
   OnInit,
+  Optional,
   Output,
 } from '@angular/core';
+import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
 import * as THREE from 'three';
-import type { AnyConstructor, NgtColor, UnknownRecord } from '../models';
+import { NgtContentMaterialController } from '../controllers/content-material.controller';
+import type {
+  AnyConstructor,
+  AnyFunction,
+  NgtColor,
+  UnknownRecord,
+} from '../models';
+import { NGT_OBJECT_3D } from '../providers/object3d';
 import { NgtStore } from '../stores/store';
 import { makeColor } from '../utils/make';
 
@@ -35,7 +45,13 @@ export abstract class NgtMaterial<
 
   #parameters?: TMaterialParameters;
 
-  constructor(protected ngZone: NgZone, protected store: NgtStore) {}
+  constructor(
+    protected ngZone: NgZone,
+    protected store: NgtStore,
+    @Inject(NGT_OBJECT_3D) protected parentObject: AnyFunction<THREE.Object3D>,
+    @Optional()
+    protected contentMaterialController: NgtContentMaterialController
+  ) {}
 
   abstract materialType: AnyConstructor<TMaterial>;
 
@@ -45,7 +61,23 @@ export abstract class NgtMaterial<
         this.#convertColorToLinear(this.parameters);
       }
       this.#material = new this.materialType(this.parameters);
-      this.ready.emit();
+      requestAnimationFrame(() => {
+        const parentObject = this.parentObject() as THREE.Mesh;
+        if (parentObject) {
+          if (
+            this.contentMaterialController &&
+            this.contentMaterialController.isMaterialArray
+          ) {
+            if (!Array.isArray(parentObject.material)) {
+              parentObject.material = [];
+            }
+            (parentObject.material as THREE.Material[]).push(this.material);
+          } else {
+            parentObject.material = this.material;
+          }
+        }
+        this.ready.emit();
+      });
     });
   }
 

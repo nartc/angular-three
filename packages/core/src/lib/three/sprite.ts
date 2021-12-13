@@ -1,10 +1,10 @@
 import {
-  AfterContentInit,
   ContentChild,
   Directive,
   Inject,
   Input,
   NgZone,
+  OnInit,
 } from '@angular/core';
 import * as THREE from 'three';
 import {
@@ -17,7 +17,7 @@ import { NgtMaterial } from './material';
 @Directive()
 export abstract class NgtCommonSprite<
   TSprite extends THREE.Sprite = THREE.Sprite
-> implements AfterContentInit
+> implements OnInit
 {
   @Input() material?: THREE.SpriteMaterial;
 
@@ -45,7 +45,7 @@ export abstract class NgtCommonSprite<
     };
   }
 
-  ngAfterContentInit() {
+  ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.objectController.init();
     });

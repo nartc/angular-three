@@ -1,15 +1,16 @@
 import {
   Directive,
   EventEmitter,
+  Inject,
   NgZone,
   OnDestroy,
   OnInit,
-  Optional,
   Output,
 } from '@angular/core';
+import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
 import * as THREE from 'three';
-import { NgtObject3dController } from '../controllers/object-3d.controller';
-import type { AnyConstructor, UnknownRecord } from '../models';
+import type { AnyConstructor, AnyFunction, UnknownRecord } from '../models';
+import { NGT_OBJECT_3D } from '../providers/object3d';
 
 @Directive()
 export abstract class NgtGeometry<
@@ -20,7 +21,7 @@ export abstract class NgtGeometry<
 
   constructor(
     protected ngZone: NgZone,
-    @Optional() private parentObject: NgtObject3dController
+    @Inject(NGT_OBJECT_3D) protected parentObject: AnyFunction<THREE.Object3D>
   ) {}
 
   abstract geometryType: AnyConstructor<TGeometry>;
@@ -46,7 +47,7 @@ export abstract class NgtGeometry<
     if (this.geometry) {
       // cleanup
       if (this.parentObject) {
-        const object3d = this.parentObject.object3d as unknown as UnknownRecord;
+        const object3d = this.parentObject as unknown as UnknownRecord;
         if (object3d.geometry) {
           (object3d.geometry as THREE.BufferGeometry).dispose();
         }
@@ -54,18 +55,25 @@ export abstract class NgtGeometry<
 
       // reconstruct
       this.#construct();
-      if (this.parentObject) {
-        const object3d = this.parentObject.object3d as unknown as UnknownRecord;
-        object3d.geometry = this.geometry;
-      }
+      this.#assign();
     } else {
       this.#construct();
+      this.#assign();
     }
+  }
+
+  #assign() {
+    requestAnimationFrame(() => {
+      const parentObject = this.parentObject() as THREE.Mesh;
+      if (parentObject) {
+        parentObject.geometry = this.geometry;
+      }
+      this.ready.emit();
+    });
   }
 
   #construct() {
     this.#geometry = new this.geometryType(...this.#geometryArgs);
-    this.ready.emit();
   }
 
   #geometry!: TGeometry;
