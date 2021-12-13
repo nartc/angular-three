@@ -1,30 +1,30 @@
 // GENERATED
-
-import { NgtHelper, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { NgModule, Directive, Input } from '@angular/core';
+import { NgtObjectHelper, Tail } from '@angular-three/core';
+import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-camera-helper',
+  selector: '[ngtCameraHelper]',
   exportAs: 'ngtCameraHelper',
   providers: [
     {
-      provide: NgtHelper,
+      provide: NgtObjectHelper,
       useExisting: NgtCameraHelper,
     },
-    NGT_OBJECT_CONTROLLER_PROVIDER,
   ],
 })
-export class NgtCameraHelper extends NgtHelper<THREE.CameraHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.CameraHelper>
+export class NgtCameraHelper extends NgtObjectHelper<THREE.CameraHelper> {
+  static ngAcceptInputType_ngtCameraHelper:
+    | Tail<ConstructorParameters<typeof THREE.CameraHelper>>
     | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof THREE.CameraHelper>) {
-    this.helperArgs = v;
+  @Input() set ngtCameraHelper(
+    v: Tail<ConstructorParameters<typeof THREE.CameraHelper>>
+  ) {
+    this.objectHelperArgs = v;
   }
 
-  helperType = THREE.CameraHelper;
+  objectHelperType = THREE.CameraHelper;
 }
 
 @NgModule({

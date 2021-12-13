@@ -13,15 +13,18 @@ import * as THREE from 'three';
 export const helpers = [
   THREE.ArrowHelper.name,
   THREE.AxesHelper.name,
-  THREE.BoxHelper.name,
   THREE.Box3Helper.name,
   THREE.GridHelper.name,
+  THREE.PlaneHelper.name,
+  THREE.PolarGridHelper.name,
+];
+
+export const objectHelpers = [
+  THREE.BoxHelper.name,
   THREE.CameraHelper.name,
   THREE.DirectionalLightHelper.name,
   THREE.HemisphereLightHelper.name,
-  THREE.PlaneHelper.name,
   THREE.PointLightHelper.name,
-  THREE.PolarGridHelper.name,
   THREE.SkeletonHelper.name,
   THREE.SpotLightHelper.name,
 ];
@@ -50,6 +53,7 @@ export default async function helpersGenerator(tree: Tree): Promise<string[]> {
       join(helperDir, 'src', 'lib', normalizedNames.fileName),
       {
         ...normalizedNames,
+        objectHelper: false,
         tmpl: '',
       }
     );
@@ -57,8 +61,26 @@ export default async function helpersGenerator(tree: Tree): Promise<string[]> {
     generatedHelpers.push(normalizedNames.fileName);
   }
 
+  const generatedObjectHelpers = [];
+  for (const objectHelper of objectHelpers) {
+    const normalizedNames = names(objectHelper);
+
+    generateFiles(
+      tree,
+      join(__dirname, 'files/lib'),
+      join(helperDir, 'src', 'lib', normalizedNames.fileName),
+      {
+        ...normalizedNames,
+        objectHelper: true,
+        tmpl: '',
+      }
+    );
+
+    generatedObjectHelpers.push(normalizedNames.fileName);
+  }
+
   generateFiles(tree, join(__dirname, 'files/index'), join(helperDir, 'src'), {
-    items: generatedHelpers,
+    items: [...generatedHelpers, ...generatedObjectHelpers],
     tmpl: '',
   });
 

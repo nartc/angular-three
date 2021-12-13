@@ -1,30 +1,30 @@
 // GENERATED
-
-import { NgtHelper, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { NgModule, Directive, Input } from '@angular/core';
+import { NgtObjectHelper, Tail } from '@angular-three/core';
+import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-point-light-helper',
+  selector: '[ngtPointLightHelper]',
   exportAs: 'ngtPointLightHelper',
   providers: [
     {
-      provide: NgtHelper,
+      provide: NgtObjectHelper,
       useExisting: NgtPointLightHelper,
     },
-    NGT_OBJECT_CONTROLLER_PROVIDER,
   ],
 })
-export class NgtPointLightHelper extends NgtHelper<THREE.PointLightHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.PointLightHelper>
+export class NgtPointLightHelper extends NgtObjectHelper<THREE.PointLightHelper> {
+  static ngAcceptInputType_ngtPointLightHelper:
+    | Tail<ConstructorParameters<typeof THREE.PointLightHelper>>
     | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof THREE.PointLightHelper>) {
-    this.helperArgs = v;
+  @Input() set ngtPointLightHelper(
+    v: Tail<ConstructorParameters<typeof THREE.PointLightHelper>>
+  ) {
+    this.objectHelperArgs = v;
   }
 
-  helperType = THREE.PointLightHelper;
+  objectHelperType = THREE.PointLightHelper;
 }
 
 @NgModule({

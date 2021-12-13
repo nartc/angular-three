@@ -13,14 +13,14 @@ import {
 import { setTimeout } from '@rx-angular/cdk/zone-less';
 import { Subscription, take } from 'rxjs';
 import * as THREE from 'three';
-import { NgtEventsStore } from '../stores/events.store';
-import { NgtStore } from '../stores/store';
 import {
   NgtEvent,
   NgtEventHandlers,
   NgtInstanceInternal,
   UnknownRecord,
 } from '../types';
+import { NgtEventsStore } from '../stores/events.store';
+import { NgtStore } from '../stores/store';
 import { applyProps } from '../utils/apply-props';
 import {
   NGT_ANIMATION_SUBSCRIBER_CONTROLLER_PROVIDER,
@@ -76,17 +76,10 @@ const supportedEvents = [
     ngt-rect-area-light,
     ngt-arrow-helper,
     ngt-axes-helper,
-    ngt-box-helper,
     ngt-box3-helper,
     ngt-grid-helper,
-    ngt-camera-helper,
-    ngt-directional-light-helper,
-    ngt-hemisphere-light-helper,
     ngt-plane-helper,
-    ngt-point-light-helper,
     ngt-polar-grid-helper,
-    ngt-skeleton-helper,
-    ngt-spot-light-helper,
     ngt-sprite,
     ngt-camera,
     ngt-perspective-camera,

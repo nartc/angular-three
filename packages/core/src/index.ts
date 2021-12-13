@@ -36,6 +36,7 @@ export * from './lib/three/mesh';
 export * from './lib/three/sprite';
 export * from './lib/three/camera';
 export * from './lib/three/extender';
+export * from './lib/three/object-helper';
 
 export * from './lib/stores/enhanced-rx-state';
 export * from './lib/stores/store';

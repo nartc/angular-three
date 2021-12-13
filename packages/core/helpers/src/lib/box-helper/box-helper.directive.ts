@@ -1,30 +1,30 @@
 // GENERATED
-
-import { NgtHelper, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { NgModule, Directive, Input } from '@angular/core';
+import { NgtObjectHelper, Tail } from '@angular-three/core';
+import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-box-helper',
+  selector: '[ngtBoxHelper]',
   exportAs: 'ngtBoxHelper',
   providers: [
     {
-      provide: NgtHelper,
+      provide: NgtObjectHelper,
       useExisting: NgtBoxHelper,
     },
-    NGT_OBJECT_CONTROLLER_PROVIDER,
   ],
 })
-export class NgtBoxHelper extends NgtHelper<THREE.BoxHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.BoxHelper>
+export class NgtBoxHelper extends NgtObjectHelper<THREE.BoxHelper> {
+  static ngAcceptInputType_ngtBoxHelper:
+    | Tail<ConstructorParameters<typeof THREE.BoxHelper>>
     | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof THREE.BoxHelper>) {
-    this.helperArgs = v;
+  @Input() set ngtBoxHelper(
+    v: Tail<ConstructorParameters<typeof THREE.BoxHelper>>
+  ) {
+    this.objectHelperArgs = v;
   }
 
-  helperType = THREE.BoxHelper;
+  objectHelperType = THREE.BoxHelper;
 }
 
 @NgModule({

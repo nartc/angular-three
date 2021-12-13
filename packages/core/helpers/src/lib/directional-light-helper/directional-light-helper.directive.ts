@@ -1,32 +1,30 @@
 // GENERATED
-
-import { NgtHelper, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { NgModule, Directive, Input } from '@angular/core';
+import { NgtObjectHelper, Tail } from '@angular-three/core';
+import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-directional-light-helper',
+  selector: '[ngtDirectionalLightHelper]',
   exportAs: 'ngtDirectionalLightHelper',
   providers: [
     {
-      provide: NgtHelper,
+      provide: NgtObjectHelper,
       useExisting: NgtDirectionalLightHelper,
     },
-    NGT_OBJECT_CONTROLLER_PROVIDER,
   ],
 })
-export class NgtDirectionalLightHelper extends NgtHelper<THREE.DirectionalLightHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.DirectionalLightHelper>
+export class NgtDirectionalLightHelper extends NgtObjectHelper<THREE.DirectionalLightHelper> {
+  static ngAcceptInputType_ngtDirectionalLightHelper:
+    | Tail<ConstructorParameters<typeof THREE.DirectionalLightHelper>>
     | undefined;
 
-  @Input() set args(
-    v: ConstructorParameters<typeof THREE.DirectionalLightHelper>
+  @Input() set ngtDirectionalLightHelper(
+    v: Tail<ConstructorParameters<typeof THREE.DirectionalLightHelper>>
   ) {
-    this.helperArgs = v;
+    this.objectHelperArgs = v;
   }
 
-  helperType = THREE.DirectionalLightHelper;
+  objectHelperType = THREE.DirectionalLightHelper;
 }
 
 @NgModule({

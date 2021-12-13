@@ -1,5 +1,31 @@
-// GENERATED
+// GENERATED<% if (objectHelper) { %>
+import { NgtObjectHelper, Tail } from '@angular-three/core';
+import { Directive, Input, NgModule } from '@angular/core';
+import * as THREE from 'three';
 
+@Directive({
+  selector: '[ngt<%= name %>]',
+  exportAs: 'ngt<%= name %>',
+  providers: [
+    {
+      provide: NgtObjectHelper,
+      useExisting: Ngt<%= name %>,
+    }
+  ],
+})
+export class Ngt<%= name %> extends NgtObjectHelper<THREE.<%= name %>> {
+  static ngAcceptInputType_ngt<%= name %>:
+    | Tail<ConstructorParameters<typeof THREE.<%= name %>>>
+    | undefined;
+
+  @Input() set ngt<%= name %>(
+    v: Tail<ConstructorParameters<typeof THREE.<%= name %>>>
+  ) {
+    this.objectHelperArgs = v;
+  }
+
+  objectHelperType = THREE.<%= name %>;
+}<% } else { %>
 import { NgtHelper, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -24,7 +50,7 @@ export class Ngt<%= name %> extends NgtHelper<THREE.<%= name %>> {
   }
 
   helperType = THREE.<%= name %>;
-}
+}<% } %>
 
 @NgModule({
   declarations: [Ngt<%= name %>],

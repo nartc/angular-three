@@ -1,30 +1,30 @@
 // GENERATED
-
-import { NgtHelper, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
-import { NgModule, Directive, Input } from '@angular/core';
+import { NgtObjectHelper, Tail } from '@angular-three/core';
+import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-skeleton-helper',
+  selector: '[ngtSkeletonHelper]',
   exportAs: 'ngtSkeletonHelper',
   providers: [
     {
-      provide: NgtHelper,
+      provide: NgtObjectHelper,
       useExisting: NgtSkeletonHelper,
     },
-    NGT_OBJECT_CONTROLLER_PROVIDER,
   ],
 })
-export class NgtSkeletonHelper extends NgtHelper<THREE.SkeletonHelper> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.SkeletonHelper>
+export class NgtSkeletonHelper extends NgtObjectHelper<THREE.SkeletonHelper> {
+  static ngAcceptInputType_ngtSkeletonHelper:
+    | Tail<ConstructorParameters<typeof THREE.SkeletonHelper>>
     | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof THREE.SkeletonHelper>) {
-    this.helperArgs = v;
+  @Input() set ngtSkeletonHelper(
+    v: Tail<ConstructorParameters<typeof THREE.SkeletonHelper>>
+  ) {
+    this.objectHelperArgs = v;
   }
 
-  helperType = THREE.SkeletonHelper;
+  objectHelperType = THREE.SkeletonHelper;
 }
 
 @NgModule({
