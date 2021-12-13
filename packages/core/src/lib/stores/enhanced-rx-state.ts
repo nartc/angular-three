@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 import { createSideEffectObservable, RxState } from '@rx-angular/state';
-import { catchError, EMPTY, map, noop, Observable, Subject, tap } from 'rxjs';
+import { catchError, EMPTY, noop, Observable, Subject, tap } from 'rxjs';
 
 @Directive()
 export abstract class EnhancedRxState<
@@ -70,31 +70,48 @@ type InstanceOrType<T> = T extends abstract new (...args: unknown[]) => infer R
   ? R
   : T;
 
-type UiInteractions<T extends { [x: string]: any }> = {
+export type ActionAccess<T extends { [x: string]: any }> = {
   [K in keyof T]: (arg: InstanceOrType<T[K]>) => void;
 } & {
   [K in Extract<keyof T, string> as `${K}$`]: Observable<T[K]>;
 };
 
-export function getActions<T extends object>(): UiInteractions<T> {
-  const subject = new Subject<Partial<T>>();
+/**
+ * Returns a object based off of the provided typing with a separate setter `[prop](value: T[K]): void` and observable stream `[prop]$: Observable<T[K]>`;
+ *
+ * { search: string } => { search$: Observable<string>, search: (value: string) => void;}
+ *
+ * @example
+ *
+ * const actions = getActions<search: string, submit: void>({search: (e) => e.target.value});
+ *
+ * actions.search($event);
+ * actions.search$ | async;
+ *
+ * @param transforms map of transform functions to apply on certain properties if they are set.
+ */
+export function getActions<T extends object>(): ActionAccess<T> {
+  const subjects: Record<string, Subject<T[keyof T]>> = {};
 
-  const handler: ProxyHandler<UiInteractions<T>> = {
-    get(target, property) {
-      const propName = property.toString().slice(0, -1);
-
+  const handler: ProxyHandler<ActionAccess<T>> = {
+    get(_, property: string) {
       if (property.toString().split('').pop() === '$') {
-        return subject.pipe(map((t) => t[propName as keyof T]));
+        const propName: string | number | Symbol = property
+          .toString()
+          .slice(0, -1);
+        subjects[propName] = subjects[propName] || new Subject<keyof T>();
+        return subjects[propName];
       }
 
       return (args: T[keyof T]) => {
-        subject.next({ [property]: args } as Partial<T>);
+        subjects[property] = subjects[property] || new Subject<keyof T>();
+        subjects[property].next(args);
       };
     },
-    set(target, property, vale) {
+    set() {
       throw new Error('No setters available. To emit call the property name.');
     },
   };
 
-  return new Proxy({} as UiInteractions<T>, handler);
+  return new Proxy({} as ActionAccess<T>, handler);
 }
