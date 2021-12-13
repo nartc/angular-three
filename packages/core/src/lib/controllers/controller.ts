@@ -37,15 +37,15 @@ export abstract class Controller implements OnChanges, OnInit {
   }
 
   ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      if (this.controller) {
+    if (this.controller) {
+      this.ngZone.runOutsideAngular(() => {
         this.props.forEach((prop) => {
           (this as UnknownRecord)[prop] = (
             this.controller as unknown as UnknownRecord
           )[prop];
         });
-      }
-    });
+      });
+    }
   }
 }
 
