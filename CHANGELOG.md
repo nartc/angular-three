@@ -1,3 +1,10 @@
+### [2.7.3](https://github.com/nartc/angular-three/compare/2.7.2...2.7.3) (2021-12-13)
+
+
+### Cleanup
+
+* **repo:** revert npm scripts ([0195a8d](https://github.com/nartc/angular-three/commit/0195a8d808ea038906bd819444173710e33676c4))
+
 ### [2.7.2](https://github.com/nartc/angular-three/compare/2.7.1...2.7.2) (2021-12-13)
 
 
