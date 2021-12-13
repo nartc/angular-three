@@ -6,9 +6,9 @@ import {
   NgtObject3dController,
   NgtObject3dInputsController,
   NgtRender,
+  NgtSobaExtender,
 } from '@angular-three/core';
 import { NgtLodModule } from '@angular-three/core/lod';
-import { NgtSobaExtender } from '@angular-three/soba';
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
@@ -60,7 +60,14 @@ export class NgtSobaDetailedStore extends EnhancedRxState<NgtSobaDetailedStoreSt
     <ng-content></ng-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER, NgtSobaDetailedStore],
+  providers: [
+    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
+    NgtSobaDetailedStore,
+    {
+      provide: NgtSobaExtender,
+      useExisting: NgtSobaDetailed,
+    },
+  ],
 })
 export class NgtSobaDetailed
   extends NgtSobaExtender<THREE.LOD>

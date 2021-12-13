@@ -4,9 +4,9 @@ import {
   NgtCoreModule,
   NgtObject3dInputsController,
   NgtRender,
+  NgtSobaExtender,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtSobaExtender } from '@angular-three/soba';
 import {
   ChangeDetectionStrategy,
   Component,

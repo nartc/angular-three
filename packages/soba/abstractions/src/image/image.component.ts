@@ -5,10 +5,11 @@ import {
   NgtCoreModule,
   NgtMaterial,
   NgtObject3dInputsController,
+  NgtSobaExtender,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
-import { NgtSobaExtender, shaderMaterial } from '@angular-three/soba';
+import { shaderMaterial } from '@angular-three/soba';
 import { NgtTextureLoaderService } from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
 import {

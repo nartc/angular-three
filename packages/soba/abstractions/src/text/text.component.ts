@@ -9,10 +9,10 @@ import {
   NgtCoreModule,
   NgtLoopService,
   NgtObject3dInputsController,
+  NgtSobaExtender,
   NgtVector4,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
-import { NgtSobaExtender } from '@angular-three/soba';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -48,6 +48,7 @@ import { Text as TextMeshImpl } from 'troika-three-text';
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_CONTENT_MATERIAL_CONTROLLER_PROVIDER,
+    { provide: NgtSobaExtender, useExisting: NgtSobaText },
   ],
 })
 export class NgtSobaText
