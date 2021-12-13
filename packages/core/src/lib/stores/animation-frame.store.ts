@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { noop } from 'rxjs';
-import { NgtAnimationFrameStoreState, NgtAnimationRecord } from '../models';
+import { NgtAnimationFrameStoreState, NgtAnimationRecord } from '../types';
 import { makeId } from '../utils/make-id';
 import { EnhancedRxState, getActions } from './enhanced-rx-state';
 

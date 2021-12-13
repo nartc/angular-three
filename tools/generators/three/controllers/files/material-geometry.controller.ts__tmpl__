@@ -9,7 +9,7 @@ import {
   OnInit,
 } from '@angular/core';
 import * as THREE from 'three';
-import { AnyConstructor, AnyExtenderFunction, UnknownRecord } from '../models';
+import { AnyConstructor, AnyExtenderFunction, UnknownRecord } from '../types';
 import {
   NGT_CONTENT_GEOMETRY_CONTROLLER_PROVIDER,
   NGT_CONTENT_GEOMETRY_WATCHED_CONTROLLER,

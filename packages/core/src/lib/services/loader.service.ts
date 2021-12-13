@@ -18,7 +18,7 @@ import type {
   LoaderExtensions,
   NgtLoaderResult,
   NgtObjectMap,
-} from '../models';
+} from '../types';
 import { buildGraph } from '../utils/build-graph';
 
 @Injectable({

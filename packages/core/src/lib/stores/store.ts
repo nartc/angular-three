@@ -2,6 +2,8 @@ import { ElementRef, Inject, Injectable } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { map, Observable } from 'rxjs';
 import * as THREE from 'three';
+import { NGT_PERFORMANCE_OPTIONS } from '../performance/tokens';
+import { NgtResize, NgtResizeResult } from '../resize/resize.service';
 import {
   NgtInstance,
   NgtPerformance,
@@ -10,9 +12,7 @@ import {
   NgtState,
   NgtViewport,
   UnknownRecord,
-} from '../models';
-import { NGT_PERFORMANCE_OPTIONS } from '../performance/tokens';
-import { NgtResize, NgtResizeResult } from '../resize/resize.service';
+} from '../types';
 import { applyProps } from '../utils/apply-props';
 import { calculateDpr } from '../utils/calculate-dpr';
 import { isOrthographicCamera } from '../utils/is-orthographic';

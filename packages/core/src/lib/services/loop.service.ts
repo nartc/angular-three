@@ -1,8 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
-import { NgtAnimationFrameStoreState, NgtRender, NgtState } from '../models';
 import { NgtAnimationFrameStore } from '../stores/animation-frame.store';
 import { NgtStore } from '../stores/store';
+import { NgtAnimationFrameStoreState, NgtRender, NgtState } from '../types';
 
 @Injectable()
 export class NgtLoopService {

@@ -4,7 +4,7 @@ import {
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
 } from '../controllers/object-3d.controller';
-import { AnyConstructor } from '../models';
+import { AnyConstructor } from '../types';
 
 @Directive()
 export abstract class NgtCommonCamera<

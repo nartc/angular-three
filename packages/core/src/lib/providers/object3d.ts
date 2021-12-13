@@ -4,8 +4,8 @@ import {
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
 } from '../controllers/object-3d.controller';
-import { AnyFunction } from '../models';
 import { NgtSobaExtender } from '../three/extender';
+import { AnyFunction } from '../types';
 
 export const NGT_OBJECT_3D = new InjectionToken<AnyFunction<THREE.Object3D>>(
   'THREE_OBJECT_3D'

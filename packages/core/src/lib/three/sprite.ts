@@ -11,7 +11,7 @@ import {
   NGT_OBJECT_CONTROLLER_PROVIDER,
   NgtObject3dController,
 } from '../controllers/object-3d.controller';
-import type { AnyConstructor } from '../models';
+import type { AnyConstructor } from '../types';
 import { NgtMaterial } from './material';
 
 @Directive()

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { clearTimeout, setTimeout } from '@rx-angular/cdk/zone-less';
-import { NgtPerformance } from '../models';
+import { NgtPerformance } from '../types';
 import { EnhancedRxState } from './enhanced-rx-state';
 import { NgtStore } from './store';
 

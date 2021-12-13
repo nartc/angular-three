@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import * as THREE from 'three';
-import type { AnyConstructor } from '../models';
+import type { AnyConstructor } from '../types';
 
 @Directive()
 export abstract class NgtTexture<TTexture extends THREE.Texture = THREE.Texture>

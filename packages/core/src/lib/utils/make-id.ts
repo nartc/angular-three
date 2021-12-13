@@ -1,5 +1,5 @@
 import { MathUtils } from 'three';
-import type { NgtIntersection } from '../models';
+import type { NgtIntersection } from '../types';
 
 /**
  * Generate a random Id or an Event's uuid

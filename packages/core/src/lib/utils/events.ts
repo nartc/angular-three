@@ -14,7 +14,7 @@ import type {
   NgtPointerCaptureTarget,
   NgtRender,
   NgtState,
-} from '../models';
+} from '../types';
 import { makeId } from './make-id';
 
 /** Release pointer captures.

@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { NgtPerformance } from '../models';
+import { NgtPerformance } from '../types';
 
 export const NGT_PERFORMANCE_OPTIONS = new InjectionToken<NgtPerformance>(
   'NgtPerformance options',

@@ -4,7 +4,7 @@ import {
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
 } from '../controllers/object-3d.controller';
-import type { AnyConstructor, UnknownRecord } from '../models';
+import type { AnyConstructor, UnknownRecord } from '../types';
 import { applyProps } from '../utils/apply-props';
 
 @Directive()

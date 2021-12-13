@@ -1,6 +1,6 @@
 import { NgModule, Pipe, PipeTransform } from '@angular/core';
 import * as THREE from 'three';
-import { NgtColor } from '../models';
+import { NgtColor } from '../types';
 import { makeColor } from '../utils/make';
 
 @Pipe({

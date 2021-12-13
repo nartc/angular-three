@@ -1,6 +1,6 @@
 import { Directive, Input, NgZone, OnInit, Optional } from '@angular/core';
 import * as THREE from 'three';
-import type { AnyConstructor } from '../models';
+import type { AnyConstructor } from '../types';
 import { NgtGeometry } from './geometry';
 
 @Directive()

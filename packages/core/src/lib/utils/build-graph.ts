@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { NgtObjectMap, UnknownRecord } from '../models';
+import { NgtObjectMap, UnknownRecord } from '../types';
 
 export function buildGraph(object: THREE.Object3D): NgtObjectMap {
   const data: NgtObjectMap = { nodes: {}, materials: {} };

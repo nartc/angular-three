@@ -12,8 +12,8 @@ import {
   Type,
 } from '@angular/core';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { UnknownRecord } from '../models';
 import { NgtDestroyedService } from '../services/destroyed.service';
+import { UnknownRecord } from '../types';
 
 @Directive()
 export abstract class Controller implements OnChanges, OnInit {

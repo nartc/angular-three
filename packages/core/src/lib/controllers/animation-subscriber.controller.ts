@@ -8,8 +8,8 @@ import {
   Output,
 } from '@angular/core';
 import * as THREE from 'three';
-import { NgtRender } from '../models';
 import { NgtAnimationFrameStore } from '../stores/animation-frame.store';
+import { NgtRender } from '../types';
 import { Controller, createControllerProviderFactory } from './controller';
 
 @Directive({

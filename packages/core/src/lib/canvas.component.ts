@@ -12,6 +12,13 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
+import { NgtResize } from './resize/resize.service';
+import { NgtLoopService } from './services/loop.service';
+import { NgtAnimationFrameStore } from './stores/animation-frame.store';
+import { EnhancedRxState } from './stores/enhanced-rx-state';
+import { NgtEventsStore } from './stores/events.store';
+import { NgtPerformanceStore } from './stores/performance.store';
+import { NgtStore } from './stores/store';
 import {
   NgtCameraOptions,
   NgtCreatedState,
@@ -21,14 +28,7 @@ import {
   NgtRaycaster,
   NgtSceneOptions,
   NgtSize,
-} from './models';
-import { NgtResize } from './resize/resize.service';
-import { NgtLoopService } from './services/loop.service';
-import { NgtAnimationFrameStore } from './stores/animation-frame.store';
-import { EnhancedRxState } from './stores/enhanced-rx-state';
-import { NgtEventsStore } from './stores/events.store';
-import { NgtPerformanceStore } from './stores/performance.store';
-import { NgtStore } from './stores/store';
+} from './types';
 
 @Component({
   selector: 'ngt-canvas',

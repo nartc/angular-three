@@ -4,7 +4,7 @@ import {
   NgtInstance,
   NgtInstanceInternal,
   UnknownRecord,
-} from '../models';
+} from '../types';
 
 function checkNeedsUpdate(value: unknown) {
   if (

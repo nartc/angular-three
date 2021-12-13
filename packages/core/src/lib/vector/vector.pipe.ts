@@ -1,6 +1,6 @@
 import { NgModule, Pipe, PipeTransform } from '@angular/core';
 import * as THREE from 'three';
-import { NgtVector2, NgtVector3, NgtVector4 } from '../models';
+import { NgtVector2, NgtVector3, NgtVector4 } from '../types';
 import { makeVector2, makeVector3, makeVector4 } from '../utils/make';
 
 @Pipe({ name: 'vector2' })

@@ -13,14 +13,14 @@ import {
 import { setTimeout } from '@rx-angular/cdk/zone-less';
 import { Subscription, take } from 'rxjs';
 import * as THREE from 'three';
+import { NgtEventsStore } from '../stores/events.store';
+import { NgtStore } from '../stores/store';
 import {
   NgtEvent,
   NgtEventHandlers,
   NgtInstanceInternal,
   UnknownRecord,
-} from '../models';
-import { NgtEventsStore } from '../stores/events.store';
-import { NgtStore } from '../stores/store';
+} from '../types';
 import { applyProps } from '../utils/apply-props';
 import {
   NGT_ANIMATION_SUBSCRIBER_CONTROLLER_PROVIDER,

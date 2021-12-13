@@ -1,4 +1,5 @@
-export * from './lib/models';
+// export * from './lib/models';
+export * from './lib/types';
 
 export * from './lib/core.module';
 
@@ -48,7 +49,6 @@ export * from './lib/services/destroyed.service';
 export * from './lib/services/loader.service';
 
 export * from './lib/utils/apply-props';
-export * from './lib/utils/array-partition';
 export * from './lib/utils/build-graph';
 export * from './lib/utils/make-id';
 export * from './lib/utils/make';

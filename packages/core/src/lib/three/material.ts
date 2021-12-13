@@ -12,14 +12,14 @@ import {
 import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
 import * as THREE from 'three';
 import { NgtContentMaterialController } from '../controllers/content-material.controller';
+import { NGT_OBJECT_3D } from '../providers/object3d';
+import { NgtStore } from '../stores/store';
 import type {
   AnyConstructor,
   AnyFunction,
   NgtColor,
   UnknownRecord,
-} from '../models';
-import { NGT_OBJECT_3D } from '../providers/object3d';
-import { NgtStore } from '../stores/store';
+} from '../types';
 import { makeColor } from '../utils/make';
 
 @Directive()

@@ -18,7 +18,7 @@ import {
   NgtEventHandlers,
   NgtInstanceInternal,
   UnknownRecord,
-} from '../models';
+} from '../types';
 import { NgtEventsStore } from '../stores/events.store';
 import { NgtStore } from '../stores/store';
 import { applyProps } from '../utils/apply-props';

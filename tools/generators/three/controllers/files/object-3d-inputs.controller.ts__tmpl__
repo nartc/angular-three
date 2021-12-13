@@ -15,7 +15,7 @@ import {
   NgtQuaternion,
   NgtVector3,
   UnknownRecord,
-} from '../models';
+} from '../types';
 import { makeColor, makeForSet, makeVector3 } from '../utils/make';
 import { Controller, createControllerProviderFactory } from './controller';
 

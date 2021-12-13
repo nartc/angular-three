@@ -5,7 +5,7 @@ import {
   NgtVector2,
   NgtVector3,
   NgtVector4,
-} from '../models';
+} from '../types';
 
 export function makeVector2(input?: NgtVector2): THREE.Vector2 | undefined {
   if (!input) return undefined;

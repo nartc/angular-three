@@ -1,4 +1,4 @@
-import { NgtDpr } from '../models';
+import { NgtDpr } from '../types';
 
 export function calculateDpr(dpr: NgtDpr) {
   return Array.isArray(dpr)

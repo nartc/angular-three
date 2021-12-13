@@ -7,7 +7,7 @@ import {
   NgtEventsStoreState,
   NgtPointerCaptureTarget,
   UnknownRecord,
-} from '../models';
+} from '../types';
 import { createEvents } from '../utils/events';
 import { EnhancedRxState, getActions } from './enhanced-rx-state';
 import { NgtStore } from './store';
