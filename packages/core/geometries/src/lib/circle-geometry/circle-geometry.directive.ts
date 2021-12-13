@@ -1,5 +1,5 @@
 // GENERATED
-import { NgtGeometry } from '@angular-three/core';
+import { NGT_OBJECT_3D_PROVIDER, NgtGeometry } from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -11,6 +11,7 @@ import * as THREE from 'three';
       provide: NgtGeometry,
       useExisting: NgtCircleGeometry,
     },
+    NGT_OBJECT_3D_PROVIDER,
   ],
 })
 export class NgtCircleGeometry extends NgtGeometry<THREE.CircleGeometry> {

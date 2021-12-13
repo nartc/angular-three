@@ -1,5 +1,5 @@
 // GENERATED
-import { NgtMaterial } from '@angular-three/core';
+import { NGT_OBJECT_3D_PROVIDER, NgtMaterial } from '@angular-three/core';
 import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
 
@@ -11,6 +11,7 @@ import * as THREE from 'three';
       provide: NgtMaterial,
       useExisting: NgtMeshBasicMaterial,
     },
+    NGT_OBJECT_3D_PROVIDER,
   ],
 })
 export class NgtMeshBasicMaterial extends NgtMaterial<
