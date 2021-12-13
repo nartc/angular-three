@@ -9,7 +9,12 @@ import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { NgtSobaBoxModule } from '@angular-three/soba/shapes';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  NgModule,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -35,10 +40,9 @@ export class SimpleCubeComponent {}
       (animateReady)="onAnimateReady(sobaBox.object)"
       (pointerover)="hover = true"
       (pointerout)="hover = false"
+      [isMaterialArray]="true"
     >
-      <ngt-mesh-standard-material
-        [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
-      ></ngt-mesh-standard-material>
+      <ngt-cube-materials [hover]="hover"></ngt-cube-materials>
     </ngt-soba-box>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,8 +56,36 @@ export class CubeComponent {
   }
 }
 
+@Component({
+  selector: 'ngt-cube-materials',
+  template: `
+    <ngt-mesh-standard-material
+      [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
+    ></ngt-mesh-standard-material>
+    <ngt-mesh-standard-material
+      [parameters]="{ color: hover ? 'hotpink' : 'orange' }"
+    ></ngt-mesh-standard-material>
+    <ngt-mesh-standard-material
+      [parameters]="{ color: hover ? 'blue' : 'red' }"
+    ></ngt-mesh-standard-material>
+    <ngt-mesh-standard-material
+      [parameters]="{ color: hover ? 'green' : 'yellow' }"
+    ></ngt-mesh-standard-material>
+    <ngt-mesh-standard-material
+      [parameters]="{ color: hover ? 'purple' : 'brown' }"
+    ></ngt-mesh-standard-material>
+    <ngt-mesh-standard-material
+      [parameters]="{ color: hover ? 'tomato' : 'turquoise' }"
+    ></ngt-mesh-standard-material>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CubeMaterials {
+  @Input() hover = false;
+}
+
 @NgModule({
-  declarations: [SimpleCubeComponent, CubeComponent],
+  declarations: [SimpleCubeComponent, CubeComponent, CubeMaterials],
   exports: [SimpleCubeComponent, CubeComponent],
   imports: [
     NgtCoreModule,
