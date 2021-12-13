@@ -1,15 +1,18 @@
-// export * from './lib/models';
 export * from './lib/types';
 
 export * from './lib/core.module';
 
+export * from './lib/di/object3d';
+export * from './lib/di/performance';
+export * from './lib/di/resize';
+
 export * from './lib/canvas.component';
 
-export * from './lib/vector/vector.pipe';
-export * from './lib/color/color.pipe';
-export * from './lib/math/math.pipe';
+export * from './lib/pipes/vector.pipe';
+export * from './lib/pipes/color.pipe';
+export * from './lib/pipes/math.pipe';
 
-export * from './lib/repeat/repeat.directive';
+export * from './lib/directives/repeat.directive';
 
 export * from './lib/controllers/controller';
 export * from './lib/controllers/object-3d.controller';
@@ -34,10 +37,6 @@ export * from './lib/three/sprite';
 export * from './lib/three/camera';
 export * from './lib/three/extender';
 
-export * from './lib/resize/tokens';
-export * from './lib/resize/resize.service';
-export * from './lib/performance/tokens';
-
 export * from './lib/stores/enhanced-rx-state';
 export * from './lib/stores/store';
 export * from './lib/stores/performance.store';
@@ -47,11 +46,10 @@ export * from './lib/stores/animation-frame.store';
 export * from './lib/services/loop.service';
 export * from './lib/services/destroyed.service';
 export * from './lib/services/loader.service';
+export * from './lib/services/resize.service';
 
 export * from './lib/utils/apply-props';
 export * from './lib/utils/build-graph';
 export * from './lib/utils/make-id';
 export * from './lib/utils/make';
 export * from './lib/utils/is-webgl-available';
-
-export * from './lib/providers/object3d';

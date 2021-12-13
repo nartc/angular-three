@@ -10,7 +10,6 @@ import { AnyFunction } from '../types';
 export const NGT_OBJECT_3D = new InjectionToken<AnyFunction<THREE.Object3D>>(
   'THREE_OBJECT_3D'
 );
-
 export const NGT_OBJECT_3D_PROVIDER: Provider = {
   provide: NGT_OBJECT_3D,
   useFactory: (

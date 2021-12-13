@@ -10,7 +10,6 @@ export interface NgtResizeOptions {
 
 export const NGT_RESIZE_BOX_DEFAULT = 'content-box';
 export const NGT_RESIZE_DEBOUNCE_DEFAULT = 200;
-
 export const NGT_RESIZE_OPTIONS = new InjectionToken<NgtResizeOptions>(
   'ngtResizeObserver Options',
   {
@@ -23,7 +22,6 @@ export const NGT_RESIZE_OPTIONS = new InjectionToken<NgtResizeOptions>(
     }),
   }
 );
-
 export const NGT_RESIZE_OBSERVER_SUPPORT = new InjectionToken<boolean>(
   'Resize Observer API support',
   {

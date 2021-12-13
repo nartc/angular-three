@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { NgtCanvas } from './canvas.component';
-import { NgtColorPipeModule } from './color/color.pipe';
 import { NgtAnimationSubscriberControllerModule } from './controllers/animation-subscriber.controller';
 import { NgtAudioControllerModule } from './controllers/audio.controller';
 import { NgtContentGeometryControllerModule } from './controllers/content-geometry.controller';
@@ -8,8 +7,9 @@ import { NgtContentMaterialControllerModule } from './controllers/content-materi
 import { NgtMaterialGeometryControllerModule } from './controllers/material-geometry.controller';
 import { NgtObject3dInputsControllerModule } from './controllers/object-3d-inputs.controller';
 import { NgtObject3dControllerModule } from './controllers/object-3d.controller';
-import { NgtMathPipeModule } from './math/math.pipe';
-import { NgtVectorPipeModule } from './vector/vector.pipe';
+import { NgtColorPipeModule } from './pipes/color.pipe';
+import { NgtMathPipeModule } from './pipes/math.pipe';
+import { NgtVectorPipeModule } from './pipes/vector.pipe';
 
 @NgModule({
   declarations: [NgtCanvas],

@@ -15,7 +15,7 @@ import {
   NGT_RESIZE_OBSERVER_SUPPORT,
   NGT_RESIZE_OPTIONS,
   NgtResizeOptions,
-} from './tokens';
+} from '../di/resize';
 
 export interface NgtResizeResult {
   readonly entries: ReadonlyArray<ResizeObserverEntry>;

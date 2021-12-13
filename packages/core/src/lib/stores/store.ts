@@ -2,8 +2,8 @@ import { ElementRef, Inject, Injectable } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { map, Observable } from 'rxjs';
 import * as THREE from 'three';
-import { NGT_PERFORMANCE_OPTIONS } from '../performance/tokens';
-import { NgtResize, NgtResizeResult } from '../resize/resize.service';
+import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
+import { NgtResize, NgtResizeResult } from '../services/resize.service';
 import {
   NgtInstance,
   NgtPerformance,

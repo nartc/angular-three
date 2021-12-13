@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
 import * as THREE from 'three';
-import { NGT_OBJECT_3D } from '../providers/object3d';
+import { NGT_OBJECT_3D } from '../di/object3d';
 import type { AnyConstructor, AnyFunction, UnknownRecord } from '../types';
 
 @Directive()

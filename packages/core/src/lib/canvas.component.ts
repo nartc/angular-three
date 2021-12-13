@@ -12,8 +12,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
-import { NgtResize } from './resize/resize.service';
 import { NgtLoopService } from './services/loop.service';
+import { NgtResize } from './services/resize.service';
 import { NgtAnimationFrameStore } from './stores/animation-frame.store';
 import { EnhancedRxState } from './stores/enhanced-rx-state';
 import { NgtEventsStore } from './stores/events.store';
