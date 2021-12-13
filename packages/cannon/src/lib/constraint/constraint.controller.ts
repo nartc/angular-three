@@ -4,12 +4,12 @@ import {
   createControllerProviderFactory,
 } from '@angular-three/core';
 import {
-  AfterContentInit,
   ContentChildren,
   Directive,
   Input,
   NgModule,
   NgZone,
+  OnInit,
   QueryList,
 } from '@angular/core';
 import { map } from 'rxjs';
@@ -29,7 +29,7 @@ import { NgtPhysicConstraintStore } from './constraint.store';
 })
 export class NgtPhysicConstraintController
   extends Controller
-  implements AfterContentInit
+  implements OnInit
 {
   @Input() set options(v: Record<string, unknown>) {
     this.physicConstraintStore.set({ options: v });
@@ -52,7 +52,8 @@ export class NgtPhysicConstraintController
     super(ngZone);
   }
 
-  ngAfterContentInit() {
+  ngOnInit() {
+    super.ngOnInit();
     this.ngZone.runOutsideAngular(() => {
       this.physicConstraintStore.actions.init();
     });
