@@ -10,8 +10,6 @@ import {
   NgtObject3dInputsController,
 } from '@angular-three/core';
 import {
-  AfterContentInit,
-  ContentChildren,
   Directive,
   EventEmitter,
   Inject,
@@ -21,8 +19,8 @@ import {
   OnInit,
   Optional,
   Output,
-  QueryList,
 } from '@angular/core';
+import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
 import * as THREE from 'three';
 
 @Directive({
@@ -46,6 +44,52 @@ export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
 }
 
 @Directive({
+  selector: 'ngt-skeleton',
+  exportAs: 'ngtSkeleton',
+})
+export class NgtSkeleton implements OnInit {
+  @Input() boneInverses?: NgtMatrix4[];
+  @Output() ready = new EventEmitter();
+
+  #skeleton?: THREE.Skeleton;
+  get skeleton() {
+    return this.#skeleton;
+  }
+
+  constructor(
+    private ngZone: NgZone,
+    @Optional() private skinnedMesh: NgtSkinnedMesh
+  ) {
+    if (!skinnedMesh) {
+      throw new Error('ngt-skeleton must be used within a ngt-skinned-mesh');
+    }
+  }
+
+  ngOnInit() {
+    this.ngZone.runOutsideAngular(() => {
+      const boneInverses: THREE.Matrix4[] | undefined = this.boneInverses
+        ? this.boneInverses.map((threeMaxtrix) => {
+            if (threeMaxtrix instanceof THREE.Matrix4) return threeMaxtrix;
+            return new THREE.Matrix4().set(...threeMaxtrix);
+          })
+        : undefined;
+      this.#skeleton = new THREE.Skeleton([], boneInverses);
+      this.ready.emit();
+
+      if (this.skinnedMesh) {
+        const bindMatrix: THREE.Matrix4 | undefined = this.skinnedMesh
+          .bindMatrix
+          ? this.skinnedMesh.bindMatrix instanceof THREE.Matrix4
+            ? this.skinnedMesh.bindMatrix
+            : new THREE.Matrix4().set(...this.skinnedMesh.bindMatrix)
+          : undefined;
+        this.skinnedMesh.mesh.bind(this.skeleton!, bindMatrix);
+      }
+    });
+  }
+}
+
+@Directive({
   selector: 'ngt-bone',
   exportAs: 'ngtBone',
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
@@ -63,7 +107,9 @@ export class NgtBone implements OnInit {
     private objectInputsController: NgtObject3dInputsController,
     private ngZone: NgZone,
     @Optional()
-    private parentSkinnedMesh: NgtSkinnedMesh
+    private parentSkinnedMesh: NgtSkinnedMesh,
+    @Optional()
+    private parentSkeleton: NgtSkeleton
   ) {
     if (!parentSkinnedMesh) {
       throw new Error('ngt-bone must be used within a ngt-skinned-mesh');
@@ -78,60 +124,11 @@ export class NgtBone implements OnInit {
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.objectController.init();
-    });
-  }
-}
-
-@Directive({
-  selector: 'ngt-skeleton',
-  exportAs: 'ngtSkeleton',
-})
-export class NgtSkeleton implements AfterContentInit {
-  @Input() boneInverses?: NgtMatrix4[];
-  @Output() ready = new EventEmitter();
-
-  @ContentChildren(NgtBone, { descendants: true })
-  bones?: QueryList<NgtBone>;
-
-  #skeleton?: THREE.Skeleton;
-  get skeleton() {
-    return this.#skeleton;
-  }
-
-  constructor(
-    private ngZone: NgZone,
-    @Optional() private skinnedMesh: NgtSkinnedMesh
-  ) {
-    if (!skinnedMesh) {
-      throw new Error('ngt-skeleton must be used within a ngt-skinned-mesh');
-    }
-  }
-
-  ngAfterContentInit() {
-    this.ngZone.runOutsideAngular(() => {
-      if (this.bones) {
-        const boneInverses: THREE.Matrix4[] | undefined = this.boneInverses
-          ? this.boneInverses.map((threeMaxtrix) => {
-              if (threeMaxtrix instanceof THREE.Matrix4) return threeMaxtrix;
-              return new THREE.Matrix4().set(...threeMaxtrix);
-            })
-          : undefined;
-        this.#skeleton = new THREE.Skeleton(
-          this.bones.filter((bone) => !!bone.bone).map((bone) => bone.bone!),
-          boneInverses
-        );
-        this.ready.emit();
-
-        if (this.skinnedMesh) {
-          const bindMatrix: THREE.Matrix4 | undefined = this.skinnedMesh
-            .bindMatrix
-            ? this.skinnedMesh.bindMatrix instanceof THREE.Matrix4
-              ? this.skinnedMesh.bindMatrix
-              : new THREE.Matrix4().set(...this.skinnedMesh.bindMatrix)
-            : undefined;
-          this.skinnedMesh.mesh.bind(this.skeleton!, bindMatrix);
+      requestAnimationFrame(() => {
+        if (this.parentSkeleton && this.parentSkeleton.skeleton) {
+          this.parentSkeleton.skeleton.bones.push(this.bone!);
         }
-      }
+      });
     });
   }
 }
