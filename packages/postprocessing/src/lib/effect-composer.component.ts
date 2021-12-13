@@ -3,19 +3,13 @@ import { NgtGroup, NgtGroupModule } from '@angular-three/core/group';
 import {
   ChangeDetectionStrategy,
   Component,
-  ContentChildren,
   Input,
   NgModule,
-  QueryList,
   ViewChild,
 } from '@angular/core';
-import { map, startWith } from 'rxjs';
 import * as THREE from 'three';
 import { NgtEffectComposerStore } from './effect-composer.store';
-import {
-  NgtEffectController,
-  NgtEffectControllerModule,
-} from './effect.controller';
+import { NgtEffectControllerModule } from './effect.controller';
 
 @Component({
   selector: 'ngt-effect-composer',
@@ -72,19 +66,6 @@ export class NgtEffectComposer {
 
   get group() {
     return this.#group;
-  }
-
-  @ContentChildren(NgtEffectController, { descendants: true })
-  set effectControllers(v: QueryList<NgtEffectController>) {
-    this.effectComposerStore.connect(
-      'effects',
-      v.changes.pipe(
-        startWith(v),
-        map((list: QueryList<NgtEffectController>) =>
-          list.toArray().map((item) => item.effect)
-        )
-      )
-    );
   }
 
   constructor(private effectComposerStore: NgtEffectComposerStore) {}

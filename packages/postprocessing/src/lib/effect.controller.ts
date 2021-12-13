@@ -19,6 +19,7 @@ import {
 } from '@angular/core';
 // @ts-ignore
 import { BlendFunction, Effect } from 'postprocessing';
+import { NgtEffectComposerStore } from './effect-composer.store';
 
 export const NGT_EFFECT_TYPE = new InjectionToken<AnyConstructor<Effect>>(
   'Effect Type'
@@ -46,9 +47,14 @@ export class NgtEffectStore extends EnhancedRxState<NgtEffectStoreState> {
     @Inject(NGT_EFFECT_TYPE)
     effectType: AnyConstructor<Effect>,
     @Inject(NGT_EFFECT_DEFAULT_BLEND_FUNCTION)
-    defaultBlendFunction: BlendFunction
+    defaultBlendFunction: BlendFunction,
+    @Optional() effectComposerStore: NgtEffectComposerStore
   ) {
     super();
+
+    if (!effectComposerStore) {
+      throw new Error(`Effects need to be inside of ngt-effect-composer`);
+    }
 
     if (!effectType) {
       throw new Error('NGT_EFFECT_TYPE is required');
@@ -61,11 +67,13 @@ export class NgtEffectStore extends EnhancedRxState<NgtEffectStoreState> {
       effect: undefined,
     });
 
-    this.connect(
-      'effect',
-      this.actions.init$,
-      (state) => new effectType(state.options)
-    );
+    this.connect('effect', this.actions.init$, (state) => {
+      const effect = new effectType(state.options);
+      effectComposerStore.set((state) => ({
+        effects: [...state.effects, effect],
+      }));
+      return effect;
+    });
 
     this.hold(this.actions.init$, () => {
       const { blendFunction, opacity, effect } = this.get();
