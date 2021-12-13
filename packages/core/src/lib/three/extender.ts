@@ -1,5 +1,5 @@
-import { NgtRender } from '@angular-three/core';
 import { Directive, EventEmitter, Output } from '@angular/core';
+import { NgtRender } from '../models';
 
 @Directive()
 export abstract class NgtSobaExtender<TEntity> {

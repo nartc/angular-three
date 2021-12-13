@@ -7,10 +7,10 @@ import {
   NgtContentMaterialController,
   NgtCoreModule,
   NgtObject3dInputsController,
+  NgtSobaExtender,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
-import { NgtSobaExtender } from '@angular-three/soba';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
