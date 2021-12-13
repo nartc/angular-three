@@ -1,6 +1,10 @@
 import { NgtCoreModule } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import {
+  NgtBoxHelperModule,
+  NgtSpotLightHelperModule,
+} from '@angular-three/core/helpers';
+import {
   NgtAmbientLightModule,
   NgtSpotLightModule,
 } from '@angular-three/core/lights';
@@ -20,10 +24,13 @@ import * as THREE from 'three';
 @Component({
   selector: 'ngt-simple-cube',
   template: `
-    <ngt-canvas>
+    <ngt-canvas [scene]="{ background: 'black' | color }">
       <ngt-stats></ngt-stats>
       <ngt-ambient-light></ngt-ambient-light>
-      <ngt-spot-light [position]="[1, 1, 1]"></ngt-spot-light>
+      <ngt-spot-light
+        ngtSpotLightHelper
+        [position]="[1, 1, 1]"
+      ></ngt-spot-light>
       <ngt-cube></ngt-cube>
       <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
     </ngt-canvas>
@@ -37,6 +44,7 @@ export class SimpleCubeComponent {}
   template: `
     <ngt-soba-box
       #sobaBox
+      ngtBoxHelper
       (animateReady)="onAnimateReady(sobaBox.object)"
       (pointerover)="hover = true"
       (pointerout)="hover = false"
@@ -97,6 +105,8 @@ export class CubeMaterials {
     NgtBoxGeometryModule,
     NgtSobaOrbitControlsModule,
     NgtSobaBoxModule,
+    NgtBoxHelperModule,
+    NgtSpotLightHelperModule,
   ],
 })
 export class SimpleCubeComponentModule {}

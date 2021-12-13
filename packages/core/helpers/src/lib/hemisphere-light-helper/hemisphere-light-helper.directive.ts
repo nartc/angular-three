@@ -1,5 +1,9 @@
 // GENERATED
-import { NgtObjectHelper, Tail } from '@angular-three/core';
+import {
+  NGT_OBJECT_3D_PROVIDER,
+  NgtObjectHelper,
+  Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -11,17 +15,21 @@ import * as THREE from 'three';
       provide: NgtObjectHelper,
       useExisting: NgtHemisphereLightHelper,
     },
+    NGT_OBJECT_3D_PROVIDER,
   ],
 })
 export class NgtHemisphereLightHelper extends NgtObjectHelper<THREE.HemisphereLightHelper> {
   static ngAcceptInputType_ngtHemisphereLightHelper:
     | Tail<ConstructorParameters<typeof THREE.HemisphereLightHelper>>
+    | ''
     | undefined;
 
   @Input() set ngtHemisphereLightHelper(
-    v: Tail<ConstructorParameters<typeof THREE.HemisphereLightHelper>>
+    v: Tail<ConstructorParameters<typeof THREE.HemisphereLightHelper>> | ''
   ) {
-    this.objectHelperArgs = v;
+    if (v) {
+      this.objectHelperArgs = v;
+    }
   }
 
   objectHelperType = THREE.HemisphereLightHelper;

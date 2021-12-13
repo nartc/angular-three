@@ -1,5 +1,9 @@
 // GENERATED
-import { NgtObjectHelper, Tail } from '@angular-three/core';
+import {
+  NGT_OBJECT_3D_PROVIDER,
+  NgtObjectHelper,
+  Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -11,17 +15,21 @@ import * as THREE from 'three';
       provide: NgtObjectHelper,
       useExisting: NgtDirectionalLightHelper,
     },
+    NGT_OBJECT_3D_PROVIDER,
   ],
 })
 export class NgtDirectionalLightHelper extends NgtObjectHelper<THREE.DirectionalLightHelper> {
   static ngAcceptInputType_ngtDirectionalLightHelper:
     | Tail<ConstructorParameters<typeof THREE.DirectionalLightHelper>>
+    | ''
     | undefined;
 
   @Input() set ngtDirectionalLightHelper(
-    v: Tail<ConstructorParameters<typeof THREE.DirectionalLightHelper>>
+    v: Tail<ConstructorParameters<typeof THREE.DirectionalLightHelper>> | ''
   ) {
-    this.objectHelperArgs = v;
+    if (v) {
+      this.objectHelperArgs = v;
+    }
   }
 
   objectHelperType = THREE.DirectionalLightHelper;

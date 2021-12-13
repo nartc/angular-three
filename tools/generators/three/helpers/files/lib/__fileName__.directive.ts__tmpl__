@@ -1,5 +1,9 @@
 // GENERATED<% if (objectHelper) { %>
-import { NgtObjectHelper, Tail } from '@angular-three/core';
+import {
+  NGT_OBJECT_3D_PROVIDER,
+  NgtObjectHelper,
+  Tail
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -10,18 +14,22 @@ import * as THREE from 'three';
     {
       provide: NgtObjectHelper,
       useExisting: Ngt<%= name %>,
-    }
+    },
+    NGT_OBJECT_3D_PROVIDER,
   ],
 })
 export class Ngt<%= name %> extends NgtObjectHelper<THREE.<%= name %>> {
   static ngAcceptInputType_ngt<%= name %>:
     | Tail<ConstructorParameters<typeof THREE.<%= name %>>>
+    | ''
     | undefined;
 
   @Input() set ngt<%= name %>(
-    v: Tail<ConstructorParameters<typeof THREE.<%= name %>>>
+    v: Tail<ConstructorParameters<typeof THREE.<%= name %>>> | ''
   ) {
-    this.objectHelperArgs = v;
+    if (v) {
+      this.objectHelperArgs = v;
+    }
   }
 
   objectHelperType = THREE.<%= name %>;
