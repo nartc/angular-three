@@ -31,12 +31,14 @@ export abstract class NgtMaterial<
   @Output() ready = new EventEmitter();
 
   @Input() set parameters(v: TMaterialParameters | undefined) {
-    this.#parameters = v;
-    if (v && this.material) {
-      this.#convertColorToLinear(v);
-      this.material.setValues(v);
-      this.material.needsUpdate = true;
-    }
+    requestAnimationFrame(() => {
+      this.#parameters = v;
+      if (v && this.material) {
+        this.#convertColorToLinear(v);
+        this.material.setValues(v);
+        this.material.needsUpdate = true;
+      }
+    });
   }
 
   get parameters(): TMaterialParameters | undefined {
