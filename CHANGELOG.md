@@ -1,3 +1,12 @@
+### [2.7.1](https://github.com/nartc/angular-three/compare/2.7.0...2.7.1) (2021-12-13)
+
+
+### Bug Fixes
+
+* adjust generators ([aecf58a](https://github.com/nartc/angular-three/commit/aecf58ac72556059d5d2d45a38d46c5af0a7e950))
+* **cannon:** fix how constraint gets a hold of the bodies inside ([b95755e](https://github.com/nartc/angular-three/commit/b95755e2dd7417cabd56d545c15f1d91333e4b3e))
+* **postprocessing:** the effect now adds itself to the EffectComposer#effects ([f6e75b4](https://github.com/nartc/angular-three/commit/f6e75b43928704cc129a227bce20107a644aff04))
+
 ## [2.7.0](https://github.com/nartc/angular-three/compare/2.6.0...2.7.0) (2021-12-13)
 
 
