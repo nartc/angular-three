@@ -40,13 +40,6 @@
           "packages/cannon/constraints/**/*.html"
         ]
       }
-    },
-    "publish": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "npm publish",
-        "cwd": "dist/packages/cannon"
-      }
     }
   },
   "tags": ["scope:cannon", "type:lib"]

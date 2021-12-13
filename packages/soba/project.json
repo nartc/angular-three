@@ -48,13 +48,6 @@
           "packages/soba/abstractions/**/*.html"
         ]
       }
-    },
-    "publish": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "npm publish",
-        "cwd": "dist/packages/soba"
-      }
     }
   },
   "tags": ["scope:soba", "type:lib"]
