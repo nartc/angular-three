@@ -30,7 +30,10 @@ import * as THREE from 'three';
     </ngt-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER],
+  providers: [
+    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
+    { provide: NgtSobaExtender, useExisting: NgtSobaBillboard },
+  ],
 })
 export class NgtSobaBillboard extends NgtSobaExtender<THREE.Group> {
   @Input() follow = true;

@@ -121,7 +121,10 @@ export class NgtSobaImageShaderMaterial extends NgtMaterial<
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER],
+  providers: [
+    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
+    { provide: NgtSobaExtender, useExisting: NgtSobaImage },
+  ],
 })
 export class NgtSobaImage
   extends NgtSobaExtender<THREE.Mesh>
