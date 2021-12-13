@@ -41,6 +41,7 @@ export const NGT_OBJECT_POST_INIT = new InjectionToken('Object3d PostInit', {
   selector: `<% for (const mesh of meshSelectors) { %>
     ngt-<%= mesh %>,<% } %><% for (const line of lineSelectors) { %>
     ngt-<%= line %>,<% } %>
+    ngt-points
   `,
   exportAs: 'ngtMaterialGeometryController',
   providers: [

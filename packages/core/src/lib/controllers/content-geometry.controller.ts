@@ -11,6 +11,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-line,
     ngt-line-loop,
     ngt-line-segments,
+    ngt-points
   `,
   exportAs: 'ngtContentGeometryController',
 })

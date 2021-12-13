@@ -28,7 +28,8 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-extrude,
     ngt-soba-lathe,
     ngt-soba-torus-knot,
-    ngt-soba-text,
+    ngt-soba-text,,
+    ngt-points
   `,
   exportAs: 'ngtContentMaterialController',
 })

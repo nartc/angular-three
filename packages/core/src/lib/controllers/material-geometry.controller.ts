@@ -45,6 +45,7 @@ export const NGT_OBJECT_POST_INIT = new InjectionToken('Object3d PostInit', {
     ngt-line,
     ngt-line-loop,
     ngt-line-segments,
+    ngt-points
   `,
   exportAs: 'ngtMaterialGeometryController',
   providers: [
