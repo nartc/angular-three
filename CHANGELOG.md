@@ -1,3 +1,30 @@
+## [2.7.0](https://github.com/nartc/angular-three/compare/2.6.0...2.7.0) (2021-12-13)
+
+
+### Features
+
+* **core:** refactor how Geometry/Material works ([979f83a](https://github.com/nartc/angular-three/commit/979f83a51b19f9444bad0c83ce76b0d89f6e33c8))
+* **core:** use DI for Bone/Skeleton instead of Contentquery ([e8ffe34](https://github.com/nartc/angular-three/commit/e8ffe34516676da0ec5a7bc7354e4e35bd247e6a))
+* **core:** use NGT_OBJECT_3D_PROVIDER for all geometries and materials ([28b0225](https://github.com/nartc/angular-three/commit/28b022511cd389d20db0424e53ea6fdd2228571e))
+* **soba:** add Image ([0e46d7c](https://github.com/nartc/angular-three/commit/0e46d7ce2364987631d8f18e1466922a9c480b38)), closes [#28](https://github.com/nartc/angular-three/issues/28)
+* **soba:** add Line, QuadraticBezierLine, CubicBezierLine ([2ca6a13](https://github.com/nartc/angular-three/commit/2ca6a137f4e803fe7dddc59257b8cae15825bda1)), closes [#28](https://github.com/nartc/angular-three/issues/28)
+* **soba:** add shader material fn ([f31dd01](https://github.com/nartc/angular-three/commit/f31dd017268d0b306d30439cf923c38180ad1fc9))
+* **soba:** move SobaExtender to core so it can be used by core ([02c9e87](https://github.com/nartc/angular-three/commit/02c9e872a11437e7d7f702aad90ec307c3bf1c0a))
+* **soba:** use SobaExtender from core instead ([8c3910f](https://github.com/nartc/angular-three/commit/8c3910fd562ee934ef77403ba4d8b8b70e03a456))
+
+
+### Bug Fixes
+
+* **cannon:** use OnInit for PhysicBodyController instead of afterContentInit ([667a6bb](https://github.com/nartc/angular-three/commit/667a6bbbd8159425aabb02252bd58d3268ab0aa7))
+* **cannon:** use OnInit for PhysicConstraintController isntead of afterContentInit ([f9a913f](https://github.com/nartc/angular-three/commit/f9a913f516d38c1b8e722b171256a55bccd157c4))
+* **core:** null check for controller before running assign ([7a33b49](https://github.com/nartc/angular-three/commit/7a33b49c64c8a61041ff7bd15037222ebbc89034))
+* **core:** use timer rxjs for loader ([8285fbd](https://github.com/nartc/angular-three/commit/8285fbde819a68fe259be2feb78e513106660779))
+
+
+### Documentations
+
+* **demo:** try abstracting material ([0c31312](https://github.com/nartc/angular-three/commit/0c31312f08569240d980ed4f643c3c9e4abad969))
+
 ## [2.6.0](https://github.com/nartc/angular-three/compare/2.5.0...2.6.0) (2021-12-10)
 
 
