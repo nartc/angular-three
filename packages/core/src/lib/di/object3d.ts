@@ -1,4 +1,4 @@
-import { InjectionToken, Optional, Provider, SkipSelf } from '@angular/core';
+import { InjectionToken, Optional, Provider } from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -23,7 +23,7 @@ export const NGT_OBJECT_3D_PROVIDER: Provider = {
     };
   },
   deps: [
-    [new Optional(), new SkipSelf(), NgtSobaExtender],
-    [new Optional(), new SkipSelf(), NGT_OBJECT_WATCHED_CONTROLLER],
+    [new Optional(), NgtSobaExtender],
+    [new Optional(), NGT_OBJECT_WATCHED_CONTROLLER],
   ],
 };
