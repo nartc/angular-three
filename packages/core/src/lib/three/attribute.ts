@@ -18,7 +18,7 @@ export abstract class NgtAttribute<
     | THREE.InterleavedBufferAttribute = THREE.BufferAttribute
 > implements OnInit, OnChanges, OnDestroy
 {
-  @Input() attach?: THREE.BuiltinShaderAttributeName;
+  @Input() attach?: THREE.BuiltinShaderAttributeName | string;
 
   abstract attributeType: AnyConstructor<TAttribute>;
 
