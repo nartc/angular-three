@@ -1,14 +1,11 @@
-import {
-  AnyFunction,
-  NgtAnimationFrameStore,
-  NgtStore,
-} from '@angular-three/core';
 import { Directive, Inject, NgZone, OnInit } from '@angular/core';
 import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
 import * as THREE from 'three';
 import { NGT_OBJECT_3D } from '../di/object3d';
+import { NgtAnimationFrameStore } from '../stores/animation-frame.store';
 import { EnhancedRxState } from '../stores/enhanced-rx-state';
-import { AnyConstructor } from '../types';
+import { NgtStore } from '../stores/store';
+import { AnyConstructor, AnyFunction } from '../types';
 
 @Directive()
 export abstract class NgtObjectHelper<TObjectHelper extends THREE.Object3D>
