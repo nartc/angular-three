@@ -3,13 +3,7 @@ import {
   Controller,
   createControllerProviderFactory,
 } from '@angular-three/core';
-import {
-  AfterContentInit,
-  Directive,
-  Input,
-  NgModule,
-  NgZone,
-} from '@angular/core';
+import { Directive, Input, NgModule, NgZone, OnInit } from '@angular/core';
 import * as THREE from 'three';
 import { BodyProps } from '../models/body';
 import { GetByIndex } from '../models/types';
@@ -30,10 +24,7 @@ import { NgtPhysicBodyStore } from './body.store';
   exportAs: 'ngtPhysicBody',
   providers: [NgtPhysicBodyStore],
 })
-export class NgtPhysicBodyController
-  extends Controller
-  implements AfterContentInit
-{
+export class NgtPhysicBodyController extends Controller implements OnInit {
   @Input() set getPhysicProps(fn: GetByIndex<BodyProps> | undefined) {
     this.physicBodyStore.set({ getPhysicProps: fn });
   }
@@ -42,7 +33,8 @@ export class NgtPhysicBodyController
     super(ngZone);
   }
 
-  ngAfterContentInit() {
+  ngOnInit() {
+    super.ngOnInit();
     this.ngZone.runOutsideAngular(() => {
       this.physicBodyStore.init();
     });
