@@ -16,14 +16,14 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~13.1.0",
-    "@angular/common": "~13.1.0",
-    "@angular/compiler": "~13.1.0",
-    "@angular/core": "~13.1.0",
-    "@angular/forms": "~13.1.0",
-    "@angular/platform-browser": "~13.1.0",
-    "@angular/platform-browser-dynamic": "~13.1.0",
-    "@angular/router": "~13.1.0",
+    "@angular/animations": "~13.0.3",
+    "@angular/common": "~13.0.3",
+    "@angular/compiler": "~13.0.3",
+    "@angular/core": "~13.0.3",
+    "@angular/forms": "~13.0.3",
+    "@angular/platform-browser": "~13.0.3",
+    "@angular/platform-browser-dynamic": "~13.0.3",
+    "@angular/router": "~13.0.3",
     "@rx-angular/cdk": "1.0.0-alpha.11",
     "@rx-angular/state": "1.4.6",
     "cannon-es": "0.18.0",
@@ -38,13 +38,13 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~13.1.1",
+    "@angular-devkit/build-angular": "~13.0.4",
     "@angular-eslint/eslint-plugin": "13.0.1",
     "@angular-eslint/eslint-plugin-template": "13.0.1",
     "@angular-eslint/template-parser": "13.0.1",
-    "@angular/cli": "~13.1.1",
-    "@angular/compiler-cli": "~13.1.0",
-    "@angular/language-service": "~13.1.0",
+    "@angular/cli": "~13.0.4",
+    "@angular/compiler-cli": "~13.0.3",
+    "@angular/language-service": "~13.0.3",
     "@nrwl/angular": "13.3.1",
     "@nrwl/cli": "13.3.1",
     "@nrwl/devkit": "13.3.1",
@@ -86,7 +86,7 @@
     "prettier": "^2.5.1",
     "release-it": "14.11.8",
     "ts-jest": "27.1.1",
-    "typescript": "~4.5.3"
+    "typescript": "~4.4.4"
   },
   "config": {
     "commitizen": {
