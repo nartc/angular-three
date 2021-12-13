@@ -4,9 +4,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {
-    "publish": "npm publish ../../dist/packages/cannon"
-  },
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",

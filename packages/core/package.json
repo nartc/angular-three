@@ -4,9 +4,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {
-    "publish": "npm publish ../../dist/packages/core"
-  },
   "generators": "./plugins/generators.json",
   "schematics": "./plugins/generators.json",
   "peerDependencies": {

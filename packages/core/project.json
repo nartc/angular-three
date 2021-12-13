@@ -113,6 +113,13 @@
           "packages/core/lod/**/*.html"
         ]
       }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm publish",
+        "cwd": "dist/packages/core"
+      }
     }
   },
   "tags": ["scope:core", "type:lib"]
