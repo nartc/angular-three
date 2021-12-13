@@ -1,5 +1,4 @@
 export * from './states/state';
-export * from './states/canvas-inputs-state';
 export * from './states/events-state';
 export * from './states/animation-frame-state';
 export * from './states/performance-state';

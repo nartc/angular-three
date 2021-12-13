@@ -25,7 +25,6 @@ import {
 import { NgtResize } from './resize/resize.service';
 import { NgtLoopService } from './services/loop.service';
 import { NgtAnimationFrameStore } from './stores/animation-frame.store';
-import { NgtCanvasInputsStore } from './stores/canvas-inputs.store';
 import { EnhancedRxState } from './stores/enhanced-rx-state';
 import { NgtEventsStore } from './stores/events.store';
 import { NgtPerformanceStore } from './stores/performance.store';
@@ -53,7 +52,6 @@ import { NgtStore } from './stores/store';
   providers: [
     NgtResize,
     NgtStore,
-    NgtCanvasInputsStore,
     NgtPerformanceStore,
     NgtEventsStore,
     NgtAnimationFrameStore,
@@ -92,7 +90,7 @@ export class NgtCanvas extends EnhancedRxState implements OnInit {
   }
 
   @Input() set dpr(dpr: NgtDpr) {
-    this.canvasInputsStore.set({ dpr });
+    this.store.set({ dpr });
   }
 
   @Input() set clock(clock: THREE.Clock) {
@@ -100,23 +98,23 @@ export class NgtCanvas extends EnhancedRxState implements OnInit {
   }
 
   @Input() set raycaster(raycaster: Partial<NgtRaycaster>) {
-    this.canvasInputsStore.set({ raycaster });
+    this.store.set({ raycasterOptions: raycaster });
   }
 
   @Input() set shadows(shadows: boolean | Partial<THREE.WebGLShadowMap>) {
-    this.canvasInputsStore.set({ shadows });
+    this.store.set({ shadows });
   }
 
   @Input() set camera(cameraOptions: NgtCameraOptions) {
-    this.canvasInputsStore.set({ cameraOptions });
+    this.store.set({ cameraOptions });
   }
 
   @Input() set scene(sceneOptions: NgtSceneOptions) {
-    this.canvasInputsStore.set({ sceneOptions });
+    this.store.set({ sceneOptions });
   }
 
   @Input() set gl(glOptions: NgtGLOptions) {
-    this.canvasInputsStore.set({ glOptions });
+    this.store.set({ glOptions });
   }
 
   @Output() created = new EventEmitter<NgtCreatedState>();
@@ -129,7 +127,6 @@ export class NgtCanvas extends EnhancedRxState implements OnInit {
 
   constructor(
     @Self() private store: NgtStore,
-    @Self() private canvasInputsStore: NgtCanvasInputsStore,
     @Self() private performanceStore: NgtPerformanceStore,
     @Self() private eventsStore: NgtEventsStore,
     @Self() private animationFrameStore: NgtAnimationFrameStore,

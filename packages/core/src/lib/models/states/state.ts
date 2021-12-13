@@ -1,7 +1,10 @@
 import * as THREE from 'three';
-import { NgtCamera } from '../camera';
+import { NgtCamera, NgtCameraOptions } from '../camera';
+import { NgtDpr } from '../dpr';
 import { NgtInstance } from '../instance';
+import { NgtGLOptions } from '../options/gl-options';
 import { NgtRaycaster } from '../raycaster';
+import { NgtSceneOptions } from '../scene';
 import { NgtSize } from '../size';
 import { NgtCurrentViewport, NgtViewport } from '../viewport';
 import { NgtPerformance } from './performance-state';
@@ -25,6 +28,7 @@ export interface NgtState {
   clock: THREE.Clock;
   frameloop: 'always' | 'demand' | 'never';
   performance: NgtPerformance;
+  dpr: NgtDpr;
   size: NgtSize;
   viewport: NgtViewport & {
     getCurrentViewport: (
@@ -34,6 +38,11 @@ export interface NgtState {
     ) => NgtCurrentViewport;
   };
   controls: THREE.EventDispatcher | null;
+  raycasterOptions: Partial<NgtRaycaster>;
+  shadows: boolean | Partial<THREE.WebGLShadowMap>;
+  cameraOptions: NgtCameraOptions;
+  sceneOptions: NgtSceneOptions;
+  glOptions: NgtGLOptions;
   renderer: THREE.WebGLRenderer;
   camera: NgtCamera;
   scene: THREE.Scene;

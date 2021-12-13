@@ -12,10 +12,6 @@ Even though we want to avoid Imperative State Management, it is almost unavoidab
 
 This store is the main store for the Canvas. It is responsible for keeping the Renderer, Scene, Camera, and other states/configurations for the 3 main building blocks. It also contains information about the Viewport like Size and Device Pixel Ratio (DPR).
 
-## `NgtCanvasInputsStore`
-
-This store is responsible for keeping the inputs for the Canvas. It uses to provide the default configurations for `NgtStore`, and to update the configurations when the consumers pass in values via `ngt-canvas` Inputs.
-
 ## `NgtAnimationFrameStore`
 
 This store keeps track of all the animation callbacks that are registered. Animations are registered via two ways:

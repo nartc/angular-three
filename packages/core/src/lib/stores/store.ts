@@ -16,7 +16,6 @@ import { NgtResize, NgtResizeResult } from '../resize/resize.service';
 import { applyProps } from '../utils/apply-props';
 import { calculateDpr } from '../utils/calculate-dpr';
 import { isOrthographicCamera } from '../utils/is-orthographic';
-import { NgtCanvasInputsStore } from './canvas-inputs.store';
 import { EnhancedRxState, getActions } from './enhanced-rx-state';
 
 const position = new THREE.Vector3();
@@ -39,7 +38,6 @@ export class NgtStore extends EnhancedRxState<NgtState> {
   constructor(
     @Inject(NGT_PERFORMANCE_OPTIONS) performance: NgtPerformance,
     { nativeElement: canvasHost }: ElementRef<HTMLElement>,
-    private canvasInputsStore: NgtCanvasInputsStore,
     @Inject(NgtResize)
     private resizeResult$: Observable<NgtResizeResult>
   ) {
@@ -60,9 +58,15 @@ export class NgtStore extends EnhancedRxState<NgtState> {
       performance,
       controls: null,
       objects: {},
+      dpr: 1,
+      shadows: false,
+      cameraOptions: {},
+      glOptions: {},
+      raycasterOptions: {},
+      sceneOptions: {},
       viewport: {
-        initialDpr: calculateDpr(canvasInputsStore.get('dpr')),
-        dpr: calculateDpr(canvasInputsStore.get('dpr')),
+        initialDpr: calculateDpr(this.get('dpr')),
+        dpr: calculateDpr(this.get('dpr')),
         width: canvasHost.clientWidth,
         height: canvasHost.clientHeight,
         aspect: canvasHost.clientWidth / canvasHost.clientHeight,
@@ -123,8 +127,8 @@ export class NgtStore extends EnhancedRxState<NgtState> {
       glOptions,
       sceneOptions,
       cameraOptions,
-      raycaster: raycasterOptions,
-    } = this.canvasInputsStore.get();
+      raycasterOptions,
+    } = this.get();
 
     // Scene
     const scene = new THREE.Scene();
@@ -245,8 +249,7 @@ export class NgtStore extends EnhancedRxState<NgtState> {
     size: NgtSize;
     viewport: NgtViewport;
   }) {
-    const { camera, renderer, ready } = this.get();
-    const cameraOptions = this.canvasInputsStore.get('cameraOptions');
+    const { camera, renderer, ready, cameraOptions } = this.get();
 
     if (ready) {
       // update renderer
