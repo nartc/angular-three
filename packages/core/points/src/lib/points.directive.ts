@@ -12,7 +12,7 @@ import * as THREE from 'three';
   exportAs: 'ngtPoints',
   providers: [
     NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
-    { provide: NGT_OBJECT_TYPE, useExisting: THREE.Points },
+    { provide: NGT_OBJECT_TYPE, useValue: THREE.Points },
   ],
 })
 export class NgtPoints {
