@@ -1,6 +1,6 @@
 {
   "name": "angular-three",
-  "version": "2.7.3",
+  "version": "2.8.0",
   "license": "MIT",
   "scripts": {
     "postinstall": "ngcc --properties es2015 browser module main",

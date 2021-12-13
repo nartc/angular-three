@@ -1,3 +1,31 @@
+## [2.8.0](https://github.com/nartc/angular-three/compare/2.7.3...2.8.0) (2021-12-13)
+
+
+### Features
+
+* **core:** separate helpers and object helpers ([6c18608](https://github.com/nartc/angular-three/commit/6c186081a360fc1efc502f459614f1c646323528))
+* **soba:** add Stars ([b23d960](https://github.com/nartc/angular-three/commit/b23d960b70c1430e4c80d6299d7edb890db86ff3))
+
+
+### Bug Fixes
+
+* **core:** add ngt-points to required controllers ([1da9cee](https://github.com/nartc/angular-three/commit/1da9cee00a643dc123da2951a8cc237bc7eeaf36))
+* **core:** adjust imports in object helper ([42de8b4](https://github.com/nartc/angular-three/commit/42de8b4c0ad35a9d059946f1af0aebce186a087b))
+* **core:** adjust object helpers ([089d7cb](https://github.com/nartc/angular-three/commit/089d7cb082094997e314c264157478738713d9da))
+* **core:** allow Attribute#attach to accept arbitrary string ([bd8e916](https://github.com/nartc/angular-three/commit/bd8e916a562ad8fc21200dc66d3b119e73d293ab))
+* **core:** remove SkipSelf from object3d provider ([10390be](https://github.com/nartc/angular-three/commit/10390be02e6de75e1109cc2ad93b283749b382f9))
+* **core:** useValue for THREE.Points instead of useExisting ([59ec622](https://github.com/nartc/angular-three/commit/59ec622f74f707817d4afd0f5e9e7534cbf8aa35))
+* **core:** wrap setting parameters for material in requestAnimationFrame ([51f5269](https://github.com/nartc/angular-three/commit/51f5269e7252c43b8444cd0b74430eeb2ee9e813))
+* **soba:** provide NgtSobaExtender for billboard and image ([6031836](https://github.com/nartc/angular-three/commit/60318366e5318a534c16ac42e6af1a6d2ffa4d57))
+* **soba:** template error in stars component ([3827350](https://github.com/nartc/angular-three/commit/38273500117e898a743e7fc20eb1bb844cb09016))
+
+
+### Cleanup
+
+* **core:** consolidate core ([9e64eb4](https://github.com/nartc/angular-three/commit/9e64eb4b2ae3afb72851978d85f4e4ed1701a77a))
+* **core:** move all models to a single file types.ts ([8d33940](https://github.com/nartc/angular-three/commit/8d33940b46fc0b699782f34a5736ad01f242db5e))
+* **core:** remove CanvasInputsState ([dce5a4c](https://github.com/nartc/angular-three/commit/dce5a4c4b74273b0a6644e749bba5f274c56b9cb))
+
 ### [2.7.3](https://github.com/nartc/angular-three/compare/2.7.2...2.7.3) (2021-12-13)
 
 
