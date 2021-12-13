@@ -3,17 +3,7 @@ import {
   Controller,
   createControllerProviderFactory,
 } from '@angular-three/core';
-import {
-  ContentChildren,
-  Directive,
-  Input,
-  NgModule,
-  NgZone,
-  OnInit,
-  QueryList,
-} from '@angular/core';
-import { map } from 'rxjs';
-import { NgtPhysicBodyController } from '../body/body.controller';
+import { Directive, Input, NgModule, NgZone, OnInit } from '@angular/core';
 import { NgtPhysicConstraintStore } from './constraint.store';
 
 @Directive({
@@ -29,16 +19,6 @@ export class NgtPhysicConstraintController
 {
   @Input() set options(v: Record<string, unknown>) {
     this.physicConstraintStore.set({ options: v });
-  }
-
-  @ContentChildren(NgtPhysicBodyController, { descendants: true })
-  set bodies(v: QueryList<NgtPhysicBodyController>) {
-    this.physicConstraintStore.connect(
-      'bodies',
-      v.changes.pipe(
-        map((list: QueryList<NgtPhysicBodyController>) => list.toArray())
-      )
-    );
   }
 
   constructor(

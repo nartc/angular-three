@@ -3,8 +3,16 @@ import {
   Controller,
   createControllerProviderFactory,
 } from '@angular-three/core';
-import { Directive, Input, NgModule, NgZone, OnInit } from '@angular/core';
+import {
+  Directive,
+  Input,
+  NgModule,
+  NgZone,
+  OnInit,
+  Optional,
+} from '@angular/core';
 import * as THREE from 'three';
+import { NgtPhysicConstraintStore } from '../constraint/constraint.store';
 import { BodyProps } from '../models/body';
 import { GetByIndex } from '../models/types';
 import { NgtPhysicBodyStore } from './body.store';
@@ -21,8 +29,17 @@ export class NgtPhysicBodyController extends Controller implements OnInit {
     this.physicBodyStore.set({ getPhysicProps: fn });
   }
 
-  constructor(private physicBodyStore: NgtPhysicBodyStore, ngZone: NgZone) {
+  constructor(
+    private physicBodyStore: NgtPhysicBodyStore,
+    ngZone: NgZone,
+    @Optional() physicConstraintStore: NgtPhysicConstraintStore
+  ) {
     super(ngZone);
+    if (physicConstraintStore) {
+      physicConstraintStore.set((oldState) => ({
+        bodies: [...oldState.bodies, this],
+      }));
+    }
   }
 
   ngOnInit() {
