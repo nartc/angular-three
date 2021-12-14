@@ -11,7 +11,9 @@ import { NgtSobaLoaderModule } from '@angular-three/soba/loaders';
 import { NgtSobaPlaneModule } from '@angular-three/soba/shapes';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { NgxLilGuiModule } from 'ngx-lil-gui';
 import { GridHelper, Material } from 'three';
+import { RobotGuiComponent } from './robot-gui.component';
 import { RobotComponent } from './robot.component';
 
 @Component({
@@ -28,7 +30,7 @@ export class RobotExpressiveComponent {
 }
 
 @NgModule({
-  declarations: [RobotExpressiveComponent, RobotComponent],
+  declarations: [RobotExpressiveComponent, RobotComponent, RobotGuiComponent],
   exports: [RobotExpressiveComponent],
   imports: [
     NgtCoreModule,
@@ -41,6 +43,7 @@ export class RobotExpressiveComponent {
     NgtSobaLoaderModule,
     NgtPrimitiveModule,
     NgtStatsModule,
+    NgxLilGuiModule,
   ],
 })
 export class RobotExpressiveModule {}

@@ -12607,6 +12607,13 @@ ng-packagr@~13.1.1:
   optionalDependencies:
     esbuild "^0.14.0"
 
+ngx-lil-gui@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-lil-gui/-/ngx-lil-gui-1.1.0.tgz#954872e40e169d1bfa05629cf7f318cdfda3700a"
+  integrity sha512-3RNb5v9QF7TUnRmBrHxCUlEHUsHLp7OuSi+KtGMN3ChXTT8u4kNsP6WY369jFa+lJImpKGzrZWlqCI2aK3OtQw==
+  dependencies:
+    tslib "^2.3.0"
+
 nice-color-palettes@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/nice-color-palettes/-/nice-color-palettes-3.0.0.tgz#1ec31927cfc4ce8a51822b6bab2c64845d181abb"

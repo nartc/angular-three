@@ -3,6 +3,7 @@ This example is a port from [THREE.js Example](https://threejs.org/examples/#web
 - Load a model using `NgtGLTFLoaderService`
 - Use `ngt-primitive` to render the model on the scene
 - Apply `AnimationMixer`
+- Use `ngx-lil-gui` to control the Robot
 
 ```html
 <!-- robot-expressive.component.html -->
@@ -107,6 +108,14 @@ export class RobotExpressiveModule {}
     (ready)="onReady(robot.scene, robot.animations)"
     (animateReady)="onAnimateReady($event)"
   ></ngt-primitive>
+
+  <ngt-robot-gui
+    [robot]="robot.scene"
+    [states]="states"
+    [emotes]="emotes"
+    [animationMixer]="animationMixer"
+    (act)="fadeToAction($event.state, $event.duration)"
+  ></ngt-robot-gui>
 </ng-container>
 ```
 
@@ -114,8 +123,7 @@ export class RobotExpressiveModule {}
 // robot.component.ts
 import { NgtRender } from '@angular-three/core';
 import { NgtGLTFLoaderService } from '@angular-three/soba/loaders';
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
-import GUI from 'lil-gui';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   AnimationAction,
   AnimationClip,
@@ -130,11 +138,10 @@ import {
   templateUrl: './robot.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RobotComponent implements OnDestroy {
+export class RobotComponent {
   robot$ = this.gltfLoaderService.load('assets/RobotExpressive.glb');
 
-  #animationMixer?: AnimationMixer;
-  #states = [
+  states = [
     'Idle',
     'Walking',
     'Running',
@@ -143,20 +150,18 @@ export class RobotComponent implements OnDestroy {
     'Sitting',
     'Standing',
   ];
-  #emotes = ['Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp'];
+  emotes = ['Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp'];
+
+  animationMixer?: AnimationMixer;
+
   #actions: Record<string, AnimationAction> = {};
   #activeAction?: AnimationAction;
   #previousAction?: AnimationAction;
-  #gui!: GUI;
-  #api: { state: string } & Record<string, (() => void) | string> = {
-    state: 'Walking',
-  };
 
   constructor(private gltfLoaderService: NgtGLTFLoaderService) {}
 
   onReady(model: Group, animations: AnimationClip[]) {
-    this.#gui = new GUI();
-    this.#animationMixer = new AnimationMixer(model);
+    this.animationMixer = new AnimationMixer(model);
 
     model.traverse((child) => {
       if ((child as Mesh).isMesh) {
@@ -167,78 +172,29 @@ export class RobotComponent implements OnDestroy {
 
     for (let i = 0; i < animations.length; i++) {
       const animation = animations[i];
-      const action = this.#animationMixer.clipAction(animation);
+      const action = this.animationMixer.clipAction(animation);
       this.#actions[animation.name] = action;
 
       if (
-        this.#emotes.indexOf(animation.name) >= 0 ||
-        this.#states.indexOf(animation.name) >= 4
+        this.emotes.indexOf(animation.name) >= 0 ||
+        this.states.indexOf(animation.name) >= 4
       ) {
         action.clampWhenFinished = true;
         action.loop = LoopOnce;
       }
     }
 
-    const statesFolder = this.#gui.addFolder('States');
-    const animationControl = statesFolder
-      .add(this.#api, 'state')
-      .options(this.#states);
-
-    animationControl.onChange(() => {
-      this.#fadeToAction(this.#api.state, 0.5);
-    });
-
-    statesFolder.open();
-
-    const emotesFolder = this.#gui.addFolder('Emotes');
-
-    const createEmoteCallback = (emote: string) => {
-      this.#api[emote] = () => {
-        this.#fadeToAction(emote, 0.2);
-        this.#animationMixer?.addEventListener('finished', restoreState);
-      };
-      emotesFolder.add(this.#api, emote);
-    };
-
-    const restoreState = () => {
-      this.#animationMixer?.removeEventListener('finished', restoreState);
-      this.#fadeToAction(this.#api.state, 0.2);
-    };
-
-    for (let i = 0; i < this.#emotes.length; i++) {
-      createEmoteCallback(this.#emotes[i]);
-    }
-
-    emotesFolder.open();
-
-    const face = model.getObjectByName('Head_4') as Mesh;
-
-    const expressions = Object.keys(face.morphTargetDictionary || {});
-    const expressionFolder = this.#gui.addFolder('Expressions');
-
-    for (let i = 0; i < expressions.length; i++) {
-      expressionFolder
-        .add(face.morphTargetInfluences!, '' + i, 0, 1, 0.01)
-        .name(expressions[i]);
-    }
-
-    expressionFolder.open();
-
     this.#activeAction = this.#actions['Walking'];
     this.#activeAction.play();
   }
 
   onAnimateReady({ delta }: NgtRender) {
-    if (this.#animationMixer) {
-      this.#animationMixer.update(delta);
+    if (this.animationMixer) {
+      this.animationMixer.update(delta);
     }
   }
 
-  ngOnDestroy() {
-    this.#gui.destroy();
-  }
-
-  #fadeToAction(state: string, duration: number) {
+  fadeToAction(state: string, duration: number) {
     this.#previousAction = this.#activeAction;
     this.#activeAction = this.#actions[state];
 
@@ -251,6 +207,92 @@ export class RobotComponent implements OnDestroy {
       .setEffectiveWeight(1)
       .fadeIn(duration)
       .play();
+  }
+}
+```
+
+- We can have separate component for the GUI using [`ngx-lil-gui`](https://github.com/nartc/ngx-lil-gui)
+
+```ts
+// robot-gui.component.ts
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import { AnimationMixer, Group, Mesh } from 'three';
+
+@Component({
+  selector: 'ngt-robot-gui',
+  template: `
+    <ngx-lil-gui [container]="false" [zoneless]="true">
+      <ngx-lil-gui
+        title="States"
+        [object]="api"
+        (change)="act.emit({ state: api.state, duration: 0.5 })"
+      >
+        <ngx-lil-gui-controller
+          property="state"
+          [controllerConfig]="{ collection: states }"
+        ></ngx-lil-gui-controller>
+      </ngx-lil-gui>
+
+      <ngx-lil-gui title="Emotes" [object]="api">
+        <ngx-lil-gui-controller
+          *ngFor="let emote of emotes"
+          [property]="emote"
+          (preAdd)="onEmotePreAdd(emote)"
+        ></ngx-lil-gui-controller>
+      </ngx-lil-gui>
+
+      <ngx-lil-gui title="Expressions" [object]="morphTargetInfluences!">
+        <ngx-lil-gui-controller
+          *ngFor="let pair of morphTargetDictionary! | keyvalue; index as i"
+          (controllerReady)="$event.name('' + pair.key)"
+          [property]="'' + i"
+          [controllerConfig]="{ min: 0, max: 1, step: 0.01 }"
+        ></ngx-lil-gui-controller>
+      </ngx-lil-gui>
+    </ngx-lil-gui>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class RobotGuiComponent {
+  @Input() set robot(v: Group) {
+    this.morphTargetInfluences = (
+      v.getObjectByName('Head_4') as Mesh
+    ).morphTargetInfluences;
+    this.morphTargetDictionary = (v.getObjectByName('Head_4') as Mesh)
+      .morphTargetDictionary as unknown as ReadonlyMap<unknown, unknown>;
+  }
+
+  @Input() states!: string[];
+  @Input() emotes!: string[];
+  @Input() animationMixer?: AnimationMixer;
+
+  @Output() act = new EventEmitter<{ state: string; duration: number }>();
+
+  morphTargetInfluences?: number[] | undefined;
+  morphTargetDictionary?: ReadonlyMap<unknown, unknown> | undefined;
+
+  api: { state: string } & Record<string, (() => void) | string> = {
+    state: 'Walking',
+  };
+
+  constructor() {}
+
+  onEmotePreAdd(emote: string) {
+    const restoreState = () => {
+      this.animationMixer?.removeEventListener('finished', restoreState);
+      this.act.emit({ state: this.api.state, duration: 0.2 });
+    };
+
+    this.api[emote] = () => {
+      this.act.emit({ state: emote, duration: 0.2 });
+      this.animationMixer?.addEventListener('finished', restoreState);
+    };
   }
 }
 ```
