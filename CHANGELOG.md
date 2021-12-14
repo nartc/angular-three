@@ -1,3 +1,15 @@
+## [2.9.0](https://github.com/nartc/angular-three/compare/2.8.0...2.9.0) (2021-12-14)
+
+
+### Features
+
+* **core:** add FogPipe ([bd58523](https://github.com/nartc/angular-three/commit/bd58523bee62c784a88b7045665865a8d1722fdc))
+
+
+### Documentations
+
+* **demo/storybook:** add RobotExpressive demo ([c99c504](https://github.com/nartc/angular-three/commit/c99c5042d1938024fd0f7b9b4c6b319bad99fd7d))
+
 ## [2.8.0](https://github.com/nartc/angular-three/compare/2.7.3...2.8.0) (2021-12-13)
 
 
