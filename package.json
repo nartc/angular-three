@@ -28,6 +28,7 @@
     "@rx-angular/state": "1.4.6",
     "cannon-es": "0.18.0",
     "cannon-es-debugger": "0.1.4",
+    "lil-gui": "0.15.0",
     "nice-color-palettes": "3.0.0",
     "postprocessing": "6.23.3",
     "rxjs": "~7.4.0",

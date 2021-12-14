@@ -1,0 +1,256 @@
+This example is a port from [THREE.js Example](https://threejs.org/examples/#webgl_animation_skinning_morph). It shows how to:
+
+- Load a model using `NgtGLTFLoaderService`
+- Use `ngt-primitive` to render the model on the scene
+- Apply `AnimationMixer`
+
+```html
+<!-- robot-expressive.component.html -->
+<ngt-canvas
+  (created)="$event.camera.lookAt(0, 2, 0)"
+  [shadows]="true"
+  [camera]="{ fov: 45, near: 0.25, far: 100, position: [-5, 5, 10] }"
+  [scene]="{ background: '#e0e0e0' | color, fog: ['#e0e0e0', 20, 100] | fog }"
+>
+  <!--      stats-->
+  <ngt-stats></ngt-stats>
+
+  <!--      lights-->
+  <ngt-hemisphere-light
+    [args]="['#ffffff', '#444444']"
+    [position]="[0, 20, 0]"
+  ></ngt-hemisphere-light>
+  <ngt-directional-light
+    [args]="['#ffffff']"
+    [position]="[0, 20, 10]"
+    [castShadow]="true"
+  ></ngt-directional-light>
+
+  <!--    ground-->
+  <ngt-soba-plane
+    [args]="[2000, 2000]"
+    [rotation]="[-(0.5 | mathConst: 'PI'), 0, 0]"
+    [receiveShadow]="true"
+  >
+    <ngt-mesh-phong-material
+      [parameters]="{ color: '#ffffff', depthWrite: false }"
+    ></ngt-mesh-phong-material>
+  </ngt-soba-plane>
+  <ngt-grid-helper
+    #ngtGridHelper="ngtGridHelper"
+    (ready)="onGridHelperReady(ngtGridHelper.helper)"
+    [args]="[200, 40, '#000000', '#000000']"
+    [receiveShadow]="true"
+  ></ngt-grid-helper>
+
+  <!--      robot-->
+  <ngt-robot></ngt-robot>
+</ngt-canvas>
+<ngt-soba-loader></ngt-soba-loader>
+```
+
+```ts
+// robot-expressive.component.ts
+import { NgtCoreModule } from '@angular-three/core';
+import { NgtGridHelperModule } from '@angular-three/core/helpers';
+import {
+  NgtDirectionalLightModule,
+  NgtHemisphereLightModule,
+} from '@angular-three/core/lights';
+import { NgtMeshPhongMaterialModule } from '@angular-three/core/materials';
+import { NgtPrimitiveModule } from '@angular-three/core/primitive';
+import { NgtStatsModule } from '@angular-three/core/stats';
+import { NgtSobaLoaderModule } from '@angular-three/soba/loaders';
+import { NgtSobaPlaneModule } from '@angular-three/soba/shapes';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { GridHelper, Material } from 'three';
+import { RobotComponent } from './robot.component';
+
+@Component({
+  selector: 'ngt-robot-expressive',
+  templateUrl: './robot-expressive.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class RobotExpressiveComponent {
+  onGridHelperReady(helper: GridHelper) {
+    const material = helper.material as Material;
+    material.opacity = 0.2;
+    material.transparent = true;
+  }
+}
+
+@NgModule({
+  declarations: [RobotExpressiveComponent, RobotComponent],
+  exports: [RobotExpressiveComponent],
+  imports: [
+    NgtCoreModule,
+    NgtHemisphereLightModule,
+    NgtDirectionalLightModule,
+    NgtSobaPlaneModule,
+    NgtMeshPhongMaterialModule,
+    NgtGridHelperModule,
+    CommonModule,
+    NgtSobaLoaderModule,
+    NgtPrimitiveModule,
+    NgtStatsModule,
+  ],
+})
+export class RobotExpressiveModule {}
+```
+
+```html
+<!-- robot.component.html -->
+<ng-container *ngIf="robot$ | async as robot">
+  <ngt-primitive
+    [object]="robot.scene"
+    (ready)="onReady(robot.scene, robot.animations)"
+    (animateReady)="onAnimateReady($event)"
+  ></ngt-primitive>
+</ng-container>
+```
+
+```ts
+// robot.component.ts
+import { NgtRender } from '@angular-three/core';
+import { NgtGLTFLoaderService } from '@angular-three/soba/loaders';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import GUI from 'lil-gui';
+import {
+  AnimationAction,
+  AnimationClip,
+  AnimationMixer,
+  Group,
+  LoopOnce,
+  Mesh,
+} from 'three';
+
+@Component({
+  selector: 'ngt-robot',
+  templateUrl: './robot.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class RobotComponent implements OnDestroy {
+  robot$ = this.gltfLoaderService.load('assets/RobotExpressive.glb');
+
+  #animationMixer?: AnimationMixer;
+  #states = [
+    'Idle',
+    'Walking',
+    'Running',
+    'Dance',
+    'Death',
+    'Sitting',
+    'Standing',
+  ];
+  #emotes = ['Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp'];
+  #actions: Record<string, AnimationAction> = {};
+  #activeAction?: AnimationAction;
+  #previousAction?: AnimationAction;
+  #gui!: GUI;
+  #api: { state: string } & Record<string, (() => void) | string> = {
+    state: 'Walking',
+  };
+
+  constructor(private gltfLoaderService: NgtGLTFLoaderService) {}
+
+  onReady(model: Group, animations: AnimationClip[]) {
+    this.#gui = new GUI();
+    this.#animationMixer = new AnimationMixer(model);
+
+    model.traverse((child) => {
+      if ((child as Mesh).isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+
+    for (let i = 0; i < animations.length; i++) {
+      const animation = animations[i];
+      const action = this.#animationMixer.clipAction(animation);
+      this.#actions[animation.name] = action;
+
+      if (
+        this.#emotes.indexOf(animation.name) >= 0 ||
+        this.#states.indexOf(animation.name) >= 4
+      ) {
+        action.clampWhenFinished = true;
+        action.loop = LoopOnce;
+      }
+    }
+
+    const statesFolder = this.#gui.addFolder('States');
+    const animationControl = statesFolder
+      .add(this.#api, 'state')
+      .options(this.#states);
+
+    animationControl.onChange(() => {
+      this.#fadeToAction(this.#api.state, 0.5);
+    });
+
+    statesFolder.open();
+
+    const emotesFolder = this.#gui.addFolder('Emotes');
+
+    const createEmoteCallback = (emote: string) => {
+      this.#api[emote] = () => {
+        this.#fadeToAction(emote, 0.2);
+        this.#animationMixer?.addEventListener('finished', restoreState);
+      };
+      emotesFolder.add(this.#api, emote);
+    };
+
+    const restoreState = () => {
+      this.#animationMixer?.removeEventListener('finished', restoreState);
+      this.#fadeToAction(this.#api.state, 0.2);
+    };
+
+    for (let i = 0; i < this.#emotes.length; i++) {
+      createEmoteCallback(this.#emotes[i]);
+    }
+
+    emotesFolder.open();
+
+    const face = model.getObjectByName('Head_4') as Mesh;
+
+    const expressions = Object.keys(face.morphTargetDictionary || {});
+    const expressionFolder = this.#gui.addFolder('Expressions');
+
+    for (let i = 0; i < expressions.length; i++) {
+      expressionFolder
+        .add(face.morphTargetInfluences!, '' + i, 0, 1, 0.01)
+        .name(expressions[i]);
+    }
+
+    expressionFolder.open();
+
+    this.#activeAction = this.#actions['Walking'];
+    this.#activeAction.play();
+  }
+
+  onAnimateReady({ delta }: NgtRender) {
+    if (this.#animationMixer) {
+      this.#animationMixer.update(delta);
+    }
+  }
+
+  ngOnDestroy() {
+    this.#gui.destroy();
+  }
+
+  #fadeToAction(state: string, duration: number) {
+    this.#previousAction = this.#activeAction;
+    this.#activeAction = this.#actions[state];
+
+    if (this.#previousAction !== this.#activeAction) {
+      this.#previousAction!.fadeOut(duration);
+    }
+
+    this.#activeAction!.reset()
+      .setEffectiveTimeScale(1)
+      .setEffectiveWeight(1)
+      .fadeIn(duration)
+      .play();
+  }
+}
+```
