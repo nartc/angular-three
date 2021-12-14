@@ -8,6 +8,7 @@ import { NgtMaterialGeometryControllerModule } from './controllers/material-geom
 import { NgtObject3dInputsControllerModule } from './controllers/object-3d-inputs.controller';
 import { NgtObject3dControllerModule } from './controllers/object-3d.controller';
 import { NgtColorPipeModule } from './pipes/color.pipe';
+import { NgtFogPipeModule } from './pipes/fog.pipe';
 import { NgtMathPipeModule } from './pipes/math.pipe';
 import { NgtVectorPipeModule } from './pipes/vector.pipe';
 
@@ -25,6 +26,7 @@ import { NgtVectorPipeModule } from './pipes/vector.pipe';
     NgtMathPipeModule,
     NgtVectorPipeModule,
     NgtColorPipeModule,
+    NgtFogPipeModule,
   ],
 })
 export class NgtCoreModule {}
