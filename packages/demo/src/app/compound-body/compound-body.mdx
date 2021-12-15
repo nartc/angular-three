@@ -47,7 +47,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { mapTo, startWith, timer } from 'rxjs';
+import { mapTo, startWith, tap, timer } from 'rxjs';
 
 @Component({
   selector: 'ngt-compound-body',
@@ -77,8 +77,8 @@ import { mapTo, startWith, timer } from 'rxjs';
           <ngt-compound
             [position]="[2.5, 3, 0.25]"
             [rotation]="[1.25, -1.25, 0]"
-            (positionChange)="position = $event"
-            (rotationChange)="rotation = $event"
+            (positionChange)="!isCopied && (position = $event)"
+            (rotationChange)="!isCopied && (rotation = $event)"
           ></ngt-compound>
 
           <!--          async pipe reevaluates the postion/rotation of the copied?? -->
@@ -96,6 +96,7 @@ import { mapTo, startWith, timer } from 'rxjs';
             [position]="position"
             [rotation]="rotation"
           ></ngt-compound>
+          ,
         </ngt-cannon-debug>
       </ngt-physics>
     </ngt-canvas>
@@ -104,7 +105,15 @@ import { mapTo, startWith, timer } from 'rxjs';
 })
 export class CompoundBodyComponent {
   ready$ = timer(2000).pipe(mapTo(true), startWith(false));
-  copy$ = timer(1000).pipe(mapTo(true), startWith(false));
+  copy$ = timer(1000).pipe(
+    tap(() => {
+      this.isCopied = true;
+    }),
+    mapTo(true),
+    startWith(false)
+  );
+
+  isCopied = false;
 
   position: NgtVector3 = [0, 0, 0];
   rotation: NgtEuler = [0, 0, 0];
@@ -179,11 +188,17 @@ export class CompoundComponent implements AfterViewInit {
   boxSize: NgtTriplet = [1, 1, 1];
   sphereRadius = 0.65;
 
-  @ViewChild(NgtPhysicCompound, { static: true })
+  @ViewChild(NgtPhysicCompound)
   physicCompound!: NgtPhysicCompound;
 
   #positionSubscription?: () => void;
   #rotationSubscription?: () => void;
+
+  ngOnChanges() {
+    if (this.isTrigger) {
+      console.log(this.position, this.rotation);
+    }
+  }
 
   ngAfterViewInit() {
     if (this.positionChange.observed) {

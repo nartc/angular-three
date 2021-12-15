@@ -191,12 +191,6 @@ export class CompoundComponent implements AfterViewInit {
   #positionSubscription?: () => void;
   #rotationSubscription?: () => void;
 
-  ngOnChanges() {
-    if (this.isTrigger) {
-      console.log(this.position, this.rotation);
-    }
-  }
-
   ngAfterViewInit() {
     if (this.positionChange.observed) {
       this.#positionSubscription = this.physicCompound.api.position.subscribe(
