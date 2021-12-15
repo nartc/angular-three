@@ -118,7 +118,7 @@ export class NgtPhysicBodyStore extends EnhancedRxState<NgtPhysicBodyStoreState>
     this.holdEffect(this.#changes$, this.#initWorker.bind(this));
   }
 
-  get api() {
+  get api(): WorkerApi & { at: (index: number) => WorkerApi } {
     const { worker, subscriptions } = this.physicsStore.get();
     const object3d = this.objectController.object3d;
     const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
@@ -181,7 +181,9 @@ export class NgtPhysicBodyStore extends EnhancedRxState<NgtPhysicBodyStoreState>
     };
 
     const makeVec = (type: VectorName, index?: number) => {
-      const op: SetOpName<VectorName> = `set${capitalize(type)}`;
+      const op: SetOpName<VectorName> = `set${capitalize(
+        type
+      )}` as SetOpName<VectorName>;
       return {
         set: (x: number, y: number, z: number) => {
           const uuid = getUUID(object3d, index);
