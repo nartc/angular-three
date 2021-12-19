@@ -1,5 +1,6 @@
 import {
   EnhancedRxState,
+  makeVector3,
   NgtAnimationFrameStore,
   NgtEventsStore,
   NgtLoopService,
@@ -17,7 +18,7 @@ import {
   Output,
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
-import { of, switchMap } from 'rxjs';
+import { combineLatest, of, switchMap } from 'rxjs';
 import * as THREE from 'three';
 import { OrbitControls } from 'three-stdlib/controls/OrbitControls';
 
@@ -127,6 +128,18 @@ export class NgtSobaOrbitControls
         this.set({ controls });
       }
     });
+
+    this.hold(
+      combineLatest([this.select('controls'), this.select('target')]),
+      ([controls, target]) => {
+        if (controls) {
+          const vector3Target = makeVector3(target);
+          if (vector3Target) {
+            controls.target = vector3Target;
+          }
+        }
+      }
+    );
 
     this.holdEffect(
       this.#controlsEventsChanges$,

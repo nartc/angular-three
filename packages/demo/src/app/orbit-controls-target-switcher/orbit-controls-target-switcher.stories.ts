@@ -1,23 +1,23 @@
 import { Meta, moduleMetadata } from '@storybook/angular';
-import { KinematicCubeComponentModule } from './kinematic-cube.component';
+import { OrbitControlsTargetSwitcherComponentModule } from './orbit-controls-target-switcher.component';
 // @ts-ignore
-import kinematicCubeDocs from './kinematic-cube.mdx';
+import orbitControlsTargetSwitcherDocs from './orbit-controls-target-switcher.mdx';
 
 export default {
-  title: 'Examples/Kinematic Cube',
+  title: 'Examples/Orbit Controls Target Switcher',
   decorators: [
     moduleMetadata({
-      imports: [KinematicCubeComponentModule],
+      imports: [OrbitControlsTargetSwitcherComponentModule],
     }),
   ],
   parameters: {
-    docs: { page: kinematicCubeDocs },
+    docs: { page: orbitControlsTargetSwitcherDocs },
     viewMode: 'story',
   },
 } as Meta;
 
 export const Default = () => ({
   template: `
-    <ngt-kinematic-cube></ngt-kinematic-cube>
+    <ngt-orbit-controls-target-switcher></ngt-orbit-controls-target-switcher>
   `,
 });
