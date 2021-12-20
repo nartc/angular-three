@@ -12,7 +12,23 @@ import {
 
 @Component({
   selector: 'ngt-robot',
-  templateUrl: './robot.component.html',
+  template: `
+    <ng-container *ngIf="robot$ | async as robot">
+      <ngt-primitive
+        [object]="robot.scene"
+        (ready)="onReady(robot.scene, robot.animations)"
+        (animateReady)="onAnimateReady($event)"
+      ></ngt-primitive>
+
+      <ngt-robot-gui
+        [robot]="robot.scene"
+        [states]="states"
+        [emotes]="emotes"
+        [animationMixer]="animationMixer"
+        (act)="fadeToAction($event.state, $event.duration)"
+      ></ngt-robot-gui>
+    </ng-container>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RobotComponent {
