@@ -27,6 +27,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "BenLune",
+      "name": "BenLune",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5662714?v=4",
+      "profile": "https://github.com/BenLune",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
