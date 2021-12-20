@@ -1,3 +1,29 @@
+## [2.10.0](https://github.com/nartc/angular-three/compare/2.9.0...2.10.0) (2021-12-20)
+
+
+### Features
+
+* **soba:** add PositionalAudio ([5593440](https://github.com/nartc/angular-three/commit/5593440a53f4ca366495d45fce6a7cce3039659e))
+* **soba:** being able to update NgtOrbitControls target ([#38](https://github.com/nartc/angular-three/issues/38)) ([22d507f](https://github.com/nartc/angular-three/commit/22d507f4d7814a8b36864fb77d568324c11eda10))
+
+
+### Bug Fixes
+
+* **cannon:** adjust typing ([239d57d](https://github.com/nartc/angular-three/commit/239d57d696a1790bc75655a4a7d38092cad3acd3))
+* **core:** adjust changes from r3f events ([dfbb2df](https://github.com/nartc/angular-three/commit/dfbb2dfb407ac89db151d19a2c42f12c898554d4))
+* **core:** adjust RxState with new actions from core ([2ee026e](https://github.com/nartc/angular-three/commit/2ee026e1e227ce069c0589cff0079285613db443))
+* **soba:** clean up orbit controls updating target ([70bafc6](https://github.com/nartc/angular-three/commit/70bafc6e645a49c536e4602e9a24b83c6b613cdf))
+* **soba:** delay assigning text for text component by an animation frame to allow for binding ([cb29085](https://github.com/nartc/angular-three/commit/cb2908511d83d3fe1348c10af21ce4a217c11cf7))
+
+
+### Documentations
+
+* add @BenLune as a contributor ([d6dd109](https://github.com/nartc/angular-three/commit/d6dd109c068f85545f9c7d92af617d463676da52))
+* **demo/storybook:** add ngx-lil-gui ([b970fa6](https://github.com/nartc/angular-three/commit/b970fa669940b756c072e4a13c87db0d21f78897))
+* **demo/storybook:** clean up orbit controls swtich target demo ([9708add](https://github.com/nartc/angular-three/commit/9708addf50c9faa9eadfb78f9911f429e64de243))
+* **demo/storybook:** cleanup compound body ([1fac969](https://github.com/nartc/angular-three/commit/1fac969b3460dccce2554afb1a181151faebdf77))
+* **demo/storybook:** fix compound body demo ([4a22eec](https://github.com/nartc/angular-three/commit/4a22eecd3a29a6b920efc1e27775d678d77ca337))
+
 ## [2.9.0](https://github.com/nartc/angular-three/compare/2.8.0...2.9.0) (2021-12-14)
 
 
