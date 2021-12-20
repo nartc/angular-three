@@ -28,6 +28,7 @@
     "@rx-angular/state": "1.4.6",
     "cannon-es": "0.18.0",
     "cannon-es-debugger": "0.1.4",
+    "gsap": "^3.9.0",
     "lil-gui": "0.15.0",
     "ngx-lil-gui": "^1.1.0",
     "nice-color-palettes": "3.0.0",
