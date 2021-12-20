@@ -2,14 +2,17 @@ import { Injectable } from '@angular/core';
 import { noop } from 'rxjs';
 import { NgtAnimationFrameStoreState, NgtAnimationRecord } from '../types';
 import { makeId } from '../utils/make-id';
-import { EnhancedRxState, getActions } from './enhanced-rx-state';
+import { EnhancedRxState } from './enhanced-rx-state';
 
 @Injectable()
-export class NgtAnimationFrameStore extends EnhancedRxState<NgtAnimationFrameStoreState> {
-  actions = getActions<{
+export class NgtAnimationFrameStore extends EnhancedRxState<
+  NgtAnimationFrameStoreState,
+  {
     animationRecord: NgtAnimationRecord & { uuid: string };
     unsubscriberUuid: string;
-  }>();
+  }
+> {
+  actions = this.create();
 
   register(animationRecord: NgtAnimationRecord) {
     const uuid = animationRecord.obj?.uuid || makeId();

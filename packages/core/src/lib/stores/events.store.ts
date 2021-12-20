@@ -9,7 +9,7 @@ import {
   UnknownRecord,
 } from '../types';
 import { createEvents } from '../utils/events';
-import { EnhancedRxState, getActions } from './enhanced-rx-state';
+import { EnhancedRxState } from './enhanced-rx-state';
 import { NgtStore } from './store';
 
 const names = {
@@ -26,8 +26,11 @@ const names = {
 } as const;
 
 @Injectable()
-export class NgtEventsStore extends EnhancedRxState<NgtEventsStoreState> {
-  actions = getActions<{ element: HTMLElement }>();
+export class NgtEventsStore extends EnhancedRxState<
+  NgtEventsStoreState,
+  { element: HTMLElement }
+> {
+  actions = this.create();
 
   constructor(private store: NgtStore, private ngZone: NgZone) {
     super();

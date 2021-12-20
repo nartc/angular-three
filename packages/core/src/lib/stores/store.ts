@@ -16,13 +16,16 @@ import {
 import { applyProps } from '../utils/apply-props';
 import { calculateDpr } from '../utils/calculate-dpr';
 import { isOrthographicCamera } from '../utils/is-orthographic';
-import { EnhancedRxState, getActions } from './enhanced-rx-state';
+import { EnhancedRxState } from './enhanced-rx-state';
 
 const position = new THREE.Vector3();
 const defaultTarget = new THREE.Vector3();
 
 @Injectable()
-export class NgtStore extends EnhancedRxState<NgtState> {
+export class NgtStore extends EnhancedRxState<
+  NgtState,
+  { canvasElement: HTMLCanvasElement }
+> {
   #allReady$ = this.select(
     selectSlice(['scene', 'camera', 'renderer', 'raycaster']),
     map(
@@ -33,7 +36,7 @@ export class NgtStore extends EnhancedRxState<NgtState> {
 
   #dimensions$ = this.select(selectSlice(['size', 'viewport']));
 
-  actions = getActions<{ canvasElement: HTMLCanvasElement }>();
+  actions = this.create();
 
   constructor(
     @Inject(NGT_PERFORMANCE_OPTIONS) performance: NgtPerformance,

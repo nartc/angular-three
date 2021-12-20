@@ -1,8 +1,4 @@
-import {
-  EnhancedRxState,
-  getActions,
-  NgtAnimationFrameStore,
-} from '@angular-three/core';
+import { EnhancedRxState, NgtAnimationFrameStore } from '@angular-three/core';
 import { Injectable } from '@angular/core';
 import { Vec3 } from 'cannon-es';
 import cannonDebugger from 'cannon-es-debugger';
@@ -19,9 +15,12 @@ const s = new THREE.Vector3(1, 1, 1);
 const q = new THREE.Quaternion();
 
 @Injectable()
-export class NgtCannonDebugStore extends EnhancedRxState<NgtCannonDebugStoreState> {
+export class NgtCannonDebugStore extends EnhancedRxState<
+  NgtCannonDebugStoreState,
+  { init: void }
+> {
   #scene = new THREE.Scene();
-  actions = getActions<{ init: void }>();
+  actions = this.create();
 
   constructor(
     physicsStore: NgtPhysicsStore,

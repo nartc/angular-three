@@ -1,4 +1,4 @@
-import { EnhancedRxState, getActions } from '@angular-three/core';
+import { EnhancedRxState } from '@angular-three/core';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
 import * as THREE from 'three';
@@ -13,9 +13,12 @@ export interface NgtPhysicConstraintStoreState {
 }
 
 @Injectable()
-export class NgtPhysicConstraintStore extends EnhancedRxState<NgtPhysicConstraintStoreState> {
+export class NgtPhysicConstraintStore extends EnhancedRxState<
+  NgtPhysicConstraintStoreState,
+  { init: void }
+> {
   #uuid = THREE.MathUtils.generateUUID();
-  actions = getActions<{ init: void }>();
+  actions = this.create();
 
   #addConstraintChanges$ = combineLatest([
     this.actions.init$,

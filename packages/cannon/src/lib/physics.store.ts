@@ -1,6 +1,5 @@
 import {
   EnhancedRxState,
-  getActions,
   NgtAnimationFrameStore,
   NgtLoopService,
   NgtStore,
@@ -34,8 +33,11 @@ function apply(index: number, buffers: Buffers, object?: THREE.Object3D) {
 }
 
 @Injectable()
-export class NgtPhysicsStore extends EnhancedRxState<NgtPhysicsStoreState> {
-  actions = getActions<{ init: void }>();
+export class NgtPhysicsStore extends EnhancedRxState<
+  NgtPhysicsStoreState,
+  { init: void }
+> {
+  actions = this.create();
 
   constructor(
     private animationFrameStore: NgtAnimationFrameStore,
