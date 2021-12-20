@@ -28,6 +28,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
 // @ts-ignore
 import { Text as TextMeshImpl } from 'troika-three-text';
 
@@ -127,10 +128,12 @@ export class NgtSobaText
   }
 
   ngOnInit() {
-    this.elRef.nativeElement.childNodes.forEach((childNode) => {
-      if (childNode instanceof Text) {
-        this.text += childNode.textContent;
-      }
+    requestAnimationFrame(() => {
+      this.elRef.nativeElement.childNodes.forEach((childNode) => {
+        if (childNode instanceof Text) {
+          this.text += childNode.textContent;
+        }
+      });
     });
   }
 
@@ -141,36 +144,38 @@ export class NgtSobaText
   }
 
   onTroikaTextReady(troikaText: TextMeshImpl) {
-    troikaText.text = this.text;
-    if (this.contentMaterialController.material) {
-      troikaText.material = this.contentMaterialController.material;
-    }
-    applyProps(troikaText, {
-      color: this.color,
-      fontSize: this.fontSize,
-      maxWidth: this.maxWidth,
-      lineHeight: this.lineHeight,
-      letterSpacing: this.letterSpacing,
-      textAlign: this.textAlign,
-      font: this.font,
-      anchorX: this.anchorX,
-      anchorY: this.anchorY,
-      clipRect: this.clipRect,
-      depthOffset: this.depthOffset,
-      direction: this.direction,
-      overflowWrap: this.overflowWrap,
-      whiteSpace: this.whiteSpace,
-      outlineWidth: this.outlineWidth,
-      outlineOffsetX: this.outlineOffsetX,
-      outlineOffsetY: this.outlineOffsetY,
-      outlineBlur: this.outlineBlur,
-      outlineColor: this.outlineColor,
-      outlineOpacity: this.outlineOpacity,
-      strokeWidth: this.strokeWidth,
-      strokeColor: this.strokeColor,
-      strokeOpacity: this.strokeOpacity,
-      fillOpacity: this.fillOpacity,
-      debugSDF: this.debugSDF,
+    requestAnimationFrame(() => {
+      troikaText.text = this.text;
+      if (this.contentMaterialController.material) {
+        troikaText.material = this.contentMaterialController.material;
+      }
+      applyProps(troikaText, {
+        color: this.color,
+        fontSize: this.fontSize,
+        maxWidth: this.maxWidth,
+        lineHeight: this.lineHeight,
+        letterSpacing: this.letterSpacing,
+        textAlign: this.textAlign,
+        font: this.font,
+        anchorX: this.anchorX,
+        anchorY: this.anchorY,
+        clipRect: this.clipRect,
+        depthOffset: this.depthOffset,
+        direction: this.direction,
+        overflowWrap: this.overflowWrap,
+        whiteSpace: this.whiteSpace,
+        outlineWidth: this.outlineWidth,
+        outlineOffsetX: this.outlineOffsetX,
+        outlineOffsetY: this.outlineOffsetY,
+        outlineBlur: this.outlineBlur,
+        outlineColor: this.outlineColor,
+        outlineOpacity: this.outlineOpacity,
+        strokeWidth: this.strokeWidth,
+        strokeColor: this.strokeColor,
+        strokeOpacity: this.strokeOpacity,
+        fillOpacity: this.fillOpacity,
+        debugSDF: this.debugSDF,
+      });
     });
   }
 }
