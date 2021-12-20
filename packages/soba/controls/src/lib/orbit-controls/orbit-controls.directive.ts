@@ -18,7 +18,7 @@ import {
   Output,
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
-import { combineLatest, of, switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import * as THREE from 'three';
 import { OrbitControls } from 'three-stdlib/controls/OrbitControls';
 
@@ -74,6 +74,7 @@ export class NgtSobaOrbitControls
   );
 
   #makeDefaultParams$ = this.select(selectSlice(['makeDefault', 'controls']));
+  #controlsTargetParams$ = this.select(selectSlice(['target', 'controls']));
 
   constructor(
     private loopService: NgtLoopService,
@@ -129,17 +130,14 @@ export class NgtSobaOrbitControls
       }
     });
 
-    this.hold(
-      combineLatest([this.select('controls'), this.select('target')]),
-      ([controls, target]) => {
-        if (controls) {
-          const vector3Target = makeVector3(target);
-          if (vector3Target) {
-            controls.target = vector3Target;
-          }
+    this.hold(this.#controlsTargetParams$, ({ controls, target }) => {
+      if (controls) {
+        const vector3Target = makeVector3(target);
+        if (vector3Target) {
+          controls.target = vector3Target;
         }
       }
-    );
+    });
 
     this.holdEffect(
       this.#controlsEventsChanges$,
