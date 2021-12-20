@@ -4,7 +4,6 @@ import {
   Controller,
   createControllerProviderFactory,
   EnhancedRxState,
-  getActions,
 } from '@angular-three/core';
 import {
   Directive,
@@ -31,17 +30,12 @@ export const NGT_EFFECT_DEFAULT_BLEND_FUNCTION =
     factory: () => BlendFunction.NORMAL,
   });
 
-
-interface NgtEffectStoreState {
-  options: ConstructorParameters<AnyConstructor<Effect>>[0];
-  blendFunction: BlendFunction;
-  opacity?: number;
-  effect?: Effect;
-}
-
 @Injectable()
-export class NgtEffectStore extends EnhancedRxState<NgtEffectStoreState> {
-  actions = getActions<{ init: void }>();
+export class NgtEffectStore extends EnhancedRxState<
+  NgtEffectStoreState,
+  { init: void }
+> {
+  actions = this.create();
 
   constructor(
     @Optional()
@@ -86,6 +80,13 @@ export class NgtEffectStore extends EnhancedRxState<NgtEffectStoreState> {
       }
     });
   }
+}
+
+interface NgtEffectStoreState {
+  options: ConstructorParameters<AnyConstructor<Effect>>[0];
+  blendFunction: BlendFunction;
+  opacity?: number;
+  effect?: Effect;
 }
 
 @Directive({

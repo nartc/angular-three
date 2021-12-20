@@ -24,6 +24,7 @@ export default async function controllersGenerator(
     'soba-cubic-bezier-line',
   ];
   const sobaWithMaterialSelectors = ['soba-text'];
+  const sobaAudioSelectors = ['soba-positional-audio'];
 
   const { libsDir } = getWorkspaceLayout(tree);
   const controllersDir = join(libsDir, 'core', 'src', 'lib', 'controllers');
@@ -51,7 +52,7 @@ export default async function controllersGenerator(
 
   generateFiles(tree, join(__dirname, 'files'), controllersDir, {
     tmpl: '',
-    audioSelectors,
+    audioSelectors: [...audioSelectors, ...sobaAudioSelectors],
     meshSelectors,
     lineSelectors,
     sobaShapeSelectors: [

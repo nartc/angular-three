@@ -6,6 +6,7 @@ import { Controller, createControllerProviderFactory } from './controller';
   selector: `
     ngt-audio,
     ngt-positional-audio,
+    ngt-soba-positional-audio,
   `,
   exportAs: 'ngtAudioController',
 })
