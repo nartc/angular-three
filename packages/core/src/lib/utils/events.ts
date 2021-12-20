@@ -345,17 +345,17 @@ export function createEvents(
       case 'pointerleave':
       case 'pointercancel':
         return () => cancelPointer([]);
-      case 'onLostPointerCapture':
+      case 'lostpointercapture':
         return (event: NgtDomEvent) => {
-          if ('pointerId' in event) {
+          const {
+            internal: { capturedMap },
+          } = eventsStateGetter();
+          if ('pointerId' in event && !capturedMap.has(event.pointerId)) {
             // If the object event interface had onLostPointerCapture, we'd call it here on every
             // object that's getting removed.
-            const {
-              internal: { capturedMap },
-            } = eventsStateGetter();
             capturedMap.delete(event.pointerId);
+            cancelPointer([]);
           }
-          cancelPointer([]);
         };
     }
 
