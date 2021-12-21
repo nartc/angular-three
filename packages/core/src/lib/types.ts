@@ -75,6 +75,10 @@ export interface NgtCommonParameters {
   dispose?: (() => void) | null;
 }
 
+export interface NgtCanvasOptions {
+  projectContent?: boolean;
+}
+
 export type NgtGLOptions =
   | THREE.Renderer
   | ((canvas: HTMLCanvasElement) => THREE.Renderer)

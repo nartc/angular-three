@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  Inject,
   Input,
   NgZone,
   OnInit,
@@ -12,6 +13,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
+import { NGT_CANVAS_OPTIONS } from './di/canvas';
 import { NgtLoopService } from './services/loop.service';
 import { NgtResize } from './services/resize.service';
 import { NgtAnimationFrameStore } from './stores/animation-frame.store';
@@ -21,6 +23,7 @@ import { NgtPerformanceStore } from './stores/performance.store';
 import { NgtStore } from './stores/store';
 import {
   NgtCameraOptions,
+  NgtCanvasOptions,
   NgtCreatedState,
   NgtDpr,
   NgtGLOptions,
@@ -32,7 +35,12 @@ import {
 
 @Component({
   selector: 'ngt-canvas',
-  template: ` <canvas #rendererCanvas></canvas> `,
+  template: `
+    <canvas #rendererCanvas></canvas>
+    <ng-container *ngIf="canvasOptions.projectContent">
+      <ng-content></ng-content>
+    </ng-container>
+  `,
   styles: [
     `
       :host {
@@ -131,7 +139,8 @@ export class NgtCanvas extends EnhancedRxState implements OnInit {
     @Self() private eventsStore: NgtEventsStore,
     @Self() private animationFrameStore: NgtAnimationFrameStore,
     @Self() private loopService: NgtLoopService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    @Inject(NGT_CANVAS_OPTIONS) public canvasOptions: NgtCanvasOptions
   ) {
     super();
   }

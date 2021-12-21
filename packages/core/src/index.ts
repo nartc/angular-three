@@ -5,6 +5,7 @@ export * from './lib/core.module';
 export * from './lib/di/object3d';
 export * from './lib/di/performance';
 export * from './lib/di/resize';
+export * from './lib/di/canvas';
 
 export * from './lib/canvas.component';
 

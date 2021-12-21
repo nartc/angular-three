@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NgtCanvas } from './canvas.component';
 import { NgtAnimationSubscriberControllerModule } from './controllers/animation-subscriber.controller';
@@ -14,6 +15,7 @@ import { NgtVectorPipeModule } from './pipes/vector.pipe';
 
 @NgModule({
   declarations: [NgtCanvas],
+  imports: [CommonModule],
   exports: [
     NgtCanvas,
     NgtMaterialGeometryControllerModule,
