@@ -9,6 +9,7 @@ import { KinematicCubeComponentModule } from './kinematic-cube/kinematic-cube.co
 import { LevelOfDetailsModule } from './level-of-details/level-of-details.component';
 import { OrbitControlsTargetSwitcherComponentModule } from './orbit-controls-target-switcher/orbit-controls-target-switcher.component';
 import { RobotExpressiveModule } from './robot-expressive/robot-expressive.component';
+import { RoutingComponentModule } from './routing/routing.component';
 import { SimpleCubeComponentModule } from './simple-cube.component';
 
 @NgModule({
@@ -23,6 +24,7 @@ import { SimpleCubeComponentModule } from './simple-cube.component';
     LevelOfDetailsModule,
     RobotExpressiveModule,
     OrbitControlsTargetSwitcherComponentModule,
+    RoutingComponentModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

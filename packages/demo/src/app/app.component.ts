@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
     <!--    <ngt-level-of-details></ngt-level-of-details>-->
     <!--    <ngt-robot-expressive></ngt-robot-expressive>-->
     <ngt-orbit-controls-target-switcher></ngt-orbit-controls-target-switcher>
+    <!--    <ngt-routing></ngt-routing>-->
   `,
 })
 export class AppComponent {}

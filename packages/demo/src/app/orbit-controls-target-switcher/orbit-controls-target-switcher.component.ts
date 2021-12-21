@@ -1,7 +1,9 @@
 import {
   makeVector3,
+  NGT_CANVAS_OPTIONS,
   NgtCoreModule,
   NgtCursorModule,
+  provideCanvasOptions,
 } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtGroupModule } from '@angular-three/core/group';
@@ -31,6 +33,7 @@ import { gsap } from 'gsap';
 import niceColors from 'nice-color-palettes';
 import { Mesh, Vector3 } from 'three';
 import { OrbitControls } from 'three-stdlib';
+import { environment } from '../../environments/environment';
 import { SimpleCubeComponentModule } from '../simple-cube.component';
 
 export interface CubeContent {
@@ -149,6 +152,14 @@ export interface CubeContent {
         cursor: auto;
       }
     `,
+  ],
+  providers: [
+    {
+      provide: NGT_CANVAS_OPTIONS,
+      useValue: provideCanvasOptions({
+        projectContent: !environment.production,
+      }),
+    },
   ],
 })
 export class OrbitControlsTargetSwitcherComponent {
