@@ -59,7 +59,10 @@ export class NgtSobaOrthographicCameraStore extends EnhancedRxState<NgtSobaOrtho
   }> = combineLatest([
     of(this.objectInputsController),
     this.store.select('size'),
-    this.select(selectSlice(['near', 'far'])),
+    this.select(
+      selectSlice(['near', 'far']),
+      startWith({ near: undefined, far: undefined })
+    ),
   ]).pipe(
     map(([objectInputsController, size, { near, far }]) => ({
       left: size.width / -2,
@@ -108,6 +111,7 @@ export class NgtSobaOrthographicCameraStore extends EnhancedRxState<NgtSobaOrtho
       *ngIf="vm$ | async as vm"
       #ngtOrthographicCamera="ngtOrthographicCamera"
       [args]="[vm.left, vm.right, vm.top, vm.bottom, vm.near, vm.far]"
+      [object3dInputsController]="vm.objectInputsController"
       (ready)="object = ngtOrthographicCamera.camera"
     >
       <ng-content></ng-content>
