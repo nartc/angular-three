@@ -50,6 +50,7 @@
       "@angular-three/soba/abstractions": [
         "packages/soba/abstractions/src/index.ts"
       ],
+      "@angular-three/soba/cameras": ["packages/soba/cameras/src/index.ts"],
       "@angular-three/soba/controls": ["packages/soba/controls/src/index.ts"],
       "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"],
       "@angular-three/soba/performances": [
