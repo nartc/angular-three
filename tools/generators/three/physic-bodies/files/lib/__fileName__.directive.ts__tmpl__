@@ -6,7 +6,8 @@ import {
   NGT_PHYSIC_BODY_CONTROLLER_PROVIDER,
   NGT_PHYSIC_BODY_TYPE,
   NGT_PHYSIC_BODY_WATCHED_CONTROLLER,
-  NgtPhysicBodyController,<% for (const additionalImport of additionalImports) { %>
+  NgtPhysicBodyController,
+  NgtPhysicBodyControllerModule,<% for (const additionalImport of additionalImports) { %>
   <%= additionalImport %>,<% }%>
 } from '@angular-three/cannon';
 import { Directive, Inject, NgModule } from '@angular/core';
@@ -35,6 +36,6 @@ export class NgtPhysic<%= name %> {
 
 @NgModule({
   declarations: [NgtPhysic<%= name %>],
-  exports: [NgtPhysic<%= name %>],
+  exports: [NgtPhysic<%= name %>, NgtPhysicBodyControllerModule],
 })
 export class NgtPhysic<%= name %>Module {}

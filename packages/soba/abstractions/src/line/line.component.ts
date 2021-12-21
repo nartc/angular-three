@@ -5,8 +5,8 @@ import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtColor,
-  NgtCoreModule,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtVector3,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
@@ -260,7 +260,11 @@ export class NgtSobaLine
 
 @NgModule({
   declarations: [NgtSobaLine, NgtSobaLineInputsController],
-  exports: [NgtSobaLine, NgtSobaLineInputsController],
-  imports: [NgtCoreModule, NgtPrimitiveModule],
+  exports: [
+    NgtSobaLine,
+    NgtSobaLineInputsController,
+    NgtObject3dInputsControllerModule,
+  ],
+  imports: [NgtPrimitiveModule],
 })
 export class NgtSobaLineModule {}

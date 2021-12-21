@@ -1,5 +1,5 @@
-import { NgtCanvasOptions } from '@angular-three/core';
 import { InjectionToken } from '@angular/core';
+import { NgtCanvasOptions } from '../types';
 
 const DEFAULT_NGT_CANVAS_OPTIONS: NgtCanvasOptions = {
   projectContent: false,

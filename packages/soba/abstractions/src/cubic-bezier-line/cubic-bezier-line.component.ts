@@ -1,8 +1,8 @@
 import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-  NgtCoreModule,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtVector3,
 } from '@angular-three/core';
 import {
@@ -100,7 +100,11 @@ export class NgtSobaCubicBezierLine implements OnInit, OnChanges {
 
 @NgModule({
   declarations: [NgtSobaCubicBezierLine],
-  exports: [NgtSobaCubicBezierLine],
-  imports: [NgtCoreModule, NgtSobaLineModule],
+  exports: [
+    NgtSobaCubicBezierLine,
+    NgtSobaLineModule,
+    NgtObject3dInputsControllerModule,
+  ],
+  imports: [NgtSobaLineModule],
 })
 export class NgtSobaCubicBezierLineModule {}

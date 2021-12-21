@@ -1,4 +1,4 @@
-import { NgtCoreModule } from '@angular-three/core';
+import { NgtColorPipeModule, NgtCoreModule } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
 import {
   NgtAmbientLightModule,
@@ -101,6 +101,7 @@ export class KeenComponent {
     NgtStatsModule,
     NgtNoiseModule,
     NgtSobaLoaderModule,
+    NgtColorPipeModule,
   ],
 })
 export class KeenComponentModule {}

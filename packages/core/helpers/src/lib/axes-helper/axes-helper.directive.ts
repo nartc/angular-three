@@ -1,5 +1,9 @@
 // GENERATED
-import { NgtHelper, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
+import {
+  NgtHelper,
+  NGT_OBJECT_CONTROLLER_PROVIDER,
+  NgtObject3dControllerModule,
+} from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -28,6 +32,6 @@ export class NgtAxesHelper extends NgtHelper<THREE.AxesHelper> {
 
 @NgModule({
   declarations: [NgtAxesHelper],
-  exports: [NgtAxesHelper],
+  exports: [NgtAxesHelper, NgtObject3dControllerModule],
 })
 export class NgtAxesHelperModule {}

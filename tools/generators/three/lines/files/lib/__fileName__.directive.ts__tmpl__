@@ -1,5 +1,5 @@
 // GENERATED
-import { NgtCommonLine, NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER, NGT_OBJECT_TYPE } from '@angular-three/core';
+import { NgtCommonLine, NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER, NGT_OBJECT_TYPE, NgtMaterialGeometryControllerModule } from '@angular-three/core';
 import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
 
@@ -22,7 +22,7 @@ export class Ngt<%= name %> extends NgtCommonLine<THREE.<%= name %>> {}
 
 @NgModule({
   declarations: [Ngt<%= name %>],
-  exports: [Ngt<%= name %>],
+  exports: [Ngt<%= name %>, NgtMaterialGeometryControllerModule],
 })
 export class Ngt<%= name %>Module {}
 

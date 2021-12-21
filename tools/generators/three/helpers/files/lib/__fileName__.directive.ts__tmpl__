@@ -34,7 +34,7 @@ export class Ngt<%= name %> extends NgtObjectHelper<THREE.<%= name %>> {
 
   objectHelperType = THREE.<%= name %>;
 }<% } else { %>
-import { NgtHelper, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
+import { NgtHelper, NGT_OBJECT_CONTROLLER_PROVIDER, NgtObject3dControllerModule } from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -62,7 +62,7 @@ export class Ngt<%= name %> extends NgtHelper<THREE.<%= name %>> {
 
 @NgModule({
   declarations: [Ngt<%= name %>],
-  exports: [Ngt<%= name %>],
+  exports: [Ngt<%= name %><% if (!objectHelper) { %>, NgtObject3dControllerModule<% } %>],
 })
 export class Ngt<%= name %>Module {}
 

@@ -4,6 +4,7 @@ import {
   createControllerProviderFactory,
 } from '@angular-three/core';
 import { Directive, Input, NgModule, NgZone, OnInit } from '@angular/core';
+import { requestAnimationFrame } from '@rx-angular/cdk';
 import { NgtPhysicConstraintStore } from './constraint.store';
 
 @Directive({
@@ -34,7 +35,7 @@ export class NgtPhysicConstraintController
 
   ngOnInit() {
     super.ngOnInit();
-    this.ngZone.runOutsideAngular(() => {
+    requestAnimationFrame(() => {
       this.physicConstraintStore.actions.init();
     });
   }

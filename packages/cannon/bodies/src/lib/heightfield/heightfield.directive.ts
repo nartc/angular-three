@@ -6,6 +6,7 @@ import {
   NGT_PHYSIC_BODY_TYPE,
   NGT_PHYSIC_BODY_WATCHED_CONTROLLER,
   NgtPhysicBodyController,
+  NgtPhysicBodyControllerModule,
 } from '@angular-three/cannon';
 import { Directive, Inject, NgModule } from '@angular/core';
 
@@ -34,6 +35,6 @@ export class NgtPhysicHeightfield {
 
 @NgModule({
   declarations: [NgtPhysicHeightfield],
-  exports: [NgtPhysicHeightfield],
+  exports: [NgtPhysicHeightfield, NgtPhysicBodyControllerModule],
 })
 export class NgtPhysicHeightfieldModule {}

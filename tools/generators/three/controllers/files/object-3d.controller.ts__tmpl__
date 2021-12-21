@@ -13,25 +13,27 @@ import {
 import { setTimeout } from '@rx-angular/cdk/zone-less';
 import { Subscription, take } from 'rxjs';
 import * as THREE from 'three';
+import { NgtEventsStore } from '../stores/events.store';
+import { NgtStore } from '../stores/store';
 import {
   NgtEvent,
   NgtEventHandlers,
   NgtInstanceInternal,
   UnknownRecord,
 } from '../types';
-import { NgtEventsStore } from '../stores/events.store';
-import { NgtStore } from '../stores/store';
 import { applyProps } from '../utils/apply-props';
 import {
   NGT_ANIMATION_SUBSCRIBER_CONTROLLER_PROVIDER,
   NGT_ANIMATION_SUBSCRIBER_WATCHED_CONTROLLER,
   NgtAnimationSubscriberController,
+  NgtAnimationSubscriberControllerModule,
 } from './animation-subscriber.controller';
 import { Controller, createControllerProviderFactory } from './controller';
 import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
 } from './object-3d-inputs.controller';
 
 const supportedEvents = [
@@ -347,7 +349,11 @@ export class NgtObject3dController extends Controller implements OnDestroy {
 
 @NgModule({
   declarations: [NgtObject3dController],
-  exports: [NgtObject3dController],
+  exports: [
+    NgtObject3dController,
+    NgtObject3dInputsControllerModule,
+    NgtAnimationSubscriberControllerModule,
+  ],
 })
 export class NgtObject3dControllerModule {}
 

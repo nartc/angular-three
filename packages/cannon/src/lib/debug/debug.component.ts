@@ -1,4 +1,4 @@
-import { NgtColor, NgtCoreModule } from '@angular-three/core';
+import { NgtColor } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
 import {
   ChangeDetectionStrategy,
@@ -56,6 +56,6 @@ export class NgtCannonDebug implements OnInit {
 @NgModule({
   declarations: [NgtCannonDebug],
   exports: [NgtCannonDebug],
-  imports: [NgtCoreModule, NgtPrimitiveModule],
+  imports: [NgtPrimitiveModule],
 })
 export class NgtCannonDebugModule {}

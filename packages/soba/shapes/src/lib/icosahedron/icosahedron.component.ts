@@ -5,9 +5,10 @@ import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtContentMaterialController,
-  NgtCoreModule,
   NgtObject3dInputsController,
   NgtSobaExtender,
+  NgtObject3dInputsControllerModule,
+  NgtContentMaterialControllerModule,
 } from '@angular-three/core';
 import { NgtIcosahedronGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
@@ -62,12 +63,11 @@ export class NgtSobaIcosahedron extends NgtSobaExtender<THREE.Mesh> {
 
 @NgModule({
   declarations: [NgtSobaIcosahedron],
-  exports: [NgtSobaIcosahedron],
-  imports: [
-    NgtCoreModule,
-    NgtMeshModule,
-    NgtIcosahedronGeometryModule,
-    CommonModule,
+  exports: [
+    NgtSobaIcosahedron,
+    NgtObject3dInputsControllerModule,
+    NgtContentMaterialControllerModule,
   ],
+  imports: [NgtMeshModule, NgtIcosahedronGeometryModule, CommonModule],
 })
 export class NgtSobaIcosahedronModule {}

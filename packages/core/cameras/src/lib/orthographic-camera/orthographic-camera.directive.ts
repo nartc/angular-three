@@ -2,6 +2,7 @@
 import {
   NgtCommonCamera,
   NGT_OBJECT_CONTROLLER_PROVIDER,
+  NgtObject3dControllerModule,
 } from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -31,6 +32,6 @@ export class NgtOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCam
 
 @NgModule({
   declarations: [NgtOrthographicCamera],
-  exports: [NgtOrthographicCamera],
+  exports: [NgtOrthographicCamera, NgtObject3dControllerModule],
 })
 export class NgtOrthographicCameraModule {}

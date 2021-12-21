@@ -2,6 +2,7 @@
 import {
   NgtCommonSprite,
   NGT_OBJECT_CONTROLLER_PROVIDER,
+  NgtObject3dControllerModule,
 } from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -23,6 +24,6 @@ export class NgtSprite extends NgtCommonSprite<THREE.Sprite> {
 
 @NgModule({
   declarations: [NgtSprite],
-  exports: [NgtSprite],
+  exports: [NgtSprite, NgtObject3dControllerModule],
 })
 export class NgtSpriteModule {}

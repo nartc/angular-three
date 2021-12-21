@@ -1,5 +1,5 @@
 // GENERATED
-import { AnyConstructor, NgtCoreModule } from '@angular-three/core';
+import { AnyConstructor } from '@angular-three/core';
 import {
   NgtPrimitive,
   NgtPrimitiveModule,
@@ -11,6 +11,7 @@ import {
   NGT_EFFECT_WATCH_CONTROLLER,
   NgtEffectComposerModule,
   NgtEffectController,
+  NgtEffectControllerModule,
 } from '@angular-three/postprocessing';
 import { CommonModule } from '@angular/common';
 import {
@@ -62,12 +63,7 @@ export class NgtNoise {
 
 @NgModule({
   declarations: [NgtNoise],
-  exports: [NgtNoise],
-  imports: [
-    NgtCoreModule,
-    NgtPrimitiveModule,
-    NgtEffectComposerModule,
-    CommonModule,
-  ],
+  exports: [NgtNoise, NgtEffectControllerModule],
+  imports: [NgtPrimitiveModule, NgtEffectComposerModule, CommonModule],
 })
 export class NgtNoiseModule {}

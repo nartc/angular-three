@@ -5,6 +5,7 @@ import {
   NGT_OBJECT_TYPE,
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtCommonMesh,
+  NgtMaterialGeometryControllerModule,
   NgtMatrix4,
   NgtObject3dController,
   NgtObject3dInputsController,
@@ -135,6 +136,11 @@ export class NgtBone implements OnInit {
 
 @NgModule({
   declarations: [NgtSkinnedMesh, NgtBone, NgtSkeleton],
-  exports: [NgtSkinnedMesh, NgtBone, NgtSkeleton],
+  exports: [
+    NgtSkinnedMesh,
+    NgtBone,
+    NgtSkeleton,
+    NgtMaterialGeometryControllerModule,
+  ],
 })
 export class NgtSkinnedMeshModule {}

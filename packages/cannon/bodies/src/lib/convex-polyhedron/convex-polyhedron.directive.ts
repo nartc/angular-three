@@ -7,6 +7,7 @@ import {
   NGT_PHYSIC_BODY_TYPE,
   NGT_PHYSIC_BODY_WATCHED_CONTROLLER,
   NgtPhysicBodyController,
+  NgtPhysicBodyControllerModule,
   makeTriplet,
 } from '@angular-three/cannon';
 import { Directive, Inject, NgModule } from '@angular/core';
@@ -48,6 +49,6 @@ export class NgtPhysicConvexPolyhedron {
 
 @NgModule({
   declarations: [NgtPhysicConvexPolyhedron],
-  exports: [NgtPhysicConvexPolyhedron],
+  exports: [NgtPhysicConvexPolyhedron, NgtPhysicBodyControllerModule],
 })
 export class NgtPhysicConvexPolyhedronModule {}

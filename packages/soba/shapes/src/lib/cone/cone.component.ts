@@ -5,9 +5,10 @@ import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtContentMaterialController,
-  NgtCoreModule,
   NgtObject3dInputsController,
   NgtSobaExtender,
+  NgtObject3dInputsControllerModule,
+  NgtContentMaterialControllerModule,
 } from '@angular-three/core';
 import { NgtConeGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
@@ -62,7 +63,11 @@ export class NgtSobaCone extends NgtSobaExtender<THREE.Mesh> {
 
 @NgModule({
   declarations: [NgtSobaCone],
-  exports: [NgtSobaCone],
-  imports: [NgtCoreModule, NgtMeshModule, NgtConeGeometryModule, CommonModule],
+  exports: [
+    NgtSobaCone,
+    NgtObject3dInputsControllerModule,
+    NgtContentMaterialControllerModule,
+  ],
+  imports: [NgtMeshModule, NgtConeGeometryModule, CommonModule],
 })
 export class NgtSobaConeModule {}

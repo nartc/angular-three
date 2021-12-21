@@ -2,6 +2,7 @@ import {
   NGT_OBJECT_CONTROLLER_PROVIDER,
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
+  NgtObject3dControllerModule,
 } from '@angular-three/core';
 import { Directive, Inject, NgModule, NgZone, OnInit } from '@angular/core';
 import * as THREE from 'three';
@@ -37,6 +38,6 @@ export class NgtGroup implements OnInit {
 
 @NgModule({
   declarations: [NgtGroup],
-  exports: [NgtGroup],
+  exports: [NgtGroup, NgtObject3dControllerModule],
 })
 export class NgtGroupModule {}

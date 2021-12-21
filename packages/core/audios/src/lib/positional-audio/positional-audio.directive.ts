@@ -1,8 +1,10 @@
 // GENERATED
 import {
-  NgtCommonAudio,
   NGT_AUDIO_CONTROLLER_PROVIDER,
   NGT_OBJECT_CONTROLLER_PROVIDER,
+  NgtAudioControllerModule,
+  NgtCommonAudio,
+  NgtObject3dControllerModule,
 } from '@angular-three/core';
 import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
@@ -28,6 +30,10 @@ export class NgtPositionalAudio extends NgtCommonAudio<
 
 @NgModule({
   declarations: [NgtPositionalAudio],
-  exports: [NgtPositionalAudio],
+  exports: [
+    NgtPositionalAudio,
+    NgtAudioControllerModule,
+    NgtObject3dControllerModule,
+  ],
 })
 export class NgtPositionalAudioModule {}

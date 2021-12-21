@@ -25,6 +25,7 @@ import { SimpleCubeComponentModule } from './simple-cube.component';
     RobotExpressiveModule,
     OrbitControlsTargetSwitcherComponentModule,
     RoutingComponentModule,
+    // RoutingComponentModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

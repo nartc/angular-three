@@ -1,5 +1,9 @@
 // GENERATED
-import { NgtLight, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
+import {
+  NgtLight,
+  NGT_OBJECT_CONTROLLER_PROVIDER,
+  NgtObject3dControllerModule,
+} from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -28,6 +32,6 @@ export class NgtHemisphereLight extends NgtLight<THREE.HemisphereLight> {
 
 @NgModule({
   declarations: [NgtHemisphereLight],
-  exports: [NgtHemisphereLight],
+  exports: [NgtHemisphereLight, NgtObject3dControllerModule],
 })
 export class NgtHemisphereLightModule {}

@@ -5,9 +5,10 @@ import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtContentMaterialController,
-  NgtCoreModule,
   NgtObject3dInputsController,
   NgtSobaExtender,
+  NgtObject3dInputsControllerModule,
+  NgtContentMaterialControllerModule,
 } from '@angular-three/core';
 import { NgtTorusGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
@@ -62,7 +63,11 @@ export class NgtSobaTorus extends NgtSobaExtender<THREE.Mesh> {
 
 @NgModule({
   declarations: [NgtSobaTorus],
-  exports: [NgtSobaTorus],
-  imports: [NgtCoreModule, NgtMeshModule, NgtTorusGeometryModule, CommonModule],
+  exports: [
+    NgtSobaTorus,
+    NgtObject3dInputsControllerModule,
+    NgtContentMaterialControllerModule,
+  ],
+  imports: [NgtMeshModule, NgtTorusGeometryModule, CommonModule],
 })
 export class NgtSobaTorusModule {}

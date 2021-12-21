@@ -1,5 +1,5 @@
 // GENERATED
-import { AnyConstructor, NgtCoreModule } from '@angular-three/core';
+import { AnyConstructor } from '@angular-three/core';
 import {
   NgtPrimitive,
   NgtPrimitiveModule,
@@ -11,6 +11,7 @@ import {
   NGT_EFFECT_WATCH_CONTROLLER,
   NgtEffectComposerModule,
   NgtEffectController,
+  NgtEffectControllerModule
 } from '@angular-three/postprocessing';
 import { CommonModule } from '@angular/common';
 import {
@@ -60,9 +61,8 @@ export class Ngt<%= name %> {
 
 @NgModule({
   declarations: [Ngt<%= name %>],
-  exports: [Ngt<%= name %>],
+  exports: [Ngt<%= name %>, NgtEffectControllerModule],
   imports: [
-    NgtCoreModule,
     NgtPrimitiveModule,
     NgtEffectComposerModule,
     CommonModule,

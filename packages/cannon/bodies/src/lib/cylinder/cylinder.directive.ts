@@ -7,6 +7,7 @@ import {
   NGT_PHYSIC_BODY_TYPE,
   NGT_PHYSIC_BODY_WATCHED_CONTROLLER,
   NgtPhysicBodyController,
+  NgtPhysicBodyControllerModule,
 } from '@angular-three/cannon';
 import { Directive, Inject, NgModule } from '@angular/core';
 
@@ -39,6 +40,6 @@ export class NgtPhysicCylinder {
 
 @NgModule({
   declarations: [NgtPhysicCylinder],
-  exports: [NgtPhysicCylinder],
+  exports: [NgtPhysicCylinder, NgtPhysicBodyControllerModule],
 })
 export class NgtPhysicCylinderModule {}

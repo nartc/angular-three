@@ -1,4 +1,9 @@
-import { NgtCoreModule } from '@angular-three/core';
+import {
+  NgtColorPipeModule,
+  NgtCoreModule,
+  NgtFogPipeModule,
+  NgtMathPipeModule,
+} from '@angular-three/core';
 import { NgtGridHelperModule } from '@angular-three/core/helpers';
 import {
   NgtDirectionalLightModule,
@@ -89,6 +94,9 @@ export class RobotExpressiveComponent {
     NgtPrimitiveModule,
     NgtStatsModule,
     NgxLilGuiModule,
+    NgtColorPipeModule,
+    NgtFogPipeModule,
+    NgtMathPipeModule,
   ],
 })
 export class RobotExpressiveModule {}

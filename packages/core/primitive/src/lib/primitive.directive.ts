@@ -2,6 +2,7 @@ import {
   NGT_OBJECT_CONTROLLER_PROVIDER,
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
+  NgtObject3dControllerModule,
 } from '@angular-three/core';
 import { Directive, Inject, Input, NgModule, NgZone } from '@angular/core';
 import * as THREE from 'three';
@@ -38,6 +39,6 @@ export class NgtPrimitive {
 
 @NgModule({
   declarations: [NgtPrimitive],
-  exports: [NgtPrimitive],
+  exports: [NgtPrimitive, NgtObject3dControllerModule],
 })
 export class NgtPrimitiveModule {}

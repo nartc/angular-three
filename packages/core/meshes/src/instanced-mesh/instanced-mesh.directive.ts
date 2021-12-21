@@ -5,6 +5,7 @@ import {
   NGT_OBJECT_TYPE,
   NgtCommonMesh,
   NgtMaterialGeometryController,
+  NgtMaterialGeometryControllerModule,
 } from '@angular-three/core';
 import {
   Directive,
@@ -50,6 +51,6 @@ export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {
 
 @NgModule({
   declarations: [NgtInstancedMesh],
-  exports: [NgtInstancedMesh],
+  exports: [NgtInstancedMesh, NgtMaterialGeometryControllerModule],
 })
 export class NgtInstancedMeshModule {}

@@ -2,8 +2,8 @@ import {
   EnhancedRxState,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-  NgtCoreModule,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtSobaExtender,
   NgtStore,
 } from '@angular-three/core';
@@ -152,7 +152,7 @@ export class NgtSobaOrthographicCamera extends NgtSobaExtender<THREE.Orthographi
 
 @NgModule({
   declarations: [NgtSobaOrthographicCamera],
-  exports: [NgtSobaOrthographicCamera],
-  imports: [CommonModule, NgtCoreModule, NgtOrthographicCameraModule],
+  exports: [NgtSobaOrthographicCamera, NgtObject3dInputsControllerModule],
+  imports: [CommonModule, NgtOrthographicCameraModule],
 })
 export class NgtSobaOrthographicCameraModule {}

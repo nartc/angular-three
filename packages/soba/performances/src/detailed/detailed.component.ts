@@ -2,9 +2,9 @@ import {
   EnhancedRxState,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-  NgtCoreModule,
   NgtObject3dController,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtRender,
   NgtSobaExtender,
 } from '@angular-three/core';
@@ -127,7 +127,7 @@ export class NgtSobaDetailed
 
 @NgModule({
   declarations: [NgtSobaDetailed],
-  exports: [NgtSobaDetailed],
-  imports: [NgtLodModule, NgtCoreModule],
+  exports: [NgtSobaDetailed, NgtObject3dInputsControllerModule],
+  imports: [NgtLodModule],
 })
 export class NgtSobaDetailedModule {}

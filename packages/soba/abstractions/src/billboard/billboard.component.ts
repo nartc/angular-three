@@ -1,8 +1,8 @@
 import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-  NgtCoreModule,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtRender,
   NgtSobaExtender,
 } from '@angular-three/core';
@@ -78,7 +78,7 @@ export class NgtSobaBillboard extends NgtSobaExtender<THREE.Group> {
 
 @NgModule({
   declarations: [NgtSobaBillboard],
-  exports: [NgtSobaBillboard],
-  imports: [NgtCoreModule, NgtGroupModule],
+  exports: [NgtSobaBillboard, NgtObject3dInputsControllerModule],
+  imports: [NgtGroupModule],
 })
 export class NgtSobaBillboardModule {}

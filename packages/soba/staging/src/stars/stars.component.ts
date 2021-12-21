@@ -1,6 +1,5 @@
 import {
   EnhancedRxState,
-  NgtCoreModule,
   NgtRender,
   NgtSobaExtender,
 } from '@angular-three/core';
@@ -180,7 +179,6 @@ export class NgtSobaStars extends NgtSobaExtender<THREE.Points> {
   declarations: [NgtSobaStars],
   exports: [NgtSobaStars],
   imports: [
-    NgtCoreModule,
     NgtPointsModule,
     NgtBufferGeometryModule,
     NgtBufferAttributeModule,

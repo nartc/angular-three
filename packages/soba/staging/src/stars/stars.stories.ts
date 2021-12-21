@@ -1,3 +1,4 @@
+import { NgtMathPipeModule } from '@angular-three/core';
 import { NgtAxesHelperModule } from '@angular-three/core/helpers';
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtSobaPlaneModule } from '@angular-three/soba/shapes';
@@ -17,6 +18,7 @@ export default {
     moduleMetadata({
       imports: [
         ...setupCanvasModules,
+        NgtMathPipeModule,
         NgtSobaStarsModule,
         NgtSobaPlaneModule,
         NgtAxesHelperModule,

@@ -3,6 +3,7 @@ import {
   NgtCommonLine,
   NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
   NGT_OBJECT_TYPE,
+  NgtMaterialGeometryControllerModule,
 } from '@angular-three/core';
 import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
@@ -26,6 +27,6 @@ export class NgtLine extends NgtCommonLine<THREE.Line> {}
 
 @NgModule({
   declarations: [NgtLine],
-  exports: [NgtLine],
+  exports: [NgtLine, NgtMaterialGeometryControllerModule],
 })
 export class NgtLineModule {}

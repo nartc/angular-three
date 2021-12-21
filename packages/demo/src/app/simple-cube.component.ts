@@ -1,4 +1,8 @@
-import { NgtCoreModule } from '@angular-three/core';
+import {
+  NgtColorPipeModule,
+  NgtCoreModule,
+  NgtCursorModule,
+} from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import {
   NgtBoxHelperModule,
@@ -107,6 +111,8 @@ export class CubeMaterials {
     NgtSobaBoxModule,
     NgtBoxHelperModule,
     NgtSpotLightHelperModule,
+    NgtCursorModule,
+    NgtColorPipeModule,
   ],
 })
 export class SimpleCubeComponentModule {}

@@ -11,10 +11,13 @@ import {
   NgtPhysicPlaneModule,
 } from '@angular-three/cannon/bodies';
 import {
+  NgtColorPipeModule,
   NgtCoreModule,
   NgtEuler,
+  NgtMathPipeModule,
   NgtTriplet,
   NgtVector3,
+  NgtVectorPipeModule,
 } from '@angular-three/core';
 import {
   NgtBoxGeometryModule,
@@ -35,14 +38,12 @@ import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
   NgModule,
   Output,
-  ViewChild,
 } from '@angular/core';
 import { mapTo, startWith, tap, timer } from 'rxjs';
 
@@ -78,8 +79,6 @@ import { mapTo, startWith, tap, timer } from 'rxjs';
             (rotationChange)="!isCopied && (rotation = $event)"
           ></ngt-compound>
 
-          <!--          async pipe reevaluates the postion/rotation of the copied?? -->
-          <!--          so it appears to be copied twice: one when copy$ emits, and one when ready$ emits-->
           <ngt-compound
             *ngIf="ready$ | async"
             [position]="[2.5, 4, 0.25]"
@@ -155,6 +154,8 @@ export class PlaneComponent {
   template: `
     <ngt-group
       ngtPhysicCompound
+      #ngtPhysicCompound="ngtPhysicCompound"
+      (ready)="onReady(ngtPhysicCompound)"
       [getPhysicProps]="getCompoundProps"
       [position]="position"
       [rotation]="rotation"
@@ -173,7 +174,7 @@ export class PlaneComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CompoundComponent implements AfterViewInit {
+export class CompoundComponent {
   @Input() isTrigger?: boolean;
   @Input() mass = 12;
   @Input() position?: NgtVector3;
@@ -185,25 +186,8 @@ export class CompoundComponent implements AfterViewInit {
   boxSize: NgtTriplet = [1, 1, 1];
   sphereRadius = 0.65;
 
-  @ViewChild(NgtPhysicCompound)
-  physicCompound!: NgtPhysicCompound;
-
   #positionSubscription?: () => void;
   #rotationSubscription?: () => void;
-
-  ngAfterViewInit() {
-    if (this.positionChange.observed) {
-      this.#positionSubscription = this.physicCompound.api.position.subscribe(
-        this.positionChange.emit.bind(this.positionChange)
-      );
-    }
-
-    if (this.rotationChange.observed) {
-      this.#rotationSubscription = this.physicCompound.api.rotation.subscribe(
-        this.rotationChange.emit.bind(this.rotationChange)
-      );
-    }
-  }
 
   ngOnDestroy() {
     this.#positionSubscription?.();
@@ -232,6 +216,20 @@ export class CompoundComponent implements AfterViewInit {
       ],
     };
   };
+
+  onReady(ngtPhysicCompound: NgtPhysicCompound) {
+    if (this.positionChange.observed) {
+      this.#positionSubscription = ngtPhysicCompound.api.position.subscribe(
+        this.positionChange.emit.bind(this.positionChange)
+      );
+    }
+
+    if (this.rotationChange.observed) {
+      this.#rotationSubscription = ngtPhysicCompound.api.rotation.subscribe(
+        this.rotationChange.emit.bind(this.rotationChange)
+      );
+    }
+  }
 }
 
 @NgModule({
@@ -255,6 +253,9 @@ export class CompoundComponent implements AfterViewInit {
     NgtCannonDebugModule,
     CommonModule,
     NgtStatsModule,
+    NgtColorPipeModule,
+    NgtVectorPipeModule,
+    NgtMathPipeModule,
   ],
 })
 export class CompoundBodyComponentModule {}

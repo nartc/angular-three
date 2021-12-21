@@ -6,9 +6,10 @@ import {
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtColor,
   NgtContentMaterialController,
-  NgtCoreModule,
+  NgtContentMaterialControllerModule,
   NgtLoopService,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtSobaExtender,
   NgtVector4,
 } from '@angular-three/core';
@@ -182,7 +183,11 @@ export class NgtSobaText
 
 @NgModule({
   declarations: [NgtSobaText],
-  exports: [NgtSobaText],
-  imports: [CommonModule, NgtCoreModule, NgtPrimitiveModule],
+  exports: [
+    NgtSobaText,
+    NgtObject3dInputsControllerModule,
+    NgtContentMaterialControllerModule,
+  ],
+  imports: [CommonModule, NgtPrimitiveModule],
 })
 export class NgtSobaTextModule {}

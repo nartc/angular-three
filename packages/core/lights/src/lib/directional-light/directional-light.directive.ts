@@ -1,5 +1,9 @@
 // GENERATED
-import { NgtLight, NGT_OBJECT_CONTROLLER_PROVIDER } from '@angular-three/core';
+import {
+  NgtLight,
+  NGT_OBJECT_CONTROLLER_PROVIDER,
+  NgtObject3dControllerModule,
+} from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -28,6 +32,6 @@ export class NgtDirectionalLight extends NgtLight<THREE.DirectionalLight> {
 
 @NgModule({
   declarations: [NgtDirectionalLight],
-  exports: [NgtDirectionalLight],
+  exports: [NgtDirectionalLight, NgtObject3dControllerModule],
 })
 export class NgtDirectionalLightModule {}

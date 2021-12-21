@@ -9,6 +9,7 @@ import {
   NgtTriplet,
 } from '@angular-three/core';
 import { Inject, Injectable, Optional } from '@angular/core';
+import { requestAnimationFrame } from '@rx-angular/cdk';
 import { stateful } from '@rx-angular/state';
 import { combineLatest, map, startWith } from 'rxjs';
 import * as THREE from 'three';
@@ -119,14 +120,17 @@ export class NgtPhysicBodyStore extends EnhancedRxState<NgtPhysicBodyStoreState>
   }
 
   get api(): WorkerApi & { at: (index: number) => WorkerApi } {
+    this.set({ object3d: this.objectController.object3d });
     const { worker, subscriptions } = this.physicsStore.get();
-    const object3d = this.objectController.object3d;
+    const object3d = this.get('object3d')!;
     const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
       const op: SetOpName<T> = `set${capitalize(type)}`;
       return {
         set: (value: PropValue<T>) => {
-          const uuid = getUUID(object3d, index);
-          uuid && worker.postMessage({ op, props: value, uuid });
+          requestAnimationFrame(() => {
+            const uuid = getUUID(object3d, index);
+            uuid && worker.postMessage({ op, props: value, uuid });
+          });
         },
         subscribe: subscribe(object3d, worker, subscriptions, type, index),
       };
@@ -137,12 +141,16 @@ export class NgtPhysicBodyStore extends EnhancedRxState<NgtPhysicBodyStoreState>
       const type = 'quaternion';
       return {
         set: (x: number, y: number, z: number, w: number) => {
-          const uuid = getUUID(object3d, index);
-          uuid && worker.postMessage({ op, props: [x, y, z, w], uuid });
+          requestAnimationFrame(() => {
+            const uuid = getUUID(object3d, index);
+            uuid && worker.postMessage({ op, props: [x, y, z, w], uuid });
+          });
         },
         copy: ({ w, x, y, z }: THREE.Quaternion) => {
-          const uuid = getUUID(object3d, index);
-          uuid && worker.postMessage({ op, props: [x, y, z, w], uuid });
+          requestAnimationFrame(() => {
+            const uuid = getUUID(object3d, index);
+            uuid && worker.postMessage({ op, props: [x, y, z, w], uuid });
+          });
         },
         subscribe: subscribe(object3d, worker, subscriptions, type, index),
       };
@@ -152,12 +160,16 @@ export class NgtPhysicBodyStore extends EnhancedRxState<NgtPhysicBodyStoreState>
       const op = 'setRotation';
       return {
         set: (x: number, y: number, z: number) => {
-          const uuid = getUUID(object3d, index);
-          uuid && worker.postMessage({ op, props: [x, y, z], uuid });
+          requestAnimationFrame(() => {
+            const uuid = getUUID(object3d, index);
+            uuid && worker.postMessage({ op, props: [x, y, z], uuid });
+          });
         },
         copy: ({ x, y, z }: THREE.Vector3 | THREE.Euler) => {
-          const uuid = getUUID(object3d, index);
-          uuid && worker.postMessage({ op, props: [x, y, z], uuid });
+          requestAnimationFrame(() => {
+            const uuid = getUUID(object3d, index);
+            uuid && worker.postMessage({ op, props: [x, y, z], uuid });
+          });
         },
         subscribe: (callback: (value: NgtTriplet) => void) => {
           const id = incrementingId++;
@@ -186,12 +198,16 @@ export class NgtPhysicBodyStore extends EnhancedRxState<NgtPhysicBodyStoreState>
       )}` as SetOpName<VectorName>;
       return {
         set: (x: number, y: number, z: number) => {
-          const uuid = getUUID(object3d, index);
-          uuid && worker.postMessage({ op, props: [x, y, z], uuid });
+          requestAnimationFrame(() => {
+            const uuid = getUUID(object3d, index);
+            uuid && worker.postMessage({ op, props: [x, y, z], uuid });
+          });
         },
         copy: ({ x, y, z }: THREE.Vector3 | THREE.Euler) => {
-          const uuid = getUUID(object3d, index);
-          uuid && worker.postMessage({ op, props: [x, y, z], uuid });
+          requestAnimationFrame(() => {
+            const uuid = getUUID(object3d, index);
+            uuid && worker.postMessage({ op, props: [x, y, z], uuid });
+          });
         },
         subscribe: subscribe(object3d, worker, subscriptions, type, index),
       };
@@ -309,6 +325,7 @@ export class NgtPhysicBodyStore extends EnhancedRxState<NgtPhysicBodyStoreState>
   }
 
   #initWorker() {
+    this.set({ object3d: this.objectController.object3d });
     let uuid: string[] = [];
     const { worker: currentWorker, refs, events } = this.physicsStore.get();
 

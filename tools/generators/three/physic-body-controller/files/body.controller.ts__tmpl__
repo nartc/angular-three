@@ -11,6 +11,7 @@ import {
   OnInit,
   Optional,
 } from '@angular/core';
+import { requestAnimationFrame } from '@rx-angular/cdk';
 import * as THREE from 'three';
 import { NgtPhysicConstraintStore } from '../constraint/constraint.store';
 import { BodyProps } from '../models/body';
@@ -44,7 +45,7 @@ export class NgtPhysicBodyController extends Controller implements OnInit {
 
   ngOnInit() {
     super.ngOnInit();
-    this.ngZone.runOutsideAngular(() => {
+    requestAnimationFrame(() => {
       this.physicBodyStore.init();
     });
   }

@@ -5,9 +5,10 @@ import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtContentMaterialController,
-  NgtCoreModule,
   NgtObject3dInputsController,
   NgtSobaExtender,
+  NgtObject3dInputsControllerModule,
+  NgtContentMaterialControllerModule,
 } from '@angular-three/core';
 import { NgtPolyhedronGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
@@ -62,12 +63,11 @@ export class NgtSobaPolyhedron extends NgtSobaExtender<THREE.Mesh> {
 
 @NgModule({
   declarations: [NgtSobaPolyhedron],
-  exports: [NgtSobaPolyhedron],
-  imports: [
-    NgtCoreModule,
-    NgtMeshModule,
-    NgtPolyhedronGeometryModule,
-    CommonModule,
+  exports: [
+    NgtSobaPolyhedron,
+    NgtObject3dInputsControllerModule,
+    NgtContentMaterialControllerModule,
   ],
+  imports: [NgtMeshModule, NgtPolyhedronGeometryModule, CommonModule],
 })
 export class NgtSobaPolyhedronModule {}

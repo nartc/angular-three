@@ -2,6 +2,7 @@
 import {
   NgtCommonCamera,
   NGT_OBJECT_CONTROLLER_PROVIDER,
+  NgtObject3dControllerModule,
 } from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -31,6 +32,6 @@ export class NgtStereoCamera extends NgtCommonCamera<THREE.StereoCamera> {
 
 @NgModule({
   declarations: [NgtStereoCamera],
-  exports: [NgtStereoCamera],
+  exports: [NgtStereoCamera, NgtObject3dControllerModule],
 })
 export class NgtStereoCameraModule {}

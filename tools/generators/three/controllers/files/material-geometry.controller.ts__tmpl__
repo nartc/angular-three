@@ -14,17 +14,20 @@ import {
   NGT_CONTENT_GEOMETRY_CONTROLLER_PROVIDER,
   NGT_CONTENT_GEOMETRY_WATCHED_CONTROLLER,
   NgtContentGeometryController,
+  NgtContentGeometryControllerModule,
 } from './content-geometry.controller';
 import {
   NGT_CONTENT_MATERIAL_CONTROLLER_PROVIDER,
   NGT_CONTENT_MATERIAL_WATCHED_CONTROLLER,
   NgtContentMaterialController,
+  NgtContentMaterialControllerModule,
 } from './content-material.controller';
 import { Controller, createControllerProviderFactory } from './controller';
 import {
   NGT_OBJECT_CONTROLLER_PROVIDER,
   NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
+  NgtObject3dControllerModule,
 } from './object-3d.controller';
 
 export const NGT_OBJECT_TYPE = new InjectionToken('Object3d Type', {
@@ -138,7 +141,12 @@ export class NgtMaterialGeometryController
 
 @NgModule({
   declarations: [NgtMaterialGeometryController],
-  exports: [NgtMaterialGeometryController],
+  exports: [
+    NgtMaterialGeometryController,
+    NgtObject3dControllerModule,
+    NgtContentMaterialControllerModule,
+    NgtContentGeometryControllerModule,
+  ],
 })
 export class NgtMaterialGeometryControllerModule {}
 

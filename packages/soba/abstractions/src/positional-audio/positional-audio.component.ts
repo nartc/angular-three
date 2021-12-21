@@ -3,7 +3,7 @@ import {
   NGT_AUDIO_CONTROLLER_PROVIDER,
   NGT_AUDIO_WATCHED_CONTROLLER,
   NgtAudioController,
-  NgtCoreModule,
+  NgtAudioControllerModule,
   NgtLoaderService,
   NgtSobaExtender,
   NgtStore,
@@ -147,7 +147,7 @@ export class NgtSobaPositionalAudio extends NgtSobaExtender<THREE.PositionalAudi
 
 @NgModule({
   declarations: [NgtSobaPositionalAudio],
-  exports: [NgtSobaPositionalAudio],
-  imports: [NgtCoreModule, NgtPositionalAudioModule, CommonModule],
+  exports: [NgtSobaPositionalAudio, NgtAudioControllerModule],
+  imports: [NgtPositionalAudioModule, CommonModule],
 })
 export class NgtSobaPositionalAudioModule {}

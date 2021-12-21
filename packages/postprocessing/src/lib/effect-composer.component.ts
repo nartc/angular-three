@@ -1,4 +1,3 @@
-import { NgtCoreModule } from '@angular-three/core';
 import { NgtGroup, NgtGroupModule } from '@angular-three/core/group';
 import {
   ChangeDetectionStrategy,
@@ -74,6 +73,6 @@ export class NgtEffectComposer {
 @NgModule({
   declarations: [NgtEffectComposer],
   exports: [NgtEffectComposer, NgtEffectControllerModule],
-  imports: [NgtCoreModule, NgtGroupModule],
+  imports: [NgtGroupModule],
 })
 export class NgtEffectComposerModule {}

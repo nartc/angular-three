@@ -1,4 +1,8 @@
-import { NgtCoreModule } from '@angular-three/core';
+import {
+  NgtCoreModule,
+  NgtCursorModule,
+  NgtMathPipeModule,
+} from '@angular-three/core';
 import {
   NgtDirectionalLightHelperModule,
   NgtHemisphereLightHelperModule,
@@ -35,9 +39,13 @@ import { OrbitControls } from 'three-stdlib';
       <!--                [geometry]="{width: 100, height: 100}|planeBufferGeometry">-->
       <!--      </tjs-mesh>-->
 
-      <ngt-soba-plane [args]="[100, 100]" [receiveShadow]="true">
+      <ngt-soba-plane
+        [args]="[100, 100]"
+        [receiveShadow]="true"
+        [rotation]="[0.5 | mathConst: 'PI', 0, 0]"
+      >
         <ngt-mesh-phong-material
-          [parameters]="{ depthWrite: false, side: this.side, color: 'white' }"
+          [parameters]="{ depthWrite: false, side: side, color: 'white' }"
         ></ngt-mesh-phong-material>
       </ngt-soba-plane>
 
@@ -48,7 +56,6 @@ import { OrbitControls } from 'three-stdlib';
 
       <ngt-hemisphere-light
         ngtHemisphereLightHelper
-        [castShadow]="true"
         [position]="[10, 10, 10]"
         [args]="['#ffffff', '#ffffff', 0.2]"
       ></ngt-hemisphere-light>
@@ -59,13 +66,15 @@ import { OrbitControls } from 'three-stdlib';
         [position]="[10, 10, 10]"
       ></ngt-directional-light>
 
-      <!--      <ngt-primitive-->
-      <!--        [object]="(rock$ | async).scene"-->
-      <!--        [position]="[0, 2.6, 0]"-->
-      <!--        [scale]="[3, 3, 3]"-->
-      <!--        [castShadow]="true"-->
-      <!--        [receiveShadow]="true"-->
-      <!--      ></ngt-primitive>-->
+      <ngt-primitive
+        *ngIf="rock$ | async as rock"
+        ngtCursor
+        [object]="rock.scene"
+        [position]="[0, 2.6, 0]"
+        [scale]="[3, 3, 3]"
+        [castShadow]="true"
+        [receiveShadow]="true"
+      ></ngt-primitive>
 
       <router-outlet></router-outlet>
     </ngt-canvas>
@@ -75,6 +84,28 @@ import { OrbitControls } from 'three-stdlib';
 export class RoutingComponent {
   rock$ = this.gltfLoaderService.load('/assets/rock2/scene.gltf');
   side = THREE.DoubleSide;
+  colors = [
+    {
+      color: '#042A2B',
+      label: 'Rich Black',
+    },
+    {
+      color: '#5EB1BF',
+      label: 'Maximum Blue',
+    },
+    {
+      color: '#CDEDF6',
+      label: 'Light Cyan',
+    },
+    {
+      color: '#EF7B45',
+      label: 'Mandarin',
+    },
+    {
+      color: '#D84727',
+      label: 'Vermilion',
+    },
+  ];
 
   onOrbitControlsReady(controls: OrbitControls) {
     controls.minDistance = 12;
@@ -110,6 +141,8 @@ export class RoutingComponent {
     NgtHemisphereLightHelperModule,
     NgtDirectionalLightHelperModule,
     NgtPrimitiveModule,
+    NgtCursorModule,
+    NgtMathPipeModule,
   ],
 })
 export class RoutingComponentModule {}

@@ -1,4 +1,8 @@
-import { NgtCoreModule, NgtRepeatModule } from '@angular-three/core';
+import {
+  NgtCoreModule,
+  NgtMathPipeModule,
+  NgtRepeatModule,
+} from '@angular-three/core';
 import { NgtIcosahedronGeometryModule } from '@angular-three/core/geometries';
 import {
   NgtDirectionalLightModule,
@@ -138,6 +142,7 @@ export class LevelOfDetailsComponent {
     NgtMeshModule,
     NgtIcosahedronGeometryModule,
     NgtMeshLambertMaterialModule,
+    NgtMathPipeModule,
   ],
 })
 export class LevelOfDetailsModule {}

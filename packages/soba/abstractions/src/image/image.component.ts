@@ -2,9 +2,9 @@ import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtColor,
-  NgtCoreModule,
   NgtMaterial,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtSobaExtender,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
@@ -166,7 +166,11 @@ export class NgtSobaImage
 
 @NgModule({
   declarations: [NgtSobaImage, NgtSobaImageShaderMaterial],
-  exports: [NgtSobaImage, NgtSobaImageShaderMaterial],
-  imports: [NgtCoreModule, NgtMeshModule, NgtPlaneGeometryModule, CommonModule],
+  exports: [
+    NgtSobaImage,
+    NgtSobaImageShaderMaterial,
+    NgtObject3dInputsControllerModule,
+  ],
+  imports: [NgtMeshModule, NgtPlaneGeometryModule, CommonModule],
 })
 export class NgtSobaImageModule {}

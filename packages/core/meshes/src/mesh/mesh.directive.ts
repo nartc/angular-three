@@ -2,6 +2,7 @@ import {
   NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
   NGT_OBJECT_TYPE,
   NgtCommonMesh,
+  NgtMaterialGeometryControllerModule,
 } from '@angular-three/core';
 import { Directive, NgModule } from '@angular/core';
 import * as THREE from 'three';
@@ -19,6 +20,6 @@ export class NgtMesh extends NgtCommonMesh {}
 
 @NgModule({
   declarations: [NgtMesh],
-  exports: [NgtMesh],
+  exports: [NgtMesh, NgtMaterialGeometryControllerModule],
 })
 export class NgtMeshModule {}

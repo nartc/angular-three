@@ -3,6 +3,7 @@ import {
   NGT_CANVAS_OPTIONS,
   NgtCoreModule,
   NgtCursorModule,
+  NgtMathPipeModule,
   provideCanvasOptions,
 } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
@@ -256,6 +257,7 @@ export class OrbitControlsTargetSwitcherComponent {
     NgtGridHelperModule,
     NgtSobaTextModule,
     NgtCursorModule,
+    NgtMathPipeModule,
   ],
 })
 export class OrbitControlsTargetSwitcherComponentModule {}

@@ -3,6 +3,7 @@ import {
   NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER,
   NGT_OBJECT_TYPE,
   NgtMaterialGeometryController,
+  NgtMaterialGeometryControllerModule,
 } from '@angular-three/core';
 import { Directive, Inject, NgModule } from '@angular/core';
 import * as THREE from 'three';
@@ -29,6 +30,6 @@ export class NgtPoints {
 
 @NgModule({
   declarations: [NgtPoints],
-  exports: [NgtPoints],
+  exports: [NgtPoints, NgtMaterialGeometryControllerModule],
 })
 export class NgtPointsModule {}

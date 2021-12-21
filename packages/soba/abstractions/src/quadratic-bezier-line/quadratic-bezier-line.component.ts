@@ -2,8 +2,8 @@ import {
   EnhancedRxState,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-  NgtCoreModule,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtVector3,
 } from '@angular-three/core';
 import { CommonModule } from '@angular/common';
@@ -141,7 +141,11 @@ export class NgtSobaQuadraticBezierLine extends EnhancedRxState<NgtSobaQuadratic
 
 @NgModule({
   declarations: [NgtSobaQuadraticBezierLine],
-  exports: [NgtSobaQuadraticBezierLine],
-  imports: [NgtSobaLineModule, NgtCoreModule, CommonModule],
+  exports: [
+    NgtSobaQuadraticBezierLine,
+    NgtSobaLineModule,
+    NgtObject3dInputsControllerModule,
+  ],
+  imports: [NgtSobaLineModule, CommonModule],
 })
 export class NgtSobaQuadraticBezierLineModule {}

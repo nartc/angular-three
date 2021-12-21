@@ -3,6 +3,7 @@
   "version": "2.10.0",
   "license": "MIT",
   "scripts": {
+    "start": "nx serve demo",
     "postinstall": "ngcc --properties es2015 browser module main",
     "commit": "git-cz",
     "release": "dotenv release-it --",

@@ -7,6 +7,7 @@ import {
   NGT_PHYSIC_BODY_TYPE,
   NGT_PHYSIC_BODY_WATCHED_CONTROLLER,
   NgtPhysicBodyController,
+  NgtPhysicBodyControllerModule,
 } from '@angular-three/cannon';
 import { Directive, Inject, NgModule } from '@angular/core';
 
@@ -37,6 +38,6 @@ export class NgtPhysicBox {
 
 @NgModule({
   declarations: [NgtPhysicBox],
-  exports: [NgtPhysicBox],
+  exports: [NgtPhysicBox, NgtPhysicBodyControllerModule],
 })
 export class NgtPhysicBoxModule {}
