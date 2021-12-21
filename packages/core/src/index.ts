@@ -14,6 +14,7 @@ export * from './lib/pipes/math.pipe';
 export * from './lib/pipes/fog.pipe';
 
 export * from './lib/directives/repeat.directive';
+export * from './lib/directives/cursor.directive';
 
 export * from './lib/controllers/controller';
 export * from './lib/controllers/object-3d.controller';
