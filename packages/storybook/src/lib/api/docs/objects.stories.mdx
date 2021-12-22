@@ -101,9 +101,9 @@ export class MyComponent {
 }
 ```
 
-#### `exportAs`
+#### Template Variable
 
-All NGT objects are exposed on the template via `exportAs` so we can assign a Template Variable to them. Most NGT objects have `(ready)` event which we can leverage to assign the object as soon as they are constructed and ready.
+All NGT directives (components does not need `exportAs`) are exposed on the template via `exportAs` so we can assign a Template Variable to them. Most NGT objects have `(ready)` event which we can leverage to assign the object as soon as they are constructed and ready.
 
 ```ts
 @Component({
@@ -119,7 +119,7 @@ export class MyComponent {
 
 `exportAs` will always be `camelCase` with `ngt-` prefix. Eg: `ngt-mesh` is exported as `ngtMesh`, `ngt-ambient-light` is exported as `ngtAmbientLight`.
 
-There are no recommended approaches as they are situational, and have both pros and cons to each.
+> Using Template Variable + `(ready)` is recommended because it is guaranteed that the underline THREE entity has been constructed.
 
 ## How to put existing objects in the Angular component tree?
 
@@ -146,3 +146,5 @@ export class SomeComponent {
 })
 export class SomeComponentModule {}
 ```
+
+> `ngt-primitive`, like any other 3D object, is still a 3D object and still needs to be put inside of `ngt-canvas`

@@ -13,6 +13,7 @@ export const parameters = {
           'Controllers',
           'Services',
           'Pipes',
+          'Directives',
           'Extra Exports',
           'Events',
           'Generators',

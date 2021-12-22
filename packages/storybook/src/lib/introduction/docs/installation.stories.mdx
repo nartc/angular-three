@@ -33,6 +33,8 @@ npm install @angular-three/core
 npx nx generate @angular-three/core:init
 ```
 
+The schematic also turns `skipLibCheck` in the root `tsconfig.json` to `true`. This is required for other libraries usage like: `soba` or `postprocessing` because their dependencies will fail strict type checking.
+
 ### Manual
 
 ```shell
@@ -56,7 +58,7 @@ yarn add -D @types/three@0.135
 ## Ecosystem
 
 - `@angular-three/core`: THREE.js core entities. Most of the exports from `THREE` namespace are provided by **core** package.
-- `@angular-three/soba`\_: A set of helpers, utilities, and extra entities that are complimentary to `@angular-three/core`. Also, **soba** provides THREE.js entities that are from `three/examples/*` via [three-stdlib](https://github.com/pmndrs/three-stdlib) for better tree-shakability.
+- `@angular-three/soba`\*: A set of helpers, utilities, and extra entities that are complimentary to `@angular-three/core`. Also, **soba** provides THREE.js entities that are from `three/examples/*` via [three-stdlib](https://github.com/pmndrs/three-stdlib) for better tree-shakability.
 - `@angular-three/postprocessing`\*: A set of post-processing effects with `EffectComposer` and other effects from [postprocessing](https://github.com/vanruesc/postprocessing).
 - `@angular-three/cannon`: Physics support for NGT, ported from [React Three Cannon](https://github.com/pmndrs/use-cannon)
 
