@@ -1,3 +1,29 @@
+## [2.11.0](https://github.com/nartc/angular-three/compare/2.10.0...2.11.0) (2021-12-22)
+
+
+### Features
+
+* **core:** add CursorDirective ([74a13dc](https://github.com/nartc/angular-three/commit/74a13dccaec06960f901aa8169bbf42fd1f4b393))
+* **core:** add NGT_CANVAS_OPTIONS to customize the CanvasComponent ([395914b](https://github.com/nartc/angular-three/commit/395914b055eaf87ad83da39dbc54147d2771b6b0))
+* **core:** clean up core module ([6ba5df4](https://github.com/nartc/angular-three/commit/6ba5df44ba82c81867dd2a5bb8d9b223ecab47c5))
+* **soba:** add OrthographicCAmera ([3a4dca6](https://github.com/nartc/angular-three/commit/3a4dca6c33c95151a9664ccc5a0e4164312f4655))
+
+
+### Bug Fixes
+
+* **core:** ensure to use #object3dInputsController ([f015881](https://github.com/nartc/angular-three/commit/f015881c7f8e92036f8ba972cbef8764c8215040)), closes [#object3](https://github.com/nartc/angular-three/issues/object3)
+* **core:** ng add now modifies skipLibCheck as well ([a9fdfaf](https://github.com/nartc/angular-three/commit/a9fdfaf47e81fd838cf5fceac429db74e0a7e112))
+* **soba:** use objectInputsController on soba orthographic camera ([8a69082](https://github.com/nartc/angular-three/commit/8a690828f1f183e9d6ef25e724f158bd5a087c23))
+
+
+### Documentations
+
+* add LittlestTokyo asset ([ce6f582](https://github.com/nartc/angular-three/commit/ce6f582288472d77e343c25b428b6c85c6350ff6))
+* **storybook:** add documentations on NGT_CANVAS_OPTIONS ([55c170a](https://github.com/nartc/angular-three/commit/55c170a74732a2165f47a502a7a3c8d88431cb25))
+* **storybook:** add positional audio ([17e059b](https://github.com/nartc/angular-three/commit/17e059b88817be0fbcd6393ee5f355d26dca08f2))
+* **storybook:** adjust documentations with latest changes ([670b057](https://github.com/nartc/angular-three/commit/670b05796e5f3395d98f316815c53480e66c493e))
+* WIP routing ([af056db](https://github.com/nartc/angular-three/commit/af056db7952858360af32039f441b530e6302f25))
+
 ## [2.10.0](https://github.com/nartc/angular-three/compare/2.9.0...2.10.0) (2021-12-20)
 
 
