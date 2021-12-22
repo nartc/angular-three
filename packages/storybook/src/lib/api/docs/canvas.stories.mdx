@@ -54,6 +54,48 @@ export class AppModule {}
 - A default `Scene` and `Raycaster`
 - A `window:resize` listener that will update the `Renderer#size` and `Camera#aspect` when the window is resized.
 
+## `NGT_CANVAS_OPTIONS`
+
+You can override some default `NGT_CANVAS_OPTIONS` to customize how `CanvasComponent` works.
+
+### Interface
+
+```ts
+export interface NgtCanvasOptions {
+  projectContent?: boolean;
+}
+
+const DEFAULT_NGT_CANVAS_OPTIONS: NgtCanvasOptions = {
+  projectContent: false,
+};
+```
+
+### Usage
+
+```ts
+@Component({
+  /**/,
+  providers: [
+    { provide: NGT_CANVAS_OPTIONS, useValue: provideCanvasOptions({/* options goes here */}) }
+  ]
+})
+export class AppComponent {}
+```
+
+### `projectContent`
+
+By default, `CanvasComponent` will not project any of its children. This is to not crowd the DOM with a lot of wrapper Directives/Components. However, it can be useful to see the projected wrappers in DEV mode, especially with the [Angular DevTools](https://chrome.google.com/webstore/detail/angular-devtools/ienfalfjdbdpebioblfackkekamfmbnh?hl=en-US)
+
+```ts
+@Component({
+  /**/,
+  providers: [
+    { provide: NGT_CANVAS_OPTIONS, useValue: provideCanvasOptions({projectContent: !environment.production}) }
+  ]
+})
+export class AppComponent {}
+```
+
 ## Inputs
 
 | Name          | Type                        | Description                                              | Default                                                                |
