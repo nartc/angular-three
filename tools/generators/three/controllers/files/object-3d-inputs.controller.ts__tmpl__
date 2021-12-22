@@ -2,22 +2,55 @@
 import {
   Directive,
   EventEmitter,
-  Input,
+  Inject,
   NgModule,
+  NgZone,
+  OnDestroy,
+  Optional,
   Output,
+  SkipSelf,
 } from '@angular/core';
+import { setTimeout } from '@rx-angular/cdk/zone-less';
+import { Subscription, take } from 'rxjs';
 import * as THREE from 'three';
+import { NgtEventsStore } from '../stores/events.store';
+import { NgtStore } from '../stores/store';
 import {
-  NgtColor,
-  NgtEuler,
   NgtEvent,
-  NgtObject3dProps,
-  NgtQuaternion,
-  NgtVector3,
+  NgtEventHandlers,
+  NgtInstanceInternal,
   UnknownRecord,
 } from '../types';
-import { makeColor, makeForSet, makeVector3 } from '../utils/make';
+import { applyProps } from '../utils/apply-props';
+import {
+  NGT_ANIMATION_SUBSCRIBER_CONTROLLER_PROVIDER,
+  NGT_ANIMATION_SUBSCRIBER_WATCHED_CONTROLLER,
+  NgtAnimationSubscriberController,
+  NgtAnimationSubscriberControllerModule,
+} from './animation-subscriber.controller';
 import { Controller, createControllerProviderFactory } from './controller';
+import {
+  NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
+  NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+  NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
+} from './object-3d-inputs.controller';
+
+const supportedEvents = [
+  'click',
+  'contextmenu',
+  'dblclick',
+  'pointerup',
+  'pointerdown',
+  'pointerover',
+  'pointerout',
+  'pointerenter',
+  'pointerleave',
+  'pointermove',
+  'pointermissed',
+  'pointercancel',
+  'wheel',
+] as const;
 
 @Directive({
   selector: `
@@ -28,155 +61,310 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-points<% if (inputsSelectors.length) { %>,<% } %><% for (const selector of inputsSelectors) { %>
     ngt-<%= selector.selector %><% if (!selector.isLast) { %>,<% } %><% } %>
   `,
-  exportAs: 'ngtObject3dInputsController',
+  exportAs: 'ngtObject3dController',
+  providers: [
+    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
+    NGT_ANIMATION_SUBSCRIBER_CONTROLLER_PROVIDER,
+  ],
 })
-export class NgtObject3dInputsController extends Controller {
-  @Input() name?: string;
+export class NgtObject3dController extends Controller implements OnDestroy {
+  @Output() ready = new EventEmitter<void>();
 
-  @Input() set position(position: NgtVector3 | undefined) {
-    this.#position = makeVector3(position);
+  #object3d?: THREE.Object3D;
+  #inputChangesSubscription?: Subscription;
+  #object3dInputsController!: NgtObject3dInputsController;
+
+  #initFn?: () => THREE.Object3D;
+
+  set initFn(v: () => THREE.Object3D) {
+    this.#initFn = v;
   }
 
-  get position() {
-    return this.#position;
+  get initFn() {
+    if (!this.#initFn) {
+      this.initFn = () => this.object3d;
+    }
+    return this.#initFn as () => THREE.Object3D;
   }
 
-  #position?: THREE.Vector3;
-
-  @Input() set rotation(rotation: NgtEuler | undefined) {
-    this.#rotation = makeForSet(THREE.Euler, rotation);
+  constructor(
+    ngZone: NgZone,
+    private store: NgtStore,
+    private eventsStore: NgtEventsStore,
+    @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
+    private objectInputsController: NgtObject3dInputsController,
+    @Inject(NGT_ANIMATION_SUBSCRIBER_WATCHED_CONTROLLER)
+    private animationSubscriberController: NgtAnimationSubscriberController,
+    @Optional() @SkipSelf() private parentObject3d: NgtObject3dController
+  ) {
+    super(ngZone);
   }
 
-  get rotation() {
-    return this.#rotation;
+  ngOnInit() {
+    this.#object3dInputsController =
+      this.objectInputsController.object3dInputsController ??
+      this.objectInputsController;
+    super.ngOnInit();
+    this.#inputChangesSubscription =
+      this.#object3dInputsController.change$.subscribe(() => {
+        if (this.object3d) {
+          this.#applyCustomProps();
+        }
+      });
   }
 
-  #rotation?: THREE.Euler;
+  init() {
+    this.ngZone.runOutsideAngular(() => {
+      this.#object3d = this.initFn();
+      if (this.object3d) {
+        this.#object3dInputsController =
+          this.objectInputsController.object3dInputsController ??
+          this.objectInputsController;
 
-  @Input() set quaternion(quaternion: NgtQuaternion | undefined) {
-    this.#quaternion = makeForSet(THREE.Quaternion, quaternion);
+        this.#applyCustomProps();
+
+        if (!this.disabled) {
+          const observedEvents = supportedEvents.reduce(
+            (result, event) => {
+              if (this.#object3dInputsController[event].observed) {
+                result.handlers[event] = this.#eventNameToHandler(event);
+                result.eventCount += 1;
+              }
+              return result;
+            },
+            { handlers: {}, eventCount: 0 } as {
+              handlers: NgtEventHandlers;
+              eventCount: number;
+            }
+          );
+
+          // setup __ngt instance
+          applyProps(this.object3d, {
+            __ngt: {
+              stateGetter: () => this.store.get(),
+              eventsStateGetter: () => this.eventsStore.get(),
+              handlers: observedEvents.handlers,
+              eventCount: observedEvents.eventCount,
+              linear: this.store.get('linear'),
+            } as NgtInstanceInternal,
+          });
+
+          // add as an interaction if there are events observed
+          if (observedEvents.eventCount > 0) {
+            this.eventsStore.addInteraction(this.object3d);
+          }
+
+          this.store.set((state) => ({
+            ...state,
+            objects: { ...state.objects, [this.object3d.uuid]: this.object3d },
+          }));
+
+          if (this.#object3dInputsController.appendMode !== 'none') {
+            this.#appendToParent();
+          }
+        }
+
+        this.#objectReady();
+      }
+    });
   }
 
-  get quaternion() {
-    return this.#quaternion;
+  #objectReady() {
+    this.ready.emit();
+    if (this.animationSubscriberController) {
+      this.animationSubscriberController.prepare(this.object3d);
+    }
   }
 
-  #quaternion?: THREE.Quaternion;
+  #appendToParent(): void {
+    // Schedule this in the next loop to allow for all appendTo's to settle
+    // TODO: find better way
+    setTimeout(() => {
+      if (this.#object3dInputsController.appendTo) {
+        this.#object3dInputsController.appendTo.add(this.object3d);
+        return;
+      }
 
-  @Input() set scale(scale: NgtVector3 | undefined) {
-    this.#scale = makeVector3(scale);
+      if (this.#object3dInputsController.appendMode === 'root') {
+        this.#addToScene();
+        return;
+      }
+
+      if (this.#object3dInputsController.appendMode === 'immediate') {
+        this.#addToParent();
+      }
+    });
   }
 
-  get scale() {
-    return this.#scale;
+  #addToScene() {
+    const scene = this.store.get('scene');
+    if (scene) {
+      scene.add(this.object3d);
+    }
   }
 
-  #scale?: THREE.Vector3;
-
-  @Input() set color(color: NgtColor | undefined) {
-    this.#color = makeColor(color);
+  #addToParent() {
+    if (this.parentObject3d) {
+      this.parentObject3d.object3d.add(this.object3d);
+    } else {
+      this.#addToScene();
+    }
   }
 
-  get color() {
-    return this.#color;
+  #remove() {
+    if (this.#object3dInputsController.appendTo) {
+      this.#object3dInputsController.appendTo.remove(this.object3d);
+    } else if (
+      this.parentObject3d &&
+      this.#object3dInputsController.appendMode === 'immediate'
+    ) {
+      this.parentObject3d.object3d.remove(this.object3d);
+    } else {
+      const scene = this.store.get('scene');
+      if (scene) {
+        scene.remove(this.object3d);
+      }
+    }
+
+    if (this.object3d.clear) {
+      this.object3d.clear();
+    }
   }
 
-  #color?: THREE.Color;
+  #eventNameToHandler(eventName: typeof supportedEvents[number]) {
+    return (
+      event: Parameters<
+        Exclude<NgtEventHandlers[typeof eventName], undefined>
+      >[0]
+    ) => {
+      this.ngZone.run(() => {
+        this.#object3dInputsController[eventName].emit(event as NgtEvent<any>);
+      });
+    };
+  }
 
-  @Input() userData?: UnknownRecord;
-  @Input() castShadow = false;
-  @Input() receiveShadow = false;
-  @Input() visible = true;
-  @Input() matrixAutoUpdate = true;
-  @Input() dispose?: (() => void) | null;
-  @Input() raycast?: THREE.Object3D['raycast'];
+  #applyCustomProps() {
+    this.ngZone.runOutsideAngular(() => {
+      const customProps = {
+        castShadow: this.#object3dInputsController.castShadow,
+        receiveShadow: this.#object3dInputsController.receiveShadow,
+        visible: this.#object3dInputsController.visible,
+        matrixAutoUpdate: this.#object3dInputsController.matrixAutoUpdate,
+      } as UnknownRecord;
 
-  @Input() appendMode: 'immediate' | 'root' | 'none' = 'immediate';
-  @Input() appendTo?: THREE.Object3D;
+      if (this.#object3dInputsController.name) {
+        customProps['name'] = this.#object3dInputsController.name;
+      }
 
-  @Input() object3dInputsController?: NgtObject3dInputsController;
+      if (this.#object3dInputsController.position) {
+        customProps['position'] = this.#object3dInputsController.position;
+      }
 
-  // events
-  @Output() click = new EventEmitter<NgtEvent<MouseEvent>>();
-  @Output() contextmenu = new EventEmitter<NgtEvent<MouseEvent>>();
-  @Output() dblclick = new EventEmitter<NgtEvent<MouseEvent>>();
-  @Output() pointerup = new EventEmitter<NgtEvent<PointerEvent>>();
-  @Output() pointerdown = new EventEmitter<NgtEvent<PointerEvent>>();
-  @Output() pointerover = new EventEmitter<NgtEvent<PointerEvent>>();
-  @Output() pointerout = new EventEmitter<NgtEvent<PointerEvent>>();
-  @Output() pointerenter = new EventEmitter<NgtEvent<PointerEvent>>();
-  @Output() pointerleave = new EventEmitter<NgtEvent<PointerEvent>>();
-  @Output() pointermove = new EventEmitter<NgtEvent<PointerEvent>>();
-  @Output() pointermissed = new EventEmitter<NgtEvent<PointerEvent>>();
-  @Output() pointercancel = new EventEmitter<NgtEvent<PointerEvent>>();
-  @Output() wheel = new EventEmitter<NgtEvent<WheelEvent>>();
+      if (this.#object3dInputsController.rotation) {
+        customProps['rotation'] = this.#object3dInputsController.rotation;
+      } else if (this.#object3dInputsController.quaternion) {
+        customProps['quaternion'] = this.#object3dInputsController.quaternion;
+      }
 
-  get props(): string[] {
-    return [
-      'name',
-      'position',
-      'rotation',
-      'quaternion',
-      'scale',
-      'color',
-      'userData',
-      'dispose',
-      'raycast',
-      'castShadow',
-      'receiveShadow',
-      'visible',
-      'matrixAutoUpdate',
-      'appendMode',
-      'appendTo',
-      'click',
-      'contextmenu',
-      'dblclick',
-      'pointerup',
-      'pointerdown',
-      'pointerover',
-      'pointerout',
-      'pointerenter',
-      'pointerleave',
-      'pointermove',
-      'pointermissed',
-      'pointercancel',
-      'wheel',
-    ];
+      if (this.#object3dInputsController.scale) {
+        customProps['scale'] = this.#object3dInputsController.scale;
+      }
+
+      if (this.#object3dInputsController.userData) {
+        customProps['userData'] = this.#object3dInputsController.userData;
+      }
+
+      if (this.#object3dInputsController.color) {
+        customProps['color'] = this.#object3dInputsController.color;
+        if (!this.store.get('linear')) {
+          (customProps['color'] as THREE.Color).convertSRGBToLinear();
+        }
+      }
+
+      if (this.#object3dInputsController.dispose) {
+        customProps['dispose'] = this.#object3dInputsController.dispose;
+      }
+
+      if (this.#object3dInputsController.raycast) {
+        customProps['raycast'] = this.#object3dInputsController.raycast;
+      }
+
+      this.#object3dInputsController.change$
+        .pipe(take(1))
+        .subscribe((changes) => {
+          if (changes) {
+            for (const [inputName, inputChange] of Object.entries(changes)) {
+              if (
+                !inputChange.isFirstChange() ||
+                [
+                  'name',
+                  'position',
+                  'rotation',
+                  'quaternion',
+                  'scale',
+                  'userData',
+                  'color',
+                  'dispose',
+                  'raycast',
+                  'castShadow',
+                  'receiveShadow',
+                  'visible',
+                  'matrixAutoUpdate',
+                  'object3dController',
+                ].includes(inputName) // skip 14 common inputs
+              ) {
+                continue;
+              }
+              customProps[inputName] = inputChange.currentValue;
+            }
+          }
+        });
+
+      applyProps(this.object3d, customProps);
+      this.object3d.updateMatrix?.();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.#inputChangesSubscription) {
+      this.#inputChangesSubscription.unsubscribe();
+    }
+
+    if (this.object3d) {
+      this.#remove();
+      this.store.set((state) => {
+        const { [this.object3d.uuid]: _, ...objects } = state.objects;
+        return { ...state, objects };
+      });
+      this.eventsStore.removeInteraction(this.object3d.uuid);
+    }
+  }
+
+  get object3d(): THREE.Object3D {
+    return this.#object3d as THREE.Object3D;
   }
 
   get controller(): Controller | undefined {
-    return this.object3dInputsController;
+    return undefined;
   }
 
-  get object3dProps(): NgtObject3dProps {
-    return {
-      name: this.name,
-      position: this.#position?.toArray(),
-      rotation: this.#rotation?.toArray() as NgtEuler,
-      quaternion: this.#quaternion?.toArray() as NgtQuaternion,
-      scale: this.#scale?.toArray(),
-      color: this.color,
-      userData: this.userData,
-      dispose: this.dispose,
-      raycast: this.raycast,
-      castShadow: this.castShadow,
-      receiveShadow: this.receiveShadow,
-      visible: this.visible,
-      matrixAutoUpdate: this.matrixAutoUpdate,
-    };
+  get props(): string[] {
+    return [];
   }
 }
 
 @NgModule({
-  declarations: [NgtObject3dInputsController],
-  exports: [NgtObject3dInputsController],
+  declarations: [NgtObject3dController],
+  exports: [
+    NgtObject3dController,
+    NgtObject3dInputsControllerModule,
+    NgtAnimationSubscriberControllerModule,
+  ],
 })
-export class NgtObject3dInputsControllerModule {}
+export class NgtObject3dControllerModule {}
 
-export const [
-  NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-  NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-] = createControllerProviderFactory({
-  watchedControllerTokenName: 'Watched Object3dInputsController',
-  controller: NgtObject3dInputsController,
-});
+export const [NGT_OBJECT_WATCHED_CONTROLLER, NGT_OBJECT_CONTROLLER_PROVIDER] =
+  createControllerProviderFactory({
+    watchedControllerTokenName: 'Watched Object3dController',
+    controller: NgtObject3dController,
+  });
