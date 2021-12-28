@@ -1,4 +1,11 @@
-import { Directive, Inject, NgZone, OnInit } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Inject,
+  NgZone,
+  OnInit,
+  Output,
+} from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -11,6 +18,8 @@ export abstract class NgtCommonCamera<
   TCamera extends THREE.Camera = THREE.Camera
 > implements OnInit
 {
+  @Output() ready = new EventEmitter<TCamera>();
+
   abstract cameraType: AnyConstructor<TCamera>;
 
   constructor(
@@ -21,6 +30,10 @@ export abstract class NgtCommonCamera<
     objectController.initFn = () => {
       this.#camera = new this.cameraType(...this.#cameraArgs);
       return this.#camera;
+    };
+
+    objectController.readyFn = () => {
+      this.ready.emit(this.camera);
     };
   }
 
