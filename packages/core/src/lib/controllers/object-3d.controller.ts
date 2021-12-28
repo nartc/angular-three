@@ -1,13 +1,11 @@
 // GENERATED
 import {
   Directive,
-  EventEmitter,
   Inject,
   NgModule,
   NgZone,
   OnDestroy,
   Optional,
-  Output,
   SkipSelf,
 } from '@angular/core';
 import { setTimeout } from '@rx-angular/cdk/zone-less';
@@ -97,8 +95,6 @@ const supportedEvents = [
   ],
 })
 export class NgtObject3dController extends Controller implements OnDestroy {
-  @Output() ready = new EventEmitter<void>();
-
   #object3d?: THREE.Object3D;
   #inputChangesSubscription?: Subscription;
   #object3dInputsController!: NgtObject3dInputsController;
@@ -199,7 +195,9 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   }
 
   #objectReady() {
-    this.ready.emit();
+    if (this.readyFn) {
+      this.readyFn();
+    }
     if (this.animationSubscriberController) {
       this.animationSubscriberController.prepare(this.object3d);
     }

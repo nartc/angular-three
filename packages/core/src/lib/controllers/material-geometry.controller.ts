@@ -125,6 +125,12 @@ export class NgtMaterialGeometryController
 
       return object;
     };
+
+    objectController.readyFn = () => {
+      if (this.readyFn) {
+        this.readyFn();
+      }
+    };
   }
 
   ngOnInit() {

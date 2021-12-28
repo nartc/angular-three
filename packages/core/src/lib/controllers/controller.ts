@@ -27,6 +27,16 @@ export abstract class Controller implements OnChanges, OnInit {
 
   constructor(protected ngZone: NgZone) {}
 
+  #readyFn?: () => void;
+
+  set readyFn(v: (() => void) | undefined) {
+    this.#readyFn = v;
+  }
+
+  get readyFn() {
+    return this.#readyFn;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (this.controller) {
       this.controller.ngOnChanges(changes);
