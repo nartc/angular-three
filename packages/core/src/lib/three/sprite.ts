@@ -1,10 +1,12 @@
 import {
   ContentChild,
   Directive,
+  EventEmitter,
   Inject,
   Input,
   NgZone,
   OnInit,
+  Output,
 } from '@angular/core';
 import * as THREE from 'three';
 import {
@@ -20,6 +22,7 @@ export abstract class NgtCommonSprite<
 > implements OnInit
 {
   @Input() material?: THREE.SpriteMaterial;
+  @Output() ready = new EventEmitter<TSprite>();
 
   @ContentChild(NgtMaterial) materialDirective?: NgtMaterial;
 
@@ -42,6 +45,10 @@ export abstract class NgtCommonSprite<
       }
 
       return this.#sprite;
+    };
+
+    objectController.readyFn = () => {
+      this.ready.emit(this.sprite);
     };
   }
 
