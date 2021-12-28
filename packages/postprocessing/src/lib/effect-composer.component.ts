@@ -57,7 +57,7 @@ export class NgtEffectComposer {
     this.effectComposerStore.set({ scene: v });
   }
 
-  @ViewChild(NgtGroup) set groupDirective(v: NgtGroup) {
+  @ViewChild(NgtGroup, { static: true }) set groupDirective(v: NgtGroup) {
     this.#group = v.group as THREE.Group;
   }
 
