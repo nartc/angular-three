@@ -34,7 +34,7 @@ import {
 })
 export class WorldComponent {
   texture$ = this.loaderService
-    .use(THREE.TextureLoader, '/assets/minecraft/atlas.png')
+    .use(THREE.TextureLoader, 'assets/minecraft/atlas.png')
     .pipe(
       tap((texture) => {
         texture.magFilter = THREE.NearestFilter;
