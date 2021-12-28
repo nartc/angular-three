@@ -4,7 +4,15 @@ import {
   NgtObject3dController,
   NgtObject3dControllerModule,
 } from '@angular-three/core';
-import { Directive, Inject, Input, NgModule, NgZone } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Inject,
+  Input,
+  NgModule,
+  NgZone,
+  Output,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -12,12 +20,17 @@ import * as THREE from 'three';
   exportAs: 'ngtPrimitive',
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
-export class NgtPrimitive {
-  #object!: THREE.Object3D;
+export class NgtPrimitive<TObject extends THREE.Object3D = THREE.Object3D> {
+  @Output() ready = new EventEmitter<TObject>();
 
-  @Input() set object(value: THREE.Object3D) {
+  #object!: TObject;
+
+  @Input() set object(value: TObject) {
     this.#object = value;
     this.objectController.initFn = () => value;
+    this.objectController.readyFn = () => {
+      this.ready.emit(this.object);
+    };
   }
 
   get object() {
