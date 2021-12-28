@@ -50,7 +50,7 @@ export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
 })
 export class NgtSkeleton implements OnInit {
   @Input() boneInverses?: NgtMatrix4[];
-  @Output() ready = new EventEmitter();
+  @Output() ready = new EventEmitter<THREE.Skeleton>();
 
   #skeleton?: THREE.Skeleton;
   get skeleton() {
@@ -75,7 +75,7 @@ export class NgtSkeleton implements OnInit {
           })
         : undefined;
       this.#skeleton = new THREE.Skeleton([], boneInverses);
-      this.ready.emit();
+      this.ready.emit(this.skeleton);
 
       if (this.skinnedMesh) {
         const bindMatrix: THREE.Matrix4 | undefined = this.skinnedMesh
@@ -96,6 +96,8 @@ export class NgtSkeleton implements OnInit {
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
 export class NgtBone implements OnInit {
+  @Output() ready = new EventEmitter<THREE.Bone>();
+
   #bone?: THREE.Bone;
   get bone() {
     return this.#bone;
@@ -119,6 +121,9 @@ export class NgtBone implements OnInit {
     objectController.initFn = () => {
       this.#bone = new THREE.Bone();
       return this.#bone;
+    };
+    objectController.readyFn = () => {
+      this.ready.emit(this.bone);
     };
   }
 
