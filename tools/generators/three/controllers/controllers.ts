@@ -23,6 +23,7 @@ export default async function controllersGenerator(
     'soba-quadratic-bezier-line',
     'soba-cubic-bezier-line',
     'soba-orthographic-camera',
+    'soba-gizmo-helper',
   ];
   const sobaWithMaterialSelectors = ['soba-text'];
   const sobaAudioSelectors = ['soba-positional-audio'];
