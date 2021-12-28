@@ -11,13 +11,11 @@ import {
 import { NgtMeshLambertMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
-import {
-  NgtSobaFlyControls,
-  NgtSobaFlyControlsModule,
-} from '@angular-three/soba/controls';
+import { NgtSobaFlyControlsModule } from '@angular-three/soba/controls';
 import { NgtSobaDetailedModule } from '@angular-three/soba/performances';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
+import { FlyControls } from 'three-stdlib';
 
 @Component({
   selector: 'ngt-level-of-details',
@@ -66,7 +64,6 @@ import * as THREE from 'three';
       ></ngt-icosahedron-geometry>
 
       <ngt-soba-detailed
-        #lod
         *repeat="let _ of 1000"
         [position]="[
           10000 * (0.5 - (1 | mathConst: 'random')),
@@ -76,45 +73,37 @@ import * as THREE from 'three';
         [distances]="[50, 300, 1000, 2000, 8000]"
       >
         <ngt-mesh
-          #ngtMesh="ngtMesh"
           [disabled]="true"
           [geometry]="geometry16.geometry"
           [material]="lambertMaterial.material"
           [scale]="[1.5, 1.5, 1.5]"
         ></ngt-mesh>
         <ngt-mesh
-          #ngtMesh="ngtMesh"
           [disabled]="true"
           [geometry]="geometry8.geometry"
           [material]="lambertMaterial.material"
           [scale]="[1.5, 1.5, 1.5]"
         ></ngt-mesh>
         <ngt-mesh
-          #ngtMesh="ngtMesh"
           [disabled]="true"
           [geometry]="geometry4.geometry"
           [material]="lambertMaterial.material"
           [scale]="[1.5, 1.5, 1.5]"
         ></ngt-mesh>
         <ngt-mesh
-          #ngtMesh="ngtMesh"
           [disabled]="true"
           [geometry]="geometry2.geometry"
           [material]="lambertMaterial.material"
           [scale]="[1.5, 1.5, 1.5]"
         ></ngt-mesh>
         <ngt-mesh
-          #ngtMesh="ngtMesh"
           [disabled]="true"
           [geometry]="geometry1.geometry"
           [material]="lambertMaterial.material"
           [scale]="[1.5, 1.5, 1.5]"
         ></ngt-mesh>
       </ngt-soba-detailed>
-      <ngt-soba-fly-controls
-        #flyControls="ngtSobaFlyControls"
-        (ready)="onReady(flyControls)"
-      ></ngt-soba-fly-controls>
+      <ngt-soba-fly-controls (ready)="onReady($event)"></ngt-soba-fly-controls>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -122,9 +111,9 @@ import * as THREE from 'three';
 export class LevelOfDetailsComponent {
   fog = new THREE.Fog('#000000', 1, 15000);
 
-  onReady(flyControls: NgtSobaFlyControls) {
-    flyControls.controls.movementSpeed = 1000;
-    flyControls.controls.rollSpeed = Math.PI / 10;
+  onReady(controls: FlyControls) {
+    controls.movementSpeed = 1000;
+    controls.rollSpeed = Math.PI / 10;
   }
 }
 

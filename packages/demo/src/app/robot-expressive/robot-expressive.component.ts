@@ -58,8 +58,7 @@ import { RobotComponent } from './robot.component';
         ></ngt-mesh-phong-material>
       </ngt-soba-plane>
       <ngt-grid-helper
-        #ngtGridHelper="ngtGridHelper"
-        (ready)="onGridHelperReady(ngtGridHelper.helper)"
+        (ready)="onGridHelperReady($event)"
         [args]="[200, 40, '#000000', '#000000']"
         [receiveShadow]="true"
       ></ngt-grid-helper>

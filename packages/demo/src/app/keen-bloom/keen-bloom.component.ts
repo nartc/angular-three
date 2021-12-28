@@ -54,7 +54,7 @@ export class KeenBloomComponent {}
     <ng-container *ngIf="keen$ | async as keen">
       <ngt-group
         #group="ngtGroup"
-        (ready)="onReady(group.group!)"
+        (ready)="onReady($event)"
         (animateReady)="onGroupAnimate(group.group!)"
         [position]="[0, -7, 0]"
         [dispose]="null"

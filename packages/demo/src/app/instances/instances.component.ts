@@ -9,7 +9,6 @@ import { NgtMeshLambertMaterialModule } from '@angular-three/core/materials';
 import { NgtInstancedMeshModule } from '@angular-three/core/meshes';
 import {
   NgtSobaFlyControlsModule,
-  NgtSobaOrbitControls,
   NgtSobaOrbitControlsModule,
 } from '@angular-three/soba/controls';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
@@ -46,28 +45,18 @@ const colorArray = Float32Array.from(
       <ngt-spheres></ngt-spheres>
 
       <ngt-soba-orbit-controls
-        #sobaControls="ngtSobaOrbitControls"
-        (ready)="onReady(sobaControls)"
+        (ready)="$event.autoRotate = true; $event.enablePan = false"
       ></ngt-soba-orbit-controls>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InstancesComponent {
-  onReady(sobaControls: NgtSobaOrbitControls) {
-    sobaControls.controls.autoRotate = true;
-    sobaControls.controls.enablePan = false;
-  }
-}
+export class InstancesComponent {}
 
 @Component({
   selector: 'ngt-spheres',
   template: `
-    <ngt-instanced-mesh
-      #instancedMesh="ngtInstancedMesh"
-      (ready)="onInstancedMeshReady(instancedMesh.mesh)"
-      [args]="[size]"
-    >
+    <ngt-instanced-mesh (ready)="onInstancedMeshReady($event)" [args]="[size]">
       <ngt-sphere-geometry [args]="[0.15, 8, 6]">
         <ngt-instanced-buffer-attribute
           attach="color"

@@ -68,8 +68,7 @@ export interface CubeContent {
           </ngt-soba-text>
           <ngt-mesh
             ngtCursor
-            #cube="ngtMesh"
-            (ready)="cubes.push(cube.mesh)"
+            (ready)="cubes.push($event)"
             (click)="onCubeSelected(cubeContent, i)"
             [position]="[6, 0, 0]"
             [userData]="cubeContent"
