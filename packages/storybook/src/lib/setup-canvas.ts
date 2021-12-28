@@ -1,4 +1,4 @@
-import { NgtCoreModule } from '@angular-three/core';
+import { NgtColorPipeModule, NgtCoreModule } from '@angular-three/core';
 import {
   NgtAmbientLightModule,
   NgtPointLightModule,
@@ -23,9 +23,11 @@ export function setupCanvas({
   loader: boolean;
 }> = {}) {
   return (story: string) => `
-    <ngt-canvas [shadows]='true' [camera]='{position: [${cameraPosition}], fov: ${cameraFov}}' (created)='$event.renderer.setClearAlpha(${
-    black ? 'black' : 'white'
-  })'>
+    <ngt-canvas
+      [shadows]='true'
+      [camera]='{position: [${cameraPosition}], fov: ${cameraFov}}'
+      [scene]='{background: "${black ? 'black' : 'white'}" | color}'
+    >
       <ngt-stats></ngt-stats>
 
       <ng-container *ngIf='${lights}'>
@@ -48,4 +50,5 @@ export const setupCanvasModules = [
   NgtPointLightModule,
   NgtSobaOrbitControlsModule,
   NgtSobaLoaderModule,
+  NgtColorPipeModule,
 ];
