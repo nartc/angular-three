@@ -101,25 +101,21 @@ export class MyComponent {
 }
 ```
 
-#### Template Variable
+#### Ready Event
 
-All NGT directives (components does not need `exportAs`) are exposed on the template via `exportAs` so we can assign a Template Variable to them. Most NGT objects have `(ready)` event which we can leverage to assign the object as soon as they are constructed and ready.
+Most NGT objects have `(ready)` event which we can leverage to assign the object as soon as they are constructed and ready.
 
 ```ts
 @Component({
   selector: 'app-my-component',
-  template: `
-    <ngt-mesh #ngtMesh="ngtMesh" (ready)="mesh = ngtMesh.mesh"></ngt-mesh>
-  `,
+  template: ` <ngt-mesh (ready)="mesh = $event"></ngt-mesh> `,
 })
 export class MyComponent {
   mesh: THREE.Mesh;
 }
 ```
 
-`exportAs` will always be `camelCase` with `ngt-` prefix. Eg: `ngt-mesh` is exported as `ngtMesh`, `ngt-ambient-light` is exported as `ngtAmbientLight`.
-
-> Using Template Variable + `(ready)` is recommended because it is guaranteed that the underline THREE entity has been constructed.
+> Using `(ready)` is recommended because it is guaranteed that the underline THREE entity has been constructed.
 
 ## How to put existing objects in the Angular component tree?
 

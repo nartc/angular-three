@@ -3,7 +3,7 @@ import { Story } from '@storybook/addon-docs';
 This example demonstrates how `ngt-effect-composer` from `@angular-three/postprocessing` work. `EffectComposer` is a way to add effects to the 3D scene.
 
 ```ts
-import { NgtCoreModule } from '@angular-three/core';
+import { NgtColorPipeModule, NgtCoreModule } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
 import {
   NgtAmbientLightModule,
@@ -17,7 +17,10 @@ import {
   NgtNoiseModule,
 } from '@angular-three/postprocessing/effects';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
-import { GLTFLoaderService } from '@angular-three/soba/loaders';
+import {
+  NgtGLTFLoaderService,
+  NgtSobaLoaderModule,
+} from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
@@ -44,6 +47,7 @@ import * as THREE from 'three';
         <ngt-noise [options]="{ premultiply: true }"></ngt-noise>
       </ngt-effect-composer>
     </ngt-canvas>
+    <ngt-soba-loader></ngt-soba-loader>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -55,7 +59,7 @@ export class KeenBloomComponent {}
     <ng-container *ngIf="keen$ | async as keen">
       <ngt-group
         #group="ngtGroup"
-        (ready)="onReady(group.group!)"
+        (ready)="onReady($event)"
         (animateReady)="onGroupAnimate(group.group!)"
         [position]="[0, -7, 0]"
         [dispose]="null"
@@ -74,7 +78,7 @@ export class KeenBloomComponent {}
 export class KeenComponent {
   keen$ = this.gltfLoader.load('assets/scene.gltf');
 
-  constructor(private gltfLoader: GLTFLoaderService) {}
+  constructor(private gltfLoader: NgtGLTFLoaderService) {}
 
   onGroupAnimate(group: THREE.Group) {
     group.rotation.z += 0.01;
@@ -101,6 +105,8 @@ export class KeenComponent {
     NgtBloomModule,
     NgtStatsModule,
     NgtNoiseModule,
+    NgtSobaLoaderModule,
+    NgtColorPipeModule,
   ],
 })
 export class KeenComponentModule {}
