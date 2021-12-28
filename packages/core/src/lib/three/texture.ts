@@ -13,7 +13,7 @@ import type { AnyConstructor } from '../types';
 export abstract class NgtTexture<TTexture extends THREE.Texture = THREE.Texture>
   implements OnInit, OnDestroy
 {
-  @Output() ready = new EventEmitter();
+  @Output() ready = new EventEmitter<TTexture>();
 
   abstract textureType: AnyConstructor<TTexture>;
 
@@ -34,7 +34,7 @@ export abstract class NgtTexture<TTexture extends THREE.Texture = THREE.Texture>
     this.ngZone.runOutsideAngular(() => {
       if (!this.texture) {
         this.#texture = new this.textureType(...this.#textureArgs);
-        this.ready.emit();
+        this.ready.emit(this.texture);
       }
     });
   }
