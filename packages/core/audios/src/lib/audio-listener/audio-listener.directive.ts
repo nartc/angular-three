@@ -17,7 +17,7 @@ export class NgtAudioListener extends EnhancedRxState implements OnInit {
   @Input() filter?: AudioNode;
   @Input() timeDelta?: number;
 
-  @Output() ready = new EventEmitter();
+  @Output() ready = new EventEmitter<THREE.AudioListener>();
 
   #listener!: THREE.AudioListener;
   get listener() {
@@ -39,7 +39,7 @@ export class NgtAudioListener extends EnhancedRxState implements OnInit {
       const camera = this.store.get('camera');
       if (ready && camera) {
         camera.add(this.listener);
-        this.ready.emit();
+        this.ready.emit(this.listener);
       }
 
       return () => {
