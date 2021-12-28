@@ -4,7 +4,15 @@ import {
   NgtObject3dController,
   NgtObject3dControllerModule,
 } from '@angular-three/core';
-import { Directive, Inject, NgModule, NgZone, OnInit } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Inject,
+  NgModule,
+  NgZone,
+  OnInit,
+  Output,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
@@ -13,6 +21,8 @@ import * as THREE from 'three';
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
 export class NgtLod implements OnInit {
+  @Output() ready = new EventEmitter<THREE.LOD>();
+
   #lod?: THREE.LOD;
 
   get lod() {
@@ -27,6 +37,10 @@ export class NgtLod implements OnInit {
     objectController.initFn = () => {
       this.#lod = new THREE.LOD();
       return this.#lod;
+    };
+
+    objectController.readyFn = () => {
+      this.ready.emit(this.lod);
     };
   }
 
