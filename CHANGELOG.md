@@ -1,3 +1,22 @@
+## [2.15.0](https://github.com/nartc/angular-three/compare/2.14.0...2.15.0) (2021-12-28)
+
+
+### Features
+
+* **soba:** add GizmoHelper ([0a96282](https://github.com/nartc/angular-three/commit/0a96282f74e4c41516638085314be27cb4d169e5))
+
+
+### Bug Fixes
+
+* **core:** adjust type of raycast to include `null` ([2879822](https://github.com/nartc/angular-three/commit/287982289580f215ee010852d5fd17f0534afd6c))
+* **core:** make EnhancedRxState provid-able ([9e8d092](https://github.com/nartc/angular-three/commit/9e8d09245e464c91925a97e99cdb3c655bb9f426))
+* **soba:** export all classes ([c4174d0](https://github.com/nartc/angular-three/commit/c4174d0ddec513d935be4ea6c7260c7f36be8399))
+
+
+### Documentations
+
+* **storybook:** adjust how "black" is used ([ae78b24](https://github.com/nartc/angular-three/commit/ae78b24772c3e30f1f2db774386054b55ba6ddee))
+
 ## [2.14.0](https://github.com/nartc/angular-three/compare/2.13.0...2.14.0) (2021-12-28)
 
 
