@@ -1,4 +1,12 @@
-import { Directive, Inject, Input, NgZone, OnInit } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Inject,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+} from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -13,6 +21,7 @@ export abstract class NgtCommonAudio<
 > implements OnInit
 {
   @Input() listener!: THREE.AudioListener;
+  @Output() ready = new EventEmitter<TAudio>();
 
   #audioArgs: unknown[] = [];
   protected set audioArgs(v: unknown | unknown[]) {
@@ -34,6 +43,9 @@ export abstract class NgtCommonAudio<
 
       this.#audio = new this.audioType(this.listener, ...this.#audioArgs);
       return this.#audio;
+    };
+    objectController.readyFn = () => {
+      this.ready.emit(this.audio);
     };
   }
 
