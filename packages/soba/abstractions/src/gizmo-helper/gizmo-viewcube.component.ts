@@ -95,7 +95,7 @@ const edgeDimensions = edges.map(
   `,
   providers: [EnhancedRxState],
 })
-class GenericController extends Controller {
+export class GenericController extends Controller {
   get props(): string[] {
     return [
       'font',
@@ -269,7 +269,7 @@ export class NgtSobaGizmoViewcube extends NgtSobaExtender<THREE.Group> {
     },
   ],
 })
-class NgtSobaGizmoEdgecube extends NgtSobaExtender<THREE.Mesh> {
+export class NgtSobaGizmoEdgecube extends NgtSobaExtender<THREE.Mesh> {
   @Input() set dimensions(dimensions: XYZ) {
     this.state.set({ dimensions });
   }
@@ -345,7 +345,7 @@ class NgtSobaGizmoEdgecube extends NgtSobaExtender<THREE.Mesh> {
     },
   ],
 })
-class NgtSobaGizmoFacecube extends NgtSobaExtender<THREE.Mesh> {
+export class NgtSobaGizmoFacecube extends NgtSobaExtender<THREE.Mesh> {
   hover: number | null = null;
 
   readonly raycast$ = this.gizmoHelperStore.select('raycast');
@@ -394,7 +394,7 @@ class NgtSobaGizmoFacecube extends NgtSobaExtender<THREE.Mesh> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NGT_VIEWCUBE_GENERIC_CONTROLLER_PROVIDER, EnhancedRxState],
 })
-class NgtSobaGizmoFaceMaterial {
+export class NgtSobaGizmoFaceMaterial {
   @Input() set hover(hover: boolean) {
     this.state.set({ hover });
   }
@@ -483,7 +483,7 @@ class NgtSobaGizmoFaceMaterial {
     NgtSobaGizmoFacecube,
     NgtSobaGizmoFaceMaterial,
   ],
-  exports: [NgtSobaGizmoViewcube, GenericController],
+  exports: [NgtSobaGizmoViewcube],
   imports: [
     NgtGroupModule,
     NgtAmbientLightModule,
