@@ -1,3 +1,15 @@
+## [2.14.0](https://github.com/nartc/angular-three/compare/2.13.0...2.14.0) (2021-12-28)
+
+
+### Features
+
+* **core:** add Side pipe ([30e84e9](https://github.com/nartc/angular-three/commit/30e84e95ac3e0f4e3a91c127cc6cda4f3b1ea68b))
+
+
+### Documentations
+
+* **demo:** adjust minecraft demo ([2b92882](https://github.com/nartc/angular-three/commit/2b9288251233f294822ede83223599784591f306))
+
 ## [2.13.0](https://github.com/nartc/angular-three/compare/2.12.0...2.13.0) (2021-12-28)
 
 
