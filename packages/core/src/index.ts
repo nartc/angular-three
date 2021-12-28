@@ -13,6 +13,7 @@ export * from './lib/pipes/vector.pipe';
 export * from './lib/pipes/color.pipe';
 export * from './lib/pipes/math.pipe';
 export * from './lib/pipes/fog.pipe';
+export * from './lib/pipes/side.pipe';
 
 export * from './lib/directives/repeat.directive';
 export * from './lib/directives/cursor.directive';
