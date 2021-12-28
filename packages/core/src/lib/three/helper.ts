@@ -1,4 +1,12 @@
-import { Directive, Inject, NgZone, OnChanges, OnInit } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Inject,
+  NgZone,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -10,6 +18,8 @@ import { AnyConstructor } from '../types';
 export abstract class NgtHelper<THelper extends THREE.Object3D>
   implements OnInit, OnChanges
 {
+  @Output() ready = new EventEmitter<THelper>();
+
   abstract helperType: AnyConstructor<THelper>;
 
   #helper!: THelper;
@@ -29,6 +39,10 @@ export abstract class NgtHelper<THelper extends THREE.Object3D>
     objectController.initFn = () => {
       this.#helper = new this.helperType(...this.#helperArgs);
       return this.#helper;
+    };
+
+    objectController.readyFn = () => {
+      this.ready.emit(this.helper);
     };
   }
 
