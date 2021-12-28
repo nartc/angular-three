@@ -5,11 +5,13 @@ import {
 } from '@angular-three/core';
 import {
   Directive,
+  EventEmitter,
   Inject,
   Input,
   NgModule,
   NgZone,
   OnInit,
+  Output,
 } from '@angular/core';
 import * as THREE from 'three';
 
@@ -19,6 +21,8 @@ import * as THREE from 'three';
   providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
 export class NgtCubeCamera implements OnInit {
+  @Output() ready = new EventEmitter<THREE.CubeCamera>();
+
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CubeCamera>;
 
   #cubeCamera?: THREE.CubeCamera;
@@ -36,6 +40,9 @@ export class NgtCubeCamera implements OnInit {
     objectController.initFn = () => {
       this.#cubeCamera = new THREE.CubeCamera(...this.args);
       return this.#cubeCamera;
+    };
+    objectController.readyFn = () => {
+      this.ready.emit(this.cubeCamera);
     };
   }
 
