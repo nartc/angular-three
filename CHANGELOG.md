@@ -1,3 +1,15 @@
+## [2.12.0](https://github.com/nartc/angular-three/compare/2.11.0...2.12.0) (2021-12-28)
+
+
+### Features
+
+* **soba:** add FirstPersonControls ([b6febf4](https://github.com/nartc/angular-three/commit/b6febf46b64d294ab971526ccba7b633b27baf85))
+
+
+### Documentations
+
+* **demo:** change simple cube ([3bc5d6d](https://github.com/nartc/angular-three/commit/3bc5d6d173fcc75d363a8ba9fcdeeb0fad08b697))
+
 ## [2.11.0](https://github.com/nartc/angular-three/compare/2.10.0...2.11.0) (2021-12-22)
 
 
