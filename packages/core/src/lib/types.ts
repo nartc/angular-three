@@ -323,7 +323,7 @@ export interface NgtObject3dProps {
   color?: NgtColor;
   userData?: UnknownRecord;
   dispose?: (() => void) | null;
-  raycast?: THREE.Object3D['raycast'];
+  raycast?: THREE.Object3D['raycast'] | null;
   castShadow?: boolean;
   receiveShadow?: boolean;
   visible?: boolean;

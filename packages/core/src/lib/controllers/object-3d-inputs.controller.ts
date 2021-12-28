@@ -143,7 +143,7 @@ export class NgtObject3dInputsController extends Controller {
   @Input() visible = true;
   @Input() matrixAutoUpdate = true;
   @Input() dispose?: (() => void) | null;
-  @Input() raycast?: THREE.Object3D['raycast'];
+  @Input() raycast?: THREE.Object3D['raycast'] | null;
 
   @Input() appendMode: 'immediate' | 'root' | 'none' = 'immediate';
   @Input() appendTo?: THREE.Object3D;
