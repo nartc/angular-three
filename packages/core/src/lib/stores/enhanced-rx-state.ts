@@ -92,7 +92,7 @@ function actionProxyHandler<T, U>(
 }
 
 @Directive()
-export abstract class EnhancedRxState<
+export class EnhancedRxState<
   T extends object = {},
   TActions extends object = {}
 > extends RxState<T> {
