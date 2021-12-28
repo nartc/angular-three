@@ -1,4 +1,12 @@
-import { Directive, Inject, Input, NgZone, OnInit } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Inject,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+} from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -11,6 +19,8 @@ import { applyProps } from '../utils/apply-props';
 export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
   implements OnInit
 {
+  @Output() ready = new EventEmitter<TLight>();
+
   abstract lightType: AnyConstructor<TLight>;
 
   @Input() intensity?: number;
@@ -32,6 +42,10 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
       }
 
       return this.#light;
+    };
+
+    objectController.readyFn = () => {
+      this.ready.emit(this.light);
     };
   }
 
