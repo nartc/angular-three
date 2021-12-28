@@ -34,7 +34,7 @@ export function getY(x: number, z: number) {
   return (data[x + z * worldWidth] * 0.15) | 0;
 }
 
-export const geometries = {
+export const planeOptions = {
   pxPlane: {
     uv: [1, 3],
     rotate: ['rotateY', Math.PI / 2],

@@ -3,6 +3,7 @@ import {
   NgtCoreModule,
   NgtCreatedState,
   NgtMathPipeModule,
+  NgtSidePipeModule,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import {
@@ -15,7 +16,6 @@ import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtSobaFirstPersonControlsModule } from '@angular-three/soba/controls';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-import { FirstPersonControls } from 'three-stdlib';
 import { WorldComponent, WorldGeometryComponent } from './world.component';
 import { getY, worldHalfDepth, worldHalfWidth } from './world.utils';
 
@@ -36,7 +36,11 @@ import { getY, worldHalfDepth, worldHalfWidth } from './world.utils';
       <ngt-world></ngt-world>
 
       <ngt-soba-first-person-controls
-        (ready)="onControlsReady($event)"
+        (ready)="
+          $event.movementSpeed = 1000;
+          $event.lookSpeed = 0.125;
+          $event.lookVertical = true
+        "
       ></ngt-soba-first-person-controls>
 
       <ngt-stats></ngt-stats>
@@ -45,12 +49,6 @@ import { getY, worldHalfDepth, worldHalfWidth } from './world.utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MinecraftComponent {
-  onControlsReady(controls: FirstPersonControls) {
-    controls.movementSpeed = 1000;
-    controls.lookSpeed = 0.125;
-    controls.lookVertical = true;
-  }
-
   onCanvasCreated({ camera }: NgtCreatedState) {
     camera.position.y = getY(worldHalfWidth, worldHalfDepth) * 100 + 100;
   }
@@ -71,6 +69,7 @@ export class MinecraftComponent {
     NgtDirectionalLightModule,
     NgtSobaFirstPersonControlsModule,
     NgtStatsModule,
+    NgtSidePipeModule,
   ],
 })
 export class MinecraftComponentModule {}
