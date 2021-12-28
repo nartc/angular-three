@@ -28,7 +28,7 @@ export abstract class NgtMaterial<
   TMaterial extends THREE.Material = THREE.Material
 > implements OnInit, OnDestroy
 {
-  @Output() ready = new EventEmitter();
+  @Output() ready = new EventEmitter<TMaterial>();
 
   @Input() set parameters(v: TMaterialParameters | undefined) {
     requestAnimationFrame(() => {
@@ -78,7 +78,7 @@ export abstract class NgtMaterial<
             parentObject.material = this.material;
           }
         }
-        this.ready.emit();
+        this.ready.emit(this.material);
       });
     });
   }
