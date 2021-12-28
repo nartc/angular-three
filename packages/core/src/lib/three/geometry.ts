@@ -17,7 +17,7 @@ export abstract class NgtGeometry<
   TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
 > implements OnInit, OnDestroy
 {
-  @Output() ready = new EventEmitter();
+  @Output() ready = new EventEmitter<TGeometry>();
 
   constructor(
     protected ngZone: NgZone,
@@ -68,12 +68,12 @@ export abstract class NgtGeometry<
       if (parentObject) {
         parentObject.geometry = this.geometry;
       }
-      this.ready.emit();
     });
   }
 
   #construct() {
     this.#geometry = new this.geometryType(...this.#geometryArgs);
+    this.ready.emit(this.geometry);
   }
 
   #geometry!: TGeometry;
