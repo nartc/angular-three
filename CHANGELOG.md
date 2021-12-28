@@ -1,3 +1,40 @@
+## [2.13.0](https://github.com/nartc/angular-three/compare/2.12.0...2.13.0) (2021-12-28)
+
+
+### Features
+
+* **core:** move (ready) out of controllers so we have type-safe on ready ([e8f3f3d](https://github.com/nartc/angular-three/commit/e8f3f3d97c982b9660ce75f43575410a7289beba))
+* **core:** type safe for Primitive ([653aa9f](https://github.com/nartc/angular-three/commit/653aa9f9c7bcd1edd47f89fd8d0bad75c874b832))
+* **core:** type safe ready for Audio ([07a8777](https://github.com/nartc/angular-three/commit/07a8777e6cd7b62a96094360217756df76f3f8aa))
+* **core:** type safe ready for AudioListener ([0e8e8e5](https://github.com/nartc/angular-three/commit/0e8e8e55acbc0a3cbc13bc39e46571e305f2a39d))
+* **core:** type safe ready for Camera ([2ea5f60](https://github.com/nartc/angular-three/commit/2ea5f601ef18f48332d7e8c163bd172f71e5e438))
+* **core:** type safe ready for CubeCamera ([c84aa88](https://github.com/nartc/angular-three/commit/c84aa88d60a5d070a75eae3ab09345dae65cc65a))
+* **core:** type safe ready for Group ([42c3239](https://github.com/nartc/angular-three/commit/42c32395f93477f3356d69fa64b7ae590c4cde46))
+* **core:** type safe ready for Helper ([4585c76](https://github.com/nartc/angular-three/commit/4585c7642f229bf009513255c321cea120f36d4c))
+* **core:** type safe ready for Light ([ea19242](https://github.com/nartc/angular-three/commit/ea1924269bfe6b62b21f90eaa88786d9656a94d8))
+* **core:** type safe ready for Line ([9d894a7](https://github.com/nartc/angular-three/commit/9d894a7251a8d3c9fc5f84f6300c0d67868a637f))
+* **core:** type safe ready for LOD ([c526a98](https://github.com/nartc/angular-three/commit/c526a98c4e9944a483d53623781ae4117ae19475))
+* **core:** type safe ready for Material ([50e2649](https://github.com/nartc/angular-three/commit/50e26494898496d99ed6c7d92afcd88f858edb73))
+* **core:** type safe ready for Mesh ([26f1a41](https://github.com/nartc/angular-three/commit/26f1a41d249ece76fe75ad43fbd0f207d03692cb))
+* **core:** type safe ready for Points ([ec84c88](https://github.com/nartc/angular-three/commit/ec84c883b712f14405ea6c8a4eeb11a527ec3df9))
+* **core:** type safe ready for Skeleton and Bone ([2d2a7a9](https://github.com/nartc/angular-three/commit/2d2a7a9447db92bcd56aaaa89af07744fbb87fc9))
+* **core:** type safe ready for Sprite ([7889a7e](https://github.com/nartc/angular-three/commit/7889a7ebfbeadd9dd486a23c60dbf8a36da1ed27))
+* **core:** type safe ready for Texture ([cd3343e](https://github.com/nartc/angular-three/commit/cd3343ee40d611956e4b790dfd4725d618c7f553))
+* **soba:** adjust soba components to use type-safe ready for their core counterparts ([973fe6e](https://github.com/nartc/angular-three/commit/973fe6e7ba300ccfa340f719df5ea5f9ebe02ba7))
+
+
+### Bug Fixes
+
+* **core:** add ready<type>() to geometry and also move ready emit to after the geometry is constructed instead of after it's added to the parent ([197f28c](https://github.com/nartc/angular-three/commit/197f28c67077d3cfcfcf83ee46e0af3a79ce6d18))
+* **postprocessing:** static querying for NgtGroup in EffectComposer ([c706ce7](https://github.com/nartc/angular-three/commit/c706ce714f3a5d0177b0cf91029e5c7bfc22b7ef))
+
+
+### Documentations
+
+* **demo:** add Minecraft demo ([0dfd1a2](https://github.com/nartc/angular-three/commit/0dfd1a2bc337e574764243024a6f10dde175ba7a))
+* **demo:** adjust demo to use type-safe ready ([b572036](https://github.com/nartc/angular-three/commit/b57203612351e81b9ee06663af9a9ba59fe3a3b2))
+* **storybook:** adjust storybook ([725934a](https://github.com/nartc/angular-three/commit/725934a30a9440da7d1b0f03dc3f81d9dc649fd1))
+
 ## [2.12.0](https://github.com/nartc/angular-three/compare/2.11.0...2.12.0) (2021-12-28)
 
 
