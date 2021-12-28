@@ -105,10 +105,9 @@ export class NgtSobaImageShaderMaterial extends NgtMaterial<
   template: `
     <ng-container *ngIf="texture$ | async as texture">
       <ngt-mesh
-        #ngtMesh="ngtMesh"
         [scale]="scale"
         [object3dInputsController]="objectInputsController"
-        (ready)="object = ngtMesh.mesh"
+        (ready)="object = $event"
       >
         <ngt-plane-geometry
           [args]="[1, 1, segments, segments]"

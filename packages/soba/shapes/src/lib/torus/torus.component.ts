@@ -26,8 +26,7 @@ import * as THREE from 'three';
   selector: 'ngt-soba-torus',
   template: `
     <ngt-mesh
-      #ngtMesh="ngtMesh"
-      (ready)="object = ngtMesh.mesh"
+      (ready)="object = $event"
       [object3dInputsController]="objectInputsController"
       [contentMaterialController]="contentMaterialController"
     >

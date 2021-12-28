@@ -22,7 +22,7 @@ import * as THREE from 'three';
   template: `
     <ngt-group
       #ngtGroup="ngtGroup"
-      (ready)="onGroupReady(ngtGroup.group!)"
+      (ready)="onGroupReady($event)"
       (animateReady)="onGroupAnimate(ngtGroup.group!, $event)"
       [object3dInputsController]="objectInputsController"
     >

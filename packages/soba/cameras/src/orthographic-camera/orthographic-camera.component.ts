@@ -109,10 +109,9 @@ export class NgtSobaOrthographicCameraStore extends EnhancedRxState<NgtSobaOrtho
   template: `
     <ngt-orthographic-camera
       *ngIf="vm$ | async as vm"
-      #ngtOrthographicCamera="ngtOrthographicCamera"
       [args]="[vm.left, vm.right, vm.top, vm.bottom, vm.near, vm.far]"
       [object3dInputsController]="vm.objectInputsController"
-      (ready)="object = ngtOrthographicCamera.camera"
+      (ready)="object = $event"
     >
       <ng-content></ng-content>
     </ngt-orthographic-camera>

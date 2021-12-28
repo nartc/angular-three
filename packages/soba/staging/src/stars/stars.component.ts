@@ -86,11 +86,7 @@ export class NgtSobaStarsStore extends EnhancedRxState<NgtSobaStarsState> {
 @Component({
   selector: 'ngt-soba-stars',
   template: `
-    <ngt-points
-      #ngtPoints="ngtPoints"
-      (ready)="object = ngtPoints.points"
-      (animateReady)="onAnimate($event)"
-    >
+    <ngt-points (ready)="object = $event" (animateReady)="onAnimate($event)">
       <ng-container *ngIf="attributes$ | async as attributes">
         <ngt-buffer-geometry>
           <ngt-buffer-attribute
@@ -108,7 +104,7 @@ export class NgtSobaStarsStore extends EnhancedRxState<NgtSobaStarsState> {
         </ngt-buffer-geometry>
         <ngt-soba-star-field-material
           #sobaStarFieldMaterial="ngtSobaStarFieldMaterial"
-          (ready)="starMaterial = sobaStarFieldMaterial.material"
+          (ready)="starMaterial = $event"
           [parameters]="{
             vertexColors: true,
             transparent: true,

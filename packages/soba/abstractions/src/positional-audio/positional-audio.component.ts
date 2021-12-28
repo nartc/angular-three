@@ -95,8 +95,7 @@ export class NgtSobaPositionalAudioStore extends EnhancedRxState<NgtSobaPosition
   template: `
     <ngt-positional-audio
       *ngIf="listener$ | async as listener"
-      #ngtPositionalAudio="ngtPositionalAudio"
-      (ready)="onPositionalAudioReady(ngtPositionalAudio.audio)"
+      (ready)="onPositionalAudioReady($event)"
       [listener]="listener"
       [audioController]="audioController"
     ></ngt-positional-audio>

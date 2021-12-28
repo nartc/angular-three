@@ -53,7 +53,7 @@ export class NgtSobaDetailedStore extends EnhancedRxState<NgtSobaDetailedStoreSt
   template: `
     <ngt-lod
       #lod="ngtLod"
-      (ready)="onLodReady(lod.lod)"
+      (ready)="onLodReady($event)"
       (animateReady)="onLodAnimateReady($event, lod.lod)"
       [object3dInputsController]="objectInputsController"
     ></ngt-lod>
