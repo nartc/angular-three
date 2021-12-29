@@ -1,3 +1,17 @@
+### [2.16.1](https://github.com/nartc/angular-three/compare/2.16.0...2.16.1) (2021-12-29)
+
+
+### Bug Fixes
+
+* **core:** merge changes on both controllers' inputs and the nested controllers\ ([d4d8c78](https://github.com/nartc/angular-three/commit/d4d8c78c01d1603bf0404a597239c85b1b47770a))
+
+
+### Documentations
+
+* **demo:** use simple cube ([d2832d4](https://github.com/nartc/angular-three/commit/d2832d463831dc43f803aa6146cb7583683ec09d))
+* **storybook:** add custom font to text demo ([77b4d5e](https://github.com/nartc/angular-three/commit/77b4d5e0ce25c5947a2fd2661109e3d269e0dfe7))
+* **storybook:** adjust gizmo story ([09976bf](https://github.com/nartc/angular-three/commit/09976bf2549da08b36e08ae2f77b71c6f4c998ce))
+
 ## [2.16.0](https://github.com/nartc/angular-three/compare/2.15.1...2.16.0) (2021-12-29)
 
 
