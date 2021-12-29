@@ -55,16 +55,19 @@ export class NgtSobaGizmoHelperStore extends EnhancedRxState<
         },
         size,
       ]) => {
-        objectInputsController.position = [
-          alignment.endsWith('-left')
-            ? -size.width / 2 + marginX
-            : size.width / 2 - marginX,
-          alignment.startsWith('top-')
-            ? size.height / 2 - marginY
-            : -size.height / 2 + marginY,
-          0,
-        ];
-        return objectInputsController;
+        const x = alignment.endsWith('-left')
+          ? -size.width / 2 + marginX
+          : size.width / 2 - marginX;
+        const y = alignment.startsWith('top-')
+          ? size.height / 2 - marginY
+          : -size.height / 2 + marginY;
+
+        objectInputsController.position = [x, y, 0];
+        return {
+          objectInputsController,
+          x,
+          y,
+        };
       }
     )
   );

@@ -21,9 +21,11 @@ import { NgtSobaGizmoHelperStore } from './gizmo-helper.store';
   template: `
     <ng-container *ngIf="virtualScene$ | async as virtualScene">
       <ngt-group
-        *ngIf="gizmoProps$ | async as gizmoInputsController"
+        *ngIf="gizmoProps$ | async as gizmoProps"
         (ready)="onGizmoReady($event)"
-        [object3dInputsController]="gizmoInputsController"
+        [appendTo]="virtualScene"
+        [position]="[gizmoProps.x, gizmoProps.y, 0]"
+        [object3dInputsController]="gizmoProps.objectInputsController"
       ></ngt-group>
       <ngt-soba-orthographic-camera
         [appendTo]="virtualScene"
