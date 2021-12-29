@@ -23,15 +23,25 @@ import { NgtSobaGizmoViewportModule } from './gizmo-viewport.component';
   selector: 'ngt-default-gizmo',
   template: `
     <ng-container *ngIf="node$ | async as node">
-      <ngt-soba-gizmo-helper [alignment]="alignment" [margin]="margin">
-        <!--        <ngt-soba-gizmo-viewcube-->
-        <!--          [faces]="['Right', 'Left', 'Top', 'Bottom', 'Front', 'Back']"-->
-        <!--          [opacity]="1"-->
-        <!--          color="white"-->
-        <!--          strokeColor="gray"-->
-        <!--          textColor="black"-->
-        <!--          hoverColor="lightgray"-->
-        <!--        ></ngt-soba-gizmo-viewcube>-->
+      <ngt-soba-gizmo-helper
+        *ngIf="mode === 'viewcube'"
+        [alignment]="alignment"
+        [margin]="margin"
+      >
+        <ngt-soba-gizmo-viewcube
+          [faces]="['Right', 'Left', 'Top', 'Bottom', 'Front', 'Back']"
+          [opacity]="1"
+          color="white"
+          strokeColor="gray"
+          textColor="black"
+          hoverColor="lightgray"
+        ></ngt-soba-gizmo-viewcube>
+      </ngt-soba-gizmo-helper>
+      <ngt-soba-gizmo-helper
+        *ngIf="mode === 'viewport'"
+        [alignment]="alignment"
+        [margin]="margin"
+      >
         <ngt-soba-gizmo-viewport
           [axisColors]="['red', 'green', 'blue']"
           labelColor="black"
@@ -51,6 +61,7 @@ import { NgtSobaGizmoViewportModule } from './gizmo-viewport.component';
 class DefaultGizmo {
   node$ = this.gltfLoaderService.load('/assets/LittlestTokyo.glb');
 
+  @Input() mode: 'viewport' | 'viewcube' = 'viewcube';
   @Input() alignment:
     | 'top-left'
     | 'top-right'
@@ -90,17 +101,22 @@ export default {
       options: ['top-left', 'top-right', 'bottom-right', 'bottom-left'],
       control: { type: 'select' },
     },
+    mode: {
+      options: ['viewcube', 'viewport'],
+      control: { type: 'select' },
+    },
   },
 } as Meta;
 
 export const Default: Story = (args) => ({
   props: args,
   template: `
-    <ngt-default-gizmo [alignment]='alignment' [margin]='margin'></ngt-default-gizmo>
+    <ngt-default-gizmo [mode]='mode' [alignment]='alignment' [margin]='margin'></ngt-default-gizmo>
   `,
 });
 
 Default.args = {
+  mode: 'viewport',
   alignment: 'bottom-right',
   margin: [80, 80],
 };
