@@ -53,6 +53,30 @@ export const Default = () => ({
   `,
 });
 
+export const Garfield = () => ({
+  props: { onTextAnimate },
+  template: `
+    <ngt-soba-text
+      #sobaText
+      [color]="'#EC2D2D'"
+      [fontSize]='12'
+      [maxWidth]='200'
+      [lineHeight]='1'
+      [letterSpacing]='0.02'
+      [textAlign]="'left'"
+      font='https://fonts.cdnfonts.com/s/1761/Garfield.woff'
+      anchorX='center'
+      anchorY='middle'
+      (animateReady)='onTextAnimate(sobaText.object)'
+    >
+      LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+      MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
+      CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
+      EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.
+    </ngt-soba-text>
+  `,
+});
+
 export const Outline = () => ({
   props: { onTextAnimate },
   template: `
