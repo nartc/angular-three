@@ -10,7 +10,7 @@ import {
   SkipSelf,
 } from '@angular/core';
 import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
-import { Subscription, take } from 'rxjs';
+import { defer, map, merge, Subscription, take } from 'rxjs';
 import * as THREE from 'three';
 import { NgtEventsStore } from '../stores/events.store';
 import { NgtStore } from '../stores/store';
@@ -98,7 +98,6 @@ const supportedEvents = [
 export class NgtObject3dController extends Controller implements OnDestroy {
   #object3d?: THREE.Object3D;
   #inputChangesSubscription?: Subscription;
-  #object3dInputsController!: NgtObject3dInputsController;
 
   #initFn?: () => THREE.Object3D;
 
@@ -112,6 +111,38 @@ export class NgtObject3dController extends Controller implements OnDestroy {
     }
     return this.#initFn as () => THREE.Object3D;
   }
+
+  #change$ = defer(() => {
+    if (this.objectInputsController.object3dInputsController) {
+      return merge(
+        this.objectInputsController.change$.pipe(
+          map((changes) => ({
+            changes,
+            controller: this.objectInputsController,
+          }))
+        ),
+        this.objectInputsController.object3dInputsController.change$.pipe(
+          map((changes) => ({
+            changes,
+            controller: this.objectInputsController.object3dInputsController!,
+          }))
+        )
+      );
+    }
+    return this.objectInputsController.change$.pipe(
+      map((changes) => ({
+        changes,
+        controller: this.objectInputsController,
+      }))
+    );
+  }).pipe(
+    map(({ changes, controller }) => {
+      return Object.keys(changes).reduce((trueChanges, key) => {
+        trueChanges[key] = controller[key as keyof NgtObject3dInputsController];
+        return trueChanges;
+      }, {} as UnknownRecord);
+    })
+  );
 
   constructor(
     ngZone: NgZone,
@@ -127,26 +158,18 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   }
 
   ngOnInit() {
-    this.#object3dInputsController =
-      this.objectInputsController.object3dInputsController ??
-      this.objectInputsController;
     super.ngOnInit();
-    this.#inputChangesSubscription =
-      this.#object3dInputsController.change$.subscribe(() => {
-        if (this.object3d) {
-          this.#applyCustomProps();
-        }
-      });
+    this.#inputChangesSubscription = this.#change$.subscribe((changes) => {
+      if (this.object3d) {
+        this.#applyCustomProps(changes);
+      }
+    });
   }
 
   init() {
     this.ngZone.runOutsideAngular(() => {
       this.#object3d = this.initFn();
       if (this.object3d) {
-        this.#object3dInputsController =
-          this.objectInputsController.object3dInputsController ??
-          this.objectInputsController;
-
         this.#applyCustomProps();
 
         if (!this.disabled) {
@@ -155,8 +178,9 @@ export class NgtObject3dController extends Controller implements OnDestroy {
               const controllerEvent = this.objectInputsController[event]
                 .observed
                 ? this.objectInputsController[event]
-                : this.#object3dInputsController[event].observed
-                ? this.#object3dInputsController[event]
+                : this.objectInputsController.object3dInputsController?.[event]
+                    .observed
+                ? this.objectInputsController.object3dInputsController[event]
                 : null;
               if (controllerEvent) {
                 result.handlers[event] = this.#eventNameToHandler(
@@ -193,11 +217,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
             objects: { ...state.objects, [this.object3d.uuid]: this.object3d },
           }));
 
-          if (this.#object3dInputsController.appendMode !== 'none') {
-            if (this.objectInputsController.appendTo) {
-              this.#object3dInputsController.appendTo =
-                this.objectInputsController.appendTo;
-            }
+          if (this.objectInputsController.appendMode !== 'none') {
             this.#appendToParent();
           }
         }
@@ -220,17 +240,17 @@ export class NgtObject3dController extends Controller implements OnDestroy {
     // Schedule this in the next loop to allow for all appendTo's to settle
     // TODO: find better way
     requestAnimationFrame(() => {
-      if (this.#object3dInputsController.appendTo) {
-        this.#object3dInputsController.appendTo.add(this.object3d);
+      if (this.objectInputsController.appendTo) {
+        this.objectInputsController.appendTo.add(this.object3d);
         return;
       }
 
-      if (this.#object3dInputsController.appendMode === 'root') {
+      if (this.objectInputsController.appendMode === 'root') {
         this.#addToScene();
         return;
       }
 
-      if (this.#object3dInputsController.appendMode === 'immediate') {
+      if (this.objectInputsController.appendMode === 'immediate') {
         this.#addToParent();
       }
     });
@@ -252,11 +272,11 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   }
 
   #remove() {
-    if (this.#object3dInputsController.appendTo) {
-      this.#object3dInputsController.appendTo.remove(this.object3d);
+    if (this.objectInputsController.appendTo) {
+      this.objectInputsController.appendTo.remove(this.object3d);
     } else if (
       this.parentObject3d &&
-      this.#object3dInputsController.appendMode === 'immediate'
+      this.objectInputsController.appendMode === 'immediate'
     ) {
       this.parentObject3d.object3d.remove(this.object3d);
     } else {
@@ -287,82 +307,83 @@ export class NgtObject3dController extends Controller implements OnDestroy {
     };
   }
 
-  #applyCustomProps() {
+  #applyCustomProps(changes?: UnknownRecord) {
     this.ngZone.runOutsideAngular(() => {
       const customProps = {
-        castShadow: this.#object3dInputsController.castShadow,
-        receiveShadow: this.#object3dInputsController.receiveShadow,
-        visible: this.#object3dInputsController.visible,
-        matrixAutoUpdate: this.#object3dInputsController.matrixAutoUpdate,
+        castShadow: this.objectInputsController.castShadow,
+        receiveShadow: this.objectInputsController.receiveShadow,
+        visible: this.objectInputsController.visible,
+        matrixAutoUpdate: this.objectInputsController.matrixAutoUpdate,
       } as UnknownRecord;
 
-      if (this.#object3dInputsController.name) {
-        customProps['name'] = this.#object3dInputsController.name;
+      if (this.objectInputsController.name) {
+        customProps['name'] = this.objectInputsController.name;
       }
 
-      if (this.#object3dInputsController.position) {
-        customProps['position'] = this.#object3dInputsController.position;
+      if (this.objectInputsController.position) {
+        customProps['position'] = this.objectInputsController.position;
       }
 
-      if (this.#object3dInputsController.rotation) {
-        customProps['rotation'] = this.#object3dInputsController.rotation;
-      } else if (this.#object3dInputsController.quaternion) {
-        customProps['quaternion'] = this.#object3dInputsController.quaternion;
+      if (this.objectInputsController.rotation) {
+        customProps['rotation'] = this.objectInputsController.rotation;
+      } else if (this.objectInputsController.quaternion) {
+        customProps['quaternion'] = this.objectInputsController.quaternion;
       }
 
-      if (this.#object3dInputsController.scale) {
-        customProps['scale'] = this.#object3dInputsController.scale;
+      if (this.objectInputsController.scale) {
+        customProps['scale'] = this.objectInputsController.scale;
       }
 
-      if (this.#object3dInputsController.userData) {
-        customProps['userData'] = this.#object3dInputsController.userData;
+      if (this.objectInputsController.userData) {
+        customProps['userData'] = this.objectInputsController.userData;
       }
 
-      if (this.#object3dInputsController.color) {
-        customProps['color'] = this.#object3dInputsController.color;
+      if (this.objectInputsController.color) {
+        customProps['color'] = this.objectInputsController.color;
         if (!this.store.get('linear')) {
           (customProps['color'] as THREE.Color).convertSRGBToLinear();
         }
       }
 
-      if (this.#object3dInputsController.dispose) {
-        customProps['dispose'] = this.#object3dInputsController.dispose;
+      if (this.objectInputsController.dispose) {
+        customProps['dispose'] = this.objectInputsController.dispose;
       }
 
-      if (this.#object3dInputsController.raycast) {
-        customProps['raycast'] = this.#object3dInputsController.raycast;
+      if (this.objectInputsController.raycast) {
+        customProps['raycast'] = this.objectInputsController.raycast;
       }
 
-      this.#object3dInputsController.change$
-        .pipe(take(1))
-        .subscribe((changes) => {
-          if (changes) {
-            for (const [inputName, inputChange] of Object.entries(changes)) {
-              if (
-                !inputChange.isFirstChange() ||
-                [
-                  'name',
-                  'position',
-                  'rotation',
-                  'quaternion',
-                  'scale',
-                  'userData',
-                  'color',
-                  'dispose',
-                  'raycast',
-                  'castShadow',
-                  'receiveShadow',
-                  'visible',
-                  'matrixAutoUpdate',
-                  'object3dController',
-                ].includes(inputName) // skip 14 common inputs
-              ) {
-                continue;
-              }
-              customProps[inputName] = inputChange.currentValue;
+      if (changes) {
+        Object.assign(customProps, changes);
+      }
+
+      this.#change$.pipe(take(1)).subscribe((changes) => {
+        if (changes) {
+          for (const [inputName, inputChange] of Object.entries(changes)) {
+            if (
+              [
+                'name',
+                'position',
+                'rotation',
+                'quaternion',
+                'scale',
+                'userData',
+                'color',
+                'dispose',
+                'raycast',
+                'castShadow',
+                'receiveShadow',
+                'visible',
+                'matrixAutoUpdate',
+                'object3dController',
+              ].includes(inputName) // skip 14 common inputs
+            ) {
+              continue;
             }
+            customProps[inputName] = inputChange;
           }
-        });
+        }
+      });
 
       applyProps(this.object3d, customProps);
       this.object3d.updateMatrix?.();

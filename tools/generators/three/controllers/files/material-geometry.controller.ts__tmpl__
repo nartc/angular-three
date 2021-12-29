@@ -65,9 +65,6 @@ export class NgtMaterialGeometryController
   @Input() morphTargetInfluences?: number[];
   @Input() morphTargetDictionary?: { [key: string]: number };
 
-  #contentMaterialController: NgtContentMaterialController;
-  #contentGeometryController: NgtContentGeometryController;
-
   constructor(
     ngZone: NgZone,
     @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
@@ -83,25 +80,18 @@ export class NgtMaterialGeometryController
   ) {
     super(ngZone);
 
-    this.#contentMaterialController =
-      contentMaterialController.contentMaterialController ??
-      contentMaterialController;
-    this.#contentGeometryController =
-      contentGeometryController.contentGeometryController ??
-      contentGeometryController;
-
     objectController.initFn = () => {
-      if (!this.#contentGeometryController.geometry) {
-        this.#contentGeometryController.construct();
+      if (!contentGeometryController.geometry) {
+        contentGeometryController.construct();
       }
 
-      if (!this.#contentMaterialController.material) {
-        this.#contentMaterialController.construct();
+      if (!contentMaterialController.material) {
+        contentMaterialController.construct();
       }
 
       const object = new this.objectType(
-        this.#contentGeometryController.geometry || undefined,
-        this.#contentMaterialController.material || undefined,
+        contentGeometryController.geometry || undefined,
+        contentMaterialController.material || undefined,
         ...this.#meshArgs
       );
 
