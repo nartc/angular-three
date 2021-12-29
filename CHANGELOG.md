@@ -1,3 +1,10 @@
+## [2.16.0](https://github.com/nartc/angular-three/compare/2.15.1...2.16.0) (2021-12-29)
+
+
+### Features
+
+* **soba:** add GizmoViewport ([5394487](https://github.com/nartc/angular-three/commit/5394487b1da217dc1ddbe7bbb71f4f1690520bcc))
+
 ### [2.15.1](https://github.com/nartc/angular-three/compare/2.15.0...2.15.1) (2021-12-29)
 
 
