@@ -34,7 +34,7 @@
     "ngx-lil-gui": "^1.1.1",
     "nice-color-palettes": "3.0.0",
     "postprocessing": "6.23.3",
-    "rxjs": "~7.5.1",
+    "rxjs": "~7.4.0",
     "three": "0.135.0",
     "three-stdlib": "~2.6.2",
     "troika-three-text": "0.44.0",
