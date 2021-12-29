@@ -1,3 +1,11 @@
+### [2.15.1](https://github.com/nartc/angular-three/compare/2.15.0...2.15.1) (2021-12-29)
+
+
+### Bug Fixes
+
+* **core:** ensure prop on the controller overrides the controller itself ([e7a8997](https://github.com/nartc/angular-three/commit/e7a8997f6dce234c153a07885d59843f21ba62fb))
+* **soba:** bind to position on gizmoHelper ([859864e](https://github.com/nartc/angular-three/commit/859864eb4244bf4665eb3d333435e15d36c6ccb1))
+
 ## [2.15.0](https://github.com/nartc/angular-three/compare/2.14.0...2.15.0) (2021-12-28)
 
 
