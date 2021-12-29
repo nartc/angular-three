@@ -39,6 +39,7 @@ export abstract class Controller implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.controller) {
+      this.#assignProps();
       this.controller.ngOnChanges(changes);
       this.change$.next(changes);
     } else {
@@ -48,14 +49,18 @@ export abstract class Controller implements OnChanges, OnInit {
 
   ngOnInit() {
     if (this.controller) {
-      this.ngZone.runOutsideAngular(() => {
-        this.props.forEach((prop) => {
-          (this as UnknownRecord)[prop] =
-            (this as UnknownRecord)[prop] ??
-            (this.controller as unknown as UnknownRecord)[prop];
-        });
-      });
+      this.#assignProps();
     }
+  }
+
+  #assignProps() {
+    this.ngZone.runOutsideAngular(() => {
+      this.props.forEach((prop) => {
+        const selfController = this as UnknownRecord;
+        const inputController = this.controller as unknown as UnknownRecord;
+        selfController[prop] = selfController[prop] ?? inputController[prop];
+      });
+    });
   }
 }
 

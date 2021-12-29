@@ -79,8 +79,10 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-quadratic-bezier-line,
     ngt-soba-cubic-bezier-line,
     ngt-soba-orthographic-camera,
-    ngt-soba-text,
-    ngt-soba-gizmo-helper
+    ngt-soba-gizmo-helper,
+    ngt-soba-gizmo-viewport,
+    ngt-soba-gizmo-axis-head,
+    ngt-soba-text
   `,
   exportAs: 'ngtObject3dInputsController',
 })

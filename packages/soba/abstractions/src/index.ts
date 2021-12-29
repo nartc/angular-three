@@ -7,3 +7,4 @@ export * from './positional-audio/positional-audio.component';
 export * from './gizmo-helper/gizmo-helper.store';
 export * from './gizmo-helper/gizmo-helper.component';
 export * from './gizmo-helper/gizmo-viewcube.component';
+export * from './gizmo-helper/gizmo-viewport.component';

@@ -1,8 +1,4 @@
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
-import {
-  NgtSobaGizmoHelperModule,
-  NgtSobaGizmoViewcubeModule,
-} from '@angular-three/soba/abstractions';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { NgtGLTFLoaderService } from '@angular-three/soba/loaders';
 import { setupCanvas, setupCanvasModules } from '@angular-three/storybook';
@@ -19,20 +15,28 @@ import {
   moduleMetadata,
   Story,
 } from '@storybook/angular';
+import { NgtSobaGizmoHelperModule } from './gizmo-helper.component';
+import { NgtSobaGizmoViewcubeModule } from './gizmo-viewcube.component';
+import { NgtSobaGizmoViewportModule } from './gizmo-viewport.component';
 
 @Component({
   selector: 'ngt-default-gizmo',
   template: `
     <ng-container *ngIf="node$ | async as node">
       <ngt-soba-gizmo-helper [alignment]="alignment" [margin]="margin">
-        <ngt-soba-gizmo-viewcube
-          [faces]="['Right', 'Left', 'Top', 'Bottom', 'Front', 'Back']"
-          [opacity]="1"
-          color="white"
-          strokeColor="gray"
-          textColor="black"
-          hoverColor="lightgray"
-        ></ngt-soba-gizmo-viewcube>
+        <!--        <ngt-soba-gizmo-viewcube-->
+        <!--          [faces]="['Right', 'Left', 'Top', 'Bottom', 'Front', 'Back']"-->
+        <!--          [opacity]="1"-->
+        <!--          color="white"-->
+        <!--          strokeColor="gray"-->
+        <!--          textColor="black"-->
+        <!--          hoverColor="lightgray"-->
+        <!--        ></ngt-soba-gizmo-viewcube>-->
+        <ngt-soba-gizmo-viewport
+          [axisColors]="['red', 'green', 'blue']"
+          labelColor="black"
+          [hideNegativeAxes]="false"
+        ></ngt-soba-gizmo-viewport>
       </ngt-soba-gizmo-helper>
       <ngt-primitive
         [object]="node.scene"
@@ -65,6 +69,7 @@ class DefaultGizmo {
     NgtPrimitiveModule,
     NgtSobaGizmoHelperModule,
     NgtSobaGizmoViewcubeModule,
+    NgtSobaGizmoViewportModule,
     NgtSobaOrbitControlsModule,
   ],
 })

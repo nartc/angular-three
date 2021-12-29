@@ -1,6 +1,7 @@
 // GENERATED
 import {
   Directive,
+  EventEmitter,
   Inject,
   NgModule,
   NgZone,
@@ -8,7 +9,7 @@ import {
   Optional,
   SkipSelf,
 } from '@angular/core';
-import { setTimeout } from '@rx-angular/cdk/zone-less';
+import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
 import { Subscription, take } from 'rxjs';
 import * as THREE from 'three';
 import { NgtEventsStore } from '../stores/events.store';
@@ -151,8 +152,16 @@ export class NgtObject3dController extends Controller implements OnDestroy {
         if (!this.disabled) {
           const observedEvents = supportedEvents.reduce(
             (result, event) => {
-              if (this.#object3dInputsController[event].observed) {
-                result.handlers[event] = this.#eventNameToHandler(event);
+              const controllerEvent = this.objectInputsController[event]
+                .observed
+                ? this.objectInputsController[event]
+                : this.#object3dInputsController[event].observed
+                ? this.#object3dInputsController[event]
+                : null;
+              if (controllerEvent) {
+                result.handlers[event] = this.#eventNameToHandler(
+                  controllerEvent as EventEmitter<NgtEvent<any>>
+                );
                 result.eventCount += 1;
               }
               return result;
@@ -185,6 +194,10 @@ export class NgtObject3dController extends Controller implements OnDestroy {
           }));
 
           if (this.#object3dInputsController.appendMode !== 'none') {
+            if (this.objectInputsController.appendTo) {
+              this.#object3dInputsController.appendTo =
+                this.objectInputsController.appendTo;
+            }
             this.#appendToParent();
           }
         }
@@ -206,7 +219,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   #appendToParent(): void {
     // Schedule this in the next loop to allow for all appendTo's to settle
     // TODO: find better way
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       if (this.#object3dInputsController.appendTo) {
         this.#object3dInputsController.appendTo.add(this.object3d);
         return;
@@ -258,14 +271,18 @@ export class NgtObject3dController extends Controller implements OnDestroy {
     }
   }
 
-  #eventNameToHandler(eventName: typeof supportedEvents[number]) {
+  #eventNameToHandler(
+    controllerEvent:
+      | EventEmitter<NgtEvent<PointerEvent>>
+      | EventEmitter<NgtEvent<WheelEvent>>
+  ) {
     return (
       event: Parameters<
-        Exclude<NgtEventHandlers[typeof eventName], undefined>
+        Exclude<NgtEventHandlers[typeof supportedEvents[number]], undefined>
       >[0]
     ) => {
       this.ngZone.run(() => {
-        this.#object3dInputsController[eventName].emit(event as NgtEvent<any>);
+        controllerEvent.emit(event as NgtEvent<any>);
       });
     };
   }

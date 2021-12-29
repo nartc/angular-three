@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 import {
-  NGT_OBJECT_CONTROLLER_PROVIDER,
+  NGT_OBJECT_WATCHED_CONTROLLER,
   NgtObject3dController,
 } from '../controllers/object-3d.controller';
 import type { AnyConstructor } from '../types';
@@ -31,7 +31,7 @@ export abstract class NgtCommonSprite<
   #sprite!: TSprite;
 
   constructor(
-    @Inject(NGT_OBJECT_CONTROLLER_PROVIDER)
+    @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
     protected objectController: NgtObject3dController,
     protected ngZone: NgZone
   ) {

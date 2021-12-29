@@ -43,7 +43,6 @@ type GenericProps = {
   textColor: string;
   strokeColor: string;
   faces: string[];
-  onClick?: (e: Event) => null;
 };
 
 const colors = { bg: '#f0f0f0', hover: '#999', text: 'black', stroke: 'black' };
@@ -167,7 +166,7 @@ export class GenericController extends Controller {
   }
 }
 
-const [
+export const [
   NGT_VIEWCUBE_GENERIC_WATCHED_CONTROLLER,
   NGT_VIEWCUBE_GENERIC_CONTROLLER_PROVIDER,
 ] = createControllerProviderFactory({
@@ -483,7 +482,7 @@ export class NgtSobaGizmoFaceMaterial {
     NgtSobaGizmoFacecube,
     NgtSobaGizmoFaceMaterial,
   ],
-  exports: [NgtSobaGizmoViewcube],
+  exports: [NgtSobaGizmoViewcube, GenericController],
   imports: [
     NgtGroupModule,
     NgtAmbientLightModule,
