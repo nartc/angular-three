@@ -5,7 +5,12 @@ export type AnyFunction<TObject> = () => TObject;
 export type AnyConstructor<TObject> = new (...args: any[]) => TObject;
 export type AnyExtenderFunction<TObject> = (object: TObject) => void;
 
-export type Tail<T extends any[]> = T extends [infer A, ...infer R] ? R : never;
+export type Tail<X extends readonly any[]> = ((...args: X) => any) extends (
+  arg: any,
+  ...rest: infer U
+) => any
+  ? U
+  : never;
 
 export type Properties<T> = Pick<
   T,
