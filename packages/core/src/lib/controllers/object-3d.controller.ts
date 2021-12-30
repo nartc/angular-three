@@ -237,8 +237,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   }
 
   #appendToParent(): void {
-    // Schedule this in the next loop to allow for all appendTo's to settle
-    // TODO: find better way
+    // Schedule this in the next frame to allow for all appendTo's to settle
     requestAnimationFrame(() => {
       if (this.objectInputsController.appendTo) {
         this.objectInputsController.appendTo.add(this.object3d);
@@ -358,7 +357,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
       }
 
       this.#change$.pipe(take(1)).subscribe((changes) => {
-        if (changes) {
+        if (changes && Object.keys(changes).length) {
           for (const [inputName, inputChange] of Object.entries(changes)) {
             if (
               [
