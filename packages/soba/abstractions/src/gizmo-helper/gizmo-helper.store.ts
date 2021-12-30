@@ -6,9 +6,9 @@ import {
   NgtObject3dInputsController,
   NgtStore,
 } from '@angular-three/core';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, NgZone } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
-import { combineLatest, map } from 'rxjs';
+import { combineLatest, filter, map } from 'rxjs';
 import * as THREE from 'three';
 
 const turnRate = 2 * Math.PI; // turn rate in angles per second
@@ -72,11 +72,17 @@ export class NgtSobaGizmoHelperStore extends EnhancedRxState<
     )
   );
 
+  #ready$ = combineLatest([
+    this.actions.init$,
+    this.store.select('ready').pipe(filter((ready) => ready)),
+  ]);
+
   constructor(
     @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
     objectInputsController: NgtObject3dInputsController,
+    animationFrameStore: NgtAnimationFrameStore,
+    ngZone: NgZone,
     private store: NgtStore,
-    private animationFrameStore: NgtAnimationFrameStore,
     private loopService: NgtLoopService
   ) {
     super();
@@ -92,45 +98,49 @@ export class NgtSobaGizmoHelperStore extends EnhancedRxState<
       objectInputsController,
     });
 
-    this.holdEffect(this.actions.init$, () => {
-      let mainSceneBackground: THREE.Scene['background'];
-      const scene = this.store.get('scene');
-      const virtualScene = this.get('virtualScene');
+    this.holdEffect(this.#ready$, () => {
+      return ngZone.runOutsideAngular(() => {
+        let mainSceneBackground: THREE.Scene['background'];
+        const scene = this.store.get('scene');
+        const virtualScene = this.get('virtualScene');
 
-      if (scene.background) {
-        mainSceneBackground = scene.background;
-        scene.background = null;
-        virtualScene.background = mainSceneBackground;
-      }
-
-      return () => {
-        if (mainSceneBackground) {
-          scene.background = mainSceneBackground;
+        if (scene.background) {
+          mainSceneBackground = scene.background;
+          scene.background = null;
+          virtualScene.background = mainSceneBackground;
         }
-      };
+
+        return () => {
+          if (mainSceneBackground) {
+            scene.background = mainSceneBackground;
+          }
+        };
+      });
     });
 
-    this.holdEffect(this.actions.init$, () => {
-      const priority = this.get('renderPriority');
-      const renderer = this.store.get('renderer');
+    this.holdEffect(this.#ready$, () => {
+      return ngZone.runOutsideAngular(() => {
+        const priority = this.get('renderPriority');
+        const renderer = this.store.get('renderer');
 
-      const animationUuid = this.animationFrameStore.register({
-        callback: ({ delta }) => {
-          const { virtualScene, virtualCamera, gizmo } = this.get();
-          if (virtualCamera && gizmo) {
-            this.#animateStep(delta);
-            this.#beforeRender();
-            renderer.autoClear = false;
-            renderer.clearDepth();
-            renderer.render(virtualScene, virtualCamera);
-          }
-        },
-        priority,
+        const animationUuid = animationFrameStore.register({
+          callback: ({ delta }) => {
+            const { virtualScene, virtualCamera, gizmo } = this.get();
+            if (virtualCamera && gizmo) {
+              this.#animateStep(delta);
+              this.#beforeRender();
+              renderer.autoClear = false;
+              renderer.clearDepth();
+              renderer.render(virtualScene, virtualCamera);
+            }
+          },
+          priority,
+        });
+
+        return () => {
+          animationFrameStore.actions.unsubscriberUuid(animationUuid);
+        };
       });
-
-      return () => {
-        this.animationFrameStore.actions.unsubscriberUuid(animationUuid);
-      };
     });
 
     this.connect(

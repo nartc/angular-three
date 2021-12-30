@@ -53,7 +53,10 @@ import { NgtSobaGizmoViewportModule } from './gizmo-viewport.component';
         [scale]="[0.01, 0.01, 0.01]"
       ></ngt-primitive>
 
-      <ngt-soba-orbit-controls [makeDefault]="true"></ngt-soba-orbit-controls>
+      <ngt-soba-orbit-controls
+        (ready)="$event.enablePan = false"
+        [makeDefault]="true"
+      ></ngt-soba-orbit-controls>
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

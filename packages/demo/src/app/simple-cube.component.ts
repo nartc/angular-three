@@ -15,6 +15,10 @@ import {
 import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
+import {
+  NgtSobaGizmoHelperModule,
+  NgtSobaGizmoViewportModule,
+} from '@angular-three/soba/abstractions';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { NgtSobaBoxModule } from '@angular-three/soba/shapes';
 import {
@@ -36,7 +40,16 @@ import * as THREE from 'three';
         [position]="[1, 1, 1]"
       ></ngt-spot-light>
       <ngt-cube></ngt-cube>
-      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+
+      <ngt-soba-gizmo-helper>
+        <ngt-soba-gizmo-viewport
+          [axisColors]="['red', 'green', 'blue']"
+          labelColor="black"
+          [hideNegativeAxes]="false"
+        ></ngt-soba-gizmo-viewport>
+      </ngt-soba-gizmo-helper>
+
+      <ngt-soba-orbit-controls [makeDefault]="true"></ngt-soba-orbit-controls>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,6 +130,8 @@ export class CubeMaterials {
     NgtSpotLightHelperModule,
     NgtCursorModule,
     NgtColorPipeModule,
+    NgtSobaGizmoHelperModule,
+    NgtSobaGizmoViewportModule,
   ],
 })
 export class SimpleCubeComponentModule {}
