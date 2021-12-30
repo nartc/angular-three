@@ -1,3 +1,10 @@
+### [2.16.2](https://github.com/nartc/angular-three/compare/2.16.1...2.16.2) (2021-12-30)
+
+
+### Bug Fixes
+
+* **soba:** make sure gizmo wait for Canvas to be ready before initialize itself ([1fd4bdc](https://github.com/nartc/angular-three/commit/1fd4bdc793e735718f7084e435b170b6cea5cee1)), closes [#41](https://github.com/nartc/angular-three/issues/41)
+
 ### [2.16.1](https://github.com/nartc/angular-three/compare/2.16.0...2.16.1) (2021-12-29)
 
 
