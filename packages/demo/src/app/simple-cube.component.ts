@@ -1,8 +1,4 @@
-import {
-  NgtColorPipeModule,
-  NgtCoreModule,
-  NgtCursorModule,
-} from '@angular-three/core';
+import { NgtColorPipeModule, NgtCoreModule } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import {
   NgtBoxHelperModule,
@@ -27,6 +23,8 @@ import {
   Input,
   NgModule,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgxLilGuiControllerNumberConfig, NgxLilGuiModule } from 'ngx-lil-gui';
 import * as THREE from 'three';
 
 @Component({
@@ -34,12 +32,9 @@ import * as THREE from 'three';
   template: `
     <ngt-canvas [camera]="{ position: [0, 2, 5] }">
       <ngt-stats></ngt-stats>
-      <ngt-ambient-light></ngt-ambient-light>
-      <ngt-spot-light
-        [ngtSpotLightHelper]="['black']"
-        [position]="[1, 1, 1]"
-      ></ngt-spot-light>
-      <ngt-cube></ngt-cube>
+
+      <ngt-lights></ngt-lights>
+      <ngt-cube [x]="scale[0]" [y]="scale[1]" [z]="scale[2]"></ngt-cube>
 
       <ngt-soba-gizmo-helper>
         <ngt-soba-gizmo-viewport
@@ -51,24 +46,109 @@ import * as THREE from 'three';
 
       <ngt-soba-orbit-controls [makeDefault]="true"></ngt-soba-orbit-controls>
     </ngt-canvas>
+
+    <div class="controls">
+      <label>
+        <input
+          type="range"
+          [(ngModel)]="scale[0]"
+          [min]="0.1"
+          [max]="3"
+          [step]="0.1"
+        />
+        x
+      </label>
+      <label>
+        <input
+          type="range"
+          [(ngModel)]="scale[1]"
+          [min]="0.1"
+          [max]="3"
+          [step]="0.1"
+        />
+        y
+      </label>
+      <label>
+        <input
+          type="range"
+          [(ngModel)]="scale[2]"
+          [min]="0.1"
+          [max]="3"
+          [step]="0.1"
+        />
+        z
+      </label>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [
+    `
+      .controls {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    `,
+  ],
+})
+export class SimpleCubeComponent {
+  scale = [1, 1, 1];
+}
+
+@Component({
+  selector: 'ngt-lights',
+  template: `
+    <ngt-ambient-light></ngt-ambient-light>
+    <ngt-spot-light
+      #spotLight="ngtSpotLight"
+      [ngtSpotLightHelper]="['black']"
+      [position]="[1, 1, 1]"
+    ></ngt-spot-light>
+
+    <ngx-lil-gui
+      title="SpotLight Position"
+      [object]="spotLight.light.position"
+      [container]="false"
+      [zoneless]="true"
+    >
+      <ngx-lil-gui-controller
+        property="x"
+        [controllerConfig]="positionControllerConfig"
+      ></ngx-lil-gui-controller>
+      <ngx-lil-gui-controller
+        property="y"
+        [controllerConfig]="positionControllerConfig"
+      ></ngx-lil-gui-controller>
+      <ngx-lil-gui-controller
+        property="z"
+        [controllerConfig]="positionControllerConfig"
+      ></ngx-lil-gui-controller>
+    </ngx-lil-gui>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimpleCubeComponent {}
+export class LightsComponent {
+  positionControllerConfig: NgxLilGuiControllerNumberConfig = {
+    min: 1,
+    max: 10,
+    step: 0.01,
+  };
+}
 
 @Component({
   selector: 'ngt-cube',
   template: `
     <ngt-soba-box
       #sobaBox
-      ngtCursor
       [ngtBoxHelper]="['black']"
       (animateReady)="onAnimateReady(sobaBox.object)"
-      (click)="active = !active"
       (pointerover)="hover = true"
       (pointerout)="hover = false"
       [isMaterialArray]="true"
-      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
+      [scale]="[x, y, z]"
     >
       <ngt-cube-materials [hover]="hover"></ngt-cube-materials>
     </ngt-soba-box>
@@ -76,8 +156,10 @@ export class SimpleCubeComponent {}
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
+  @Input() x = 1;
+  @Input() y = 1;
+  @Input() z = 1;
   hover = false;
-  active = false;
 
   onAnimateReady(mesh: THREE.Mesh) {
     mesh.rotation.x = -Math.PI / 2;
@@ -114,8 +196,13 @@ export class CubeMaterials {
 }
 
 @NgModule({
-  declarations: [SimpleCubeComponent, CubeComponent, CubeMaterials],
-  exports: [SimpleCubeComponent, CubeComponent],
+  declarations: [
+    SimpleCubeComponent,
+    CubeComponent,
+    CubeMaterials,
+    LightsComponent,
+  ],
+  exports: [SimpleCubeComponent],
   imports: [
     NgtCoreModule,
     NgtStatsModule,
@@ -128,10 +215,11 @@ export class CubeMaterials {
     NgtSobaBoxModule,
     NgtBoxHelperModule,
     NgtSpotLightHelperModule,
-    NgtCursorModule,
     NgtColorPipeModule,
     NgtSobaGizmoHelperModule,
     NgtSobaGizmoViewportModule,
+    FormsModule,
+    NgxLilGuiModule,
   ],
 })
 export class SimpleCubeComponentModule {}
