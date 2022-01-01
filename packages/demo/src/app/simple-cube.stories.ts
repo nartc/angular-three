@@ -1,5 +1,7 @@
 import { Meta, moduleMetadata } from '@storybook/angular';
 import { SimpleCubeComponentModule } from './simple-cube.component';
+// @ts-ignore
+import simpleCubeDocs from './simple-cube.mdx';
 
 export default {
   title: 'Examples/Simple Cube',
@@ -9,6 +11,7 @@ export default {
     }),
   ],
   parameters: {
+    docs: { page: simpleCubeDocs },
     viewMode: 'story',
   },
 } as Meta;
