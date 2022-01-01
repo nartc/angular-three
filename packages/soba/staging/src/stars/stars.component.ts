@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  Injectable,
   Input,
   NgModule,
 } from '@angular/core';
@@ -39,48 +38,6 @@ export interface NgtSobaStarsState {
   factor: number;
   saturation: number;
   fade: boolean;
-}
-
-@Injectable()
-export class NgtSobaStarsStore extends EnhancedRxState<NgtSobaStarsState> {
-  readonly attributes$ = this.select(
-    selectSlice(['radius', 'depth', 'count', 'factor', 'saturation']),
-    map(({ depth, count, factor, radius, saturation }) => {
-      const positions: number[] = [];
-      const colors: number[] = [];
-      const sizes = Array.from(
-        { length: count },
-        () => (0.5 + 0.5 * Math.random()) * factor
-      );
-      const color = new THREE.Color();
-      let r = radius + depth;
-      const increment = depth / count;
-      for (let i = 0; i < count; i++) {
-        r -= increment * Math.random();
-        positions.push(...genStar(r).toArray());
-        color.setHSL(i / count, saturation, 0.9);
-        colors.push(color.r, color.g, color.b);
-      }
-      return {
-        positions: new Float32Array(positions),
-        colors: new Float32Array(colors),
-        sizes: new Float32Array(sizes),
-        fade: this.get('fade'),
-      };
-    })
-  );
-
-  constructor() {
-    super();
-    this.set({
-      radius: 100,
-      depth: 50,
-      count: 5000,
-      saturation: 0,
-      factor: 4,
-      fade: false,
-    });
-  }
 }
 
 @Component({
@@ -126,42 +83,75 @@ export class NgtSobaStarsStore extends EnhancedRxState<NgtSobaStarsState> {
       provide: NgtSobaExtender,
       useExisting: NgtSobaStars,
     },
-    NgtSobaStarsStore,
+    EnhancedRxState,
   ],
 })
 export class NgtSobaStars extends NgtSobaExtender<THREE.Points> {
   readonly blending = THREE.AdditiveBlending;
 
-  readonly attributes$ = this.sobaStarsStore.attributes$;
+  readonly attributes$ = this.state.select(
+    selectSlice(['radius', 'depth', 'count', 'factor', 'saturation']),
+    map(({ depth, count, factor, radius, saturation }) => {
+      const positions: number[] = [];
+      const colors: number[] = [];
+      const sizes = Array.from(
+        { length: count },
+        () => (0.5 + 0.5 * Math.random()) * factor
+      );
+      const color = new THREE.Color();
+      let r = radius + depth;
+      const increment = depth / count;
+      for (let i = 0; i < count; i++) {
+        r -= increment * Math.random();
+        positions.push(...genStar(r).toArray());
+        color.setHSL(i / count, saturation, 0.9);
+        colors.push(color.r, color.g, color.b);
+      }
+      return {
+        positions: new Float32Array(positions),
+        colors: new Float32Array(colors),
+        sizes: new Float32Array(sizes),
+        fade: this.state.get('fade'),
+      };
+    })
+  );
 
   starMaterial?: StarFieldMaterial;
 
   @Input() set radius(radius: number) {
-    this.sobaStarsStore.set({ radius });
+    this.state.set({ radius });
   }
 
   @Input() set depth(depth: number) {
-    this.sobaStarsStore.set({ depth });
+    this.state.set({ depth });
   }
 
   @Input() set count(count: number) {
-    this.sobaStarsStore.set({ count });
+    this.state.set({ count });
   }
 
   @Input() set factor(factor: number) {
-    this.sobaStarsStore.set({ factor });
+    this.state.set({ factor });
   }
 
   @Input() set saturation(saturation: number) {
-    this.sobaStarsStore.set({ saturation });
+    this.state.set({ saturation });
   }
 
   @Input() set fade(fade: boolean) {
-    this.sobaStarsStore.set({ fade });
+    this.state.set({ fade });
   }
 
-  constructor(private sobaStarsStore: NgtSobaStarsStore) {
+  constructor(private state: EnhancedRxState<NgtSobaStarsState>) {
     super();
+    this.state.set({
+      radius: 100,
+      depth: 50,
+      count: 5000,
+      saturation: 0,
+      factor: 4,
+      fade: false,
+    });
   }
 
   onAnimate({ clock }: NgtRender) {
