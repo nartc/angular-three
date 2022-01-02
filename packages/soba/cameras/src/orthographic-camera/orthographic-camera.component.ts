@@ -13,12 +13,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   Inject,
-  Injectable,
   Input,
   NgModule,
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
-import { combineLatest, map, Observable, of, startWith } from 'rxjs';
+import { combineLatest, map, of, startWith } from 'rxjs';
 import * as THREE from 'three';
 
 export interface NgtSobaOrthographicCameraState {
@@ -29,17 +28,51 @@ export interface NgtSobaOrthographicCameraState {
   orthographicCamera?: THREE.OrthographicCamera;
 }
 
-@Injectable()
-export class NgtSobaOrthographicCameraStore extends EnhancedRxState<NgtSobaOrthographicCameraState> {
+@Component({
+  selector: 'ngt-soba-orthographic-camera',
+  template: `
+    <ngt-orthographic-camera
+      *ngIf="vm$ | async as vm"
+      [args]="[vm.left, vm.right, vm.top, vm.bottom, vm.near, vm.far]"
+      [object3dInputsController]="vm.objectInputsController"
+      (ready)="object = $event"
+    >
+      <ng-content></ng-content>
+    </ngt-orthographic-camera>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
+    EnhancedRxState,
+    { provide: NgtSobaExtender, useExisting: NgtSobaOrthographicCamera },
+  ],
+})
+export class NgtSobaOrthographicCamera extends NgtSobaExtender<THREE.OrthographicCamera> {
+  @Input() set makeDefault(makeDefault: boolean) {
+    this.state.set({ makeDefault });
+  }
+
+  @Input() set manual(manual: boolean) {
+    this.state.set({ manual });
+  }
+
+  @Input() set near(near: number) {
+    this.state.set({ near });
+  }
+
+  @Input() set far(far: number) {
+    this.state.set({ far });
+  }
+
   readonly #projectMatrixParams$ = combineLatest([
     this.store.select('size'),
-    this.select(selectSlice(['near', 'far'])),
+    this.state.select(selectSlice(['near', 'far'])),
     this.objectInputsController.change$.pipe(startWith({})),
   ]).pipe(map(([size, { near, far }]) => ({ size, near, far })));
 
   readonly #cameraParams$ = combineLatest([
     this.store.select('camera'),
-    this.select(selectSlice(['orthographicCamera', 'makeDefault'])),
+    this.state.select(selectSlice(['orthographicCamera', 'makeDefault'])),
   ]).pipe(
     map(([camera, { orthographicCamera, makeDefault }]) => ({
       camera,
@@ -48,18 +81,10 @@ export class NgtSobaOrthographicCameraStore extends EnhancedRxState<NgtSobaOrtho
     }))
   );
 
-  readonly vm$: Observable<{
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-    near?: number;
-    far?: number;
-    objectInputsController: NgtObject3dInputsController;
-  }> = combineLatest([
+  readonly vm$ = combineLatest([
     of(this.objectInputsController),
     this.store.select('size'),
-    this.select(
+    this.state.select(
       selectSlice(['near', 'far']),
       startWith({ near: undefined, far: undefined })
     ),
@@ -78,18 +103,19 @@ export class NgtSobaOrthographicCameraStore extends EnhancedRxState<NgtSobaOrtho
   constructor(
     private store: NgtStore,
     @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-    private objectInputsController: NgtObject3dInputsController
+    private objectInputsController: NgtObject3dInputsController,
+    private state: EnhancedRxState<NgtSobaOrthographicCameraState>
   ) {
     super();
 
-    this.hold(this.#projectMatrixParams$, () => {
-      const { manual, orthographicCamera } = this.get();
+    state.hold(this.#projectMatrixParams$, () => {
+      const { manual, orthographicCamera } = state.get();
       if (orthographicCamera && !manual) {
         orthographicCamera.updateProjectionMatrix();
       }
     });
 
-    this.holdEffect(
+    state.holdEffect(
       this.#cameraParams$,
       ({ camera, orthographicCamera, makeDefault }) => {
         if (makeDefault && orthographicCamera) {
@@ -101,51 +127,6 @@ export class NgtSobaOrthographicCameraStore extends EnhancedRxState<NgtSobaOrtho
         };
       }
     );
-  }
-}
-
-@Component({
-  selector: 'ngt-soba-orthographic-camera',
-  template: `
-    <ngt-orthographic-camera
-      *ngIf="vm$ | async as vm"
-      [args]="[vm.left, vm.right, vm.top, vm.bottom, vm.near, vm.far]"
-      [object3dInputsController]="vm.objectInputsController"
-      (ready)="object = $event"
-    >
-      <ng-content></ng-content>
-    </ngt-orthographic-camera>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-    NgtSobaOrthographicCameraStore,
-    { provide: NgtSobaExtender, useExisting: NgtSobaOrthographicCamera },
-  ],
-})
-export class NgtSobaOrthographicCamera extends NgtSobaExtender<THREE.OrthographicCamera> {
-  @Input() set makeDefault(makeDefault: boolean) {
-    this.sobaOrthographicCameraStore.set({ makeDefault });
-  }
-
-  @Input() set manual(manual: boolean) {
-    this.sobaOrthographicCameraStore.set({ manual });
-  }
-
-  @Input() set near(near: number) {
-    this.sobaOrthographicCameraStore.set({ near });
-  }
-
-  @Input() set far(far: number) {
-    this.sobaOrthographicCameraStore.set({ far });
-  }
-
-  readonly vm$ = this.sobaOrthographicCameraStore.vm$;
-
-  constructor(
-    private sobaOrthographicCameraStore: NgtSobaOrthographicCameraStore
-  ) {
-    super();
   }
 }
 
