@@ -15,7 +15,6 @@ import {
   Component,
   ContentChildren,
   Inject,
-  Injectable,
   Input,
   NgModule,
   QueryList,
@@ -29,23 +28,6 @@ interface NgtSobaDetailedStoreState {
   lod: THREE.LOD;
   distances: number[];
   children: THREE.Object3D[];
-}
-
-@Injectable()
-export class NgtSobaDetailedStore extends EnhancedRxState<NgtSobaDetailedStoreState> {
-  #updateLodChildrenParams$ = this.select(selectSlice(['lod', 'children']));
-
-  constructor() {
-    super();
-    this.set({ distances: [], children: [] });
-    this.hold(this.#updateLodChildrenParams$, ({ lod, children }) => {
-      const distances = this.get('distances');
-      if (!children.length) lod.levels.length = 0;
-      children.forEach((object, index) => {
-        lod.addLevel(object, distances[index]);
-      });
-    });
-  }
 }
 
 @Component({
@@ -62,7 +44,7 @@ export class NgtSobaDetailedStore extends EnhancedRxState<NgtSobaDetailedStoreSt
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-    NgtSobaDetailedStore,
+    EnhancedRxState,
     {
       provide: NgtSobaExtender,
       useExisting: NgtSobaDetailed,
@@ -74,7 +56,7 @@ export class NgtSobaDetailed
   implements AfterContentInit
 {
   @Input() set distances(v: number[]) {
-    this.detailedStore.set({ distances: v });
+    this.state.set({ distances: v });
   }
 
   @ContentChildren(NgtObject3dController, { descendants: true })
@@ -86,9 +68,21 @@ export class NgtSobaDetailed
   constructor(
     @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
     public objectInputsController: NgtObject3dInputsController,
-    private detailedStore: NgtSobaDetailedStore
+    private state: EnhancedRxState<NgtSobaDetailedStoreState>
   ) {
     super();
+
+    state.set({ distances: [], children: [] });
+    state.hold(
+      state.select(selectSlice(['lod', 'children'])),
+      ({ lod, children }) => {
+        const distances = state.get('distances');
+        if (!children.length) lod.levels.length = 0;
+        children.forEach((object, index) => {
+          lod.addLevel(object, distances[index]);
+        });
+      }
+    );
   }
 
   ngAfterContentInit() {
@@ -112,7 +106,7 @@ export class NgtSobaDetailed
         ]
       )
     );
-    this.detailedStore.connect('children', children$);
+    this.state.connect('children', children$);
   }
 
   onLodAnimateReady({ camera }: NgtRender, lod: THREE.LOD) {
@@ -121,7 +115,7 @@ export class NgtSobaDetailed
 
   onLodReady(lod: THREE.LOD) {
     this.object = lod;
-    this.detailedStore.set({ lod });
+    this.state.set({ lod });
   }
 }
 
