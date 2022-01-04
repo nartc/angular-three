@@ -92,7 +92,7 @@ export class NgtObject3dInputsController extends Controller {
   @Input() raycast?: THREE.Object3D['raycast'] | null;
 
   @Input() appendMode: 'immediate' | 'root' | 'none' = 'immediate';
-  @Input() appendTo?: THREE.Object3D;
+  @Input() appendTo?: THREE.Object3D | (() => THREE.Object3D);
 
   @Input() object3dInputsController?: NgtObject3dInputsController;
 

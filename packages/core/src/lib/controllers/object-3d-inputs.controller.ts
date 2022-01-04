@@ -82,6 +82,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-gizmo-helper,
     ngt-soba-gizmo-viewport,
     ngt-soba-gizmo-axis-head,
+    ngt-soba-transform-controls,
     ngt-soba-text
   `,
   exportAs: 'ngtObject3dInputsController',
@@ -148,7 +149,7 @@ export class NgtObject3dInputsController extends Controller {
   @Input() raycast?: THREE.Object3D['raycast'] | null;
 
   @Input() appendMode: 'immediate' | 'root' | 'none' = 'immediate';
-  @Input() appendTo?: THREE.Object3D;
+  @Input() appendTo?: THREE.Object3D | (() => THREE.Object3D);
 
   @Input() object3dInputsController?: NgtObject3dInputsController;
 

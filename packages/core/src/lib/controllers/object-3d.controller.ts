@@ -10,7 +10,7 @@ import {
   SkipSelf,
 } from '@angular/core';
 import { requestAnimationFrame } from '@rx-angular/cdk/zone-less';
-import { defer, map, merge, Subscription, take } from 'rxjs';
+import { BehaviorSubject, defer, map, merge, Subscription, take } from 'rxjs';
 import * as THREE from 'three';
 import { NgtEventsStore } from '../stores/events.store';
 import { NgtStore } from '../stores/store';
@@ -96,7 +96,9 @@ const supportedEvents = [
   ],
 })
 export class NgtObject3dController extends Controller implements OnDestroy {
-  #object3d?: THREE.Object3D;
+  #object3d = new BehaviorSubject<THREE.Object3D | null>(null);
+  readonly object3d$ = this.#object3d.asObservable();
+
   #inputChangesSubscription?: Subscription;
 
   #initFn?: () => THREE.Object3D;
@@ -168,7 +170,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
 
   init() {
     this.ngZone.runOutsideAngular(() => {
-      this.#object3d = this.initFn();
+      this.#object3d.next(this.initFn());
       if (this.object3d) {
         this.#applyCustomProps();
 
@@ -240,7 +242,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
     // Schedule this in the next frame to allow for all appendTo's to settle
     requestAnimationFrame(() => {
       if (this.objectInputsController.appendTo) {
-        this.objectInputsController.appendTo.add(this.object3d);
+        this.#appendTo.add(this.object3d);
         return;
       }
 
@@ -272,7 +274,7 @@ export class NgtObject3dController extends Controller implements OnDestroy {
 
   #remove() {
     if (this.objectInputsController.appendTo) {
-      this.objectInputsController.appendTo.remove(this.object3d);
+      this.#appendTo.remove(this.object3d);
     } else if (
       this.parentObject3d &&
       this.objectInputsController.appendMode === 'immediate'
@@ -405,7 +407,13 @@ export class NgtObject3dController extends Controller implements OnDestroy {
   }
 
   get object3d(): THREE.Object3D {
-    return this.#object3d as THREE.Object3D;
+    return this.#object3d.getValue() as THREE.Object3D;
+  }
+
+  get #appendTo() {
+    return this.objectInputsController.appendTo instanceof THREE.Object3D
+      ? this.objectInputsController.appendTo
+      : (this.objectInputsController.appendTo as () => THREE.Object3D)();
   }
 
   get controller(): Controller | undefined {

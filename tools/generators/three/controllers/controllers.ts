@@ -26,6 +26,7 @@ export default async function controllersGenerator(
     'soba-gizmo-helper',
     'soba-gizmo-viewport',
     'soba-gizmo-axis-head',
+    'soba-transform-controls',
   ];
   const sobaWithMaterialSelectors = ['soba-text'];
   const sobaAudioSelectors = ['soba-positional-audio'];
