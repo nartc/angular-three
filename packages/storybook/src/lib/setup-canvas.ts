@@ -12,12 +12,14 @@ export function setupCanvas({
   cameraFov = 75,
   lights = true,
   controls = true,
+  makeControlsDefault = false,
   black = false,
   loader = false,
 }: Partial<{
   cameraPosition: [number, number, number];
   cameraFov: number;
   controls: boolean;
+  makeControlsDefault: boolean;
   lights: boolean;
   black: boolean;
   loader: boolean;
@@ -35,7 +37,7 @@ export function setupCanvas({
         <ngt-point-light [intensity]='1' [position]='[0, 6, 0]'></ngt-point-light>
       </ng-container>
 
-      <ngt-soba-orbit-controls *ngIf='${controls}'></ngt-soba-orbit-controls>
+      <ngt-soba-orbit-controls *ngIf='${controls}' [makeDefault]='${makeControlsDefault}' ></ngt-soba-orbit-controls>
 
       ${story}
     </ngt-canvas>
