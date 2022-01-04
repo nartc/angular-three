@@ -10,7 +10,11 @@ import { Component } from '@angular/core';
     <!--    <ngt-level-of-details></ngt-level-of-details>-->
     <!--    <ngt-robot-expressive></ngt-robot-expressive>-->
     <!--    <ngt-orbit-controls-target-switcher></ngt-orbit-controls-target-switcher>-->
+    <!--    <ngt-cube-transform></ngt-cube-transform>-->
+
     <!--    <ngt-routing></ngt-routing>-->
+
+    <!--    <ngt-testing></ngt-testing>-->
 
     <!--    does not work locally -->
     <!--    <ngt-kinematic-cube></ngt-kinematic-cube>-->

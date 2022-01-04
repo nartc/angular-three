@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { CompoundBodyComponentModule } from './compound-body/compound-body.component';
+import { CubeTransformComponentModule } from './cube-transform/cube-transform.component';
 import { InstancesComponentModule } from './instances/instances.component';
 import { KeenComponentModule } from './keen-bloom/keen-bloom.component';
 import { KinematicCubeComponentModule } from './kinematic-cube/kinematic-cube.component';
@@ -12,6 +13,7 @@ import { OrbitControlsTargetSwitcherComponentModule } from './orbit-controls-tar
 import { RobotExpressiveModule } from './robot-expressive/robot-expressive.component';
 import { RoutingComponentModule } from './routing/routing.component';
 import { SimpleCubeComponentModule } from './simple-cube.component';
+import { TestingComponentModule } from './testing/testing.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,6 +29,8 @@ import { SimpleCubeComponentModule } from './simple-cube.component';
     OrbitControlsTargetSwitcherComponentModule,
     RoutingComponentModule,
     MinecraftComponentModule,
+    CubeTransformComponentModule,
+    TestingComponentModule,
     // RoutingComponentModule,
   ],
   providers: [],
