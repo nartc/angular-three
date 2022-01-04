@@ -1,3 +1,32 @@
+## [2.17.0](https://github.com/nartc/angular-three/compare/2.16.2...2.17.0) (2022-01-04)
+
+
+### Features
+
+* **core:** allow to pass Object3d getter to appendTo ([d4b0bf7](https://github.com/nartc/angular-three/commit/d4b0bf7a4858bd68e322bae4530acfd2ae428e3c))
+* **soba:** add GradientTexture ([34004e2](https://github.com/nartc/angular-three/commit/34004e2e34c67663eef9416bdc328e0eac86ee73)), closes [#28](https://github.com/nartc/angular-three/issues/28)
+* **soba:** add TransformControls ([0e33191](https://github.com/nartc/angular-three/commit/0e33191be0b3fdc4a9c7e067ee42eba467583903))
+
+
+### Bug Fixes
+
+* **cannon:** clean up debug ([5c8f4d1](https://github.com/nartc/angular-three/commit/5c8f4d142adb4b94b508d950a3ca49d4975404ce))
+* **core:** adjust Tail type ([0f75e34](https://github.com/nartc/angular-three/commit/0f75e3414aeb7a1a4b539202688913469d2d35bf))
+* **core:** requestAnimationFrame for appending object can be a good solution for now ([53b5429](https://github.com/nartc/angular-three/commit/53b542901e829e63adf8e630c916d3ca2a86aa00))
+* **soba:** clean up detailed component ([80988f6](https://github.com/nartc/angular-three/commit/80988f64c932184496c1ffc348ea1df042eeca2e))
+* **soba:** clean up orthographic camera ([e999966](https://github.com/nartc/angular-three/commit/e999966b37af74918bf128449694bf3f9c994608))
+* **soba:** clean up positional audio ([9044253](https://github.com/nartc/angular-three/commit/9044253b39d42fea285d0dd71b40747f5319f29e))
+* **soba:** clean up stars component ([32732d7](https://github.com/nartc/angular-three/commit/32732d794137bfab6efe55aa3d33ffc17d8f5613))
+
+
+### Documentations
+
+* **demo:** add mdx for simple cube ([557fe22](https://github.com/nartc/angular-three/commit/557fe22038bfc12ccd62786b9284059030755925))
+* **demo:** add testing component to quickly test new stuffs ([7d2485f](https://github.com/nartc/angular-three/commit/7d2485f46178200386b0d22ce2ee7448072e9005))
+* **demo:** playaround more with simplecube component ([f963403](https://github.com/nartc/angular-three/commit/f9634034007bcc03114da5f563e41835b9eb81e4))
+* **demo:** wip cube transform from threejs ([835cec9](https://github.com/nartc/angular-three/commit/835cec9d8f4e66825d987abd2d596c58018b263c))
+* **storybook:** add flag to make orbit controls default ([82d4890](https://github.com/nartc/angular-three/commit/82d489066843afc240af3e6bdf20c9ac959adcf8))
+
 ### [2.16.2](https://github.com/nartc/angular-three/compare/2.16.1...2.16.2) (2021-12-30)
 
 
