@@ -19,11 +19,11 @@ This package, while stable, is still in active development.
 
 ### Peer Dependencies
 
-- `three@0.135`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js** is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.135`
+- `three@0.136`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js** is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.136`
   - Make sure to also have `@types/three` installed as well
 
 ```bash
-npm install -E three@0.135
+npm install -E three@0.136
 npm install -DE @types/three
 ```
 

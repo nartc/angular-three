@@ -83,8 +83,8 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-gizmo-viewport,
     ngt-soba-gizmo-axis-head,
     ngt-soba-transform-controls,
-    ngt-soba-text,
-    ngt-soba-center
+    ngt-soba-center,
+    ngt-soba-text
   `,
   exportAs: 'ngtObject3dInputsController',
 })
