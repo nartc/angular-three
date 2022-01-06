@@ -25,7 +25,7 @@ export class NgtGroup implements OnInit {
 
   #group?: THREE.Group;
   get group() {
-    return this.#group;
+    return this.#group!;
   }
 
   constructor(
