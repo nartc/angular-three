@@ -1,3 +1,31 @@
+## [3.0.0](https://github.com/nartc/angular-three/compare/2.17.0...3.0.0) (2022-01-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** Update to THREE 0.136. Please consult THREE.js changelog for breaking changes from 0.135 to 0.136
+
+### Features
+
+* **core:** update THREE 0.136 ([09933af](https://github.com/nartc/angular-three/commit/09933afdf66d092756eb40c89d1b8d173b22a921))
+* **soba:** add Center ([f0e6a5b](https://github.com/nartc/angular-three/commit/f0e6a5be2a60c778c6c0513168bdfc2ecfa08b67))
+* **soba:** update troika-three-text and make it a dependencies to soba instead of peerDep ([51c8df1](https://github.com/nartc/angular-three/commit/51c8df1730a627fe2215211225f53101b4142002))
+* **soba:** upgrade cannon-es-debugger and Debug component ([5723306](https://github.com/nartc/angular-three/commit/5723306cb736963831d0f72c282a9f751729d6f9))
+
+
+### Bug Fixes
+
+* **core:** null assert for group export ([9e6aa8e](https://github.com/nartc/angular-three/commit/9e6aa8ecae14e75d80ceb521314c23edc307788b))
+* **soba:** export controllers from proper components ([3fe174c](https://github.com/nartc/angular-three/commit/3fe174cd59b086aeb35c9a93c4ffd7a2acb9c3a7))
+
+
+### Documentations
+
+* **demo:** play around with simple cube ([100c011](https://github.com/nartc/angular-three/commit/100c011c1c36c4feca10271e1a30aec6c9604fbc))
+* **demo:** update lil-gui ([12bdc3f](https://github.com/nartc/angular-three/commit/12bdc3f6ed164c787e228a3ff3828a6b2a315079))
+* **storybook:** add Shape stories ([78678b9](https://github.com/nartc/angular-three/commit/78678b9057c1f2606fdbaa488455f37672158b9f))
+* **storybook:** fix absoluate import ([c686bbd](https://github.com/nartc/angular-three/commit/c686bbd9123763ac599e025abc6d477c9c79d59a))
+
 ## [2.17.0](https://github.com/nartc/angular-three/compare/2.16.2...2.17.0) (2022-01-04)
 
 
