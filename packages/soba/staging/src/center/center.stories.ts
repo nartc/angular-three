@@ -2,7 +2,6 @@ import { NgtMeshNormalMaterialModule } from '@angular-three/core/materials';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
 import { NgtGLTFLoaderService } from '@angular-three/soba/loaders';
 import { NgtSobaBoxModule } from '@angular-three/soba/shapes';
-import { NgtSobaCenterModule } from '@angular-three/soba/staging';
 import { setupCanvas, setupCanvasModules } from '@angular-three/storybook';
 import { CommonModule } from '@angular/common';
 import {
@@ -18,6 +17,7 @@ import {
   Story,
 } from '@storybook/angular';
 import * as THREE from 'three';
+import { NgtSobaCenterModule } from './center.component';
 
 @Component({
   selector: 'ngt-default-center',
