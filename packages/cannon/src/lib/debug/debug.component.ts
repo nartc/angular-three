@@ -9,7 +9,6 @@ import {
   OnInit,
 } from '@angular/core';
 import { NgtCannonDebugStore } from './debug.store';
-import { NgtCannonDebuggerInterface } from './models/debug';
 
 @Component({
   selector: 'ngt-cannon-debug',
@@ -29,7 +28,7 @@ export class NgtCannonDebug implements OnInit {
     this.cannonDebugStore.set({ scale: v });
   }
 
-  @Input() set impl(v: NgtCannonDebuggerInterface) {
+  @Input() set impl(v: typeof import('cannon-es-debugger').default) {
     this.cannonDebugStore.set({ impl: v });
   }
 

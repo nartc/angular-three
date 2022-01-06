@@ -4,6 +4,7 @@ import { Vec3 } from 'cannon-es';
 import cannonDebugger from 'cannon-es-debugger';
 import { Quaternion as CQuaternion } from 'math/Quaternion';
 import * as THREE from 'three';
+import { World } from 'world/World';
 import { BodyProps, BodyShapeType } from '../models/body';
 import { NgtPhysicsStore } from '../physics.store';
 // @ts-ignore
@@ -52,10 +53,9 @@ export class NgtCannonDebugStore extends EnhancedRxState<
           if (!instance || lastBodies !== bodies.length) {
             lastBodies = bodies.length;
             this.#scene.children = [];
-            instance = impl!(this.#scene, bodies, {
+            instance = impl!(this.#scene, { bodies } as World, {
               color: color as THREE.ColorRepresentation,
               scale,
-              autoUpdate: false,
             });
           }
 
