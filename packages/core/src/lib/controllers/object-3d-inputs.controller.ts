@@ -84,6 +84,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-gizmo-axis-head,
     ngt-soba-transform-controls,
     ngt-soba-center,
+    ngt-soba-bounds,
     ngt-soba-text
   `,
   exportAs: 'ngtObject3dInputsController',

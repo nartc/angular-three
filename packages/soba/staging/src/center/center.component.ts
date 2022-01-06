@@ -53,33 +53,35 @@ export class NgtSobaCenter extends NgtSobaExtender<THREE.Group> {
       v.changes.pipe(startWith(v)),
       (queryList: QueryList<NgtObject3dInputsController>) => {
         setTimeout(() => {
-          queryList.forEach((controller) => {
-            controller.appendTo = () => this.innerGroup;
-          });
-          this.outerGroup.position.set(0, 0, 0);
-          this.outerGroup.updateWorldMatrix(true, true);
-          const box3 = new THREE.Box3().setFromObject(this.innerGroup);
-          const center = new THREE.Vector3();
-          const sphere = new THREE.Sphere();
-          const height = box3.max.y - box3.min.y;
-          box3.getCenter(center);
-          box3.getBoundingSphere(sphere);
-          this.outerGroup.position.set(
-            -center.x,
-            -center.y + (this.state.get('alignTop') ? height / 2 : 0),
-            -center.z
-          );
+          if (this.innerGroup && this.outerGroup) {
+            queryList.forEach((controller) => {
+              controller.appendTo = () => this.innerGroup!;
+            });
+            this.outerGroup.position.set(0, 0, 0);
+            this.outerGroup.updateWorldMatrix(true, true);
+            const box3 = new THREE.Box3().setFromObject(this.innerGroup);
+            const center = new THREE.Vector3();
+            const sphere = new THREE.Sphere();
+            const height = box3.max.y - box3.min.y;
+            box3.getCenter(center);
+            box3.getBoundingSphere(sphere);
+            this.outerGroup.position.set(
+              -center.x,
+              -center.y + (this.state.get('alignTop') ? height / 2 : 0),
+              -center.z
+            );
+          }
         });
       }
     );
   }
 
   get outerGroup() {
-    return this.object.children[0] as THREE.Group;
+    return this.object?.children[0] as THREE.Group | undefined;
   }
 
   get innerGroup() {
-    return this.outerGroup.children[0] as THREE.Group;
+    return this.outerGroup?.children[0] as THREE.Group | undefined;
   }
 
   constructor(
