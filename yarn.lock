@@ -11847,10 +11847,10 @@ license-webpack-plugin@4.0.0:
   dependencies:
     webpack-sources "^3.0.0"
 
-lil-gui@0.15.0:
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/lil-gui/-/lil-gui-0.15.0.tgz#18f50bccbbf7ab59fdf12840031d6ba113e9e729"
-  integrity sha512-S2KJSkudOHpw30wry2vrFVgcI+2W1nUIhSRUDhJJK7Mbs7jaMbTVd4ayKuSfarzx8ZonTS8xOxx40NmsF44tAw==
+lil-gui@0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/lil-gui/-/lil-gui-0.16.0.tgz#ac3f38e4b73331688f10f4430b1324cf888d3c41"
+  integrity sha512-wDySFozDfOed8UymoMprgQ+xuEZhbOP9h6cagszu/gIRpGjfoo8lHPYXXJN5OluHoM1Z4Y2ac0FJhiMQC5Ac0Q==
 
 lines-and-columns@^1.1.6:
   version "1.2.4"
@@ -12742,10 +12742,10 @@ ng-packagr@13.1.2:
   optionalDependencies:
     esbuild "^0.14.0"
 
-ngx-lil-gui@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/ngx-lil-gui/-/ngx-lil-gui-1.1.1.tgz#393fbd6da306f06664260864c7066165748b90aa"
-  integrity sha512-QtAu8izehIwWs20cW+XGH4qgAKqr2hbrzOW54sQK3l+vkX4vBBYO5Ms+A98ndBCP2KwavLytymq4bq6Zp5UUjw==
+ngx-lil-gui@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ngx-lil-gui/-/ngx-lil-gui-1.2.0.tgz#b5b002370036ba059375acc0c5001c87f6e6febf"
+  integrity sha512-N+6BdouaG9uyozJ2V8LMU14K773s8756wGDROPrfhIhOs+nm3A5W6aqPgN+XnqI4LiHjpKeuX+SBP3pWqQxfAA==
   dependencies:
     tslib "^2.3.0"
 
