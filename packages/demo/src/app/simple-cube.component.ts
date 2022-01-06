@@ -44,7 +44,7 @@ import * as THREE from 'three';
         ></ngt-soba-gizmo-viewport>
       </ngt-soba-gizmo-helper>
 
-      <ngt-soba-orbit-controls [makeDefault]="true"></ngt-soba-orbit-controls>
+      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
     </ngt-canvas>
 
     <div class="controls">
@@ -162,8 +162,7 @@ export class CubeComponent {
   hover = false;
 
   onAnimateReady(mesh: THREE.Mesh) {
-    mesh.rotation.x = -Math.PI / 2;
-    mesh.rotation.z += 0.01;
+    mesh.rotation.y += 0.01;
   }
 }
 
