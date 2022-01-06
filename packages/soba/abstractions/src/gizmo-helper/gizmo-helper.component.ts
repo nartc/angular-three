@@ -1,6 +1,7 @@
 import {
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NgtCoreModule,
+  NgtObject3dInputsControllerModule,
   NgtSobaExtender,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
@@ -87,7 +88,7 @@ export class NgtSobaGizmoHelper
 
 @NgModule({
   declarations: [NgtSobaGizmoHelper],
-  exports: [NgtSobaGizmoHelper],
+  exports: [NgtSobaGizmoHelper, NgtObject3dInputsControllerModule],
   imports: [
     NgtCoreModule,
     NgtGroupModule,

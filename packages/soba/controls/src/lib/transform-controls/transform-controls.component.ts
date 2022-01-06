@@ -4,6 +4,7 @@ import {
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtLoopService,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtStore,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
@@ -204,7 +205,7 @@ export class NgtSobaTransformControls
 
 @NgModule({
   declarations: [NgtSobaTransformControls],
-  exports: [NgtSobaTransformControls],
+  exports: [NgtSobaTransformControls, NgtObject3dInputsControllerModule],
   imports: [NgtGroupModule, NgtPrimitiveModule, CommonModule],
 })
 export class NgtSobaTransformControlsModule {}

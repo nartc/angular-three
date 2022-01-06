@@ -5,6 +5,7 @@ import {
   NgtEvent,
   NgtMathPipeModule,
   NgtObject3dInputsController,
+  NgtObject3dInputsControllerModule,
   NgtSobaExtender,
   NgtStore,
 } from '@angular-three/core';
@@ -349,7 +350,7 @@ export class NgtSobaGizmoAxisHead extends NgtSobaExtender<THREE.Sprite> {
 
 @NgModule({
   declarations: [NgtSobaGizmoViewport, NgtSobaGizmoAxis, NgtSobaGizmoAxisHead],
-  exports: [NgtSobaGizmoViewport],
+  exports: [NgtSobaGizmoViewport, NgtObject3dInputsControllerModule],
   imports: [
     CommonModule,
     NgtGroupModule,
