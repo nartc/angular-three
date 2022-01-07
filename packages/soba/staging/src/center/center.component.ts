@@ -25,6 +25,7 @@ import * as THREE from 'three';
   template: `
     <ngt-group
       (ready)="object = $event"
+      (animateReady)="animateReady.emit({ entity: object, state: $event })"
       [object3dInputsController]="objectInputsController"
     >
       <ngt-group name="outer-soba-center-group">

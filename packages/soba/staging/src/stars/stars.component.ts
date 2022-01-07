@@ -154,9 +154,10 @@ export class NgtSobaStars extends NgtSobaExtender<THREE.Points> {
     });
   }
 
-  onAnimate({ clock }: NgtRender) {
+  onAnimate(state: NgtRender) {
     if (this.starMaterial) {
-      this.starMaterial.uniforms.time.value = clock.getElapsedTime();
+      this.starMaterial.uniforms.time.value = state.clock.getElapsedTime();
+      this.animateReady.emit({ entity: this.object, state });
     }
   }
 }

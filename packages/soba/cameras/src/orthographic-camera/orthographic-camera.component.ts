@@ -36,6 +36,7 @@ export interface NgtSobaOrthographicCameraState {
       [args]="[vm.left, vm.right, vm.top, vm.bottom, vm.near, vm.far]"
       [object3dInputsController]="vm.objectInputsController"
       (ready)="object = $event"
+      (animateReady)="animateReady.emit({ entity: object, state: $event })"
     >
       <ng-content></ng-content>
     </ngt-orthographic-camera>

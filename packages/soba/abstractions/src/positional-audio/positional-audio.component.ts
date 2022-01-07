@@ -43,6 +43,7 @@ export interface NgtSobaPositionalAudioState {
     <ngt-positional-audio
       *ngIf="listener$ | async as listener"
       (ready)="onPositionalAudioReady($event)"
+      (animateReady)="animateReady.emit({ entity: object, state: $event })"
       [listener]="listener"
       [audioController]="audioController"
     ></ngt-positional-audio>

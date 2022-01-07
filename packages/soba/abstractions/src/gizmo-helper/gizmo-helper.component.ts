@@ -24,6 +24,7 @@ import { NgtSobaGizmoHelperStore } from './gizmo-helper.store';
       <ngt-group
         *ngIf="gizmoProps$ | async as gizmoProps"
         (ready)="onGizmoReady($event)"
+        (animateReady)="animateReady.emit({ entity: object, state: $event })"
         [appendTo]="virtualScene"
         [position]="[gizmoProps.x, gizmoProps.y, 0]"
         [object3dInputsController]="gizmoProps.objectInputsController"

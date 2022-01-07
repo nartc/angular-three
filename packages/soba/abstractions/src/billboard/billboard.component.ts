@@ -54,7 +54,7 @@ export class NgtSobaBillboard extends NgtSobaExtender<THREE.Group> {
   onGroupAnimate(group: THREE.Group, $event: NgtRender) {
     if (!this.follow) return;
 
-    this.animateReady.emit($event);
+    this.animateReady.emit({ entity: group, state: $event });
 
     // save previous rotation in case we're locking an axis
     const prevRotation = group.rotation.clone();

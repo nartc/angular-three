@@ -108,6 +108,7 @@ export class NgtSobaImageShaderMaterial extends NgtMaterial<
         [scale]="scale"
         [object3dInputsController]="objectInputsController"
         (ready)="object = $event"
+        (animateReady)="animateReady.emit({ entity: object, state: $event })"
       >
         <ngt-plane-geometry
           [args]="[1, 1, segments, segments]"

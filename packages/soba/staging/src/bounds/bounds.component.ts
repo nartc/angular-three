@@ -317,6 +317,7 @@ export class NgtSobaBoundsStore extends EnhancedRxState<
   template: `
     <ngt-group
       (ready)="object = $event; sobaSoundsStore.set({ group: $event })"
+      (animateReady)="animateReady.emit({ entity: object, state: $event })"
       [object3dInputsController]="objectInputsController"
     >
       <ng-content></ng-content>

@@ -182,6 +182,7 @@ export const [
       [appendTo]="gizmo"
       [scale]="[60, 60, 60]"
       (ready)="object = $event"
+      (animateReady)="animateReady.emit({ entity: object, state: $event })"
     >
       <ngt-soba-gizmo-facecube
         [genericController]="genericController"
@@ -246,6 +247,10 @@ export class NgtSobaGizmoViewcube extends NgtSobaExtender<THREE.Group> {
         (pointerover)="$event.stopPropagation(); hover = true"
         (pointerout)="$event.stopPropagation(); hover = false"
         (click)="onEdgeClick($event)"
+        (ready)="object = $event"
+        (animateReady)="
+          animateReady.emit({ entity: object, state: $any($event).state })
+        "
       >
         <ngt-mesh-basic-material
           [parameters]="{
@@ -323,6 +328,9 @@ export class NgtSobaGizmoEdgecube extends NgtSobaExtender<THREE.Mesh> {
       [isMaterialArray]="true"
       [raycast]="raycast$ | async"
       (ready)="object = $event"
+      (animateReady)="
+        animateReady.emit({ entity: object, state: $any($event).state })
+      "
       (click)="onFaceClick($event)"
       (pointermove)="onFacePointerMove($event)"
       (pointerout)="onFacePointerOut($event)"

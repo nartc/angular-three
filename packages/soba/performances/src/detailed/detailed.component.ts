@@ -109,8 +109,9 @@ export class NgtSobaDetailed
     this.state.connect('children', children$);
   }
 
-  onLodAnimateReady({ camera }: NgtRender, lod: THREE.LOD) {
-    lod.update(camera);
+  onLodAnimateReady(state: NgtRender, lod: THREE.LOD) {
+    lod.update(state.camera);
+    this.animateReady.emit({ entity: lod, state });
   }
 
   onLodReady(lod: THREE.LOD) {

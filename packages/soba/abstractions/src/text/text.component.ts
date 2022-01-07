@@ -41,6 +41,7 @@ import { Text as TextMeshImpl } from 'troika-three-text';
         [object]="$any(object)"
         [object3dInputsController]="objectInputsController"
         (ready)="onTroikaTextReady(object)"
+        (animateReady)="animateReady.emit({ entity: object, state: $event })"
       >
       </ngt-primitive>
     </ng-container>

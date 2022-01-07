@@ -41,6 +41,7 @@ import { NgtSobaGizmoHelperStore } from './gizmo-helper.store';
     <ngt-group
       *ngIf="gizmo$ | async as gizmo"
       (ready)="object = $event; object.scale.set(40, 40, 40)"
+      (animateReady)="animateReady.emit({ entity: object, state: $event })"
       [appendTo]="gizmo"
       [object3dInputsController]="objectInputsController"
     >
@@ -168,7 +169,11 @@ export class NgtSobaGizmoViewport extends NgtSobaExtender<THREE.Group> {
 @Component({
   selector: 'ngt-soba-gizmo-axis[color][rotation]',
   template: `
-    <ngt-group (ready)="object = $event" [rotation]="rotation">
+    <ngt-group
+      (ready)="object = $event"
+      (animateReady)="animateReady.emit({ entity: object, state: $event })"
+      [rotation]="rotation"
+    >
       <ngt-soba-box [args]="scale" [position]="[0.4, 0, 0]">
         <ngt-mesh-basic-material
           [parameters]="{ color, toneMapped: false }"
@@ -209,6 +214,7 @@ export class NgtSobaGizmoAxis extends NgtSobaExtender<THREE.Group> {
       ></ngt-sprite-material>
       <ngt-sprite
         (ready)="object = $event"
+        (animateReady)="animateReady.emit({ entity: object, state: $event })"
         (pointerover)="onAxisHeadPointerOver($event)"
         (pointerout)="onAxisHeadPointerOut($event)"
         (pointerdown)="onAxisHeadPointerDown($event)"

@@ -27,6 +27,7 @@ import * as THREE from 'three';
   template: `
     <ngt-mesh
       (ready)="object = $event"
+      (animateReady)="animateReady.emit({ entity: object, state: $event })"
       [object3dInputsController]="objectInputsController"
       [contentMaterialController]="contentMaterialController"
     >
