@@ -1,3 +1,21 @@
+## [3.1.0](https://github.com/nartc/angular-three/compare/3.0.0...3.1.0) (2022-01-07)
+
+
+### Features
+
+* **postprocessing:** add DepthOfField effect ([d9b5069](https://github.com/nartc/angular-three/commit/d9b50698962691dbb36c11293d9dfae42c0f344e))
+* **soba:** add Bounds ([ccddd0d](https://github.com/nartc/angular-three/commit/ccddd0d030d0d3b2016f2f331922421b9fe95403))
+
+
+### Bug Fixes
+
+* **postprocessing:** clean up postprocessing simple effects ([56a00a4](https://github.com/nartc/angular-three/commit/56a00a406f9fe7256659ec41f5864ce48efb0303))
+
+
+### Documentations
+
+* **demo/storybook:** add Narwhal Landing demo ([d82964b](https://github.com/nartc/angular-three/commit/d82964b055c2380914cbd2810137713053b4a246))
+
 ## [3.0.0](https://github.com/nartc/angular-three/compare/2.17.0...3.0.0) (2022-01-06)
 
 
