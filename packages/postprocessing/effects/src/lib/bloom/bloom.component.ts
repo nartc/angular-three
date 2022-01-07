@@ -9,7 +9,6 @@ import {
   NGT_EFFECT_DEFAULT_BLEND_FUNCTION,
   NGT_EFFECT_TYPE,
   NGT_EFFECT_WATCH_CONTROLLER,
-  NgtEffectComposerModule,
   NgtEffectController,
   NgtEffectControllerModule,
 } from '@angular-three/postprocessing';
@@ -64,6 +63,6 @@ export class NgtBloom {
 @NgModule({
   declarations: [NgtBloom],
   exports: [NgtBloom, NgtEffectControllerModule],
-  imports: [NgtPrimitiveModule, NgtEffectComposerModule, CommonModule],
+  imports: [NgtPrimitiveModule, CommonModule],
 })
 export class NgtBloomModule {}

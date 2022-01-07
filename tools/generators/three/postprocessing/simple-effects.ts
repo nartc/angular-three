@@ -67,6 +67,7 @@ export default async function simpleEffectsGenerator(
   }
 
   const generatedSimpleEffects = [];
+  const effects = ['depth-of-field'];
 
   for (const simpleEffect of simpleEffects) {
     const normalizedNames = names(simpleEffect.name);
@@ -91,7 +92,7 @@ export default async function simpleEffectsGenerator(
     join(__dirname, 'files', 'index'),
     join(effectsDir, 'src'),
     {
-      items: generatedSimpleEffects,
+      items: [...generatedSimpleEffects, ...effects],
       tmpl: '',
     }
   );

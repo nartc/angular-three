@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 import { NgtEffectComposerStore } from './effect-composer.store';
-import { NgtEffectControllerModule } from './effect.controller';
 
 @Component({
   selector: 'ngt-effect-composer',
@@ -72,7 +71,7 @@ export class NgtEffectComposer {
 
 @NgModule({
   declarations: [NgtEffectComposer],
-  exports: [NgtEffectComposer, NgtEffectControllerModule],
+  exports: [NgtEffectComposer],
   imports: [NgtGroupModule],
 })
 export class NgtEffectComposerModule {}

@@ -11,3 +11,4 @@ export * from './lib/sepia/sepia.component';
 export * from './lib/shock-wave/shock-wave.component';
 export * from './lib/tone-mapping/tone-mapping.component';
 export * from './lib/vignette/vignette.component';
+export * from './lib/depth-of-field/depth-of-field.component';

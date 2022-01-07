@@ -9,7 +9,6 @@ import {
   NGT_EFFECT_DEFAULT_BLEND_FUNCTION,<% } %>
   NGT_EFFECT_TYPE,
   NGT_EFFECT_WATCH_CONTROLLER,
-  NgtEffectComposerModule,
   NgtEffectController,
   NgtEffectControllerModule
 } from '@angular-three/postprocessing';
@@ -62,10 +61,6 @@ export class Ngt<%= name %> {
 @NgModule({
   declarations: [Ngt<%= name %>],
   exports: [Ngt<%= name %>, NgtEffectControllerModule],
-  imports: [
-    NgtPrimitiveModule,
-    NgtEffectComposerModule,
-    CommonModule,
-  ],
+  imports: [NgtPrimitiveModule, CommonModule],
 })
 export class Ngt<%= name %>Module {}

@@ -8,7 +8,6 @@ import {
   NGT_EFFECT_CONTROLLER_PROVIDER,
   NGT_EFFECT_TYPE,
   NGT_EFFECT_WATCH_CONTROLLER,
-  NgtEffectComposerModule,
   NgtEffectController,
   NgtEffectControllerModule,
 } from '@angular-three/postprocessing';
@@ -59,6 +58,6 @@ export class NgtSepia {
 @NgModule({
   declarations: [NgtSepia],
   exports: [NgtSepia, NgtEffectControllerModule],
-  imports: [NgtPrimitiveModule, NgtEffectComposerModule, CommonModule],
+  imports: [NgtPrimitiveModule, CommonModule],
 })
 export class NgtSepiaModule {}
