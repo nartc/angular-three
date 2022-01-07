@@ -4,7 +4,10 @@ import { NgtRender } from '../types';
 @Directive()
 export abstract class NgtSobaExtender<TEntity> {
   @Output() ready = new EventEmitter<TEntity>();
-  @Output() animateReady = new EventEmitter<NgtRender>();
+  @Output() animateReady = new EventEmitter<{
+    entity: TEntity;
+    state: NgtRender;
+  }>();
 
   #object!: TEntity;
 
