@@ -5,3 +5,4 @@ export * from './center/center.component';
 export * from './bounds/bounds.component';
 export * from './camera-shake/camera-shake.directive';
 export * from './float/float.component';
+export * from './stage/stage.component';
