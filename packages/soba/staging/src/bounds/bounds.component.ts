@@ -324,7 +324,14 @@ export class NgtSobaBoundsStore extends EnhancedRxState<
     </ngt-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER, NgtSobaBoundsStore],
+  providers: [
+    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
+    NgtSobaBoundsStore,
+    {
+      provide: NgtSobaExtender,
+      useExisting: NgtSobaBounds,
+    },
+  ],
 })
 export class NgtSobaBounds extends NgtSobaExtender<THREE.Group> {
   @Input() set damping(damping: number) {

@@ -39,7 +39,14 @@ export interface NgtSobaFloatState {
     </ngt-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER, EnhancedRxState],
+  providers: [
+    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
+    EnhancedRxState,
+    {
+      provide: NgtSobaExtender,
+      useExisting: NgtSobaFloat,
+    },
+  ],
 })
 export class NgtSobaFloat extends NgtSobaExtender<THREE.Group> {
   @Input() set speed(speed: number) {

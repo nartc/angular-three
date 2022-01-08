@@ -87,6 +87,7 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-bounds,
     ngt-soba-float,
     ngt-soba-stage,
+    ngt-soba-backdrop,
     ngt-soba-text
   `,
   exportAs: 'ngtObject3dInputsController',
