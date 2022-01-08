@@ -12,8 +12,7 @@ import {
   NgtPointLightModule,
   NgtSpotLightModule,
 } from '@angular-three/core/lights';
-import { PresetsType } from '@angular-three/soba';
-import { NgtSobaEnvironmentModule } from '@angular-three/soba/staging';
+import type { PresetsType } from '@angular-three/soba';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -29,6 +28,7 @@ import { setTimeout } from '@rx-angular/cdk/zone-less';
 import { selectSlice } from '@rx-angular/state';
 import { combineLatest, Observable, startWith } from 'rxjs';
 import * as THREE from 'three';
+import { NgtSobaEnvironmentModule } from '../environment/environment.directive';
 
 const presets = {
   rembrandt: {
