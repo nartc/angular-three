@@ -29,6 +29,7 @@ export default async function controllersGenerator(
     'soba-transform-controls',
     'soba-center',
     'soba-bounds',
+    'soba-float',
   ];
   const sobaWithMaterialSelectors = ['soba-text'];
   const sobaAudioSelectors = ['soba-positional-audio'];
