@@ -1,3 +1,21 @@
+## [3.2.0](https://github.com/nartc/angular-three/compare/3.1.0...3.2.0) (2022-01-09)
+
+
+### Features
+
+* **soba:** add Backdrop ([e37cd9a](https://github.com/nartc/angular-three/commit/e37cd9af898a79d6898dc059a37a40c0bbef66fb))
+* **soba:** add CameraShake ([028cbb4](https://github.com/nartc/angular-three/commit/028cbb4909b22a3625338963eca6dcebfefa0316))
+* **soba:** add Float ([7324066](https://github.com/nartc/angular-three/commit/7324066e735b3e70616ae12ee9b18c46e4fd459e))
+* **soba:** add Stage ([e1520ca](https://github.com/nartc/angular-three/commit/e1520cabbb79afb56e33b774f6ae17cd69851d34))
+
+
+### Bug Fixes
+
+* **core:** modify type of animateReady on SobaExtender ([992f35f](https://github.com/nartc/angular-three/commit/992f35f316a14cbe8bcf9988347f751fbfaf20b2))
+* **soba:** adjust Staging import in Stage ([131a32e](https://github.com/nartc/angular-three/commit/131a32e841e1abee226e4724cf353cc65420ceb7))
+* **soba:** clean up ([bf62e09](https://github.com/nartc/angular-three/commit/bf62e0910af5081ca6f0a6376abfbad28d0793f4))
+* **soba:** delegate all animateReady for sobaExtender ([042ba31](https://github.com/nartc/angular-three/commit/042ba31a967f15398b1ab3d6ae2026402cd1e341))
+
 ## [3.1.0](https://github.com/nartc/angular-three/compare/3.0.0...3.1.0) (2022-01-07)
 
 
