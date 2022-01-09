@@ -20,7 +20,7 @@ import {
 import { selectSlice } from '@rx-angular/state';
 import { of, switchMap } from 'rxjs';
 import * as THREE from 'three';
-import { OrbitControls } from 'three-stdlib/controls/OrbitControls';
+import { OrbitControls } from 'three-stdlib';
 
 export interface NgtSobaOrbitControlsState {
   enableDamping: boolean;
@@ -200,8 +200,8 @@ export class NgtSobaOrbitControls
   }
 
   get controls() {
-    return (this.store.get('controls') ||
-      this.get('controls')) as OrbitControls;
+    return (this.get('controls') ||
+      this.store.get('controls')) as OrbitControls;
   }
 }
 
