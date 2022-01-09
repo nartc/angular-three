@@ -1,4 +1,0 @@
-// GENERATED
-export const additionalSobaShapesSelectors = [<% for (const selector of selectors) { %>
-  '<%= selector %>',<% } %>
-];

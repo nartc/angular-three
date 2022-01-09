@@ -1,3 +1,0 @@
-// GENERATED
-<% for (const item of items) { %>
-export * from './lib/<%= item %>/<%= item %>.component';<% } %>

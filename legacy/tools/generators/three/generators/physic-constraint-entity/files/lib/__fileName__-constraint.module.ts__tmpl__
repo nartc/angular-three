@@ -1,9 +1,0 @@
-//GENERATED
-import { NgModule } from '@angular/core';
-import { Ngt<%= name %>Constraint } from './<%= fileName %>-constraint.directive';
-
-@NgModule({
-  declarations: [Ngt<%= name %>Constraint],
-  exports: [Ngt<%= name %>Constraint],
-})
-export class Ngt<%= name %>ConstraintModule {}

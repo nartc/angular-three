@@ -1,4 +1,0 @@
-// GENERATED
-<% for (const extra of extras) { %>
-export * from './lib/<%= extra %>/<%= extra %>.directive';<% } %><% for (const fileName of items) {%>
-export * from './lib/<%= fileName %>/<%= fileName %>.directive';<% } %>
