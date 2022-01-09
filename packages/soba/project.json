@@ -8,7 +8,8 @@
       "executor": "@nrwl/angular:package",
       "outputs": ["dist/packages/soba"],
       "options": {
-        "project": "packages/soba/ng-package.json"
+        "project": "packages/soba/ng-package.json",
+        "updateBuildableProjectDepsInPackageJson": false
       },
       "configurations": {
         "production": {
