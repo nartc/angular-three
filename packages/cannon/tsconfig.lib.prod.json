@@ -3,6 +3,7 @@
   "compilerOptions": {
     "declarationMap": false
   },
+  "exclude": ["**/*.stories.ts"],
   "angularCompilerOptions": {
     "compilationMode": "partial"
   }
