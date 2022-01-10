@@ -6,3 +6,5 @@ export * from './bounds/bounds.component';
 export * from './camera-shake/camera-shake.directive';
 export * from './float/float.component';
 export * from './stage/stage.component';
+export * from './spot-light/spot-light.component';
+export * from './spot-light/spot-light-material.directive';

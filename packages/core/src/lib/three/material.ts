@@ -35,7 +35,20 @@ export abstract class NgtMaterial<
       this.#parameters = v;
       if (v && this.material) {
         this.#convertColorToLinear(v);
-        this.material.setValues(v);
+        this.material.setValues(
+          Object.assign(
+            v,
+            'uniforms' in this.material && 'uniforms' in v
+              ? {
+                  uniforms: {
+                    ...(this.material as unknown as THREE.ShaderMaterial)
+                      .uniforms,
+                    ...(v as THREE.ShaderMaterialParameters).uniforms,
+                  },
+                }
+              : {}
+          )
+        );
         this.material.needsUpdate = true;
       }
     });

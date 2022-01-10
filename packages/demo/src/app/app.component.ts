@@ -14,9 +14,9 @@ import { Component } from '@angular/core';
 
     <!--    <ngt-routing></ngt-routing>-->
 
-    <!--    <ngt-testing></ngt-testing>-->
+    <ngt-testing></ngt-testing>
 
-    <ngt-narwhal-landing></ngt-narwhal-landing>
+    <!--    <ngt-narwhal-landing></ngt-narwhal-landing>-->
 
     <!--    does not work locally -->
     <!--    <ngt-kinematic-cube></ngt-kinematic-cube>-->

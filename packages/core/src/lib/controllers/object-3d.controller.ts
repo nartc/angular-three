@@ -170,7 +170,11 @@ export class NgtObject3dController extends Controller implements OnDestroy {
 
   init() {
     this.ngZone.runOutsideAngular(() => {
-      this.#object3d.next(this.initFn());
+      if (this.object3d) {
+        this.#switch();
+      } else {
+        this.#object3d.next(this.initFn());
+      }
       if (this.object3d) {
         this.#applyCustomProps();
 
@@ -286,10 +290,27 @@ export class NgtObject3dController extends Controller implements OnDestroy {
         scene.remove(this.object3d);
       }
     }
+  }
 
-    if (this.object3d.clear) {
-      this.object3d.clear();
+  #switch() {
+    const newObject3d = this.initFn();
+    if (this.object3d.children) {
+      this.object3d.traverse((object) => {
+        if (object !== this.object3d && object.parent === this.object3d) {
+          object.parent = newObject3d;
+        }
+      });
+      this.object3d.children = [];
     }
+
+    this.#remove();
+    this.store.set((state) => {
+      const { [this.object3d.uuid]: _, ...objects } = state.objects;
+      return { ...state, objects };
+    });
+    this.eventsStore.removeInteraction(this.object3d.uuid);
+    this.#object3d.next(newObject3d);
+    console.log(this.store.get('scene'));
   }
 
   #eventNameToHandler(
@@ -398,6 +419,9 @@ export class NgtObject3dController extends Controller implements OnDestroy {
 
     if (this.object3d) {
       this.#remove();
+      if (this.object3d.clear) {
+        this.object3d.clear();
+      }
       this.store.set((state) => {
         const { [this.object3d.uuid]: _, ...objects } = state.objects;
         return { ...state, objects };

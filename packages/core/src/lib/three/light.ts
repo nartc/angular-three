@@ -52,6 +52,7 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
   #lightArgs: unknown[] = [];
   protected set lightArgs(v: unknown | unknown[]) {
     this.#lightArgs = Array.isArray(v) ? v : [v];
+    console.log(this.#lightArgs);
     this.ngZone.runOutsideAngular(() => {
       this.objectController.init();
     });

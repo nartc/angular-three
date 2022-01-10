@@ -6,7 +6,6 @@ import {
 import { NgtBufferAttributeModule } from '@angular-three/core/attributes';
 import { NgtBufferGeometryModule } from '@angular-three/core/geometries';
 import { NgtPointsModule } from '@angular-three/core/points';
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,7 +13,6 @@ import {
   NgModule,
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
-import { map } from 'rxjs';
 import * as THREE from 'three';
 import {
   NgtSobaStarFieldMaterialModule,
@@ -38,43 +36,39 @@ export interface NgtSobaStarsState {
   factor: number;
   saturation: number;
   fade: boolean;
+  positions: Float32Array;
+  colors: Float32Array;
+  sizes: Float32Array;
+  material: StarFieldMaterial;
 }
 
 @Component({
   selector: 'ngt-soba-stars',
   template: `
     <ngt-points (ready)="object = $event" (animateReady)="onAnimate($event)">
-      <ng-container *ngIf="attributes$ | async as attributes">
-        <ngt-buffer-geometry>
-          <ngt-buffer-attribute
-            attach="position"
-            [args]="[attributes.positions, 3]"
-          ></ngt-buffer-attribute>
-          <ngt-buffer-attribute
-            attach="color"
-            [args]="[attributes.colors, 3]"
-          ></ngt-buffer-attribute>
-          <ngt-buffer-attribute
-            attach="size"
-            [args]="[attributes.sizes, 1]"
-          ></ngt-buffer-attribute>
-        </ngt-buffer-geometry>
-        <ngt-soba-star-field-material
-          #sobaStarFieldMaterial="ngtSobaStarFieldMaterial"
-          (ready)="starMaterial = $event"
-          [parameters]="{
-            vertexColors: true,
-            transparent: true,
-            blending: this.blending,
-            uniforms: {
-              fade: { value: attributes.fade },
-              time: sobaStarFieldMaterial.material?.uniforms?.time || {
-                value: 0
-              }
-            }
-          }"
-        ></ngt-soba-star-field-material>
-      </ng-container>
+      <ngt-buffer-geometry>
+        <ngt-buffer-attribute
+          attach="position"
+          [args]="[state.get('positions'), 3]"
+        ></ngt-buffer-attribute>
+        <ngt-buffer-attribute
+          attach="color"
+          [args]="[state.get('colors'), 3]"
+        ></ngt-buffer-attribute>
+        <ngt-buffer-attribute
+          attach="size"
+          [args]="[state.get('sizes'), 1]"
+        ></ngt-buffer-attribute>
+      </ngt-buffer-geometry>
+      <ngt-soba-star-field-material
+        (ready)="state.set({ material: $event })"
+        [parameters]="{
+          vertexColors: true,
+          transparent: true,
+          blending: this.blending,
+          uniforms: { fade: { value: state.get('fade') } }
+        }"
+      ></ngt-soba-star-field-material>
     </ngt-points>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -88,35 +82,6 @@ export interface NgtSobaStarsState {
 })
 export class NgtSobaStars extends NgtSobaExtender<THREE.Points> {
   readonly blending = THREE.AdditiveBlending;
-
-  readonly attributes$ = this.state.select(
-    selectSlice(['radius', 'depth', 'count', 'factor', 'saturation']),
-    map(({ depth, count, factor, radius, saturation }) => {
-      const positions: number[] = [];
-      const colors: number[] = [];
-      const sizes = Array.from(
-        { length: count },
-        () => (0.5 + 0.5 * Math.random()) * factor
-      );
-      const color = new THREE.Color();
-      let r = radius + depth;
-      const increment = depth / count;
-      for (let i = 0; i < count; i++) {
-        r -= increment * Math.random();
-        positions.push(...genStar(r).toArray());
-        color.setHSL(i / count, saturation, 0.9);
-        colors.push(color.r, color.g, color.b);
-      }
-      return {
-        positions: new Float32Array(positions),
-        colors: new Float32Array(colors),
-        sizes: new Float32Array(sizes),
-        fade: this.state.get('fade'),
-      };
-    })
-  );
-
-  starMaterial?: StarFieldMaterial;
 
   @Input() set radius(radius: number) {
     this.state.set({ radius });
@@ -142,7 +107,7 @@ export class NgtSobaStars extends NgtSobaExtender<THREE.Points> {
     this.state.set({ fade });
   }
 
-  constructor(private state: EnhancedRxState<NgtSobaStarsState>) {
+  constructor(public state: EnhancedRxState<NgtSobaStarsState>) {
     super();
     this.state.set({
       radius: 100,
@@ -152,11 +117,40 @@ export class NgtSobaStars extends NgtSobaExtender<THREE.Points> {
       factor: 4,
       fade: false,
     });
+
+    state.hold(
+      state.select(
+        selectSlice(['radius', 'depth', 'count', 'factor', 'saturation'])
+      ),
+      ({ factor, radius, saturation, count, depth }) => {
+        const positions: number[] = [];
+        const colors: number[] = [];
+        const sizes = Array.from(
+          { length: count },
+          () => (0.5 + 0.5 * Math.random()) * factor
+        );
+        const color = new THREE.Color();
+        let r = radius + depth;
+        const increment = depth / count;
+        for (let i = 0; i < count; i++) {
+          r -= increment * Math.random();
+          positions.push(...genStar(r).toArray());
+          color.setHSL(i / count, saturation, 0.9);
+          colors.push(color.r, color.g, color.b);
+        }
+        state.set({
+          positions: new Float32Array(positions),
+          colors: new Float32Array(colors),
+          sizes: new Float32Array(sizes),
+        });
+      }
+    );
   }
 
   onAnimate(state: NgtRender) {
-    if (this.starMaterial) {
-      this.starMaterial.uniforms.time.value = state.clock.getElapsedTime();
+    const material = this.state.get('material');
+    if (material) {
+      material.uniforms.time.value = state.clock.getElapsedTime();
       this.animateReady.emit({ entity: this.object, state });
     }
   }
@@ -170,7 +164,6 @@ export class NgtSobaStars extends NgtSobaExtender<THREE.Points> {
     NgtBufferGeometryModule,
     NgtBufferAttributeModule,
     NgtSobaStarFieldMaterialModule,
-    CommonModule,
   ],
 })
 export class NgtSobaStarsModule {}

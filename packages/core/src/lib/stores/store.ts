@@ -1,6 +1,6 @@
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
 import { NgtResize, NgtResizeResult } from '../services/resize.service';
@@ -37,6 +37,7 @@ export class NgtStore extends EnhancedRxState<
   #dimensions$ = this.select(selectSlice(['size', 'viewport']));
 
   actions = this.create();
+  ready$ = this.select('ready').pipe(filter((ready) => ready));
 
   constructor(
     @Inject(NGT_PERFORMANCE_OPTIONS) performance: NgtPerformance,
@@ -68,8 +69,8 @@ export class NgtStore extends EnhancedRxState<
       raycasterOptions: {},
       sceneOptions: {},
       viewport: {
-        initialDpr: calculateDpr(this.get('dpr')),
-        dpr: calculateDpr(this.get('dpr')),
+        initialDpr: calculateDpr(1),
+        dpr: calculateDpr(1),
         width: canvasHost.clientWidth,
         height: canvasHost.clientHeight,
         aspect: canvasHost.clientWidth / canvasHost.clientHeight,
