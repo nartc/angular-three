@@ -4,14 +4,20 @@
   "license": "MIT",
   "scripts": {},
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@rx-angular/cdk": "~1.0.0-alpha.11",
+    "@rx-angular/state": "~1.4.6",
+    "three": "~0.137.5"
+  },
   "devDependencies": {
-    "@nrwl/tao": "13.7.1",
+    "@nrwl/angular": "13.7.1",
     "@nrwl/cli": "13.7.1",
+    "@nrwl/tao": "13.7.1",
     "@nrwl/workspace": "13.7.1",
     "@types/node": "16.11.7",
-    "typescript": "~4.5.2",
-    "prettier": "^2.5.1"
+    "@types/three": "0.137.0",
+    "prettier": "~2.5.1",
+    "typescript": "~4.5.5"
   },
   "workspaces": [
     "packages/**"
