@@ -33,7 +33,41 @@
       "options": {
         "lintFilePatterns": [
           "packages/core/src/**/*.ts",
-          "packages/core/src/**/*.html"
+          "packages/core/src/**/*.html",
+          "packages/core/geometries/**/*.ts",
+          "packages/core/geometries/**/*.html",
+          "packages/core/materials/**/*.ts",
+          "packages/core/materials/**/*.html",
+          "packages/core/attributes/**/*.ts",
+          "packages/core/attributes/**/*.html",
+          "packages/core/curves/**/*.ts",
+          "packages/core/curves/**/*.html",
+          "packages/core/textures/**/*.ts",
+          "packages/core/textures/**/*.html",
+          "packages/core/audios/**/*.ts",
+          "packages/core/audios/**/*.html",
+          "packages/core/cameras/**/*.ts",
+          "packages/core/cameras/**/*.html",
+          "packages/core/helpers/**/*.ts",
+          "packages/core/helpers/**/*.html",
+          "packages/core/lights/**/*.ts",
+          "packages/core/lights/**/*.html",
+          "packages/core/lines/**/*.ts",
+          "packages/core/lines/**/*.html",
+          "packages/core/sprites/**/*.ts",
+          "packages/core/sprites/**/*.html",
+          "packages/core/meshes/**/*.ts",
+          "packages/core/meshes/**/*.html",
+          "packages/core/group/**/*.ts",
+          "packages/core/group/**/*.html",
+          "packages/core/stats/**/*.ts",
+          "packages/core/stats/**/*.html",
+          "packages/core/lod/**/*.ts",
+          "packages/core/lod/**/*.html",
+          "packages/core/primitive/**/*.ts",
+          "packages/core/primitive/**/*.html",
+          "packages/core/points/**/*.ts",
+          "packages/core/points/**/*.html"
         ]
       }
     }

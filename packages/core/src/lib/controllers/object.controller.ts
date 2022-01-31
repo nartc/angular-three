@@ -207,17 +207,17 @@ export class NgtObjectController extends Controller implements OnDestroy {
           this.readyFn();
         }
       }
-    });
 
-    if (this.animateReady.observed) {
-      this.animationFrameStore.register({
-        obj: () => this.object,
-        callback: (state) => {
-          this.animateReady.emit({ state, object: this.object });
-        },
-        priority: this.priority,
-      });
-    }
+      if (this.animateReady.observed) {
+        this.animationFrameStore.register({
+          obj: () => this.object,
+          callback: (state) => {
+            this.animateReady.emit({ state, object: this.object });
+          },
+          priority: this.priority,
+        });
+      }
+    });
   }
 
   ngOnDestroy() {

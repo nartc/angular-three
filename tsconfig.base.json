@@ -15,7 +15,28 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@angular-three/core": ["packages/core/src/index.ts"]
+      "@angular-three/core": ["packages/core/src/index.ts"],
+      "@angular-three/core/attributes": [
+        "packages/core/attributes/src/index.ts"
+      ],
+      "@angular-three/core/audios": ["packages/core/audios/src/index.ts"],
+      "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"],
+      "@angular-three/core/curves": ["packages/core/curves/src/index.ts"],
+      "@angular-three/core/geometries": [
+        "packages/core/geometries/src/index.ts"
+      ],
+      "@angular-three/core/group": ["packages/core/group/src/index.ts"],
+      "@angular-three/core/helpers": ["packages/core/helpers/src/index.ts"],
+      "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
+      "@angular-three/core/lines": ["packages/core/lines/src/index.ts"],
+      "@angular-three/core/lod": ["packages/core/lod/src/index.ts"],
+      "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
+      "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
+      "@angular-three/core/points": ["packages/core/points/src/index.ts"],
+      "@angular-three/core/primitive": ["packages/core/primitive/src/index.ts"],
+      "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"],
+      "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
+      "@angular-three/core/textures": ["packages/core/textures/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

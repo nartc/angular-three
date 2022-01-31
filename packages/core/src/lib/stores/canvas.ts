@@ -28,7 +28,7 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
     selectSlice(['scene', 'camera', 'renderer', 'raycaster']),
     map(
       ({ camera, renderer, scene, raycaster }) =>
-        !!camera && !!renderer && !scene && !raycaster
+        !!camera && !!renderer && !!scene && !!raycaster
     )
   );
 

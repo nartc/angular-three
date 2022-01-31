@@ -1,0 +1,32 @@
+// GENERATED
+import { NgtTexture } from '@angular-three/core';
+import { NgModule, Directive, Input } from '@angular/core';
+import * as THREE from 'three';
+
+@Directive({
+  selector: 'ngt-<%= fileName %>',
+  exportAs: 'ngt<%= name %>',
+  providers: [
+    {
+      provide: NgtTexture,
+      useExisting: Ngt<%= name %>,
+    }
+  ],
+})
+export class Ngt<%= name %> extends NgtTexture<THREE.<%= name %>> {
+
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.<%= name %>> | undefined;
+
+  @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
+    this.textureArgs = v;
+  }
+
+  textureType = THREE.<%= name %>;
+}
+
+@NgModule({
+  declarations: [Ngt<%= name %>],
+  exports: [Ngt<%= name %>],
+})
+export class Ngt<%= name %>Module {}
+
