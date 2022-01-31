@@ -1,0 +1,22 @@
+import { Directive, EventEmitter, Output } from '@angular/core';
+import type { NgtRender } from '../types';
+
+@Directive()
+export abstract class NgtExtender<TEntity> {
+  @Output() ready = new EventEmitter<TEntity>();
+  @Output() animateReady = new EventEmitter<{
+    entity: TEntity;
+    state: NgtRender;
+  }>();
+
+  private _object!: TEntity;
+
+  set object(value: TEntity) {
+    this._object = value;
+    this.ready.emit(value);
+  }
+
+  get object(): TEntity {
+    return this._object;
+  }
+}

@@ -3,5 +3,6 @@
   "dest": "../../dist/packages/core",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["@rx-angular/cdk", "@rx-angular/state"]
 }

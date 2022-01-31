@@ -1,7 +1,9 @@
-# core
+# `@angular-three/core`
 
-This library was generated with [Nx](https://nx.dev).
+This package provides **THREE.js** core objects like Objects, Attributes, Materials, Geometries, Helpers, Loaders etc... In addition, `@angular-three/core` also provides the main `CanvasComponent` that will setup a `WebGLRenderer`, `Scene`, and a _default_ `PerspectiveCamera`.
 
-## Running unit tests
+## Installation
 
-Run `nx test core` to execute the unit tests.
+```shell
+npm install @angular-three/core
+```
