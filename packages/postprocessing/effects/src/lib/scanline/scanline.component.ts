@@ -5,12 +5,12 @@ import {
   NgtPrimitiveModule,
 } from '@angular-three/core/primitive';
 import {
-  NGT_EFFECT_CONTROLLER_PROVIDER,<% if (blendFunction) { %>
-  NGT_EFFECT_DEFAULT_BLEND_FUNCTION,<% } %>
+  NGT_EFFECT_CONTROLLER_PROVIDER,
+  NGT_EFFECT_DEFAULT_BLEND_FUNCTION,
   NGT_EFFECT_TYPE,
   NGT_EFFECT_WATCH_CONTROLLER,
   NgtEffectController,
-  NgtEffectControllerModule
+  NgtEffectControllerModule,
 } from '@angular-three/postprocessing';
 import { CommonModule } from '@angular/common';
 import {
@@ -20,10 +20,10 @@ import {
   NgModule,
   ViewChild,
 } from '@angular/core';
-import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %>Effect } from 'postprocessing';
+import { BlendFunction, ScanlineEffect } from 'postprocessing';
 
 @Component({
-  selector: 'ngt-<%= fileName %>',
+  selector: 'ngt-scanline',
   template: `
     <ngt-primitive
       *ngIf="effect"
@@ -35,15 +35,17 @@ import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %>Effect } fro
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NGT_EFFECT_CONTROLLER_PROVIDER,
-    { provide: NGT_EFFECT_TYPE, useValue: <%= name %>Effect },<% if (blendFunction) { %>
+    { provide: NGT_EFFECT_TYPE, useValue: ScanlineEffect },
     {
       provide: NGT_EFFECT_DEFAULT_BLEND_FUNCTION,
-      useValue: BlendFunction.<%= blendFunction %>,
-    },<% } %>
+      useValue: BlendFunction.OVERLAY,
+    },
   ],
 })
-export class Ngt<%= name %> {
-  static ngAcceptInputType_options: ConstructorParameters<AnyConstructor<<%= name %>Effect>>[0] | undefined;
+export class NgtScanline {
+  static ngAcceptInputType_options:
+    | ConstructorParameters<AnyConstructor<ScanlineEffect>>[0]
+    | undefined;
 
   @ViewChild(NgtPrimitive) primitive?: NgtPrimitive;
 
@@ -58,8 +60,8 @@ export class Ngt<%= name %> {
 }
 
 @NgModule({
-  declarations: [Ngt<%= name %>],
-  exports: [Ngt<%= name %>, NgtEffectControllerModule],
+  declarations: [NgtScanline],
+  exports: [NgtScanline, NgtEffectControllerModule],
   imports: [NgtPrimitiveModule, CommonModule],
 })
-export class Ngt<%= name %>Module {}
+export class NgtScanlineModule {}

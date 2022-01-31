@@ -17,6 +17,7 @@
     "@angular/router": "~13.2.0",
     "@rx-angular/cdk": "~1.0.0-alpha.11",
     "@rx-angular/state": "~1.4.6",
+    "postprocessing": "~6.23.5",
     "rxjs": "~7.5.2",
     "three": "~0.137.5",
     "tslib": "^2.3.1",

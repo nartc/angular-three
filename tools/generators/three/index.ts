@@ -9,8 +9,8 @@ import helpersGenerator from './helpers/helpers';
 import lightsGenerator from './lights/lights';
 import linesGenerator from './lines/lines';
 import materialsGenerator from './materials/materials';
-// import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
-// import simpleEffectsGenerator from './postprocessing/simple-effects';
+import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
+import simpleEffectsGenerator from './postprocessing/simple-effects';
 import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
 
@@ -30,7 +30,7 @@ export default async function (tree: Tree) {
     lightSelectors,
     lineSelectors,
     spriteSelectors,
-    // simpleEffectSelectors,
+    simpleEffectSelectors,
   ] = await Promise.all([
     audiosGenerator(tree),
     camerasGenerator(tree),
@@ -38,7 +38,7 @@ export default async function (tree: Tree) {
     lightsGenerator(tree),
     linesGenerator(tree),
     spritesGenerator(tree),
-    // simpleEffectsGenerator(tree),
+    simpleEffectsGenerator(tree),
   ]);
 
   // const [
@@ -86,6 +86,6 @@ export default async function (tree: Tree) {
     //   tree,
     //   physicConstraintSelectors.map(({ name }) => name)
     // ),
-    // simpleEffectControllerGenerator(tree, simpleEffectSelectors),
+    simpleEffectControllerGenerator(tree, simpleEffectSelectors),
   ]);
 }

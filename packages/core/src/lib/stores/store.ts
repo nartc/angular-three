@@ -1,6 +1,15 @@
 import { Directive } from '@angular/core';
 import { createSideEffectObservable, RxState } from '@rx-angular/state';
-import { catchError, EMPTY, noop, Observable, Subject, tap } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  noop,
+  Observable,
+  OperatorFunction,
+  startWith,
+  Subject,
+  tap,
+} from 'rxjs';
 
 type AsyncActions<TActions extends object> = {
   [TActionKey in keyof TActions]: (args: TActions[TActionKey]) => void;
@@ -109,4 +118,8 @@ export class NgtStore<TState extends object = {}> extends RxState<TState> {
       this.subCache[subKey].complete();
     }
   }
+}
+
+export function startWithUndefined<TValue>(): OperatorFunction<TValue, TValue> {
+  return startWith<TValue>(undefined) as OperatorFunction<TValue, TValue>;
 }
