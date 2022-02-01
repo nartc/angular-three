@@ -29,12 +29,8 @@ export interface NgtCannonConstraintState {
 }
 
 @Directive({
-  selector: `
-    ng-container[ngtPhysicPointToPointConstraint],
-    ng-container[ngtPhysicConeTwistConstraint],
-    ng-container[ngtPhysicDistanceConstraint],
-    ng-container[ngtPhysicHingeConstraint],
-    ng-container[ngtPhysicLockConstraint]
+  selector: `<% if (selectors.length) { %><% for (const selector of selectors) { %>
+    ng-container[ngtPhysic<%= selector.selector %>Constraint]<% if (!selector.isLast) { %>,<% } %><% } %><% } %>
   `,
   exportAs: 'ngtCannonConstraint',
   providers: [NgtStore],
