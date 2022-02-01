@@ -1,6 +1,6 @@
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
 import { NgtResize, NgtResizeResult } from '../services/resize';
@@ -24,6 +24,8 @@ const defaultTarget = new THREE.Vector3();
 
 @Injectable()
 export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
+  ready$ = this.select('ready').pipe(filter((ready) => ready));
+
   private allConstructed$ = this.select(
     selectSlice(['scene', 'camera', 'renderer', 'raycaster']),
     map(

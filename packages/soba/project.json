@@ -41,7 +41,9 @@
           "packages/soba/shapes/**/*.ts",
           "packages/soba/shapes/**/*.html",
           "packages/soba/cameras/**/*.ts",
-          "packages/soba/cameras/**/*.html"
+          "packages/soba/cameras/**/*.html",
+          "packages/soba/misc/**/*.ts",
+          "packages/soba/misc/**/*.html"
         ]
       }
     }
