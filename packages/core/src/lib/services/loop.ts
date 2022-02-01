@@ -12,7 +12,7 @@ import { zonelessRequestAnimationFrame } from '../utils/zoneless-timer';
 export class NgtLoop {
   private running = false;
   private repeat?: number;
-  private frames = 1;
+  private frames = 0;
 
   constructor(
     private canvasStore: NgtCanvasStore,

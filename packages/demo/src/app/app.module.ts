@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { KeenComponentModule } from './keen-bloom/keen-bloom.component';
+import { KinematicCubeComponentModule } from './kinematic-cube/kinematic-cube.component';
 import { SimpleCubeComponentModule } from './simple-cube/simple-cube.component';
 
 @NgModule({
@@ -13,6 +14,7 @@ import { SimpleCubeComponentModule } from './simple-cube/simple-cube.component';
     RouterModule.forRoot([], { initialNavigation: 'enabledBlocking' }),
     SimpleCubeComponentModule,
     KeenComponentModule,
+    KinematicCubeComponentModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
