@@ -11,6 +11,7 @@ import type {
   NgtColor,
   NgtEuler,
   NgtEvent,
+  NgtObject3dProps,
   NgtQuaternion,
   NgtVector3,
   UnknownRecord,
@@ -144,6 +145,24 @@ export class NgtObjectInputsController extends Controller {
       ],
       this.objectInputsController,
     ];
+  }
+
+  get object3dProps(): NgtObject3dProps {
+    return {
+      name: this.name,
+      position: this._position?.toArray(),
+      rotation: this._rotation?.toArray() as NgtEuler,
+      quaternion: this._quaternion?.toArray() as NgtQuaternion,
+      scale: this._scale?.toArray(),
+      color: this.color,
+      userData: this.userData,
+      dispose: this.dispose,
+      raycast: this.raycast,
+      castShadow: this.castShadow,
+      receiveShadow: this.receiveShadow,
+      visible: this.visible,
+      matrixAutoUpdate: this.matrixAutoUpdate,
+    };
   }
 }
 
