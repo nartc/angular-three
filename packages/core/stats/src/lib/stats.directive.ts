@@ -8,13 +8,10 @@ import {
   Inject,
   Input,
   NgModule,
-  NgZone,
   OnDestroy,
   OnInit,
 } from '@angular/core';
-// import Stats from minified bundle for minimizing bundle size
-// @ts-ignore
-import Stats from 'three/examples/js/libs/stats.min';
+import Stats from 'three/examples/jsm/libs/stats.module';
 
 @Directive({
   selector: 'ngt-stats',
@@ -29,7 +26,6 @@ export class NgtStats implements OnInit, OnDestroy {
 
   constructor(
     private animationFrameStore: NgtAnimationFrameStore,
-    private zone: NgZone,
     @Inject(DOCUMENT) document: Document
   ) {
     this.node = document.body;
@@ -41,7 +37,7 @@ export class NgtStats implements OnInit, OnDestroy {
         this.node = this.parent;
       }
 
-      this.stats = new Stats();
+      this.stats = Stats();
       this.node.appendChild(this.stats.dom);
       this.animationUuid = this.animationFrameStore.register({
         callback: this.stats.update.bind(this.stats),

@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { NGT_CANVAS_OPTIONS } from './di/canvas';
 import { NgtLoop } from './services/loop';
+import { NgtPerformance } from './services/performance';
 import { NgtResize } from './services/resize';
 import { NgtAnimationFrameStore } from './stores/animation-frame';
 import { NgtCanvasStore } from './stores/canvas';
@@ -62,6 +63,7 @@ import { zonelessRequestAnimationFrame } from './utils/zoneless-timer';
     NgtEventsStore,
     NgtResize,
     NgtLoop,
+    NgtPerformance,
   ],
 })
 export class NgtCanvas extends NgtStore implements OnInit {

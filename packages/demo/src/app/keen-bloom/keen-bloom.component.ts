@@ -13,7 +13,7 @@ import {
 } from '@angular-three/postprocessing/effects';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import {
-  NgtGLTFLoaderService,
+  NgtGLTFLoader,
   NgtSobaLoaderModule,
 } from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
@@ -21,7 +21,7 @@ import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-  selector: 'ngt-keen-bloom',
+  selector: 'demo-keen-bloom',
   template: `
     <ngt-canvas
       [camera]="{ position: [0, 0, 15], near: 5, far: 20 }"
@@ -29,7 +29,7 @@ import * as THREE from 'three';
     >
       <ngt-stats></ngt-stats>
       <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
-      <ngt-keen></ngt-keen>
+      <demo-keen></demo-keen>
 
       <ngt-ambient-light></ngt-ambient-light>
       <ngt-directional-light
@@ -49,13 +49,12 @@ import * as THREE from 'three';
 export class KeenBloomComponent {}
 
 @Component({
-  selector: 'ngt-keen',
+  selector: 'demo-keen',
   template: `
     <ng-container *ngIf="keen$ | async as keen">
       <ngt-group
-        #group="ngtGroup"
         (ready)="onReady($event)"
-        (animateReady)="onGroupAnimate(group.group!)"
+        (animateReady)="onGroupAnimate($event.object)"
         [position]="[0, -7, 0]"
         [dispose]="null"
       >
@@ -73,9 +72,9 @@ export class KeenBloomComponent {}
 export class KeenComponent {
   keen$ = this.gltfLoader.load('assets/scene.gltf');
 
-  constructor(private gltfLoader: NgtGLTFLoaderService) {}
+  constructor(private gltfLoader: NgtGLTFLoader) {}
 
-  onGroupAnimate(group: THREE.Group) {
+  onGroupAnimate(group: THREE.Object3D) {
     group.rotation.z += 0.01;
   }
 
@@ -93,7 +92,6 @@ export class KeenComponent {
     NgtCoreModule,
     NgtGroupModule,
     NgtMeshModule,
-    NgtSobaOrbitControlsModule,
     NgtAmbientLightModule,
     NgtDirectionalLightModule,
     NgtEffectComposerModule,
@@ -102,6 +100,7 @@ export class KeenComponent {
     NgtNoiseModule,
     NgtSobaLoaderModule,
     NgtColorPipeModule,
+    NgtSobaOrbitControlsModule,
   ],
 })
 export class KeenComponentModule {}

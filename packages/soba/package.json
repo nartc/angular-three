@@ -1,5 +1,5 @@
 {
-  "name": "@angular-three/postprocessing",
+  "name": "@angular-three/soba",
   "version": "3.2.0",
   "publishConfig": {
     "access": "public"
@@ -9,6 +9,8 @@
     "@angular/core": "^13.2.0"
   },
   "dependencies": {
+    "three-stdlib": "~2.8.4",
+    "troika-three-text": "~0.45.0",
     "tslib": "^2.3.0"
   }
 }

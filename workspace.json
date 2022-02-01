@@ -3,6 +3,7 @@
   "projects": {
     "core": "packages/core",
     "demo": "packages/demo",
-    "postprocessing": "packages/postprocessing"
+    "postprocessing": "packages/postprocessing",
+    "soba": "packages/soba"
   }
 }

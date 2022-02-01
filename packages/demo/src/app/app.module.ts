@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { KeenComponentModule } from './keen-bloom/keen-bloom.component';
 import { SimpleCubeComponentModule } from './simple-cube/simple-cube.component';
 
 @NgModule({
@@ -11,6 +12,7 @@ import { SimpleCubeComponentModule } from './simple-cube/simple-cube.component';
     BrowserModule,
     RouterModule.forRoot([], { initialNavigation: 'enabledBlocking' }),
     SimpleCubeComponentModule,
+    KeenComponentModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
