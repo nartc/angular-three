@@ -1,9 +1,9 @@
 import { NgModule, Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'rad' })
+@Pipe({ name: 'radian' })
 export class NgtRadianPipe implements PipeTransform {
-  transform(value: number): number {
-    return (value * Math.PI) / 180;
+  transform(degree: number): number {
+    return (degree * Math.PI) / 180;
   }
 }
 

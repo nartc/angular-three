@@ -29,9 +29,13 @@ export class NgtMathPipe implements PipeTransform {
  * This pipe is deprecated due to complicated template usage.
  * `Math.PI` is the most used one so see {@link NgtPiPipe} for Math.PI
  */
-
 @Pipe({ name: 'mathConst' })
 export class NgtMathConstantPipe implements PipeTransform {
+  /**
+   * @deprecated will be removed in v5.
+   * This pipe is deprecated due to complicated template usage.
+   * `Math.PI` is the most used one so see {@link NgtPiPipe} for Math.PI
+   */
   transform(
     value: number | 0,
     keyOfMathConst:
