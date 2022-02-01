@@ -20,7 +20,12 @@ export const NGT_OBJECT_PROVIDER: Provider = {
     withMaterialController: NgtWithMaterialController
   ) => {
     return () => {
-      if (extender && withMaterialController && 'material' in extender.object)
+      if (
+        extender &&
+        extender.object &&
+        withMaterialController &&
+        'material' in extender.object
+      )
         return extender.object;
       if (objectController) return objectController.object;
       return null;

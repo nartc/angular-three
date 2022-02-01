@@ -5,7 +5,7 @@ import { NgtAnimationFrameStore } from '../stores/animation-frame';
 import { NgtCanvasStore } from '../stores/canvas';
 import { NgtStore } from '../stores/store';
 import type { AnyConstructor, AnyFunction } from '../types';
-import { zonelessRequestAnimationFrame } from '../utils/zoneless-timer';
+import { zonelessSetTimeout } from '../utils/zoneless-timer';
 
 @Directive()
 export abstract class NgtObjectHelper<TObjectHelper extends THREE.Object3D>
@@ -30,7 +30,7 @@ export abstract class NgtObjectHelper<TObjectHelper extends THREE.Object3D>
   }
 
   ngOnInit() {
-    zonelessRequestAnimationFrame(() => {
+    zonelessSetTimeout(() => {
       this._object = this.objectFn();
 
       if (!this._object) {

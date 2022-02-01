@@ -15,6 +15,7 @@ import physicBodiesGenerator from './physic-bodies/physic-bodies';
 import physicConstraintsGenerator from './physic-constraints/physic-constraints';
 import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
 import simpleEffectsGenerator from './postprocessing/simple-effects';
+import sobaShapesGenerator from './soba-shapes/soba-shapes';
 import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
 
@@ -35,6 +36,7 @@ export default async function (tree: Tree) {
     lineSelectors,
     spriteSelectors,
     simpleEffectSelectors,
+    sobaShapeSelectors,
     physicBodySelectors,
     physicConstraintSelectors,
   ] = await Promise.all([
@@ -45,34 +47,11 @@ export default async function (tree: Tree) {
     linesGenerator(tree),
     spritesGenerator(tree),
     simpleEffectsGenerator(tree),
+    sobaShapesGenerator(tree),
     physicBodiesGenerator(tree),
     physicConstraintsGenerator(tree),
   ]);
 
-  // const [
-  //   audioSelectors,
-  //   lightSelectors,
-  //   helperSelectors,
-  //   lineSelectors,
-  //   spriteSelectors,
-  //   cameraSelectors,
-  //   physicBodySelectors,
-  //   physicConstraintSelectors,
-  //   sobaShapeSelectors,
-  //   simpleEffectSelectors,
-  // ] = await Promise.all([
-  //   audiosGenerator(tree),
-  //   lightsGenerator(tree),
-  //   helpersGenerator(tree),
-  //   linesGenerator(tree),
-  //   spritesGenerator(tree),
-  //   camerasGenerator(tree),
-  //   physicBodiesGenerator(tree),
-  //   physicConstraintsGenerator(tree),
-  //   sobaShapesGenerator(tree),
-  //   simpleEffectsGenerator(tree),
-  // ]);
-  //
   await Promise.all([
     controllersGenerator(
       tree,
@@ -84,7 +63,7 @@ export default async function (tree: Tree) {
       ],
       audioSelectors,
       lineSelectors,
-      [] // sobaShapeSelectors
+      sobaShapeSelectors
     ),
     cannonBodyControllerGenerator(
       tree,
