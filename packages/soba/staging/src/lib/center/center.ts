@@ -74,10 +74,9 @@ export class NgtSobaCenterContent {
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     createExtenderProvider(NgtSobaCenter),
     NgtStore,
-    createParentObjectProvider([
-      NgtSobaCenter,
-      (center) => center.store.get('innerGroup'),
-    ]),
+    createParentObjectProvider(NgtSobaCenter, (center) =>
+      center.store.get('innerGroup')
+    ),
   ],
 })
 export class NgtSobaCenter extends NgtExtender<THREE.Group> {

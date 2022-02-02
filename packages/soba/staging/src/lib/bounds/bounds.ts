@@ -1,5 +1,6 @@
 import {
   createExtenderProvider,
+  createParentObjectProvider,
   isOrthographicCamera,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
@@ -13,20 +14,22 @@ import {
   zonelessRequestAnimationFrame,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ContentChildren,
+  ContentChild,
+  Directive,
   Inject,
   Injectable,
   Input,
   NgModule,
   OnDestroy,
   OnInit,
-  QueryList,
+  TemplateRef,
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
-import { combineLatest, Observable, startWith } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import * as THREE from 'three';
 
 type ControlsProto = {
@@ -250,6 +253,14 @@ export class NgtSobaBoundsContext {
   }
 }
 
+@Directive({
+  selector: 'ng-template[sobaBoundsContent]',
+  exportAs: 'ngtSobaBoundsContent',
+})
+export class NgtSobaBoundsContent {
+  constructor(public templateRef: TemplateRef<NgtSobaBoundsState>) {}
+}
+
 @Component({
   selector: 'ngt-soba-bounds',
   template: `
@@ -260,7 +271,11 @@ export class NgtSobaBoundsContext {
       "
       [objectInputsController]="objectInputsController"
     >
-      <ng-content></ng-content>
+      <ng-container
+        *ngIf="store.get('group')"
+        [ngTemplateOutlet]="content.templateRef"
+        [ngTemplateOutletContext]="store.get()"
+      ></ng-container>
     </ngt-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -269,6 +284,9 @@ export class NgtSobaBoundsContext {
     NgtSobaBoundsContext,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     createExtenderProvider(NgtSobaBounds),
+    createParentObjectProvider(NgtSobaBounds, (bounds) =>
+      bounds.store.get('group')
+    ),
   ],
 })
 export class NgtSobaBounds
@@ -295,25 +313,8 @@ export class NgtSobaBounds
     this.store.set({ eps });
   }
 
-  @ContentChildren(NgtObjectInputsController, { descendants: true })
-  set children(queryList: QueryList<NgtObjectInputsController>) {
-    zonelessRequestAnimationFrame(() => {
-      this.store.hold(
-        combineLatest([
-          queryList.changes.pipe(startWith(queryList)),
-          this.store.select('group'),
-        ]),
-        ([controllers, group]: [
-          QueryList<NgtObjectInputsController>,
-          THREE.Group
-        ]) => {
-          controllers.forEach((controller) => {
-            controller.appendTo = () => group;
-          });
-        }
-      );
-    });
-  }
+  @ContentChild(NgtSobaBoundsContent, { static: true })
+  content!: NgtSobaBoundsContent;
 
   private animationUuid = '';
 
@@ -450,8 +451,12 @@ export class NgtSobaBounds
 }
 
 @NgModule({
-  declarations: [NgtSobaBounds],
-  exports: [NgtSobaBounds, NgtObjectInputsControllerModule],
-  imports: [NgtGroupModule],
+  declarations: [NgtSobaBounds, NgtSobaBoundsContent],
+  exports: [
+    NgtSobaBounds,
+    NgtSobaBoundsContent,
+    NgtObjectInputsControllerModule,
+  ],
+  imports: [NgtGroupModule, CommonModule],
 })
 export class NgtSobaBoundsModule {}
