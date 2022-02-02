@@ -14,16 +14,17 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ContentChildren,
+  ContentChild,
+  Directive,
   EventEmitter,
   Inject,
   Input,
   NgModule,
   OnInit,
   Output,
-  QueryList,
+  TemplateRef,
 } from '@angular/core';
-import { combineLatest, map, merge, startWith } from 'rxjs';
+import { combineLatest, map, merge } from 'rxjs';
 import * as THREE from 'three';
 import { TransformControls } from 'three-stdlib';
 
@@ -39,6 +40,14 @@ interface NgtSobaTransformControlsState {
   camera: THREE.Camera | null;
 }
 
+@Directive({
+  selector: 'ng-template[sobaTransformControlsContent]',
+  exportAs: 'ngtSobaTransformControlsContent',
+})
+export class NgtSobaTransformControlsContent {
+  constructor(public templateRef: TemplateRef<NgtSobaTransformControlsState>) {}
+}
+
 @Component({
   selector: 'ngt-soba-transform-controls',
   template: `
@@ -48,7 +57,11 @@ interface NgtSobaTransformControlsState {
       (ready)="set({ group: $event })"
       [objectInputsController]="objectInputsController"
     >
-      <ng-content></ng-content>
+      <ng-container
+        *ngIf="get('group')"
+        [ngTemplateOutlet]="content.templateRef"
+        [ngTemplateOutletContext]="get()"
+      ></ng-container>
     </ngt-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -96,25 +109,8 @@ export class NgtSobaTransformControls
     }))
   );
 
-  @ContentChildren(NgtObjectInputsController, { descendants: true })
-  set children(queryList: QueryList<NgtObjectInputsController>) {
-    zonelessRequestAnimationFrame(() => {
-      this.hold(
-        combineLatest([
-          queryList.changes.pipe(startWith(queryList)),
-          this.select('group'),
-        ]),
-        ([controllers, group]: [
-          QueryList<NgtObjectInputsController>,
-          THREE.Group
-        ]) => {
-          controllers.forEach((controller) => {
-            controller.appendTo = () => group;
-          });
-        }
-      );
-    });
-  }
+  @ContentChild(NgtSobaTransformControlsContent, { static: true })
+  content!: NgtSobaTransformControlsContent;
 
   constructor(
     private canvasStore: NgtCanvasStore,
@@ -209,8 +205,12 @@ export class NgtSobaTransformControls
 }
 
 @NgModule({
-  declarations: [NgtSobaTransformControls],
-  exports: [NgtSobaTransformControls, NgtObjectInputsControllerModule],
+  declarations: [NgtSobaTransformControls, NgtSobaTransformControlsContent],
+  exports: [
+    NgtSobaTransformControls,
+    NgtSobaTransformControlsContent,
+    NgtObjectInputsControllerModule,
+  ],
   imports: [NgtGroupModule, NgtPrimitiveModule, CommonModule],
 })
 export class NgtSobaTransformControlsModule {}
