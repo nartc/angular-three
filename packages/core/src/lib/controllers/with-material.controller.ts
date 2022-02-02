@@ -1,6 +1,8 @@
 // GENERATED
-import { Directive, Input, NgModule } from '@angular/core';
+import { ContentChild, Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
+import { NgtMaterial } from '../three/material';
+import { zonelessRequestAnimationFrame } from '../utils/zoneless-timer';
 import { Controller, createControllerProviderFactory } from './controller';
 
 @Directive({
@@ -47,6 +49,16 @@ export class NgtWithMaterialController extends Controller {
   }
 
   @Input() withMaterialController?: NgtWithMaterialController;
+
+  @ContentChild(NgtMaterial, { static: true }) set contentMaterial(
+    dir: NgtMaterial
+  ) {
+    if (dir) {
+      zonelessRequestAnimationFrame(() => {
+        this.material = dir.material;
+      });
+    }
+  }
 
   private _multiple = false;
 

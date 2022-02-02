@@ -69,28 +69,26 @@ export abstract class NgtMaterial<
   abstract materialType: AnyConstructor<TMaterial>;
 
   ngOnInit() {
+    if (this.parameters) {
+      this.convertColorToLinear(this.parameters);
+    }
+    this._material = new this.materialType(this.parameters);
     zonelessRequestAnimationFrame(() => {
-      if (this.parameters) {
-        this.convertColorToLinear(this.parameters);
-      }
-      this._material = new this.materialType(this.parameters);
-      zonelessRequestAnimationFrame(() => {
-        const parentObject = this.parentObjectFactory() as THREE.Mesh;
-        if (parentObject) {
-          if (
-            this.withMaterialController &&
-            this.withMaterialController.multiple
-          ) {
-            if (!Array.isArray(parentObject.material)) {
-              parentObject.material = [];
-            }
-            (parentObject.material as THREE.Material[]).push(this.material);
-          } else {
-            parentObject.material = this.material;
+      const parentObject = this.parentObjectFactory() as THREE.Mesh;
+      if (parentObject) {
+        if (
+          this.withMaterialController &&
+          this.withMaterialController.multiple
+        ) {
+          if (!Array.isArray(parentObject.material)) {
+            parentObject.material = [];
           }
+          (parentObject.material as THREE.Material[]).push(this.material);
+        } else {
+          parentObject.material = this.material;
         }
-        this.ready.emit(this.material);
-      });
+      }
+      this.ready.emit(this.material);
     });
   }
 

@@ -41,8 +41,8 @@ import * as THREE from 'three';
       <ng-template #withoutArgs>
         <ngt-dodecahedron-geometry></ngt-dodecahedron-geometry>
       </ng-template>
+      <ng-content></ng-content>
     </ngt-mesh>
-    <ng-content></ng-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [

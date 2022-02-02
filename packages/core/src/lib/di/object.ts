@@ -1,4 +1,4 @@
-import { InjectionToken, Optional, Provider } from '@angular/core';
+import { InjectionToken, Optional, Provider, Type } from '@angular/core';
 import * as THREE from 'three';
 import {
   NGT_OBJECT_WATCHED_CONTROLLER,
@@ -37,3 +37,20 @@ export const NGT_OBJECT_PROVIDER: Provider = {
     [new Optional(), NGT_WITH_MATERIAL_WATCHED_CONTROLLER],
   ],
 };
+
+export const NGT_PARENT_OBJECT = new InjectionToken<AnyFunction>(
+  'THREE_OBJECT_3D as Parent'
+);
+
+export function createParentObjectProvider<TExisting extends Type<any>>([
+  existing,
+  factory,
+]: [TExisting, (existing: InstanceType<TExisting>) => THREE.Object3D]) {
+  return {
+    provide: NGT_PARENT_OBJECT,
+    useFactory: (existing: InstanceType<TExisting>) => {
+      return () => factory?.(existing);
+    },
+    deps: [existing],
+  };
+}

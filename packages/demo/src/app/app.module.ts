@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { KeenComponentModule } from './keen-bloom/keen-bloom.component';
 import { KinematicCubeComponentModule } from './kinematic-cube/kinematic-cube.component';
 import { SimpleCubeComponentModule } from './simple-cube/simple-cube.component';
+import { TestCenterComponentModule } from './test-center/test-center.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,6 +16,7 @@ import { SimpleCubeComponentModule } from './simple-cube/simple-cube.component';
     SimpleCubeComponentModule,
     KeenComponentModule,
     KinematicCubeComponentModule,
+    TestCenterComponentModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,6 +1,8 @@
 // GENERATED
-import { Directive, Input, NgModule } from '@angular/core';
+import { ContentChild, Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
+import { NgtGeometry } from '../three/geometry';
+import { zonelessRequestAnimationFrame } from '../utils/zoneless-timer';
 import { Controller, createControllerProviderFactory } from './controller';
 
 @Directive({
@@ -27,6 +29,16 @@ export class NgtWithGeometryController extends Controller {
   private _geometry: THREE.BufferGeometry | undefined = undefined;
 
   @Input() withGeometryController?: NgtWithGeometryController;
+
+  @ContentChild(NgtGeometry, { static: true }) set contentGeometry(
+    dir: NgtGeometry
+  ) {
+    if (dir) {
+      zonelessRequestAnimationFrame(() => {
+        this.geometry = dir.geometry;
+      });
+    }
+  }
 
   override get inputControllerProps(): [string[], Controller | undefined] {
     return [['geometry'], this.withGeometryController];

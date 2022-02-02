@@ -84,9 +84,7 @@ export class NgtStore<TState extends object = {}> extends RxState<TState> {
    * Create an AsyncActionsProxy that contains executable actions
    * along with their respective Observables.
    */
-  protected createActions<
-    TActions extends object
-  >(): AsyncActionsProxy<TActions> {
+  createActions<TActions extends object>(): AsyncActionsProxy<TActions> {
     return new Proxy(
       {},
       {

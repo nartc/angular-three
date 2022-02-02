@@ -41,8 +41,8 @@ import * as THREE from 'three';
       <ng-template #withoutArgs>
         <ngt-plane-geometry></ngt-plane-geometry>
       </ng-template>
+      <ng-content></ng-content>
     </ngt-mesh>
-    <ng-content></ng-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [

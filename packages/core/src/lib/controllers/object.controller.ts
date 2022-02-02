@@ -2,6 +2,7 @@
 import {
   Directive,
   EventEmitter,
+  Host,
   Inject,
   Input,
   NgModule,
@@ -14,10 +15,12 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, Subscription, take } from 'rxjs';
 import * as THREE from 'three';
+import { NGT_PARENT_OBJECT } from '../di/object';
 import { NgtAnimationFrameStore } from '../stores/animation-frame';
 import { NgtCanvasStore } from '../stores/canvas';
 import { NgtEventsStore } from '../stores/events';
 import type {
+  AnyFunction,
   NgtEvent,
   NgtEventHandlers,
   NgtInstanceInternal,
@@ -119,6 +122,8 @@ export class NgtObjectController extends Controller implements OnDestroy {
     return this._initFn as () => THREE.Object3D;
   }
 
+  private parentObjectFactory!: AnyFunction;
+
   constructor(
     zone: NgZone,
     private canvasStore: NgtCanvasStore,
@@ -126,7 +131,11 @@ export class NgtObjectController extends Controller implements OnDestroy {
     private animationFrameStore: NgtAnimationFrameStore,
     @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
     private objectInputsController: NgtObjectInputsController,
-    @Optional() @SkipSelf() private parentObject: NgtObjectController
+    @Optional() @SkipSelf() private parentObjectController: NgtObjectController,
+    @Optional()
+    @Host()
+    @Inject(NGT_PARENT_OBJECT)
+    private parentObjectFn: AnyFunction
   ) {
     super(zone);
   }
@@ -198,6 +207,16 @@ export class NgtObjectController extends Controller implements OnDestroy {
             objects: { ...state.objects, [this.object.uuid]: this.object },
           }));
 
+          if (this.parentObjectFn) {
+            this.parentObjectFactory = this.parentObjectFn;
+          } else {
+            this.parentObjectFactory = (() => {
+              return this.parentObjectController?.object
+                ? this.parentObjectController.object
+                : undefined;
+            }) as AnyFunction;
+          }
+
           if (this.objectInputsController.appendMode !== 'none') {
             this.appendToParent();
           }
@@ -241,22 +260,19 @@ export class NgtObjectController extends Controller implements OnDestroy {
   }
 
   private appendToParent(): void {
-    // Schedule this in the next frame to allow for all appendTo's to settle
-    this.zone.runOutsideAngular(() => {
-      if (this.objectInputsController.appendTo) {
-        this.appendTo.add(this.object);
-        return;
-      }
+    if (this.objectInputsController.appendTo) {
+      this.appendTo.add(this.object);
+      return;
+    }
 
-      if (this.objectInputsController.appendMode === 'root') {
-        this.addToScene();
-        return;
-      }
+    if (this.objectInputsController.appendMode === 'root') {
+      this.addToScene();
+      return;
+    }
 
-      if (this.objectInputsController.appendMode === 'immediate') {
-        this.addToParent();
-      }
-    });
+    if (this.objectInputsController.appendMode === 'immediate') {
+      this.addToParent();
+    }
   }
 
   private addToScene() {
@@ -267,8 +283,8 @@ export class NgtObjectController extends Controller implements OnDestroy {
   }
 
   private addToParent() {
-    if (this.parentObject) {
-      this.parentObject.object.add(this.object);
+    if (this.parentObjectFactory()) {
+      this.parentObjectFactory().add(this.object);
     } else {
       this.addToScene();
     }
@@ -312,12 +328,14 @@ export class NgtObjectController extends Controller implements OnDestroy {
 
   private remove() {
     if (this.objectInputsController.appendTo) {
-      this.appendTo.remove(this.object);
+      if (this.appendTo) {
+        this.appendTo.remove(this.object);
+      }
     } else if (
-      this.parentObject &&
+      this.parentObjectFactory() &&
       this.objectInputsController.appendMode === 'immediate'
     ) {
-      this.parentObject.object.remove(this.object);
+      this.parentObjectFactory().remove(this.object);
     } else {
       const scene = this.canvasStore.get('scene');
       if (scene) {
