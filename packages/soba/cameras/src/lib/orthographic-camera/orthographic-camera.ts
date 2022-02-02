@@ -1,4 +1,5 @@
 import {
+  createExtenderProvider,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtCanvasStore,
@@ -49,7 +50,7 @@ export interface NgtSobaOrthographicCameraState {
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NgtStore,
-    { provide: NgtExtender, useExisting: NgtSobaOrthographicCamera },
+    createExtenderProvider(NgtSobaOrthographicCamera),
   ],
 })
 export class NgtSobaOrthographicCamera extends NgtExtender<THREE.OrthographicCamera> {

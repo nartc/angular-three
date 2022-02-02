@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Output } from '@angular/core';
+import { Directive, EventEmitter, Output, Provider, Type } from '@angular/core';
 import type { NgtRender } from '../types';
 
 @Directive()
@@ -19,4 +19,11 @@ export abstract class NgtExtender<TEntity> {
   get object(): TEntity {
     return this._object;
   }
+}
+
+export function createExtenderProvider(type: Type<unknown>): Provider {
+  return {
+    provide: NgtExtender,
+    useExisting: type,
+  };
 }

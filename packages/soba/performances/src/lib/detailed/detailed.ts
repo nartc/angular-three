@@ -1,4 +1,5 @@
 import {
+  createExtenderProvider,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtExtender,
@@ -45,10 +46,7 @@ interface NgtSobaDetailedState {
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NgtStore,
-    {
-      provide: NgtExtender,
-      useExisting: NgtSobaDetailed,
-    },
+    createExtenderProvider(NgtSobaDetailed),
   ],
 })
 export class NgtSobaDetailed

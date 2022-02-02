@@ -1,5 +1,6 @@
 // GENERATED
 import {
+  createExtenderProvider,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NGT_WITH_MATERIAL_CONTROLLER_PROVIDER,
@@ -47,7 +48,7 @@ import * as THREE from 'three';
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_WITH_MATERIAL_CONTROLLER_PROVIDER,
-    { provide: NgtExtender, useExisting: NgtSobaPolyhedron },
+    createExtenderProvider(NgtSobaPolyhedron),
   ],
 })
 export class NgtSobaPolyhedron extends NgtExtender<THREE.Mesh> {

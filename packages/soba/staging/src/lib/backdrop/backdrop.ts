@@ -1,4 +1,5 @@
 import {
+  createExtenderProvider,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtExtender,
@@ -51,7 +52,7 @@ const easeInExpo = (x: number) => (x === 0 ? 0 : Math.pow(2, 10 * x - 10));
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-    { provide: NgtExtender, useExisting: NgtSobaBackdrop },
+    createExtenderProvider(NgtSobaBackdrop),
     NgtStore,
   ],
 })

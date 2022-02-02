@@ -1,5 +1,6 @@
 // GENERATED
 import {
+  createExtenderProvider,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NGT_WITH_MATERIAL_CONTROLLER_PROVIDER,
@@ -40,15 +41,14 @@ import * as THREE from 'three';
       <ng-template #withoutArgs>
         <ngt-box-geometry></ngt-box-geometry>
       </ng-template>
-
-      <ng-content></ng-content>
     </ngt-mesh>
+    <ng-content></ng-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_WITH_MATERIAL_CONTROLLER_PROVIDER,
-    { provide: NgtExtender, useExisting: NgtSobaBox },
+    createExtenderProvider(NgtSobaBox),
   ],
 })
 export class NgtSobaBox extends NgtExtender<THREE.Mesh> {

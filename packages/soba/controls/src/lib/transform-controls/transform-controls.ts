@@ -23,7 +23,7 @@ import {
   Output,
   QueryList,
 } from '@angular/core';
-import { combineLatest, map, merge } from 'rxjs';
+import { combineLatest, map, merge, startWith } from 'rxjs';
 import * as THREE from 'three';
 import { TransformControls } from 'three-stdlib';
 
@@ -97,9 +97,22 @@ export class NgtSobaTransformControls
   );
 
   @ContentChildren(NgtObjectInputsController, { descendants: true })
-  set children(controllers: QueryList<NgtObjectInputsController>) {
-    controllers.forEach((controller) => {
-      controller.appendTo = () => this.group;
+  set children(queryList: QueryList<NgtObjectInputsController>) {
+    zonelessRequestAnimationFrame(() => {
+      this.hold(
+        combineLatest([
+          queryList.changes.pipe(startWith(queryList)),
+          this.select('group'),
+        ]),
+        ([controllers, group]: [
+          QueryList<NgtObjectInputsController>,
+          THREE.Group
+        ]) => {
+          controllers.forEach((controller) => {
+            controller.appendTo = () => group;
+          });
+        }
+      );
     });
   }
 
@@ -127,8 +140,11 @@ export class NgtSobaTransformControls
 
   ngOnInit() {
     zonelessRequestAnimationFrame(() => {
-      this.hold(this.attach$, ([controls, object]) => {
+      this.effect(this.attach$, ([controls, object]) => {
         controls.attach(object);
+        return () => {
+          controls.detach();
+        };
       });
 
       this.hold(this.initControls$, ({ camera, ready }) => {
