@@ -11,8 +11,7 @@ export default async function controllersGenerator(
   tree: Tree,
   object3dSelectors: string[],
   audioSelectors: string[],
-  lineSelectors: string[],
-  sobaShapeSelectors: string[]
+  lineSelectors: string[]
 ) {
   const meshSelectors = ['mesh', 'instanced-mesh', 'skinned-mesh'];
 
@@ -42,10 +41,6 @@ export default async function controllersGenerator(
 
   logger.log('Generating controllers...');
 
-  const prefixedSobaSelectors = sobaShapeSelectors.map(
-    (selector) => `soba-${selector}`
-  );
-
   const selectors = [
     ...meshSelectors,
     ...audioSelectors,
@@ -56,7 +51,6 @@ export default async function controllersGenerator(
   // Object3dInputs includes the Soba shapes but Object3d does not
   const inputsSelectors = [
     ...selectors,
-    ...prefixedSobaSelectors,
     ...sobaSelectors,
     ...sobaWithMaterialSelectors,
   ];
@@ -66,10 +60,7 @@ export default async function controllersGenerator(
     audioSelectors: [...audioSelectors, ...sobaAudioSelectors],
     meshSelectors,
     lineSelectors,
-    sobaShapeSelectors: [
-      ...prefixedSobaSelectors,
-      ...sobaWithMaterialSelectors,
-    ],
+    sobaShapeSelectors: [...sobaWithMaterialSelectors],
     selectors: Array.from(new Set(selectors)).map(mapIsLast),
     inputsSelectors: Array.from(new Set(inputsSelectors)).map(mapIsLast),
   });

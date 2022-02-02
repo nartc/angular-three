@@ -38,8 +38,6 @@
           "packages/soba/loaders/**/*.html",
           "packages/soba/controls/**/*.ts",
           "packages/soba/controls/**/*.html",
-          "packages/soba/shapes/**/*.ts",
-          "packages/soba/shapes/**/*.html",
           "packages/soba/cameras/**/*.ts",
           "packages/soba/cameras/**/*.html",
           "packages/soba/misc/**/*.ts",

@@ -55,7 +55,6 @@
       "@angular-three/soba/performances": [
         "packages/soba/performances/src/index.ts"
       ],
-      "@angular-three/soba/shapes": ["packages/soba/shapes/src/index.ts"],
       "@angular-three/soba/staging": ["packages/soba/staging/src/index.ts"]
     }
   },

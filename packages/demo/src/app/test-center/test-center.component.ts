@@ -13,7 +13,6 @@ import {
   NgtGLTFLoader,
   NgtSobaLoaderModule,
 } from '@angular-three/soba/loaders';
-import { NgtSobaBoxModule } from '@angular-three/soba/shapes';
 import { NgtSobaCenterModule } from '@angular-three/soba/staging';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
@@ -88,7 +87,6 @@ export class TestCenterComponent {
     NgtSobaOrbitControlsModule,
     CommonModule,
     NgtSobaCenterModule,
-    NgtSobaBoxModule,
     NgtMeshNormalMaterialModule,
     NgtPrimitiveModule,
     NgtSobaLoaderModule,
