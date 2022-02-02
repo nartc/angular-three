@@ -82,9 +82,9 @@ export class NgtSobaTransformControls
   @Output() objectChange = new EventEmitter<THREE.Event>();
 
   private initControls$ = combineLatest([
-    this.canvasStore.select('ready'),
+    this.canvasStore.ready$,
     this.select('camera'),
-  ]).pipe(map(([ready, camera]) => ({ ready, camera })));
+  ]).pipe(map(([, camera]) => ({ camera })));
 
   private draggingChanged$ = combineLatest([
     this.canvasStore.select('controls'),
@@ -147,17 +147,15 @@ export class NgtSobaTransformControls
         };
       });
 
-      this.hold(this.initControls$, ({ camera, ready }) => {
-        if (ready) {
-          const controlsCamera: THREE.Camera =
-            camera || this.canvasStore.get('camera');
-          this.set({
-            controls: new TransformControls(
-              controlsCamera,
-              this.canvasStore.get('renderer').domElement
-            ),
-          });
-        }
+      this.hold(this.initControls$, ({ camera }) => {
+        const controlsCamera: THREE.Camera =
+          camera || this.canvasStore.get('camera');
+        this.set({
+          controls: new TransformControls(
+            controlsCamera,
+            this.canvasStore.get('renderer').domElement
+          ),
+        });
       });
 
       this.effect(this.draggingChanged$, ({ defaultControls, controls }) => {

@@ -158,14 +158,12 @@ export class NgtCanvas extends NgtStore implements OnInit {
 
       this.canvasStore.init(this.rendererCanvas.nativeElement);
 
-      this.hold(this.canvasStore.select('ready'), (ready) => {
-        if (ready) {
-          const canvasState = this.canvasStore.get();
-          this.eventsStore.init(canvasState.renderer.domElement);
-          this.animationFrameStore.init();
-          this.loop.invalidate(canvasState);
-          this.created.emit(canvasState as NgtCreatedState);
-        }
+      this.hold(this.canvasStore.ready$, () => {
+        const canvasState = this.canvasStore.get();
+        this.eventsStore.init(canvasState.renderer.domElement);
+        this.animationFrameStore.init();
+        this.loop.invalidate(canvasState);
+        this.created.emit(canvasState as NgtCreatedState);
       });
     });
   }

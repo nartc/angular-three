@@ -41,15 +41,15 @@ export class NgtAudioListener extends NgtStore implements OnInit {
         timeDelta: this.timeDelta,
       };
       applyProps(this.listener, props);
-      this.effect(this.canvasStore.select('ready'), (ready) => {
+      this.effect(this.canvasStore.ready$, () => {
         const camera = this.canvasStore.get('camera');
-        if (ready && camera) {
+        if (camera) {
           camera.add(this.listener);
           this.ready.emit(this.listener);
         }
 
         return () => {
-          if (ready && camera && this.listener) {
+          if (camera && this.listener) {
             this.listener.clear();
             camera.remove(this.listener);
           }
