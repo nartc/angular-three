@@ -71,7 +71,7 @@ export class TestCenterComponent {
   }
 
   onCreated(scene: THREE.Scene) {
-    // console.log(scene);
+    console.log(scene);
   }
 }
 

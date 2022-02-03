@@ -2,7 +2,6 @@
 import {
   Directive,
   EventEmitter,
-  Host,
   Inject,
   Input,
   NgModule,
@@ -133,7 +132,7 @@ export class NgtObjectController extends Controller implements OnDestroy {
     private objectInputsController: NgtObjectInputsController,
     @Optional() @SkipSelf() private parentObjectController: NgtObjectController,
     @Optional()
-    @Host()
+    @SkipSelf()
     @Inject(NGT_PARENT_OBJECT)
     private parentObjectFn: AnyFunction
   ) {
@@ -207,14 +206,13 @@ export class NgtObjectController extends Controller implements OnDestroy {
             objects: { ...state.objects, [this.object.uuid]: this.object },
           }));
 
-          if (this.parentObjectFn) {
+          if (this.parentObjectController) {
+            this.parentObjectFactory = (() =>
+              this.parentObjectController.object) as AnyFunction;
+          } else if (this.parentObjectFn !== null) {
             this.parentObjectFactory = this.parentObjectFn;
           } else {
-            this.parentObjectFactory = (() => {
-              return this.parentObjectController?.object
-                ? this.parentObjectController.object
-                : undefined;
-            }) as AnyFunction;
+            this.parentObjectFactory = (() => undefined) as AnyFunction;
           }
 
           if (this.objectInputsController.appendMode !== 'none') {
