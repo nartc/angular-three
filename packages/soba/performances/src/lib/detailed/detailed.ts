@@ -21,7 +21,7 @@ import {
   NgModule,
   QueryList,
 } from '@angular/core';
-import { asapScheduler } from '@rx-angular/cdk/zone-less';
+import { asapScheduler } from '@rx-angular/cdk/zone-less/rxjs';
 import { selectSlice } from '@rx-angular/state';
 import { combineLatest, map, observeOn, startWith } from 'rxjs';
 import * as THREE from 'three';
