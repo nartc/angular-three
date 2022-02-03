@@ -1,0 +1,51 @@
+{
+  "projectType": "library",
+  "root": "packages/storybook",
+  "sourceRoot": "packages/storybook/src",
+  "prefix": "ngt",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/storybook/src/**/*.ts",
+          "packages/storybook/src/**/*.html"
+        ]
+      }
+    },
+    "storybook": {
+      "executor": "@nrwl/storybook:storybook",
+      "options": {
+        "uiFramework": "@storybook/angular",
+        "port": 4400,
+        "config": {
+          "configFolder": "packages/storybook/.storybook"
+        },
+        "projectBuildConfig": "storybook:build-storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@nrwl/storybook:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "uiFramework": "@storybook/angular",
+        "outputPath": "dist/storybook/storybook",
+        "config": {
+          "configFolder": "packages/storybook/.storybook"
+        },
+        "projectBuildConfig": "storybook:build-storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    }
+  },
+  "tags": ["scope:storybook"]
+}

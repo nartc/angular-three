@@ -5,6 +5,7 @@
     "core": "packages/core",
     "demo": "packages/demo",
     "postprocessing": "packages/postprocessing",
-    "soba": "packages/soba"
+    "soba": "packages/soba",
+    "storybook": "packages/storybook"
   }
 }

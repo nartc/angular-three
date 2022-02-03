@@ -55,7 +55,8 @@
       "@angular-three/soba/performances": [
         "packages/soba/performances/src/index.ts"
       ],
-      "@angular-three/soba/staging": ["packages/soba/staging/src/index.ts"]
+      "@angular-three/soba/staging": ["packages/soba/staging/src/index.ts"],
+      "@angular-three/storybook": ["packages/storybook/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
