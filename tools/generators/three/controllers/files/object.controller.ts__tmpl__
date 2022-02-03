@@ -9,10 +9,9 @@ import {
   OnDestroy,
   Optional,
   Output,
-  SimpleChanges,
   SkipSelf,
 } from '@angular/core';
-import { BehaviorSubject, Subscription, take } from 'rxjs';
+import { BehaviorSubject, defer, map, merge, Subscription, take } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_PARENT_OBJECT } from '../di/object';
 import { NgtAnimationFrameStore } from '../stores/animation-frame';
@@ -94,6 +93,38 @@ export class NgtObjectController extends Controller implements OnDestroy {
 
   private parentObjectFactory!: AnyFunction;
 
+  private inputChanges$ = defer(() => {
+    if (this.objectInputsController.objectInputsController) {
+      return merge(
+        this.objectInputsController.changes$.pipe(
+          map((changes) => ({
+            changes,
+            controller: this.objectInputsController,
+          }))
+        ),
+        this.objectInputsController.objectInputsController.changes$.pipe(
+          map((changes) => ({
+            changes,
+            controller: this.objectInputsController.objectInputsController!,
+          }))
+        )
+      );
+    }
+    return this.objectInputsController.changes$.pipe(
+      map((changes) => ({
+        changes,
+        controller: this.objectInputsController,
+      }))
+    );
+  }).pipe(
+    map(({ changes, controller }) => {
+      return Object.keys(changes).reduce((inputChanges, key) => {
+        inputChanges[key] = controller[key as keyof NgtObjectInputsController];
+        return inputChanges;
+      }, {} as UnknownRecord);
+    })
+  );
+
   constructor(
     zone: NgZone,
     private canvasStore: NgtCanvasStore,
@@ -112,7 +143,7 @@ export class NgtObjectController extends Controller implements OnDestroy {
 
   override ngOnInit() {
     super.ngOnInit();
-    this.inputChangesSubscription = this.changes$.subscribe((changes) => {
+    this.inputChangesSubscription = this.inputChanges$.subscribe((changes) => {
       if (this.object) {
         this.applyCustomProps(changes);
       }
@@ -319,7 +350,7 @@ export class NgtObjectController extends Controller implements OnDestroy {
       : (this.objectInputsController.appendTo as () => THREE.Object3D)();
   }
 
-  private applyCustomProps(simpleChanges?: SimpleChanges) {
+  private applyCustomProps(changes?: UnknownRecord) {
     this.zone.runOutsideAngular(() => {
       const customProps = {
         castShadow: this.objectInputsController.castShadow,
@@ -365,11 +396,11 @@ export class NgtObjectController extends Controller implements OnDestroy {
         customProps['raycast'] = this.objectInputsController.raycast;
       }
 
-      if (simpleChanges) {
-        Object.assign(customProps, simpleChanges);
+      if (changes) {
+        Object.assign(customProps, changes);
       }
 
-      this.changes$.pipe(take(1)).subscribe((changes) => {
+      this.inputChanges$.pipe(take(1)).subscribe((changes) => {
         if (changes && Object.keys(changes).length) {
           for (const [inputName, inputChange] of Object.entries(changes)) {
             // TODO: double check this

@@ -3,7 +3,7 @@ import {
   clearTimeout,
   requestAnimationFrame,
   setTimeout,
-} from '@rx-angular/cdk/zone-less/browser/browser';
+} from '@rx-angular/cdk/zone-less/browser';
 
 export const zonelessRequestAnimationFrame = requestAnimationFrame;
 export const zonelessCancelAnimationFrame = cancelAnimationFrame;

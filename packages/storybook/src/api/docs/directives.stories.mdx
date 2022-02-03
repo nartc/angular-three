@@ -1,0 +1,28 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title={'Core API/Directives'} parameters={{ viewMode: 'docs' }} />
+
+# Directives
+
+## `NgtRepeat`
+
+This directive acts like an `ngFor` but the template will iterate over "how many times" instead of "how many items"
+
+```html
+<!--creating 1000 SobaDetailed-->
+<ngt-soba-detailed #lod *repeat="let _ of 1000"></ngt-soba-detailed>
+```
+
+## `NgtCursor`
+
+This directive will change the `cursor` style on the `document.body` to `pointer` on objects' hover, and back to `auto` on objects' off-hover. This is useful when you want to show a pointer `cursor` to let the users know that some 3D object is actionable.
+
+> `ngtCusor` can only be used `NgtObject3dInputsController`.
+
+```html
+<!--hovering this mesh will change the cursor-->
+<ngt-mesh ngtCursor></ngt-mesh>
+
+<!--nothing happens when hovering this-->
+<ngt-stats ngtCursor></ngt-stats>
+```

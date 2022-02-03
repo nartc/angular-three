@@ -23,7 +23,6 @@ export class NgtWithMaterialController extends Controller {
 
   @Input() set material(v: THREE.Material | THREE.Material[] | undefined) {
     if (v) {
-      this.multiple = Array.isArray(v) && v.length > 1;
       if (!(Array.isArray(v) && !v.length)) {
         this._materialInput = v;
       }
@@ -41,16 +40,6 @@ export class NgtWithMaterialController extends Controller {
         this.material = dir.material;
       });
     }
-  }
-
-  private _multiple = false;
-
-  get multiple() {
-    return this._multiple;
-  }
-
-  set multiple(v: boolean) {
-    this._multiple = v;
   }
 
   get material() {

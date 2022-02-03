@@ -5,11 +5,9 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Optional,
   Output,
 } from '@angular/core';
 import * as THREE from 'three';
-import { NgtWithMaterialController } from '../controllers/with-material.controller';
 import { NGT_OBJECT } from '../di/object';
 import { NgtCanvasStore } from '../stores/canvas';
 import type {
@@ -61,9 +59,7 @@ export abstract class NgtMaterial<
 
   constructor(
     protected canvasStore: NgtCanvasStore,
-    @Inject(NGT_OBJECT) protected parentObjectFactory: AnyFunction,
-    @Optional()
-    protected withMaterialController: NgtWithMaterialController
+    @Inject(NGT_OBJECT) protected parentObjectFactory: AnyFunction
   ) {}
 
   abstract materialType: AnyConstructor<TMaterial>;
@@ -76,13 +72,7 @@ export abstract class NgtMaterial<
     zonelessRequestAnimationFrame(() => {
       const parentObject = this.parentObjectFactory() as THREE.Mesh;
       if (parentObject) {
-        if (
-          this.withMaterialController &&
-          this.withMaterialController.multiple
-        ) {
-          if (!Array.isArray(parentObject.material)) {
-            parentObject.material = [];
-          }
+        if (Array.isArray(parentObject.material)) {
           (parentObject.material as THREE.Material[]).push(this.material);
         } else {
           parentObject.material = this.material;

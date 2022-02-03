@@ -70,6 +70,7 @@ export class NgtMaterialGeometryController
     return this._meshArgs;
   }
 
+  @Input() isMultipleMaterials = false;
   @Input() morphTargetInfluences?: number[];
   @Input() morphTargetDictionary?: { [key: string]: number };
 
@@ -101,11 +102,25 @@ export class NgtMaterialGeometryController
         this.materialController.construct();
       }
 
-      const object = new this.objectType(
-        this.geometryController.geometry,
-        this.materialController.material,
-        ...this.meshArgs
-      );
+      let object: THREE.Object3D;
+
+      if (this.isMultipleMaterials) {
+        object = new this.objectType(
+          this.geometryController.geometry,
+          Array.isArray(this.materialController.material)
+            ? this.materialController.material
+            : this.materialController.material
+            ? [this.materialController.material]
+            : [],
+          ...this.meshArgs
+        );
+      } else {
+        object = new this.objectType(
+          this.geometryController.geometry,
+          this.materialController.material,
+          ...this.meshArgs
+        );
+      }
 
       if (this.morphTargetDictionary && 'morphTargetDictionary' in object) {
         (object as unknown as UnknownRecord)['morphTargetDictionary'] =
