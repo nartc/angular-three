@@ -4,3 +4,4 @@ export * from './lib/camera-shake/camera-shake';
 export * from './lib/center/center';
 export * from './lib/environment/environment';
 export * from './lib/environment/presets';
+export * from './lib/float/float';
