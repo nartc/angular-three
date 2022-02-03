@@ -1,4 +1,5 @@
 import {
+  createExtenderProvider,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtExtender,
@@ -60,10 +61,7 @@ export class NgtSobaFloatContent {
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NgtStore,
-    {
-      provide: NgtExtender,
-      useExisting: NgtSobaFloat,
-    },
+    createExtenderProvider(NgtSobaFloat),
   ],
 })
 export class NgtSobaFloat extends NgtExtender<THREE.Group> {
