@@ -98,6 +98,8 @@ export class NgtSobaEnvironment
             // @ts-ignore
             this.loader.use(loader, urls, (innerLoader) => {
               innerLoader.setPath(path!);
+              // @ts-ignore
+              innerLoader.setDataType?.(THREE.FloatType);
               if (extensions) {
                 extensions(innerLoader);
               }
@@ -105,14 +107,8 @@ export class NgtSobaEnvironment
           )
         ) as Observable<THREE.Texture>,
         (textureResult) => {
-          const renderer = this.canvasStore.get('renderer');
-          const gen = new THREE.PMREMGenerator(renderer!);
-          const texture = NgtSobaEnvironment.getTexture(
-            textureResult,
-            gen,
-            this.isCubeMap
-          ) as THREE.Texture;
-          gen.dispose();
+          const texture = textureResult;
+          texture.mapping = THREE.EquirectangularReflectionMapping;
 
           this.set({ texture });
         }
@@ -147,18 +143,6 @@ export class NgtSobaEnvironment
 
   private get isCubeMap() {
     return Array.isArray(this.get('files'));
-  }
-
-  private static getTexture(
-    texture: THREE.Texture | THREE.CubeTexture,
-    gen: THREE.PMREMGenerator,
-    isCubeMap: boolean
-  ) {
-    if (isCubeMap) {
-      gen.compileEquirectangularShader();
-      return gen.fromCubemap(texture as THREE.CubeTexture).texture;
-    }
-    return gen.fromEquirectangular(texture).texture;
   }
 }
 
