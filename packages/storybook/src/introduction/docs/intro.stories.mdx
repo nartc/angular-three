@@ -39,28 +39,28 @@ import { Meta, Story } from '@storybook/addon-docs';
 
 ## Why is it good to use NGT?
 
-Utilizing Template-less Directives to build 3D scenes declaratively with accessing to Angular Dependency Injection, Inputs, Outputs, and other common Directives while keeping the DOM clean.
+NGT allows the consumers to utilize Template-less Directives to build 3D scenes declaratively with access to Angular Dependency Injection, Inputs, Outputs, and other standard features.
 
 ## How does NGT work?
 
-NGT relies heavily on [Hierarchical Dependency Injection](https://angular.io/guide/hierarchical-dependency-injection) to allow for declarative creation of THREE.js objects on the template. Take a look at the [SimpleCube example](?path=/story/introduction-examples--simple-cube). We will explore in more detailed what is happening under the hood.
+NGT relies heavily on [Hierarchical Dependency Injection](https://angular.io/guide/hierarchical-dependency-injection) to allow for declarative creation of THREE.js objects on the template. Take a look at the [SimpleCube example](?path=/story/introduction-examples--simple-cube). We will explore in more detail what is happening under the hood.
 
 <Story id="introduction-examples--simple-cube" height="480px" />
 
 ## What is the difference between NGT and React Three Fiber?
 
-Many points in comparison with R3F listed here in [Svelte Cubed](https://svelte-cubed.vercel.app/docs/faqs#how-is-it-different-from-x-react-three-fiber) (a Svelte-based THREE.js library) also applies to NGT.
+Many points in comparison with R3F, which are listed here, in [Svelte Cubed](https://svelte-cubed.vercel.app/docs/faqs#how-is-it-different-from-x-react-three-fiber) (a Svelte-based THREE.js library) also applies to NGT.
 
-[React Three Fiber](https://github.com/pmndrs/react-three-fiber) (R3F) is a **Renderer** that treats THREE.js as native elements. Hence, it does not **wrap** anything, providing a **clean** surface API, and future-proof from THREE.js version changes.
+[React Three Fiber](https://github.com/pmndrs/react-three-fiber) (R3F) is a **Renderer** that treats THREE.js as native elements. Hence, it does not **wrap** anything, providing a **clean** surface API and future-proof from THREE.js version changes.
 
-On the other hand, NGT is a **Component Library** which means for almost each THREE.js entity, there is a corresponding entity (whether it is a Component or a Directive) in NGT. The bulk of the entities in NGT are **Single-Component-as-Module** to be best for Tree-shaking. For maintainability, NGT also **generates** most of these entities which makes it possible to keep up with THREE.js version changes.
+On the other hand, NGT is a **Component Library**, which means for almost every THREE.js entity, there is a corresponding entity (whether it is a Component or a Directive) in NGT. The bulk of the entities in NGT is **Single-Component-as-Module** to be best for Tree-shaking. For maintainability, NGT also **generates** most of these entities, which makes it possible to keep up with THREE.js version changes.
 
-Rendering the THREE.js scene is done **outside** of the Angular Zone. In the future when [Zone-less](https://angular.io/guide/roadmap#leverage-full-framework-capabilities-with-zonejs-opt-out) is available, NGT will be able to provide even better experience to the consumers.
+Rendering the THREE.js scene is done **outside** of the Angular Zone. In the future, when [Zone-less](https://angular.io/guide/roadmap#leverage-full-framework-capabilities-with-zonejs-opt-out) is available, NGT will be able to provide an even better experience to the consumers.
 
-> Zone-less is actually available today, but it requires more understanding and a lot of hoops to jump through to get it to work flawlessly.
+> Zone-less is available today, but it requires more understanding and a lot of hoops to jump through to get it to work flawlessly.
 
-It is worth noting that NGT is heavily inspired by R3F. Many of the concepts and features of NGT are ported from R3F.
+It is worth noting that R3F heavily inspires NGT. Many of the concepts and features of NGT are ported from R3F.
 
-## Before we start
+## What do I need to get started?
 
-- Understand the fundamentals of Angular and THREE.js. Consult [Angular Docs](https://angular.io/docs) and [THREE.js Docs](https://threejs.org/docs/index.html) for more information.
+NGT requires you to have fundamental understanding of both Angular and THREE.js

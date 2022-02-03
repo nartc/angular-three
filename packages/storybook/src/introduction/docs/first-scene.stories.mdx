@@ -4,14 +4,14 @@ import { Meta, Story } from '@storybook/addon-docs';
 
 # Our first 3D scene
 
-We are going to create our simple first scene using NGT. To make it easier to follow, we will have inline-template for our `AppComponent`.
+We are going to create our simple first scene using NGT. We will have an inline template for our `AppComponent` to make it easier to follow.
 
 ## TLDR;
 
 I know that this is a bit long, so here is the TLDR version of this tutorial:
 
-- We setup a Canvas with `ngt-canvas`
-- We use `ngt-mesh` along with `ngt-box-geometry` and `ngt-mesh-basic-material` to construct our cube, and animate it
+- We set up a Canvas with `ngt-canvas`
+- We use `ngt-mesh` along with `ngt-box-geometry` and `ngt-mesh-basic-material` to construct our cube and animate it
 - We separate `ngt-mesh` into a reusable `CubeComponent`
 - We add states to the `CubeComponent` to make it interactive, and we "clone" it.
 
@@ -112,7 +112,7 @@ export class AppModule {}
 
 - A `WebGLRenderer`, `Scene`, and `Camera` which are the basic building blocks of THREE.js
 - A render loop that will render the scene every frame.
-- A `window:resize` event listener that will resize the renderer and camera when the window is resized. The event listener will get automatically removed when the component is destroyed.
+- A `window:resize` event listener will resize the renderer and camera when the window is resized. The event listener will get automatically removed when the component is destroyed.
 
 `ngt-canvas` takes up the dimensions of the parent element. Here, we are rendering the `ngt-canvas` in our `AppComponent` host element (`app-root`). We can wrap `ngt-canvas` with a `div` and give the `div` a fixed size.
 
@@ -120,7 +120,7 @@ export class AppModule {}
 
 ## Adding a Mesh
 
-Now that we have the Canvas setup, we can start adding THREE.js objects to the scene. Let's add a `ngt-mesh` to the scene, which wraps `THREE.js#Mesh`
+Now that we have the Canvas setup, we can add THREE.js objects to the scene. Let's add an `ngt-mesh` to the scene, which wraps `THREE.js#Mesh`
 
 ```ts
 //         👇 import NgtMeshModule from '@angular-three/core/meshes';
@@ -152,7 +152,7 @@ export class AppModule {}
 
 `ngt-mesh` is provided by `NgtMeshModule` which is imported from `@angular-three/core/meshes`. NGT follows best practice for an Angular Component Library which exposes modules as secondary entry points to help with Tree-Shakability.
 
-`THREE.js#Mesh` is one of the most basic object in THREE.js. It is used to hold a Geometry and a Material to represent a specific shape in the 3D space. We'll use a `ngt-box-geometry` and a `ngt-mesh-basic-material` to create a cube with our Mesh.
+`THREE.js#Mesh` is one of the most fundamental objects in THREE.js. It is used to hold a Geometry and a Material to represent a specific shape in the 3D space. We'll use an `ngt-box-geometry` and an `ngt-mesh-basic-material` to create a cube with our Mesh.
 
 ```ts
 //          👇 import NgtBoxGeometryModule from '@angular-three/core/geometries';
@@ -193,7 +193,7 @@ At this point, we have something on the scene that we can finally see; a Cube.
 
 <Story id="introduction-examples-first-scene--cube" height={480} />
 
-Minus the imports (which sometimes are helped by our IDEs), our scene is 7 lines of code of HTML template. Let's take a look at the equivalent code in vanilla THREE.js.
+Minus the imports (which sometimes are helped by our IDEs), our scene is seven lines of HTML template code. Let's take a look at the equivalent code in vanilla THREE.js.
 
 ```ts
 const scene = new THREE.Scene();
@@ -224,7 +224,7 @@ animate();
 
 ## Animation
 
-3D scene is boring without animation. Let's see how we can spin our cube to show that it is truly an object in 3D
+3D scenes are boring without animation. Let's see how we can spin our cube to show that it is truly an object in 3D
 
 ```ts
 @Component({
@@ -254,7 +254,7 @@ export class AppComponent {
 
 ## Separate into a reusable Angular component
 
-That was great, and easy! But what if we want to reuse the same code for multiple cubes? Let's make our `ngt-mesh` into a `CubeComponent`
+That was great and easy! But what if we want to reuse the same code for multiple cubes? Let's make our `ngt-mesh` into a `CubeComponent`
 
 ```ts
 @Component({
@@ -285,7 +285,7 @@ export class CubeComponent {
 }
 ```
 
-Everything still works as expected thanks to Angular Hierarchical Dependency Injection and Content Projection. However, we now have a `CubeComponent` that we can add states to, to customize the Cube.
+Thanks to Angular Hierarchical Dependency Injection and Content Projection, everything still works as expected. However, we now have a `CubeComponent` to which we can add states to customize the Cube.
 
 ## Add Component state
 
@@ -334,7 +334,7 @@ Interact with the cube and see the magic 🤯!
 There is quite a lot to take in here:
 
 - `(click)`, `(pointerover)`, and `(pointerout)` _look like_ DOM events, but they're not. Remember, these objects are inside a Canvas which means they do not have a DOM representation, so they do not trigger DOM events.
-- These events can update the state and trigger a change detection cycle. This is because NGT gets back into Angular Zone when these events happen. Most of the time, NGT will bail out of Angular Zone and not trigger a change detection cycle.
+- These events can update the state and trigger a change detection cycle. This is because NGT gets back into Angular Zone when these events happen. NGT will usually bail out of Angular Zone and not trigger a change detection cycle.
 
 ## Here's why a component framework is needed
 
@@ -392,7 +392,7 @@ Let's update our `AppComponent`
 export class AppComponent {}
 ```
 
-and voila!
+And voila!
 
 <Story
   id="introduction-examples-first-scene--two-spinning-cubes"
@@ -401,7 +401,7 @@ and voila!
 
 ## Make it more dynamic
 
-Our cubes are animated and reactive. But they look bland. In fact, they don't even look like cubes at the moment. It is because they are lacking Light Reflection. Let's change it up a bit.
+Our cubes are animated and reactive. But they look bland. They don't even look like cubes at the moment. It is because they lack Light Reflection. Let's change it up a bit.
 
 ```ts
 @Component({
@@ -476,7 +476,7 @@ export class AppComponent {}
 export class AppModule {}
 ```
 
-- `ngt-ambient-light` is a light source that emits light in all directions, effectively makes our scene "bright".
+- `ngt-ambient-light` is a light source that emits light in all directions, effectively making our scene "bright".
 - `ngt-spot-light` is a light source that emits light from a single point in a specific direction, and the light gets wider and weaker as it travels. Imagine a flashlight.
 
 Our cubes look so much better now, with dimensionality, showing that they are real 3D objects.
@@ -486,7 +486,7 @@ Our cubes look so much better now, with dimensionality, showing that they are re
   height={480}
 />
 
-## Take controls of the camera
+## Take control of the camera
 
 If you're like me, you have probably tried to "grab" the scene and move it around. Right now, our scene, or more like the camera, is static in its position. Let's take over the camera's controls with `ngt-soba-orbit-controls`. To do that, we'd need to install another package from `@angular-three`:
 
@@ -529,7 +529,7 @@ export class AppComponent {}
 export class AppModule {}
 ```
 
-Let's also add a `GridHelper`, with `ngt-grid-helper`, to our scene to makes it easier to pinpoint our cubes in 3D space.
+Let's also add a `GridHelper`, with `ngt-grid-helper`, to our scene to make it easier to pinpoint our cubes in 3D space.
 
 ```ts
 @Component({
@@ -566,7 +566,7 @@ VOILA!!
 
 <Story id="introduction-examples-first-scene--controls-camera" height={480} />
 
-> The order of the objects added to the Canvas does not matter much. However, I'd like to put my light sources first, then helpers, then the objects, then the controls.
+> The order of the objects added to the Canvas does not matter much. However, I'd like to put my light sources first, helpers, objects, and controls.
 
 ## Exercise
 
