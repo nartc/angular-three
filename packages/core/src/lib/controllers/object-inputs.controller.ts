@@ -130,8 +130,8 @@ export class NgtObjectInputsController extends Controller {
   private _color?: THREE.Color;
 
   @Input() userData?: UnknownRecord;
-  @Input() castShadow = false;
-  @Input() receiveShadow = false;
+  @Input() castShadow?: boolean;
+  @Input() receiveShadow?: boolean;
   @Input() visible = true;
   @Input() matrixAutoUpdate = true;
   @Input() dispose?: (() => void) | null;

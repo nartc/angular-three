@@ -179,6 +179,23 @@ export class NgtObjectController extends Controller implements OnDestroy {
     });
   }
 
+  get initialInputProps() {
+    const initialProps: UnknownRecord = {};
+
+    for (const prop of this.objectInputsController.inputControllerProps[0]) {
+      const controllerProp = prop as keyof NgtObjectInputsController;
+      if (controllerProp === 'raycast') continue;
+      initialProps[prop] =
+        this.objectInputsController[controllerProp] !== undefined
+          ? this.objectInputsController[controllerProp]
+          : this.objectInputsController.objectInputsController
+          ? this.objectInputsController.objectInputsController[controllerProp]
+          : this.objectInputsController[controllerProp];
+    }
+
+    return initialProps;
+  }
+
   /**
    * zoneless
    */
@@ -191,7 +208,7 @@ export class NgtObjectController extends Controller implements OnDestroy {
       }
 
       if (this.object) {
-        this.applyCustomProps();
+        this.applyCustomProps(this.initialInputProps);
         if (!this.disabled) {
           const observedEvents = supportedEvents.reduce(
             (result, event) => {

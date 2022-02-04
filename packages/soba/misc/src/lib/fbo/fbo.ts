@@ -1,12 +1,9 @@
-import {
-  NgtCanvasStore,
-  NgtStore,
-  zonelessRequestAnimationFrame,
-} from '@angular-three/core';
+import { NgtCanvasStore, NgtStore } from '@angular-three/core';
 import { Injectable } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { combineLatest, Observable } from 'rxjs';
 import * as THREE from 'three';
+import { WebGLRenderTargetOptions } from 'three';
 
 interface FBOSettings<T extends boolean = false>
   extends THREE.WebGLRenderTargetOptions {
@@ -43,69 +40,73 @@ export class NgtSobaFBO extends NgtStore<{
     height?: number,
     settings?: FBOSettings<T>
   ): Observable<FBOReturn<T>> {
-    zonelessRequestAnimationFrame(() => {
-      this.connect(
-        'dpr',
-        combineLatest([
-          this.canvasStore.ready$,
-          this.canvasStore.select('renderer'),
-        ]),
-        (_, [, renderer]) => renderer.getPixelRatio()
-      );
+    this.connect(
+      'dpr',
+      combineLatest([
+        this.canvasStore.ready$,
+        this.canvasStore.select('renderer')
+      ]),
+      (_, [, renderer]) => renderer.getPixelRatio()
+    );
 
-      this.connect('target', this.canvasStore.ready$, () => {
+    this.connect('target',
+      combineLatest([
+        this.canvasStore.ready$,
+        this.select(selectSlice(['width', 'height', 'settings']))
+      ])
+      , (_, [, { width, height, settings }]) => {
         const { multisample, samples, ...targetSettings } =
-          this.get('settings');
+        settings || {};
+
         let target;
         if (
           multisample &&
           this.canvasStore.get('renderer').capabilities.isWebGL2
         ) {
           target = new THREE.WebGLMultisampleRenderTarget(
-            this.get('width'),
-            this.get('height'),
-            targetSettings
+            width,
+            height,
+            targetSettings as WebGLRenderTargetOptions
           );
           if (samples) target.samples = samples;
         } else {
           target = new THREE.WebGLRenderTarget(
-            this.get('width'),
-            this.get('height'),
-            targetSettings
+            width,
+            height,
+            targetSettings as WebGLRenderTargetOptions
           );
         }
         return target;
       });
 
-      this.hold(
-        combineLatest([
-          this.canvasStore.ready$,
-          this.canvasStore.select('size'),
-          this.select('dpr'),
-        ]),
-        ([_, size, dpr]) => {
-          this.set({
-            width: typeof width === 'number' ? width : size.width * dpr,
-            height: typeof height === 'number' ? height : size.height * dpr,
-            settings:
-              (typeof width === 'number' ? settings : (width as FBOSettings)) ||
-              {},
-          });
-        }
-      );
+    this.hold(
+      combineLatest([
+        this.canvasStore.ready$,
+        this.canvasStore.select('size'),
+        this.select('dpr')
+      ]),
+      ([_, size, dpr]) => {
+        this.set({
+          width: typeof width === 'number' ? width : size.width * dpr,
+          height: typeof height === 'number' ? height : size.height * dpr,
+          settings:
+            (typeof width === 'number' ? settings : (width as FBOSettings)) ||
+            {}
+        });
+      }
+    );
 
-      this.hold(
-        this.select(selectSlice(['target', 'width', 'height'])),
-        ({ target, height, width }) => {
-          target.setSize(width, height);
-        }
-      );
+    this.hold(
+      this.select(selectSlice(['target', 'width', 'height'])),
+      ({ target, height, width }) => {
+        target.setSize(width, height);
+      }
+    );
 
-      this.effect(this.select('target'), (target) => {
-        return () => {
-          target.dispose();
-        };
-      });
+    this.effect(this.select('target'), (target) => {
+      return () => {
+        target.dispose();
+      };
     });
 
     return this.select('target');

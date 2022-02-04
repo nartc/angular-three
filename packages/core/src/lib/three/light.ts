@@ -25,12 +25,15 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
   @Input() intensity?: number;
   @Input() shadow?: Partial<THREE.LightShadow>;
 
+  private initializing = false;
+
   constructor(
     @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
     protected objectController: NgtObjectController
   ) {
     objectController.initFn = () => {
       this._light = new this.lightType(...this._lightArgs);
+
       if (this.intensity) {
         applyProps(this.light, { intensity: this.intensity });
       }
@@ -39,7 +42,8 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
         applyProps(this.light, this.shadow as unknown as UnknownRecord);
       }
 
-      return this._light;
+      this.initializing = false;
+      return this.light as THREE.Light;
     };
 
     objectController.readyFn = () => {
@@ -49,6 +53,7 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
 
   private _lightArgs: unknown[] = [];
   protected set lightArgs(v: unknown | unknown[]) {
+    this.initializing = true;
     this._lightArgs = Array.isArray(v) ? v : [v];
     this.objectController.init();
   }
@@ -56,7 +61,7 @@ export abstract class NgtLight<TLight extends THREE.Light = THREE.Light>
   private _light!: TLight;
 
   ngOnInit() {
-    if (!this._light) {
+    if (!this._light && !this.initializing) {
       this.objectController.init();
     }
   }

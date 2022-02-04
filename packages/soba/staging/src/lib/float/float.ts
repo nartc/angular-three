@@ -1,12 +1,13 @@
 import {
   createExtenderProvider,
+  createParentObjectProvider,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtExtender,
   NgtObjectInputsController,
   NgtObjectInputsControllerModule,
   NgtRender,
-  NgtStore,
+  NgtStore
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
 import { CommonModule } from '@angular/common';
@@ -18,7 +19,7 @@ import {
   Inject,
   Input,
   NgModule,
-  TemplateRef,
+  TemplateRef
 } from '@angular/core';
 import * as THREE from 'three';
 
@@ -32,27 +33,27 @@ export interface NgtSobaFloatState {
 
 @Directive({
   selector: 'ng-template[sobaFloatContent]',
-  exportAs: 'ngtSobaFloatContent',
+  exportAs: 'ngtSobaFloatContent'
 })
 export class NgtSobaFloatContent {
-  constructor(public templateRef: TemplateRef<NgtSobaFloatState>) {}
+  constructor(public templateRef: TemplateRef<NgtSobaFloatState>) {
+  }
 }
 
 @Component({
   selector: 'ngt-soba-float',
   template: `
     <ngt-group
-      (ready)="store.set({ outerGroup: $event })"
-      [objectInputsController]="objectInputsController"
+      (ready)='store.set({ outerGroup: $event })'
+      [objectInputsController]='objectInputsController'
     >
       <ngt-group
-        (ready)="object = $event; store.set({ innerGroup: $event })"
-        (animateReady)="onInnerGroupAnimate($event.state)"
+        (ready)='object = $event; store.set({ innerGroup: $event })'
+        (animateReady)='onInnerGroupAnimate($event.state)'
       >
         <ng-container
-          *ngIf="object"
-          [ngTemplateOutlet]="content.templateRef"
-          [ngTemplateOutletContext]="store.get()"
+          [ngTemplateOutlet]='content.templateRef'
+          [ngTemplateOutletContext]='store.get()'
         ></ng-container>
       </ngt-group>
     </ngt-group>
@@ -62,7 +63,10 @@ export class NgtSobaFloatContent {
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NgtStore,
     createExtenderProvider(NgtSobaFloat),
-  ],
+    createParentObjectProvider(NgtSobaFloat, (float) =>
+      float.store.get('innerGroup')
+    )
+  ]
 })
 export class NgtSobaFloat extends NgtExtender<THREE.Group> {
   @Input() set speed(speed: number) {
@@ -91,7 +95,7 @@ export class NgtSobaFloat extends NgtExtender<THREE.Group> {
     store.set({
       speed: 1,
       rotationIntensity: 1,
-      floatIntensity: 1,
+      floatIntensity: 1
     });
   }
 
@@ -116,6 +120,7 @@ export class NgtSobaFloat extends NgtExtender<THREE.Group> {
 @NgModule({
   declarations: [NgtSobaFloat, NgtSobaFloatContent],
   exports: [NgtSobaFloat, NgtSobaFloatContent, NgtObjectInputsControllerModule],
-  imports: [NgtGroupModule, CommonModule],
+  imports: [NgtGroupModule, CommonModule]
 })
-export class NgtSobaFloatModule {}
+export class NgtSobaFloatModule {
+}

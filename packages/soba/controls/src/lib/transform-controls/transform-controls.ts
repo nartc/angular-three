@@ -1,4 +1,5 @@
 import {
+  createParentObjectProvider,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtCanvasStore,
@@ -6,7 +7,7 @@ import {
   NgtObjectInputsController,
   NgtObjectInputsControllerModule,
   NgtStore,
-  zonelessRequestAnimationFrame,
+  zonelessRequestAnimationFrame
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
@@ -22,7 +23,7 @@ import {
   NgModule,
   OnInit,
   Output,
-  TemplateRef,
+  TemplateRef
 } from '@angular/core';
 import { combineLatest, map, merge } from 'rxjs';
 import * as THREE from 'three';
@@ -42,35 +43,34 @@ interface NgtSobaTransformControlsState {
 
 @Directive({
   selector: 'ng-template[sobaTransformControlsContent]',
-  exportAs: 'ngtSobaTransformControlsContent',
+  exportAs: 'ngtSobaTransformControlsContent'
 })
 export class NgtSobaTransformControlsContent {
-  constructor(public templateRef: TemplateRef<NgtSobaTransformControlsState>) {}
+  constructor(public templateRef: TemplateRef<NgtSobaTransformControlsState>) {
+  }
 }
 
 @Component({
   selector: 'ngt-soba-transform-controls',
   template: `
-    <ngt-primitive *ngIf="controls" [object]="controls"></ngt-primitive>
+    <ngt-primitive *ngIf='controls' [object]='controls'></ngt-primitive>
     <ngt-group
-      *ngIf="!object"
-      (ready)="set({ group: $event })"
-      [objectInputsController]="objectInputsController"
+      *ngIf='!object'
+      (ready)='set({ group: $event })'
+      [objectInputsController]='objectInputsController'
     >
       <ng-container
-        *ngIf="get('group')"
-        [ngTemplateOutlet]="content.templateRef"
-        [ngTemplateOutletContext]="get()"
+        [ngTemplateOutlet]='content.templateRef'
+        [ngTemplateOutletContext]='get()'
       ></ng-container>
     </ngt-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER],
+  providers: [NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER, createParentObjectProvider(NgtSobaTransformControls, controls => controls.get('group'))]
 })
 export class NgtSobaTransformControls
   extends NgtStore<NgtSobaTransformControlsState>
-  implements OnInit
-{
+  implements OnInit {
   @Input() set enabled(enabled: boolean) {
     this.set({ enabled });
   }
@@ -85,7 +85,7 @@ export class NgtSobaTransformControls
 
   private attach$ = combineLatest([
     this.select('controls'),
-    merge(this.select('object'), this.select('group')),
+    merge(this.select('object'), this.select('group'))
   ]);
 
   @Output() ready = this.attach$;
@@ -96,16 +96,16 @@ export class NgtSobaTransformControls
 
   private initControls$ = combineLatest([
     this.canvasStore.ready$,
-    this.select('camera'),
-  ]).pipe(map(([, camera]) => ({ camera })));
+    this.select('camera')
+  ]).pipe(map(([, camera]) => camera));
 
   private draggingChanged$ = combineLatest([
     this.canvasStore.select('controls'),
-    this.select('controls'),
+    this.select('controls')
   ]).pipe(
     map(([defaultControls, controls]) => ({
       defaultControls: defaultControls as unknown as ControlsProto,
-      controls,
+      controls
     }))
   );
 
@@ -143,14 +143,14 @@ export class NgtSobaTransformControls
         };
       });
 
-      this.hold(this.initControls$, ({ camera }) => {
+      this.hold(this.initControls$, (camera: THREE.Camera | null) => {
         const controlsCamera: THREE.Camera =
           camera || this.canvasStore.get('camera');
         this.set({
           controls: new TransformControls(
             controlsCamera,
             this.canvasStore.get('renderer').domElement
-          ),
+          )
         });
       });
 
@@ -209,8 +209,9 @@ export class NgtSobaTransformControls
   exports: [
     NgtSobaTransformControls,
     NgtSobaTransformControlsContent,
-    NgtObjectInputsControllerModule,
+    NgtObjectInputsControllerModule
   ],
-  imports: [NgtGroupModule, NgtPrimitiveModule, CommonModule],
+  imports: [NgtGroupModule, NgtPrimitiveModule, CommonModule]
 })
-export class NgtSobaTransformControlsModule {}
+export class NgtSobaTransformControlsModule {
+}
