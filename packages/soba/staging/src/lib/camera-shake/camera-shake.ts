@@ -106,14 +106,13 @@ export class NgtSobaCameraShake
       rollFrequency: 0.1,
       controls: null,
     });
+    this.connect('intensityRef', this.select('intensity'), (_, intensity) => {
+      return NgtSobaCameraShake.constraintIntensity(intensity);
+    });
   }
 
   ngOnInit() {
     zonelessRequestAnimationFrame(() => {
-      this.connect('intensityRef', this.select('intensity'), (_, intensity) => {
-        return NgtSobaCameraShake.constraintIntensity(intensity);
-      });
-
       this.effect(
         combineLatest([
           this.select('controls'),
@@ -141,7 +140,8 @@ export class NgtSobaCameraShake
       );
 
       this.effect(this.canvasStore.ready$, () => {
-        this.initialRotation = this.canvasStore.get('camera').rotation.clone();
+        const camera = this.canvasStore.get('camera');
+        this.initialRotation = camera.rotation.clone();
         const animationUuid = this.animationFrameStore.register({
           callback: ({ clock, delta }) => {
             const {
@@ -155,8 +155,6 @@ export class NgtSobaCameraShake
               decay,
               decayRate,
             } = this.get();
-            const camera = this.canvasStore.get('camera');
-
             const shake = Math.pow(intensityRef, 2);
             const yaw =
               maxYaw *

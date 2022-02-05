@@ -89,46 +89,59 @@ export class NgtSobaOrbitControls
   ) {
     super();
     this.set({
+      target: undefined,
       regress: false,
       enableDamping: true,
       makeDefault: false,
+      camera: undefined,
+      domElement: undefined,
     });
   }
 
   ngOnInit() {
+    this.connect('camera', this.canvasStore.select('camera'));
+    this.connect(
+      'domElement',
+      this.eventsStore.select('connected').pipe(
+        switchMap((connected) => {
+          if (typeof connected !== 'boolean') return of(connected);
+          return this.canvasStore.select('renderer', 'domElement');
+        })
+      )
+    );
+    this.hold(this.select('camera'), (camera) => {
+      const enableDamping = this.get('enableDamping');
+      if (camera) {
+        const controls = new OrbitControls(camera);
+        controls.enableDamping = enableDamping;
+        this.set({ controls });
+      }
+    });
+
+    this.effect(this.select('controls'), (controls) => {
+      let animationUuid: string;
+      if (controls.enabled) {
+        animationUuid = this.animationFrameStore.register({
+          callback: () => {
+            controls.update();
+          },
+        });
+      }
+      return () => {
+        this.animationFrameStore.actions.unregister(animationUuid);
+      };
+    });
+
     zonelessRequestAnimationFrame(() => {
-      this.connect('camera', this.canvasStore.select('camera'));
-      this.connect(
-        'domElement',
-        this.eventsStore.select('connected').pipe(
-          switchMap((connected) => {
-            if (typeof connected !== 'boolean') return of(connected);
-            return this.canvasStore.select('renderer', 'domElement');
-          })
-        )
-      );
-
-      this.effect(this.select('controls'), (controls) => {
-        let animationUuid: string;
-        if (controls.enabled) {
-          animationUuid = this.animationFrameStore.register({
-            callback: () => {
-              controls.update();
-            },
-          });
+      this.effect(this.makeDefaultParams$, ({ controls, makeDefault }) => {
+        const oldControls = this.canvasStore.get('controls');
+        if (makeDefault) {
+          this.canvasStore.set({ controls });
         }
+
         return () => {
-          this.animationFrameStore.actions.unregister(animationUuid);
+          this.canvasStore.set({ controls: oldControls });
         };
-      });
-
-      this.hold(this.select('camera'), (camera) => {
-        const enableDamping = this.get('enableDamping');
-        if (camera) {
-          const controls = new OrbitControls(camera);
-          controls.enableDamping = enableDamping;
-          this.set({ controls });
-        }
       });
 
       this.hold(this.controlsTargetParams$, ({ controls, target }) => {
@@ -185,17 +198,6 @@ export class NgtSobaOrbitControls
           };
         }
       );
-
-      this.effect(this.makeDefaultParams$, ({ controls, makeDefault }) => {
-        const oldControls = this.canvasStore.get('controls');
-        if (makeDefault) {
-          this.canvasStore.set({ controls });
-        }
-
-        return () => {
-          this.canvasStore.set({ controls: oldControls });
-        };
-      });
     });
   }
 
