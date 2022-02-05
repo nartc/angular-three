@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { filter, map, Observable } from 'rxjs';
@@ -40,7 +41,8 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
     @Inject(NGT_PERFORMANCE_OPTIONS) performance: NgtPerformanceOptions,
     { nativeElement: { clientHeight, clientWidth } }: ElementRef<HTMLElement>,
     @Inject(NgtResize)
-    private resizeResult$: Observable<NgtResizeResult>
+    private resizeResult$: Observable<NgtResizeResult>,
+    @Inject(DOCUMENT) document: Document
   ) {
     super();
     this.set({
@@ -58,15 +60,15 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
       frameloop: 'always',
       performance,
       objects: {},
-      dpr: 1,
+      dpr: document.defaultView?.devicePixelRatio || 1,
       shadows: false,
       cameraOptions: {},
       glOptions: {},
       raycasterOptions: {},
       sceneOptions: {},
       viewport: {
-        initialDpr: 1,
-        dpr: 1,
+        initialDpr: document.defaultView?.devicePixelRatio || 1,
+        dpr: document.defaultView?.devicePixelRatio || 1,
         width: clientWidth,
         height: clientHeight,
         aspect: clientWidth / clientHeight,
