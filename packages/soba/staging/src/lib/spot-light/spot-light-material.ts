@@ -14,7 +14,7 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
         lightColor: { value: new THREE.Color('white') },
         cameraNear: { value: 0 },
         cameraFar: { value: 1 },
-        resolution: { value: new THREE.Vector2(0, 0) }
+        resolution: { value: new THREE.Vector2(0, 0) },
       },
       transparent: true,
       depthWrite: false,
@@ -79,7 +79,7 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
           intensity	*= smoothstep(0., 1., vViewZ - d);
         }
         gl_FragColor = vec4(lightColor, intensity * opacity);
-      }`
+      }`,
     });
   }
 }
@@ -89,11 +89,13 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
   exportAs: 'ngtSobaSpotLightMaterial',
   providers: [
     { provide: NgtMaterial, useExisting: NgtSobaSpotLightMaterial },
-    NGT_OBJECT_PROVIDER
-  ]
+    NGT_OBJECT_PROVIDER,
+  ],
 })
-export class NgtSobaSpotLightMaterial extends NgtMaterial<THREE.ShaderMaterialParameters,
-  SpotLightMaterial> {
+export class NgtSobaSpotLightMaterial extends NgtMaterial<
+  THREE.ShaderMaterialParameters,
+  SpotLightMaterial
+> {
   static ngAcceptInputType_parameters:
     | THREE.ShaderMaterialParameters
     | undefined;
@@ -103,7 +105,6 @@ export class NgtSobaSpotLightMaterial extends NgtMaterial<THREE.ShaderMaterialPa
 
 @NgModule({
   declarations: [NgtSobaSpotLightMaterial],
-  exports: [NgtSobaSpotLightMaterial]
+  exports: [NgtSobaSpotLightMaterial],
 })
-export class NgtSobaSpotLightMaterialModule {
-}
+export class NgtSobaSpotLightMaterialModule {}
