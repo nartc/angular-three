@@ -1,0 +1,39 @@
+{
+  "projectType": "library",
+  "root": "libs/core",
+  "sourceRoot": "libs/core/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "outputs": ["dist/libs/core"],
+      "options": {
+        "project": "libs/core/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/core/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/core/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/core"],
+      "options": {
+        "jestConfig": "libs/core/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/core/src/**/*.ts", "libs/core/src/**/*.html"]
+      }
+    }
+  },
+  "tags": ["scope:core"]
+}
