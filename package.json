@@ -2,14 +2,11 @@
   "name": "angular-three",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "nx test"
-  },
+  "scripts": {},
   "private": true,
   "dependencies": {},
   "devDependencies": {
+    "@nrwl/angular": "13.8.0",
     "@nrwl/cli": "13.8.0",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/tao": "13.8.0",
