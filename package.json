@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {},
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "three": "0.137.5"
+  },
   "devDependencies": {
     "@nrwl/angular": "13.8.0",
     "@nrwl/cli": "13.8.0",
@@ -12,6 +14,7 @@
     "@nrwl/tao": "13.8.0",
     "@nrwl/workspace": "13.8.0",
     "@types/node": "16.11.7",
+    "@types/three": "0.137.0",
     "prettier": "^2.5.1",
     "typescript": "~4.5.5"
   }
