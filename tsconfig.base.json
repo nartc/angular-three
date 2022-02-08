@@ -14,53 +14,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {
-      "@angular-three/cannon": ["packages/cannon/src/index.ts"],
-      "@angular-three/cannon/bodies": ["packages/cannon/bodies/src/index.ts"],
-      "@angular-three/cannon/constraints": [
-        "packages/cannon/constraints/src/index.ts"
-      ],
-      "@angular-three/cannon/debug": ["packages/cannon/debug/src/index.ts"],
-      "@angular-three/core": ["packages/core/src/index.ts"],
-      "@angular-three/core/attributes": [
-        "packages/core/attributes/src/index.ts"
-      ],
-      "@angular-three/core/audios": ["packages/core/audios/src/index.ts"],
-      "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"],
-      "@angular-three/core/curves": ["packages/core/curves/src/index.ts"],
-      "@angular-three/core/geometries": [
-        "packages/core/geometries/src/index.ts"
-      ],
-      "@angular-three/core/group": ["packages/core/group/src/index.ts"],
-      "@angular-three/core/helpers": ["packages/core/helpers/src/index.ts"],
-      "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
-      "@angular-three/core/lines": ["packages/core/lines/src/index.ts"],
-      "@angular-three/core/lod": ["packages/core/lod/src/index.ts"],
-      "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
-      "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
-      "@angular-three/core/points": ["packages/core/points/src/index.ts"],
-      "@angular-three/core/primitive": ["packages/core/primitive/src/index.ts"],
-      "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"],
-      "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
-      "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
-      "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
-      "@angular-three/postprocessing/effects": [
-        "packages/postprocessing/effects/src/index.ts"
-      ],
-      "@angular-three/soba": ["packages/soba/src/index.ts"],
-      "@angular-three/soba/abstractions": [
-        "packages/soba/abstractions/src/index.ts"
-      ],
-      "@angular-three/soba/cameras": ["packages/soba/cameras/src/index.ts"],
-      "@angular-three/soba/controls": ["packages/soba/controls/src/index.ts"],
-      "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"],
-      "@angular-three/soba/misc": ["packages/soba/misc/src/index.ts"],
-      "@angular-three/soba/performances": [
-        "packages/soba/performances/src/index.ts"
-      ],
-      "@angular-three/soba/staging": ["packages/soba/staging/src/index.ts"],
-      "@angular-three/storybook": ["packages/storybook/src/index.ts"]
-    }
+    "paths": {}
   },
   "exclude": ["node_modules", "tmp"]
 }

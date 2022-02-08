@@ -1,11 +1,4 @@
 {
   "version": 2,
-  "projects": {
-    "cannon": "packages/cannon",
-    "core": "packages/core",
-    "demo": "packages/demo",
-    "postprocessing": "packages/postprocessing",
-    "soba": "packages/soba",
-    "storybook": "packages/storybook"
-  }
+  "projects": {}
 }
