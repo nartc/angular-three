@@ -1,7 +1,7 @@
 import { Directive, Input, OnInit, Optional } from '@angular/core';
 import * as THREE from 'three';
+import { NgtCanvasStore } from '../stores/canvas';
 import type { AnyConstructor } from '../types';
-import { zonelessRequestAnimationFrame } from '../utils/zoneless-timer';
 import { NgtGeometry } from './geometry';
 
 @Directive()
@@ -20,7 +20,10 @@ export abstract class NgtCurve<
     this.init();
   }
 
-  constructor(@Optional() protected geometryDirective: NgtGeometry) {}
+  constructor(
+    @Optional() protected geometryDirective: NgtGeometry,
+    protected canvasStore: NgtCanvasStore
+  ) {}
 
   private _curve?: TCurve;
 
@@ -31,7 +34,7 @@ export abstract class NgtCurve<
   }
 
   private init() {
-    zonelessRequestAnimationFrame(() => {
+    this.canvasStore.onZonelessReady(() => {
       this._curve = new this.curveType(...this._curveArgs);
       if (this.curve && this.geometryDirective) {
         const points = this.curve.getPoints(this.divisions);

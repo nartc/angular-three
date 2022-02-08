@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 import { NGT_OBJECT } from '../di/object';
+import { NgtCanvasStore } from '../stores/canvas';
 import type { AnyConstructor, AnyFunction } from '../types';
 import { zonelessRequestAnimationFrame } from '../utils/zoneless-timer';
 
@@ -18,7 +19,10 @@ export abstract class NgtGeometry<
 {
   @Output() ready = new EventEmitter<TGeometry>();
 
-  constructor(@Inject(NGT_OBJECT) protected parentObjectFactory: AnyFunction) {}
+  constructor(
+    @Inject(NGT_OBJECT) protected parentObjectFactory: AnyFunction,
+    protected canvasStore: NgtCanvasStore
+  ) {}
 
   abstract geometryType: AnyConstructor<TGeometry>;
 
@@ -35,7 +39,7 @@ export abstract class NgtGeometry<
   }
 
   private init() {
-    zonelessRequestAnimationFrame(() => {
+    this.canvasStore.onZonelessReady(() => {
       // geometry has changed. reconstruct
       if (this.geometry) {
         // cleanup

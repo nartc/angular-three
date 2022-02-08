@@ -1,4 +1,5 @@
 import {
+  createExtenderProvider,
   NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
   NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
   NgtAnimationFrameStore,
@@ -108,7 +109,7 @@ const vec = new THREE.Vector3();
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-    { provide: NgtExtender, useExisting: NgtSobaSpotLight },
+    createExtenderProvider(NgtSobaSpotLight),
     NgtStore,
   ],
 })

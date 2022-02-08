@@ -11,7 +11,7 @@ import {
   NgZone,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { NGT_CANVAS_OPTIONS } from './di/canvas';
 import { NgtLoop } from './services/loop';
@@ -30,14 +30,14 @@ import type {
   NgtPerformanceOptions,
   NgtRaycaster,
   NgtSceneOptions,
-  NgtSize
+  NgtSize,
 } from './types';
 
 @Component({
   selector: 'ngt-canvas',
   template: `
     <canvas #rendererCanvas></canvas>
-    <ng-container *ngIf='canvasOptions.projectContent'>
+    <ng-container *ngIf="canvasOptions.projectContent">
       <ng-content></ng-content>
     </ng-container>
   `,
@@ -54,7 +54,7 @@ import type {
       :host canvas {
         display: block;
       }
-    `
+    `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -63,8 +63,8 @@ import type {
     NgtEventsStore,
     NgtResize,
     NgtLoop,
-    NgtPerformance
-  ]
+    NgtPerformance,
+  ],
 })
 export class NgtCanvas extends NgtStore implements OnInit {
   @HostBinding('class.ngt-canvas') hostClass = true;
@@ -87,7 +87,7 @@ export class NgtCanvas extends NgtStore implements OnInit {
 
   @Input() set orthographic(orthographic: boolean | '') {
     this.canvasStore.set({
-      orthographic: orthographic === '' ? true : orthographic
+      orthographic: orthographic === '' ? true : orthographic,
     });
   }
 
@@ -153,7 +153,7 @@ export class NgtCanvas extends NgtStore implements OnInit {
         this.eventsStore.set({
           pointerMissed: (event) => {
             this.pointermissed.emit(event);
-          }
+          },
         });
       }
 
@@ -178,7 +178,6 @@ export class NgtCanvas extends NgtStore implements OnInit {
 @NgModule({
   declarations: [NgtCanvas],
   exports: [NgtCanvas],
-  imports: [CommonModule]
+  imports: [CommonModule],
 })
-export class NgtCoreModule {
-}
+export class NgtCoreModule {}

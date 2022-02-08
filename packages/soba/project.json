@@ -45,7 +45,9 @@
           "packages/soba/performances/**/*.ts",
           "packages/soba/performances/**/*.html",
           "packages/soba/staging/**/*.ts",
-          "packages/soba/staging/**/*.html"
+          "packages/soba/staging/**/*.html",
+          "packages/soba/abstractions/**/*.ts",
+          "packages/soba/abstractions/**/*.html"
         ]
       }
     }

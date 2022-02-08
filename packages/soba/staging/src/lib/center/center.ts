@@ -7,7 +7,7 @@ import {
   NgtObjectInputsController,
   NgtObjectInputsControllerModule,
   NgtStore,
-  zonelessRequestAnimationFrame
+  zonelessRequestAnimationFrame,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,7 @@ import {
   Inject,
   Input,
   NgModule,
-  TemplateRef
+  TemplateRef,
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import * as THREE from 'three';
@@ -34,34 +34,33 @@ export interface NgtSobaCenterState {
 
 @Directive({
   selector: 'ng-template[sobaCenterContent]',
-  exportAs: 'ngtSobaCenterContent'
+  exportAs: 'ngtSobaCenterContent',
 })
 export class NgtSobaCenterContent {
-  constructor(public templateRef: TemplateRef<NgtSobaCenterState>) {
-  }
+  constructor(public templateRef: TemplateRef<NgtSobaCenterState>) {}
 }
 
 @Component({
   selector: 'ngt-soba-center',
   template: `
     <ngt-group
-      (ready)='object = $event'
-      (animateReady)='
+      (ready)="object = $event"
+      (animateReady)="
         animateReady.emit({ entity: object, state: $event.state })
-      '
-      [objectInputsController]='objectInputsController'
+      "
+      [objectInputsController]="objectInputsController"
     >
       <ngt-group
-        name='outer-soba-center-group'
-        (ready)='store.set({ outerGroup: $event })'
+        name="outer-soba-center-group"
+        (ready)="store.set({ outerGroup: $event })"
       >
         <ngt-group
-          name='inner-soba-center-group'
-          (ready)='store.set({ innerGroup: $event })'
+          name="inner-soba-center-group"
+          (ready)="store.set({ innerGroup: $event })"
         >
           <ng-container
-            [ngTemplateOutlet]='content.templateRef'
-            [ngTemplateOutletContext]='store.get()'
+            [ngTemplateOutlet]="content.templateRef"
+            [ngTemplateOutletContext]="store.get()"
           ></ng-container>
         </ngt-group>
       </ngt-group>
@@ -74,8 +73,8 @@ export class NgtSobaCenterContent {
     NgtStore,
     createParentObjectProvider(NgtSobaCenter, (center) =>
       center.store.get('innerGroup')
-    )
-  ]
+    ),
+  ],
 })
 export class NgtSobaCenter extends NgtExtender<THREE.Group> {
   @Input() set alignTop(alignTop: boolean) {
@@ -97,12 +96,7 @@ export class NgtSobaCenter extends NgtExtender<THREE.Group> {
   ngOnInit() {
     this.store.hold(
       this.store.select(
-        selectSlice([
-          'alignTop',
-          'innerGroup',
-          'outerGroup',
-          'contentChecked'
-        ])
+        selectSlice(['alignTop', 'innerGroup', 'outerGroup', 'contentChecked'])
       ),
       ({ alignTop, innerGroup, outerGroup }) => {
         if (innerGroup) {
@@ -129,7 +123,7 @@ export class NgtSobaCenter extends NgtExtender<THREE.Group> {
 
   ngAfterContentChecked() {
     this.store.set((state) => ({
-      contentChecked: state.contentChecked ? state.contentChecked + 1 : 1
+      contentChecked: state.contentChecked ? state.contentChecked + 1 : 1,
     }));
   }
 }
@@ -139,9 +133,8 @@ export class NgtSobaCenter extends NgtExtender<THREE.Group> {
   exports: [
     NgtSobaCenter,
     NgtSobaCenterContent,
-    NgtObjectInputsControllerModule
+    NgtObjectInputsControllerModule,
   ],
-  imports: [CommonModule, NgtGroupModule]
+  imports: [CommonModule, NgtGroupModule],
 })
-export class NgtSobaCenterModule {
-}
+export class NgtSobaCenterModule {}

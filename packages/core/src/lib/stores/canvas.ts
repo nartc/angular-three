@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ElementRef, Inject, Injectable } from '@angular/core';
+import { ElementRef, Inject, Injectable, NgZone } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { filter, map, Observable } from 'rxjs';
 import * as THREE from 'three';
@@ -42,9 +42,11 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
     { nativeElement: { clientHeight, clientWidth } }: ElementRef<HTMLElement>,
     @Inject(NgtResize)
     private resizeResult$: Observable<NgtResizeResult>,
-    @Inject(DOCUMENT) document: Document
+    @Inject(DOCUMENT) document: Document,
+    private zone: NgZone
   ) {
     super();
+
     this.set({
       ready: false,
       vr: false,
@@ -237,6 +239,18 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
         raycaster: raycaster as NgtRaycaster,
       });
     }
+  }
+
+  onReady(cb: (canvasState: NgtCanvasState) => void) {
+    this.hold(this.ready$, () => {
+      cb(this.get());
+    });
+  }
+
+  onZonelessReady(cb: (canvasState: NgtCanvasState) => void) {
+    this.zone.runOutsideAngular(() => {
+      this.onReady(cb);
+    });
   }
 
   override ngOnDestroy() {

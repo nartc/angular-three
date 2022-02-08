@@ -6,22 +6,26 @@ export type AnyConstructor<TObject> = new (...args: any[]) => TObject;
 export type AnyExtenderFunction<TObject> = (object: TObject) => void;
 
 export type Tail<X extends readonly any[]> = ((...args: X) => any) extends (
-    arg: any,
-    ...rest: infer U
-  ) => any
+  arg: any,
+  ...rest: infer U
+) => any
   ? U
   : never;
 
-export type Properties<T> = Pick<T,
-  { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]>;
+export type Properties<T> = Pick<
+  T,
+  { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
+>;
 
 export type ConditionalType<Child, Parent, Truthy, Falsy> = Child extends Parent
   ? Truthy
   : Falsy;
 
-export type BranchingReturn<T = any,
+export type BranchingReturn<
+  T = any,
   Parent = any,
-  Coerced = any> = ConditionalType<T, Parent, Coerced, T>;
+  Coerced = any
+> = ConditionalType<T, Parent, Coerced, T>;
 
 export type NonFunctionKeys<T> = {
   [K in keyof T]: T[K] extends Function ? never : K;
@@ -213,8 +217,12 @@ export interface NgtRaycasterOptions {
   far?: number;
 }
 
-export type NgtSceneOptions = Overwrite<Partial<Omit<THREE.Scene, 'isScene' | 'onBeforeRender' | 'onAfterRender' | 'type'>>,
-  NgtCommonParameters>;
+export type NgtSceneOptions = Overwrite<
+  Partial<
+    Omit<THREE.Scene, 'isScene' | 'onBeforeRender' | 'onAfterRender' | 'type'>
+  >,
+  NgtCommonParameters
+>;
 
 export interface NgtEventsState {
   pointerMissed?: (event: MouseEvent) => void;

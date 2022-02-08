@@ -8,8 +8,8 @@ import {
   Optional,
 } from '@angular/core';
 import * as THREE from 'three';
+import { NgtCanvasStore } from '../stores/canvas';
 import type { AnyConstructor } from '../types';
-import { zonelessRequestAnimationFrame } from '../utils/zoneless-timer';
 import { NgtGeometry } from './geometry';
 
 @Directive()
@@ -25,7 +25,8 @@ export abstract class NgtAttribute<
 
   constructor(
     protected zone: NgZone,
-    @Optional() protected geometryDirective: NgtGeometry
+    @Optional() protected geometryDirective: NgtGeometry,
+    protected canvasStore: NgtCanvasStore
   ) {}
 
   private _attributeArgs: unknown[] = [];
@@ -53,7 +54,7 @@ export abstract class NgtAttribute<
   }
 
   private init() {
-    zonelessRequestAnimationFrame(() => {
+    this.canvasStore.onZonelessReady(() => {
       if (this.geometryDirective && this.attach) {
         this._attribute = new this.attributeType(...this._attributeArgs);
         if (this.attribute) {

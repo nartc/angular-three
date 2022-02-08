@@ -1,14 +1,25 @@
 import { Directive } from '@angular/core';
 import { createSideEffectObservable, RxState } from '@rx-angular/state';
-import { catchError, EMPTY, noop, Observable, OperatorFunction, startWith, Subject, tap } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  noop,
+  Observable,
+  OperatorFunction,
+  startWith,
+  Subject,
+  tap,
+} from 'rxjs';
 
 type AsyncActions<TActions extends object> = {
   [TActionKey in keyof TActions]: (args: TActions[TActionKey]) => void;
 };
 
 type AsyncActionsObservables<TActions extends object> = {
-  [TActionKey in Extract<keyof TActions,
-    string> as `${TActionKey}$`]: Observable<TActions[TActionKey]>;
+  [TActionKey in Extract<
+    keyof TActions,
+    string
+  > as `${TActionKey}$`]: Observable<TActions[TActionKey]>;
 };
 
 type AsyncActionsProxy<TActions extends object> = AsyncActions<TActions> &
@@ -16,7 +27,7 @@ type AsyncActionsProxy<TActions extends object> = AsyncActions<TActions> &
 
 @Directive()
 export class NgtStore<TState extends object = {}> extends RxState<TState> {
-  private readonly subCache: Record<string, Subject<any>> = {};
+  private readonly actionSubCache: Record<string, Subject<unknown>> = {};
   private readonly effect$ = createSideEffectObservable();
   private readonly effectSubscription = this.effect$.subscribe();
 
@@ -63,7 +74,7 @@ export class NgtStore<TState extends object = {}> extends RxState<TState> {
             if (cleanupFn) {
               cleanupFn(latestValue, true);
             }
-          }
+          },
         })
       )
     );
@@ -74,35 +85,33 @@ export class NgtStore<TState extends object = {}> extends RxState<TState> {
    * along with their respective Observables.
    */
   createActions<TActions extends object>(): AsyncActionsProxy<TActions> {
-    return new Proxy(
-      {},
-      {
-        get: (_, p: string) => {
-          if (p.endsWith('$')) {
-            return (
-              this.subCache[p] || (this.subCache[p] = new Subject())
-            ).asObservable();
-          }
-
-          return (args: TActions[keyof TActions]) => {
-            const $prop = p + '$';
-            const sub =
-              this.subCache[$prop] || (this.subCache[$prop] = new Subject());
-            sub.next(args);
-          };
-        },
-        set: () => {
-          throw new Error('setters are not available on asyncActions');
+    return new Proxy({}, {
+      get: (_, p: string) => {
+        if (p.endsWith('$')) {
+          return (
+            this.actionSubCache[p] || (this.actionSubCache[p] = new Subject())
+          ).asObservable();
         }
-      } as ProxyHandler<TActions>
-    ) as AsyncActionsProxy<TActions>;
+
+        return (args: TActions[keyof TActions]) => {
+          const $prop = p + '$';
+          const sub =
+            this.actionSubCache[$prop] ||
+            (this.actionSubCache[$prop] = new Subject());
+          sub.next(args);
+        };
+      },
+      set: () => {
+        throw new Error('setters are not available on asyncActions');
+      },
+    } as ProxyHandler<TActions>) as AsyncActionsProxy<TActions>;
   }
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
     this.effectSubscription.unsubscribe();
-    for (const subKey in this.subCache) {
-      this.subCache[subKey].complete();
+    for (const subKey in this.actionSubCache) {
+      this.actionSubCache[subKey].complete();
     }
   }
 }

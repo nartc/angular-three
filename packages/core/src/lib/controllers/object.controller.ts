@@ -154,6 +154,9 @@ export class NgtObjectController extends Controller implements OnDestroy {
     })
   );
 
+  // ngt-mesh - ObjectController
+  // ngt-group - ObjectController
+
   constructor(
     zone: NgZone,
     private canvasStore: NgtCanvasStore,
@@ -161,7 +164,9 @@ export class NgtObjectController extends Controller implements OnDestroy {
     private animationFrameStore: NgtAnimationFrameStore,
     @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
     private objectInputsController: NgtObjectInputsController,
-    @Optional() @SkipSelf() private parentObjectController: NgtObjectController,
+    @Optional()
+    @SkipSelf()
+    private parentObjectController: NgtObjectController,
     @Optional()
     @SkipSelf()
     @Inject(NGT_PARENT_OBJECT)
@@ -254,6 +259,26 @@ export class NgtObjectController extends Controller implements OnDestroy {
             objects: { ...state.objects, [this.object.uuid]: this.object },
           }));
 
+          /**
+           * <ngt-group>
+           *    <ngt-mesh>
+           * </ngt-ggroup>
+           *
+           * <ngt-billboard>
+           *    <ng-template billboardContent>
+           *      <ngt-mesh>
+           *      </ng-template>
+           * <ngt-billboard>
+           *
+           *
+           *
+           *   @ContentChildren(NgtObjectInputsController) set children(list: QueryList<NgtObjectInputsController) {
+           *     list.forEach(child => {
+           *       child.appendTo = () => this.group
+           *     })
+           *   }
+           */
+
           if (this.parentObjectController) {
             this.parentObjectFactory = (() =>
               this.parentObjectController.object) as AnyFunction;
@@ -261,6 +286,11 @@ export class NgtObjectController extends Controller implements OnDestroy {
             this.parentObjectFactory = this.parentObjectFn;
           } else {
             this.parentObjectFactory = (() => undefined) as AnyFunction;
+          }
+
+          if (this.object.name === 'soba-text') {
+            console.log(this.object);
+            console.log(this.parentObjectFactory(), this.appendTo);
           }
 
           if (this.objectInputsController.appendMode !== 'none') {
@@ -390,10 +420,10 @@ export class NgtObjectController extends Controller implements OnDestroy {
     }
   }
 
-  private get appendTo() {
-    return this.objectInputsController.appendTo instanceof THREE.Object3D
-      ? this.objectInputsController.appendTo
-      : (this.objectInputsController.appendTo as () => THREE.Object3D)();
+  private get appendTo(): THREE.Object3D {
+    return typeof this.objectInputsController.appendTo === 'function'
+      ? (this.objectInputsController.appendTo as () => THREE.Object3D)()
+      : (this.objectInputsController.appendTo as THREE.Object3D);
   }
 
   private applyCustomProps(changes?: UnknownRecord) {
