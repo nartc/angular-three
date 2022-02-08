@@ -1,2 +1,0 @@
-// GENERATED<% for (const fileName of items) {%>
-export * from './lib/<%= fileName %>/<%= fileName %>.directive';<% } %>
