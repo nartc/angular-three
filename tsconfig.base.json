@@ -15,7 +15,18 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@angular-three/core": ["libs/core/src/index.ts"]
+      "@angular-three/core": ["libs/core/src/index.ts"],
+      "@angular-three/core/attributes": ["libs/core/attributes/src/index.ts"],
+      "@angular-three/core/audios": ["libs/core/audios/src/index.ts"],
+      "@angular-three/core/cameras": ["libs/core/cameras/src/index.ts"],
+      "@angular-three/core/curves": ["libs/core/curves/src/index.ts"],
+      "@angular-three/core/geometries": ["libs/core/geometries/src/index.ts"],
+      "@angular-three/core/helpers": ["libs/core/helpers/src/index.ts"],
+      "@angular-three/core/lights": ["libs/core/lights/src/index.ts"],
+      "@angular-three/core/lines": ["libs/core/lines/src/index.ts"],
+      "@angular-three/core/materials": ["libs/core/materials/src/index.ts"],
+      "@angular-three/core/sprites": ["libs/core/sprites/src/index.ts"],
+      "@angular-three/core/textures": ["libs/core/textures/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

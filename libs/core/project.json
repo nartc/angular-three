@@ -31,7 +31,32 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/core/src/**/*.ts", "libs/core/src/**/*.html"]
+        "lintFilePatterns": [
+          "libs/core/src/**/*.ts",
+          "libs/core/src/**/*.html",
+          "libs/core/geometries/**/*.ts",
+          "libs/core/geometries/**/*.html",
+          "libs/core/materials/**/*.ts",
+          "libs/core/materials/**/*.html",
+          "libs/core/attributes/**/*.ts",
+          "libs/core/attributes/**/*.html",
+          "libs/core/curves/**/*.ts",
+          "libs/core/curves/**/*.html",
+          "libs/core/textures/**/*.ts",
+          "libs/core/textures/**/*.html",
+          "libs/core/audios/**/*.ts",
+          "libs/core/audios/**/*.html",
+          "libs/core/cameras/**/*.ts",
+          "libs/core/cameras/**/*.html",
+          "libs/core/helpers/**/*.ts",
+          "libs/core/helpers/**/*.html",
+          "libs/core/lights/**/*.ts",
+          "libs/core/lights/**/*.html",
+          "libs/core/lines/**/*.ts",
+          "libs/core/lines/**/*.html",
+          "libs/core/sprites/**/*.ts",
+          "libs/core/sprites/**/*.html"
+        ]
       }
     }
   },
