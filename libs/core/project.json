@@ -57,7 +57,9 @@
           "libs/core/sprites/**/*.ts",
           "libs/core/sprites/**/*.html",
           "libs/core/stats/**/*.ts",
-          "libs/core/stats/**/*.html"
+          "libs/core/stats/**/*.html",
+          "libs/core/primitive/**/*.ts",
+          "libs/core/primitive/**/*.html"
         ]
       }
     }
