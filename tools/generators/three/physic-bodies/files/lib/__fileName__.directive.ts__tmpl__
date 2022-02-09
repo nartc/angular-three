@@ -1,0 +1,41 @@
+// GENERATED
+import { <%= props %>, GetByIndex } from '@angular-three/cannon';
+import { Directive, Inject, NgModule } from '@angular/core';
+import {
+  <% if (argsFn) { %>NGT_CANNON_BODY_ARGS_FN,<% } %>
+  NGT_CANNON_BODY_CONTROLLER_PROVIDER,
+  NGT_CANNON_BODY_TYPE,
+  NGT_CANNON_BODY_WATCHED_CONTROLLER,
+  NgtCannonBodyController,
+  NgtCannonBodyControllerModule,
+} from '../body.controller';
+<% if (utilImports.length) { %>import { <% for (let utilImport of utilImports) { %><%= utilImport %>,<% } %> } from '../utils';<% } %>
+
+
+@Directive({
+  selector: '[ngtPhysic<%= name %>]',
+  exportAs: 'ngtPhysic<%= name %>',
+  providers: [
+    NGT_CANNON_BODY_CONTROLLER_PROVIDER,
+    { provide: NGT_CANNON_BODY_TYPE, useValue: '<%= name %>' },<% if (argsFn) { %>
+    { provide: NGT_CANNON_BODY_ARGS_FN, useValue: (<% if (argsFn.withArgs) { %>args: <%= props %>['args']<% if (argsFn.defaultArgs) { %> = <%= argsFn.defaultArgs %><% } %><% } %>) => <%- argsFn.body %> },<% } %>
+  ],
+})
+export class NgtPhysic<%= name %> {
+  static ngAcceptInputType_getPhysicProps: GetByIndex<<%= props %>> | undefined;
+
+  constructor(
+      @Inject(NGT_CANNON_BODY_WATCHED_CONTROLLER)
+      private cannonBodyController: NgtCannonBodyController
+  ) {}
+
+  get api() {
+    return this.cannonBodyController.api;
+  }
+}
+
+@NgModule({
+  declarations: [NgtPhysic<%= name %>],
+  exports: [NgtPhysic<%= name %>, NgtCannonBodyControllerModule],
+})
+export class NgtPhysic<%= name %>Module {}
