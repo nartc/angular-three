@@ -65,7 +65,9 @@
           "libs/core/points/**/*.ts",
           "libs/core/points/**/*.html",
           "libs/core/meshes/**/*.ts",
-          "libs/core/meshes/**/*.html"
+          "libs/core/meshes/**/*.html",
+          "libs/core/group/**/*.ts",
+          "libs/core/group/**/*.html"
         ]
       }
     }
