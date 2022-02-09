@@ -61,7 +61,9 @@
           "libs/core/primitive/**/*.ts",
           "libs/core/primitive/**/*.html",
           "libs/core/lod/**/*.ts",
-          "libs/core/lod/**/*.html"
+          "libs/core/lod/**/*.html",
+          "libs/core/points/**/*.ts",
+          "libs/core/points/**/*.html"
         ]
       }
     }

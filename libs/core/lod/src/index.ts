@@ -1,1 +1,1 @@
-export * from './lib/lod.directive';
+export * from './lib/lod';
