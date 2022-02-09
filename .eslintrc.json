@@ -7,7 +7,7 @@
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
-          "error",
+          0,
           {
             "enforceBuildableLibDependency": true,
             "allow": [],
@@ -24,7 +24,12 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/ban-types": 0,
+        "@typescript-eslint/no-non-null-assertion": 0,
+        "@typescript-eslint/ban-ts-comment": 0
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

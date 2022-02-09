@@ -4,11 +4,11 @@
   "overrides": [
     {
       "files": ["*.ts"],
-      "extends": [
-        "plugin:@nrwl/nx/angular",
-        "plugin:@angular-eslint/template/process-inline-templates"
-      ],
-      "rules": {}
+      "extends": ["plugin:@angular-eslint/template/process-inline-templates"],
+      "rules": {
+        "@typescript-eslint/no-non-null-assertion": 0,
+        "@typescript-eslint/ban-ts-comment": 0
+      }
     },
     {
       "files": ["*.html"],
