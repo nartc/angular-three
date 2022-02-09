@@ -24,6 +24,7 @@
       "@angular-three/core/helpers": ["libs/core/helpers/src/index.ts"],
       "@angular-three/core/lights": ["libs/core/lights/src/index.ts"],
       "@angular-three/core/lines": ["libs/core/lines/src/index.ts"],
+      "@angular-three/core/lod": ["libs/core/lod/src/index.ts"],
       "@angular-three/core/materials": ["libs/core/materials/src/index.ts"],
       "@angular-three/core/primitive": ["libs/core/primitive/src/index.ts"],
       "@angular-three/core/sprites": ["libs/core/sprites/src/index.ts"],

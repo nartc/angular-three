@@ -59,7 +59,9 @@
           "libs/core/stats/**/*.ts",
           "libs/core/stats/**/*.html",
           "libs/core/primitive/**/*.ts",
-          "libs/core/primitive/**/*.html"
+          "libs/core/primitive/**/*.html",
+          "libs/core/lod/**/*.ts",
+          "libs/core/lod/**/*.html"
         ]
       }
     }
