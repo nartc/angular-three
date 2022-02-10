@@ -1,0 +1,67 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title={'Introduction/Installation'} parameters={{ viewMode: 'docs' }} />
+
+# Installation
+
+## Compatibility Table
+
+Make sure you check the compatibility table before installing the package.
+
+| NGT Package    | 3rd party            | Version   |
+| -------------- | -------------------- | --------- |
+| all            | `@angular/core`      | `^13.0.0` |
+| all            | `rxjs`               | `^7.0.0`  |
+| all            | `three`              | `0.136`   |
+| soba           | `three-stdlib`       | `~2.6.1`  |
+| postprocessing | `postprocessing`     | `~6.23.2` |
+| cannon         | `cannon-es`          | `~0.18.0` |
+| cannon         | `cannon-es-debugger` | `~1.0.0`  |
+
+## Installation
+
+NGT is a collection of packages that provide different areas of THREE.js. To get started, you only need `@angular-three/core` and its `peerDependencies`
+
+### Using `ng add`
+
+`@angular-three/core` provides `ng add` schematic to quickly add it to your project
+
+```shell
+ng add @angular-three/core
+```
+
+If you are using [Nx Dev Tools](https://nx.dev), use the following commands:
+
+```shell
+npm install @angular-three/core
+npx nx generate @angular-three/core:init
+```
+
+The schematic also turns `skipLibCheck` in the root `tsconfig.json` to `true`. This is required for other libraries' usage like: `soba` or `postprocessing` because their dependencies will fail strict type checking.
+
+### Manual
+
+```shell
+npm install @angular-three/core
+#or yarn
+yarn add @angular-three/core
+```
+
+Manual installation also requires that the following `peerDependencies` are installed. You will need to install the THREE.js Library and its types:
+
+```shell
+npm install three@0.136
+npm install -D @types/three@0.136
+# or yarn
+yarn add three@0.136
+yarn add -D @types/three@0.136
+```
+
+> NGT will always try to stay on a version of THREE.js that has the corresponding typing definitions.
+
+## Ecosystem
+
+- `@angular-three/core`: THREE.js core entities. Most of the exports from `THREE` namespace are provided by **core** package.
+- `@angular-three/soba`: A set of helpers, utilities, and extra entities that are complimentary to `@angular-three/core`. Also, **soba** provides THREE.js entities that are from `three/examples/*` via [three-stdlib](https://github.com/pmndrs/three-stdlib) for better tree-shakability.
+- `@angular-three/postprocessing`: A set of post-processing effects with `EffectComposer` and other effects from [postprocessing](https://github.com/vanruesc/postprocessing).
+- `@angular-three/cannon`: Physics support for NGT, ported from [React Three Cannon](https://github.com/pmndrs/use-cannon)
