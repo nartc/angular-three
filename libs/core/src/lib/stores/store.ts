@@ -11,6 +11,7 @@ import {
     noop,
     Observable,
     of,
+    OperatorFunction,
     queueScheduler,
     ReplaySubject,
     scheduled,
@@ -364,6 +365,10 @@ export function debounceSync<T>(): MonoTypeOperatorFunction<T> {
 
 export function skipUndefined<TValue>(): MonoTypeOperatorFunction<TValue> {
     return filter<TValue>((value) => value !== undefined);
+}
+
+export function startWithUndefined<TValue>(): OperatorFunction<TValue, TValue> {
+    return startWith<TValue>(undefined) as OperatorFunction<TValue, TValue>;
 }
 
 function processSelectorArgs<
