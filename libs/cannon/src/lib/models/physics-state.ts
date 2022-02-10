@@ -8,24 +8,24 @@ import { Solver } from './solver';
 import { Subscriptions } from './subscription';
 
 export interface NgtPhysicsState {
-  worker: Worker;
-  refs: Refs;
-  buffers: Buffers;
-  events: CannonEvents;
-  subscriptions: Subscriptions;
-  bodies: Record<string, number>;
+    worker: Worker;
+    refs: Refs;
+    buffers: Buffers;
+    events: CannonEvents;
+    subscriptions: Subscriptions;
+    bodies: Record<string, number>;
 
-  shouldInvalidate?: boolean;
-  tolerance?: number;
-  step?: number;
-  iterations?: number;
-  allowSleep?: boolean;
-  broadphase?: Broadphase;
-  gravity?: NgtTriplet;
-  quatNormalizeFast?: boolean;
-  quatNormalizeSkip?: number;
-  solver?: Solver;
-  axisIndex?: number;
-  defaultContactMaterial?: DefaultContactMaterial;
-  size?: number;
+    shouldInvalidate?: boolean;
+    tolerance?: number;
+    step?: number;
+    iterations?: number;
+    allowSleep?: boolean;
+    broadphase?: Broadphase;
+    gravity?: NgtTriplet;
+    quatNormalizeFast?: boolean;
+    quatNormalizeSkip?: number;
+    solver?: Solver;
+    axisIndex?: number;
+    defaultContactMaterial?: DefaultContactMaterial;
+    size?: number;
 }

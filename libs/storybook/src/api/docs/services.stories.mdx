@@ -19,13 +19,13 @@ This service is a utility service that can be used in combination with `takeUnti
 
 ```ts
 @Component({
-  /* ... */
-  providers: [NgtDestroyedService],
+    /* ... */
+    providers: [NgtDestroyedService],
 })
 export class SomeComponent {
-  constructor(private destroyed: NgtDestroyedService) {
-    interval(1000).pipe(takeUntil(destroyed)).subscribe();
-  }
+    constructor(private destroyed: NgtDestroyedService) {
+        interval(1000).pipe(takeUntil(destroyed)).subscribe();
+    }
 }
 ```
 
@@ -39,31 +39,31 @@ This service is a utility service that can be used on any component that wants t
 
 ```ts
 @Component({
-  /* ... */
-  providers: [NgtResize],
+    /* ... */
+    providers: [NgtResize],
 })
 export class SomeComponent {
-  constructor(
-    @Inject(NgtResize)
-    private resizeResult$: Observable<NgtResizeResult>
-  ) {
-    this.resizeResult$.subscribe(); // emit everytime the window/host is resized
-  }
+    constructor(
+        @Inject(NgtResize)
+        private resizeResult$: Observable<NgtResizeResult>
+    ) {
+        this.resizeResult$.subscribe(); // emit everytime the window/host is resized
+    }
 }
 ```
 
 ```ts
 export interface NgtResizeResult {
-  readonly entries: ReadonlyArray<ResizeObserverEntry>;
-  readonly x: number;
-  readonly y: number;
-  readonly width: number;
-  readonly height: number;
-  readonly top: number;
-  readonly right: number;
-  readonly bottom: number;
-  readonly left: number;
-  readonly dpr: number;
+    readonly entries: ReadonlyArray<ResizeObserverEntry>;
+    readonly x: number;
+    readonly y: number;
+    readonly width: number;
+    readonly height: number;
+    readonly top: number;
+    readonly right: number;
+    readonly bottom: number;
+    readonly left: number;
+    readonly dpr: number;
 }
 ```
 
@@ -82,28 +82,28 @@ We can provide our own options via `NGT_RESIZE_OPTIONS` on the component that us
 
 ```ts
 @Component({
-  /* ... */
-  providers: [
-    NgtResize,
-    {
-      provide: NGT_RESIZE_OPTIONS,
-      useValue: {
-        // have to provide the whole options object as they're not merged at the moment
-        debounce: 500,
-        scroll: false,
-        box: 'content-box',
-        offsetSize: false,
-      },
-    },
-  ],
+    /* ... */
+    providers: [
+        NgtResize,
+        {
+            provide: NGT_RESIZE_OPTIONS,
+            useValue: {
+                // have to provide the whole options object as they're not merged at the moment
+                debounce: 500,
+                scroll: false,
+                box: 'content-box',
+                offsetSize: false,
+            },
+        },
+    ],
 })
 export class SomeComponent {
-  constructor(
-    @Inject(NgtResize)
-    private resizeResult$: Observable<NgtResizeResult>
-  ) {
-    this.resizeResult$.subscribe(); // emit everytime the window/host is resized
-  }
+    constructor(
+        @Inject(NgtResize)
+        private resizeResult$: Observable<NgtResizeResult>
+    ) {
+        this.resizeResult$.subscribe(); // emit everytime the window/host is resized
+    }
 }
 ```
 
@@ -115,8 +115,8 @@ This service is used to load external resources. This is recommended as it is ty
 
 ```ts
 export class SomeComponent {
-  model$ = this.loaderService.use(GTLFLoader, 'path/to/model.gltf'); // Observable<GLTF>
+    model$ = this.loaderService.use(GTLFLoader, 'path/to/model.gltf'); // Observable<GLTF>
 
-  constructor(private loaderService: NgtLoaderService) {}
+    constructor(private loaderService: NgtLoaderService) {}
 }
 ```

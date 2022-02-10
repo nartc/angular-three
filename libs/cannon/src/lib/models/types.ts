@@ -7,5 +7,10 @@ export type GetByIndex<T extends BodyProps> = (index: number) => T;
 export type ArgFn<T> = (args: T) => unknown[];
 
 export type SetOpName<
-  T extends AtomicName | VectorName | WorldPropName | 'quaternion' | 'rotation'
+    T extends
+        | AtomicName
+        | VectorName
+        | WorldPropName
+        | 'quaternion'
+        | 'rotation'
 > = `set${Capitalize<T>}`;

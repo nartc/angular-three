@@ -11,7 +11,7 @@ import {
   NgtObjectInputsController,
   NgtObjectInputsControllerModule,
   NgtStore,
-  zonelessRequestAnimationFrame
+  zonelessRequestAnimationFrame,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
 import { CommonModule } from '@angular/common';
@@ -26,7 +26,7 @@ import {
   NgModule,
   OnDestroy,
   OnInit,
-  TemplateRef
+  TemplateRef,
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { combineLatest, Observable } from 'rxjs';
@@ -112,8 +112,7 @@ export class NgtSobaBoundsContext {
     private canvasStore: NgtCanvasStore,
     private boundsStore: NgtStore<NgtSobaBoundsState>,
     private loop: NgtLoop
-  ) {
-  }
+  ) {}
 
   getSize(): SizeProps {
     const camera = this.canvasStore.get('camera');
@@ -210,7 +209,7 @@ export class NgtSobaBoundsContext {
         new THREE.Vector3(this.box.max.x, this.box.max.y, this.box.max.z),
         new THREE.Vector3(this.box.max.x, this.box.max.y, this.box.min.z),
         new THREE.Vector3(this.box.max.x, this.box.min.y, this.box.max.z),
-        new THREE.Vector3(this.box.max.x, this.box.min.y, this.box.min.z)
+        new THREE.Vector3(this.box.max.x, this.box.min.y, this.box.min.z),
       ];
       // Transform the center and each corner to camera space
       center.applyMatrix4(camera.matrixWorldInverse);
@@ -256,26 +255,25 @@ export class NgtSobaBoundsContext {
 
 @Directive({
   selector: 'ng-template[sobaBoundsContent]',
-  exportAs: 'ngtSobaBoundsContent'
+  exportAs: 'ngtSobaBoundsContent',
 })
 export class NgtSobaBoundsContent {
-  constructor(public templateRef: TemplateRef<NgtSobaBoundsState>) {
-  }
+  constructor(public templateRef: TemplateRef<NgtSobaBoundsState>) {}
 }
 
 @Component({
   selector: 'ngt-soba-bounds',
   template: `
     <ngt-group
-      (ready)='object = $event; store.set({ group: $event })'
-      (animateReady)='
+      (ready)="object = $event; store.set({ group: $event })"
+      (animateReady)="
         animateReady.emit({ entity: object, state: $event.state })
-      '
-      [objectInputsController]='objectInputsController'
+      "
+      [objectInputsController]="objectInputsController"
     >
       <ng-container
-        [ngTemplateOutlet]='content.templateRef'
-        [ngTemplateOutletContext]='store.get()'
+        [ngTemplateOutlet]="content.templateRef"
+        [ngTemplateOutletContext]="store.get()"
       ></ng-container>
     </ngt-group>
   `,
@@ -287,12 +285,13 @@ export class NgtSobaBoundsContent {
     createExtenderProvider(NgtSobaBounds),
     createParentObjectProvider(NgtSobaBounds, (bounds) =>
       bounds.store.get('group')
-    )
-  ]
+    ),
+  ],
 })
 export class NgtSobaBounds
   extends NgtExtender<THREE.Group>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   @Input() set damping(damping: number) {
     this.store.set({ damping });
   }
@@ -333,7 +332,7 @@ export class NgtSobaBounds
       margin: 1.2,
       eps: 0.01,
       fit: false,
-      clip: false
+      clip: false,
     });
   }
 
@@ -344,7 +343,7 @@ export class NgtSobaBounds
           this.canvasStore.select(
             'controls'
           ) as unknown as Observable<ControlsProto>,
-          this.store.select(selectSlice(['clip', 'fit']))
+          this.store.select(selectSlice(['clip', 'fit'])),
         ]),
         ([controls, { clip, fit }]) => {
           this.context.refresh();
@@ -421,7 +420,7 @@ export class NgtSobaBounds
             return;
           this.context.currentAnimating = false;
         }
-      }
+      },
     });
   }
 
@@ -455,9 +454,8 @@ export class NgtSobaBounds
   exports: [
     NgtSobaBounds,
     NgtSobaBoundsContent,
-    NgtObjectInputsControllerModule
+    NgtObjectInputsControllerModule,
   ],
-  imports: [NgtGroupModule, CommonModule]
+  imports: [NgtGroupModule, CommonModule],
 })
-export class NgtSobaBoundsModule {
-}
+export class NgtSobaBoundsModule {}

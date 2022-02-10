@@ -32,8 +32,8 @@ This pipe acts as a helper to use the `Math` object in the template. When workin
 
 ```ts
 export class SomeComponent {
-  // expose Math object
-  MATH = Math;
+    // expose Math object
+    MATH = Math;
 }
 ```
 
@@ -42,9 +42,9 @@ or we can use `math` and `mathConst` pipes:
 ```html
 <!-- 👇 this equals to -(Math.PI / 2) -->
 <ngt-mesh [rotation]='[-(0.5 | mathConst:"PI"), 0, 0]'>
-  <ngt-plane-geometry></ngt-plane-geometry>
+    <ngt-plane-geometry></ngt-plane-geometry>
 </ngt-mesh>
 ```
 
-- `mathConst`: the value passed in will be used as a multiplier. Eg: `0.5 | mathConst:'PI'` will return `Math.PI * 0.5` (or `Math.PI / 2`)
-- `math`: the value passed in will be used as arguments to the `Math` object. Eg: `0.5 | math:'sin'` will return `Math.sin(0.5)`
+-   `mathConst`: the value passed in will be used as a multiplier. Eg: `0.5 | mathConst:'PI'` will return `Math.PI * 0.5` (or `Math.PI / 2`)
+-   `math`: the value passed in will be used as arguments to the `Math` object. Eg: `0.5 | math:'sin'` will return `Math.sin(0.5)`

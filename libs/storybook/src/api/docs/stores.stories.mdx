@@ -16,8 +16,8 @@ This store is the main store for the Canvas. It is responsible for keeping the R
 
 This store keeps track of all the animation callbacks that are registered. Animations are registered via two ways:
 
-- `(animateReady)` Output
-- `NgtAnimationFrameStore#register`
+-   `(animateReady)` Output
+-   `NgtAnimationFrameStore#register`
 
 The difference between the two is that the former subscribes a single object to the Animation Frame.
 
@@ -30,32 +30,32 @@ Some time, it works well. But when you need to orchestrate both meshes through e
 
 ```ts
 @Component({
-  selector: 'two-meshes',
-  template: `
-    <ngt-mesh #meshOne></ngt-mesh>
-    <ngt-mesh #meshTwo></ngt-mesh>
-  `,
+    selector: 'two-meshes',
+    template: `
+        <ngt-mesh #meshOne></ngt-mesh>
+        <ngt-mesh #meshTwo></ngt-mesh>
+    `,
 })
 export class TwoMeshesComponent {
-  @ViewChild('meshOne') meshOne: NgtMesh;
-  @ViewChild('meshTwo') meshTwo: NgtMesh;
+    @ViewChild('meshOne') meshOne: NgtMesh;
+    @ViewChild('meshTwo') meshTwo: NgtMesh;
 
-  private animationUuid?: string;
+    private animationUuid?: string;
 
-  constructor(private animationFrameStore: NgtAnimationFrameStore) {}
+    constructor(private animationFrameStore: NgtAnimationFrameStore) {}
 
-  ngOnInit() {
-    this.animationUuid = this.animationFrameStore.register({
-      callback: () => {
-        this.meshOne.mesh.rotation.y += 0.01;
-        this.meshTwo.mesh.rotation.y += 0.01;
-      },
-    });
-  }
+    ngOnInit() {
+        this.animationUuid = this.animationFrameStore.register({
+            callback: () => {
+                this.meshOne.mesh.rotation.y += 0.01;
+                this.meshTwo.mesh.rotation.y += 0.01;
+            },
+        });
+    }
 
-  ngOnDestroy() {
-    this.animationFrameStore.unregister(this.animationUuid);
-  }
+    ngOnDestroy() {
+        this.animationFrameStore.unregister(this.animationUuid);
+    }
 }
 ```
 

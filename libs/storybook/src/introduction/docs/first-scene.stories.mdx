@@ -10,10 +10,10 @@ We are going to create our simple first scene using NGT. We will have an inline 
 
 I know that this is a bit long, so here is the TLDR version of this tutorial:
 
-- We set up a Canvas with `ngt-canvas`
-- We use `ngt-mesh` along with `ngt-box-geometry` and `ngt-mesh-basic-material` to construct our cube and animate it
-- We separate `ngt-mesh` into a reusable `CubeComponent`
-- We add states to the `CubeComponent` to make it interactive, and we "clone" it.
+-   We set up a Canvas with `ngt-canvas`
+-   We use `ngt-mesh` along with `ngt-box-geometry` and `ngt-mesh-basic-material` to construct our cube and animate it
+-   We separate `ngt-mesh` into a reusable `CubeComponent`
+-   We add states to the `CubeComponent` to make it interactive, and we "clone" it.
 
 Full code:
 
@@ -24,57 +24,57 @@ import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 
 @Component({
-  selector: 'app-root',
-  template: `
-    <ngt-canvas>
-      <app-cube [position]="[2, 0, 0]"></app-cube>
-      <app-cube [position]="[-2, 0, 0]"></app-cube>
-    </ngt-canvas>
-  `,
+    selector: 'app-root',
+    template: `
+        <ngt-canvas>
+            <app-cube [position]="[2, 0, 0]"></app-cube>
+            <app-cube [position]="[-2, 0, 0]"></app-cube>
+        </ngt-canvas>
+    `,
 })
 export class AppComponent {}
 
 @Component({
-  selector: 'app-cube',
-  template: `
-    <ngt-mesh
-      #mesh="ngtMesh"
-      (animateReady)="onAnimate(mesh.mesh)"
-      (click)="active = !active"
-      (pointerover)="hover = true"
-      (pointerout)="hover = false"
-      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
-      [position]="position"
-    >
-      <ngt-box-geometry></ngt-box-geometry>
-      <ngt-mesh-basic-material
-        [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
-      ></ngt-mesh-basic-material>
-    </ngt-mesh>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-cube',
+    template: `
+        <ngt-mesh
+            #mesh="ngtMesh"
+            (animateReady)="onAnimate(mesh.mesh)"
+            (click)="active = !active"
+            (pointerover)="hover = true"
+            (pointerout)="hover = false"
+            [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
+            [position]="position"
+        >
+            <ngt-box-geometry></ngt-box-geometry>
+            <ngt-mesh-basic-material
+                [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
+            ></ngt-mesh-basic-material>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
-  @Input() position?: NgtVector3; // imported from @angular-three/core
+    @Input() position?: NgtVector3; // imported from @angular-three/core
 
-  hover = false;
-  active = false;
+    hover = false;
+    active = false;
 
-  onAnimate(mesh: THREE.Mesh) {
-    mesh.rotation.x = mesh.rotation.y += 0.01;
-  }
+    onAnimate(mesh: THREE.Mesh) {
+        mesh.rotation.x = mesh.rotation.y += 0.01;
+    }
 }
 
 @NgModule({
-  declarations: [AppComponent, CubeComponent],
-  imports: [
-    BrowserModule,
-    NgtCoreModule,
-    NgtMeshModule,
-    NgtBoxGeometryModule,
-    NgtMeshBasicMaterialModule,
-  ],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent, CubeComponent],
+    imports: [
+        BrowserModule,
+        NgtCoreModule,
+        NgtMeshModule,
+        NgtBoxGeometryModule,
+        NgtMeshBasicMaterialModule,
+    ],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
@@ -88,31 +88,31 @@ Everything in NGT starts with the `CanvasComponent`. Let's start by putting `ngt
 import { NgtCoreModule } from '@angular-three/core';
 
 @Component({
-  selector: 'app-root',
-  template: `
-    <!-- 👇 render the CanvasComponent -->
-    <ngt-canvas></ngt-canvas>
-  `,
+    selector: 'app-root',
+    template: `
+        <!-- 👇 render the CanvasComponent -->
+        <ngt-canvas></ngt-canvas>
+    `,
 })
 export class AppComponent {}
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    // 👇 import NgtCoreModule which provides the CanvasComponent
-    NgtCoreModule,
-  ],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        // 👇 import NgtCoreModule which provides the CanvasComponent
+        NgtCoreModule,
+    ],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
 
 `ngt-canvas` sets up the following:
 
-- A `WebGLRenderer`, `Scene`, and `Camera` which are the basic building blocks of THREE.js
-- A render loop that will render the scene every frame.
-- A `window:resize` event listener will resize the renderer and camera when the window is resized. The event listener will get automatically removed when the component is destroyed.
+-   A `WebGLRenderer`, `Scene`, and `Camera` which are the basic building blocks of THREE.js
+-   A render loop that will render the scene every frame.
+-   A `window:resize` event listener will resize the renderer and camera when the window is resized. The event listener will get automatically removed when the component is destroyed.
 
 `ngt-canvas` takes up the dimensions of the parent element. Here, we are rendering the `ngt-canvas` in our `AppComponent` host element (`app-root`). We can wrap `ngt-canvas` with a `div` and give the `div` a fixed size.
 
@@ -127,25 +127,25 @@ Now that we have the Canvas setup, we can add THREE.js objects to the scene. Let
 import { NgtMeshModule } from '@angular-three/core/meshes';
 
 @Component({
-  selector: 'app-root',
-  template: `
-    <ngt-canvas>
-      <!-- 👇 put the Mesh in the scene -->
-      <ngt-mesh></ngt-mesh>
-    </ngt-canvas>
-  `,
+    selector: 'app-root',
+    template: `
+        <ngt-canvas>
+            <!-- 👇 put the Mesh in the scene -->
+            <ngt-mesh></ngt-mesh>
+        </ngt-canvas>
+    `,
 })
 export class AppComponent {}
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    NgtCoreModule,
-    // 👇 import NgtMeshModule which provides the NgtMesh
-    NgtMeshModule,
-  ],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        NgtCoreModule,
+        // 👇 import NgtMeshModule which provides the NgtMesh
+        NgtMeshModule,
+    ],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
@@ -161,30 +161,30 @@ import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 
 @Component({
-  selector: 'app-root',
-  template: `
-    <ngt-canvas>
-      <ngt-mesh>
-        <!-- 👇 put the Geometry and Material in the Mesh -->
-        <ngt-box-geometry></ngt-box-geometry>
-        <ngt-mesh-basic-material></ngt-mesh-basic-material>
-      </ngt-mesh>
-    </ngt-canvas>
-  `,
+    selector: 'app-root',
+    template: `
+        <ngt-canvas>
+            <ngt-mesh>
+                <!-- 👇 put the Geometry and Material in the Mesh -->
+                <ngt-box-geometry></ngt-box-geometry>
+                <ngt-mesh-basic-material></ngt-mesh-basic-material>
+            </ngt-mesh>
+        </ngt-canvas>
+    `,
 })
 export class AppComponent {}
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    NgtCoreModule,
-    NgtMeshModule,
-    // 👇 import the required modules
-    NgtBoxGeometryModule,
-    NgtMeshBasicMaterialModule,
-  ],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        NgtCoreModule,
+        NgtMeshModule,
+        // 👇 import the required modules
+        NgtBoxGeometryModule,
+        NgtMeshBasicMaterialModule,
+    ],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
@@ -198,10 +198,10 @@ Minus the imports (which sometimes are helped by our IDEs), our scene is seven l
 ```ts
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-  75,
-  document.clientWidth / document.clientHeight,
-  0.1,
-  1000
+    75,
+    document.clientWidth / document.clientHeight,
+    0.1,
+    1000
 );
 
 const renderer = new THREE.WebGLRenderer();
@@ -215,8 +215,8 @@ mesh.material = new THREE.MeshStandardMaterial();
 scene.add(mesh);
 
 function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
 }
 
 animate();
@@ -228,8 +228,8 @@ animate();
 
 ```ts
 @Component({
-  selector: 'app-root',
-  template: `
+    selector: 'app-root',
+    template: `
     <ngt-canvas>
                 <!-- 👇 we grab the reference of NgtMesh -->
                 <!-- 👇          👇 listen for (animateReady) 👇 pass in the actual THREE.Mesh that NgtMesh creates
@@ -241,10 +241,10 @@ animate();
   `,
 })
 export class AppComponent {
-  onAnimate(mesh: THREE.Mesh) {
-    // 👇 now we can animate the mesh by incrementing the mesh's rotation
-    mesh.rotation.x = mesh.rotation.y += 0.01;
-  }
+    onAnimate(mesh: THREE.Mesh) {
+        // 👇 now we can animate the mesh by incrementing the mesh's rotation
+        mesh.rotation.x = mesh.rotation.y += 0.01;
+    }
 }
 ```
 
@@ -258,30 +258,30 @@ That was great and easy! But what if we want to reuse the same code for multiple
 
 ```ts
 @Component({
-  selector: 'app-root',
-  template: `
-    <ngt-canvas>
-      <app-cube></app-cube>
-    </ngt-canvas>
-  `,
+    selector: 'app-root',
+    template: `
+        <ngt-canvas>
+            <app-cube></app-cube>
+        </ngt-canvas>
+    `,
 })
 export class AppComponent {}
 
 @Component({
-  selector: 'app-cube',
-  template: `
-    <ngt-mesh #mesh="ngtMesh" (animateReady)="onAnimate(mesh.mesh)">
-      <ngt-box-geometry></ngt-box-geometry>
-      <ngt-mesh-basic-material></ngt-mesh-basic-material>
-    </ngt-mesh>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-cube',
+    template: `
+        <ngt-mesh #mesh="ngtMesh" (animateReady)="onAnimate(mesh.mesh)">
+            <ngt-box-geometry></ngt-box-geometry>
+            <ngt-mesh-basic-material></ngt-mesh-basic-material>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
-  // Don't forget to add CubeComponent to AppModule's declarations
-  onAnimate(mesh: THREE.Mesh) {
-    mesh.rotation.x = mesh.rotation.y += 0.01;
-  }
+    // Don't forget to add CubeComponent to AppModule's declarations
+    onAnimate(mesh: THREE.Mesh) {
+        mesh.rotation.x = mesh.rotation.y += 0.01;
+    }
 }
 ```
 
@@ -293,48 +293,48 @@ We will add two states: `hover` and `active` to our `CubeComponent`.
 
 ```ts
 @Component({
-  selector: 'app-cube',
-  template: `
-    <!-- 👇 add the event handler to change the states -->
-    <ngt-mesh
-      #mesh="ngtMesh"
-      (animateReady)="onAnimate(mesh.mesh)"
-      (click)="active = !active"
-      (pointerover)="hover = true"
-      (pointerout)="hover = false"
-      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
-    >
-      <!-- 👆 we use the active state to change the scale of the Mesh -->
-      <ngt-box-geometry></ngt-box-geometry>
-      <!-- 👇 we use the hover state to change the color of the Material -->
-      <ngt-mesh-basic-material
-        [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
-      ></ngt-mesh-basic-material>
-    </ngt-mesh>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-cube',
+    template: `
+        <!-- 👇 add the event handler to change the states -->
+        <ngt-mesh
+            #mesh="ngtMesh"
+            (animateReady)="onAnimate(mesh.mesh)"
+            (click)="active = !active"
+            (pointerover)="hover = true"
+            (pointerout)="hover = false"
+            [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
+        >
+            <!-- 👆 we use the active state to change the scale of the Mesh -->
+            <ngt-box-geometry></ngt-box-geometry>
+            <!-- 👇 we use the hover state to change the color of the Material -->
+            <ngt-mesh-basic-material
+                [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
+            ></ngt-mesh-basic-material>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
-  hover = false; // <-- default to false
-  active = false; // <-- default to false
+    hover = false; // <-- default to false
+    active = false; // <-- default to false
 
-  onAnimate(mesh: THREE.Mesh) {
-    mesh.rotation.x = mesh.rotation.y += 0.01;
-  }
+    onAnimate(mesh: THREE.Mesh) {
+        mesh.rotation.x = mesh.rotation.y += 0.01;
+    }
 }
 ```
 
 Interact with the cube and see the magic 🤯!
 
 <Story
-  id="introduction-examples-first-scene--spinning-cube-states"
-  height={480}
+    id="introduction-examples-first-scene--spinning-cube-states"
+    height={480}
 />
 
 There is quite a lot to take in here:
 
-- `(click)`, `(pointerover)`, and `(pointerout)` _look like_ DOM events, but they're not. Remember, these objects are inside a Canvas which means they do not have a DOM representation, so they do not trigger DOM events.
-- These events can update the state and trigger a change detection cycle. This is because NGT gets back into Angular Zone when these events happen. NGT will usually bail out of Angular Zone and not trigger a change detection cycle.
+-   `(click)`, `(pointerover)`, and `(pointerout)` _look like_ DOM events, but they're not. Remember, these objects are inside a Canvas which means they do not have a DOM representation, so they do not trigger DOM events.
+-   These events can update the state and trigger a change detection cycle. This is because NGT gets back into Angular Zone when these events happen. NGT will usually bail out of Angular Zone and not trigger a change detection cycle.
 
 ## Here's why a component framework is needed
 
@@ -342,36 +342,36 @@ What's better than a reactive-animated cube? TWO reactive-animated cubes!
 
 ```ts
 @Component({
-  selector: 'app-cube',
-  template: `
-    <ngt-mesh
-      #mesh="ngtMesh"
-      (animateReady)="onAnimate(mesh.mesh)"
-      (click)="active = !active"
-      (pointerover)="hover = true"
-      (pointerout)="hover = false"
-      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
-      [position]="position"
-    >
-      <!-- 👆 we bind our position input to the Mesh's [position] -->
-      <ngt-box-geometry></ngt-box-geometry>
-      <ngt-mesh-basic-material
-        [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
-      ></ngt-mesh-basic-material>
-    </ngt-mesh>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-cube',
+    template: `
+        <ngt-mesh
+            #mesh="ngtMesh"
+            (animateReady)="onAnimate(mesh.mesh)"
+            (click)="active = !active"
+            (pointerover)="hover = true"
+            (pointerout)="hover = false"
+            [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
+            [position]="position"
+        >
+            <!-- 👆 we bind our position input to the Mesh's [position] -->
+            <ngt-box-geometry></ngt-box-geometry>
+            <ngt-mesh-basic-material
+                [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
+            ></ngt-mesh-basic-material>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
-  // 👇 add a position Input so that we can customize the position from outside
-  @Input() position?: NgtVector3; // imported from @angular-three/core
+    // 👇 add a position Input so that we can customize the position from outside
+    @Input() position?: NgtVector3; // imported from @angular-three/core
 
-  hover = false;
-  active = false;
+    hover = false;
+    active = false;
 
-  onAnimate(mesh: THREE.Mesh) {
-    mesh.rotation.x = mesh.rotation.y += 0.01;
-  }
+    onAnimate(mesh: THREE.Mesh) {
+        mesh.rotation.x = mesh.rotation.y += 0.01;
+    }
 }
 ```
 
@@ -379,15 +379,15 @@ Let's update our `AppComponent`
 
 ```ts
 @Component({
-  selector: 'app-root',
-  template: `
-    <ngt-canvas>
-      <!--                  👇 let's move this one 2 units to the right (X axis) -->
-      <app-cube [position]="[2, 0, 0]"></app-cube>
-      <!--                  👇 let's move this one 2 units to the left (X axis) -->
-      <app-cube [position]="[-2, 0, 0]"></app-cube>
-    </ngt-canvas>
-  `,
+    selector: 'app-root',
+    template: `
+        <ngt-canvas>
+            <!--                  👇 let's move this one 2 units to the right (X axis) -->
+            <app-cube [position]="[2, 0, 0]"></app-cube>
+            <!--                  👇 let's move this one 2 units to the left (X axis) -->
+            <app-cube [position]="[-2, 0, 0]"></app-cube>
+        </ngt-canvas>
+    `,
 })
 export class AppComponent {}
 ```
@@ -395,8 +395,8 @@ export class AppComponent {}
 And voila!
 
 <Story
-  id="introduction-examples-first-scene--two-spinning-cubes"
-  height={480}
+    id="introduction-examples-first-scene--two-spinning-cubes"
+    height={480}
 />
 
 ## Make it more dynamic
@@ -405,35 +405,35 @@ Our cubes are animated and reactive. But they look bland. They don't even look l
 
 ```ts
 @Component({
-  selector: 'app-cube',
-  template: `
-    <ngt-mesh
-      #mesh="ngtMesh"
-      (animateReady)="onAnimate(mesh.mesh)"
-      (click)="active = !active"
-      (pointerover)="hover = true"
-      (pointerout)="hover = false"
-      [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
-      [position]="position"
-    >
-      <ngt-box-geometry></ngt-box-geometry>
-      <!--      👇 change from BasicMaterial to StandardMaterial -->
-      <ngt-mesh-standard-material
-        [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
-      ></ngt-mesh-standard-material>
-    </ngt-mesh>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-cube',
+    template: `
+        <ngt-mesh
+            #mesh="ngtMesh"
+            (animateReady)="onAnimate(mesh.mesh)"
+            (click)="active = !active"
+            (pointerover)="hover = true"
+            (pointerout)="hover = false"
+            [scale]="active ? [1.5, 1.5, 1.5] : [1, 1, 1]"
+            [position]="position"
+        >
+            <ngt-box-geometry></ngt-box-geometry>
+            <!--      👇 change from BasicMaterial to StandardMaterial -->
+            <ngt-mesh-standard-material
+                [parameters]="{ color: hover ? 'turquoise' : 'tomato' }"
+            ></ngt-mesh-standard-material>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {}
 
 @NgModule({
-  /* ... */
-  imports: [
-    ,
-    /* ... */ // 👇 Don't forget to import and add NgtMeshStandardMaterialModule (from @angular-three/core/materials)
-    NgtMeshStandardMaterialModule,
-  ],
+    /* ... */
+    imports: [
+        ,
+        /* ... */ // 👇 Don't forget to import and add NgtMeshStandardMaterialModule (from @angular-three/core/materials)
+        NgtMeshStandardMaterialModule,
+    ],
 })
 export class AppModule {}
 ```
@@ -441,8 +441,8 @@ export class AppModule {}
 This is the result:
 
 <Story
-  id="introduction-examples-first-scene--standard-material-cubes"
-  height={480}
+    id="introduction-examples-first-scene--standard-material-cubes"
+    height={480}
 />
 
 What happened to our scene? The cubes are all "black". This is because `MeshStandardMaterial` is a material that needs to be lit up by some light sources. Imagine these cubes are inside a dark room, there is no light, so they appear black.
@@ -451,39 +451,39 @@ Let's add some lights to our scene to fix this.
 
 ```ts
 @Component({
-  selector: 'app-root',
-  template: `
-    <ngt-canvas>
-      <ngt-ambient-light></ngt-ambient-light>
-      <ngt-spot-light [position]="[2, 2, 2]"></ngt-spot-light>
+    selector: 'app-root',
+    template: `
+        <ngt-canvas>
+            <ngt-ambient-light></ngt-ambient-light>
+            <ngt-spot-light [position]="[2, 2, 2]"></ngt-spot-light>
 
-      <app-cube [position]="[2, 0, 0]"></app-cube>
-      <app-cube [position]="[-2, 0, 0]"></app-cube>
-    </ngt-canvas>
-  `,
+            <app-cube [position]="[2, 0, 0]"></app-cube>
+            <app-cube [position]="[-2, 0, 0]"></app-cube>
+        </ngt-canvas>
+    `,
 })
 export class AppComponent {}
 
 @NgModule({
-  /* ... */
-  imports: [
-    ,
-    /* ... */ // 👇 Don't forget to import and add NgtAmbientLightModule, NgtSpotLightModule (from @angular-three/core/lights)
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-  ],
+    /* ... */
+    imports: [
+        ,
+        /* ... */ // 👇 Don't forget to import and add NgtAmbientLightModule, NgtSpotLightModule (from @angular-three/core/lights)
+        NgtAmbientLightModule,
+        NgtSpotLightModule,
+    ],
 })
 export class AppModule {}
 ```
 
-- `ngt-ambient-light` is a light source that emits light in all directions, effectively making our scene "bright".
-- `ngt-spot-light` is a light source that emits light from a single point in a specific direction, and the light gets wider and weaker as it travels. Imagine a flashlight.
+-   `ngt-ambient-light` is a light source that emits light in all directions, effectively making our scene "bright".
+-   `ngt-spot-light` is a light source that emits light from a single point in a specific direction, and the light gets wider and weaker as it travels. Imagine a flashlight.
 
 Our cubes look so much better now, with dimensionality, showing that they are real 3D objects.
 
 <Story
-  id="introduction-examples-first-scene--real-standard-material-cubes"
-  height={480}
+    id="introduction-examples-first-scene--real-standard-material-cubes"
+    height={480}
 />
 
 ## Take control of the camera
@@ -502,29 +502,29 @@ yarn add @angular-three/soba
 
 ```ts
 @Component({
-  selector: 'app-root',
-  template: `
-    <ngt-canvas>
-      <ngt-ambient-light></ngt-ambient-light>
-      <ngt-spot-light [position]="[2, 2, 2]"></ngt-spot-light>
+    selector: 'app-root',
+    template: `
+        <ngt-canvas>
+            <ngt-ambient-light></ngt-ambient-light>
+            <ngt-spot-light [position]="[2, 2, 2]"></ngt-spot-light>
 
-      <app-cube [position]="[2, 0, 0]"></app-cube>
-      <app-cube [position]="[-2, 0, 0]"></app-cube>
+            <app-cube [position]="[2, 0, 0]"></app-cube>
+            <app-cube [position]="[-2, 0, 0]"></app-cube>
 
-      <!--👇 -->
-      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
-    </ngt-canvas>
-  `,
+            <!--👇 -->
+            <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+        </ngt-canvas>
+    `,
 })
 export class AppComponent {}
 
 @NgModule({
-  /* ... */
-  imports: [
-    ,
-    /* ... */ // 👇 Don't forget to import and add NgtSobaOrbitControlsModule (from @angular-three/soba/controls)
-    NgtSobaOrbitControlsModule,
-  ],
+    /* ... */
+    imports: [
+        ,
+        /* ... */ // 👇 Don't forget to import and add NgtSobaOrbitControlsModule (from @angular-three/soba/controls)
+        NgtSobaOrbitControlsModule,
+    ],
 })
 export class AppModule {}
 ```
@@ -533,31 +533,31 @@ Let's also add a `GridHelper`, with `ngt-grid-helper`, to our scene to make it e
 
 ```ts
 @Component({
-  selector: 'app-root',
-  template: `
-    <ngt-canvas>
-      <ngt-ambient-light></ngt-ambient-light>
-      <ngt-spot-light [position]="[2, 2, 2]"></ngt-spot-light>
+    selector: 'app-root',
+    template: `
+        <ngt-canvas>
+            <ngt-ambient-light></ngt-ambient-light>
+            <ngt-spot-light [position]="[2, 2, 2]"></ngt-spot-light>
 
-      <!--👇 -->
-      <ngt-grid-helper></ngt-grid-helper>
+            <!--👇 -->
+            <ngt-grid-helper></ngt-grid-helper>
 
-      <app-cube [position]="[2, 0, 0]"></app-cube>
-      <app-cube [position]="[-2, 0, 0]"></app-cube>
+            <app-cube [position]="[2, 0, 0]"></app-cube>
+            <app-cube [position]="[-2, 0, 0]"></app-cube>
 
-      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
-    </ngt-canvas>
-  `,
+            <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+        </ngt-canvas>
+    `,
 })
 export class AppComponent {}
 
 @NgModule({
-  /* ... */
-  imports: [
-    ,
-    /* ... */ // 👇 Don't forget to import and add NgtGridHelperModule (from @angular-three/core/helpers)
-    NgtGridHelperModule,
-  ],
+    /* ... */
+    imports: [
+        ,
+        /* ... */ // 👇 Don't forget to import and add NgtGridHelperModule (from @angular-three/core/helpers)
+        NgtGridHelperModule,
+    ],
 })
 export class AppModule {}
 ```
@@ -570,7 +570,7 @@ VOILA!!
 
 ## Exercise
 
-- Try playing with the colors
-- Try using a different Geometry to display something other than a cube
-- Try placing more objects using different positions
-- Try different lights
+-   Try playing with the colors
+-   Try using a different Geometry to display something other than a cube
+-   Try placing more objects using different positions
+-   Try different lights

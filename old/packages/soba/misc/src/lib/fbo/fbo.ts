@@ -44,19 +44,19 @@ export class NgtSobaFBO extends NgtStore<{
       'dpr',
       combineLatest([
         this.canvasStore.ready$,
-        this.canvasStore.select('renderer')
+        this.canvasStore.select('renderer'),
       ]),
       (_, [, renderer]) => renderer.getPixelRatio()
     );
 
-    this.connect('target',
+    this.connect(
+      'target',
       combineLatest([
         this.canvasStore.ready$,
-        this.select(selectSlice(['width', 'height', 'settings']))
-      ])
-      , (_, [, { width, height, settings }]) => {
-        const { multisample, samples, ...targetSettings } =
-        settings || {};
+        this.select(selectSlice(['width', 'height', 'settings'])),
+      ]),
+      (_, [, { width, height, settings }]) => {
+        const { multisample, samples, ...targetSettings } = settings || {};
 
         let target;
         if (
@@ -77,13 +77,14 @@ export class NgtSobaFBO extends NgtStore<{
           );
         }
         return target;
-      });
+      }
+    );
 
     this.hold(
       combineLatest([
         this.canvasStore.ready$,
         this.canvasStore.select('size'),
-        this.select('dpr')
+        this.select('dpr'),
       ]),
       ([_, size, dpr]) => {
         this.set({
@@ -91,7 +92,7 @@ export class NgtSobaFBO extends NgtStore<{
           height: typeof height === 'number' ? height : size.height * dpr,
           settings:
             (typeof width === 'number' ? settings : (width as FBOSettings)) ||
-            {}
+            {},
         });
       }
     );

@@ -6,9 +6,9 @@ import { Meta } from '@storybook/addon-docs';
 
 There are three main types of inputs for NGT objects:
 
-- Constructor Arguments
-- Parameters
-- Properties
+-   Constructor Arguments
+-   Parameters
+-   Properties
 
 They seem very similar to each other, but they function a little differently.
 
@@ -38,9 +38,9 @@ When we create a `MeshStandardMaterial`, we can pass in parameters to specify th
 
 ```ts
 new THREE.MeshStandardMaterial({
-  color: 0xffffff,
-  roughness: 0.5,
-  metalness: 0.5,
+    color: 0xffffff,
+    roughness: 0.5,
+    metalness: 0.5,
 });
 ```
 
@@ -48,7 +48,7 @@ The following in NGT is equivalent to the above:
 
 ```html
 <ngt-mesh-standard-material
-  [parameters]='{ color: "#ffffff", roughness: 0.5, metalness: 0.5 }'
+    [parameters]='{ color: "#ffffff", roughness: 0.5, metalness: 0.5 }'
 ></ngt-mesh-standard-material>
 ```
 
@@ -69,17 +69,17 @@ The following in NGT is equivalent to the above:
 
 ```html
 <ngt-ambient-light
-  [intensity]="1"
-  [position]="[1, 1, 1]"
-  color="white"
-  [args]="[undefined, undefined, 100]"
+    [intensity]="1"
+    [position]="[1, 1, 1]"
+    color="white"
+    [args]="[undefined, undefined, 100]"
 ></ngt-ambient-light>
 
 <!-- or -->
 
 <ngt-ambient-light
-  [position]="[1, 1, 1]"
-  [args]='["white", 1, 100]'
+    [position]="[1, 1, 1]"
+    [args]='["white", 1, 100]'
 ></ngt-ambient-light>
 ```
 

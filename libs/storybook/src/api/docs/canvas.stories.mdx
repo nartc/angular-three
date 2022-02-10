@@ -8,22 +8,22 @@ The root of a 3D scene is a `ngt-canvas` component which is provided by `NgtCore
 
 ```html
 <ngt-canvas>
-  <!-- all 3D objects need to be in here -->
+    <!-- all 3D objects need to be in here -->
 
-  <ngt-ambient-light></ngt-ambient-light>
-  <ngt-spot-light></ngt-spot-light>
+    <ngt-ambient-light></ngt-ambient-light>
+    <ngt-spot-light></ngt-spot-light>
 
-  <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
 
-  <ngt-mesh>
-    <ngt-box-geometry></ngt-box-geometry>
-    <ngt-mesh-standard-material></ngt-mesh-standard-material>
-  </ngt-mesh>
+    <ngt-mesh>
+        <ngt-box-geometry></ngt-box-geometry>
+        <ngt-mesh-standard-material></ngt-mesh-standard-material>
+    </ngt-mesh>
 
-  <ngt-mesh>
-    <ngt-plane-geometry></ngt-plane-geometry>
-    <ngt-mesh-standard-material></ngt-mesh-standard-material>
-  </ngt-mesh>
+    <ngt-mesh>
+        <ngt-plane-geometry></ngt-plane-geometry>
+        <ngt-mesh-standard-material></ngt-mesh-standard-material>
+    </ngt-mesh>
 </ngt-canvas>
 ```
 
@@ -33,26 +33,26 @@ The root of a 3D scene is a `ngt-canvas` component which is provided by `NgtCore
 import { NgtCoreModule } from '@angular-three/core';
 
 @NgModule({
-  imports: [NgtCoreModule],
+    imports: [NgtCoreModule],
 })
 export class AppModule {}
 ```
 
 `ngt-canvas` is the main building block of NGT. Normally when working with THREE.js, we need to set up a `WebGLRenderer`, a `Scene`, and a `Camera`. `ngt-canvas` sets these up with the following defaults:
 
-- `WebGLRenderer`:
-  - `antialias`: `true`
-  - `alpha`: `true`
-  - `powerPreference`: `"high-performance"`
-  - `setClearAlpha(0)`
-  - if `shadows` is passed in, `shadowMap` will be enabled, and a default `PCFSoftShadowMap` will be assigned.
-  - if `linear` is `false` (which is the default), the colorpsace on the `WebGLRenderer` will be set to `sRGB` and all colors/textures will be converted to `sRGB` when they are loaded.
-    > Consult https://www.donmccurdy.com/2020/06/17/color-management-in-threejs for more information about color management.
-- A default `PerspectiveCamera` with `fov: 75, near: 0.1, far: 1000, z: 5`
-  - if `orthographic` is set to `true`, the camera will be set to `OrthographicCamera` with `near: 0.1, far: 1000, z: 5`
-  - By default, `Camera` will look at the `[0, 0, 0]` (center of the scene)
-- A default `Scene` and `Raycaster`
-- A `window:resize` listener that will update the `Renderer#size` and `Camera#aspect` when the window is resized.
+-   `WebGLRenderer`:
+    -   `antialias`: `true`
+    -   `alpha`: `true`
+    -   `powerPreference`: `"high-performance"`
+    -   `setClearAlpha(0)`
+    -   if `shadows` is passed in, `shadowMap` will be enabled, and a default `PCFSoftShadowMap` will be assigned.
+    -   if `linear` is `false` (which is the default), the colorpsace on the `WebGLRenderer` will be set to `sRGB` and all colors/textures will be converted to `sRGB` when they are loaded.
+        > Consult https://www.donmccurdy.com/2020/06/17/color-management-in-threejs for more information about color management.
+-   A default `PerspectiveCamera` with `fov: 75, near: 0.1, far: 1000, z: 5`
+    -   if `orthographic` is set to `true`, the camera will be set to `OrthographicCamera` with `near: 0.1, far: 1000, z: 5`
+    -   By default, `Camera` will look at the `[0, 0, 0]` (center of the scene)
+-   A default `Scene` and `Raycaster`
+-   A `window:resize` listener that will update the `Renderer#size` and `Camera#aspect` when the window is resized.
 
 ## `NGT_CANVAS_OPTIONS`
 
@@ -62,11 +62,11 @@ You can override some default `NGT_CANVAS_OPTIONS` to customize how `CanvasCompo
 
 ```ts
 export interface NgtCanvasOptions {
-  projectContent?: boolean;
+    projectContent?: boolean;
 }
 
 const DEFAULT_NGT_CANVAS_OPTIONS: NgtCanvasOptions = {
-  projectContent: false,
+    projectContent: false,
 };
 ```
 

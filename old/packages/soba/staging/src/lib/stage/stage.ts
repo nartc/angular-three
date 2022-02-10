@@ -7,10 +7,14 @@ import {
   NgtObjectInputsControllerModule,
   NgtStore,
   zonelessRequestAnimationFrame,
-  zonelessSetTimeout
+  zonelessSetTimeout,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtAmbientLightModule, NgtPointLightModule, NgtSpotLightModule } from '@angular-three/core/lights';
+import {
+  NgtAmbientLightModule,
+  NgtPointLightModule,
+  NgtSpotLightModule,
+} from '@angular-three/core/lights';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -23,7 +27,7 @@ import {
   NgModule,
   OnInit,
   QueryList,
-  TemplateRef
+  TemplateRef,
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { combineLatest, Observable, startWith } from 'rxjs';
@@ -34,20 +38,20 @@ import { PresetsType } from '../environment/presets';
 const presets = {
   rembrandt: {
     main: [1, 2, 1],
-    fill: [-2, -0.5, -2]
+    fill: [-2, -0.5, -2],
   },
   portrait: {
     main: [-1, 2, 0.5],
-    fill: [-1, 0.5, -1.5]
+    fill: [-1, 0.5, -1.5],
   },
   upfront: {
     main: [0, 2, 1],
-    fill: [-1, 0.5, -1.5]
+    fill: [-1, 0.5, -1.5],
   },
   soft: {
     main: [-2, 4, 4],
-    fill: [-1, 0.5, -1.5]
-  }
+    fill: [-1, 0.5, -1.5],
+  },
 };
 
 type ControlsProto = { update(): void; target: THREE.Vector3 };
@@ -70,57 +74,56 @@ interface NgtSobaStageState {
   shadowBias: number;
   contactShadow:
     | {
-    blur: number;
-    opacity?: number;
-    position?: [x: number, y: number, z: number];
-  }
+        blur: number;
+        opacity?: number;
+        position?: [x: number, y: number, z: number];
+      }
     | false;
 }
 
 @Directive({
   selector: 'ng-template[sobaStageContent]',
-  exportAs: 'ngtSobaStageContent'
+  exportAs: 'ngtSobaStageContent',
 })
 export class NgtSobaStageContent {
-  constructor(public templateRef: TemplateRef<NgtSobaStageState>) {
-  }
+  constructor(public templateRef: TemplateRef<NgtSobaStageState>) {}
 }
 
 @Component({
   selector: 'ngt-soba-stage',
   template: `
     <ngt-group
-      *ngIf='vm$ | async as vm'
-      [objectInputsController]='objectInputsController'
+      *ngIf="vm$ | async as vm"
+      [objectInputsController]="objectInputsController"
     >
-      <ngt-group (ready)='set({ outerGroup: $event })'>
-        <ngt-group (ready)='set({ innerGroup: $event })'>
+      <ngt-group (ready)="set({ outerGroup: $event })">
+        <ngt-group (ready)="set({ innerGroup: $event })">
           <ng-container
-            [ngTemplateOutlet]='content.templateRef'
-            [ngTemplateOutletContext]='get()'
+            [ngTemplateOutlet]="content.templateRef"
+            [ngTemplateOutletContext]="get()"
           ></ng-container>
         </ngt-group>
       </ngt-group>
       <!--      contact shadows-->
-      <ngt-soba-environment [preset]='vm.environment'></ngt-soba-environment>
-      <ngt-ambient-light [intensity]='vm.intensity / 3'></ngt-ambient-light>
+      <ngt-soba-environment [preset]="vm.environment"></ngt-soba-environment>
+      <ngt-ambient-light [intensity]="vm.intensity / 3"></ngt-ambient-light>
       <ngt-spot-light
-        [position]='[
+        [position]="[
           presets[vm.preset].main[0] * vm.radius,
           presets[vm.preset].main[1] * vm.radius,
           presets[vm.preset].main[2] * vm.radius
-        ]'
-        [args]='[undefined, vm.intensity * 2, undefined, undefined, 1]'
-        [castShadow]='vm.shadows'
-        [shadow]='{ bias: vm.shadowBias }'
+        ]"
+        [args]="[undefined, vm.intensity * 2, undefined, undefined, 1]"
+        [castShadow]="vm.shadows"
+        [shadow]="{ bias: vm.shadowBias }"
       ></ngt-spot-light>
       <ngt-point-light
-        [intensity]='vm.intensity'
-        [position]='[
+        [intensity]="vm.intensity"
+        [position]="[
           presets[vm.preset].fill[0] * vm.radius,
           presets[vm.preset].fill[1] * vm.radius,
           presets[vm.preset].fill[2] * vm.radius
-        ]'
+        ]"
       ></ngt-point-light>
     </ngt-group>
   `,
@@ -129,12 +132,13 @@ export class NgtSobaStageContent {
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     createParentObjectProvider(NgtSobaStage, (stage) =>
       stage.get('innerGroup')
-    )
-  ]
+    ),
+  ],
 })
 export class NgtSobaStage
   extends NgtStore<NgtSobaStageState>
-  implements OnInit {
+  implements OnInit
+{
   @Input() set shadows(shadows: boolean) {
     this.set({ shadows });
   }
@@ -170,10 +174,10 @@ export class NgtSobaStage
   @Input() set contactShadow(
     contactShadow:
       | {
-      blur: number;
-      opacity?: number;
-      position?: [x: number, y: number, z: number];
-    }
+          blur: number;
+          opacity?: number;
+          position?: [x: number, y: number, z: number];
+        }
       | false
   ) {
     this.set({ contactShadow });
@@ -192,7 +196,7 @@ export class NgtSobaStage
 
   private adjustCamera$ = combineLatest([
     this.canvasStore.select('controls') as unknown as Observable<ControlsProto>,
-    this.select(selectSlice(['radius', 'width', 'height', 'adjustCamera']))
+    this.select(selectSlice(['radius', 'width', 'height', 'adjustCamera'])),
   ]);
 
   presets = presets;
@@ -204,7 +208,7 @@ export class NgtSobaStage
       'radius',
       'intensity',
       'shadows',
-      'shadowBias'
+      'shadowBias',
     ])
   );
 
@@ -227,8 +231,8 @@ export class NgtSobaStage
       contactShadow: {
         blur: 2,
         opacity: 0.5,
-        position: [0, 0, 0]
-      }
+        position: [0, 0, 0],
+      },
     });
   }
 
@@ -281,8 +285,7 @@ export class NgtSobaStage
     NgtAmbientLightModule,
     NgtSpotLightModule,
     NgtPointLightModule,
-    CommonModule
-  ]
+    CommonModule,
+  ],
 })
-export class NgtSobaStageModule {
-}
+export class NgtSobaStageModule {}
