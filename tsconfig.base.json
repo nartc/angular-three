@@ -43,7 +43,8 @@
             "@angular-three/core/textures": ["libs/core/textures/src/index.ts"],
             "@angular-three/soba": ["libs/soba/src/index.ts"],
             "@angular-three/soba/cameras": ["libs/soba/cameras/src/index.ts"],
-            "@angular-three/soba/controls": ["libs/soba/controls/src/index.ts"]
+            "@angular-three/soba/controls": ["libs/soba/controls/src/index.ts"],
+            "@angular-three/storybook": ["libs/storybook/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]

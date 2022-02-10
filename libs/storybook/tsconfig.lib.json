@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../dist/out-tsc",
+        "declaration": true,
+        "declarationMap": true,
+        "inlineSources": true,
+        "types": []
+    },
+    "exclude": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/*.stories.ts",
+        "**/*.stories.js"
+    ],
+    "include": ["**/*.ts"]
+}
