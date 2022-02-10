@@ -27,13 +27,14 @@ export function applyProps(instance: NgtInstance, props: UnknownRecord) {
 
   if (
     unknownInstance['set'] != null &&
-    typeof unknownInstance['set'] === 'function'
+    typeof unknownInstance['set'] === 'function' &&
+    !(unknownInstance instanceof THREE.Raycaster)
   ) {
     try {
       (unknownInstance['set'] as Function)(props);
     } catch (e) {
       console.info(
-        `Swallowing erroneous "set" invoke on ${unknownInstance.constructor.name} as non fatal: ${e}`
+        `Swallowing erroneous "set" invoked on ${unknownInstance.constructor.name} as non fatal: ${e}`
       );
     }
   }
