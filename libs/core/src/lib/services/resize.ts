@@ -34,7 +34,7 @@ export interface NgtResizeResult {
 export class NgtResize extends Observable<NgtResizeResult> {
     constructor(
         @Inject(ElementRef) { nativeElement }: ElementRef<Element>,
-        @Inject(NgZone) ngZone: NgZone,
+        @Inject(NgZone) zone: NgZone,
         @Inject(DOCUMENT) document: Document,
         @Inject(NGT_RESIZE_OBSERVER_SUPPORT) isSupport: boolean,
         @Inject(NGT_RESIZE_OPTIONS)
@@ -75,7 +75,7 @@ export class NgtResize extends Observable<NgtResizeResult> {
                 return;
             }
 
-            ngZone.runOutsideAngular(() => {
+            zone.runOutsideAngular(() => {
                 const callback = (entries: ResizeObserverEntry[]) => {
                     lastEntries = entries;
                     const { left, top, width, height, bottom, right, x, y } =
