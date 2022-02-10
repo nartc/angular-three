@@ -40,6 +40,7 @@ export function applyProps(instance: NgtInstance, props: UnknownRecord) {
     }
 
     for (const [key, prop] of Object.entries(props)) {
+        if (key === 'raycast' && prop === undefined) continue;
         const currentInstance = unknownInstance;
         const targetProp = currentInstance[key] as UnknownRecord;
 
