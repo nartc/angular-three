@@ -1,6 +1,7 @@
 {
     "version": 2,
     "projects": {
+        "cannon": "libs/cannon",
         "core": "libs/core",
         "demo": "apps/demo",
         "postprocessing": "libs/postprocessing",
