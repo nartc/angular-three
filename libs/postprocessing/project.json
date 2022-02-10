@@ -1,0 +1,44 @@
+{
+    "projectType": "library",
+    "root": "libs/postprocessing",
+    "sourceRoot": "libs/postprocessing/src",
+    "prefix": "ngt",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/angular:package",
+            "outputs": ["dist/libs/postprocessing"],
+            "options": {
+                "project": "libs/postprocessing/ng-package.json"
+            },
+            "configurations": {
+                "production": {
+                    "tsConfig": "libs/postprocessing/tsconfig.lib.prod.json"
+                },
+                "development": {
+                    "tsConfig": "libs/postprocessing/tsconfig.lib.json"
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/libs/postprocessing"],
+            "options": {
+                "jestConfig": "libs/postprocessing/jest.config.js",
+                "passWithNoTests": true
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": [
+                    "libs/postprocessing/src/**/*.ts",
+                    "libs/postprocessing/src/**/*.html",
+                    "libs/postprocessing/effects/**/*.ts",
+                    "libs/postprocessing/effects/**/*.html"
+                ]
+            }
+        }
+    },
+    "tags": ["scope:postprocessing"]
+}

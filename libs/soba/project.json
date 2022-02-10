@@ -37,7 +37,9 @@
                     "libs/soba/controls/**/*.ts",
                     "libs/soba/controls/**/*.html",
                     "libs/soba/cameras/**/*.ts",
-                    "libs/soba/cameras/**/*.html"
+                    "libs/soba/cameras/**/*.html",
+                    "libs/soba/loaders/**/*.ts",
+                    "libs/soba/loaders/**/*.html"
                 ]
             }
         }

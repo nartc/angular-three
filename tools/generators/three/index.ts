@@ -13,62 +13,62 @@ import linesGenerator from './lines/lines';
 import materialsGenerator from './materials/materials';
 // import physicBodiesGenerator from './physic-bodies/physic-bodies';
 // import physicConstraintsGenerator from './physic-constraints/physic-constraints';
-// import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
-// import simpleEffectsGenerator from './postprocessing/simple-effects';
+import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
+import simpleEffectsGenerator from './postprocessing/simple-effects';
 import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
 
 export default async function (tree: Tree) {
-  await Promise.all([
-    geometriesGenerator(tree),
-    materialsGenerator(tree),
-    attributesGenerator(tree),
-    curvesGenerator(tree),
-    texturesGenerator(tree),
-  ]);
+    await Promise.all([
+        geometriesGenerator(tree),
+        materialsGenerator(tree),
+        attributesGenerator(tree),
+        curvesGenerator(tree),
+        texturesGenerator(tree),
+    ]);
 
-  const [
-    audioSelectors,
-    cameraSelectors,
-    helperSelectors,
-    lightSelectors,
-    lineSelectors,
-    spriteSelectors,
-    // simpleEffectSelectors,
-    // physicBodySelectors,
-    // physicConstraintSelectors,
-  ] = await Promise.all([
-    audiosGenerator(tree),
-    camerasGenerator(tree),
-    helpersGenerator(tree),
-    lightsGenerator(tree),
-    linesGenerator(tree),
-    spritesGenerator(tree),
-    // simpleEffectsGenerator(tree),
-    // physicBodiesGenerator(tree),
-    // physicConstraintsGenerator(tree),
-  ]);
+    const [
+        audioSelectors,
+        cameraSelectors,
+        helperSelectors,
+        lightSelectors,
+        lineSelectors,
+        spriteSelectors,
+        simpleEffectSelectors,
+        // physicBodySelectors,
+        // physicConstraintSelectors,
+    ] = await Promise.all([
+        audiosGenerator(tree),
+        camerasGenerator(tree),
+        helpersGenerator(tree),
+        lightsGenerator(tree),
+        linesGenerator(tree),
+        spritesGenerator(tree),
+        simpleEffectsGenerator(tree),
+        // physicBodiesGenerator(tree),
+        // physicConstraintsGenerator(tree),
+    ]);
 
-  await Promise.all([
-    controllersGenerator(
-      tree,
-      [
-        ...lightSelectors,
-        ...helperSelectors,
-        ...spriteSelectors,
-        ...cameraSelectors,
-      ],
-      audioSelectors,
-      lineSelectors
-    ),
-    // cannonBodyControllerGenerator(
-    //   tree,
-    //   physicBodySelectors.map(({ name }) => name)
-    // ),
-    // cannonConstraintControllerGenerator(
-    //   tree,
-    //   physicConstraintSelectors.map(({ name }) => name)
-    // ),
-    // simpleEffectControllerGenerator(tree, simpleEffectSelectors),
-  ]);
+    await Promise.all([
+        controllersGenerator(
+            tree,
+            [
+                ...lightSelectors,
+                ...helperSelectors,
+                ...spriteSelectors,
+                ...cameraSelectors,
+            ],
+            audioSelectors,
+            lineSelectors
+        ),
+        // cannonBodyControllerGenerator(
+        //   tree,
+        //   physicBodySelectors.map(({ name }) => name)
+        // ),
+        // cannonConstraintControllerGenerator(
+        //   tree,
+        //   physicConstraintSelectors.map(({ name }) => name)
+        // ),
+        simpleEffectControllerGenerator(tree, simpleEffectSelectors),
+    ]);
 }

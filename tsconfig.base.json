@@ -41,9 +41,16 @@
             "@angular-three/core/sprites": ["libs/core/sprites/src/index.ts"],
             "@angular-three/core/stats": ["libs/core/stats/src/index.ts"],
             "@angular-three/core/textures": ["libs/core/textures/src/index.ts"],
+            "@angular-three/postprocessing": [
+                "libs/postprocessing/src/index.ts"
+            ],
+            "@angular-three/postprocessing/effects": [
+                "libs/postprocessing/effects/src/index.ts"
+            ],
             "@angular-three/soba": ["libs/soba/src/index.ts"],
             "@angular-three/soba/cameras": ["libs/soba/cameras/src/index.ts"],
             "@angular-three/soba/controls": ["libs/soba/controls/src/index.ts"],
+            "@angular-three/soba/loaders": ["libs/soba/loaders/src/index.ts"],
             "@angular-three/storybook": ["libs/storybook/src/index.ts"]
         }
     },

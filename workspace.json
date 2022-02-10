@@ -3,6 +3,7 @@
     "projects": {
         "core": "libs/core",
         "demo": "apps/demo",
+        "postprocessing": "libs/postprocessing",
         "soba": "libs/soba",
         "storybook": "libs/storybook"
     }

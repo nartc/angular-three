@@ -1,15 +1,15 @@
 {
-    "name": "@angular-three/core",
+    "name": "@angular-three/postprocessing",
     "version": "3.2.0",
     "publishConfig": {
         "access": "public"
     },
     "peerDependencies": {
         "@angular/common": "^13.2.0",
-        "@angular/core": "^13.2.0",
-        "three": "~0.137.0"
+        "@angular/core": "^13.2.0"
     },
     "dependencies": {
+        "postprocessing": "~6.23.0",
         "tslib": "^2.3.0"
     }
 }
