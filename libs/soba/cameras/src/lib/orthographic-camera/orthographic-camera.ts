@@ -38,7 +38,7 @@ export interface NgtSobaOrthographicCameraState {
     selector: 'ngt-soba-orthographic-camera',
     template: `
         <ngt-orthographic-camera
-            [args]="cameraArgs$ | async"
+            [args]="(cameraArgs$ | async)!"
             [name]="objectInputsController.name"
             [position]="objectInputsController.position"
             [rotation]="objectInputsController.rotation"
