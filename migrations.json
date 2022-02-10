@@ -1,0 +1,12 @@
+{
+  "migrations": [
+    {
+      "cli": "nx",
+      "version": "13.8.1",
+      "description": "Angular doesn't attach styles.js to index.html with type=module in dev mode, meaning an error is written to the console. Cypress falls over on this error. Add logic to Cypress e2e projects to ignore this error.",
+      "factory": "./src/migrations/update-13-8-1/add-cypress-mfe-workaround",
+      "package": "@nrwl/angular",
+      "name": "add-cypress-mfe-workaround"
+    }
+  ]
+}
