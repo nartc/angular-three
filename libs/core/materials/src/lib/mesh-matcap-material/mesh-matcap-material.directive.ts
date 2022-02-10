@@ -4,29 +4,29 @@ import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-mesh-matcap-material',
-  exportAs: 'ngtMeshMatcapMaterial',
-  providers: [
-    {
-      provide: NgtMaterial,
-      useExisting: NgtMeshMatcapMaterial,
-    },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-mesh-matcap-material',
+    exportAs: 'ngtMeshMatcapMaterial',
+    providers: [
+        {
+            provide: NgtMaterial,
+            useExisting: NgtMeshMatcapMaterial,
+        },
+        NGT_OBJECT_PROVIDER,
+    ],
 })
 export class NgtMeshMatcapMaterial extends NgtMaterial<
-  THREE.MeshMatcapMaterialParameters,
-  THREE.MeshMatcapMaterial
+    THREE.MeshMatcapMaterialParameters,
+    THREE.MeshMatcapMaterial
 > {
-  static ngAcceptInputType_parameters:
-    | THREE.MeshMatcapMaterialParameters
-    | undefined;
+    static ngAcceptInputType_parameters:
+        | THREE.MeshMatcapMaterialParameters
+        | undefined;
 
-  materialType = THREE.MeshMatcapMaterial;
+    materialType = THREE.MeshMatcapMaterial;
 }
 
 @NgModule({
-  declarations: [NgtMeshMatcapMaterial],
-  exports: [NgtMeshMatcapMaterial],
+    declarations: [NgtMeshMatcapMaterial],
+    exports: [NgtMeshMatcapMaterial],
 })
 export class NgtMeshMatcapMaterialModule {}

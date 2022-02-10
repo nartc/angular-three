@@ -4,29 +4,29 @@ import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-shadow-material',
-  exportAs: 'ngtShadowMaterial',
-  providers: [
-    {
-      provide: NgtMaterial,
-      useExisting: NgtShadowMaterial,
-    },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-shadow-material',
+    exportAs: 'ngtShadowMaterial',
+    providers: [
+        {
+            provide: NgtMaterial,
+            useExisting: NgtShadowMaterial,
+        },
+        NGT_OBJECT_PROVIDER,
+    ],
 })
 export class NgtShadowMaterial extends NgtMaterial<
-  THREE.ShadowMaterialParameters,
-  THREE.ShadowMaterial
+    THREE.ShadowMaterialParameters,
+    THREE.ShadowMaterial
 > {
-  static ngAcceptInputType_parameters:
-    | THREE.ShadowMaterialParameters
-    | undefined;
+    static ngAcceptInputType_parameters:
+        | THREE.ShadowMaterialParameters
+        | undefined;
 
-  materialType = THREE.ShadowMaterial;
+    materialType = THREE.ShadowMaterial;
 }
 
 @NgModule({
-  declarations: [NgtShadowMaterial],
-  exports: [NgtShadowMaterial],
+    declarations: [NgtShadowMaterial],
+    exports: [NgtShadowMaterial],
 })
 export class NgtShadowMaterialModule {}

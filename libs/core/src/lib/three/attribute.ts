@@ -1,11 +1,11 @@
 import {
-  Directive,
-  Input,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Optional,
+    Directive,
+    Input,
+    NgZone,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Optional,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as THREE from 'three';
@@ -16,98 +16,101 @@ import { NgtGeometry } from './geometry';
 
 @Directive()
 export abstract class NgtAttribute<
-    TAttribute extends
-      | THREE.BufferAttribute
-      | THREE.InterleavedBufferAttribute = THREE.BufferAttribute
-  >
-  extends NgtStore
-  implements OnInit, OnChanges, OnDestroy
+        TAttribute extends
+            | THREE.BufferAttribute
+            | THREE.InterleavedBufferAttribute = THREE.BufferAttribute
+    >
+    extends NgtStore
+    implements OnInit, OnChanges, OnDestroy
 {
-  @Input() attach?: THREE.BuiltinShaderAttributeName | string;
+    @Input() attach?: THREE.BuiltinShaderAttributeName | string;
 
-  abstract attributeType: AnyConstructor<TAttribute>;
+    abstract attributeType: AnyConstructor<TAttribute>;
 
-  constructor(
-    protected zone: NgZone,
-    @Optional() protected geometryDirective: NgtGeometry,
-    protected canvasStore: NgtCanvasStore
-  ) {
-    super();
-  }
-
-  private _attributeArgs: unknown[] = [];
-
-  protected set attributeArgs(v: unknown | unknown[]) {
-    this._attributeArgs = Array.isArray(v) ? v : [v];
-    this.init();
-  }
-
-  private _attribute?: TAttribute;
-  private _defaultValue?: TAttribute;
-
-  private initSubscription?: Subscription;
-
-  ngOnChanges() {
-    this.zone.runOutsideAngular(() => {
-      if (this.attribute) {
-        this.attribute.needsUpdate = true;
-      }
-    });
-  }
-
-  ngOnInit() {
-    if (!this.attribute) {
-      this.init();
+    constructor(
+        protected zone: NgZone,
+        @Optional() protected geometryDirective: NgtGeometry,
+        protected canvasStore: NgtCanvasStore
+    ) {
+        super();
     }
-  }
 
-  private init() {
-    this.zone.runOutsideAngular(() => {
-      if (this.initSubscription) {
-        this.initSubscription.unsubscribe();
-      }
+    private _attributeArgs: unknown[] = [];
 
-      this.initSubscription = this.onCanvasReady(
-        this.canvasStore.ready$,
-        () => {
-          if (this.geometryDirective && this.attach) {
-            this._attribute = new this.attributeType(...this._attributeArgs);
+    protected set attributeArgs(v: unknown | unknown[]) {
+        this._attributeArgs = Array.isArray(v) ? v : [v];
+        this.init();
+    }
+
+    private _attribute?: TAttribute;
+    private _defaultValue?: TAttribute;
+
+    private initSubscription?: Subscription;
+
+    ngOnChanges() {
+        this.zone.runOutsideAngular(() => {
             if (this.attribute) {
-              this._defaultValue = this.geometryDirective.geometry.attributes[
-                this.attach
-              ] as TAttribute;
-              this.geometryDirective.geometry.setAttribute(
-                this.attach,
-                this.attribute
-              );
+                this.attribute.needsUpdate = true;
             }
-          }
+        });
+    }
+
+    ngOnInit() {
+        if (!this.attribute) {
+            this.init();
         }
-      );
-    });
-  }
+    }
 
-  override ngOnDestroy() {
-    this.zone.runOutsideAngular(() => {
-      if (this.initSubscription) {
-        this.initSubscription.unsubscribe();
-      }
+    private init() {
+        this.zone.runOutsideAngular(() => {
+            if (this.initSubscription) {
+                this.initSubscription.unsubscribe();
+            }
 
-      if (this.geometryDirective && this.attach) {
-        if (this._defaultValue !== undefined) {
-          this.geometryDirective.geometry.setAttribute(
-            this.attach,
-            this._defaultValue
-          );
-        } else {
-          this.geometryDirective.geometry.deleteAttribute(this.attach);
-        }
-      }
-    });
-    super.ngOnDestroy();
-  }
+            this.initSubscription = this.onCanvasReady(
+                this.canvasStore.ready$,
+                () => {
+                    if (this.geometryDirective && this.attach) {
+                        this._attribute = new this.attributeType(
+                            ...this._attributeArgs
+                        );
+                        if (this.attribute) {
+                            this._defaultValue = this.geometryDirective.geometry
+                                .attributes[this.attach] as TAttribute;
+                            this.geometryDirective.geometry.setAttribute(
+                                this.attach,
+                                this.attribute
+                            );
+                        }
+                    }
+                }
+            );
+        });
+    }
 
-  get attribute(): TAttribute | undefined {
-    return this._attribute;
-  }
+    override ngOnDestroy() {
+        this.zone.runOutsideAngular(() => {
+            if (this.initSubscription) {
+                this.initSubscription.unsubscribe();
+            }
+
+            if (this.geometryDirective && this.attach) {
+                if (this._defaultValue !== undefined) {
+                    this.geometryDirective.geometry.setAttribute(
+                        this.attach,
+                        this._defaultValue
+                    );
+                } else {
+                    this.geometryDirective.geometry.deleteAttribute(
+                        this.attach
+                    );
+                }
+            }
+        });
+        super.ngOnDestroy();
+    }
+
+    get attribute(): TAttribute | undefined {
+        return this._attribute;
+    }
 }

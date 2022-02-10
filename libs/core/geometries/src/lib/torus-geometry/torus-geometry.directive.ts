@@ -4,30 +4,30 @@ import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-torus-geometry',
-  exportAs: 'ngtTorusGeometry',
-  providers: [
-    {
-      provide: NgtGeometry,
-      useExisting: NgtTorusGeometry,
-    },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-torus-geometry',
+    exportAs: 'ngtTorusGeometry',
+    providers: [
+        {
+            provide: NgtGeometry,
+            useExisting: NgtTorusGeometry,
+        },
+        NGT_OBJECT_PROVIDER,
+    ],
 })
 export class NgtTorusGeometry extends NgtGeometry<THREE.TorusGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.TorusGeometry>
-    | undefined;
+    static ngAcceptInputType_args:
+        | ConstructorParameters<typeof THREE.TorusGeometry>
+        | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof THREE.TorusGeometry>) {
-    this.geometryArgs = v;
-  }
+    @Input() set args(v: ConstructorParameters<typeof THREE.TorusGeometry>) {
+        this.geometryArgs = v;
+    }
 
-  geometryType = THREE.TorusGeometry;
+    geometryType = THREE.TorusGeometry;
 }
 
 @NgModule({
-  declarations: [NgtTorusGeometry],
-  exports: [NgtTorusGeometry],
+    declarations: [NgtTorusGeometry],
+    exports: [NgtTorusGeometry],
 })
 export class NgtTorusGeometryModule {}

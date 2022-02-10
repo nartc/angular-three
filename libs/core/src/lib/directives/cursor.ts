@@ -5,32 +5,32 @@ import { NgtObjectInputsController } from '../controllers/object-inputs.controll
 import { NgtDestroyed } from '../services/destroyed';
 
 @Directive({
-  selector: '[ngtCursor]',
-  exportAs: 'ngtCursor',
-  providers: [NgtDestroyed],
+    selector: '[ngtCursor]',
+    exportAs: 'ngtCursor',
+    providers: [NgtDestroyed],
 })
 export class NgtCursor {
-  constructor(
-    @Optional()
-    @Self()
-    objectInputsController: NgtObjectInputsController,
-    @Inject(DOCUMENT) document: Document,
-    destroyed: NgtDestroyed
-  ) {
-    if (!objectInputsController) return;
-    merge(
-      objectInputsController.pointerover.pipe(mapTo(true)),
-      objectInputsController.pointerout.pipe(mapTo(false))
-    )
-      .pipe(takeUntil(destroyed))
-      .subscribe((hovered) => {
-        document.body.style.cursor = hovered ? 'pointer' : 'auto';
-      });
-  }
+    constructor(
+        @Optional()
+        @Self()
+        objectInputsController: NgtObjectInputsController,
+        @Inject(DOCUMENT) document: Document,
+        destroyed: NgtDestroyed
+    ) {
+        if (!objectInputsController) return;
+        merge(
+            objectInputsController.pointerover.pipe(mapTo(true)),
+            objectInputsController.pointerout.pipe(mapTo(false))
+        )
+            .pipe(takeUntil(destroyed))
+            .subscribe((hovered) => {
+                document.body.style.cursor = hovered ? 'pointer' : 'auto';
+            });
+    }
 }
 
 @NgModule({
-  declarations: [NgtCursor],
-  exports: [NgtCursor],
+    declarations: [NgtCursor],
+    exports: [NgtCursor],
 })
 export class NgtCursorModule {}

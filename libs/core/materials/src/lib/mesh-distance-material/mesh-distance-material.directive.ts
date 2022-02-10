@@ -4,29 +4,29 @@ import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-mesh-distance-material',
-  exportAs: 'ngtMeshDistanceMaterial',
-  providers: [
-    {
-      provide: NgtMaterial,
-      useExisting: NgtMeshDistanceMaterial,
-    },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-mesh-distance-material',
+    exportAs: 'ngtMeshDistanceMaterial',
+    providers: [
+        {
+            provide: NgtMaterial,
+            useExisting: NgtMeshDistanceMaterial,
+        },
+        NGT_OBJECT_PROVIDER,
+    ],
 })
 export class NgtMeshDistanceMaterial extends NgtMaterial<
-  THREE.MeshDistanceMaterialParameters,
-  THREE.MeshDistanceMaterial
+    THREE.MeshDistanceMaterialParameters,
+    THREE.MeshDistanceMaterial
 > {
-  static ngAcceptInputType_parameters:
-    | THREE.MeshDistanceMaterialParameters
-    | undefined;
+    static ngAcceptInputType_parameters:
+        | THREE.MeshDistanceMaterialParameters
+        | undefined;
 
-  materialType = THREE.MeshDistanceMaterial;
+    materialType = THREE.MeshDistanceMaterial;
 }
 
 @NgModule({
-  declarations: [NgtMeshDistanceMaterial],
-  exports: [NgtMeshDistanceMaterial],
+    declarations: [NgtMeshDistanceMaterial],
+    exports: [NgtMeshDistanceMaterial],
 })
 export class NgtMeshDistanceMaterialModule {}

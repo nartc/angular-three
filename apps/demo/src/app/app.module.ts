@@ -5,9 +5,9 @@ import { AppComponent } from './app.component';
 import { SimpleCubeComponentModule } from './simple-cube/simple-cube.component';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, SimpleCubeComponentModule],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [BrowserModule, SimpleCubeComponentModule],
+    providers: [],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}

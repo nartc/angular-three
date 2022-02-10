@@ -1,16 +1,18 @@
 {
-  "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"],
-  "overrides": [
-    {
-      "files": ["*.ts"],
-      "extends": ["plugin:@angular-eslint/template/process-inline-templates"],
-      "rules": {}
-    },
-    {
-      "files": ["*.html"],
-      "extends": ["plugin:@nrwl/nx/angular-template"],
-      "rules": {}
-    }
-  ]
+    "extends": ["../../.eslintrc.json"],
+    "ignorePatterns": ["!**/*"],
+    "overrides": [
+        {
+            "files": ["*.ts"],
+            "extends": [
+                "plugin:@angular-eslint/template/process-inline-templates"
+            ],
+            "rules": {}
+        },
+        {
+            "files": ["*.html"],
+            "extends": ["plugin:@nrwl/nx/angular-template"],
+            "rules": {}
+        }
+    ]
 }

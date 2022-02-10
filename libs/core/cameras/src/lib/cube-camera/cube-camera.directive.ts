@@ -1,52 +1,54 @@
 import {
-  NGT_OBJECT_CONTROLLER_PROVIDER,
-  NGT_OBJECT_WATCHED_CONTROLLER,
-  NgtObjectController,
+    NGT_OBJECT_CONTROLLER_PROVIDER,
+    NGT_OBJECT_WATCHED_CONTROLLER,
+    NgtObjectController,
 } from '@angular-three/core';
 import {
-  Directive,
-  EventEmitter,
-  Inject,
-  Input,
-  NgModule,
-  OnInit,
-  Output,
+    Directive,
+    EventEmitter,
+    Inject,
+    Input,
+    NgModule,
+    OnInit,
+    Output,
 } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-cube-camera',
-  exportAs: 'ngtCubeCamera',
-  providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
+    selector: 'ngt-cube-camera',
+    exportAs: 'ngtCubeCamera',
+    providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
 })
 export class NgtCubeCamera implements OnInit {
-  @Output() ready = new EventEmitter<THREE.CubeCamera>();
+    @Output() ready = new EventEmitter<THREE.CubeCamera>();
 
-  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CubeCamera>;
+    static ngAcceptInputType_args: ConstructorParameters<
+        typeof THREE.CubeCamera
+    >;
 
-  private _cubeCamera?: THREE.CubeCamera;
-  get cubeCamera() {
-    return this._cubeCamera;
-  }
+    private _cubeCamera?: THREE.CubeCamera;
+    get cubeCamera() {
+        return this._cubeCamera;
+    }
 
-  @Input() args!: ConstructorParameters<typeof THREE.CubeCamera>;
+    @Input() args!: ConstructorParameters<typeof THREE.CubeCamera>;
 
-  constructor(
-    @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
-    private objectController: NgtObjectController
-  ) {
-    objectController.initFn = () =>
-      (this._cubeCamera = new THREE.CubeCamera(...this.args));
-    objectController.readyFn = () => this.ready.emit(this.cubeCamera);
-  }
+    constructor(
+        @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
+        private objectController: NgtObjectController
+    ) {
+        objectController.initFn = () =>
+            (this._cubeCamera = new THREE.CubeCamera(...this.args));
+        objectController.readyFn = () => this.ready.emit(this.cubeCamera);
+    }
 
-  ngOnInit() {
-    this.objectController.init();
-  }
+    ngOnInit() {
+        this.objectController.init();
+    }
 }
 
 @NgModule({
-  declarations: [NgtCubeCamera],
-  exports: [NgtCubeCamera],
+    declarations: [NgtCubeCamera],
+    exports: [NgtCubeCamera],
 })
 export class NgtCubeCameraModule {}

@@ -4,29 +4,29 @@ import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-line-basic-material',
-  exportAs: 'ngtLineBasicMaterial',
-  providers: [
-    {
-      provide: NgtMaterial,
-      useExisting: NgtLineBasicMaterial,
-    },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-line-basic-material',
+    exportAs: 'ngtLineBasicMaterial',
+    providers: [
+        {
+            provide: NgtMaterial,
+            useExisting: NgtLineBasicMaterial,
+        },
+        NGT_OBJECT_PROVIDER,
+    ],
 })
 export class NgtLineBasicMaterial extends NgtMaterial<
-  THREE.LineBasicMaterialParameters,
-  THREE.LineBasicMaterial
+    THREE.LineBasicMaterialParameters,
+    THREE.LineBasicMaterial
 > {
-  static ngAcceptInputType_parameters:
-    | THREE.LineBasicMaterialParameters
-    | undefined;
+    static ngAcceptInputType_parameters:
+        | THREE.LineBasicMaterialParameters
+        | undefined;
 
-  materialType = THREE.LineBasicMaterial;
+    materialType = THREE.LineBasicMaterial;
 }
 
 @NgModule({
-  declarations: [NgtLineBasicMaterial],
-  exports: [NgtLineBasicMaterial],
+    declarations: [NgtLineBasicMaterial],
+    exports: [NgtLineBasicMaterial],
 })
 export class NgtLineBasicMaterialModule {}

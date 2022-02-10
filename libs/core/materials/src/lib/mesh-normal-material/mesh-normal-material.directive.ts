@@ -4,29 +4,29 @@ import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-mesh-normal-material',
-  exportAs: 'ngtMeshNormalMaterial',
-  providers: [
-    {
-      provide: NgtMaterial,
-      useExisting: NgtMeshNormalMaterial,
-    },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-mesh-normal-material',
+    exportAs: 'ngtMeshNormalMaterial',
+    providers: [
+        {
+            provide: NgtMaterial,
+            useExisting: NgtMeshNormalMaterial,
+        },
+        NGT_OBJECT_PROVIDER,
+    ],
 })
 export class NgtMeshNormalMaterial extends NgtMaterial<
-  THREE.MeshNormalMaterialParameters,
-  THREE.MeshNormalMaterial
+    THREE.MeshNormalMaterialParameters,
+    THREE.MeshNormalMaterial
 > {
-  static ngAcceptInputType_parameters:
-    | THREE.MeshNormalMaterialParameters
-    | undefined;
+    static ngAcceptInputType_parameters:
+        | THREE.MeshNormalMaterialParameters
+        | undefined;
 
-  materialType = THREE.MeshNormalMaterial;
+    materialType = THREE.MeshNormalMaterial;
 }
 
 @NgModule({
-  declarations: [NgtMeshNormalMaterial],
-  exports: [NgtMeshNormalMaterial],
+    declarations: [NgtMeshNormalMaterial],
+    exports: [NgtMeshNormalMaterial],
 })
 export class NgtMeshNormalMaterialModule {}

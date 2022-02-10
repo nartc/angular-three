@@ -1,44 +1,44 @@
 {
-  "projectType": "library",
-  "root": "libs/soba",
-  "sourceRoot": "libs/soba/src",
-  "prefix": "ngt",
-  "targets": {
-    "build": {
-      "executor": "@nrwl/angular:package",
-      "outputs": ["dist/libs/soba"],
-      "options": {
-        "project": "libs/soba/ng-package.json"
-      },
-      "configurations": {
-        "production": {
-          "tsConfig": "libs/soba/tsconfig.lib.prod.json"
+    "projectType": "library",
+    "root": "libs/soba",
+    "sourceRoot": "libs/soba/src",
+    "prefix": "ngt",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/angular:package",
+            "outputs": ["dist/libs/soba"],
+            "options": {
+                "project": "libs/soba/ng-package.json"
+            },
+            "configurations": {
+                "production": {
+                    "tsConfig": "libs/soba/tsconfig.lib.prod.json"
+                },
+                "development": {
+                    "tsConfig": "libs/soba/tsconfig.lib.json"
+                }
+            },
+            "defaultConfiguration": "production"
         },
-        "development": {
-          "tsConfig": "libs/soba/tsconfig.lib.json"
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/libs/soba"],
+            "options": {
+                "jestConfig": "libs/soba/jest.config.js",
+                "passWithNoTests": true
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": [
+                    "libs/soba/src/**/*.ts",
+                    "libs/soba/src/**/*.html",
+                    "libs/soba/controls/**/*.ts",
+                    "libs/soba/controls/**/*.html"
+                ]
+            }
         }
-      },
-      "defaultConfiguration": "production"
     },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/soba"],
-      "options": {
-        "jestConfig": "libs/soba/jest.config.js",
-        "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/soba/src/**/*.ts",
-          "libs/soba/src/**/*.html",
-          "libs/soba/controls/**/*.ts",
-          "libs/soba/controls/**/*.html"
-        ]
-      }
-    }
-  },
-  "tags": ["scope:soba"]
+    "tags": ["scope:soba"]
 }

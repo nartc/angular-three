@@ -4,29 +4,29 @@ import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-mesh-toon-material',
-  exportAs: 'ngtMeshToonMaterial',
-  providers: [
-    {
-      provide: NgtMaterial,
-      useExisting: NgtMeshToonMaterial,
-    },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-mesh-toon-material',
+    exportAs: 'ngtMeshToonMaterial',
+    providers: [
+        {
+            provide: NgtMaterial,
+            useExisting: NgtMeshToonMaterial,
+        },
+        NGT_OBJECT_PROVIDER,
+    ],
 })
 export class NgtMeshToonMaterial extends NgtMaterial<
-  THREE.MeshToonMaterialParameters,
-  THREE.MeshToonMaterial
+    THREE.MeshToonMaterialParameters,
+    THREE.MeshToonMaterial
 > {
-  static ngAcceptInputType_parameters:
-    | THREE.MeshToonMaterialParameters
-    | undefined;
+    static ngAcceptInputType_parameters:
+        | THREE.MeshToonMaterialParameters
+        | undefined;
 
-  materialType = THREE.MeshToonMaterial;
+    materialType = THREE.MeshToonMaterial;
 }
 
 @NgModule({
-  declarations: [NgtMeshToonMaterial],
-  exports: [NgtMeshToonMaterial],
+    declarations: [NgtMeshToonMaterial],
+    exports: [NgtMeshToonMaterial],
 })
 export class NgtMeshToonMaterialModule {}

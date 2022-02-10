@@ -4,30 +4,30 @@ import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Directive({
-  selector: 'ngt-cone-geometry',
-  exportAs: 'ngtConeGeometry',
-  providers: [
-    {
-      provide: NgtGeometry,
-      useExisting: NgtConeGeometry,
-    },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-cone-geometry',
+    exportAs: 'ngtConeGeometry',
+    providers: [
+        {
+            provide: NgtGeometry,
+            useExisting: NgtConeGeometry,
+        },
+        NGT_OBJECT_PROVIDER,
+    ],
 })
 export class NgtConeGeometry extends NgtGeometry<THREE.ConeGeometry> {
-  static ngAcceptInputType_args:
-    | ConstructorParameters<typeof THREE.ConeGeometry>
-    | undefined;
+    static ngAcceptInputType_args:
+        | ConstructorParameters<typeof THREE.ConeGeometry>
+        | undefined;
 
-  @Input() set args(v: ConstructorParameters<typeof THREE.ConeGeometry>) {
-    this.geometryArgs = v;
-  }
+    @Input() set args(v: ConstructorParameters<typeof THREE.ConeGeometry>) {
+        this.geometryArgs = v;
+    }
 
-  geometryType = THREE.ConeGeometry;
+    geometryType = THREE.ConeGeometry;
 }
 
 @NgModule({
-  declarations: [NgtConeGeometry],
-  exports: [NgtConeGeometry],
+    declarations: [NgtConeGeometry],
+    exports: [NgtConeGeometry],
 })
 export class NgtConeGeometryModule {}

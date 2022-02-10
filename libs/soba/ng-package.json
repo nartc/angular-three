@@ -1,8 +1,8 @@
 {
-  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/libs/soba",
-  "lib": {
-    "entryFile": "src/index.ts"
-  },
-  "allowedNonPeerDependencies": ["three-stdlib"]
+    "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+    "dest": "../../dist/libs/soba",
+    "lib": {
+        "entryFile": "src/index.ts"
+    },
+    "allowedNonPeerDependencies": ["three-stdlib"]
 }
