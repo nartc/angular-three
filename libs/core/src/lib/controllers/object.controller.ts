@@ -2,6 +2,7 @@
 import {
     Directive,
     EventEmitter,
+    Host,
     Inject,
     Input,
     NgModule,
@@ -148,7 +149,7 @@ export class NgtObjectController extends Controller implements OnDestroy {
         @SkipSelf()
         private parentObjectController: NgtObjectController,
         @Optional()
-        @SkipSelf()
+        @Host()
         @Inject(NGT_PARENT_OBJECT)
         private parentObjectFn: AnyFunction
     ) {
@@ -306,19 +307,22 @@ export class NgtObjectController extends Controller implements OnDestroy {
     }
 
     private appendToParent(): void {
-        if (this.objectInputsController.appendTo) {
-            this.appendTo.add(this.object);
-            return;
-        }
+        // delay by a frame so all appendTo is settled
+        requestAnimationFrame(() => {
+            if (this.objectInputsController.appendTo) {
+                this.appendTo.add(this.object);
+                return;
+            }
 
-        if (this.objectInputsController.appendMode === 'root') {
-            this.addToScene();
-            return;
-        }
+            if (this.objectInputsController.appendMode === 'root') {
+                this.addToScene();
+                return;
+            }
 
-        if (this.objectInputsController.appendMode === 'immediate') {
-            this.addToParent();
-        }
+            if (this.objectInputsController.appendMode === 'immediate') {
+                this.addToParent();
+            }
+        });
     }
 
     private addToScene() {
