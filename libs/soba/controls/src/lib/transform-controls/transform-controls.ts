@@ -15,7 +15,6 @@ import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
-    ContentChildren,
     EventEmitter,
     Inject,
     Input,
@@ -23,7 +22,6 @@ import {
     NgZone,
     OnInit,
     Output,
-    QueryList,
 } from '@angular/core';
 import { merge, tap } from 'rxjs';
 import * as THREE from 'three';
@@ -124,13 +122,6 @@ export class NgtSobaTransformControls
     @Output() mousedown = new EventEmitter<THREE.Event>();
     @Output() mouseup = new EventEmitter<THREE.Event>();
     @Output() objectChange = new EventEmitter<THREE.Event>();
-
-    @ContentChildren(NgtObjectInputsController, { descendants: true })
-    set children(controllers: QueryList<NgtObjectInputsController>) {
-        controllers.forEach((controller) => {
-            controller.appendTo = () => this.group;
-        });
-    }
 
     private initControls$ = this.select(
         this.canvasStore.ready$,
