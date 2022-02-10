@@ -33,7 +33,8 @@
       "@angular-three/core/sprites": ["libs/core/sprites/src/index.ts"],
       "@angular-three/core/stats": ["libs/core/stats/src/index.ts"],
       "@angular-three/core/textures": ["libs/core/textures/src/index.ts"],
-      "@angular-three/soba": ["libs/soba/src/index.ts"]
+      "@angular-three/soba": ["libs/soba/src/index.ts"],
+      "@angular-three/soba/controls": ["libs/soba/controls/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -31,7 +31,12 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/soba/src/**/*.ts", "libs/soba/src/**/*.html"]
+        "lintFilePatterns": [
+          "libs/soba/src/**/*.ts",
+          "libs/soba/src/**/*.html",
+          "libs/soba/controls/**/*.ts",
+          "libs/soba/controls/**/*.html"
+        ]
       }
     }
   },

@@ -1,11 +1,12 @@
 import {
   NgtAnimationFrameStore,
+  NgtCanvasState,
   NgtCanvasStore,
   NgtStore,
-  zonelessRequestAnimationFrame,
+  tapEffect,
 } from '@angular-three/core';
-import { Directive, NgModule, OnInit, Output } from '@angular/core';
-import { selectSlice } from '@rx-angular/state';
+import { Directive, NgModule, NgZone, OnInit, Output } from '@angular/core';
+import { tap } from 'rxjs';
 import { FirstPersonControls } from 'three-stdlib';
 
 interface NgtSobaFirstPersonControlsState {
@@ -20,9 +21,10 @@ export class NgtSobaFirstPersonControls
   extends NgtStore<NgtSobaFirstPersonControlsState>
   implements OnInit
 {
-  @Output() ready = this.select('controls');
+  @Output() ready = this.select((s) => s.controls);
 
   constructor(
+    private zone: NgZone,
     private canvasStore: NgtCanvasStore,
     private animationFrameStore: NgtAnimationFrameStore
   ) {
@@ -30,34 +32,49 @@ export class NgtSobaFirstPersonControls
   }
 
   ngOnInit() {
-    zonelessRequestAnimationFrame(() => {
-      this.hold(
-        this.canvasStore.select(selectSlice(['camera', 'renderer'])),
-        ({ renderer, camera }) => {
-          if (camera && renderer) {
-            this.set({
-              controls: new FirstPersonControls(camera, renderer.domElement),
-            });
-          }
-        }
-      );
+    this.zone.runOutsideAngular(() => {
+      this.onCanvasReady(this.canvasStore.ready$, () => {
+        this.init(
+          this.select(
+            this.canvasStore.camera$,
+            this.canvasStore.renderer$,
+            (camera, renderer) => ({ camera, renderer })
+          )
+        );
 
-      this.effect(this.select('controls'), (controls) => {
-        const animationUuid = this.animationFrameStore.register({
-          callback: ({ delta }) => {
-            controls.update(delta);
-          },
-        });
-
-        return () => {
-          this.animationFrameStore.actions.unregister(animationUuid);
-        };
+        this.registerAnimation(this.select((s) => s.controls));
       });
     });
   }
 
+  private readonly init = this.effect<
+    Pick<NgtCanvasState, 'camera' | 'renderer'>
+  >(
+    tap(({ camera, renderer }) => {
+      if (camera && renderer) {
+        this.set({
+          controls: new FirstPersonControls(camera, renderer.domElement),
+        });
+      }
+    })
+  );
+
+  private readonly registerAnimation = this.effect<FirstPersonControls>(
+    tapEffect((controls) => {
+      const animationUuid = this.animationFrameStore.register({
+        callback: ({ delta }) => {
+          controls.update(delta);
+        },
+      });
+
+      return () => {
+        this.animationFrameStore.unregister(animationUuid);
+      };
+    })
+  );
+
   get controls() {
-    return this.get('controls') as FirstPersonControls;
+    return this.get((s) => s.controls) as FirstPersonControls;
   }
 }
 
