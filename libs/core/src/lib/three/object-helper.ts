@@ -1,5 +1,4 @@
 import { Directive, Inject, NgZone, OnInit } from '@angular/core';
-import { tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_OBJECT } from '../di/object';
 import { NgtAnimationFrameStore } from '../stores/animation-frame';
@@ -32,8 +31,8 @@ export abstract class NgtObjectHelper<TObjectHelper extends THREE.Object3D>
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.effect<boolean>(
-        tap(() => {
+      this.effect<unknown[]>(
+        tapEffect((args) => {
           this._object = this.objectFn();
 
           if (!this._object) {
@@ -41,39 +40,39 @@ export abstract class NgtObjectHelper<TObjectHelper extends THREE.Object3D>
             return;
           }
 
-          this.effect<unknown[]>(
-            tapEffect((args) => {
-              this._objectHelper = new this.objectHelperType(
-                this._object,
-                ...args
-              );
-              const scene = this.canvasStore.get((s) => s.scene);
-              if (this.objectHelper && scene) {
-                scene.add(this.objectHelper);
-                const animationUuid = this.animationFrameStore.register({
-                  callback: () => {
-                    if (this.objectHelper) {
-                      (
-                        this.objectHelper as TObjectHelper & {
-                          update: () => void;
-                        }
-                      ).update();
-                    }
-                  },
-                });
-                return () => {
-                  if (this.objectHelper && scene) {
-                    scene.remove(this.objectHelper);
-                    this.animationFrameStore.unregister(animationUuid);
-                  }
-                };
-              }
+          this._objectHelper = new this.objectHelperType(this._object, ...args);
 
-              return;
-            })
-          )(this.select((s) => s.args));
+          const scene = this.canvasStore.get((s) => s.scene);
+          if (this.objectHelper && scene) {
+            scene.add(this.objectHelper);
+            const animationUuid = this.animationFrameStore.register({
+              callback: () => {
+                if (this.objectHelper) {
+                  (
+                    this.objectHelper as TObjectHelper & {
+                      update: () => void;
+                    }
+                  ).update();
+                }
+              },
+            });
+            return () => {
+              if (this.objectHelper && scene) {
+                scene.remove(this.objectHelper);
+                this.animationFrameStore.unregister(animationUuid);
+              }
+            };
+          }
+
+          return;
         })
-      )(this.canvasStore.ready$);
+      )(
+        this.select(
+          this.select((s) => s.args),
+          this.canvasStore.ready$,
+          (args) => args
+        )
+      );
     });
   }
 
