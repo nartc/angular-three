@@ -1,5 +1,5 @@
 import { Directive, Input, NgZone, OnInit, Optional } from '@angular/core';
-import { Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as THREE from 'three';
 import { NgtCanvasStore } from '../stores/canvas';
 import { NgtStore } from '../stores/store';
@@ -48,8 +48,9 @@ export abstract class NgtCurve<
         this.initSubscription.unsubscribe();
       }
 
-      this.initSubscription = this.effect<boolean>(
-        tap(() => {
+      this.initSubscription = this.onCanvasReady(
+        this.canvasStore.ready$,
+        () => {
           this._curve = new this.curveType(...this._curveArgs);
           if (this.curve && this.geometryDirective) {
             const points = this.curve.getPoints(this.divisions);
@@ -57,8 +58,8 @@ export abstract class NgtCurve<
               points as unknown as THREE.Vector3[] | THREE.Vector2[]
             );
           }
-        })
-      )(this.canvasStore.ready$);
+        }
+      );
     });
   }
 

@@ -23,7 +23,6 @@ import {
   Optional,
   Output,
 } from '@angular/core';
-import { tap } from 'rxjs';
 import * as THREE from 'three';
 
 @Directive({
@@ -72,28 +71,26 @@ export class NgtSkeleton extends NgtStore implements OnInit {
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.effect<boolean>(
-        tap(() => {
-          const boneInverses: THREE.Matrix4[] | undefined = this.boneInverses
-            ? this.boneInverses.map((threeMaxtrix) => {
-                if (threeMaxtrix instanceof THREE.Matrix4) return threeMaxtrix;
-                return new THREE.Matrix4().set(...threeMaxtrix);
-              })
-            : undefined;
-          this._skeleton = new THREE.Skeleton([], boneInverses);
-          this.ready.emit(this.skeleton);
+      this.onCanvasReady(this.canvasStore.ready$, () => {
+        const boneInverses: THREE.Matrix4[] | undefined = this.boneInverses
+          ? this.boneInverses.map((threeMaxtrix) => {
+              if (threeMaxtrix instanceof THREE.Matrix4) return threeMaxtrix;
+              return new THREE.Matrix4().set(...threeMaxtrix);
+            })
+          : undefined;
+        this._skeleton = new THREE.Skeleton([], boneInverses);
+        this.ready.emit(this.skeleton);
 
-          if (this.skinnedMesh) {
-            const bindMatrix: THREE.Matrix4 | undefined = this.skinnedMesh
-              .bindMatrix
-              ? this.skinnedMesh.bindMatrix instanceof THREE.Matrix4
-                ? this.skinnedMesh.bindMatrix
-                : new THREE.Matrix4().set(...this.skinnedMesh.bindMatrix)
-              : undefined;
-            this.skinnedMesh.mesh.bind(this.skeleton!, bindMatrix);
-          }
-        })
-      )(this.canvasStore.ready$);
+        if (this.skinnedMesh) {
+          const bindMatrix: THREE.Matrix4 | undefined = this.skinnedMesh
+            .bindMatrix
+            ? this.skinnedMesh.bindMatrix instanceof THREE.Matrix4
+              ? this.skinnedMesh.bindMatrix
+              : new THREE.Matrix4().set(...this.skinnedMesh.bindMatrix)
+            : undefined;
+          this.skinnedMesh.mesh.bind(this.skeleton!, bindMatrix);
+        }
+      });
     });
   }
 }

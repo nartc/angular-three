@@ -8,7 +8,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_OBJECT } from '../di/object';
 import { NgtCanvasStore } from '../stores/canvas';
@@ -73,23 +72,21 @@ export abstract class NgtMaterial<
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.effect<boolean>(
-        tap(() => {
-          if (this.parameters) {
-            this.convertColorToLinear(this.parameters);
+      this.onCanvasReady(this.canvasStore.ready$, () => {
+        if (this.parameters) {
+          this.convertColorToLinear(this.parameters);
+        }
+        this._material = new this.materialType(this.parameters);
+        const parentObject = this.parentObjectFactory() as THREE.Mesh;
+        if (parentObject) {
+          if (Array.isArray(parentObject.material)) {
+            (parentObject.material as THREE.Material[]).push(this.material);
+          } else {
+            parentObject.material = this.material;
           }
-          this._material = new this.materialType(this.parameters);
-          const parentObject = this.parentObjectFactory() as THREE.Mesh;
-          if (parentObject) {
-            if (Array.isArray(parentObject.material)) {
-              (parentObject.material as THREE.Material[]).push(this.material);
-            } else {
-              parentObject.material = this.material;
-            }
-          }
-          this.ready.emit(this.material);
-        })
-      )(this.canvasStore.ready$);
+        }
+        this.ready.emit(this.material);
+      });
     });
   }
 

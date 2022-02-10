@@ -192,6 +192,15 @@ export class NgtStore<TState extends object = {}> implements OnDestroy {
     }) as unknown as TReturnType;
   }
 
+  onCanvasReady(
+    ready$: Observable<boolean>,
+    callback: () => void,
+    useEffect = false
+  ): Subscription {
+    const operator = useEffect ? tapEffect : tap;
+    return this.effect<boolean>(operator(() => callback()))(ready$);
+  }
+
   private update<
     // Allow to force-provide the type
     TProvidedType = void,

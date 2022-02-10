@@ -13,7 +13,6 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { tap } from 'rxjs';
 import { NGT_CANVAS_OPTIONS } from './di/canvas';
 import { NgtLoop } from './services/loop';
 import { NgtPerformance } from './services/performance';
@@ -159,24 +158,20 @@ export class NgtCanvas extends NgtStore implements OnInit {
       }
 
       this.canvasStore.init(this.rendererCanvas.nativeElement);
-      this.whenCanvasReady(this.canvasStore.ready$);
+      this.onCanvasReady(this.canvasStore.ready$, () => {
+        const canvasState = this.canvasStore.get();
+        this.eventsStore.init(canvasState.renderer.domElement);
+        this.animationFrameStore.init();
+        this.loop.invalidate(canvasState);
+        this.created.emit(canvasState);
+        if (this.canvasOptions.initialLog) {
+          console.group('Canvas initialized');
+          console.log(canvasState);
+          console.groupEnd();
+        }
+      });
     });
   }
-
-  private whenCanvasReady = this.effect(
-    tap(() => {
-      const canvasState = this.canvasStore.get();
-      this.eventsStore.init(canvasState.renderer.domElement);
-      this.animationFrameStore.init();
-      this.loop.invalidate(canvasState);
-      this.created.emit(canvasState);
-      if (this.canvasOptions.initialLog) {
-        console.group('Canvas initialized');
-        console.log(canvasState);
-        console.groupEnd();
-      }
-    })
-  );
 }
 
 @NgModule({

@@ -7,7 +7,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_OBJECT } from '../di/object';
 import { NgtCanvasStore } from '../stores/canvas';
@@ -53,8 +53,9 @@ export abstract class NgtGeometry<
         this.initSubscription.unsubscribe();
       }
 
-      this.initSubscription = this.effect<boolean>(
-        tap(() => {
+      this.initSubscription = this.onCanvasReady(
+        this.canvasStore.ready$,
+        () => {
           // geometry has changed. reconstruct
           if (this.geometry) {
             // cleanup
@@ -72,8 +73,8 @@ export abstract class NgtGeometry<
             this.construct();
             this.assign();
           }
-        })
-      )(this.canvasStore.ready$);
+        }
+      );
     });
   }
 

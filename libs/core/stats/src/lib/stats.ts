@@ -2,7 +2,6 @@ import {
   NgtAnimationFrameStore,
   NgtCanvasStore,
   NgtStore,
-  tapEffect,
 } from '@angular-three/core';
 import { DOCUMENT } from '@angular/common';
 import {
@@ -38,8 +37,9 @@ export class NgtStats extends NgtStore implements OnInit {
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.effect<boolean>(
-        tapEffect(() => {
+      this.onCanvasReady(
+        this.canvasStore.ready$,
+        () => {
           if (this.parent) {
             this.node = this.parent;
           }
@@ -56,8 +56,9 @@ export class NgtStats extends NgtStore implements OnInit {
               this.node.removeChild(this.stats.dom);
             }
           };
-        })
-      )(this.canvasStore.ready$);
+        },
+        true
+      );
     });
   }
 }

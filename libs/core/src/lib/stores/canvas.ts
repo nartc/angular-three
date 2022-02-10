@@ -25,11 +25,16 @@ const defaultTarget = new THREE.Vector3();
 export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
   readonly ready$ = this.select((s) => s.ready).pipe(filter((ready) => ready));
 
+  readonly camera$ = this.select((s) => s.camera);
+  readonly scene$ = this.select((s) => s.scene);
+  readonly renderer$ = this.select((s) => s.renderer);
+  readonly raycaster$ = this.select((s) => s.raycaster);
+
   private allConstructed$ = this.select(
-    this.select((s) => s.camera),
-    this.select((s) => s.scene),
-    this.select((s) => s.renderer),
-    this.select((s) => s.raycaster),
+    this.camera$,
+    this.scene$,
+    this.renderer$,
+    this.raycaster$,
     (camera, scene, renderer, raycaster) =>
       !!camera && !!renderer && !!scene && !!raycaster
   ).pipe(map((ready) => ({ ready })));

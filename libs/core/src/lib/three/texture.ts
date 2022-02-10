@@ -32,12 +32,13 @@ export abstract class NgtTexture<TTexture extends THREE.Texture = THREE.Texture>
         this.initSubscription.unsubscribe();
       }
 
-      this.initSubscription = this.effect<boolean>(
-        tap(() => {
+      this.initSubscription = this.onCanvasReady(
+        this.canvasStore.ready$,
+        () => {
           this._texture = new this.textureType(...this._textureArgs);
           this.set({ texture: this.texture });
-        })
-      )(this.canvasStore.ready$);
+        }
+      );
     });
   }
 

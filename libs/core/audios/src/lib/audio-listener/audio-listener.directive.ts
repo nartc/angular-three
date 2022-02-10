@@ -1,9 +1,4 @@
-import {
-  applyProps,
-  NgtCanvasStore,
-  NgtStore,
-  tapEffect,
-} from '@angular-three/core';
+import { applyProps, NgtCanvasStore, NgtStore } from '@angular-three/core';
 import {
   Directive,
   EventEmitter,
@@ -36,8 +31,9 @@ export class NgtAudioListener extends NgtStore implements OnInit {
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.effect<boolean>(
-        tapEffect(() => {
+      this.onCanvasReady(
+        this.canvasStore.ready$,
+        () => {
           this._listener = new THREE.AudioListener();
           applyProps(this.listener, {
             filter: this.filter,
@@ -55,8 +51,9 @@ export class NgtAudioListener extends NgtStore implements OnInit {
               camera.remove(this.listener);
             }
           };
-        })
-      )(this.canvasStore.ready$);
+        },
+        true
+      );
     });
   }
 }

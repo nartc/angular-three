@@ -7,7 +7,7 @@ import {
   OnInit,
   Optional,
 } from '@angular/core';
-import { Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as THREE from 'three';
 import { NgtCanvasStore } from '../stores/canvas';
 import { NgtStore } from '../stores/store';
@@ -67,8 +67,9 @@ export abstract class NgtAttribute<
         this.initSubscription.unsubscribe();
       }
 
-      this.initSubscription = this.effect<boolean>(
-        tap(() => {
+      this.initSubscription = this.onCanvasReady(
+        this.canvasStore.ready$,
+        () => {
           if (this.geometryDirective && this.attach) {
             this._attribute = new this.attributeType(...this._attributeArgs);
             if (this.attribute) {
@@ -81,8 +82,8 @@ export abstract class NgtAttribute<
               );
             }
           }
-        })
-      )(this.canvasStore.ready$);
+        }
+      );
     });
   }
 

@@ -169,8 +169,9 @@ export class NgtObjectController extends Controller implements OnDestroy {
         this.initSubscription.unsubscribe();
       }
 
-      this.initSubscription = this.store.effect<boolean>(
-        tap(() => {
+      this.initSubscription = this.store.onCanvasReady(
+        this.canvasStore.ready$,
+        () => {
           if (this.object) {
             this.switch();
           } else {
@@ -254,8 +255,8 @@ export class NgtObjectController extends Controller implements OnDestroy {
               priority: this.priority,
             });
           }
-        })
-      )(this.canvasStore.ready$);
+        }
+      );
     });
   }
 
