@@ -1,4 +1,4 @@
-import { NgtCoreModule } from '@angular-three/core';
+import { NgtCoreModule, provideCanvasOptions } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtBoxHelperModule } from '@angular-three/core/helpers';
 import {
@@ -8,7 +8,6 @@ import {
 import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
-import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { Object3D } from 'three';
 
@@ -33,12 +32,11 @@ import { Object3D } from 'three';
         ></ngt-mesh-standard-material>
       </ngt-mesh>
 
-      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
-
       <ngt-stats></ngt-stats>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideCanvasOptions({ initialLog: true })],
 })
 export class SimpleCubeComponent {
   hover = false;
@@ -59,7 +57,6 @@ export class SimpleCubeComponent {
     NgtAmbientLightModule,
     NgtSpotLightModule,
     NgtBoxHelperModule,
-    NgtSobaOrbitControlsModule,
     NgtStatsModule,
     NgtMeshModule,
   ],
