@@ -15,6 +15,7 @@ import {
   ReplaySubject,
   scheduled,
   share,
+  startWith,
   Subject,
   Subscription,
   take,
@@ -120,14 +121,12 @@ export class NgtStore<TState extends object = {}> implements OnDestroy {
     if (observables.length === 0) {
       observable$ = this.stateSubject$.pipe(
         skipUndefined(),
-        debounceSync(),
         map(projector as unknown as (value: TState, index: number) => TResult)
       );
     } else {
       // If there are multiple arguments, then we're aggregating selectors, so we need
       // to take the combineLatest of them before calling the map function.
       observable$ = combineLatest(observables).pipe(
-        debounceSync(),
         map((projectorArgs) =>
           (projector as unknown as (...a: unknown[]) => TResult)(
             ...projectorArgs
@@ -211,18 +210,21 @@ export class NgtStore<TState extends object = {}> implements OnDestroy {
       const observable$ = isObservable(observableOrValue)
         ? observableOrValue
         : of(observableOrValue);
+
       return observable$
         .pipe(
           concatMap((value) =>
             scheduled([value], queueScheduler).pipe(
-              withLatestFrom(this.stateSubject$)
+              withLatestFrom(this.stateSubject$.pipe(startWith({})))
             )
           ),
           takeUntil(this.destroy$)
         )
         .subscribe({
           next: ([value, currentState]) => {
-            this.stateSubject$.next(updaterFn(currentState || {}, value!));
+            this.stateSubject$.next(
+              updaterFn((currentState || {}) as TState, value!)
+            );
           },
           error: (error: Error) => {
             this.stateSubject$.error(error);
