@@ -8,7 +8,8 @@
             "executor": "@nrwl/angular:package",
             "outputs": ["dist/libs/postprocessing"],
             "options": {
-                "project": "libs/postprocessing/ng-package.json"
+                "project": "libs/postprocessing/ng-package.json",
+                "updateBuildableProjectDepsInPackageJson": false
             },
             "configurations": {
                 "production": {
