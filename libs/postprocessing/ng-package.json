@@ -3,5 +3,6 @@
     "dest": "../../dist/libs/postprocessing",
     "lib": {
         "entryFile": "src/index.ts"
-    }
+    },
+    "allowedNonPeerDependencies": ["postprocessing"]
 }

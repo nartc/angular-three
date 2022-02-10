@@ -9,7 +9,7 @@
         "@angular/core": "^13.2.0"
     },
     "dependencies": {
-        "postprocessing": "~6.23.0",
+        "postprocessing": "~6.24.0",
         "tslib": "^2.3.0"
     }
 }
