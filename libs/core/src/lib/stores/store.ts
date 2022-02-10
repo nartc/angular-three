@@ -99,6 +99,7 @@ export class NgtStore<TState extends object = {}> implements OnDestroy {
      *   returns some new slice/projection of that state.
      * @return An observable of the projector results.
      */
+    select(): Observable<TState>;
     select<TResult>(projector: (s: TState) => TResult): Observable<TResult>;
     select<TSelectors extends Observable<unknown>[], TResult>(
         ...args: [
@@ -110,7 +111,21 @@ export class NgtStore<TState extends object = {}> implements OnDestroy {
         TSelectors extends Array<Observable<unknown> | TProjectorFn>,
         TResult,
         TProjectorFn = (...a: unknown[]) => TResult
-    >(...args: TSelectors): Observable<TResult> {
+    >(...args: TSelectors): Observable<TResult> | Observable<TState> {
+        if (args.length === 0) {
+            return this.stateSubject$.pipe(
+                skipUndefined(),
+                distinctUntilChanged(),
+                share({
+                    connector: () => new ReplaySubject(1),
+                    resetOnComplete: true,
+                    resetOnRefCountZero: true,
+                    resetOnError: true,
+                }),
+                takeUntil(this.destroy$)
+            );
+        }
+
         const { observables, projector } = processSelectorArgs<
             TSelectors,
             TResult,

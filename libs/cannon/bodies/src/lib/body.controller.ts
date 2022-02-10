@@ -102,8 +102,16 @@ export interface NgtCannonBodyState {
 }
 
 @Directive({
-    selector: `<% if (selectors.length) { %><% for (const selector of selectors) { %>
-        [ngtPhysic<%= selector.selector %>]<% if (!selector.isLast) { %>,<% } %><% } %><% } %>
+    selector: `
+        [ngtPhysicBox],
+        [ngtPhysicPlane],
+        [ngtPhysicCylinder],
+        [ngtPhysicHeightfield],
+        [ngtPhysicParticle],
+        [ngtPhysicSphere],
+        [ngtPhysicTrimesh],
+        [ngtPhysicConvexPolyhedron],
+        [ngtPhysicCompound]
     `,
     exportAs: 'ngtCannonBody',
     providers: [NgtStore],
