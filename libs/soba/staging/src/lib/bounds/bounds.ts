@@ -322,10 +322,14 @@ export class NgtSobaBoundsContext {
             (pointercancel)="objectInputsController.pointercancel.emit($event)"
             (wheel)="objectInputsController.wheel.emit($event)"
         >
-            <ng-container *ngIf="object">
-                <ng-content></ng-content>
-            </ng-container>
+            <ng-container
+                *ngIf="object"
+                [ngTemplateOutlet]="contentTemplate"
+            ></ng-container>
         </ngt-group>
+        <ng-template #contentTemplate>
+            <ng-content></ng-content>
+        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [

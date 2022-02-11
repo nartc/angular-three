@@ -37,9 +37,14 @@ import type {
     selector: 'ngt-canvas',
     template: `
         <canvas #rendererCanvas></canvas>
-        <ng-container *ngIf="canvasOptions.projectContent">
-            <ng-content></ng-content>
+        <ng-container
+            *ngIf="canvasOptions.projectContent"
+            [ngTemplateOutlet]="contentTemplate"
+        >
         </ng-container>
+        <ng-template #contentTemplate>
+            <ng-content></ng-content>
+        </ng-template>
     `,
     styles: [
         `

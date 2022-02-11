@@ -72,8 +72,14 @@ export interface NgtSobaOrthographicCameraState {
                 animateReady.emit({ entity: object, state: $event.state })
             "
         >
-            <ng-content></ng-content>
+            <ng-container
+                *ngIf="object"
+                [ngTemplateOutlet]="contentTemplate"
+            ></ng-container>
         </ngt-orthographic-camera>
+        <ng-template #contentTemplate>
+            <ng-content></ng-content>
+        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [

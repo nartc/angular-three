@@ -13,6 +13,7 @@ import {
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtGroupModule } from '@angular-three/core/group';
 import { NgtMeshModule } from '@angular-three/core/meshes';
+import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -75,8 +76,14 @@ const easeInExpo = (x: number) => (x === 0 ? 0 : Math.pow(2, 10 * x - 10));
                     (ready)="store.set({ plane: $event })"
                     [args]="[1, 1, segments, segments]"
                 ></ngt-plane-geometry>
-                <ng-content></ng-content>
+                <ng-container
+                    *ngIf="object"
+                    [ngTemplateOutlet]="contentTemplate"
+                ></ng-container>
             </ngt-mesh>
+            <ng-template #contentTemplate>
+                <ng-content></ng-content>
+            </ng-template>
         </ngt-group>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -171,6 +178,7 @@ export class NgtSobaBackdrop extends NgtExtender<THREE.Mesh> {
         NgtPlaneGeometryModule,
         NgtMathPipeModule,
         NgtRadianPipeModule,
+        CommonModule,
     ],
 })
 export class NgtSobaBackdropModule {}

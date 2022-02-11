@@ -12,6 +12,7 @@ import {
     NgtStore,
 } from '@angular-three/core';
 import { NgtLodModule } from '@angular-three/core/lod';
+import { CommonModule } from '@angular/common';
 import {
     AfterContentInit,
     ChangeDetectionStrategy,
@@ -66,8 +67,14 @@ interface NgtSobaDetailedState {
             (pointercancel)="objectInputsController.pointercancel.emit($event)"
             (wheel)="objectInputsController.wheel.emit($event)"
         >
-            <ng-content></ng-content>
+            <ng-container
+                *ngIf="object"
+                [ngTemplateOutlet]="contentTemplate"
+            ></ng-container>
         </ngt-lod>
+        <ng-template #contentTemplate>
+            <ng-content></ng-content>
+        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
@@ -148,6 +155,6 @@ export class NgtSobaDetailed
 @NgModule({
     declarations: [NgtSobaDetailed],
     exports: [NgtSobaDetailed, NgtObjectInputsControllerModule],
-    imports: [NgtLodModule],
+    imports: [NgtLodModule, CommonModule],
 })
 export class NgtSobaDetailedModule {}

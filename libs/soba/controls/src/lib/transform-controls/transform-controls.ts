@@ -75,10 +75,14 @@ interface NgtSobaTransformControlsState {
             (pointercancel)="objectInputsController.pointercancel.emit($event)"
             (wheel)="objectInputsController.wheel.emit($event)"
         >
-            <ng-container *ngIf="group">
-                <ng-content></ng-content>
-            </ng-container>
+            <ng-container
+                *ngIf="group"
+                [ngTemplateOutlet]="contentTemplate"
+            ></ng-container>
         </ngt-group>
+        <ng-template #contentTemplate>
+            <ng-content></ng-content>
+        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [

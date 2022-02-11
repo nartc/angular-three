@@ -1,5 +1,6 @@
 import { createParentObjectProvider } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
+import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -14,8 +15,14 @@ import { NgtEffectComposerStore } from './effect-composer.store';
     selector: 'ngt-effect-composer',
     template: `
         <ngt-group (ready)="group = $event">
-            <ng-content></ng-content>
+            <ng-container
+                *ngIf="group"
+                [ngTemplateOutlet]="contentTemplate"
+            ></ng-container>
         </ngt-group>
+        <ng-template #contentTemplate>
+            <ng-content></ng-content>
+        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
@@ -83,6 +90,6 @@ export class NgtEffectComposer implements OnInit {
 @NgModule({
     declarations: [NgtEffectComposer],
     exports: [NgtEffectComposer],
-    imports: [NgtGroupModule],
+    imports: [NgtGroupModule, CommonModule],
 })
 export class NgtEffectComposerModule {}
