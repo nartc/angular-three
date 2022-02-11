@@ -1,4 +1,3 @@
-import { provideCanvasOptions } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
@@ -35,7 +34,6 @@ Default.decorators = [
             NgtBoxGeometryModule,
             NgtMeshBasicMaterialModule,
         ],
-        providers: [provideCanvasOptions({ initialLog: true })],
     }),
 ];
 

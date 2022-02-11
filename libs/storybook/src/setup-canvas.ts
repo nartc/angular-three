@@ -5,6 +5,7 @@ import {
 } from '@angular-three/core/lights';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
+import { NgtSobaLoaderModule } from '@angular-three/soba/loaders';
 
 export function setupCanvas({
     cameraPosition = [-5, 5, 5],
@@ -40,6 +41,7 @@ export function setupCanvas({
 
       ${story}
     </ngt-canvas>
+    <ngt-soba-loader *ngIf="${loader}"></ngt-soba-loader>
   `;
 }
 
@@ -50,4 +52,5 @@ export const setupCanvasModules = [
     NgtPointLightModule,
     NgtSobaOrbitControlsModule,
     NgtColorPipeModule,
+    NgtSobaLoaderModule,
 ];

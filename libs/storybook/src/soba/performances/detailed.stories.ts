@@ -1,4 +1,3 @@
-import { provideCanvasOptions } from '@angular-three/core';
 import { NgtIcosahedronGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
@@ -25,7 +24,6 @@ export default {
                 NgtIcosahedronGeometryModule,
                 NgtMeshBasicMaterialModule,
             ],
-            providers: [provideCanvasOptions({ initialLog: true })],
         }),
     ],
 } as Meta;
