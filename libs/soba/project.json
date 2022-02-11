@@ -40,7 +40,11 @@
                     "libs/soba/cameras/**/*.ts",
                     "libs/soba/cameras/**/*.html",
                     "libs/soba/loaders/**/*.ts",
-                    "libs/soba/loaders/**/*.html"
+                    "libs/soba/loaders/**/*.html",
+                    "libs/soba/misc/**/*.ts",
+                    "libs/soba/misc/**/*.html",
+                    "libs/soba/performances/**/*.ts",
+                    "libs/soba/performances/**/*.html"
                 ]
             }
         }
