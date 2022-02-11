@@ -242,42 +242,39 @@ export class NgtObjectController extends Controller implements OnDestroy {
                                     [this.object.uuid]: this.object,
                                 },
                             }));
-
-                            if (this.parentObjectController) {
-                                this.parentObjectFactory = (() =>
-                                    this.parentObjectController
-                                        .object) as AnyFunction;
-                            } else if (this.parentObjectFn !== null) {
-                                this.parentObjectFactory = this.parentObjectFn;
-                            } else {
-                                this.parentObjectFactory = (() =>
-                                    undefined) as AnyFunction;
-                            }
-
-                            if (
-                                this.objectInputsController.appendMode !==
-                                'none'
-                            ) {
-                                this.appendToParent();
-                            }
                         }
-                    }
 
-                    if (this.readyFn) {
-                        this.readyFn();
-                    }
+                        if (this.parentObjectController) {
+                            this.parentObjectFactory = (() =>
+                                this.parentObjectController
+                                    .object) as AnyFunction;
+                        } else if (this.parentObjectFn !== null) {
+                            this.parentObjectFactory = this.parentObjectFn;
+                        } else {
+                            this.parentObjectFactory = (() =>
+                                undefined) as AnyFunction;
+                        }
 
-                    if (this.animateReady.observed) {
-                        this.animationFrameStore.register({
-                            obj: () => this.object,
-                            callback: (state) => {
-                                this.animateReady.emit({
-                                    state,
-                                    object: this.object,
-                                });
-                            },
-                            priority: this.priority,
-                        });
+                        if (this.objectInputsController.appendMode !== 'none') {
+                            this.appendToParent();
+                        }
+
+                        if (this.readyFn) {
+                            this.readyFn();
+                        }
+
+                        if (this.animateReady.observed) {
+                            this.animationFrameStore.register({
+                                obj: () => this.object,
+                                callback: (state) => {
+                                    this.animateReady.emit({
+                                        state,
+                                        object: this.object,
+                                    });
+                                },
+                                priority: this.priority,
+                            });
+                        }
                     }
                 }
             );
