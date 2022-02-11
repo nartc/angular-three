@@ -44,7 +44,9 @@
                     "libs/soba/misc/**/*.ts",
                     "libs/soba/misc/**/*.html",
                     "libs/soba/performances/**/*.ts",
-                    "libs/soba/performances/**/*.html"
+                    "libs/soba/performances/**/*.html",
+                    "libs/soba/staging/**/*.ts",
+                    "libs/soba/staging/**/*.html"
                 ]
             }
         }

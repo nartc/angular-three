@@ -61,6 +61,7 @@
             "@angular-three/soba/performances": [
                 "libs/soba/performances/src/index.ts"
             ],
+            "@angular-three/soba/staging": ["libs/soba/staging/src/index.ts"],
             "@angular-three/storybook": ["libs/storybook/src/index.ts"]
         }
     },
