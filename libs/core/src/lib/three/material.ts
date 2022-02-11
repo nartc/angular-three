@@ -1,17 +1,16 @@
 import {
     Directive,
-    EventEmitter,
     Inject,
     Input,
     NgZone,
-    OnDestroy,
     OnInit,
     Output,
 } from '@angular/core';
+import { tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_OBJECT } from '../di/object';
 import { NgtCanvasStore } from '../stores/canvas';
-import { NgtStore } from '../stores/store';
+import { NgtStore, tapEffect } from '../stores/store';
 import type {
     AnyConstructor,
     AnyFunction,
@@ -20,48 +19,31 @@ import type {
 } from '../types';
 import { makeColor } from '../utils/make';
 
+interface NgtMaterialState<
+    TMaterial extends THREE.Material = THREE.Material,
+    TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters
+> {
+    material: TMaterial;
+    materialParameters: TMaterialParameters;
+}
+
 @Directive()
 export abstract class NgtMaterial<
         TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
         TMaterial extends THREE.Material = THREE.Material
     >
-    extends NgtStore
-    implements OnInit, OnDestroy
+    extends NgtStore<NgtMaterialState<TMaterial, TMaterialParameters>>
+    implements OnInit
 {
-    @Output() ready = new EventEmitter<TMaterial>();
+    @Output() ready = this.select((s) => s.material);
 
     @Input() set parameters(v: TMaterialParameters | undefined) {
-        this.zone.runOutsideAngular(() => {
-            this._parameters = v;
-            if (v && this.material) {
-                this.convertColorToLinear(v);
-                this.material.setValues(
-                    Object.assign(
-                        v,
-                        'uniforms' in this.material && 'uniforms' in v
-                            ? {
-                                  uniforms: {
-                                      ...(
-                                          this
-                                              .material as unknown as THREE.ShaderMaterial
-                                      ).uniforms,
-                                      ...(v as THREE.ShaderMaterialParameters)
-                                          .uniforms,
-                                  },
-                              }
-                            : {}
-                    )
-                );
-                this.material.needsUpdate = true;
-            }
-        });
+        this.set({ materialParameters: v });
     }
 
     get parameters(): TMaterialParameters | undefined {
-        return this._parameters;
+        return this.get((s) => s.materialParameters);
     }
-
-    private _parameters?: TMaterialParameters;
 
     constructor(
         protected zone: NgZone,
@@ -73,32 +55,73 @@ export abstract class NgtMaterial<
 
     abstract materialType: AnyConstructor<TMaterial>;
 
+    get material(): TMaterial {
+        return this.get((s) => s.material);
+    }
+
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.canvasStore.ready$, () => {
-                if (this.parameters) {
-                    this.convertColorToLinear(this.parameters);
-                }
-                this._material = new this.materialType(this.parameters);
-                const parentObject = this.parentObjectFactory() as THREE.Mesh;
-                if (parentObject) {
-                    if (Array.isArray(parentObject.material)) {
-                        (parentObject.material as THREE.Material[]).push(
-                            this.material
-                        );
-                    } else {
-                        parentObject.material = this.material;
-                    }
-                }
-                this.ready.emit(this.material);
+                this.init();
+                this.setParameters(
+                    this.select(
+                        this.select((s) => s.material),
+                        this.select((s) => s.materialParameters),
+                        (material, materialParameters) => ({
+                            material,
+                            materialParameters,
+                        })
+                    )
+                );
             });
         });
     }
 
-    private _material!: TMaterial;
-    get material(): TMaterial {
-        return this._material;
-    }
+    private readonly init = this.effect<void>(
+        tapEffect(() => {
+            const material = new this.materialType();
+            const parentObject = this.parentObjectFactory() as THREE.Mesh;
+            if (parentObject) {
+                if (Array.isArray(parentObject.material)) {
+                    (parentObject.material as THREE.Material[]).push(material);
+                } else {
+                    parentObject.material = material;
+                }
+            }
+            this.set({ material });
+            return () => {
+                if (material) {
+                    material.dispose();
+                }
+            };
+        })
+    );
+
+    private readonly setParameters = this.effect<
+        NgtMaterialState<TMaterial, TMaterialParameters>
+    >(
+        tap(({ materialParameters, material }) => {
+            this.convertColorToLinear(materialParameters);
+            material.setValues(
+                Object.assign(
+                    materialParameters,
+                    'uniforms' in material && 'uniforms' in materialParameters
+                        ? {
+                              uniforms: {
+                                  ...(
+                                      material as unknown as THREE.ShaderMaterial
+                                  ).uniforms,
+                                  ...(
+                                      materialParameters as THREE.ShaderMaterialParameters
+                                  ).uniforms,
+                              },
+                          }
+                        : {}
+                )
+            );
+            material.needsUpdate = true;
+        })
+    );
 
     private convertColorToLinear(parameters: TMaterialParameters) {
         if ('color' in parameters) {
@@ -113,14 +136,5 @@ export abstract class NgtMaterial<
                 ).convertSRGBToLinear();
             }
         }
-    }
-
-    override ngOnDestroy() {
-        this.zone.runOutsideAngular(() => {
-            if (this.material) {
-                this.material.dispose();
-            }
-        });
-        super.ngOnDestroy();
     }
 }

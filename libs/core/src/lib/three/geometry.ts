@@ -1,109 +1,74 @@
 import {
     Directive,
-    EventEmitter,
     Inject,
     NgZone,
     OnDestroy,
     OnInit,
     Output,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_OBJECT } from '../di/object';
 import { NgtCanvasStore } from '../stores/canvas';
-import { NgtStore } from '../stores/store';
+import { NgtStore, tapEffect } from '../stores/store';
 import type { AnyConstructor, AnyFunction } from '../types';
+
+interface NgtGeometryState<
+    TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
+> {
+    geometry: TGeometry;
+    geometryArgs: unknown[];
+}
 
 @Directive()
 export abstract class NgtGeometry<
         TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
     >
-    extends NgtStore
+    extends NgtStore<NgtGeometryState<TGeometry>>
     implements OnInit, OnDestroy
 {
-    @Output() ready = new EventEmitter<TGeometry>();
+    @Output() ready = this.select((s) => s.geometry);
 
     constructor(
         protected zone: NgZone,
-        @Inject(NGT_OBJECT) protected parentObjectFactory: AnyFunction,
-        protected canvasStore: NgtCanvasStore
+        protected canvasStore: NgtCanvasStore,
+        @Inject(NGT_OBJECT) protected parentObjectFactory: AnyFunction
     ) {
         super();
+        this.set({ geometryArgs: [] });
     }
 
     abstract geometryType: AnyConstructor<TGeometry>;
 
-    private _geometryArgs: unknown[] = [];
     protected set geometryArgs(v: unknown | unknown[]) {
-        this._geometryArgs = Array.isArray(v) ? v : [v];
-        this.init();
+        this.set({ geometryArgs: Array.isArray(v) ? v : [v] });
     }
-
-    private initSubscription?: Subscription;
 
     ngOnInit() {
-        if (!this.geometry) {
-            this.init();
-        }
-    }
-
-    private init() {
         this.zone.runOutsideAngular(() => {
-            if (this.initSubscription) {
-                this.initSubscription.unsubscribe();
-            }
-
-            this.initSubscription = this.onCanvasReady(
-                this.canvasStore.ready$,
-                () => {
-                    // geometry has changed. reconstruct
-                    if (this.geometry) {
-                        // cleanup
-                        if (this.parentObjectFactory) {
-                            const object3d = this.parentObjectFactory();
-                            if (object3d['geometry']) {
-                                (
-                                    object3d['geometry'] as THREE.BufferGeometry
-                                ).dispose();
-                            }
-                        }
-
-                        // reconstruct
-                        this.construct();
-                        this.assign();
-                    } else {
-                        this.construct();
-                        this.assign();
-                    }
-                }
-            );
+            this.onCanvasReady(this.canvasStore.ready$, () => {
+                this.init(this.select((s) => s.geometryArgs));
+            });
         });
     }
 
-    private assign() {
-        const parentObject = this.parentObjectFactory() as THREE.Mesh;
-        if (parentObject) {
-            parentObject.geometry = this.geometry;
-        }
-    }
+    private readonly init = this.effect<
+        NgtGeometryState<TGeometry>['geometryArgs']
+    >(
+        tapEffect((geometryArgs) => {
+            const geometry = new this.geometryType(...geometryArgs);
+            const parentObject = this.parentObjectFactory() as THREE.Mesh;
+            if (parentObject) {
+                parentObject.geometry = geometry;
+            }
+            this.set({ geometry });
 
-    private construct() {
-        this.ready.emit(
-            (this._geometry = new this.geometryType(...this._geometryArgs))
-        );
-    }
+            return () => {
+                geometry.dispose();
+            };
+        })
+    );
 
-    private _geometry!: TGeometry;
     get geometry(): TGeometry {
-        return this._geometry;
-    }
-
-    override ngOnDestroy() {
-        this.zone.runOutsideAngular(() => {
-            if (this.geometry) {
-                this.geometry.dispose();
-            }
-        });
-        super.ngOnDestroy();
+        return this.get((s) => s.geometry) as TGeometry;
     }
 }
