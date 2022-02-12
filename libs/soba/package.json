@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "three-stdlib": "~2.8.6",
+        "troika-three-text": "~0.45.0",
         "tslib": "^2.3.0"
     }
 }

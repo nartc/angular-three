@@ -46,7 +46,9 @@
                     "libs/soba/performances/**/*.ts",
                     "libs/soba/performances/**/*.html",
                     "libs/soba/staging/**/*.ts",
-                    "libs/soba/staging/**/*.html"
+                    "libs/soba/staging/**/*.html",
+                    "libs/soba/abstractions/**/*.ts",
+                    "libs/soba/abstractions/**/*.html"
                 ]
             }
         }
