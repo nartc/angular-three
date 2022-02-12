@@ -57,7 +57,7 @@ export class NgtCannonConstraintController
         @Optional()
         @Inject(NGT_CANNON_CONSTRAINT_TYPE)
         private type: 'Hinge' | ConstraintTypes,
-        private physicsStore: NgtPhysicsStore
+        @Optional() private physicsStore: NgtPhysicsStore
     ) {
         super();
 
