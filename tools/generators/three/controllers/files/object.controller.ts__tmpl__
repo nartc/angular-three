@@ -2,7 +2,6 @@
 import {
     Directive,
     EventEmitter,
-    Host,
     Inject,
     Input,
     NgModule,
@@ -14,7 +13,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, defer, map, Subscription, take, tap } from 'rxjs';
 import * as THREE from 'three';
-import { NGT_PARENT_OBJECT } from '../di/parent-object';
+import { NGT_HOST_PARENT_OBJECT, NGT_PARENT_OBJECT } from '../di/parent-object';
 import { NgtAnimationFrameStore } from '../stores/animation-frame';
 import { NgtCanvasStore } from '../stores/canvas';
 import { NgtEventsStore } from '../stores/events';
@@ -66,6 +65,7 @@ const supportedEvents = [
 })
 export class NgtObjectController extends Controller implements OnDestroy {
     @Input() priority = 0;
+    @Input() useHostParent = false;
     @Output() animateReady = new EventEmitter<{
         state: NgtRender;
         object: THREE.Object3D;
@@ -92,8 +92,6 @@ export class NgtObjectController extends Controller implements OnDestroy {
         return this._initFn as () => THREE.Object3D;
     }
 
-    private parentObjectFactory!: AnyFunction;
-
     private inputChanges$ = defer(() => {
         return this.objectInputsController.changes$.pipe(
             map((changes) => {
@@ -118,11 +116,12 @@ export class NgtObjectController extends Controller implements OnDestroy {
         private objectInputsController: NgtObjectInputsController,
         @Optional()
         @SkipSelf()
-        private parentObjectController: NgtObjectController,
-        @Optional()
-        @Host()
         @Inject(NGT_PARENT_OBJECT)
-        private parentObjectFn: AnyFunction
+        private parentObjectFn: AnyFunction,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_HOST_PARENT_OBJECT)
+        private hostParentObjectFn: AnyFunction
     ) {
         super();
     }
@@ -215,18 +214,10 @@ export class NgtObjectController extends Controller implements OnDestroy {
                             }));
                         }
 
-                        if (this.parentObjectController) {
-                            this.parentObjectFactory = (() =>
-                                this.parentObjectController
-                                    .object) as AnyFunction;
-                        } else if (this.parentObjectFn !== null) {
-                            this.parentObjectFactory = this.parentObjectFn;
-                        } else {
-                            this.parentObjectFactory = (() =>
-                                undefined) as AnyFunction;
-                        }
-
-                        if (this.objectInputsController.appendMode !== 'none') {
+                        if (
+                            this.objectInputsController.appendMode !== 'none' &&
+                            this.object.isObject3D
+                        ) {
                             this.appendToParent();
                         }
 
@@ -275,7 +266,6 @@ export class NgtObjectController extends Controller implements OnDestroy {
     }
 
     private appendToParent(): void {
-        // delay by a frame so all appendTo is settled
         requestAnimationFrame(() => {
             if (this.objectInputsController.appendTo) {
                 this.appendTo.add(this.object);
@@ -301,8 +291,15 @@ export class NgtObjectController extends Controller implements OnDestroy {
     }
 
     private addToParent() {
-        if (this.parentObjectFactory()) {
-            this.parentObjectFactory().add(this.object);
+        let parentObject = (this.hostParentObjectFn?.() ||
+            this.parentObjectFn?.()) as THREE.Object3D;
+
+        if (this.useHostParent) {
+            parentObject = this.hostParentObjectFn?.();
+        }
+
+        if (parentObject && parentObject.uuid !== this.object.uuid) {
+            parentObject.add(this.object);
         } else {
             this.addToScene();
         }
@@ -353,10 +350,11 @@ export class NgtObjectController extends Controller implements OnDestroy {
                 this.appendTo.remove(this.object);
             }
         } else if (
-            this.parentObjectFactory() &&
+            this.parentObjectFn?.() &&
+            this.parentObjectFn()?.uuid !== this.object.uuid &&
             this.objectInputsController.appendMode === 'immediate'
         ) {
-            this.parentObjectFactory().remove(this.object);
+            this.parentObjectFn().remove(this.object);
         } else {
             const scene = this.canvasStore.get((s) => s.scene);
             if (scene) {

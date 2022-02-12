@@ -1,4 +1,5 @@
 import {
+    createParentObjectProvider,
     NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
     NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER,
     NGT_OBJECT_POST_INIT,
@@ -23,6 +24,7 @@ import * as THREE from 'three';
                 object.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
             },
         },
+        createParentObjectProvider(NgtInstancedMesh, (mesh) => mesh.mesh),
     ],
 })
 export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {

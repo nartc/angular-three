@@ -1,8 +1,11 @@
 import {
+    AnyFunction,
     createExtenderProvider,
+    createHostParentObjectProvider,
     createParentObjectProvider,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NgtCanvasStore,
     NgtExtender,
     NgtObjectInputsController,
@@ -19,6 +22,8 @@ import {
     Input,
     NgModule,
     NgZone,
+    Optional,
+    SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
 
@@ -37,6 +42,7 @@ export interface NgtSobaCenterState {
             (animateReady)="
                 animateReady.emit({ entity: object, state: $event.state })
             "
+            [useHostParent]="true"
             [name]="objectInputsController.name"
             [position]="objectInputsController.position"
             [rotation]="objectInputsController.rotation"
@@ -94,6 +100,7 @@ export interface NgtSobaCenterState {
             NgtSobaCenter,
             (center) => center.innerGroup
         ),
+        createHostParentObjectProvider(NgtSobaCenter),
     ],
 })
 export class NgtSobaCenter extends NgtExtender<THREE.Group> {
@@ -106,7 +113,11 @@ export class NgtSobaCenter extends NgtExtender<THREE.Group> {
         public objectInputsController: NgtObjectInputsController,
         public store: NgtStore<NgtSobaCenterState>,
         private canvasStore: NgtCanvasStore,
-        private zone: NgZone
+        private zone: NgZone,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_PARENT_OBJECT)
+        public parentObjectFn: AnyFunction
     ) {
         super();
         store.set({ alignTop: false });

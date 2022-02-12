@@ -1,5 +1,6 @@
 // GENERATED
 import {
+    createParentObjectProvider,
     NGT_AUDIO_CONTROLLER_PROVIDER,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NgtAudioControllerModule,
@@ -19,6 +20,7 @@ import * as THREE from 'three';
         },
         NGT_AUDIO_CONTROLLER_PROVIDER,
         NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(NgtAudio, (parent) => parent.audio),
     ],
 })
 export class NgtAudio extends NgtCommonAudio<GainNode, THREE.Audio> {

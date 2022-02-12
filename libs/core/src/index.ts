@@ -1,6 +1,6 @@
 export * from './lib/types';
 
-export * from './lib/di/object';
+export * from './lib/di/parent-object';
 export * from './lib/di/object-init';
 export * from './lib/di/performance';
 export * from './lib/di/resize';
@@ -58,7 +58,3 @@ export * from './lib/utils/apply-props';
 export * from './lib/utils/build-graph';
 export * from './lib/utils/make';
 export * from './lib/utils/is-orthographic';
-export { NGT_OBJECT_POST_INIT } from './lib/di/object-init';
-export { NGT_OBJECT_TYPE } from './lib/di/object-init';
-export { createParentObjectProvider } from './lib/di/parent-object';
-export { NGT_PARENT_OBJECT } from './lib/di/parent-object';

@@ -1,5 +1,5 @@
 // GENERATED
-import { NGT_OBJECT_PROVIDER, NgtGeometry } from '@angular-three/core';
+import { NgtGeometry } from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -11,7 +11,6 @@ import * as THREE from 'three';
             provide: NgtGeometry,
             useExisting: NgtIcosahedronGeometry,
         },
-        NGT_OBJECT_PROVIDER,
     ],
 })
 export class NgtIcosahedronGeometry extends NgtGeometry<THREE.IcosahedronGeometry> {

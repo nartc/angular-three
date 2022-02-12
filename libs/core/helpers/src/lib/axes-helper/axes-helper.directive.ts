@@ -1,5 +1,6 @@
 // GENERATED
 import {
+    createParentObjectProvider,
     NgtHelper,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NgtObjectControllerModule,
@@ -16,6 +17,7 @@ import * as THREE from 'three';
             useExisting: NgtAxesHelper,
         },
         NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(NgtAxesHelper, (parent) => parent.helper),
     ],
 })
 export class NgtAxesHelper extends NgtHelper<THREE.AxesHelper> {

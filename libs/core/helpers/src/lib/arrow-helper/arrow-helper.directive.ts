@@ -1,5 +1,6 @@
 // GENERATED
 import {
+    createParentObjectProvider,
     NgtHelper,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NgtObjectControllerModule,
@@ -16,6 +17,7 @@ import * as THREE from 'three';
             useExisting: NgtArrowHelper,
         },
         NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(NgtArrowHelper, (parent) => parent.helper),
     ],
 })
 export class NgtArrowHelper extends NgtHelper<THREE.ArrowHelper> {

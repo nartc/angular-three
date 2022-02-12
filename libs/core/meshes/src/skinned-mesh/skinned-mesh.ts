@@ -1,4 +1,5 @@
 import {
+    createParentObjectProvider,
     NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
@@ -32,6 +33,7 @@ import * as THREE from 'three';
         { provide: NgtCommonMesh, useExisting: NgtSkinnedMesh },
         NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
         { provide: NGT_OBJECT_TYPE, useValue: THREE.SkinnedMesh },
+        createParentObjectProvider(NgtSkinnedMesh, (mesh) => mesh.mesh),
     ],
 })
 export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
@@ -104,7 +106,10 @@ export class NgtSkeleton extends NgtStore implements OnInit {
 @Directive({
     selector: 'ngt-bone',
     exportAs: 'ngtBone',
-    providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
+    providers: [
+        NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(NgtBone, (bone) => bone.bone!),
+    ],
 })
 export class NgtBone implements OnInit {
     @Output() ready = new EventEmitter<THREE.Bone>();

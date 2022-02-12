@@ -1,5 +1,6 @@
 // GENERATED
 import {
+    createParentObjectProvider,
     NgtHelper,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NgtObjectControllerModule,
@@ -16,6 +17,10 @@ import * as THREE from 'three';
             useExisting: NgtPolarGridHelper,
         },
         NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(
+            NgtPolarGridHelper,
+            (parent) => parent.helper
+        ),
     ],
 })
 export class NgtPolarGridHelper extends NgtHelper<THREE.PolarGridHelper> {

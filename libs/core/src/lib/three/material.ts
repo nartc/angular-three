@@ -4,11 +4,12 @@ import {
     Input,
     NgZone,
     OnInit,
+    Optional,
     Output,
 } from '@angular/core';
 import { tap } from 'rxjs';
 import * as THREE from 'three';
-import { NGT_OBJECT } from '../di/object';
+import { NGT_PARENT_OBJECT } from '../di/parent-object';
 import { NgtCanvasStore } from '../stores/canvas';
 import { NgtStore, tapEffect } from '../stores/store';
 import type {
@@ -48,7 +49,9 @@ export abstract class NgtMaterial<
     constructor(
         protected zone: NgZone,
         protected canvasStore: NgtCanvasStore,
-        @Inject(NGT_OBJECT) protected parentObjectFactory: AnyFunction
+        @Optional()
+        @Inject(NGT_PARENT_OBJECT)
+        protected parentObjectFactory: AnyFunction
     ) {
         super();
     }
@@ -80,7 +83,7 @@ export abstract class NgtMaterial<
     private readonly init = this.effect<void>(
         tapEffect(() => {
             const material = new this.materialType();
-            const parentObject = this.parentObjectFactory() as THREE.Mesh;
+            const parentObject = this.parentObjectFactory?.() as THREE.Mesh;
             if (parentObject) {
                 if (Array.isArray(parentObject.material)) {
                     (parentObject.material as THREE.Material[]).push(material);

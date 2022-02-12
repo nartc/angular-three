@@ -1,5 +1,6 @@
 // GENERATED
 import {
+    createParentObjectProvider,
     NgtCommonCamera,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NgtObjectControllerModule,
@@ -16,6 +17,7 @@ import * as THREE from 'three';
             useExisting: NgtCamera,
         },
         NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(NgtCamera, (parent) => parent.camera),
     ],
 })
 export class NgtCamera extends NgtCommonCamera<THREE.Camera> {

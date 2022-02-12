@@ -1,9 +1,12 @@
 import {
+    AnyFunction,
     createExtenderProvider,
+    createHostParentObjectProvider,
     createParentObjectProvider,
     isOrthographicCamera,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NgtAnimationFrameStore,
     NgtCanvasStore,
     NgtExtender,
@@ -24,6 +27,8 @@ import {
     NgModule,
     NgZone,
     OnInit,
+    Optional,
+    SkipSelf,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as THREE from 'three';
@@ -340,6 +345,7 @@ export class NgtSobaBoundsContext {
         createParentObjectProvider(NgtSobaBounds, (bounds) =>
             bounds.store.get((s) => s.group)
         ),
+        createHostParentObjectProvider(NgtSobaBounds),
     ],
 })
 export class NgtSobaBounds extends NgtExtender<THREE.Group> implements OnInit {
@@ -371,7 +377,11 @@ export class NgtSobaBounds extends NgtExtender<THREE.Group> implements OnInit {
         private loop: NgtLoop,
         private animationFrameStore: NgtAnimationFrameStore,
         private context: NgtSobaBoundsContext,
-        private zone: NgZone
+        private zone: NgZone,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_PARENT_OBJECT)
+        public parentObjectFn: AnyFunction
     ) {
         super();
         this.store.set({

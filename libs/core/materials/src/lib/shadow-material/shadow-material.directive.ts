@@ -1,5 +1,5 @@
 // GENERATED
-import { NGT_OBJECT_PROVIDER, NgtMaterial } from '@angular-three/core';
+import { NgtMaterial } from '@angular-three/core';
 import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
 
@@ -11,7 +11,6 @@ import * as THREE from 'three';
             provide: NgtMaterial,
             useExisting: NgtShadowMaterial,
         },
-        NGT_OBJECT_PROVIDER,
     ],
 })
 export class NgtShadowMaterial extends NgtMaterial<

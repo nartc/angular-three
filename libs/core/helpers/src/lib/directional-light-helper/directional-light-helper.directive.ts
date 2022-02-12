@@ -1,9 +1,5 @@
 // GENERATED
-import {
-    NGT_OBJECT_PROVIDER,
-    NgtObjectHelper,
-    Tail,
-} from '@angular-three/core';
+import { NgtObjectHelper, Tail } from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -15,7 +11,6 @@ import * as THREE from 'three';
             provide: NgtObjectHelper,
             useExisting: NgtDirectionalLightHelper,
         },
-        NGT_OBJECT_PROVIDER,
     ],
 })
 export class NgtDirectionalLightHelper extends NgtObjectHelper<THREE.DirectionalLightHelper> {

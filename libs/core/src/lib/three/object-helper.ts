@@ -1,6 +1,6 @@
 import { Directive, Inject, NgZone, OnInit } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_OBJECT } from '../di/object';
+import { NGT_PARENT_OBJECT } from '../di/parent-object';
 import { NgtAnimationFrameStore } from '../stores/animation-frame';
 import { NgtCanvasStore } from '../stores/canvas';
 import { NgtStore, tapEffect } from '../stores/store';
@@ -20,7 +20,7 @@ export abstract class NgtObjectHelper<TObjectHelper extends THREE.Object3D>
     private _object?: THREE.Object3D;
 
     constructor(
-        @Inject(NGT_OBJECT)
+        @Inject(NGT_PARENT_OBJECT)
         protected objectFn: AnyFunction,
         protected canvasStore: NgtCanvasStore,
         protected animationFrameStore: NgtAnimationFrameStore,

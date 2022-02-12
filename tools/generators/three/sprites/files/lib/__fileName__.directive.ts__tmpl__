@@ -1,5 +1,5 @@
 // GENERATED
-import { NgtCommonSprite, NGT_OBJECT_CONTROLLER_PROVIDER, NgtObjectControllerModule } from '@angular-three/core';
+import { createParentObjectProvider, NgtCommonSprite, NGT_OBJECT_CONTROLLER_PROVIDER, NgtObjectControllerModule } from '@angular-three/core';
 import { NgModule, Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -11,7 +11,8 @@ import * as THREE from 'three';
       provide: NgtCommonSprite,
       useExisting: Ngt<%= name %>,
     },
-    NGT_OBJECT_CONTROLLER_PROVIDER
+    NGT_OBJECT_CONTROLLER_PROVIDER,
+    createParentObjectProvider(Ngt<%= name %>, parent => parent.sprite)
   ],
 })
 export class Ngt<%= name %> extends NgtCommonSprite<THREE.<%= name %>> {

@@ -1,4 +1,5 @@
 import {
+    createParentObjectProvider,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NGT_OBJECT_WATCHED_CONTROLLER,
     NgtObjectController,
@@ -17,7 +18,10 @@ import * as THREE from 'three';
 @Directive({
     selector: 'ngt-lod',
     exportAs: 'ngtLod',
-    providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
+    providers: [
+        NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(NgtLod, (lod) => lod.lod),
+    ],
 })
 export class NgtLod implements OnInit {
     @Output() ready = new EventEmitter<THREE.LOD>();

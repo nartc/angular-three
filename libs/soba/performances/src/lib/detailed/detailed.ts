@@ -1,8 +1,11 @@
 import {
+    AnyFunction,
     createExtenderProvider,
+    createHostParentObjectProvider,
     createParentObjectProvider,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NgtCanvasStore,
     NgtExtender,
     NgtObjectController,
@@ -22,7 +25,9 @@ import {
     Input,
     NgModule,
     NgZone,
+    Optional,
     QueryList,
+    SkipSelf,
 } from '@angular/core';
 import { merge, startWith, tap } from 'rxjs';
 import * as THREE from 'three';
@@ -85,6 +90,7 @@ interface NgtSobaDetailedState {
             NgtSobaDetailed,
             (detailed) => detailed.object
         ),
+        createHostParentObjectProvider(NgtSobaDetailed),
     ],
 })
 export class NgtSobaDetailed
@@ -106,7 +112,11 @@ export class NgtSobaDetailed
         public objectInputsController: NgtObjectInputsController,
         private store: NgtStore<NgtSobaDetailedState>,
         private canvasStore: NgtCanvasStore,
-        private zone: NgZone
+        private zone: NgZone,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_PARENT_OBJECT)
+        public parentObjectFn: AnyFunction
     ) {
         super();
         store.set({ distances: [] });

@@ -1,24 +1,24 @@
-import { NGT_OBJECT_PROVIDER, NgtMaterial } from '@angular-three/core';
+import { NgtMaterial } from '@angular-three/core';
 import { Directive, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 export class SpotLightMaterial extends THREE.ShaderMaterial {
-  constructor() {
-    super({
-      uniforms: {
-        depth: { value: null },
-        opacity: { value: 1 },
-        attenuation: { value: 2.5 },
-        anglePower: { value: 12 },
-        spotPosition: { value: new THREE.Vector3(0, 0, 0) },
-        lightColor: { value: new THREE.Color('white') },
-        cameraNear: { value: 0 },
-        cameraFar: { value: 1 },
-        resolution: { value: new THREE.Vector2(0, 0) },
-      },
-      transparent: true,
-      depthWrite: false,
-      vertexShader: /* glsl */ `
+    constructor() {
+        super({
+            uniforms: {
+                depth: { value: null },
+                opacity: { value: 1 },
+                attenuation: { value: 2.5 },
+                anglePower: { value: 12 },
+                spotPosition: { value: new THREE.Vector3(0, 0, 0) },
+                lightColor: { value: new THREE.Color('white') },
+                cameraNear: { value: 0 },
+                cameraFar: { value: 1 },
+                resolution: { value: new THREE.Vector2(0, 0) },
+            },
+            transparent: true,
+            depthWrite: false,
+            vertexShader: /* glsl */ `
       varying vec3 vNormal;
       varying vec3 vWorldPosition;
       varying float vViewZ;
@@ -40,7 +40,7 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
         gl_Position	= projectionMatrix * viewPosition;
 
       }`,
-      fragmentShader: /* glsl */ `
+            fragmentShader: /* glsl */ `
       #include <packing>
 
       varying vec3 vNormal;
@@ -80,31 +80,30 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
         }
         gl_FragColor = vec4(lightColor, intensity * opacity);
       }`,
-    });
-  }
+        });
+    }
 }
 
 @Directive({
-  selector: 'ngt-soba-spot-light-material',
-  exportAs: 'ngtSobaSpotLightMaterial',
-  providers: [
-    { provide: NgtMaterial, useExisting: NgtSobaSpotLightMaterial },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-soba-spot-light-material',
+    exportAs: 'ngtSobaSpotLightMaterial',
+    providers: [
+        { provide: NgtMaterial, useExisting: NgtSobaSpotLightMaterial },
+    ],
 })
 export class NgtSobaSpotLightMaterial extends NgtMaterial<
-  THREE.ShaderMaterialParameters,
-  SpotLightMaterial
+    THREE.ShaderMaterialParameters,
+    SpotLightMaterial
 > {
-  static ngAcceptInputType_parameters:
-    | THREE.ShaderMaterialParameters
-    | undefined;
+    static ngAcceptInputType_parameters:
+        | THREE.ShaderMaterialParameters
+        | undefined;
 
-  materialType = SpotLightMaterial;
+    materialType = SpotLightMaterial;
 }
 
 @NgModule({
-  declarations: [NgtSobaSpotLightMaterial],
-  exports: [NgtSobaSpotLightMaterial],
+    declarations: [NgtSobaSpotLightMaterial],
+    exports: [NgtSobaSpotLightMaterial],
 })
 export class NgtSobaSpotLightMaterialModule {}

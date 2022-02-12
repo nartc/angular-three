@@ -1,5 +1,6 @@
 // GENERATED
 import {
+    createParentObjectProvider,
     NgtCommonLine,
     NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
     NGT_OBJECT_TYPE,
@@ -21,6 +22,7 @@ import * as THREE from 'three';
             provide: NGT_OBJECT_TYPE,
             useValue: THREE.LineSegments,
         },
+        createParentObjectProvider(NgtLineSegments, (parent) => parent.line),
     ],
 })
 export class NgtLineSegments extends NgtCommonLine<THREE.LineSegments> {}

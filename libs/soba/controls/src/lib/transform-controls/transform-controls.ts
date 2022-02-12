@@ -1,7 +1,10 @@
 import {
+    AnyFunction,
+    createHostParentObjectProvider,
     createParentObjectProvider,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NgtCanvasStore,
     NgtLoop,
     NgtObjectInputsController,
@@ -21,7 +24,9 @@ import {
     NgModule,
     NgZone,
     OnInit,
+    Optional,
     Output,
+    SkipSelf,
 } from '@angular/core';
 import { merge, tap } from 'rxjs';
 import * as THREE from 'three';
@@ -42,7 +47,11 @@ interface NgtSobaTransformControlsState {
 @Component({
     selector: 'ngt-soba-transform-controls',
     template: `
-        <ngt-primitive *ngIf="controls" [object]="controls"></ngt-primitive>
+        <ngt-primitive
+            *ngIf="controls"
+            appendMode="root"
+            [object]="controls"
+        ></ngt-primitive>
         <ngt-group
             *ngIf="!object"
             (ready)="set({ group: $event })"
@@ -87,9 +96,12 @@ interface NgtSobaTransformControlsState {
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-        createParentObjectProvider(NgtSobaTransformControls, (controls) =>
-            controls.get((s) => s.group)
+        createParentObjectProvider(
+            NgtSobaTransformControls,
+            (controls) =>
+                controls.get((s) => s.object) || controls.get((s) => s.group)
         ),
+        createHostParentObjectProvider(NgtSobaTransformControls),
     ],
 })
 export class NgtSobaTransformControls
@@ -147,7 +159,11 @@ export class NgtSobaTransformControls
         private canvasStore: NgtCanvasStore,
         private loop: NgtLoop,
         @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-        public objectInputsController: NgtObjectInputsController
+        public objectInputsController: NgtObjectInputsController,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_PARENT_OBJECT)
+        public parentObjectFn: AnyFunction
     ) {
         super();
         this.set({ enabled: true, camera: null });

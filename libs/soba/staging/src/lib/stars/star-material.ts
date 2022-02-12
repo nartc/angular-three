@@ -1,12 +1,12 @@
-import { NGT_OBJECT_PROVIDER, NgtMaterial } from '@angular-three/core';
+import { NgtMaterial } from '@angular-three/core';
 import { Directive, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 export class StarFieldMaterial extends THREE.ShaderMaterial {
-  constructor() {
-    super({
-      uniforms: { time: { value: 0.0 }, fade: { value: 1.0 } },
-      vertexShader: /* glsl */ `
+    constructor() {
+        super({
+            uniforms: { time: { value: 0.0 }, fade: { value: 1.0 } },
+            vertexShader: /* glsl */ `
       uniform float time;
       attribute float size;
       varying vec3 vColor;
@@ -16,7 +16,7 @@ export class StarFieldMaterial extends THREE.ShaderMaterial {
         gl_PointSize = size * (30.0 / -mvPosition.z) * (3.0 + sin(mvPosition.x + 2.0 * time + 100.0));
         gl_Position = projectionMatrix * mvPosition;
       }`,
-      fragmentShader: /* glsl */ `
+            fragmentShader: /* glsl */ `
       uniform sampler2D pointTexture;
       uniform float fade;
       varying vec3 vColor;
@@ -28,31 +28,30 @@ export class StarFieldMaterial extends THREE.ShaderMaterial {
         }
         gl_FragColor = vec4(vColor, opacity);
       }`,
-    });
-  }
+        });
+    }
 }
 
 @Directive({
-  selector: 'ngt-soba-star-field-material',
-  exportAs: 'ngtSobaStarFieldMaterial',
-  providers: [
-    { provide: NgtMaterial, useExisting: NgtSobaStarFieldMaterial },
-    NGT_OBJECT_PROVIDER,
-  ],
+    selector: 'ngt-soba-star-field-material',
+    exportAs: 'ngtSobaStarFieldMaterial',
+    providers: [
+        { provide: NgtMaterial, useExisting: NgtSobaStarFieldMaterial },
+    ],
 })
 export class NgtSobaStarFieldMaterial extends NgtMaterial<
-  THREE.ShaderMaterialParameters,
-  StarFieldMaterial
+    THREE.ShaderMaterialParameters,
+    StarFieldMaterial
 > {
-  static ngAcceptInputType_parameters:
-    | THREE.ShaderMaterialParameters
-    | undefined;
+    static ngAcceptInputType_parameters:
+        | THREE.ShaderMaterialParameters
+        | undefined;
 
-  materialType = StarFieldMaterial;
+    materialType = StarFieldMaterial;
 }
 
 @NgModule({
-  declarations: [NgtSobaStarFieldMaterial],
-  exports: [NgtSobaStarFieldMaterial],
+    declarations: [NgtSobaStarFieldMaterial],
+    exports: [NgtSobaStarFieldMaterial],
 })
 export class NgtSobaStarFieldMaterialModule {}

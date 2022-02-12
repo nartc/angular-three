@@ -1,8 +1,11 @@
 import {
+    AnyFunction,
     createExtenderProvider,
+    createHostParentObjectProvider,
     createParentObjectProvider,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NgtExtender,
     NgtObjectInputsController,
     NgtObjectInputsControllerModule,
@@ -17,6 +20,8 @@ import {
     Inject,
     Input,
     NgModule,
+    Optional,
+    SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
 
@@ -85,6 +90,7 @@ export interface NgtSobaFloatState {
         createParentObjectProvider(NgtSobaFloat, (float) =>
             float.store.get((s) => s.innerGroup)
         ),
+        createHostParentObjectProvider(NgtSobaFloat),
     ],
 })
 export class NgtSobaFloat extends NgtExtender<THREE.Group> {
@@ -105,7 +111,11 @@ export class NgtSobaFloat extends NgtExtender<THREE.Group> {
     constructor(
         @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
         public objectInputsController: NgtObjectInputsController,
-        public store: NgtStore<NgtSobaFloatState>
+        public store: NgtStore<NgtSobaFloatState>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_PARENT_OBJECT)
+        public parentObjectFn: AnyFunction
     ) {
         super();
         store.set({

@@ -131,7 +131,7 @@ export class NgtCannonBodyController extends Controller implements OnInit {
         private objectController: NgtObjectController,
         @Inject(NGT_CANNON_BODY_ARGS_FN) private argsFn: ArgFn<unknown>,
         @Optional() @Inject(NGT_CANNON_BODY_TYPE) private type: BodyShapeType,
-        private physicsStore: NgtPhysicsStore,
+        @Optional() private physicsStore: NgtPhysicsStore,
         @Optional()
         private cannonConstraintController: NgtCannonConstraintController,
         @Optional() private cannonDebug: NgtCannonDebug

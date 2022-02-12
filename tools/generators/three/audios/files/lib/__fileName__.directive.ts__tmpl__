@@ -1,5 +1,6 @@
 // GENERATED
 import {
+  createParentObjectProvider,
   NGT_AUDIO_CONTROLLER_PROVIDER,
   NGT_OBJECT_CONTROLLER_PROVIDER,
   NgtAudioControllerModule,
@@ -18,7 +19,8 @@ import * as THREE from 'three';
       useExisting: Ngt<%= name %>,
     },
     NGT_AUDIO_CONTROLLER_PROVIDER,
-    NGT_OBJECT_CONTROLLER_PROVIDER
+    NGT_OBJECT_CONTROLLER_PROVIDER,
+    createParentObjectProvider(Ngt<%= name %>, parent => parent.audio)
   ],
 })
 export class Ngt<%= name %> extends NgtCommonAudio<<%= audioNode %>, THREE.<%= name %>> {

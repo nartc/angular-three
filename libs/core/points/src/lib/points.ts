@@ -1,4 +1,5 @@
 import {
+    createParentObjectProvider,
     NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
     NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER,
     NGT_OBJECT_TYPE,
@@ -20,6 +21,7 @@ import * as THREE from 'three';
     providers: [
         NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
         { provide: NGT_OBJECT_TYPE, useValue: THREE.Points },
+        createParentObjectProvider(NgtPoints, (points) => points.points),
     ],
 })
 export class NgtPoints {

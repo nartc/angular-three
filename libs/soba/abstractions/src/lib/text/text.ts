@@ -1,9 +1,12 @@
 import {
+    AnyFunction,
     applyProps,
     createExtenderProvider,
+    createHostParentObjectProvider,
     createParentObjectProvider,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NGT_WITH_MATERIAL_CONTROLLER_PROVIDER,
     NGT_WITH_MATERIAL_WATCHED_CONTROLLER,
     NgtCanvasStore,
@@ -30,7 +33,9 @@ import {
     NgModule,
     NgZone,
     OnInit,
+    Optional,
     Output,
+    SkipSelf,
 } from '@angular/core';
 // @ts-ignore
 import { Text as TextMeshImpl } from 'troika-three-text';
@@ -119,6 +124,7 @@ interface NgtSobaTextState {
         NGT_WITH_MATERIAL_CONTROLLER_PROVIDER,
         createExtenderProvider(NgtSobaText),
         createParentObjectProvider(NgtSobaText, (text) => text.object),
+        createHostParentObjectProvider(NgtSobaText),
     ],
 })
 export class NgtSobaText extends NgtExtender<TextMeshImpl> implements OnInit {
@@ -247,7 +253,11 @@ export class NgtSobaText extends NgtExtender<TextMeshImpl> implements OnInit {
         private loop: NgtLoop,
         private store: NgtStore<NgtSobaTextState>,
         private canvasStore: NgtCanvasStore,
-        private zone: NgZone
+        private zone: NgZone,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_PARENT_OBJECT)
+        public parentObjectFn: AnyFunction
     ) {
         super();
         store.set({

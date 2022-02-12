@@ -1,7 +1,10 @@
 import {
+    AnyFunction,
+    createHostParentObjectProvider,
     createParentObjectProvider,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NgtCanvasStore,
     NgtObjectInputsController,
     NgtObjectInputsControllerModule,
@@ -25,7 +28,9 @@ import {
     Input,
     NgModule,
     NgZone,
+    Optional,
     QueryList,
+    SkipSelf,
 } from '@angular/core';
 import { Observable, startWith, tap } from 'rxjs';
 import * as THREE from 'three';
@@ -82,6 +87,7 @@ interface NgtSobaStageState {
     selector: 'ngt-soba-stage',
     template: `
         <ngt-group
+            [useHostParent]="true"
             [name]="objectInputsController.name"
             [position]="objectInputsController.position"
             [rotation]="objectInputsController.rotation"
@@ -163,6 +169,7 @@ interface NgtSobaStageState {
     providers: [
         NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
         createParentObjectProvider(NgtSobaStage, (stage) => stage.innerGroup),
+        createHostParentObjectProvider(NgtSobaStage),
     ],
 })
 export class NgtSobaStage
@@ -270,7 +277,11 @@ export class NgtSobaStage
         public objectInputsController: NgtObjectInputsController,
         private canvasStore: NgtCanvasStore,
         private zone: NgZone,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_PARENT_OBJECT)
+        public parentObjectFn: AnyFunction
     ) {
         super();
         this.set({

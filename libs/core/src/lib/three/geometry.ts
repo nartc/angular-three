@@ -4,10 +4,11 @@ import {
     NgZone,
     OnDestroy,
     OnInit,
+    Optional,
     Output,
 } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_OBJECT } from '../di/object';
+import { NGT_PARENT_OBJECT } from '../di/parent-object';
 import { NgtCanvasStore } from '../stores/canvas';
 import { NgtStore, tapEffect } from '../stores/store';
 import type { AnyConstructor, AnyFunction } from '../types';
@@ -31,7 +32,9 @@ export abstract class NgtGeometry<
     constructor(
         protected zone: NgZone,
         protected canvasStore: NgtCanvasStore,
-        @Inject(NGT_OBJECT) protected parentObjectFactory: AnyFunction
+        @Optional()
+        @Inject(NGT_PARENT_OBJECT)
+        protected parentObjectFactory: AnyFunction
     ) {
         super();
         this.set({ geometryArgs: [] });
@@ -56,7 +59,7 @@ export abstract class NgtGeometry<
     >(
         tapEffect((geometryArgs) => {
             const geometry = new this.geometryType(...geometryArgs);
-            const parentObject = this.parentObjectFactory() as THREE.Mesh;
+            const parentObject = this.parentObjectFactory?.() as THREE.Mesh;
             if (parentObject) {
                 parentObject.geometry = geometry;
             }

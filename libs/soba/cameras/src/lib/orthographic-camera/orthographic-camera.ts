@@ -1,7 +1,11 @@
 import {
+    AnyFunction,
     createExtenderProvider,
+    createHostParentObjectProvider,
+    createParentObjectProvider,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NgtCamera,
     NgtCanvasStore,
     NgtExtender,
@@ -21,7 +25,9 @@ import {
     Input,
     NgModule,
     NgZone,
+    Optional,
     SimpleChanges,
+    SkipSelf,
 } from '@angular/core';
 import { startWith, tap } from 'rxjs';
 import * as THREE from 'three';
@@ -86,6 +92,11 @@ export interface NgtSobaOrthographicCameraState {
         NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
         NgtStore,
         createExtenderProvider(NgtSobaOrthographicCamera),
+        createParentObjectProvider(
+            NgtSobaOrthographicCamera,
+            (camera) => camera.object
+        ),
+        createHostParentObjectProvider(NgtSobaOrthographicCamera),
     ],
 })
 export class NgtSobaOrthographicCamera extends NgtExtender<THREE.OrthographicCamera> {
@@ -144,7 +155,11 @@ export class NgtSobaOrthographicCamera extends NgtExtender<THREE.OrthographicCam
         private canvasStore: NgtCanvasStore,
         @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
         public objectInputsController: NgtObjectInputsController,
-        private store: NgtStore<NgtSobaOrthographicCameraState>
+        private store: NgtStore<NgtSobaOrthographicCameraState>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_PARENT_OBJECT)
+        public parentObjectFn: AnyFunction
     ) {
         super();
         this.store.set({ makeDefault: false, manual: false });

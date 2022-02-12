@@ -1,5 +1,6 @@
 // GENERATED
 import {
+    createParentObjectProvider,
     NgtLight,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NgtObjectControllerModule,
@@ -16,6 +17,10 @@ import * as THREE from 'three';
             useExisting: NgtAmbientLightProbe,
         },
         NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(
+            NgtAmbientLightProbe,
+            (parent) => parent.light
+        ),
     ],
 })
 export class NgtAmbientLightProbe extends NgtLight<THREE.AmbientLightProbe> {

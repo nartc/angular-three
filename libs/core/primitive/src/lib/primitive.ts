@@ -1,4 +1,5 @@
 import {
+    createParentObjectProvider,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NGT_OBJECT_WATCHED_CONTROLLER,
     NgtObjectController,
@@ -18,7 +19,13 @@ import * as THREE from 'three';
 @Directive({
     selector: 'ngt-primitive[object]',
     exportAs: 'ngtPrimitive',
-    providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
+    providers: [
+        NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(
+            NgtPrimitive,
+            (primitive) => primitive.object
+        ),
+    ],
 })
 export class NgtPrimitive<TObject extends THREE.Object3D = THREE.Object3D>
     implements OnChanges

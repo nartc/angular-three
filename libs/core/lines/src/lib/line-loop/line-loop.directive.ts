@@ -1,5 +1,6 @@
 // GENERATED
 import {
+    createParentObjectProvider,
     NgtCommonLine,
     NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
     NGT_OBJECT_TYPE,
@@ -21,6 +22,7 @@ import * as THREE from 'three';
             provide: NGT_OBJECT_TYPE,
             useValue: THREE.LineLoop,
         },
+        createParentObjectProvider(NgtLineLoop, (parent) => parent.line),
     ],
 })
 export class NgtLineLoop extends NgtCommonLine<THREE.LineLoop> {}

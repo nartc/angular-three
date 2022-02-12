@@ -1,7 +1,11 @@
 import {
+    AnyFunction,
     createExtenderProvider,
+    createHostParentObjectProvider,
+    createParentObjectProvider,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NgtCanvasStore,
     NgtExtender,
     NgtMathPipeModule,
@@ -21,6 +25,8 @@ import {
     Input,
     NgModule,
     NgZone,
+    Optional,
+    SkipSelf,
 } from '@angular/core';
 import { tap } from 'rxjs';
 import * as THREE from 'three';
@@ -91,6 +97,11 @@ const easeInExpo = (x: number) => (x === 0 ? 0 : Math.pow(2, 10 * x - 10));
         NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
         createExtenderProvider(NgtSobaBackdrop),
         NgtStore,
+        createParentObjectProvider(
+            NgtSobaBackdrop,
+            (backdrop) => backdrop.object
+        ),
+        createHostParentObjectProvider(NgtSobaBackdrop),
     ],
 })
 export class NgtSobaBackdrop extends NgtExtender<THREE.Mesh> {
@@ -119,7 +130,11 @@ export class NgtSobaBackdrop extends NgtExtender<THREE.Mesh> {
         public objectInputsController: NgtObjectInputsController,
         public store: NgtStore<NgtSobaBackdropState>,
         private zone: NgZone,
-        private canvasStore: NgtCanvasStore
+        private canvasStore: NgtCanvasStore,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_PARENT_OBJECT)
+        public parentObjectFn: AnyFunction
     ) {
         super();
         store.set({

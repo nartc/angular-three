@@ -1,4 +1,5 @@
 import {
+    createParentObjectProvider,
     NGT_OBJECT_CONTROLLER_PROVIDER,
     NGT_OBJECT_WATCHED_CONTROLLER,
     NgtObjectController,
@@ -17,7 +18,10 @@ import * as THREE from 'three';
 @Directive({
     selector: 'ngt-group',
     exportAs: 'ngtGroup',
-    providers: [NGT_OBJECT_CONTROLLER_PROVIDER],
+    providers: [
+        NGT_OBJECT_CONTROLLER_PROVIDER,
+        createParentObjectProvider(NgtGroup, (group) => group.group),
+    ],
 })
 export class NgtGroup implements OnInit {
     @Output() ready = new EventEmitter<THREE.Group>();
