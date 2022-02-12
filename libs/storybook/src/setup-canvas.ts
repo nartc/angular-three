@@ -54,3 +54,7 @@ export const setupCanvasModules = [
     NgtColorPipeModule,
     NgtSobaLoaderModule,
 ];
+
+export function turnAnimate(object: THREE.Object3D) {
+    object.rotation.y += 0.01;
+}
