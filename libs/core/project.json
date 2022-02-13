@@ -1,0 +1,84 @@
+{
+    "projectType": "library",
+    "root": "libs/core",
+    "sourceRoot": "libs/core/src",
+    "prefix": "ngt",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/angular:package",
+            "outputs": ["dist/libs/core"],
+            "options": {
+                "project": "libs/core/ng-package.json",
+                "updateBuildableProjectDepsInPackageJson": false
+            },
+            "configurations": {
+                "production": {
+                    "tsConfig": "libs/core/tsconfig.lib.prod.json"
+                },
+                "development": {
+                    "tsConfig": "libs/core/tsconfig.lib.json"
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/libs/core"],
+            "options": {
+                "jestConfig": "libs/core/jest.config.js",
+                "passWithNoTests": true
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": [
+                    "libs/core/src/**/*.ts",
+                    "libs/core/src/**/*.html",
+                    "libs/core/geometries/**/*.ts",
+                    "libs/core/geometries/**/*.html",
+                    "libs/core/materials/**/*.ts",
+                    "libs/core/materials/**/*.html",
+                    "libs/core/attributes/**/*.ts",
+                    "libs/core/attributes/**/*.html",
+                    "libs/core/curves/**/*.ts",
+                    "libs/core/curves/**/*.html",
+                    "libs/core/textures/**/*.ts",
+                    "libs/core/textures/**/*.html",
+                    "libs/core/audios/**/*.ts",
+                    "libs/core/audios/**/*.html",
+                    "libs/core/cameras/**/*.ts",
+                    "libs/core/cameras/**/*.html",
+                    "libs/core/helpers/**/*.ts",
+                    "libs/core/helpers/**/*.html",
+                    "libs/core/lights/**/*.ts",
+                    "libs/core/lights/**/*.html",
+                    "libs/core/lines/**/*.ts",
+                    "libs/core/lines/**/*.html",
+                    "libs/core/sprites/**/*.ts",
+                    "libs/core/sprites/**/*.html",
+                    "libs/core/stats/**/*.ts",
+                    "libs/core/stats/**/*.html",
+                    "libs/core/primitive/**/*.ts",
+                    "libs/core/primitive/**/*.html",
+                    "libs/core/lod/**/*.ts",
+                    "libs/core/lod/**/*.html",
+                    "libs/core/points/**/*.ts",
+                    "libs/core/points/**/*.html",
+                    "libs/core/meshes/**/*.ts",
+                    "libs/core/meshes/**/*.html",
+                    "libs/core/group/**/*.ts",
+                    "libs/core/group/**/*.html"
+                ]
+            }
+        },
+        "publish": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "npm publish",
+                "cwd": "dist/libs/core"
+            }
+        }
+    },
+    "tags": ["scope:core"]
+}

@@ -1,0 +1,11 @@
+{
+    "name": "@angular-three/schematics",
+    "version": "3.2.0",
+    "publishConfig": {
+        "access": "public"
+    },
+    "main": "src/index.js",
+    "generators": "./generators.json",
+    "schematics": "./plugins/generators.json",
+    "executors": "./executors.json"
+}

@@ -1,0 +1,15 @@
+{
+    "name": "@angular-three/core",
+    "version": "3.2.0",
+    "publishConfig": {
+        "access": "public"
+    },
+    "peerDependencies": {
+        "@angular/common": "^13.2.0",
+        "@angular/core": "^13.2.0",
+        "three": "~0.137.0"
+    },
+    "dependencies": {
+        "tslib": "^2.3.0"
+    }
+}

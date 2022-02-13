@@ -1,12 +1,13 @@
 {
-  "version": 2,
-  "projects": {
-    "cannon": "packages/cannon",
-    "core": "packages/core",
-    "core-plugin-e2e": "packages/core-plugin-e2e",
-    "demo": "packages/demo",
-    "postprocessing": "packages/postprocessing",
-    "soba": "packages/soba",
-    "storybook": "packages/storybook"
-  }
+    "version": 2,
+    "projects": {
+        "cannon": "libs/cannon",
+        "core": "libs/core",
+        "demo": "apps/demo",
+        "postprocessing": "libs/postprocessing",
+        "schematics": "libs/schematics",
+        "schematics-e2e": "apps/schematics-e2e",
+        "soba": "libs/soba",
+        "storybook": "libs/storybook"
+    }
 }

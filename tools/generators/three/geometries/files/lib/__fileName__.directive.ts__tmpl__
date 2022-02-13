@@ -1,5 +1,5 @@
 // GENERATED
-import { NGT_OBJECT_3D_PROVIDER, NgtGeometry } from '@angular-three/core';
+import { NgtGeometry } from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -10,8 +10,7 @@ import * as THREE from 'three';
     {
       provide: NgtGeometry,
       useExisting: Ngt<%= name %>,
-    },
-    NGT_OBJECT_3D_PROVIDER
+    }
   ],
 })
 export class Ngt<%= name %> extends NgtGeometry<THREE.<%= name %>> {

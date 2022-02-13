@@ -1,66 +1,73 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2017", "dom"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@angular-three/cannon": ["packages/cannon/src/index.ts"],
-      "@angular-three/cannon/bodies": ["packages/cannon/bodies/src/index.ts"],
-      "@angular-three/cannon/constraints": [
-        "packages/cannon/constraints/src/index.ts"
-      ],
-      "@angular-three/core": ["packages/core/src/index.ts"],
-      "@angular-three/core/attributes": [
-        "packages/core/attributes/src/index.ts"
-      ],
-      "@angular-three/core/audios": ["packages/core/audios/src/index.ts"],
-      "@angular-three/core/cameras": ["packages/core/cameras/src/index.ts"],
-      "@angular-three/core/curves": ["packages/core/curves/src/index.ts"],
-      "@angular-three/core/geometries": [
-        "packages/core/geometries/src/index.ts"
-      ],
-      "@angular-three/core/group": ["packages/core/group/src/index.ts"],
-      "@angular-three/core/helpers": ["packages/core/helpers/src/index.ts"],
-      "@angular-three/core/lights": ["packages/core/lights/src/index.ts"],
-      "@angular-three/core/lines": ["packages/core/lines/src/index.ts"],
-      "@angular-three/core/lod": ["packages/core/lod/src/index.ts"],
-      "@angular-three/core/materials": ["packages/core/materials/src/index.ts"],
-      "@angular-three/core/meshes": ["packages/core/meshes/src/index.ts"],
-      "@angular-three/core/points": ["packages/core/points/src/index.ts"],
-      "@angular-three/core/primitive": ["packages/core/primitive/src/index.ts"],
-      "@angular-three/core/sprites": ["packages/core/sprites/src/index.ts"],
-      "@angular-three/core/stats": ["packages/core/stats/src/index.ts"],
-      "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
-      "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
-      "@angular-three/postprocessing/effects": [
-        "packages/postprocessing/effects/src/index.ts"
-      ],
-      "@angular-three/soba": ["packages/soba/src/index.ts"],
-      "@angular-three/soba/abstractions": [
-        "packages/soba/abstractions/src/index.ts"
-      ],
-      "@angular-three/soba/cameras": ["packages/soba/cameras/src/index.ts"],
-      "@angular-three/soba/controls": ["packages/soba/controls/src/index.ts"],
-      "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"],
-      "@angular-three/soba/misc": ["packages/soba/misc/src/index.ts"],
-      "@angular-three/soba/performances": [
-        "packages/soba/performances/src/index.ts"
-      ],
-      "@angular-three/soba/shapes": ["packages/soba/shapes/src/index.ts"],
-      "@angular-three/soba/staging": ["packages/soba/staging/src/index.ts"],
-      "@angular-three/storybook": ["packages/storybook/src/index.ts"]
-    }
-  },
-  "exclude": ["node_modules", "tmp"]
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "es2015",
+        "module": "esnext",
+        "lib": ["es2017", "dom"],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@angular-three/cannon": ["libs/cannon/src/index.ts"],
+            "@angular-three/cannon/bodies": ["libs/cannon/bodies/src/index.ts"],
+            "@angular-three/cannon/constraints": [
+                "libs/cannon/constraints/src/index.ts"
+            ],
+            "@angular-three/cannon/debug": ["libs/cannon/debug/src/index.ts"],
+            "@angular-three/core": ["libs/core/src/index.ts"],
+            "@angular-three/core/attributes": [
+                "libs/core/attributes/src/index.ts"
+            ],
+            "@angular-three/core/audios": ["libs/core/audios/src/index.ts"],
+            "@angular-three/core/cameras": ["libs/core/cameras/src/index.ts"],
+            "@angular-three/core/curves": ["libs/core/curves/src/index.ts"],
+            "@angular-three/core/geometries": [
+                "libs/core/geometries/src/index.ts"
+            ],
+            "@angular-three/core/group": ["libs/core/group/src/index.ts"],
+            "@angular-three/core/helpers": ["libs/core/helpers/src/index.ts"],
+            "@angular-three/core/lights": ["libs/core/lights/src/index.ts"],
+            "@angular-three/core/lines": ["libs/core/lines/src/index.ts"],
+            "@angular-three/core/lod": ["libs/core/lod/src/index.ts"],
+            "@angular-three/core/materials": [
+                "libs/core/materials/src/index.ts"
+            ],
+            "@angular-three/core/meshes": ["libs/core/meshes/src/index.ts"],
+            "@angular-three/core/points": ["libs/core/points/src/index.ts"],
+            "@angular-three/core/primitive": [
+                "libs/core/primitive/src/index.ts"
+            ],
+            "@angular-three/core/sprites": ["libs/core/sprites/src/index.ts"],
+            "@angular-three/core/stats": ["libs/core/stats/src/index.ts"],
+            "@angular-three/core/textures": ["libs/core/textures/src/index.ts"],
+            "@angular-three/postprocessing": [
+                "libs/postprocessing/src/index.ts"
+            ],
+            "@angular-three/postprocessing/effects": [
+                "libs/postprocessing/effects/src/index.ts"
+            ],
+            "@angular-three/schematics": ["libs/schematics/src/index.ts"],
+            "@angular-three/soba": ["libs/soba/src/index.ts"],
+            "@angular-three/soba/abstractions": [
+                "libs/soba/abstractions/src/index.ts"
+            ],
+            "@angular-three/soba/cameras": ["libs/soba/cameras/src/index.ts"],
+            "@angular-three/soba/controls": ["libs/soba/controls/src/index.ts"],
+            "@angular-three/soba/loaders": ["libs/soba/loaders/src/index.ts"],
+            "@angular-three/soba/misc": ["libs/soba/misc/src/index.ts"],
+            "@angular-three/soba/performances": [
+                "libs/soba/performances/src/index.ts"
+            ],
+            "@angular-three/soba/staging": ["libs/soba/staging/src/index.ts"],
+            "@angular-three/storybook": ["libs/storybook/src/index.ts"]
+        }
+    },
+    "exclude": ["node_modules", "tmp"]
 }

@@ -1,42 +1,49 @@
 {
-  "extends": "@nrwl/workspace/presets/npm.json",
-  "npmScope": "angular-three",
-  "affected": {
-    "defaultBase": "main"
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/angular"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e",
-          "build-storybook"
-        ],
-        "accessToken": "YTU0YTJiNjgtZWY1Ni00NWJjLTkyMWItNjA3ZDVkZDdjMTM3fHJlYWQtd3JpdGU="
-      }
-    }
-  },
-  "generators": {
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "none"
+    "npmScope": "angular-three",
+    "affected": {
+        "defaultBase": "main"
     },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest"
+    "cli": {
+        "defaultCollection": "@nrwl/angular"
     },
-    "@nrwl/angular:component": {
-      "style": "scss"
-    }
-  },
-  "defaultProject": "core"
+    "implicitDependencies": {
+        "package.json": {
+            "dependencies": "*",
+            "devDependencies": "*"
+        },
+        ".eslintrc.json": "*"
+    },
+    "tasksRunnerOptions": {
+        "default": {
+            "runner": "@nrwl/nx-cloud",
+            "options": {
+                "cacheableOperations": ["build", "lint", "test", "e2e"],
+                "accessToken": "ZGQ2MDIyODItMGIzZC00YzM3LWIyY2QtOTRhODI0MTdjMzJlfHJlYWQtd3JpdGU="
+            }
+        }
+    },
+    "targetDependencies": {
+        "build": [
+            {
+                "target": "build",
+                "projects": "dependencies"
+            }
+        ]
+    },
+    "generators": {
+        "@nrwl/angular:application": {
+            "style": "css",
+            "linter": "eslint",
+            "unitTestRunner": "jest",
+            "e2eTestRunner": "none"
+        },
+        "@nrwl/angular:library": {
+            "linter": "eslint",
+            "unitTestRunner": "jest"
+        },
+        "@nrwl/angular:component": {
+            "style": "css"
+        }
+    },
+    "defaultProject": "core"
 }

@@ -1,145 +1,140 @@
 // GENERATED
 import {
-  AnyConstructor,
-  Controller,
-  createControllerProviderFactory,
-  EnhancedRxState,
+    AnyConstructor,
+    Controller,
+    createControllerProviderFactory,
+    NgtCanvasStore,
+    NgtStore,
+    startWithUndefined,
 } from '@angular-three/core';
 import {
-  Directive,
-  Inject,
-  Injectable,
-  InjectionToken,
-  Input,
-  NgModule,
-  NgZone,
-  OnInit,
-  Optional,
+    Directive,
+    Inject,
+    InjectionToken,
+    Input,
+    NgModule,
+    NgZone,
+    OnInit,
+    Optional,
 } from '@angular/core';
-// @ts-ignore
 import { BlendFunction, Effect } from 'postprocessing';
+import { tap } from 'rxjs';
 import { NgtEffectComposerStore } from './effect-composer.store';
 
 export const NGT_EFFECT_TYPE = new InjectionToken<AnyConstructor<Effect>>(
-  'Effect Type'
+    'Effect Type'
 );
 
 export const NGT_EFFECT_DEFAULT_BLEND_FUNCTION =
-  new InjectionToken<BlendFunction>('Effect Blend Function', {
-    providedIn: 'root',
-    factory: () => BlendFunction.NORMAL,
-  });
-
-@Injectable()
-export class NgtEffectStore extends EnhancedRxState<
-  NgtEffectStoreState,
-  { init: void }
-> {
-  actions = this.create();
-
-  constructor(
-    @Optional()
-    @Inject(NGT_EFFECT_TYPE)
-    effectType: AnyConstructor<Effect>,
-    @Inject(NGT_EFFECT_DEFAULT_BLEND_FUNCTION)
-    defaultBlendFunction: BlendFunction,
-    @Optional() effectComposerStore: NgtEffectComposerStore
-  ) {
-    super();
-
-    if (!effectComposerStore) {
-      throw new Error(`Effects need to be inside of ngt-effect-composer`);
-    }
-
-    if (!effectType) {
-      throw new Error('NGT_EFFECT_TYPE is required');
-    }
-
-    this.set({
-      opacity: undefined,
-      blendFunction: defaultBlendFunction,
-      options: undefined,
-      effect: undefined,
+    new InjectionToken<BlendFunction>('Effect Blend Function', {
+        providedIn: 'root',
+        factory: () => BlendFunction.NORMAL,
     });
 
-    this.connect('effect', this.actions.init$, (state) => {
-      const effect = new effectType(state.options);
-      effectComposerStore.set((state) => ({
-        effects: [...state.effects, effect],
-      }));
-      return effect;
-    });
-
-    this.hold(this.actions.init$, () => {
-      const { blendFunction, opacity, effect } = this.get();
-      if (effect) {
-        effect.blendMode.blendFunction = blendFunction || defaultBlendFunction;
-        if (opacity !== undefined) {
-          effect.blendMode.opacity.value = opacity;
-        }
-      }
-    });
-  }
-}
-
-interface NgtEffectStoreState {
-  options: ConstructorParameters<AnyConstructor<Effect>>[0];
-  blendFunction: BlendFunction;
-  opacity?: number;
-  effect?: Effect;
+interface NgtEffectState {
+    options?: ConstructorParameters<AnyConstructor<Effect>>[0];
+    blendFunction: BlendFunction;
+    opacity?: number;
+    effect?: Effect;
 }
 
 @Directive({
-  selector: `<% for (const selector of selectors) { %>
-    ngt-<%= selector.selector %><% if (!selector.isLast) { %>,<% } %><% } %>
-  `,
-  exportAs: 'ngtEffectController',
-  providers: [NgtEffectStore],
+    selector: `<% for (const selector of selectors) { %>
+        ngt-<%= selector.selector %><% if (!selector.isLast) { %>,<% } %><% } %>
+    `,
+    exportAs: 'ngtEffectController',
+    providers: [NgtStore],
 })
 export class NgtEffectController extends Controller implements OnInit {
-  @Input() set opacity(v: number) {
-    this.effectStore.set({ opacity: v });
-  }
+    @Input() set opacity(opacity: number) {
+        this.store.set({ opacity });
+    }
 
-  @Input() set blendFunction(v: BlendFunction) {
-    this.effectStore.set({ blendFunction: v });
-  }
+    @Input() set blendFunction(blendFunction: BlendFunction) {
+        this.store.set({ blendFunction });
+    }
 
-  @Input() set options(v: ConstructorParameters<AnyConstructor<Effect>>[0]) {
-    this.effectStore.set({ options: v });
-  }
+    @Input() set options(
+        options: ConstructorParameters<AnyConstructor<Effect>>[0]
+    ) {
+        this.store.set({ options });
+    }
 
-  constructor(ngZone: NgZone, private effectStore: NgtEffectStore) {
-    super(ngZone);
-  }
+    constructor(
+        private zone: NgZone,
+        private store: NgtStore<NgtEffectState>,
+        private canvasStore: NgtCanvasStore,
+        @Optional()
+        @Inject(NGT_EFFECT_TYPE)
+        private effectType: AnyConstructor<Effect>,
+        @Inject(NGT_EFFECT_DEFAULT_BLEND_FUNCTION)
+        private defaultBlendFunction: BlendFunction,
+        @Optional() private effectComposerStore: NgtEffectComposerStore
+    ) {
+        super();
+        if (!effectComposerStore) {
+            throw new Error(`Effects need to be inside of ngt-effect-composer`);
+        }
 
-  get effect() {
-    return this.effectStore.get('effect') as Effect;
-  }
+        if (!effectType) {
+            throw new Error('NGT_EFFECT_TYPE is required');
+        }
 
-  ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      this.effectStore.actions.init();
-    });
-  }
+        this.store.set({
+            blendFunction: defaultBlendFunction,
+        });
+    }
 
-  get controller(): Controller | undefined {
-    return undefined;
-  }
+    get effect() {
+        return this.store.get((s) => s.effect) as Effect;
+    }
 
-  get props(): string[] {
-    return [];
-  }
+    private effectParams$ = this.store.select(
+        this.store.select((s) => s.effect),
+        this.store.select((s) => s.blendFunction),
+        this.store.select((s) => s.opacity).pipe(startWithUndefined()),
+        (effect, blendFunction, opacity) => ({ effect, blendFunction, opacity })
+    );
+
+    ngOnInit() {
+        this.zone.runOutsideAngular(() => {
+            this.store.onCanvasReady(this.canvasStore.ready$, () => {
+                const effect = new this.effectType(
+                    this.store.get((s) => s.options)
+                );
+                this.effectComposerStore.set((state) => ({
+                    effects: [...state.effects, effect],
+                }));
+                this.store.set({ effect });
+
+                this.configureEffect(this.effectParams$);
+            });
+        });
+    }
+
+    private readonly configureEffect = this.store.effect<
+        Pick<NgtEffectState, 'effect' | 'blendFunction' | 'opacity'>
+    >(
+        tap(({ effect, blendFunction, opacity }) => {
+            if (effect) {
+                effect.blendMode.blendFunction =
+                    blendFunction || this.defaultBlendFunction;
+                if (opacity !== undefined) {
+                    effect.blendMode.opacity.value = opacity;
+                }
+            }
+        })
+    );
 }
 
 @NgModule({
-  declarations: [NgtEffectController],
-  exports: [NgtEffectController],
+    declarations: [NgtEffectController],
+    exports: [NgtEffectController],
 })
 export class NgtEffectControllerModule {}
 
 export const [NGT_EFFECT_WATCH_CONTROLLER, NGT_EFFECT_CONTROLLER_PROVIDER] =
-  createControllerProviderFactory({
-    controller: NgtEffectController,
-    watchedControllerTokenName: 'Watched EffectController',
-  });
+    createControllerProviderFactory({
+        controller: NgtEffectController,
+        watchedControllerTokenName: 'Watched EffectController',
+    });

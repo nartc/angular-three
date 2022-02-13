@@ -1,0 +1,90 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title={'Core API/Inputs'} parameters={{ viewMode: 'docs' }} />
+
+# Inputs
+
+There are three main types of inputs for NGT objects:
+
+-   Constructor Arguments
+-   Parameters
+-   Properties
+
+They seem very similar to each other, but they function a little differently.
+
+## Constructor Arguments
+
+NGT exposes an input `[args]` on the objects that have constructor arguments, in the form of an array of arguments. For example:
+
+When we create a `BoxGeometry`, we can pass in constructor arguments to specify the width, height, and depth of the box.
+
+```ts
+new THREE.BoxGeometry(1, 1, 1);
+```
+
+The following in NGT is equivalent to the above:
+
+```html
+<ngt-box-geometry [args]="[1, 1, 1]"></ngt-box-geometry>
+```
+
+When consulting THREE.js documentation, if an entity accepts multiple constructor arguments, chances are NGT objects will accept the same arguments via `[args]`. Objects with `[args]` will be reconstructed from scratch when the `[args]` change.
+
+## Parameters
+
+NGT exposes an input `[parameters]` on the objects that accept a set of parameters via an options object, in the form of an object of key value pairs. For example:
+
+When we create a `MeshStandardMaterial`, we can pass in parameters to specify the color, roughness, and metalness of the material.
+
+```ts
+new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    roughness: 0.5,
+    metalness: 0.5,
+});
+```
+
+The following in NGT is equivalent to the above:
+
+```html
+<ngt-mesh-standard-material
+    [parameters]='{ color: "#ffffff", roughness: 0.5, metalness: 0.5 }'
+></ngt-mesh-standard-material>
+```
+
+When consulting THREE.js documentation, if an entity accepts an options object, chances are NGT objects will accept the same parameters via `[parameters]`. Objects with `[parameters]` will **NOT** be reconstructed from scratch when the `[parameters]` change.
+
+## Properties
+
+Most of the time, `[args]` and `[parameters]` are mutually exclusive. In addition to either one of those two, NGT objects might also accept extra properties. For example:
+
+A `PointLight` accepts constructor arguments, but they are also an `Object3D` which means they carry a `position` and such.
+
+```ts
+const pointLight = new THREE.PointLight(0xffffff, 1, 100); // set color, intensity, and distance of a PointLight
+pointLight.position.set(2, 2, 2); // set the position of the PointLight
+```
+
+The following in NGT is equivalent to the above:
+
+```html
+<ngt-ambient-light
+    [intensity]="1"
+    [position]="[1, 1, 1]"
+    color="white"
+    [args]="[undefined, undefined, 100]"
+></ngt-ambient-light>
+
+<!-- or -->
+
+<ngt-ambient-light
+    [position]="[1, 1, 1]"
+    [args]='["white", 1, 100]'
+></ngt-ambient-light>
+```
+
+## Shortcuts properties
+
+We have already seen from the above example that `[position]="[1, 1, 1]"` is equivalent to `position.set(1, 1, 1)`. `[position]` is one _shortcut_ property because NGT will call the `set` method automatically. There are many other shortcuts properties such `color`, `position`, `rotation`, `scale`, `quaternion`, and so on.
+
+One rule of thumb is that if a property has the `set`/`setScalar` method, it will be called with the value.

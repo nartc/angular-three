@@ -1,7 +1,9 @@
-import { Tree } from '@nrwl/devkit';
+import type { Tree } from '@nrwl/devkit';
 import attributesGenerator from './attributes/attributes';
 import audiosGenerator from './audios/audios';
 import camerasGenerator from './cameras/cameras';
+import cannonBodyControllerGenerator from './cannon-body-controller/cannon-body-controller';
+import cannonConstraintControllerGenerator from './cannon-constraint-controller/cannon-constraint-controller';
 import controllersGenerator from './controllers/controllers';
 import curvesGenerator from './curves/curves';
 import geometriesGenerator from './geometries/geometries';
@@ -10,69 +12,63 @@ import lightsGenerator from './lights/lights';
 import linesGenerator from './lines/lines';
 import materialsGenerator from './materials/materials';
 import physicBodiesGenerator from './physic-bodies/physic-bodies';
-import physicBodyControllerGenerator from './physic-body-controller/physic-body-controller';
-import physicConstraintControllerGenerator from './physic-constraint-controller/physic-constraint-controller';
 import physicConstraintsGenerator from './physic-constraints/physic-constraints';
 import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
 import simpleEffectsGenerator from './postprocessing/simple-effects';
-import sobaShapesGenerator from './soba-shapes/soba-shapes';
 import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
 
 export default async function (tree: Tree) {
-  await Promise.all([
-    materialsGenerator(tree),
-    geometriesGenerator(tree),
-    attributesGenerator(tree),
-    curvesGenerator(tree),
-    texturesGenerator(tree),
-  ]);
+    await Promise.all([
+        geometriesGenerator(tree),
+        materialsGenerator(tree),
+        attributesGenerator(tree),
+        curvesGenerator(tree),
+        texturesGenerator(tree),
+    ]);
 
-  const [
-    audioSelectors,
-    lightSelectors,
-    helperSelectors,
-    lineSelectors,
-    spriteSelectors,
-    cameraSelectors,
-    physicBodySelectors,
-    physicConstraintSelectors,
-    sobaShapeSelectors,
-    simpleEffectSelectors,
-  ] = await Promise.all([
-    audiosGenerator(tree),
-    lightsGenerator(tree),
-    helpersGenerator(tree),
-    linesGenerator(tree),
-    spritesGenerator(tree),
-    camerasGenerator(tree),
-    physicBodiesGenerator(tree),
-    physicConstraintsGenerator(tree),
-    sobaShapesGenerator(tree),
-    simpleEffectsGenerator(tree),
-  ]);
+    const [
+        audioSelectors,
+        cameraSelectors,
+        helperSelectors,
+        lightSelectors,
+        lineSelectors,
+        spriteSelectors,
+        simpleEffectSelectors,
+        physicBodySelectors,
+        physicConstraintSelectors,
+    ] = await Promise.all([
+        audiosGenerator(tree),
+        camerasGenerator(tree),
+        helpersGenerator(tree),
+        lightsGenerator(tree),
+        linesGenerator(tree),
+        spritesGenerator(tree),
+        simpleEffectsGenerator(tree),
+        physicBodiesGenerator(tree),
+        physicConstraintsGenerator(tree),
+    ]);
 
-  await Promise.all([
-    controllersGenerator(
-      tree,
-      [
-        ...lightSelectors,
-        ...helperSelectors,
-        ...spriteSelectors,
-        ...cameraSelectors,
-      ],
-      audioSelectors,
-      lineSelectors,
-      sobaShapeSelectors
-    ),
-    physicBodyControllerGenerator(
-      tree,
-      physicBodySelectors.map(({ name }) => name)
-    ),
-    physicConstraintControllerGenerator(
-      tree,
-      physicConstraintSelectors.map(({ name }) => name)
-    ),
-    simpleEffectControllerGenerator(tree, simpleEffectSelectors),
-  ]);
+    await Promise.all([
+        controllersGenerator(
+            tree,
+            [
+                ...lightSelectors,
+                ...helperSelectors,
+                ...spriteSelectors,
+                ...cameraSelectors,
+            ],
+            audioSelectors,
+            lineSelectors
+        ),
+        cannonBodyControllerGenerator(
+            tree,
+            physicBodySelectors.map(({ name }) => name)
+        ),
+        cannonConstraintControllerGenerator(
+            tree,
+            physicConstraintSelectors.map(({ name }) => name)
+        ),
+        simpleEffectControllerGenerator(tree, simpleEffectSelectors),
+    ]);
 }

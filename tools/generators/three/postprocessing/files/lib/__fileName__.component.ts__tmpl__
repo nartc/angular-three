@@ -20,7 +20,6 @@ import {
   NgModule,
   ViewChild,
 } from '@angular/core';
-// @ts-ignore
 import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %>Effect } from 'postprocessing';
 
 @Component({

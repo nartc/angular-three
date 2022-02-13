@@ -29,4 +29,3 @@ export class Ngt<%= name %> extends NgtCurve<THREE.<%= name %>> {
   exports: [Ngt<%= name %>],
 })
 export class Ngt<%= name %>Module {}
-

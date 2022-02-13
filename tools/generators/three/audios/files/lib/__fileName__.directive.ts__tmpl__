@@ -1,10 +1,11 @@
 // GENERATED
 import {
+  createParentObjectProvider,
   NGT_AUDIO_CONTROLLER_PROVIDER,
   NGT_OBJECT_CONTROLLER_PROVIDER,
   NgtAudioControllerModule,
   NgtCommonAudio,
-  NgtObject3dControllerModule,
+  NgtObjectControllerModule,
 } from '@angular-three/core';
 import { NgModule, Directive } from '@angular/core';
 import * as THREE from 'three';
@@ -18,18 +19,17 @@ import * as THREE from 'three';
       useExisting: Ngt<%= name %>,
     },
     NGT_AUDIO_CONTROLLER_PROVIDER,
-    NGT_OBJECT_CONTROLLER_PROVIDER
+    NGT_OBJECT_CONTROLLER_PROVIDER,
+    createParentObjectProvider(Ngt<%= name %>, parent => parent.audio)
   ],
 })
 export class Ngt<%= name %> extends NgtCommonAudio<<%= audioNode %>, THREE.<%= name %>> {
-
-
   audioType = THREE.<%= name %>;
 }
 
 @NgModule({
   declarations: [Ngt<%= name %>],
-  exports: [Ngt<%= name %>, NgtAudioControllerModule, NgtObject3dControllerModule],
+  exports: [Ngt<%= name %>, NgtAudioControllerModule, NgtObjectControllerModule],
 })
 export class Ngt<%= name %>Module {}
 

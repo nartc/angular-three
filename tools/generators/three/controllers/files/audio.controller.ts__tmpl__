@@ -23,31 +23,6 @@ export class NgtAudioController extends Controller {
   @Input() sourceType = 'empty';
   @Input() source: null | AudioBufferSourceNode = null;
   @Input() filters: AudioNode[] = [];
-
-  @Input() audioController?: NgtAudioController;
-
-  get props(): string[] {
-    return [
-      'autoplay',
-      'buffer',
-      'detune',
-      'loop',
-      'loopStart',
-      'loopEnd',
-      'offset',
-      'duration',
-      'playbackRate',
-      'isPlaying',
-      'hasPlaybackControl',
-      'sourceType',
-      'source',
-      'filters',
-    ];
-  }
-
-  get controller(): Controller | undefined {
-    return this.audioController;
-  }
 }
 
 @NgModule({
