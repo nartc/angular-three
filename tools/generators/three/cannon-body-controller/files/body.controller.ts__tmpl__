@@ -18,13 +18,13 @@ import {
 import { NgtCannonConstraintController } from '@angular-three/cannon/constraints';
 import { NgtCannonDebug } from '@angular-three/cannon/debug';
 import {
+    AnyFunction,
     Controller,
     createControllerProviderFactory,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-    NGT_OBJECT_WATCHED_CONTROLLER,
+    NGT_PARENT_OBJECT,
     NgtCanvasStore,
     NgtObject3dProps,
-    NgtObjectController,
     NgtObjectInputsController,
     NgtStore,
     NgtTriplet,
@@ -40,6 +40,7 @@ import {
     NgZone,
     OnInit,
     Optional,
+    Self,
     SimpleChanges,
 } from '@angular/core';
 import { startWith } from 'rxjs';
@@ -126,15 +127,16 @@ export class NgtCannonBodyController extends Controller implements OnInit {
         @Optional()
         @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
         private objectInputsController: NgtObjectInputsController,
-        @Optional()
-        @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
-        private objectController: NgtObjectController,
         @Inject(NGT_CANNON_BODY_ARGS_FN) private argsFn: ArgFn<unknown>,
         @Optional() @Inject(NGT_CANNON_BODY_TYPE) private type: BodyShapeType,
         @Optional() private physicsStore: NgtPhysicsStore,
         @Optional()
         private cannonConstraintController: NgtCannonConstraintController,
-        @Optional() private cannonDebug: NgtCannonDebug
+        @Optional() private cannonDebug: NgtCannonDebug,
+        @Optional()
+        @Self()
+        @Inject(NGT_PARENT_OBJECT)
+        private parentObjectFn: AnyFunction
     ) {
         super();
 
@@ -142,7 +144,7 @@ export class NgtCannonBodyController extends Controller implements OnInit {
             throw new Error('NGT_CANNON_BODY_TYPE is required');
         }
 
-        if (!objectController) {
+        if (!parentObjectFn) {
             throw new Error(
                 '[ngtCannon***] directive can only be used on an Object3D'
             );
@@ -156,14 +158,13 @@ export class NgtCannonBodyController extends Controller implements OnInit {
 
         this.store.set({
             getPhysicProps: undefined,
-            object3d: objectController.object,
         });
     }
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.store.onCanvasReady(this.canvasStore.ready$, () => {
-                this.store.set({ object3d: this.objectController.object });
+                this.store.set({ object3d: this.parentObjectFn?.() });
                 this.initWorker(this.cannonPropsParams$);
 
                 if (this.cannonConstraintController) {
@@ -178,17 +179,15 @@ export class NgtCannonBodyController extends Controller implements OnInit {
     }
 
     get api(): WorkerApi & { at: (index: number) => WorkerApi } {
-        this.store.set({ object3d: this.objectController.object });
+        this.store.set({ object3d: this.parentObjectFn?.() });
         const { worker, subscriptions } = this.physicsStore.get();
         const object3d = this.store.get((s) => s.object3d)!;
         const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
             const op: SetOpName<T> = `set${capitalize(type)}`;
             return {
                 set: (value: PropValue<T>) => {
-                    requestAnimationFrame(() => {
-                        const uuid = getUUID(object3d, index);
-                        uuid && worker.postMessage({ op, props: value, uuid });
-                    });
+                    const uuid = getUUID(object3d, index);
+                    uuid && worker.postMessage({ op, props: value, uuid });
                 },
                 subscribe: subscribe(
                     object3d,
@@ -205,26 +204,22 @@ export class NgtCannonBodyController extends Controller implements OnInit {
             const type = 'quaternion';
             return {
                 set: (x: number, y: number, z: number, w: number) => {
-                    requestAnimationFrame(() => {
-                        const uuid = getUUID(object3d, index);
-                        uuid &&
-                            worker.postMessage({
-                                op,
-                                props: [x, y, z, w],
-                                uuid,
-                            });
-                    });
+                    const uuid = getUUID(object3d, index);
+                    uuid &&
+                        worker.postMessage({
+                            op,
+                            props: [x, y, z, w],
+                            uuid,
+                        });
                 },
                 copy: ({ w, x, y, z }: THREE.Quaternion) => {
-                    requestAnimationFrame(() => {
-                        const uuid = getUUID(object3d, index);
-                        uuid &&
-                            worker.postMessage({
-                                op,
-                                props: [x, y, z, w],
-                                uuid,
-                            });
-                    });
+                    const uuid = getUUID(object3d, index);
+                    uuid &&
+                        worker.postMessage({
+                            op,
+                            props: [x, y, z, w],
+                            uuid,
+                        });
                 },
                 subscribe: subscribe(
                     object3d,
@@ -240,18 +235,12 @@ export class NgtCannonBodyController extends Controller implements OnInit {
             const op = 'setRotation';
             return {
                 set: (x: number, y: number, z: number) => {
-                    requestAnimationFrame(() => {
-                        const uuid = getUUID(object3d, index);
-                        uuid &&
-                            worker.postMessage({ op, props: [x, y, z], uuid });
-                    });
+                    const uuid = getUUID(object3d, index);
+                    uuid && worker.postMessage({ op, props: [x, y, z], uuid });
                 },
                 copy: ({ x, y, z }: THREE.Vector3 | THREE.Euler) => {
-                    requestAnimationFrame(() => {
-                        const uuid = getUUID(object3d, index);
-                        uuid &&
-                            worker.postMessage({ op, props: [x, y, z], uuid });
-                    });
+                    const uuid = getUUID(object3d, index);
+                    uuid && worker.postMessage({ op, props: [x, y, z], uuid });
                 },
                 subscribe: (callback: (value: NgtTriplet) => void) => {
                     const id = incrementingId++;
@@ -282,18 +271,12 @@ export class NgtCannonBodyController extends Controller implements OnInit {
             )}` as SetOpName<VectorName>;
             return {
                 set: (x: number, y: number, z: number) => {
-                    requestAnimationFrame(() => {
-                        const uuid = getUUID(object3d, index);
-                        uuid &&
-                            worker.postMessage({ op, props: [x, y, z], uuid });
-                    });
+                    const uuid = getUUID(object3d, index);
+                    uuid && worker.postMessage({ op, props: [x, y, z], uuid });
                 },
                 copy: ({ x, y, z }: THREE.Vector3 | THREE.Euler) => {
-                    requestAnimationFrame(() => {
-                        const uuid = getUUID(object3d, index);
-                        uuid &&
-                            worker.postMessage({ op, props: [x, y, z], uuid });
-                    });
+                    const uuid = getUUID(object3d, index);
+                    uuid && worker.postMessage({ op, props: [x, y, z], uuid });
                 },
                 subscribe: subscribe(
                     object3d,
@@ -414,7 +397,7 @@ export class NgtCannonBodyController extends Controller implements OnInit {
         inputChanges: SimpleChanges;
     }>(
         tapEffect(() => {
-            this.store.set({ object3d: this.objectController.object });
+            this.store.set({ object3d: this.parentObjectFn?.() });
             let uuid: string[] = [];
             const {
                 worker: currentWorker,
