@@ -114,8 +114,11 @@ interface NgtSobaTextState {
                 animateReady.emit({ entity: object, state: $event.state })
             "
         >
+            <ng-container [ngTemplateOutlet]="contentTemplate"></ng-container>
         </ngt-primitive>
-        <ng-content></ng-content>
+        <ng-template #contentTemplate>
+            <ng-content></ng-content>
+        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
