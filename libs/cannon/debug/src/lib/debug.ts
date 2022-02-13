@@ -7,6 +7,7 @@ import {
 import {
     NgtAnimationFrameStore,
     NgtCanvasStore,
+    NgtColor,
     NgtStore,
     tapEffect,
 } from '@angular-three/core';
@@ -14,6 +15,7 @@ import { NgtPrimitiveModule } from '@angular-three/core/primitive';
 import {
     ChangeDetectionStrategy,
     Component,
+    Input,
     NgModule,
     NgZone,
     OnInit,
@@ -39,6 +41,18 @@ export class NgtCannonDebug
     extends NgtStore<NgtCannonDebugState>
     implements OnInit
 {
+    @Input() set color(color: NgtColor) {
+        this.set({ color });
+    }
+
+    @Input() set scale(scale: number) {
+        this.set({ scale });
+    }
+
+    @Input() set impl(impl: typeof import('cannon-es-debugger').default) {
+        this.set({ impl });
+    }
+
     scene = new THREE.Scene();
 
     constructor(
