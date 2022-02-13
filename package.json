@@ -4,6 +4,7 @@
     "license": "MIT",
     "scripts": {
         "postinstall": "ngcc --properties es2015 browser module main",
+        "commit": "git-cz",
         "storybook": "nx storybook storybook",
         "storybook:build": "nx storybook storybook:build-storybook",
         "build": "nx run-many --target=build --projects=core,cannon,postprocessing,soba,schematics",
@@ -62,6 +63,8 @@
         "@types/three": "0.137.0",
         "@typescript-eslint/eslint-plugin": "~5.11.0",
         "@typescript-eslint/parser": "~5.11.0",
+        "commitizen": "4.2.4",
+        "cz-customizable": "~6.3.0",
         "eslint": "~8.9.0",
         "eslint-config-prettier": "8.3.0",
         "jest": "27.5.1",
@@ -75,5 +78,10 @@
         "ts-jest": "27.1.3",
         "tslib": "^2.0.0",
         "typescript": "~4.5.5"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-customizable"
+        }
     }
 }
