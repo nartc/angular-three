@@ -1,3 +1,102 @@
+## [4.0.0](https://github.com/nartc/angular-three/compare/3.2.0...4.0.0) (2022-02-13)
+
+This is an overhaul over the library in terms of stabilizing how the Scene Graph gets constructed.
+
+### Breaking Changes
+
+#### Core
+- All Components/Directives/Services names are updated to remove all type suffix. Eg: `NgtTextureLoaderSerivce` -> `NgtTextureLoader`, `NgtLoopService` -> `NgtLoop` etc...
+- `NgtStore` has been renamed to `NgtCanvasStore`. `NgtStore` is now a base `Store` if you'd like to implement custom Store
+- `NgtPerformanceStore` has been removed. `regres()` is now on `NgtPerformance` (as a Service)
+- State Management has been reworked with in-house solution (combination between `ngrx/component-store` and `rx-angular/state`). If you're using any of the `Ngt***Store`, `select()` and `get()` methods have been changed to use `Selector` instead of `string`
+
+```ts
+// before
+this.canvasStore.get('size');
+this.canvasStore.get('viewport', 'dpr');
+this.canvasStore.select('size');
+this.canvasStore.select('viewport', 'dpr');
+
+// after
+this.canvasStore.get(s => s.size);
+this.canvasStore.get(s => s.viewport.dpr);
+this.canvasStore.select(s => s.size);
+this.canvasStore.select(s => s.viewport.dpr);
+```
+
+- `NgtMathConstPipe` has been deprecated. If you're using `mathConst:"PI"`, please migrate to `radian` pipe
+- `NgtSobaExtender` has been renamed to `NgtExtender`
+- `NgtRepeat` has been changed to extend `NgFor` instead of a complete custom directive
+
+```html
+<!-- before -->
+<ngt-mesh *repeat="let i of 6"></ngt-mesh>
+
+<!-- after -->
+<ngt-mesh *ngFor="let i repeat 6"></ngt-mesh>
+```
+
+- `(animateRead)`signature has been changed
+
+```html
+<!-- before -->
+<ngt-mesh> (animateReady)="onAnimateReady($event)"</ngt-mesh> <!-- $event is NgtRender -->
+
+<!-- after -->
+<ngt-mesh (animateReady)="onAnimateReady($event.state)"></ngt-mesh> 
+<!-- $event.state is NgtRender. $event.object is the Object3D -->
+<!-- on some Soba components/directives, `$event.entity` is available instead of `$event.object` -->
+```
+
+#### Soba
+- All Soba Shapes are removed. I personally think these shapes are redundant. If you're using one of these shapes, please migrate to just `ngt-mesh` and respective geometries
+
+```html
+<!-- before -->
+<ngt-soba-box></ngt-soba-box>
+
+<!-- after -->
+<ngt-mesh>
+    <ngt-box-geometry></ngt-box-geometry>
+</ngt-mesh>
+```
+- `ngt-soba-positional-audio` has been removed
+
+### Features
+
+#### Core
+
+- THREE.js 0.137
+- `(ready)` now exposes `$event` as the `Object3d` instead of nothing.
+
+```html
+<!-- before -->
+<ngt-mesh #ngtMesh="ngtMesh" (ready)="onReady(ngtMesh.mesh)"></ngt-mesh>
+
+<!-- after -->
+<ngt-mesh (ready)="onReady($event)"></ngt-mesh>
+```
+
+- `(animateReady)` now exposes `$event.object` as the `Object3d` instead of just `NgtRender`
+
+```html
+<!-- before -->
+<ngt-mesh #ngtMesh="ngtMesh" (animateReady)="onAnimateReady(ngtMesh.mesh, $event)"></ngt-mesh>
+
+<!-- after -->
+<ngt-mesh (animateReady)="onAnimateReady($event.object, $event.state)"></ngt-mesh>
+```
+
+> On some Soba components/directives, the underlying `Object3d` is exposed as `$event.entity` instead of `$event.object`
+
+- `NgtStore` is a simplified version of `ComponentStore` and `RxState` created specifically for `AngularThree` usage.
+
+> `@angular-three/core` no longer depends on `@rx-angular/state` and `@rx-angular/cdk`, if you do not use these libraries, you can safely remove them.
+
+### Documentations
+
+* **repo:** add README ([f8d3a79](https://github.com/nartc/angular-three/commit/f8d3a79b270fe21808f93c445f321020a67c764a))
+
 ## [3.2.0](https://github.com/nartc/angular-three/compare/3.1.0...3.2.0) (2022-01-09)
 
 
