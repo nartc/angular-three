@@ -29,7 +29,7 @@ interface NgtSobaFBOState {
 @Injectable()
 export class NgtSobaFBO extends NgtStore<NgtSobaFBOState> {
     private dprParams$ = this.select(
-        this.canvasStore.select((s) => s.renderer),
+        this.canvasStore.renderer$,
         this.canvasStore.ready$,
         (renderer) => ({ dpr: renderer.getPixelRatio() })
     );
