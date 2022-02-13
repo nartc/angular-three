@@ -129,23 +129,11 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
     }
 
     readonly init = this.effect<HTMLCanvasElement>(
-        tapEffect((canvasElement) => {
+        tap((canvasElement) => {
             this.set(this.allConstructed$);
             this.updateDimensions(this.dimensions$);
             this.resize(this.resizeResult$);
             this.initRenderer(canvasElement);
-
-            return () => {
-                const { renderer, vr } = this.get();
-                if (renderer) {
-                    renderer.renderLists.dispose();
-                    renderer.forceContextLoss();
-
-                    if (vr) {
-                        renderer.setAnimationLoop(null);
-                    }
-                }
-            };
         })
     );
 
@@ -189,124 +177,138 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
         })
     );
 
-    private initRenderer(canvasElement: HTMLCanvasElement) {
-        const {
-            size,
-            viewport,
-            vr,
-            linear,
-            flat,
-            orthographic,
-            shadows,
-            glOptions,
-            sceneOptions,
-            cameraOptions,
-            raycasterOptions,
-        } = this.get();
+    private readonly initRenderer = this.effect<HTMLCanvasElement>(
+        tapEffect((canvasElement: HTMLCanvasElement) => {
+            const {
+                size,
+                viewport,
+                vr,
+                linear,
+                flat,
+                orthographic,
+                shadows,
+                glOptions,
+                sceneOptions,
+                cameraOptions,
+                raycasterOptions,
+            } = this.get();
 
-        // Scene
-        const scene = new THREE.Scene();
-        applyProps(scene, sceneOptions as UnknownRecord);
+            // Scene
+            const scene = new THREE.Scene();
+            applyProps(scene, sceneOptions as UnknownRecord);
 
-        // Camera
-        const isCamera = cameraOptions instanceof THREE.Camera;
-        const camera = isCamera
-            ? cameraOptions
-            : orthographic
-            ? new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000)
-            : new THREE.PerspectiveCamera(
-                  75,
-                  size.width / size.height,
-                  0.1,
-                  1000
-              );
+            // Camera
+            const isCamera = cameraOptions instanceof THREE.Camera;
+            const camera = isCamera
+                ? cameraOptions
+                : orthographic
+                ? new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000)
+                : new THREE.PerspectiveCamera(
+                      75,
+                      size.width / size.height,
+                      0.1,
+                      1000
+                  );
 
-        if (!isCamera) {
-            camera.position.z = 5;
-            if (cameraOptions) {
-                applyProps(camera, cameraOptions as UnknownRecord);
-                // Update projection matrix after applying props
-                camera.updateProjectionMatrix();
-            }
-            // look at center if initial rotation isn't set
-            if (!cameraOptions?.rotation) camera.lookAt(0, 0, 0);
-        }
-
-        // Raycaster
-        const raycaster = new THREE.Raycaster();
-        const { params, ...options } = raycasterOptions || {};
-        applyProps(raycaster as unknown as NgtInstance, {
-            enabled: true,
-            ...options,
-            params: { ...raycaster.params, ...(params || {}) },
-        });
-
-        // Renderer
-        const customRenderer = (
-            typeof glOptions === 'function'
-                ? glOptions(canvasElement)
-                : glOptions
-        ) as THREE.WebGLRenderer;
-
-        // userland custom renderer, assign as-is
-        if (customRenderer?.render != null) {
-            this.set({
-                renderer: customRenderer,
-                scene,
-                camera,
-                raycaster: raycaster as NgtRaycaster,
-            });
-        } else {
-            const renderer = new THREE.WebGLRenderer({
-                powerPreference: 'high-performance',
-                canvas: canvasElement,
-                antialias: true,
-                alpha: true,
-                ...(glOptions || {}),
-            });
-
-            if (glOptions) {
-                applyProps(
-                    renderer as unknown as NgtInstance,
-                    glOptions as UnknownRecord
-                );
-            }
-
-            if (shadows) {
-                renderer.shadowMap.enabled = true;
-                if (typeof shadows === 'object') {
-                    Object.assign(renderer.shadowMap, shadows);
-                } else {
-                    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            if (!isCamera) {
+                camera.position.z = 5;
+                if (cameraOptions) {
+                    applyProps(camera, cameraOptions as UnknownRecord);
+                    // Update projection matrix after applying props
+                    camera.updateProjectionMatrix();
                 }
+                // look at center if initial rotation isn't set
+                if (!cameraOptions?.rotation) camera.lookAt(0, 0, 0);
             }
 
-            if (!linear) {
-                // auto color management
-                renderer.toneMapping = THREE.ACESFilmicToneMapping;
-                renderer.outputEncoding = THREE.sRGBEncoding;
-            } else {
-                renderer.outputEncoding = THREE.LinearEncoding;
-            }
-
-            if (flat) {
-                renderer.toneMapping = THREE.NoToneMapping;
-            }
-
-            renderer.setClearAlpha(0);
-            renderer.setPixelRatio(calculateDpr(viewport.dpr));
-            renderer.setSize(size.width, size.height);
-
-            if (vr) {
-                renderer.xr.enabled = true;
-            }
-
-            this.set({
-                renderer,
-                scene,
-                camera,
-                raycaster: raycaster as NgtRaycaster,
+            // Raycaster
+            const raycaster = new THREE.Raycaster();
+            const { params, ...options } = raycasterOptions || {};
+            applyProps(raycaster as unknown as NgtInstance, {
+                enabled: true,
+                ...options,
+                params: { ...raycaster.params, ...(params || {}) },
             });
-        }
-    }
+
+            // Renderer
+            const customRenderer = (
+                typeof glOptions === 'function'
+                    ? glOptions(canvasElement)
+                    : glOptions
+            ) as THREE.WebGLRenderer;
+
+            // userland custom renderer, assign as-is
+            if (customRenderer?.render != null) {
+                this.set({
+                    renderer: customRenderer,
+                    scene,
+                    camera,
+                    raycaster: raycaster as NgtRaycaster,
+                });
+            } else {
+                const renderer = new THREE.WebGLRenderer({
+                    powerPreference: 'high-performance',
+                    canvas: canvasElement,
+                    antialias: true,
+                    alpha: true,
+                    ...(glOptions || {}),
+                });
+
+                if (glOptions) {
+                    applyProps(
+                        renderer as unknown as NgtInstance,
+                        glOptions as UnknownRecord
+                    );
+                }
+
+                if (shadows) {
+                    renderer.shadowMap.enabled = true;
+                    if (typeof shadows === 'object') {
+                        Object.assign(renderer.shadowMap, shadows);
+                    } else {
+                        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                    }
+                }
+
+                if (!linear) {
+                    // auto color management
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.outputEncoding = THREE.sRGBEncoding;
+                } else {
+                    renderer.outputEncoding = THREE.LinearEncoding;
+                }
+
+                if (flat) {
+                    renderer.toneMapping = THREE.NoToneMapping;
+                }
+
+                renderer.setClearAlpha(0);
+                renderer.setPixelRatio(calculateDpr(viewport.dpr));
+                renderer.setSize(size.width, size.height);
+
+                if (vr) {
+                    renderer.xr.enabled = true;
+                }
+
+                this.set({
+                    renderer,
+                    scene,
+                    camera,
+                    raycaster: raycaster as NgtRaycaster,
+                });
+            }
+
+            return () => {
+                const { renderer, vr } = this.get();
+                if (renderer) {
+                    renderer.renderLists.dispose();
+                    renderer.forceContextLoss();
+
+                    if (vr) {
+                        renderer.setAnimationLoop(null);
+                    }
+                }
+            };
+        })
+    );
 }
