@@ -5,6 +5,8 @@
         "core": "libs/core",
         "demo": "apps/demo",
         "postprocessing": "libs/postprocessing",
+        "schematics": "libs/schematics",
+        "schematics-e2e": "apps/schematics-e2e",
         "soba": "libs/soba",
         "storybook": "libs/storybook"
     }

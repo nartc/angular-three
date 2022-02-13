@@ -53,6 +53,7 @@
             "@angular-three/postprocessing/effects": [
                 "libs/postprocessing/effects/src/index.ts"
             ],
+            "@angular-three/schematics": ["libs/schematics/src/index.ts"],
             "@angular-three/soba": ["libs/soba/src/index.ts"],
             "@angular-three/soba/abstractions": [
                 "libs/soba/abstractions/src/index.ts"

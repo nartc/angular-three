@@ -1,0 +1,16 @@
+{
+    "root": "apps/schematics-e2e",
+    "projectType": "application",
+    "sourceRoot": "apps/schematics-e2e/src",
+    "targets": {
+        "e2e": {
+            "executor": "@nrwl/nx-plugin:e2e",
+            "options": {
+                "target": "schematics:build",
+                "jestConfig": "apps/schematics-e2e/jest.config.js"
+            }
+        }
+    },
+    "tags": [],
+    "implicitDependencies": ["schematics"]
+}

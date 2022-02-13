@@ -71,6 +71,13 @@
                     "libs/core/group/**/*.html"
                 ]
             }
+        },
+        "publish": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "npm publish",
+                "cwd": "dist/libs/core"
+            }
         }
     },
     "tags": ["scope:core"]

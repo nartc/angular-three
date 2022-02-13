@@ -39,6 +39,13 @@
                     "libs/postprocessing/effects/**/*.html"
                 ]
             }
+        },
+        "publish": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "npm publish",
+                "cwd": "dist/libs/postprocessing"
+            }
         }
     },
     "tags": ["scope:postprocessing"]
