@@ -5,6 +5,8 @@
     "scripts": {
         "postinstall": "ngcc --properties es2015 browser module main",
         "commit": "git-cz",
+        "contributors:init": "all-contributors init",
+        "contributors:add": "all-contributors add",
         "storybook": "nx storybook storybook",
         "storybook:build": "nx storybook storybook:build-storybook",
         "build": "nx run-many --target=build --projects=core,cannon,postprocessing,soba,schematics",
@@ -63,6 +65,7 @@
         "@types/three": "0.137.0",
         "@typescript-eslint/eslint-plugin": "~5.11.0",
         "@typescript-eslint/parser": "~5.11.0",
+        "all-contributors-cli": "6.20.0",
         "commitizen": "4.2.4",
         "cz-customizable": "~6.3.0",
         "eslint": "~8.9.0",
