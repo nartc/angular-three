@@ -1,4 +1,4 @@
-import { NgtCoreModule, provideCanvasOptions } from '@angular-three/core';
+import { NgtCoreModule } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtBoxHelperModule } from '@angular-three/core/helpers';
 import {
@@ -39,7 +39,6 @@ import { Object3D } from 'three';
         </ngt-canvas>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCanvasOptions({ initialLog: true })],
 })
 export class SimpleCubeComponent {
     hover = false;

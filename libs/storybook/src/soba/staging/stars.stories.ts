@@ -15,7 +15,7 @@ export default {
     title: 'Soba/Staging/Stars',
     component: NgtSobaStars,
     decorators: [
-        componentWrapperDecorator(setupCanvas({ black: true })),
+        componentWrapperDecorator(setupCanvas()),
         moduleMetadata({
             imports: [
                 ...setupCanvasModules,
@@ -33,9 +33,9 @@ export default {
 export const Default = () => ({
     template: `
     <ngt-soba-stars></ngt-soba-stars>
-    <ngt-mesh [rotation]='[90 | radian, 0, 0]'>
-      <ngt-plane-geometry  [args]='[100, 100, 4, 4]'></ngt-plane-geometry>
-      <ngt-mesh-basic-material [parameters]='{ wireframe: true }'></ngt-mesh-basic-material>
+    <ngt-mesh [rotation]="[90 | radian, 0, 0]">
+      <ngt-plane-geometry  [args]="[100, 100, 4, 4]"></ngt-plane-geometry>
+      <ngt-mesh-basic-material [parameters]="{ wireframe: true }"></ngt-mesh-basic-material>
     </ngt-mesh>
     <ngt-axes-helper></ngt-axes-helper>
   `,

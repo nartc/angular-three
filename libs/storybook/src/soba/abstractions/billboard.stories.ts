@@ -1,4 +1,3 @@
-import { provideCanvasOptions } from '@angular-three/core';
 import {
     NgtBoxGeometryModule,
     NgtConeGeometryModule,
@@ -36,7 +35,6 @@ export default {
                 NgtConeGeometryModule,
                 NgtBoxGeometryModule,
             ],
-            providers: [provideCanvasOptions({ initialLog: true })],
         }),
     ],
 } as Meta;

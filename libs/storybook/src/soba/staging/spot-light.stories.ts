@@ -1,8 +1,4 @@
-import {
-    NgtRadianPipeModule,
-    NgtStore,
-    provideCanvasOptions,
-} from '@angular-three/core';
+import { NgtRadianPipeModule, NgtStore } from '@angular-three/core';
 import {
     NgtBoxGeometryModule,
     NgtPlaneGeometryModule,
@@ -98,7 +94,6 @@ export default {
         componentWrapperDecorator(setupCanvas({ lights: false })),
         moduleMetadata({
             imports: [...setupCanvasModules, DefaultSpotLightModule],
-            providers: [provideCanvasOptions({ initialLog: true })],
         }),
     ],
 } as Meta;

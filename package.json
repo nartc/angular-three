@@ -19,6 +19,7 @@
         "@angular/router": "~13.2.2",
         "cannon-es": "~0.19.0",
         "cannon-es-debugger": "~1.0.0",
+        "nice-color-palettes": "3.0.0",
         "postprocessing": "~6.24.0",
         "rxjs": "~7.5.4",
         "three": "0.137.5",
