@@ -58,3 +58,4 @@ export * from './lib/utils/apply-props';
 export * from './lib/utils/build-graph';
 export * from './lib/utils/make';
 export * from './lib/utils/is-orthographic';
+export * from './lib/utils/shader-material';
