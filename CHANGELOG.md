@@ -1,3 +1,10 @@
+### [4.0.1](https://github.com/nartc/angular-three/compare/4.0.0...4.0.1) (2022-02-13)
+
+
+### Bug Fixes
+
+* **schematics:** add nrwl/devkit to dependencies ([5f8c579](https://github.com/nartc/angular-three/commit/5f8c579951347017fd85d0dd65a6ffd657223d18))
+
 ## [4.0.0](https://github.com/nartc/angular-three/compare/3.2.0...4.0.0) (2022-02-13)
 
 This is an overhaul over the library in terms of stabilizing how the Scene Graph gets constructed.
