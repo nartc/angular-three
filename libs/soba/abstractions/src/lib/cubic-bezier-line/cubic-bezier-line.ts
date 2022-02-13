@@ -49,7 +49,7 @@ import {
             [rotation]="objectInputsController.rotation"
             [quaternion]="objectInputsController.quaternion"
             [scale]="objectInputsController.scale"
-            [color]="objectInputsController.color"
+            [color]="objectInputsController.color!"
             [userData]="objectInputsController.userData"
             [castShadow]="objectInputsController.castShadow"
             [receiveShadow]="objectInputsController.receiveShadow"

@@ -37,62 +37,62 @@ import { NgtSobaGizmoHelperStore } from './gizmo-helper.store';
                 "
                 [appendTo]="virtualScene"
                 [position]="[gizmoProps.x, gizmoProps.y, 0]"
-                [name]="gizmoProps.objectInputsController?.name"
-                [rotation]="gizmoProps.objectInputsController?.rotation"
-                [quaternion]="gizmoProps.objectInputsController?.quaternion"
-                [scale]="gizmoProps.objectInputsController?.scale"
-                [color]="gizmoProps.objectInputsController?.color"
-                [userData]="gizmoProps.objectInputsController?.userData"
-                [castShadow]="gizmoProps.objectInputsController?.castShadow"
+                [name]="gizmoProps.objectInputsController!.name"
+                [rotation]="gizmoProps.objectInputsController!.rotation"
+                [quaternion]="gizmoProps.objectInputsController!.quaternion"
+                [scale]="gizmoProps.objectInputsController!.scale"
+                [color]="gizmoProps.objectInputsController!.color"
+                [userData]="gizmoProps.objectInputsController!.userData"
+                [castShadow]="gizmoProps.objectInputsController!.castShadow"
                 [receiveShadow]="
-                    gizmoProps.objectInputsController?.receiveShadow
+                    gizmoProps.objectInputsController!.receiveShadow
                 "
-                [visible]="gizmoProps.objectInputsController?.visible"
+                [visible]="gizmoProps.objectInputsController!.visible"
                 [matrixAutoUpdate]="
-                    gizmoProps.objectInputsController?.matrixAutoUpdate
+                    gizmoProps.objectInputsController!.matrixAutoUpdate
                 "
-                [dispose]="gizmoProps.objectInputsController?.dispose"
-                [raycast]="gizmoProps.objectInputsController?.raycast"
-                [appendMode]="gizmoProps.objectInputsController?.appendMode"
-                (click)="gizmoProps.objectInputsController?.click.emit($event)"
+                [dispose]="gizmoProps.objectInputsController!.dispose"
+                [raycast]="gizmoProps.objectInputsController!.raycast"
+                [appendMode]="gizmoProps.objectInputsController!.appendMode"
+                (click)="gizmoProps.objectInputsController!.click.emit($event)"
                 (contextmenu)="
-                    gizmoProps.objectInputsController?.contextmenu.emit($event)
+                    gizmoProps.objectInputsController!.contextmenu.emit($event)
                 "
                 (dblclick)="
-                    gizmoProps.objectInputsController?.dblclick.emit($event)
+                    gizmoProps.objectInputsController!.dblclick.emit($event)
                 "
                 (pointerup)="
-                    gizmoProps.objectInputsController?.pointerup.emit($event)
+                    gizmoProps.objectInputsController!.pointerup.emit($event)
                 "
                 (pointerdown)="
-                    gizmoProps.objectInputsController?.pointerdown.emit($event)
+                    gizmoProps.objectInputsController!.pointerdown.emit($event)
                 "
                 (pointerover)="
-                    gizmoProps.objectInputsController?.pointerover.emit($event)
+                    gizmoProps.objectInputsController!.pointerover.emit($event)
                 "
                 (pointerout)="
-                    gizmoProps.objectInputsController?.pointerout.emit($event)
+                    gizmoProps.objectInputsController!.pointerout.emit($event)
                 "
                 (pointerenter)="
-                    gizmoProps.objectInputsController?.pointerenter.emit($event)
+                    gizmoProps.objectInputsController!.pointerenter.emit($event)
                 "
                 (pointerleave)="
-                    gizmoProps.objectInputsController?.pointerleave.emit($event)
+                    gizmoProps.objectInputsController!.pointerleave.emit($event)
                 "
                 (pointermove)="
-                    gizmoProps.objectInputsController?.pointermove.emit($event)
+                    gizmoProps.objectInputsController!.pointermove.emit($event)
                 "
                 (pointermissed)="
-                    gizmoProps.objectInputsController?.pointermissed.emit(
+                    gizmoProps.objectInputsController!.pointermissed.emit(
                         $event
                     )
                 "
                 (pointercancel)="
-                    gizmoProps.objectInputsController?.pointercancel.emit(
+                    gizmoProps.objectInputsController!.pointercancel.emit(
                         $event
                     )
                 "
-                (wheel)="gizmoProps.objectInputsController?.wheel.emit($event)"
+                (wheel)="gizmoProps.objectInputsController!.wheel.emit($event)"
             >
                 <ng-container
                     *ngIf="object"

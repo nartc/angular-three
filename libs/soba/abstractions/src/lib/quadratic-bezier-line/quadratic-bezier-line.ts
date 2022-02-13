@@ -58,7 +58,7 @@ export interface NgtSobaQuadraticBezierLineState {
             [rotation]="objectInputsController.rotation"
             [quaternion]="objectInputsController.quaternion"
             [scale]="objectInputsController.scale"
-            [color]="objectInputsController.color"
+            [color]="objectInputsController.color!"
             [userData]="objectInputsController.userData"
             [castShadow]="objectInputsController.castShadow"
             [receiveShadow]="objectInputsController.receiveShadow"
@@ -181,6 +181,7 @@ export class NgtSobaQuadraticBezierLine
             const points = this.getPoints(start, end, mid);
             if (line.geometry) {
                 line.geometry.setPositions(
+                    // @ts-ignore
                     points.map((p) => p.toArray()).flat()
                 );
             }

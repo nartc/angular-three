@@ -38,7 +38,7 @@ import { NgtSobaImageShaderMaterialModule } from './image-shader-material';
         ></ngt-plane-geometry>
         <ngt-soba-image-shader-material
             #ngtMaterial="ngtSobaImageShaderMaterial"
-            [parameters]="{color, map: texture$ | async, zoom, grayscale, scale: planeBounds, imageBounds}"
+            [parameters]="{color, map: (texture$ | async)!, zoom, grayscale, scale: planeBounds, imageBounds}"
         ></ngt-soba-image-shader-material>
 
         <ngt-mesh
