@@ -1,6 +1,6 @@
-import { Meta } from '@storybook/addon-docs';
+import {Meta} from '@storybook/addon-docs';
 
-<Meta title={'Core API/Pipes'} parameters={{ viewMode: 'docs' }} />
+<Meta title={'Core API/Pipes'} parameters={{viewMode: 'docs'}}/>
 
 # Pipes
 
@@ -26,6 +26,37 @@ Same as `NgtColorPipe` above but for `THREE.Fog` and `THREE.FogExp`.
 
 Same as `NgtColorPipe` above, but for `THREE.Vector2`, `THREE.Vector3`, and `THREE.Vector4`, there are three respective pipes: `vector2`, `vector3`, and `vector4`.
 
+## `NgtRadianPipe`
+
+This pipe converts a value degree to radian
+
+```html
+<ngt-mesh [rotation]='[-90 | radian, 0, 0]'>
+    <ngt-plane-geometry></ngt-plane-geometry>
+</ngt-mesh>
+```
+
+## `NgtPiPipe`
+
+This pipe multiples a value with `Math.PI`
+
+```html
+<ngt-mesh [rotation]='[-0.5 | pi, 0, 0]'>
+    <ngt-plane-geometry></ngt-plane-geometry>
+</ngt-mesh>
+```
+
+## `NgtSidePipe`
+
+This pipe applies `THREE.DoubleSide`, `THREE.FrontSide`, or `THREE.BackSide`
+
+```html
+<ngt-mesh>
+    <ngt-plane-geometry></ngt-plane-geometry>
+    <ngt-mesh-basic-material [parameters]="{ side: "double" | side }"></ngt-mesh-basic-material>
+</ngt-mesh>
+```
+
 ## `NgtMathPipe`
 
 This pipe acts as a helper to use the `Math` object in the template. When working with 3D scene, more often than not you will need to use the `Math` object to calculate angles and such for objects. We can do the following:
@@ -37,14 +68,12 @@ export class SomeComponent {
 }
 ```
 
-or we can use `math` and `mathConst` pipes:
+or we can use `math`
 
 ```html
-<!-- 👇 this equals to -(Math.PI / 2) -->
-<ngt-mesh [rotation]='[-(0.5 | mathConst:"PI"), 0, 0]'>
+<ngt-mesh [rotation]='[1 | math:"random", 0, 0]'>
     <ngt-plane-geometry></ngt-plane-geometry>
 </ngt-mesh>
 ```
 
--   `mathConst`: the value passed in will be used as a multiplier. Eg: `0.5 | mathConst:'PI'` will return `Math.PI * 0.5` (or `Math.PI / 2`)
 -   `math`: the value passed in will be used as arguments to the `Math` object. Eg: `0.5 | math:'sin'` will return `Math.sin(0.5)`

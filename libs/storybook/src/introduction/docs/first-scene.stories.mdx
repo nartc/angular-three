@@ -1,6 +1,6 @@
-import { Meta, Story } from '@storybook/addon-docs';
+import {Meta, Story} from '@storybook/addon-docs';
 
-<Meta title={'Introduction/First Scene'} parameters={{ viewMode: 'docs' }} />
+<Meta title={'Introduction/First Scene'} parameters={{viewMode: 'docs'}}/>
 
 # Our first 3D scene
 
@@ -38,8 +38,7 @@ export class AppComponent {}
     selector: 'app-cube',
     template: `
         <ngt-mesh
-            #mesh="ngtMesh"
-            (animateReady)="onAnimate(mesh.mesh)"
+            (animateReady)="onAnimate($event.object)"
             (click)="active = !active"
             (pointerover)="hover = true"
             (pointerout)="hover = false"
@@ -60,7 +59,7 @@ export class CubeComponent {
     hover = false;
     active = false;
 
-    onAnimate(mesh: THREE.Mesh) {
+    onAnimate(mesh: THREE.Object3D) {
         mesh.rotation.x = mesh.rotation.y += 0.01;
     }
 }
@@ -191,7 +190,7 @@ export class AppModule {}
 
 At this point, we have something on the scene that we can finally see; a Cube.
 
-<Story id="introduction-examples-first-scene--cube" height={480} />
+<Story id="introduction-examples-first-scene--cube" height={480}/>
 
 Minus the imports (which sometimes are helped by our IDEs), our scene is seven lines of HTML template code. Let's take a look at the equivalent code in vanilla THREE.js.
 
@@ -231,9 +230,8 @@ animate();
     selector: 'app-root',
     template: `
     <ngt-canvas>
-                <!-- 👇 we grab the reference of NgtMesh -->
-                <!-- 👇          👇 listen for (animateReady) 👇 pass in the actual THREE.Mesh that NgtMesh creates
-      <ngt-mesh #mesh="ngtMesh" (animateReady)="onAnimate(mesh.mesh)">
+                <!-- 👇 listen for (animateReady), 👇 pass in the $event.object
+      <ngt-mesh (animateReady)="onAnimate($event.object)">
         <ngt-box-geometry></ngt-box-geometry>
         <ngt-mesh-basic-material></ngt-mesh-basic-material>
       </ngt-mesh>
@@ -241,14 +239,14 @@ animate();
   `,
 })
 export class AppComponent {
-    onAnimate(mesh: THREE.Mesh) {
+    onAnimate(mesh: THREE.Object3D) {
         // 👇 now we can animate the mesh by incrementing the mesh's rotation
         mesh.rotation.x = mesh.rotation.y += 0.01;
     }
 }
 ```
 
-<Story id="introduction-examples-first-scene--spinning-cube" height={480} />
+<Story id="introduction-examples-first-scene--spinning-cube" height={480}/>
 
 > Note: The code in `onAnimate()` is being invoked outside of Angular Zone for performance reasons. Try to avoid updating the component's state in the `onAnimate()` method.
 
@@ -270,7 +268,7 @@ export class AppComponent {}
 @Component({
     selector: 'app-cube',
     template: `
-        <ngt-mesh #mesh="ngtMesh" (animateReady)="onAnimate(mesh.mesh)">
+        <ngt-mesh (animateReady)="onAnimate($event.object)">
             <ngt-box-geometry></ngt-box-geometry>
             <ngt-mesh-basic-material></ngt-mesh-basic-material>
         </ngt-mesh>
@@ -279,7 +277,7 @@ export class AppComponent {}
 })
 export class CubeComponent {
     // Don't forget to add CubeComponent to AppModule's declarations
-    onAnimate(mesh: THREE.Mesh) {
+    onAnimate(mesh: THREE.Object3D) {
         mesh.rotation.x = mesh.rotation.y += 0.01;
     }
 }
@@ -297,8 +295,7 @@ We will add two states: `hover` and `active` to our `CubeComponent`.
     template: `
         <!-- 👇 add the event handler to change the states -->
         <ngt-mesh
-            #mesh="ngtMesh"
-            (animateReady)="onAnimate(mesh.mesh)"
+            (animateReady)="onAnimate($event.object)"
             (click)="active = !active"
             (pointerover)="hover = true"
             (pointerout)="hover = false"
@@ -318,7 +315,7 @@ export class CubeComponent {
     hover = false; // <-- default to false
     active = false; // <-- default to false
 
-    onAnimate(mesh: THREE.Mesh) {
+    onAnimate(mesh: THREE.Object3D) {
         mesh.rotation.x = mesh.rotation.y += 0.01;
     }
 }
@@ -345,8 +342,7 @@ What's better than a reactive-animated cube? TWO reactive-animated cubes!
     selector: 'app-cube',
     template: `
         <ngt-mesh
-            #mesh="ngtMesh"
-            (animateReady)="onAnimate(mesh.mesh)"
+            (animateReady)="onAnimate($event.object)"
             (click)="active = !active"
             (pointerover)="hover = true"
             (pointerout)="hover = false"
@@ -369,7 +365,7 @@ export class CubeComponent {
     hover = false;
     active = false;
 
-    onAnimate(mesh: THREE.Mesh) {
+    onAnimate(mesh: THREE.Object3D) {
         mesh.rotation.x = mesh.rotation.y += 0.01;
     }
 }
@@ -408,8 +404,7 @@ Our cubes are animated and reactive. But they look bland. They don't even look l
     selector: 'app-cube',
     template: `
         <ngt-mesh
-            #mesh="ngtMesh"
-            (animateReady)="onAnimate(mesh.mesh)"
+            (animateReady)="onAnimate($event.object)"
             (click)="active = !active"
             (pointerover)="hover = true"
             (pointerout)="hover = false"
@@ -564,7 +559,7 @@ export class AppModule {}
 
 VOILA!!
 
-<Story id="introduction-examples-first-scene--controls-camera" height={480} />
+<Story id="introduction-examples-first-scene--controls-camera" height={480}/>
 
 > The order of the objects added to the Canvas does not matter much. However, I'd like to put my light sources first, helpers, objects, and controls.
 
