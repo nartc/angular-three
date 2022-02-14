@@ -37,7 +37,7 @@ export class NgtSobaDepthBuffer extends NgtStore<NgtSobaDepthBufferState> {
             depthTexture.format = THREE.DepthFormat;
             depthTexture.type = THREE.UnsignedShortType;
 
-            if (this.canvasStore.get((s) => s.linear)) {
+            if (this.canvasStore.isLinear) {
                 depthTexture.encoding = THREE.LinearEncoding;
             } else {
                 depthTexture.encoding = THREE.sRGBEncoding;

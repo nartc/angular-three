@@ -223,9 +223,7 @@ export class NgtObjectController extends Controller implements OnDestroy {
                                         ),
                                     handlers: observedEvents.handlers,
                                     eventCount: observedEvents.eventCount,
-                                    linear: this.canvasStore.get(
-                                        (s) => s.linear
-                                    ),
+                                    linear: this.canvasStore.isLinear,
                                 } as NgtInstanceInternal,
                             });
 
@@ -432,7 +430,7 @@ export class NgtObjectController extends Controller implements OnDestroy {
 
             if (this.objectInputsController.color) {
                 customProps['color'] = this.objectInputsController.color;
-                if (!this.canvasStore.get((s) => s.linear)) {
+                if (!this.canvasStore.isLinear) {
                     (customProps['color'] as THREE.Color).convertSRGBToLinear();
                 }
             }

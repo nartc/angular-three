@@ -137,6 +137,10 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
         })
     );
 
+    get isLinear() {
+        return this.get((s) => s.linear);
+    }
+
     private readonly resize = this.effect<NgtResizeResult>(
         tap(({ width, height, dpr }) => {
             this.set({

@@ -133,7 +133,7 @@ export abstract class NgtMaterial<
             ] as NgtColor;
             (parameters as UnknownRecord)['color'] = makeColor(colorParams);
 
-            if (!this.canvasStore.get((s) => s.linear)) {
+            if (!this.canvasStore.isLinear) {
                 (
                     (parameters as UnknownRecord)['color'] as THREE.Color
                 ).convertSRGBToLinear();
