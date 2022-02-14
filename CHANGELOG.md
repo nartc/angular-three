@@ -1,3 +1,16 @@
+### [4.0.2](https://github.com/nartc/angular-three/compare/4.0.1...4.0.2) (2022-02-14)
+
+
+### Bug Fixes
+
+* **repo:** expose isLinear on CanvasStore for reuse ([7e40553](https://github.com/nartc/angular-three/commit/7e40553eda8529045121050de8184afaf093976e))
+* **soba/abstractions:** ensure to convert color to THREE.Color for Text ([758b298](https://github.com/nartc/angular-three/commit/758b298b78e27c483943c659b5dfe559c5272c1f))
+
+
+### Documentations
+
+* **storybook:** update docs ([c8d1c49](https://github.com/nartc/angular-three/commit/c8d1c49de58a356893e7f9da8ce235c7a0751465))
+
 ### [4.0.1](https://github.com/nartc/angular-three/compare/4.0.0...4.0.1) (2022-02-13)
 
 
