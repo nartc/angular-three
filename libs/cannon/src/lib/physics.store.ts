@@ -1,10 +1,12 @@
 import {
+    NGT_CANVAS_OPTIONS,
     NgtAnimationFrameStore,
+    NgtCanvasOptions,
     NgtCanvasStore,
     NgtLoop,
     NgtStore,
 } from '@angular-three/core';
-import { Injectable, NgZone } from '@angular/core';
+import { Inject, Injectable, NgZone } from '@angular/core';
 import { map, noop, tap } from 'rxjs';
 import * as THREE from 'three';
 import type { Buffers } from './models/buffers';
@@ -27,12 +29,18 @@ export class NgtPhysicsStore extends NgtStore<NgtPhysicsState> {
         private zone: NgZone,
         private animationFrameStore: NgtAnimationFrameStore,
         private canvasStore: NgtCanvasStore,
-        private loop: NgtLoop
+        private loop: NgtLoop,
+        @Inject(NGT_CANVAS_OPTIONS) canvasOptions: NgtCanvasOptions
     ) {
         super();
         this.set({
             worker: new Worker(
-                new URL('./utils/worker.js', import.meta.url)
+                new URL(
+                    canvasOptions.production
+                        ? 'https://unpkg.com/@angular-three/cannon/worker.js'
+                        : './utils/worker.js',
+                    import.meta.url
+                )
             ) as Worker,
             refs: {},
             buffers: {

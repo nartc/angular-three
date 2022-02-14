@@ -76,6 +76,7 @@ export interface NgtCommonParameters {
 }
 
 export interface NgtCanvasOptions {
+    production?: boolean;
     initialLog?: boolean;
     projectContent?: boolean;
 }

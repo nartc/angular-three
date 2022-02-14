@@ -2,6 +2,7 @@ import { InjectionToken, Provider } from '@angular/core';
 import type { NgtCanvasOptions } from '../types';
 
 const DEFAULT_NGT_CANVAS_OPTIONS: NgtCanvasOptions = {
+    production: true,
     initialLog: false,
     projectContent: false,
 };
