@@ -4,6 +4,7 @@ import {
     createExtenderProvider,
     createHostParentObjectProvider,
     createParentObjectProvider,
+    makeColor,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
     NGT_PARENT_OBJECT,
@@ -288,6 +289,9 @@ export class NgtSobaText extends NgtExtender<TextMeshImpl> implements OnInit {
     private readonly applyProps = this.store.effect<NgtSobaTextState>(
         tapEffect(({ object, ...props }) => {
             const id = requestAnimationFrame(() => {
+                if (props.color) {
+                    props.color = makeColor(props.color);
+                }
                 applyProps(object, props as Omit<NgtSobaTextState, 'object'>);
                 object.sync(() => {
                     this.loop.invalidate();
