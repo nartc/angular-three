@@ -1,3 +1,10 @@
+## [4.1.0](https://github.com/nartc/angular-three/compare/4.0.2...4.1.0) (2022-02-14)
+
+
+### Features
+
+* **core:** add production canvas options to load worker from CDN ([6642586](https://github.com/nartc/angular-three/commit/6642586b4408d956e90b713343abec3ddfdcfdb9))
+
 ### [4.0.2](https://github.com/nartc/angular-three/compare/4.0.1...4.0.2) (2022-02-14)
 
 
