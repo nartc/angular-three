@@ -72,6 +72,8 @@ import { Controller, createControllerProviderFactory } from './controller';
     ngt-soba-stage,
     ngt-soba-backdrop,
     ngt-soba-spot-light,
+    ngt-soba-html,
+    ngt-soba-contact-shadows,
     ngt-soba-text
   `,
     exportAs: 'ngtObjectInputsController',

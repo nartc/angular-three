@@ -10,3 +10,4 @@ export * from './lib/stage/stage';
 export * from './lib/stars/stars';
 export * from './lib/stars/star-material';
 export * from './lib/center/center';
+export * from './lib/contact-shadows/contact-shadows';

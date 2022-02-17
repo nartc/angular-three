@@ -34,6 +34,7 @@ import {
 } from '@angular/core';
 import { Observable, startWith, tap } from 'rxjs';
 import * as THREE from 'three';
+import { NgtSobaContactShadowsModule } from '../contact-shadows/contact-shadows';
 import { NgtSobaEnvironmentModule } from '../environment/environment';
 import { PresetsType } from '../environment/presets';
 
@@ -131,7 +132,15 @@ interface NgtSobaStageState {
             </ng-template>
 
             <ng-container *ngIf="vm$ | async as vm">
-                <!--      contact shadows-->
+                <ngt-soba-contact-shadows
+                    *ngIf="vm.contactShadow"
+                    [width]="vm.radius * 2"
+                    [height]="vm.radius * 2"
+                    [far]="vm.radius / 2"
+                    [blur]="$any(vm.contactShadow?.blur)"
+                    [opacity]="$any(vm.contactShadow?.opacity)"
+                    [position]="$any(vm.contactShadow?.position)"
+                ></ngt-soba-contact-shadows>
                 <ngt-soba-environment
                     [preset]="vm.environment"
                 ></ngt-soba-environment>
@@ -393,6 +402,7 @@ export class NgtSobaStage
         NgtAmbientLightModule,
         NgtSpotLightModule,
         NgtPointLightModule,
+        NgtSobaContactShadowsModule,
         CommonModule,
     ],
 })
