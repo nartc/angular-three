@@ -1,3 +1,10 @@
+### [4.2.3](https://github.com/nartc/angular-three/compare/4.2.2...4.2.3) (2022-02-18)
+
+
+### Bug Fixes
+
+* **schematics:** add props-to-body to tsConfig include as well ([2a362cc](https://github.com/nartc/angular-three/commit/2a362cc31dd0f4557c5eb261f7efeb49625f3191))
+
 ### [4.2.2](https://github.com/nartc/angular-three/compare/4.2.1...4.2.2) (2022-02-18)
 
 

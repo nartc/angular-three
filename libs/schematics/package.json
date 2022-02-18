@@ -1,6 +1,6 @@
 {
     "name": "@angular-three/schematics",
-    "version": "4.2.2",
+    "version": "4.2.3",
     "publishConfig": {
         "access": "public"
     },
