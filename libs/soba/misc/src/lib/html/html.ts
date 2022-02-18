@@ -455,7 +455,6 @@ export class NgtSobaHtml extends NgtStore<NgtSobaHtmlState> implements OnInit {
             }
             return () => {
                 if (target) target.removeChild(element);
-                // ReactDOM.unmountComponentAtNode(el);
             };
         })
     );
