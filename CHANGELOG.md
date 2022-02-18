@@ -1,3 +1,15 @@
+### [4.2.5](https://github.com/nartc/angular-three/compare/4.2.4...4.2.5) (2022-02-18)
+
+
+### Bug Fixes
+
+* **soba/staging:** adjust stage ([56036a9](https://github.com/nartc/angular-three/commit/56036a94b4ce23337ddf427bdd607cab672da3e8))
+
+
+### Documentations
+
+* **storybook:** add basic docs for Cannon ([dbf24be](https://github.com/nartc/angular-three/commit/dbf24bec464771c723f1e1990391965347be5f64))
+
 ### [4.2.4](https://github.com/nartc/angular-three/compare/4.2.3...4.2.4) (2022-02-18)
 
 
