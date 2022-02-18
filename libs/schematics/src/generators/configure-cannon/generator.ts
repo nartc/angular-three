@@ -55,7 +55,10 @@ Please make sure "include" property has a record for "@angular-three/cannon/**/w
     }
 
     const isNx = tree.exists('nx.json');
-    const offset = offsetFromRoot(projectConfiguration.root);
+    const offset =
+        projectConfiguration.root === ''
+            ? './'
+            : offsetFromRoot(projectConfiguration.root);
 
     if (isNx) {
         options.rootTsConfig =
