@@ -1,3 +1,13 @@
+## [4.2.0](https://github.com/nartc/angular-three/compare/4.0.2...4.2.0) (2022-02-18)
+
+
+### Features
+
+* **core:** add production canvas options to load worker from CDN ([6642586](https://github.com/nartc/angular-three/commit/6642586b4408d956e90b713343abec3ddfdcfdb9))
+* **schematics:** add configure cannon generator ([8abb5d8](https://github.com/nartc/angular-three/commit/8abb5d8142685eedce0c60a0a7b6a3b856eb41c7))
+* **soba/misc:** add Html (buggy, help needed) ([7f2e7b1](https://github.com/nartc/angular-three/commit/7f2e7b13828d6c774667672cf8de292dd1dfa3e8))
+* **soba/staging:** add ContactShadows ([73a77cf](https://github.com/nartc/angular-three/commit/73a77cf6ac3679079fb792b658e32e8e7b6eefc6))
+
 ### [4.0.2](https://github.com/nartc/angular-three/compare/4.0.1...4.0.2) (2022-02-14)
 
 
