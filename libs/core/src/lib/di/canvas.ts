@@ -21,7 +21,7 @@ export function provideCanvasOptions(
         provide: NGT_CANVAS_OPTIONS,
         useValue: {
             ...DEFAULT_NGT_CANVAS_OPTIONS,
-            ...(options || {}),
+            ...options,
         },
     };
 }
