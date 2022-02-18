@@ -1,0 +1,267 @@
+import {Meta, Story} from "@storybook/addon-docs";
+
+<Meta title={'Cannon/Introduction'} parameters={{viewMode: 'docs'}}/>
+
+# Introduction to Cannon
+
+Cannon is a lightweight 3D physics engine written in JavaScript [cannon.js](https://github.com/schteppe/cannon.js). `@angular-three/cannon` is a wrapper around Cannon but using [cannon-es](https://github.com/pmndrs/cannon-es) instead.
+
+## Installation
+
+`@angular-three/cannon` uses a Web Worker to offload some physics logic off of the main thread. Hence, it is not straight-forward to just install and use.
+
+The recommended way is to use the generator from `@angular-three/schematics`.
+
+```shell
+npx ng generate @angular-three/schematics:cannon <app-name>
+```
+
+`<app-name>` is the name of the application you want to add `@angular-three/cannon` to. In a normal AngularCLI project, this is basically your project name. In a workspace configuration, there might be more than one application.
+
+The generator does the following:
+- Install `@angular-three/cannon` if it's not already installed
+- Create `tsconfig.worker.json` file if it's not existed
+- If `tsconfig.worker.json` file exists under the app's root, then the generator will terminate. You will need to adjust the existing `tsconfig.worker.json` yourself.
+- Update `angular.json` (or the app's project configuration) with `webWorkerTsConfig: path/to/tsconfig.worker.json`
+
+The reason for this is Angular requires the application to have `webWorkerTsConfig` setup for it to handle Web Worker.
+
+To confirm that this works correctly, you can try serving the application, and you should see the Web Worker being bundled as a separate lazy chunk
+
+![cannon-web-worker](/lazy-chunk-cannon-worker.png)
+> Your lazy chunk name might be different.
+
+## Simple Physics scene
+
+### Setup Canvas
+
+This step will set up a Canvas with some pre-configurations.
+
+```ts
+@Component({
+    selector: 'app-simple-physics',
+    template: `
+        <ngt-canvas
+            [shadows]="true"
+            [gl]="{ alpha: false }"
+            [camera]="{ position: [-1, 5, 5], fov: 45 }"
+            [scene]="{ background: 'lightblue' | color }"
+        >
+            <ngt-ambient-light></ngt-ambient-light>
+            <ngt-directional-light
+                [position]="[10, 10, 10]"
+                [castShadow]="true"
+                [shadow]="{ mapSize: [2048, 2048] | vector2 }"
+            ></ngt-directional-light>
+        </ngt-canvas>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class SimplePhysicsComponent {}
+
+@NgModule({
+    imports: [
+        NgtAmbientLightModule,
+        NgtColorPipeModule,
+        NgtCoreModule,
+        NgtDirectionalLightModule,
+        NgtVectorPipeModule,
+    ],
+    declarations: [SimplePhysicsComponent],
+    exports: [SimplePhysicsComponent]
+})
+export class SimplePhysicsComponentModule {}
+```
+
+### Use the Physics component
+
+To start adding Physics in our scene, we'll use `ngt-physics` component from `@angular-three/cannon`
+
+```ts
+@Component({
+    selector: 'app-simple-physics',
+    template: `
+        <ngt-canvas
+            [shadows]="true"
+            [gl]="{ alpha: false }"
+            [camera]="{ position: [-1, 5, 5], fov: 45 }"
+            [scene]="{ background: 'lightblue' | color }"
+        >
+            <!-- ... -->
+
+            <!-- 👇 add ngt-physics -->
+            <ngt-physics></ngt-physics>
+        </ngt-canvas>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class SimplePhysicsComponent {}
+
+@NgModule({
+    imports: [
+        /*...*/,
+        // 👇 add NgtPhysicsModule
+        NgtPhysicsModule
+    ],
+    declarations: [/*..*/],
+    exports: [/*..*/]
+})
+export class SimplePhysicsComponentModule {}
+```
+
+All objects that are subject to the Physics world need to be put inside of `<ngt-physics>`
+
+### Add our first Physics object
+
+Let's add a "floor" so things can actually "drop" on it
+
+```ts
+@Component({
+    selector: 'app-simple-physics',
+    template: `
+        <ngt-canvas
+            [shadows]="true"
+            [gl]="{ alpha: false }"
+            [camera]="{ position: [-1, 5, 5], fov: 45 }"
+            [scene]="{ background: 'lightblue' | color }"
+        >
+            <!-- ... -->
+            <ngt-physics>
+                <!-- 👇 put our Floor inside of ngt-physics -->
+                <app-floor></app-floor>
+            </ngt-physics>
+        </ngt-canvas>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class SimplePhysicsComponent {}
+
+@Component({
+    selector: 'app-floor',
+    template: `
+        <!-- 👇 turns this Mesh into a Physic Plane by attaching ngtPhysicPlane on it -->
+        <!-- 👇 NgtPhysicPlaneModule provides this directive -->
+        <ngt-mesh
+            ngtPhysicPlane
+            [receiveShadow]="true"
+            [position]="[0, -2.5, 0]"
+            [rotation]="[-90 | radian, 0, 0]"
+        >
+            <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
+            <ngt-shadow-material
+                [parameters]="{
+                    color: '#171717',
+                    transparent: true,
+                    opacity: 0.4
+                }"
+            ></ngt-shadow-material>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class FloorComponent {}
+
+@NgModule({
+    imports: [
+        /*...*/,
+        NgtPhysicsModule,
+        // 👇 add NgtPhysicPlaneModule
+        NgtPhysicPlaneModule,
+        // 👇 add the required modules for the Plane aka our Floor
+        NgtMeshModule,
+        NgtPlaneGeometryModule,
+        NgtShadowMaterialModule
+    ],
+                            // 👇 declare our FloorComponent
+    declarations: [/*..*/, FloorComponent],
+    exports: [/*..*/]
+})
+export class SimplePhysicsComponentModule {}
+```
+
+### Add a falling cube
+
+Now that we have a Floor, we can start "dropping" objects.
+
+```ts
+@Component({
+    selector: 'app-simple-physics',
+    template: `
+        <ngt-canvas
+            [shadows]="true"
+            [gl]="{ alpha: false }"
+            [camera]="{ position: [-1, 5, 5], fov: 45 }"
+            [scene]="{ background: 'lightblue' | color }"
+        >
+            <!-- ... -->
+            <ngt-physics>
+                <!-- 👇 put our Floor inside of ngt-physics -->
+                <app-floor></app-floor>
+            </ngt-physics>
+        </ngt-canvas>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class SimplePhysicsComponent {}
+
+@Component({
+    selector: 'app-floor',
+    template: `
+        <!-- floor -->
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class FloorComponent {}
+
+@Component({
+    selector: 'app-cube',
+    template: `
+        <!-- 👇 turns this Mesh into a Physic Box by attaching ngtPhysicBox on it -->
+        <!-- 👇 NgtPhysicBoxModule provides this directive -->
+        <!-- 👇 getPhysicProps is a function that provides the object's props to our ngtPhysicBox -->
+        <!-- 👇 so the Physic World is aware of our object's position and such -->
+        <ngt-mesh
+            ngtPhysicBox
+            [getPhysicProps]="getCubeProps"
+            [receiveShadow]="true"
+            [castShadow]="true"
+            [position]="position"
+            [rotation]="rotation"
+        >
+            <ngt-box-geometry></ngt-box-geometry>
+            <ngt-mesh-lambert-material
+                [parameters]="{ color: 'hotpink' }"
+            ></ngt-mesh-lambert-material>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CubeComponent {
+    // 👇 we create these class properties to reuse them in getCubeProps and on the template.
+    // 👇 These can be turned into Input later
+    position = [0.1, 5, 0] as NgtVector3;
+    rotation = [0.4, 0.2, 0.5] as NgtEuler;
+
+    getCubeProps: GetByIndex<BoxProps> = () => ({
+        mass: 1,
+        position: this.position as NgtTriplet,
+        rotation: this.rotation as NgtTriplet,
+    });
+}
+
+@NgModule({
+    imports: [
+        /*...*/,
+        // 👇 add NgtPhysicBoxModule to have access to ngtPhysicBox
+        NgtPhysicBoxModule,
+        // 👇 required modules for our Cube
+        NgtBoxGeometryModule,
+        NgtMeshLamberMaterialModule
+    ],
+    declarations: [/*..*/, CubeComponent],
+    exports: [/*..*/]
+})
+export class SimplePhysicsComponentModule {}
+```
+
+<Story id="cannon-simple-physics--single-cube" height={480}/>

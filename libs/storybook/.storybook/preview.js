@@ -20,7 +20,7 @@ export const parameters = {
                     'Basic Shapes',
                 ],
                 'Cannon',
-                ['Kinematic Cube'],
+                ['Introduction', 'Simple Physics', 'Kinematic Cube'],
                 'Soba',
                 [
                     'Abstractions',
