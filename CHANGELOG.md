@@ -1,3 +1,20 @@
+## [4.3.0](https://github.com/nartc/angular-three/compare/4.2.5...4.3.0) (2022-02-18)
+
+
+### Features
+
+* **core:** deprecate NGT_CANVAS_OPTIONS ([c5d877f](https://github.com/nartc/angular-three/commit/c5d877fd0d2e2ee04654beafe135fbfd280c39bc))
+
+
+### Bug Fixes
+
+* **core:** adjust DI ([4d39320](https://github.com/nartc/angular-three/commit/4d393209473f00441941cd9fb5cfaf8617b56874))
+
+
+### Documentations
+
+* **repo:** add Igor to contributors ([d08ea5d](https://github.com/nartc/angular-three/commit/d08ea5d7b4a39908853a3baba02bd9555223fdaf))
+
 ### [4.2.5](https://github.com/nartc/angular-three/compare/4.2.4...4.2.5) (2022-02-18)
 
 
