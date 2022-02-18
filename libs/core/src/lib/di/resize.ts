@@ -13,7 +13,6 @@ export const NGT_RESIZE_DEBOUNCE_DEFAULT = 200;
 export const NGT_RESIZE_OPTIONS = new InjectionToken<NgtResizeOptions>(
     'ngtResizeObserver Options',
     {
-        providedIn: 'root',
         factory: () => ({
             box: NGT_RESIZE_BOX_DEFAULT,
             scroll: false,
@@ -25,7 +24,6 @@ export const NGT_RESIZE_OPTIONS = new InjectionToken<NgtResizeOptions>(
 export const NGT_RESIZE_OBSERVER_SUPPORT = new InjectionToken<boolean>(
     'Resize Observer API support',
     {
-        providedIn: 'root',
         factory: () => {
             const document = inject(DOCUMENT);
             return (

@@ -10,7 +10,6 @@ const DEFAULT_NGT_CANVAS_OPTIONS: NgtCanvasOptions = {
 export const NGT_CANVAS_OPTIONS = new InjectionToken<NgtCanvasOptions>(
     'Canvas Options',
     {
-        providedIn: 'root',
         factory: () => DEFAULT_NGT_CANVAS_OPTIONS,
     }
 );

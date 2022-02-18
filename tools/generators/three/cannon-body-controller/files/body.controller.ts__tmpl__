@@ -85,7 +85,6 @@ function subscribe<T extends SubscriptionName>(
 export const NGT_CANNON_BODY_ARGS_FN = new InjectionToken<ArgFn<unknown>>(
     'ArgsFn for NgtCannonBody',
     {
-        providedIn: 'root',
         factory:
             () =>
             (...args: unknown[]) =>
