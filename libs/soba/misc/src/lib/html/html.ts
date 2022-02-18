@@ -17,11 +17,13 @@ import {
     Component,
     Directive,
     ElementRef,
+    EventEmitter,
     Inject,
     Input,
     NgModule,
     NgZone,
     OnInit,
+    Output,
     TemplateRef,
     ViewChild,
     ViewContainerRef,
@@ -187,7 +189,6 @@ interface NgtSobaHtmlState {
     portal?: HTMLElement;
     distanceFactor?: number;
     occlude?: THREE.Object3D[] | boolean;
-    onOcclude?: (visible: boolean) => null;
     wrapperClass?: string;
 }
 
@@ -245,10 +246,7 @@ export class NgtSobaHtmlElement {
                     [style]="transformInnerStyle$ | async"
                 >
                     <ng-container
-                        *ngTemplateOutlet="
-                            renderTemplate;
-                            context: { $implicit: parentStyle$ | async }
-                        "
+                        *ngTemplateOutlet="renderTemplate"
                     ></ng-container>
                 </div>
             </div>
@@ -258,7 +256,11 @@ export class NgtSobaHtmlElement {
             <div
                 #renderedDiv
                 [class]="$any(parentClass$ | async)"
-                [style]="$any(style ?? (styles$ | async))"
+                [style]="
+                    (transform$ | async)
+                        ? (parentStyle$ | async)
+                        : (styles$ | async)
+                "
             >
                 <ng-content></ng-content>
             </div>
@@ -310,9 +312,7 @@ export class NgtSobaHtml extends NgtStore<NgtSobaHtmlState> implements OnInit {
         this.set({ occlude });
     }
 
-    @Input() set onOcclude(onOcclude: (visible: boolean) => null) {
-        this.set({ onOcclude });
-    }
+    @Output() occludeChange = new EventEmitter<boolean>();
 
     @Input() set calculatePosition(calculatePosition: CalculatePosition) {
         this.set({ calculatePosition });
@@ -326,7 +326,7 @@ export class NgtSobaHtml extends NgtStore<NgtSobaHtmlState> implements OnInit {
         this.set({ parentClass });
     }
 
-    @Input() set parentStyle(parentStyle: string) {
+    @Input() set parentStyle(parentStyle: Partial<CSSStyleDeclaration>) {
         this.set({ parentStyle });
     }
 
@@ -355,6 +355,7 @@ export class NgtSobaHtml extends NgtStore<NgtSobaHtmlState> implements OnInit {
 
     readonly parentClass$ = this.select((s) => s.parentClass);
     readonly parentStyle$ = this.select((s) => s.parentStyle);
+    readonly transform$ = this.select((s) => s.transform);
 
     readonly styles$ = this.select(
         this.select((s) => s.parentStyle),
@@ -570,9 +571,11 @@ export class NgtSobaHtml extends NgtStore<NgtSobaHtmlState> implements OnInit {
             }
 
             if (previouslyVisible !== this.visible) {
-                // if (onOcclude) onOcclude(!visible.current);
-                // else element.style.display = this.visible ? 'block' : 'none';
-                element.style.display = this.visible ? 'block' : 'none';
+                if (this.occludeChange.observed) {
+                    this.occludeChange.emit(!this.visible);
+                } else {
+                    element.style.display = this.visible ? 'block' : 'none';
+                }
             }
 
             element.style.zIndex = `${objectZIndex(
@@ -618,6 +621,10 @@ export class NgtSobaHtml extends NgtStore<NgtSobaHtmlState> implements OnInit {
                     this.transformedOuterDiv?.nativeElement &&
                     this.transformedInnerDiv?.nativeElement
                 ) {
+                    this.transformedOuterDiv.nativeElement.style.width =
+                        size.width + 'px';
+                    this.transformedOuterDiv.nativeElement.style.height =
+                        size.height + 'px';
                     this.transformedOuterDiv.nativeElement.style.transform = `${cameraTransform}${cameraMatrix}translate(${widthHalf}px,${heightHalf}px)`;
                     this.transformedInnerDiv.nativeElement.style.transform =
                         getObjectCSSMatrix(
