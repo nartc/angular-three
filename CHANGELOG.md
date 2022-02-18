@@ -1,3 +1,10 @@
+### [4.2.1](https://github.com/nartc/angular-three/compare/4.2.0...4.2.1) (2022-02-18)
+
+
+### Bug Fixes
+
+* **schematics:** fix configure-cannon schematics ([60601af](https://github.com/nartc/angular-three/commit/60601af1ba8e60ba933e3f30dd1503620a8e2ebf))
+
 ## [4.2.0](https://github.com/nartc/angular-three/compare/4.0.2...4.2.0) (2022-02-18)
 
 
