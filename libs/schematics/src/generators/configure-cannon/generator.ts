@@ -81,7 +81,8 @@ Please make sure "include" property has a record for "@angular-three/cannon/**/w
     "types": []
   },
   "include": [
-    "${offset}node_modules/@angular-three/cannon/**/worker.ts"
+    "${offset}node_modules/@angular-three/cannon/**/worker.ts",
+    "${offset}node_modules/@angular-three/cannon/**/props-to-body.ts"
   ]
 }`
     );

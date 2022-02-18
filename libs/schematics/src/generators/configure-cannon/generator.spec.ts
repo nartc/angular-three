@@ -70,6 +70,9 @@ describe('configure cannon generator', () => {
             expect(tsConfig.include[0]).toContain(
                 'node_modules/@angular-three/cannon/**/worker.ts'
             );
+            expect(tsConfig.include[1]).toContain(
+                'node_modules/@angular-three/cannon/**/props-to-body.ts'
+            );
 
             // project configuration
             expect(
