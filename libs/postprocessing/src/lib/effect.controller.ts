@@ -27,7 +27,6 @@ export const NGT_EFFECT_TYPE = new InjectionToken<AnyConstructor<Effect>>(
 
 export const NGT_EFFECT_DEFAULT_BLEND_FUNCTION =
     new InjectionToken<BlendFunction>('Effect Blend Function', {
-        providedIn: 'root',
         factory: () => BlendFunction.NORMAL,
     });
 

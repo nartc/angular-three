@@ -3,7 +3,6 @@ import type { NgtPerformanceOptions } from '../types';
 
 export const NGT_PERFORMANCE_OPTIONS =
     new InjectionToken<NgtPerformanceOptions>('NgtPerformance options', {
-        providedIn: 'root',
         factory: () => ({
             current: 1,
             min: 0.5,

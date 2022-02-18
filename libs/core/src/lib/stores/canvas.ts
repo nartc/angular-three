@@ -3,6 +3,7 @@ import { ElementRef, Inject, Injectable } from '@angular/core';
 import { filter, map, Observable, tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
+import { WINDOW } from '../di/window';
 import { NgtResize, NgtResizeResult } from '../services/resize';
 import type {
     NgtCanvasState,
@@ -54,7 +55,8 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
         }: ElementRef<HTMLElement>,
         @Inject(NgtResize)
         private resizeResult$: Observable<NgtResizeResult>,
-        @Inject(DOCUMENT) document: Document
+        @Inject(DOCUMENT) document: Document,
+        @Inject(WINDOW) window: Window
     ) {
         super();
         this.set({
@@ -72,15 +74,15 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
             frameloop: 'always',
             performance,
             objects: {},
-            dpr: document.defaultView?.devicePixelRatio || 1,
+            dpr: window.devicePixelRatio || 1,
             shadows: false,
             cameraOptions: {},
             glOptions: {},
             raycasterOptions: {},
             sceneOptions: {},
             viewport: {
-                initialDpr: document.defaultView?.devicePixelRatio || 1,
-                dpr: document.defaultView?.devicePixelRatio || 1,
+                initialDpr: window.devicePixelRatio || 1,
+                dpr: window.devicePixelRatio || 1,
                 width: clientWidth,
                 height: clientHeight,
                 aspect: clientWidth / clientHeight,
