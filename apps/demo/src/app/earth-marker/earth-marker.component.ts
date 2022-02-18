@@ -3,7 +3,6 @@ import {
     NgtEuler,
     NgtRadianPipeModule,
     NgtVector3,
-    provideCanvasOptions,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
 import { NgtAmbientLightModule } from '@angular-three/core/lights';
@@ -27,7 +26,7 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 @Component({
     selector: 'demo-earth-marker',
     template: `
-        <ngt-canvas [dpr]="[1, 2]" [camera]="{ fov: 50 }">
+        <ngt-canvas [initialLog]="true" [dpr]="[1, 2]" [camera]="{ fov: 50 }">
             <ngt-soba-stage [controls]="ngtSobaOrbitControls.controls">
                 <demo-earth></demo-earth>
             </ngt-soba-stage>
@@ -39,7 +38,6 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
         </ngt-canvas>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCanvasOptions({ initialLog: true })],
 })
 export class EarthMarkerComponent {}
 

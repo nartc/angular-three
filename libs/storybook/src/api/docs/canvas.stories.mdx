@@ -54,62 +54,20 @@ export class AppModule {}
 -   A default `Scene` and `Raycaster`
 -   A `window:resize` listener that will update the `Renderer#size` and `Camera#aspect` when the window is resized.
 
-## `NGT_CANVAS_OPTIONS`
-
-You can override some default `NGT_CANVAS_OPTIONS` to customize how `CanvasComponent` works.
-
-### Interface
-
-```ts
-export interface NgtCanvasOptions {
-    initialLog?: boolean;
-    projectContent?: boolean;
-}
-
-const DEFAULT_NGT_CANVAS_OPTIONS: NgtCanvasOptions = {
-    initialLog: false,
-    projectContent: false,
-};
-```
-
-### Usage
-
-```ts
-@Component({
-  /**/,
-  providers: [
-    provideCanvasOptions({/* options goes here */})
-  ]
-})
-export class AppComponent {}
-```
-
 ### `initialLog`
 
 This flag, if turned on, will log the whole `NgtCanvasStore` upon Canvas creation. Default to `false`, aka no log.
 
-```ts
-@Component({
-  /**/,
-  providers: [
-    provideCanvasOptions({initialLog: true})
-  ]
-})
-export class AppComponent {}
+```html
+<ngt-canvas [initialLog]="true"></ngt-canvas>
 ```
 
 ### `projectContent`
 
 By default, `CanvasComponent` will not project any of its children. This is to not crowd the DOM with a lot of wrapper Directives/Components. However, it can be useful to see the projected wrappers in DEV mode, especially with the [Angular DevTools](https://chrome.google.com/webstore/detail/angular-devtools/ienfalfjdbdpebioblfackkekamfmbnh?hl=en-US)
 
-```ts
-@Component({
-  /**/,
-  providers: [
-    provideCanvasOptions({projectContent: !environment.production})
-  ]
-})
-export class AppComponent {}
+```html
+<ngt-canvas [projectContent]="true"></ngt-canvas>
 ```
 
 ## Inputs

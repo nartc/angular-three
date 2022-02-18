@@ -5,7 +5,6 @@ import {
     ElementRef,
     EventEmitter,
     HostBinding,
-    Inject,
     Input,
     NgModule,
     NgZone,
@@ -13,7 +12,6 @@ import {
     Output,
     ViewChild,
 } from '@angular/core';
-import { NGT_CANVAS_OPTIONS } from './di/canvas';
 import { NgtLoop } from './services/loop';
 import { NgtPerformance } from './services/performance';
 import { NgtResize } from './services/resize';
@@ -23,7 +21,6 @@ import { NgtEventsStore } from './stores/events';
 import { NgtStore } from './stores/store';
 import type {
     NgtCameraOptions,
-    NgtCanvasOptions,
     NgtCreatedState,
     NgtDpr,
     NgtGLOptions,
@@ -38,7 +35,7 @@ import type {
     template: `
         <canvas #rendererCanvas></canvas>
         <ng-container
-            *ngIf="canvasOptions.projectContent"
+            *ngIf="projectContent"
             [ngTemplateOutlet]="contentTemplate"
         >
         </ng-container>
@@ -132,6 +129,9 @@ export class NgtCanvas extends NgtStore implements OnInit {
         this.canvasStore.set({ glOptions });
     }
 
+    @Input() initialLog = false;
+    @Input() projectContent = false;
+
     @Output() created = new EventEmitter<NgtCreatedState>();
     @Output() pointermissed = new EventEmitter<MouseEvent>();
 
@@ -143,8 +143,7 @@ export class NgtCanvas extends NgtStore implements OnInit {
         private eventsStore: NgtEventsStore,
         private animationFrameStore: NgtAnimationFrameStore,
         private loop: NgtLoop,
-        private zone: NgZone,
-        @Inject(NGT_CANVAS_OPTIONS) public canvasOptions: NgtCanvasOptions
+        private zone: NgZone
     ) {
         super();
     }
@@ -169,7 +168,7 @@ export class NgtCanvas extends NgtStore implements OnInit {
                 this.animationFrameStore.init();
                 this.loop.invalidate(canvasState);
                 this.created.emit(canvasState);
-                if (this.canvasOptions.initialLog) {
+                if (this.initialLog) {
                     console.group('Canvas initialized');
                     console.log(canvasState);
                     console.groupEnd();

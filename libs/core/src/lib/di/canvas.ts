@@ -2,7 +2,6 @@ import { InjectionToken, Provider } from '@angular/core';
 import type { NgtCanvasOptions } from '../types';
 
 const DEFAULT_NGT_CANVAS_OPTIONS: NgtCanvasOptions = {
-    production: true,
     initialLog: false,
     projectContent: false,
 };
@@ -14,6 +13,10 @@ export const NGT_CANVAS_OPTIONS = new InjectionToken<NgtCanvasOptions>(
     }
 );
 
+/**
+ *
+ * @deprecated Please use the [initialLog] and [projectContent] on `ngt-canvas` instead. Will be removed in V5
+ */
 export function provideCanvasOptions(
     options: Partial<NgtCanvasOptions>
 ): Provider {

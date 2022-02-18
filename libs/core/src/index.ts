@@ -4,7 +4,6 @@ export * from './lib/di/parent-object';
 export * from './lib/di/object-init';
 export * from './lib/di/performance';
 export * from './lib/di/resize';
-export * from './lib/di/canvas';
 export * from './lib/di/is-webgl-available';
 export * from './lib/di/window';
 
