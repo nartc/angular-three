@@ -5,11 +5,8 @@ import {
     Tree,
     updateJson,
 } from '@nrwl/devkit';
-import {
-    ANGULAR_THREE_VERSION,
-    THREE_TYPES_VERSION,
-    THREE_VERSION,
-} from './versions';
+import { ANGULAR_THREE_VERSION } from '../versions';
+import { THREE_TYPES_VERSION, THREE_VERSION } from './versions';
 
 export default async function (tree: Tree) {
     logger.info('Initializing Angular Three...');

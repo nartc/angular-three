@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+/// <reference lib="webworker" />
 import {
     ConeTwistConstraint,
     Constraint,

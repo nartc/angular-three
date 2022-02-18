@@ -15,7 +15,8 @@
                 "tsConfig": "apps/demo/tsconfig.app.json",
                 "assets": ["apps/demo/src/favicon.ico", "apps/demo/src/assets"],
                 "styles": ["apps/demo/src/styles.css"],
-                "scripts": []
+                "scripts": [],
+                "webWorkerTsConfig": "apps/demo/tsconfig.worker.json"
             },
             "configurations": {
                 "production": {

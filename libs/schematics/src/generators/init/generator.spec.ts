@@ -1,12 +1,9 @@
 import { readJson, Tree } from '@nrwl/devkit';
 import { createTreeWithEmptyWorkspace } from '@nrwl/devkit/testing';
+import { ANGULAR_THREE_VERSION } from '../versions';
 
 import generator from './generator';
-import {
-    ANGULAR_THREE_VERSION,
-    THREE_TYPES_VERSION,
-    THREE_VERSION,
-} from './versions';
+import { THREE_TYPES_VERSION, THREE_VERSION } from './versions';
 
 describe('init generator', () => {
     let appTree: Tree;

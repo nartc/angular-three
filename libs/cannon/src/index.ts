@@ -12,5 +12,5 @@ export * from './lib/models/prop-value';
 export * from './lib/models/atomic';
 export * from './lib/models/vector';
 
-// @ts-ignore
 export { default as propsToBody } from './lib/utils/props-to-body';
+export * from './lib/utils/worker';

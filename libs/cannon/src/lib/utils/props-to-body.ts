@@ -1,3 +1,4 @@
+// @ts-nocheck
 // from: https://github.com/pmndrs/use-cannon/blob/master/src/propsToBody.js
 import {
     Body,
