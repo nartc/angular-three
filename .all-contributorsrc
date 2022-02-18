@@ -13,7 +13,7 @@
         {
             "login": "nartc",
             "name": "Chau Tran",
-            "avatar_url": "https://avatars1.githubusercontent.com/u/25516557?v=4",
+            "avatar_url": "https://avatars.githubusercontent.com/u/25516557?v=4",
             "profile": "https://nartc.me/",
             "contributions": [
                 "code",
@@ -43,6 +43,15 @@
             "name": "BenLune",
             "avatar_url": "https://avatars.githubusercontent.com/u/5662714?v=4",
             "profile": "https://github.com/BenLune",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "IKatsuba",
+            "name": "Igor Katsuba",
+            "avatar_url": "https://avatars.githubusercontent.com/u/10637135?v=4",
+            "profile": "https://blog.katsuba.dev",
             "contributions": [
                 "code"
             ]

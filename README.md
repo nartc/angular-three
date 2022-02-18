@@ -1,6 +1,7 @@
 # Declarative THREE.js in Angular
 
-🔥 Leverage your [Angular](https://angular.io) skill to build mind-blowing 3D applications with [THREE.js](https://threejs.org) 🔥
+🔥 Leverage your [Angular](https://angular.io) skill to build mind-blowing 3D applications
+with [THREE.js](https://threejs.org) 🔥
 
 ## Attention
 
@@ -19,7 +20,8 @@ This package, while stable, is still in active development.
 
 ### Peer Dependencies
 
-- `three@0.137`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js** is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.137`
+- `three@0.137`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js**
+  is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.137`
     - Make sure to also have `@types/three` installed as well
 
 ```bash
@@ -40,10 +42,11 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/nartc"><img src="https://avatars1.githubusercontent.com/u/25516557?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chau Tran</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=nartc" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/nartc"><img src="https://avatars.githubusercontent.com/u/25516557?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chau Tran</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=nartc" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/barbados-clemens"><img src="https://avatars.githubusercontent.com/u/23272162?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Caleb Ukle</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=barbados-clemens" title="Code">💻</a></td>
     <td align="center"><a href="https://www.joshmorony.com/"><img src="https://avatars.githubusercontent.com/u/2578009?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joshua Morony</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=joshuamorony" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/BenLune"><img src="https://avatars.githubusercontent.com/u/5662714?v=4?s=100" width="100px;" alt=""/><br /><sub><b>BenLune</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=BenLune" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/IKatsuba"><img src="https://avatars.githubusercontent.com/u/10637135?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Igor Katsuba</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=IKatsuba" title="Code">💻</a></td>
   </tr>
 </table>
 
@@ -52,4 +55,5 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
+Contributions of any kind welcome!
