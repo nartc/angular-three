@@ -13,6 +13,11 @@
                 "index": 0
             },
             "x-prompt": "What project would you like to add Cannon configuration to?"
+        },
+        "rootTsConfig": {
+            "type": "string",
+            "description": "Root tsconfig of your workspace",
+            "x-prompt": "What is the path to your root tsconfig json?"
         }
     },
     "required": [

@@ -1,4 +1,3 @@
-import { webWorkerGenerator } from '@nrwl/angular/generators';
 import {
     addDependenciesToPackageJson,
     formatFiles,
@@ -7,10 +6,8 @@ import {
     offsetFromRoot,
     readProjectConfiguration,
     Tree,
-    updateJson,
     updateProjectConfiguration,
 } from '@nrwl/devkit';
-import { exec } from 'node:child_process';
 import { join } from 'node:path';
 import { ANGULAR_THREE_VERSION } from '../versions';
 import { ConfigureCannonGeneratorSchema } from './schema';
@@ -58,29 +55,33 @@ Please make sure "include" property has a record for "@angular-three/cannon/**/w
     }
 
     const isNx = tree.exists('nx.json');
+    const offset = offsetFromRoot(projectConfiguration.root);
 
     if (isNx) {
-        await webWorkerGenerator(tree, {
-            project: options.project,
-            name: 'tmp',
-            skipFormat: true,
-            snippet: false,
-        });
+        options.rootTsConfig =
+            options.rootTsConfig || `${offset}tsconfig.base.json`;
     } else {
-        await exec(`npx ng g web-worker tmp --project=${options.project}`);
+        options.rootTsConfig = options.rootTsConfig || `${offset}tsconfig.json`;
     }
 
-    updateJson(tree, webWorkerTsConfig, (tsConfig) => {
-        tsConfig['include'] = [
-            `${offsetFromRoot(
-                projectConfiguration.root
-            )}node_modules/@angular-three/cannon/**/worker.ts`,
-        ];
-
-        return tsConfig;
-    });
-
-    tree.delete(join(projectConfiguration.sourceRoot, 'app/tmp.worker.ts'));
+    tree.write(
+        webWorkerTsConfig,
+        `/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "${options.rootTsConfig}",
+  "compilerOptions": {
+    "outDir": "./out-tsc/worker",
+    "lib": [
+      "es2018",
+      "webworker"
+    ],
+    "types": []
+  },
+  "include": [
+    "${offset}node_modules/@angular-three/cannon/**/worker.ts"
+  ]
+}`
+    );
 
     updateProjectConfiguration(tree, options.project, {
         ...projectConfiguration,
