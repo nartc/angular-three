@@ -1,3 +1,10 @@
+### [4.2.2](https://github.com/nartc/angular-three/compare/4.2.1...4.2.2) (2022-02-18)
+
+
+### Bug Fixes
+
+* **schematics:** make sure offset is calculated correctly ([cc857c1](https://github.com/nartc/angular-three/commit/cc857c163b625d3d30fba30a400ccd526be5aeac))
+
 ### [4.2.1](https://github.com/nartc/angular-three/compare/4.2.0...4.2.1) (2022-02-18)
 
 
