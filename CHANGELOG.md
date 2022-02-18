@@ -1,3 +1,10 @@
+### [4.2.4](https://github.com/nartc/angular-three/compare/4.2.3...4.2.4) (2022-02-18)
+
+
+### Bug Fixes
+
+* **cannon:** add cannon-es-debugger to dependencies list instead ([187c06f](https://github.com/nartc/angular-three/commit/187c06feca780ad0e0bdd983413b956af987489d))
+
 ### [4.2.3](https://github.com/nartc/angular-three/compare/4.2.2...4.2.3) (2022-02-18)
 
 
