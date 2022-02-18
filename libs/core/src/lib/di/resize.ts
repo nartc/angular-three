@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { inject, InjectionToken } from '@angular/core';
+import { WINDOW } from './window';
 
 export interface NgtResizeOptions {
     box: ResizeObserverBoxOptions;
@@ -25,11 +26,10 @@ export const NGT_RESIZE_OBSERVER_SUPPORT = new InjectionToken<boolean>(
     'Resize Observer API support',
     {
         factory: () => {
-            const document = inject(DOCUMENT);
+            const window = inject(WINDOW);
             return (
-                !!document.defaultView &&
-                'ResizeObserver' in document.defaultView &&
-                (document.defaultView as unknown as Record<string, unknown>)[
+                'ResizeObserver' in window &&
+                (window as unknown as Record<string, unknown>)[
                     'ResizeObserver'
                 ] != null
             );

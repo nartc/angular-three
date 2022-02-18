@@ -16,6 +16,7 @@ import {
     NGT_RESIZE_OPTIONS,
     NgtResizeOptions,
 } from '../di/resize';
+import { WINDOW } from '../di/window';
 
 export interface NgtResizeResult {
     readonly entries: ReadonlyArray<ResizeObserverEntry>;
@@ -36,6 +37,7 @@ export class NgtResize extends Observable<NgtResizeResult> {
         @Inject(ElementRef) { nativeElement }: ElementRef<Element>,
         @Inject(NgZone) zone: NgZone,
         @Inject(DOCUMENT) document: Document,
+        @Inject(WINDOW) window: Window,
         @Inject(NGT_RESIZE_OBSERVER_SUPPORT) isSupport: boolean,
         @Inject(NGT_RESIZE_OPTIONS)
         { box, offsetSize, scroll, debounce }: NgtResizeOptions
@@ -103,7 +105,7 @@ export class NgtResize extends Observable<NgtResizeResult> {
                     Object.freeze(size);
                     subscriber.next({
                         entries,
-                        dpr: document.defaultView!.devicePixelRatio,
+                        dpr: window.devicePixelRatio,
                         ...size,
                     });
                     if (!areBoundsEqual(lastBounds || {}, size)) {
@@ -133,7 +135,7 @@ export class NgtResize extends Observable<NgtResizeResult> {
                         });
                     }
 
-                    fromEvent(document.defaultView as Window, 'scroll', {
+                    fromEvent(window, 'scroll', {
                         capture: true,
                         passive: true,
                     })
@@ -141,7 +143,7 @@ export class NgtResize extends Observable<NgtResizeResult> {
                         .subscribe(boundEntriesCallback);
                 }
 
-                fromEvent(document.defaultView as Window, 'resize')
+                fromEvent(window, 'resize')
                     .pipe(debounceAndDestroy(resizeDebounce))
                     .subscribe(boundEntriesCallback);
             });
