@@ -1,3 +1,15 @@
+### [4.3.1](https://github.com/nartc/angular-three/compare/4.3.0...4.3.1) (2022-02-20)
+
+
+### Bug Fixes
+
+* **schematics:** up ANGULAR_THREE_VERSION ([088ddfe](https://github.com/nartc/angular-three/commit/088ddfea53a5aa03850381a56a39c5fc62e606c7))
+
+
+### Documentations
+
+* **storybook:** add scale to simple physics ([4e1c7b1](https://github.com/nartc/angular-three/commit/4e1c7b137b0d2b709c0bd060a28e953c41267d1a))
+
 ## [4.3.0](https://github.com/nartc/angular-three/compare/4.2.5...4.3.0) (2022-02-18)
 
 
