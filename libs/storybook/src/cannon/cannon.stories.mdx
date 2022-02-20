@@ -195,8 +195,9 @@ Now that we have a Floor, we can start "dropping" objects.
         >
             <!-- ... -->
             <ngt-physics>
-                <!-- 👇 put our Floor inside of ngt-physics -->
                 <app-floor></app-floor>
+                <!-- 👇 put our Cube inside of ngt-physics -->
+                <app-cube></app-cube>
             </ngt-physics>
         </ngt-canvas>
     `,
@@ -227,6 +228,7 @@ export class FloorComponent {}
             [castShadow]="true"
             [position]="position"
             [rotation]="rotation"
+            [scale]="scale"
         >
             <ngt-box-geometry></ngt-box-geometry>
             <ngt-mesh-lambert-material
@@ -241,11 +243,14 @@ export class CubeComponent {
     // 👇 These can be turned into Input later
     position = [0.1, 5, 0] as NgtVector3;
     rotation = [0.4, 0.2, 0.5] as NgtEuler;
+    scale = 0.5 as NgtVector3;
 
     getCubeProps: GetByIndex<BoxProps> = () => ({
         mass: 1,
         position: this.position as NgtTriplet,
         rotation: this.rotation as NgtTriplet,
+        // 👇 this is specific to BoxProps
+        args: [this.scale, this.scale, this.scale] as NgtTriplet
     });
 }
 

@@ -25,6 +25,7 @@ import {
     NgtShadowMaterialModule,
 } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -51,8 +52,14 @@ import {
             <ngt-physics>
                 <storybook-plane [position]="[0, -2.5, 0]"></storybook-plane>
                 <storybook-cube [position]="[0.1, 5, 0]"></storybook-cube>
-                <storybook-cube [position]="[0, 10, -1]"></storybook-cube>
-                <storybook-cube [position]="[0, 20, -2]"></storybook-cube>
+                <storybook-cube
+                    [position]="[0, 10, -1]"
+                    [scale]="[0.5, 0.5, 0.5]"
+                ></storybook-cube>
+                <storybook-cube
+                    [position]="[0, 20, -2]"
+                    [scale]="[0.5, 0.5, 0.5]"
+                ></storybook-cube>
             </ngt-physics>
         </ngt-canvas>
     `,
@@ -78,8 +85,13 @@ export class SimplePhysicsComponent {}
 
             <ngt-physics>
                 <storybook-plane [position]="[0, -2.5, 0]"></storybook-plane>
-                <storybook-cube [position]="[0.1, 5, 0]"></storybook-cube>
+                <storybook-cube
+                    [position]="[0.1, 5, 0]"
+                    [scale]="0.5"
+                ></storybook-cube>
             </ngt-physics>
+
+            <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
         </ngt-canvas>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -121,6 +133,7 @@ export class PlaneComponent {
             [castShadow]="true"
             [position]="position"
             [rotation]="rotation"
+            [scale]="scale"
         >
             <ngt-box-geometry></ngt-box-geometry>
             <ngt-mesh-lambert-material
@@ -132,12 +145,16 @@ export class PlaneComponent {
 })
 export class CubeComponent {
     @Input() position?: NgtVector3;
+    @Input() scale?: NgtVector3;
     rotation = [0.4, 0.2, 0.5] as NgtEuler;
 
     getCubeProps: GetByIndex<BoxProps> = () => ({
         mass: 1,
         position: this.position as NgtTriplet,
         rotation: this.rotation as NgtTriplet,
+        args: (Array.isArray(this.scale)
+            ? this.scale
+            : [this.scale, this.scale, this.scale]) as NgtTriplet,
     });
 }
 
@@ -164,6 +181,7 @@ export class CubeComponent {
         NgtRadianPipeModule,
         NgtShadowMaterialModule,
         NgtVectorPipeModule,
+        NgtSobaOrbitControlsModule,
     ],
 })
 export class SimplePhysicsComponentModule {}
