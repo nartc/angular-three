@@ -11,7 +11,8 @@ export interface NgtCannonDebugInfo {
 }
 
 export interface NgtCannonDebugState extends NgtCannonDebugInfo {
-    color?: NgtColor;
-    scale?: number;
-    impl?: typeof import('cannon-es-debugger').default;
+    color: NgtColor;
+    scale: number;
+    impl: typeof import('cannon-es-debugger').default;
+    disabled: boolean;
 }

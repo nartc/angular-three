@@ -53,6 +53,10 @@ export class NgtCannonDebug
         this.set({ impl });
     }
 
+    @Input() set disabled(disabled: boolean) {
+        this.set({ disabled });
+    }
+
     scene = new THREE.Scene();
 
     constructor(
@@ -73,6 +77,7 @@ export class NgtCannonDebug
             impl: cannonDebugger,
             bodies: [],
             refs: {},
+            disabled: false,
         });
     }
 
@@ -107,7 +112,9 @@ export class NgtCannonDebug
 
             const animationUuid = this.animationFrameStore.register({
                 callback: () => {
-                    const { bodies, refs, impl, color, scale } = this.get();
+                    const { bodies, refs, impl, color, scale, disabled } =
+                        this.get();
+                    if (disabled) return;
                     const { refs: physicsRefs } = this.physicsStore.get();
 
                     if (!instance || lastBodies !== bodies.length) {
