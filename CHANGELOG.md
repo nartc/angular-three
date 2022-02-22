@@ -1,3 +1,10 @@
+### [4.4.1](https://github.com/nartc/angular-three/compare/4.4.0...4.4.1) (2022-02-22)
+
+
+### Bug Fixes
+
+* **schematics:** of course I forgot to bump the schematics version ([77c2a5c](https://github.com/nartc/angular-three/commit/77c2a5c4e62b5cc8f58d3195669e4a4388fcbdf7))
+
 ## [4.4.0](https://github.com/nartc/angular-three/compare/4.3.1...4.4.0) (2022-02-22)
 
 
