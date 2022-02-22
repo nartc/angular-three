@@ -1,3 +1,15 @@
+## [4.4.0](https://github.com/nartc/angular-three/compare/4.3.1...4.4.0) (2022-02-22)
+
+
+### Features
+
+* **cannon/debug:** add ability to disable Debug ([c4823f9](https://github.com/nartc/angular-three/commit/c4823f98a6ec9c1bf3cc9d517d6bbc03db4f4d02)), closes [#62](https://github.com/nartc/angular-three/issues/62)
+
+
+### Documentations
+
+* **storybook:** add demo for wakeUp/sleep api ([4fc2f56](https://github.com/nartc/angular-three/commit/4fc2f563b86b2d5f5310b7cb8575233c2e4bc353)), closes [#60](https://github.com/nartc/angular-three/issues/60)
+
 ### [4.3.1](https://github.com/nartc/angular-three/compare/4.3.0...4.3.1) (2022-02-20)
 
 
