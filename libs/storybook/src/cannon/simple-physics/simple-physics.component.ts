@@ -165,7 +165,11 @@ export class CubeComponent {
         PlaneComponent,
         CubeComponent,
     ],
-    exports: [SimplePhysicsComponent, SimpleSinglePhysicsComponent],
+    exports: [
+        SimplePhysicsComponent,
+        SimpleSinglePhysicsComponent,
+        PlaneComponent,
+    ],
     imports: [
         NgtAmbientLightModule,
         NgtBoxGeometryModule,
