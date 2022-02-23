@@ -1,4 +1,9 @@
-import { BoxProps, GetByIndex, NgtPhysicsModule } from '@angular-three/cannon';
+import {
+    BoxProps,
+    GetByIndex,
+    NgtPhysicsModule,
+    PlaneProps,
+} from '@angular-three/cannon';
 import {
     NgtPhysicBoxModule,
     NgtPhysicPlaneModule,
@@ -54,11 +59,11 @@ import {
                 <storybook-cube [position]="[0.1, 5, 0]"></storybook-cube>
                 <storybook-cube
                     [position]="[0, 10, -1]"
-                    [scale]="[0.5, 0.5, 0.5]"
+                    [scale]="0.5"
                 ></storybook-cube>
                 <storybook-cube
                     [position]="[0, 20, -2]"
-                    [scale]="[0.5, 0.5, 0.5]"
+                    [scale]="0.5"
                 ></storybook-cube>
             </ngt-physics>
         </ngt-canvas>
@@ -103,9 +108,10 @@ export class SimpleSinglePhysicsComponent {}
     template: `
         <ngt-mesh
             ngtPhysicPlane
+            [getPhysicProps]="getPlaneProps"
             [receiveShadow]="true"
             [position]="position"
-            [rotation]="[-90 | radian, 0, 0]"
+            [rotation]="rotation"
         >
             <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
             <ngt-shadow-material
@@ -121,6 +127,13 @@ export class SimpleSinglePhysicsComponent {}
 })
 export class PlaneComponent {
     @Input() position?: NgtVector3;
+    rotation = [-Math.PI / 2, 0, 0] as NgtEuler;
+
+    getPlaneProps: GetByIndex<PlaneProps> = () => ({
+        args: [1000, 1000],
+        rotation: this.rotation as NgtTriplet,
+        position: this.position as NgtTriplet,
+    });
 }
 
 @Component({
@@ -145,7 +158,7 @@ export class PlaneComponent {
 })
 export class CubeComponent {
     @Input() position?: NgtVector3;
-    @Input() scale?: NgtVector3;
+    @Input() scale?: NgtVector3 = 1;
     rotation = [0.4, 0.2, 0.5] as NgtEuler;
 
     getCubeProps: GetByIndex<BoxProps> = () => ({
