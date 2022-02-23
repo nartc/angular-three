@@ -43,7 +43,7 @@ import {
     Self,
     SimpleChanges,
 } from '@angular/core';
-import { startWith } from 'rxjs';
+import { defer, of, startWith } from 'rxjs';
 import * as THREE from 'three';
 import {
     capitalize,
@@ -123,9 +123,16 @@ export class NgtCannonBodyController extends Controller implements OnInit {
 
     private cannonPropsParams$ = this.store.select(
         this.store.select((s) => s.getPhysicProps).pipe(startWithUndefined()),
-        this.objectInputsController.changes$.pipe(startWith({})),
+        defer(() => {
+            return (
+                this.objectInputsController?.changes$.pipe(startWith({})) ||
+                of({})
+            );
+        }),
         (getPhysicsProps, inputChanges) => ({ getPhysicsProps, inputChanges })
     );
+
+    private readonly plainObject3d?: THREE.Object3D;
 
     constructor(
         private zone: NgZone,
@@ -151,16 +158,14 @@ export class NgtCannonBodyController extends Controller implements OnInit {
             throw new Error('NGT_CANNON_BODY_TYPE is required');
         }
 
-        if (!parentObjectFn) {
-            throw new Error(
-                '[ngtCannon***] directive can only be used on an Object3D'
-            );
-        }
-
         if (!physicsStore) {
             throw new Error(
                 '[ngtCannon***] directive can only be used inside of <ngt-physics>'
             );
+        }
+
+        if (!parentObjectFn) {
+            this.plainObject3d = new THREE.Object3D();
         }
 
         this.store.set({
@@ -171,7 +176,9 @@ export class NgtCannonBodyController extends Controller implements OnInit {
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.store.onCanvasReady(this.canvasStore.ready$, () => {
-                this.store.set({ object3d: this.parentObjectFn?.() });
+                this.store.set({
+                    object3d: this.getObject3d(),
+                });
                 this.initWorker(this.cannonPropsParams$);
 
                 if (this.cannonConstraintController) {
@@ -186,7 +193,7 @@ export class NgtCannonBodyController extends Controller implements OnInit {
     }
 
     get api(): WorkerApi & { at: (index: number) => WorkerApi } {
-        this.store.set({ object3d: this.parentObjectFn?.() });
+        this.store.set({ object3d: this.getObject3d() });
         const { worker, subscriptions } = this.physicsStore.get();
         const object3d = this.store.get((s) => s.object3d)!;
         const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
@@ -404,7 +411,7 @@ export class NgtCannonBodyController extends Controller implements OnInit {
         inputChanges: SimpleChanges;
     }>(
         tapEffect(() => {
-            this.store.set({ object3d: this.parentObjectFn?.() });
+            this.store.set({ object3d: this.getObject3d() });
             let uuid: string[] = [];
             const {
                 worker: currentWorker,
@@ -413,7 +420,7 @@ export class NgtCannonBodyController extends Controller implements OnInit {
             } = this.physicsStore.get();
 
             const object =
-                this.store.get((s) => s.object3d) || new THREE.Object3D();
+                this.store.get((s) => s.object3d) || this.getObject3d();
 
             let objectCount = 1;
 
@@ -484,16 +491,28 @@ export class NgtCannonBodyController extends Controller implements OnInit {
         })
     );
 
+    private getObject3d() {
+        return this.parentObjectFn?.() || this.plainObject3d;
+    }
+
     private getByIndex(index: number): BodyProps & NgtObject3dProps {
         const getPhysicProps = this.store.get((s) => s.getPhysicProps);
         const physicsProps = getPhysicProps
             ? getPhysicProps(index)
             : ({} as BodyProps);
 
-        return {
-            ...this.objectInputsController.object3dProps,
+        const result = {
+            ...(this.objectInputsController?.object3dProps || {}),
             ...physicsProps,
         } as BodyProps & NgtObject3dProps;
+
+        for (const key in result) {
+            if (result[key as keyof typeof result] === undefined) {
+                delete result[key as keyof typeof result];
+            }
+        }
+
+        return result;
     }
 }
 
