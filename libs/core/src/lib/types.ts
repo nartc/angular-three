@@ -273,7 +273,7 @@ export interface NgtCanvasState {
     viewport: NgtViewport & {
         getCurrentViewport: (
             camera?: NgtCamera,
-            target?: THREE.Vector3,
+            target?: NgtVector3,
             size?: NgtSize
         ) => NgtCurrentViewport;
     };

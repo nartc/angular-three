@@ -11,6 +11,7 @@ import type {
     NgtPerformanceOptions,
     NgtRaycaster,
     NgtSize,
+    NgtVector3,
     NgtViewport,
     UnknownRecord,
 } from '../types';
@@ -21,6 +22,7 @@ import { NgtStore, tapEffect } from './store';
 
 const position = new THREE.Vector3();
 const defaultTarget = new THREE.Vector3();
+const tempTarget = new THREE.Vector3();
 
 @Injectable()
 export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
@@ -88,7 +90,11 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
                 aspect: clientWidth / clientHeight,
                 distance: 0,
                 factor: 0,
-                getCurrentViewport: (camera, target = defaultTarget, size) => {
+                getCurrentViewport: (
+                    camera,
+                    target: NgtVector3 = defaultTarget,
+                    size
+                ) => {
                     const { camera: defaultCamera, size: defaultSize } =
                         this.get();
                     if (!camera) {
@@ -101,9 +107,13 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
 
                     const { width, height } = size;
                     const aspect = width / height;
+                    if (target instanceof THREE.Vector3)
+                        tempTarget.copy(target);
+                    else
+                        tempTarget.set(...(target as [number, number, number]));
                     const distance = camera
-                        .getWorldDirection(position)
-                        .distanceTo(target);
+                        .getWorldPosition(position)
+                        .distanceTo(tempTarget);
                     if (isOrthographicCamera(camera)) {
                         return {
                             width: width / camera.zoom,
@@ -113,10 +123,9 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
                             aspect,
                         };
                     }
-
                     const fov = (camera.fov * Math.PI) / 180; // convert vertical fov to radians
-                    const h = 2 * Math.tan(fov / 2) * distance; // height of viewport
-                    const w = h * aspect; // width of viewport
+                    const h = 2 * Math.tan(fov / 2) * distance; // visible height
+                    const w = h * (width / height);
                     return {
                         width: w,
                         height: h,
@@ -145,9 +154,20 @@ export class NgtCanvasStore extends NgtStore<NgtCanvasState> {
 
     private readonly resize = this.effect<NgtResizeResult>(
         tap(({ width, height, dpr }) => {
-            this.set({
-                size: { width, height },
-                viewport: { ...this.get((s) => s.viewport), dpr },
+            this.set(({ viewport, camera }) => {
+                const size = { width, height };
+                return {
+                    size,
+                    viewport: {
+                        ...viewport,
+                        ...viewport.getCurrentViewport(
+                            camera,
+                            defaultTarget,
+                            size
+                        ),
+                        dpr: calculateDpr(dpr),
+                    },
+                };
             });
         })
     );
