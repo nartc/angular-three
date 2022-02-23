@@ -1,3 +1,24 @@
+## [4.5.0](https://github.com/nartc/angular-three/compare/4.4.1...4.5.0) (2022-02-23)
+
+
+### Features
+
+* **postprocessing/effects:** add SSAO ([f9678ab](https://github.com/nartc/angular-three/commit/f9678abf42ce43ec64809eabdd19a73bfb3c9aef))
+* **soba/staging:** add Sky ([175e91e](https://github.com/nartc/angular-three/commit/175e91eebbc85a483a056e5e2481c2da63ce64f5))
+
+
+### Bug Fixes
+
+* **cannon/bodies:** make body controller works without parent object3d ([2769797](https://github.com/nartc/angular-three/commit/27697977a2caca0c759cff3f40a40041b7222f1f))
+* **core:** fix viewport calculation ([5de20b0](https://github.com/nartc/angular-three/commit/5de20b05cd116a13f09cc4452bb2c4f3afa377e0))
+* **schematics:** bump version ([5a0938d](https://github.com/nartc/angular-three/commit/5a0938d824a3b3e469a672cd192c2ee00b5d5386))
+
+
+### Documentations
+
+* **storybook:** add object clump fork ([5af9f0a](https://github.com/nartc/angular-three/commit/5af9f0a9142af54121b58f5fdd95b6bc2c7becb6))
+* **storybook:** add sky ([f8ef042](https://github.com/nartc/angular-three/commit/f8ef042ea9376a4f5951085fb191be3c6098b29c))
+
 ### [4.4.1](https://github.com/nartc/angular-three/compare/4.4.0...4.4.1) (2022-02-22)
 
 
