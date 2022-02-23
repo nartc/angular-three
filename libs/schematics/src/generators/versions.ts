@@ -1,1 +1,1 @@
-export const ANGULAR_THREE_VERSION = '~4.4.0';
+export const ANGULAR_THREE_VERSION = '~4.5.0';
