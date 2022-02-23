@@ -14,6 +14,7 @@ import {
     Input,
     NgModule,
     NgZone,
+    OnInit,
     Optional,
     Output,
 } from '@angular/core';
@@ -43,69 +44,75 @@ export interface NgtDepthOfFieldState {
         ></ngt-primitive>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [NgtStore],
 })
-export class NgtDepthOfField {
+export class NgtDepthOfField
+    extends NgtStore<NgtDepthOfFieldState>
+    implements OnInit
+{
     @Input() set options(
         options: ConstructorParameters<AnyConstructor<DepthOfFieldEffect>>[1]
     ) {
-        this.store.set({ options });
+        this.set({ options });
     }
 
     @Input() set target(target: NgtVector3) {
-        this.store.set({ target });
+        this.set({ target });
     }
 
     @Input() set depthTexture(depthTexture: {
         texture: THREE.Texture;
         packing: number;
     }) {
-        this.store.set({ depthTexture });
+        this.set({ depthTexture });
     }
 
     @Input() set blur(blur: number) {
-        this.store.set({ blur });
+        this.set({ blur });
     }
 
-    private props$ = this.store.select(
-        this.store.select((s) => s.blur).pipe(startWithUndefined()),
-        this.store.select((s) => s.options).pipe(startWith({})),
+    private props$ = this.select(
+        this.select((s) => s.blur).pipe(startWithUndefined()),
+        this.select((s) => s.options).pipe(startWith({})),
         this.effectComposerStore.select((s) => s.camera),
         (blur, options, camera) => ({ blur, options, camera })
     );
 
-    private target$ = this.store.select(
-        this.store.select((s) => s.depthTexture).pipe(startWithUndefined()),
-        this.store.select((s) => s.target).pipe(startWithUndefined()),
-        this.store.select((s) => s.effect),
+    private target$ = this.select(
+        this.select((s) => s.depthTexture).pipe(startWithUndefined()),
+        this.select((s) => s.target).pipe(startWithUndefined()),
+        this.select((s) => s.effect),
         (depthTexture, target, effect) => ({ depthTexture, target, effect })
     );
 
-    readonly effect$ = this.store.select((s) => s.effect);
+    readonly effect$ = this.select((s) => s.effect);
 
     @Output() ready = this.effect$;
 
     constructor(
-        private store: NgtStore<NgtDepthOfFieldState>,
         private canvasStore: NgtCanvasStore,
         private zone: NgZone,
         @Optional() private effectComposerStore: NgtEffectComposerStore
-    ) {}
+    ) {
+        super();
+        if (!effectComposerStore) {
+            throw new Error(`Effects need to be inside of ngt-effect-composer`);
+        }
+    }
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            this.store.onCanvasReady(this.canvasStore.ready$, () => {
+            this.onCanvasReady(this.canvasStore.ready$, () => {
                 this.setEffect(this.props$);
                 this.setEffectTarget(this.target$);
             });
         });
     }
 
-    get effect() {
-        return this.store.get((s) => s.effect);
+    get depthOfFieldEffect() {
+        return this.get((s) => s.effect);
     }
 
-    private readonly setEffect = this.store.effect<{
+    private readonly setEffect = this.effect<{
         blur: number;
         options: ConstructorParameters<AnyConstructor<DepthOfFieldEffect>>[1];
         camera: THREE.Camera;
@@ -115,11 +122,11 @@ export class NgtDepthOfField {
             this.effectComposerStore.set((state) => ({
                 effects: [...state.effects, effect],
             }));
-            this.store.set({ effect });
+            this.set({ effect });
         })
     );
 
-    private readonly setEffectTarget = this.store.effect<
+    private readonly setEffectTarget = this.effect<
         Pick<NgtDepthOfFieldState, 'depthTexture' | 'target' | 'effect'>
     >(
         tap(({ effect, target, depthTexture }) => {
