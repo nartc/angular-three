@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 /* Coercion */
 export type BooleanInput = string | boolean | null | undefined;
+export type NumberInput = string | number | null | undefined;
 
 /* Common + Utility */
 export type UnknownRecord = Record<string, unknown>;
