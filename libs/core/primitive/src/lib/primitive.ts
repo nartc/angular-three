@@ -1,61 +1,60 @@
 import {
-    createParentObjectProvider,
-    NGT_OBJECT_CONTROLLER_PROVIDER,
-    NGT_OBJECT_WATCHED_CONTROLLER,
-    NgtObjectController,
-    NgtObjectControllerModule,
+    NgtObject,
+    NgtObjectState,
+    provideObjectFactory,
+    tapEffect,
 } from '@angular-three/core';
 import {
-    Directive,
-    EventEmitter,
-    Inject,
+    ChangeDetectionStrategy,
+    Component,
     Input,
     NgModule,
-    OnChanges,
-    Output,
 } from '@angular/core';
+import { filter } from 'rxjs';
 import * as THREE from 'three';
 
-@Directive({
+export interface NgtPrimitiveState extends NgtObjectState {
+    object: THREE.Object3D;
+}
+
+@Component({
     selector: 'ngt-primitive[object]',
-    exportAs: 'ngtPrimitive',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        NGT_OBJECT_CONTROLLER_PROVIDER,
-        createParentObjectProvider(
-            NgtPrimitive,
-            (primitive) => primitive.object
-        ),
+        provideObjectFactory<THREE.Object3D, NgtPrimitiveState>(NgtPrimitive),
     ],
 })
-export class NgtPrimitive<TObject extends THREE.Object3D = THREE.Object3D>
-    implements OnChanges
-{
-    @Output() ready = new EventEmitter<TObject>();
-
-    private _object!: TObject;
-
-    @Input() set object(value: TObject) {
-        this._object = value;
-        this.objectController.initFn = () => value;
-        this.objectController.readyFn = () => this.ready.emit(this.object);
+export class NgtPrimitive extends NgtObject<THREE.Object3D, NgtPrimitiveState> {
+    @Input() set object(object: THREE.Object3D) {
+        this.set({ object });
     }
 
     get object() {
-        return this._object;
+        return this.get((s) => s.object);
     }
 
-    constructor(
-        @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
-        private objectController: NgtObjectController
-    ) {}
+    private readonly object$ = this.select((s) => s.object).pipe(
+        filter((object) => object != null)
+    );
 
-    ngOnChanges() {
-        this.objectController.init();
+    protected override objectInitFn(): THREE.Object3D {
+        return this.object;
+    }
+
+    override ngOnInit() {
+        this.effect<THREE.Object3D>(
+            tapEffect(() => {
+                // TODO: determine whether we should run clean up logic if object is undefined/null
+                this.init();
+            })
+        )(this.object$);
+        super.ngOnInit();
     }
 }
 
 @NgModule({
     declarations: [NgtPrimitive],
-    exports: [NgtPrimitive, NgtObjectControllerModule],
+    exports: [NgtPrimitive],
 })
 export class NgtPrimitiveModule {}
