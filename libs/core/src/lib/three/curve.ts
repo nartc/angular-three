@@ -1,71 +1,83 @@
-import { Directive, Input, NgZone, OnInit, Optional } from '@angular/core';
-import { Subscription } from 'rxjs';
+import {
+    Directive,
+    Inject,
+    Input,
+    NgZone,
+    Optional,
+    SkipSelf,
+} from '@angular/core';
 import * as THREE from 'three';
-import { NgtCanvasStore } from '../stores/canvas';
+import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
+import { NGT_INSTANCE_FACTORY } from '../di/instance';
+import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import type { AnyConstructor } from '../types';
-import { NgtGeometry } from './geometry';
+import type { AnyConstructor, AnyFunction, NgtUnknownInstance } from '../types';
+import { prepare } from '../utils/instance';
+
+export interface NgtCommonCurveState<
+    TCurve extends THREE.Curve<THREE.Vector> = THREE.Curve<THREE.Vector>
+> extends NgtInstanceState<TCurve> {
+    curve: TCurve;
+    curveArgs: unknown[];
+    arcLengthDivisions?: number;
+}
 
 @Directive()
-export abstract class NgtCurve<
-        TCurve extends THREE.Curve<THREE.Vector> = THREE.Curve<THREE.Vector>
-    >
-    extends NgtStore
-    implements OnInit
-{
-    @Input() divisions?: number;
+export abstract class NgtCommonCurve<
+    TCurve extends THREE.Curve<THREE.Vector> = THREE.Curve<THREE.Vector>
+> extends NgtInstance<TCurve, NgtCommonCurveState<TCurve>> {
+    abstract get curveType(): AnyConstructor<TCurve>;
 
-    abstract curveType: AnyConstructor<TCurve>;
-
-    private _curveArgs: unknown[] = [];
+    @Input() set arcLengthDivisions(arcLengthDivisions: number) {
+        this.set({ arcLengthDivisions });
+    }
 
     protected set curveArgs(v: unknown | unknown[]) {
-        this._curveArgs = Array.isArray(v) ? v : [v];
-        this.init();
+        this.set({ curveArgs: Array.isArray(v) ? v : [v] });
     }
-
-    private initSubscription?: Subscription;
 
     constructor(
-        protected zone: NgZone,
-        @Optional() protected geometryDirective: NgtGeometry,
-        protected canvasStore: NgtCanvasStore
+        zone: NgZone,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_FACTORY)
+        parentInstanceFactory: AnyFunction,
+        protected store: NgtStore
     ) {
-        super();
+        super({ zone, shouldAttach: true, parentInstanceFactory });
+        this.set({ curveArgs: [] });
     }
 
-    private _curve?: TCurve;
-
-    ngOnInit() {
-        if (!this.curve) {
-            this.init();
-        }
-    }
-
-    private init() {
+    override ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            if (this.initSubscription) {
-                this.initSubscription.unsubscribe();
+            this.onCanvasReady(this.store.ready$, () => {
+                this.init(this.select((s) => s.curveArgs));
+            });
+        });
+        super.ngOnInit();
+    }
+
+    get curve(): TCurve {
+        return this.get((s) => s.curve);
+    }
+
+    private readonly init = this.effect<
+        NgtCommonCurveState<TCurve>['curveArgs']
+    >(
+        tapEffect((curveArgs) => {
+            const curve = prepare(
+                new this.curveType(...curveArgs),
+                () => this.store.get(),
+                this.parentInstanceFactory?.() as NgtUnknownInstance
+            );
+
+            const arcLengthDivisions = this.get((s) => s.arcLengthDivisions);
+            if (arcLengthDivisions != undefined) {
+                curve.arcLengthDivisions = arcLengthDivisions;
             }
 
-            this.initSubscription = this.onCanvasReady(
-                this.canvasStore.ready$,
-                () => {
-                    this._curve = new this.curveType(...this._curveArgs);
-                    if (this.curve && this.geometryDirective) {
-                        const points = this.curve.getPoints(this.divisions);
-                        this.geometryDirective.geometry.setFromPoints(
-                            points as unknown as
-                                | THREE.Vector3[]
-                                | THREE.Vector2[]
-                        );
-                    }
-                }
-            );
-        });
-    }
-
-    get curve(): TCurve | undefined {
-        return this._curve;
-    }
+            this.set({ curve, instance: curve });
+            this.emitReady();
+        })
+    );
 }

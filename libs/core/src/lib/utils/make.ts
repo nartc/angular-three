@@ -8,8 +8,8 @@ import type {
     NgtVector4,
 } from '../types';
 
-export function makeVector2(input?: NgtVector2): THREE.Vector2 | undefined {
-    if (!input) return undefined;
+export function makeVector2(input?: NgtVector2): THREE.Vector2 {
+    if (!input) return new THREE.Vector2();
 
     if (input instanceof THREE.Vector2) {
         return input;
@@ -22,8 +22,8 @@ export function makeVector2(input?: NgtVector2): THREE.Vector2 | undefined {
     return new THREE.Vector2(input, input);
 }
 
-export function makeVector3(input?: NgtVector3): THREE.Vector3 | undefined {
-    if (!input) return undefined;
+export function makeVector3(input?: NgtVector3): THREE.Vector3 {
+    if (!input) return new THREE.Vector3();
 
     if (input instanceof THREE.Vector3) {
         return input;
@@ -36,8 +36,8 @@ export function makeVector3(input?: NgtVector3): THREE.Vector3 | undefined {
     return new THREE.Vector3(input, input, input);
 }
 
-export function makeVector4(input?: NgtVector4): THREE.Vector4 | undefined {
-    if (!input) return undefined;
+export function makeVector4(input?: NgtVector4): THREE.Vector4 {
+    if (!input) return new THREE.Vector4();
 
     if (input instanceof THREE.Vector4) {
         return input;
@@ -53,8 +53,8 @@ export function makeVector4(input?: NgtVector4): THREE.Vector4 | undefined {
 export function makeForSet<TType extends AnyConstructor<any>>(
     type: TType,
     input?: InstanceType<TType> | Parameters<typeof type.prototype['set']>
-): InstanceType<TType> | undefined {
-    if (!input) return undefined;
+): InstanceType<TType> {
+    if (!input) return new type();
 
     if (input instanceof type) {
         return input as InstanceType<TType>;
@@ -63,8 +63,8 @@ export function makeForSet<TType extends AnyConstructor<any>>(
     return new type(...(input as Parameters<typeof type.prototype['set']>));
 }
 
-export function makeColor(color?: NgtColor): THREE.Color | undefined {
-    if (!color) return undefined;
+export function makeColor(color?: NgtColor): THREE.Color {
+    if (!color) return new THREE.Color();
     if (color instanceof THREE.Color) {
         return color;
     }
@@ -74,6 +74,12 @@ export function makeColor(color?: NgtColor): THREE.Color | undefined {
     }
 
     return new THREE.Color(color);
+}
+
+export function makeDpr(dpr: number) {
+    return Array.isArray(dpr)
+        ? Math.min(Math.max(dpr[0], window.devicePixelRatio), dpr[1])
+        : dpr;
 }
 
 const idCache: { [id: string]: boolean | undefined } = {};

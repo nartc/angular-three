@@ -1,40 +1,37 @@
 import * as THREE from 'three';
 import type {
     AnyConstructor,
-    NgtInstance,
     NgtInstanceInternal,
+    NgtUnknownInstance,
     UnknownRecord,
 } from '../types';
+import { checkNeedsUpdate } from './check-needs-update';
 
-function checkNeedsUpdate(value: unknown) {
-    if (
-        value !== null &&
-        typeof value === 'object' &&
-        'needsUpdate' in (value as UnknownRecord)
-    ) {
-        (value as UnknownRecord)['needsUpdate'] = true;
-    }
-}
-
-export function applyProps(instance: NgtInstance, props: UnknownRecord) {
+export function applyProps<TInstance extends object = UnknownRecord>(
+    instance: NgtUnknownInstance<TInstance>,
+    props: UnknownRecord
+): void {
+    // props is empty
     if (!Object.keys(props).length) return;
 
-    if ('__ngt' in props) {
-        instance['__ngt'] = props['__ngt'] as NgtInstanceInternal;
+    const instanceInternal: NgtInstanceInternal = instance.__ngt__ || {};
+    const root = instanceInternal.root;
+    const rootState = root?.() ?? {};
+
+    if ('__ngt__' in props) {
+        instance.__ngt__ = (props as any).__ngt__ as NgtInstanceInternal;
     }
 
-    const unknownInstance = instance as unknown as UnknownRecord;
-
     if (
-        unknownInstance['set'] != null &&
-        typeof unknownInstance['set'] === 'function' &&
-        !(unknownInstance instanceof THREE.Raycaster)
+        (instance as UnknownRecord)['set'] != null &&
+        typeof (instance as UnknownRecord)['set'] === 'function' &&
+        !(instance instanceof THREE.Raycaster)
     ) {
         try {
-            (unknownInstance['set'] as Function)(props);
+            ((instance as UnknownRecord)['set'] as Function)(props);
         } catch (e) {
             console.info(
-                `Swallowing erroneous "set" invoked on ${unknownInstance.constructor.name} as non fatal: ${e}`
+                `Swallowing erroneous "set" invoked on ${instance.constructor.name} as non fatal: ${e}`
             );
         }
     }
@@ -42,59 +39,70 @@ export function applyProps(instance: NgtInstance, props: UnknownRecord) {
     for (const [key, prop] of Object.entries(props)) {
         // raycast is null or undefined. we'll skip
         if (key === 'raycast' && prop == undefined) continue;
-        const currentInstance = unknownInstance;
-        const targetProp = currentInstance[key] as UnknownRecord;
+
+        const currentInstance = instance;
+        const target = (currentInstance as UnknownRecord)[key] as UnknownRecord;
 
         if (
-            targetProp &&
-            targetProp['set'] &&
-            (targetProp['copy'] || targetProp instanceof THREE.Layers)
+            target &&
+            target['set'] &&
+            (target['copy'] || target instanceof THREE.Layers)
         ) {
+            // If value is an array
             if (Array.isArray(prop)) {
-                if (targetProp['fromArray'])
-                    (targetProp['fromArray'] as Function)(prop);
-                else (targetProp['set'] as Function)(...prop);
+                if (target['fromArray'])
+                    (target['fromArray'] as Function)(prop);
+                else (target['set'] as Function)(...prop);
             } else if (
-                targetProp['copy'] &&
+                target['copy'] &&
                 prop &&
                 (prop as AnyConstructor<unknown>).constructor &&
-                targetProp.constructor.name ===
+                target.constructor.name ===
                     (prop as AnyConstructor<unknown>).constructor.name
             ) {
-                (targetProp['copy'] as Function)(prop);
-            } else if (prop !== undefined) {
-                const isColor = targetProp instanceof THREE.Color;
+                (target['copy'] as Function)(prop);
+            } // If nothing else fits, just set the single value, ignore undefined
+            // https://github.com/pmndrs/react-three-fiber/issues/274
+            else if (prop !== undefined) {
+                const isColor = target instanceof THREE.Color;
                 // Allow setting array scalars
-                if (!isColor && targetProp['setScalar'])
-                    (targetProp['setScalar'] as Function)(prop);
+                if (!isColor && target['setScalar']) {
+                    (target['setScalar'] as Function)(prop);
+                }
                 // Layers have no copy function, we must therefore copy the mask property
                 else if (
-                    targetProp instanceof THREE.Layers &&
+                    target instanceof THREE.Layers &&
                     prop instanceof THREE.Layers
-                )
-                    targetProp.mask = prop.mask;
+                ) {
+                    target.mask = prop.mask;
+                }
                 // Otherwise just set ...
-                else (targetProp['set'] as Function)(prop);
-                // Auto-convert sRGB colors, for now ...
+                else {
+                    (target['set'] as Function)(prop);
+                }
+                // For versions of three which don't support THREE.ColorManagement,
+                // Auto-convert sRGB colors
                 // https://github.com/pmndrs/react-three-fiber/issues/344
-                if (!currentInstance['linear'] && isColor)
-                    (
-                        targetProp as unknown as THREE.Color
-                    ).convertSRGBToLinear();
+                const supportsColorManagement = (THREE as any).ColorManagement;
+                if (!supportsColorManagement && !rootState.linear && isColor) {
+                    target.convertSRGBToLinear();
+                }
             }
         } else {
-            currentInstance[key] = prop;
+            (currentInstance as UnknownRecord)[key] = prop;
             // Auto-convert sRGB textures, for now ...
             // https://github.com/pmndrs/react-three-fiber/issues/344
             if (
-                !currentInstance['linear'] &&
-                currentInstance[key] instanceof THREE.Texture
-            )
-                (currentInstance[key] as THREE.Texture).encoding =
-                    THREE.sRGBEncoding;
+                !rootState.linear &&
+                (currentInstance as UnknownRecord)[key] instanceof THREE.Texture
+            ) {
+                (
+                    (currentInstance as UnknownRecord)[key] as THREE.Texture
+                ).encoding = THREE.sRGBEncoding;
+            }
         }
 
         checkNeedsUpdate(prop);
-        checkNeedsUpdate(targetProp);
+        checkNeedsUpdate(target);
     }
 }

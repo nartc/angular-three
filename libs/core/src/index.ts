@@ -1,7 +1,6 @@
 export * from './lib/types';
 
 export * from './lib/di/parent-object';
-export * from './lib/di/object-init';
 export * from './lib/di/performance';
 export * from './lib/di/resize';
 export * from './lib/di/is-webgl-available';
@@ -40,19 +39,14 @@ export * from './lib/three/material';
 export * from './lib/three/mesh';
 export * from './lib/three/sprite';
 export * from './lib/three/camera';
-export * from './lib/three/extender';
+// export * from './lib/three/extender';
 export * from './lib/three/object-helper';
 
 export * from './lib/stores/store';
-export * from './lib/stores/canvas';
-export * from './lib/stores/events';
-export * from './lib/stores/animation-frame';
 
-export * from './lib/services/loop';
 export * from './lib/services/destroyed';
 export * from './lib/services/loader';
 export * from './lib/services/resize';
-export * from './lib/services/performance';
 
 export * from './lib/utils/apply-props';
 export * from './lib/utils/build-graph';

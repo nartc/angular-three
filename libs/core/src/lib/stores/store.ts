@@ -1,409 +1,658 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import {
-    asapScheduler,
-    combineLatest,
-    concatMap,
-    distinctUntilChanged,
-    filter,
-    isObservable,
-    map,
-    MonoTypeOperatorFunction,
-    noop,
-    Observable,
-    of,
-    OperatorFunction,
-    queueScheduler,
-    ReplaySubject,
-    scheduled,
-    share,
-    startWith,
-    Subject,
-    Subscription,
-    take,
-    takeUntil,
-    tap,
-    withLatestFrom,
-} from 'rxjs';
+    ElementRef,
+    Inject,
+    Injectable,
+    NgZone,
+    Optional,
+    SkipSelf,
+} from '@angular/core';
+import { filter, map, Observable, tap } from 'rxjs';
+import * as THREE from 'three';
+import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
+import { WINDOW } from '../di/window';
+import { NgtResize, NgtResizeResult } from '../services/resize';
+import type {
+    NgtAnimationRecord,
+    NgtCamera,
+    NgtEvents,
+    NgtGLOptions,
+    NgtInternalState,
+    NgtPerformanceOptions,
+    NgtSize,
+    NgtState,
+    NgtUnknownInstance,
+    NgtViewport,
+    UnknownRecord,
+} from '../types';
+import { applyProps } from '../utils/apply-props';
+import { createEvents } from '../utils/events';
+import { prepare } from '../utils/instance';
+import { makeDpr, makeId } from '../utils/make';
+import { NgtComponentStore, tapEffect } from './component-store';
 
-export type SelectorResults<TSelectors extends Observable<unknown>[]> = {
-    [Key in keyof TSelectors]: TSelectors[Key] extends Observable<infer TResult>
-        ? TResult
-        : never;
-};
+type NgtAnimationRecordWithUuid = NgtAnimationRecord & { uuid: string };
 
-export type Projector<Selectors extends Observable<unknown>[], TResult> = (
-    ...args: SelectorResults<Selectors>
-) => TResult;
+function isOrthographicCamera(
+    def: THREE.Camera
+): def is THREE.OrthographicCamera {
+    return def && (def as THREE.OrthographicCamera).isOrthographicCamera;
+}
+
+const DOM_EVENTS = {
+    click: false,
+    contextmenu: false,
+    dblclick: false,
+    wheel: false, // passive wheel errors with OrbitControls
+    pointerdown: true,
+    pointerup: true,
+    pointerleave: true,
+    pointermove: true,
+    pointercancel: true,
+    lostpointercapture: true,
+} as const;
 
 @Injectable()
-export class NgtStore<TState extends object = {}> implements OnDestroy {
-    // Should be used only in ngOnDestroy.
-    private readonly destroySubject$ = new ReplaySubject<void>(1);
-    // Exposed to any extending Store to be used for the teardown.
-    readonly destroy$ = this.destroySubject$.asObservable();
+export class NgtStore extends NgtComponentStore<NgtState> {
+    private readonly pointer = new THREE.Vector2();
+    private readonly position = new THREE.Vector3();
+    private readonly defaultTarget = new THREE.Vector3();
+    private readonly tempTarget = new THREE.Vector3();
 
-    private readonly stateSubject$ = new ReplaySubject<TState>(1);
+    readonly ready$ = this.select((s) => s.ready).pipe(
+        filter((ready) => ready)
+    );
 
-    /** Completes all relevant Observable streams. */
-    ngOnDestroy() {
-        this.stateSubject$.complete();
-        this.destroySubject$.next();
+    readonly camera$ = this.select((s) => s.camera);
+    readonly scene$ = this.select((s) => s.scene);
+    readonly gl$ = this.select((s) => s.gl);
+    readonly raycaster$ = this.select((s) => s.raycaster);
+    readonly active$ = this.select((s) => s.internal.active);
+
+    private allConstructed$ = this.select(
+        this.camera$,
+        this.scene$,
+        this.gl$,
+        this.raycaster$,
+        this.active$,
+        (camera, scene, gl, raycaster, active) =>
+            !!camera && !!gl && !!scene && !!raycaster && active === true
+    ).pipe(map((ready) => ({ ready })));
+
+    private performanceTimeoutId: ReturnType<typeof setTimeout> | undefined =
+        undefined;
+
+    private dimensions$ = this.select(
+        this.select((s) => s.size),
+        this.select((s) => s.viewport),
+        (size, viewport) => ({ size, viewport })
+    );
+
+    constructor(
+        {
+            nativeElement: { clientWidth, clientHeight },
+        }: ElementRef<HTMLElement>,
+        @Inject(NGT_PERFORMANCE_OPTIONS)
+        performanceOptions: NgtPerformanceOptions,
+        @Inject(DOCUMENT) document: Document,
+        @Inject(WINDOW) window: Window,
+        @Optional() @SkipSelf() private previousStore: NgtStore,
+        @Inject(NgtResize) private resizeResult$: Observable<NgtResizeResult>,
+        private zone: NgZone
+    ) {
+        super();
+        this.set({
+            ready: false,
+            clock: new THREE.Clock(),
+            frameloop: 'always',
+            legacy: false,
+            linear: false,
+            flat: false,
+            orthographic: false,
+            shadows: false,
+            controls: null,
+            pointer: this.pointer,
+            mouse: this.pointer,
+            events: {
+                priority: 1,
+                enabled: true,
+                connected: undefined,
+                handlers: {} as NgtEvents,
+                compute: (event, state) => {
+                    // https://github.com/pmndrs/react-three-fiber/pull/782
+                    // Events trigger outside of canvas when moved, use offsetX/Y by default and allow overrides
+                    state.pointer.set(
+                        (event.offsetX / state.size.width) * 2 - 1,
+                        -(event.offsetY / state.size.height) * 2 + 1
+                    );
+                    state.raycaster.setFromCamera(state.pointer, state.camera);
+                },
+            },
+            cameraOptions: {},
+            glOptions: {},
+            raycasterOptions: {},
+            sceneOptions: {},
+            pointerMissed: () => {},
+            internal: {
+                active: false,
+                lastEvent: null,
+                priority: 0,
+                frames: 0,
+                interaction: [],
+                hovered: new Map(),
+                subscribers: [],
+                initialClick: [0, 0],
+                initialHits: [],
+                capturedMap: new Map(),
+                animations: new Map(),
+            },
+            dpr: [1, 2],
+            size: {
+                width: clientWidth,
+                height: clientHeight,
+            },
+            viewport: {
+                initialDpr: window.devicePixelRatio || 1,
+                dpr: window.devicePixelRatio || 1,
+                width: clientWidth,
+                height: clientHeight,
+                aspect: clientWidth / clientHeight,
+                distance: 0,
+                factor: 0,
+                getCurrentViewport: (
+                    camera = this.get((s) => s.camera),
+                    target:
+                        | THREE.Vector3
+                        | Parameters<THREE.Vector3['set']> = this.defaultTarget,
+                    size = this.get((s) => s.size)
+                ) => {
+                    const { width, height } = size;
+                    const aspect = width / height;
+                    if (target instanceof THREE.Vector3)
+                        this.tempTarget.copy(target);
+                    else this.tempTarget.set(...target);
+                    const distance = camera
+                        .getWorldPosition(this.position)
+                        .distanceTo(this.tempTarget);
+                    if (isOrthographicCamera(camera)) {
+                        return {
+                            width: width / camera.zoom,
+                            height: height / camera.zoom,
+                            factor: 1,
+                            distance,
+                            aspect,
+                        };
+                    }
+                    const fov = (camera.fov * Math.PI) / 180; // convert vertical fov to radians
+                    const h = 2 * Math.tan(fov / 2) * distance; // visible height
+                    const w = h * (width / height);
+                    return {
+                        width: w,
+                        height: h,
+                        factor: width / w,
+                        distance,
+                        aspect,
+                    };
+                },
+            },
+            performance: {
+                ...performanceOptions,
+                regress: () => {
+                    this.zone.runOutsideAngular(() => {
+                        const performance = this.get((s) => s.performance);
+                        // Clear timeout
+                        if (this.performanceTimeoutId)
+                            clearTimeout(this.performanceTimeoutId);
+                        // Set lower bound performance
+                        if (performance.current !== performance.min) {
+                            this.set((state) => ({
+                                performance: {
+                                    ...state.performance,
+                                    current: performance.min,
+                                },
+                            }));
+                        }
+                        // Go back to upper bound performance after a while unless something regresses meanwhile
+                        this.performanceTimeoutId = setTimeout(
+                            () =>
+                                this.set((state) => ({
+                                    performance: {
+                                        ...state.performance,
+                                        current: this.get(
+                                            (s) => s.performance.max
+                                        ),
+                                    },
+                                })),
+                            performance.debounce
+                        );
+                    });
+                },
+            },
+            previousState: previousStore?.get(),
+        });
     }
 
-    get(): TState;
-    get<TResult>(projector: (s: TState) => TResult): TResult;
-    get<TResult>(projector?: (s: TState) => TResult): TResult | TState {
-        let value: TResult | TState;
-
-        this.stateSubject$
-            .pipe(
-                take(1),
-                skipUndefined(),
-                map((state) => (projector ? projector(state) : state)),
-                skipUndefined()
+    init(
+        canvasElement: HTMLCanvasElement,
+        invalidate: (state?: () => NgtState) => void,
+        advance: (
+            timestamp: number,
+            state?: () => NgtState,
+            frame?: THREE.XRFrame
+        ) => void
+    ) {
+        this.initEvents(canvasElement);
+        this.resize(this.resizeResult$);
+        this.updateDimensions(this.dimensions$);
+        this.initRenderer({ canvasElement, advance });
+        this.updateSubscribers(
+            this.select(
+                this.select((s) => s.internal.animations),
+                this.select((s) => s.internal.priority),
+                (animations, priority) => ({ animations, priority })
             )
-            .subscribe((result) => {
-                value = result;
+        );
+        this.set((state) => ({
+            invalidate: () => invalidate(() => this.get()),
+            advance: (timestamp) => advance(timestamp, () => this.get()),
+            internal: { ...state.internal, active: true },
+        }));
+        this.set(this.allConstructed$);
+    }
+
+    register(record: NgtAnimationRecord) {
+        const uuid =
+            record.obj instanceof THREE.Object3D
+                ? record.obj.uuid
+                : typeof record.obj === 'function'
+                ? record.obj().uuid
+                : makeId();
+        this.registerAnimation({ ...record, uuid });
+        return uuid;
+    }
+
+    unregister(uuid: string) {
+        if (!uuid) return;
+        const currentAnimations = this.get((s) => s.internal.animations);
+        const record = currentAnimations.get(uuid);
+        const deleted = currentAnimations.delete(uuid);
+        if (deleted && record) {
+            this.set((state) => ({
+                internal: {
+                    ...state.internal,
+                    animations: currentAnimations,
+                    priority:
+                        state.internal.priority -
+                        ((record.priority || 0) > 0 ? 1 : 0),
+                },
+            }));
+        }
+    }
+
+    addInteraction(interaction: THREE.Object3D) {
+        this.set((state) => ({
+            ...state,
+            internal: {
+                ...state.internal,
+                interaction: [...state.internal.interaction, interaction],
+            },
+        }));
+    }
+
+    removeInteraction(uuid: string) {
+        this.set((state) => ({
+            ...state,
+            internal: {
+                ...state.internal,
+                interaction: state.internal.interaction.filter(
+                    (interaction) => interaction.uuid !== uuid
+                ),
+            },
+        }));
+    }
+
+    readonly startLoop = this.effect<NgtState>(
+        tap(({ invalidate }) => {
+            invalidate();
+        })
+    );
+
+    private readonly initRenderer = this.effect<{
+        canvasElement: HTMLCanvasElement;
+        advance: (
+            timestamp: number,
+            state?: () => NgtState,
+            frame?: THREE.XRFrame
+        ) => void;
+    }>(
+        tapEffect(({ canvasElement, advance }) => {
+            const state = this.get();
+
+            // Scene
+            const scene = prepare(
+                new THREE.Scene(),
+                () => this.get(),
+                (this.previousStore?.get(
+                    (s) => s.scene
+                ) as unknown as NgtUnknownInstance) || null
+            );
+            applyProps(scene, state.sceneOptions as UnknownRecord);
+
+            // Set up renderer (one time only!)
+            let gl = state.gl;
+            if (!state.gl) {
+                gl = createRenderer(state.glOptions, canvasElement);
+            }
+            this.set({ gl });
+
+            // Set up raycaster (one time only!)
+            let raycaster = state.raycaster;
+            if (!state.raycaster) {
+                raycaster = new THREE.Raycaster();
+            }
+            // Set raycaster options
+            const { params, ...options } = state.raycasterOptions || {};
+            applyProps(raycaster as any, {
+                enabled: true,
+                ...options,
+                params: { ...raycaster.params, ...(params || {}) },
             });
 
-        return value!;
-    }
+            // Create default camera (one time only!)
+            let camera = state.camera;
+            if (!state.camera) {
+                const isCamera = state.cameraOptions instanceof THREE.Camera;
+                camera = isCamera
+                    ? (state.cameraOptions as NgtCamera)
+                    : state.orthographic
+                    ? new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000)
+                    : new THREE.PerspectiveCamera(
+                          75,
+                          state.size.width / state.size.height,
+                          0.1,
+                          1000
+                      );
+                if (!isCamera) {
+                    camera.position.z = 5;
+                    if (state.cameraOptions) {
+                        applyProps(camera as any, state.cameraOptions as any);
+                    }
+                    // Always look at center by default
+                    if (!state.cameraOptions?.rotation) {
+                        camera.lookAt(0, 0, 0);
+                    }
+                }
+            }
 
-    /**
-     * Patches the state with provided partial state.
-     *
-     * @param partialStateOrUpdaterFn a partial state or a partial updater
-     * function that accepts the state and returns the partial state.
-     */
-    set(
-        partialStateOrUpdaterFn:
-            | Partial<TState>
-            | Observable<Partial<TState>>
-            | ((state: TState) => Partial<TState> | Observable<Partial<TState>>)
-    ): void {
-        const patchedState =
-            typeof partialStateOrUpdaterFn === 'function'
-                ? partialStateOrUpdaterFn(this.get())
-                : partialStateOrUpdaterFn;
+            // Set up XR (one time only!)
+            let xr = state.xr;
+            if (!state.xr) {
+                // Handle frame behavior in WebXR
+                const handleXRFrame: THREE.XRFrameRequestCallback = (
+                    timestamp: number,
+                    frame?: THREE.XRFrame
+                ) => {
+                    const state = this.get();
+                    if (state.frameloop === 'never') return;
+                    advance(timestamp, () => state, frame);
+                };
 
-        this.update((state, partialState: Partial<TState>) => ({
-            ...state,
-            ...partialState,
-        }))(patchedState);
-    }
+                // Toggle render switching on session
+                const handleSessionChange = () => {
+                    const gl = this.get((s) => s.gl);
+                    gl.xr.enabled = gl.xr.isPresenting;
+                    // WebXRManager's signature is incorrect.
+                    // See: https://github.com/pmndrs/react-three-fiber/pull/2017#discussion_r790134505
+                    gl.xr.setAnimationLoop(
+                        gl.xr.isPresenting ? handleXRFrame : null
+                    );
+                };
 
-    /**
-     * Creates a selector.
-     *
-     * @param projector A pure projection function that takes the current state and
-     *   returns some new slice/projection of that state.
-     * @return An observable of the projector results.
-     */
-    select(): Observable<TState>;
-    select<TResult>(projector: (s: TState) => TResult): Observable<TResult>;
-    select<TSelectors extends Observable<unknown>[], TResult>(
-        ...args: [
-            ...selectors: TSelectors,
-            projector: Projector<TSelectors, TResult>
-        ]
-    ): Observable<TResult>;
-    select<
-        TSelectors extends Array<Observable<unknown> | TProjectorFn>,
-        TResult,
-        TProjectorFn = (...a: unknown[]) => TResult
-    >(...args: TSelectors): Observable<TResult> | Observable<TState> {
-        if (args.length === 0) {
-            return this.stateSubject$.pipe(
-                skipUndefined(),
-                distinctUntilChanged(),
-                share({
-                    connector: () => new ReplaySubject(1),
-                    resetOnComplete: true,
-                    resetOnRefCountZero: true,
-                    resetOnError: true,
-                }),
-                takeUntil(this.destroy$)
-            );
-        }
-
-        const { observables, projector } = processSelectorArgs<
-            TSelectors,
-            TResult,
-            TProjectorFn
-        >(args);
-
-        let observable$: Observable<TResult>;
-        // If there are no Observables to combine, then we'll just map the value.
-        if (observables.length === 0) {
-            observable$ = this.stateSubject$.pipe(
-                skipUndefined(),
-                map(
-                    projector as unknown as (
-                        value: TState,
-                        index: number
-                    ) => TResult
-                )
-            );
-        } else {
-            // If there are multiple arguments, then we're aggregating selectors, so we need
-            // to take the combineLatest of them before calling the map function.
-            observable$ = combineLatest(observables).pipe(
-                map((projectorArgs) =>
-                    (projector as unknown as (...a: unknown[]) => TResult)(
-                        ...projectorArgs
-                    )
-                )
-            );
-        }
-
-        return observable$.pipe(
-            skipUndefined(),
-            distinctUntilChanged(),
-            share({
-                connector: () => new ReplaySubject(1),
-                resetOnComplete: true,
-                resetOnRefCountZero: true,
-                resetOnError: true,
-            }),
-            takeUntil(this.destroy$)
-        );
-    }
-
-    /**
-     * Creates an effect.
-     *
-     * This effect is subscribed to throughout the lifecycle of the ComponentStore.
-     * @param generator A function that takes an origin Observable input and
-     *     returns an Observable. The Observable that is returned will be
-     *     subscribed to for the life of the component.
-     * @return A function that, when called, will trigger the origin Observable.
-     */
-    effect<
-        // This type quickly became part of effect 'API'
-        TProvidedType = void,
-        // The actual origin$ type, which could be unknown, when not specified
-        TOriginType extends
-            | Observable<TProvidedType>
-            | unknown = Observable<TProvidedType>,
-        // Unwrapped actual type of the origin$ Observable, after default was applied
-        TObservableType = TOriginType extends Observable<infer A> ? A : never,
-        // Return either an empty callback or a function requiring specific types as inputs
-        TReturnType = TProvidedType | TObservableType extends void
-            ? () => void
-            : (
-                  observableOrValue:
-                      | TObservableType
-                      | Observable<TObservableType>
-              ) => Subscription
-    >(generator: (origin$: TOriginType) => Observable<unknown>): TReturnType {
-        const origin$ = new Subject<TObservableType>();
-        generator(origin$ as TOriginType)
-            // tied to the lifecycle 👇 of ComponentStore
-            .pipe(takeUntil(this.destroy$))
-            .subscribe();
-
-        return ((
-            observableOrValue?: TObservableType | Observable<TObservableType>
-        ): Subscription => {
-            const observable$ = isObservable(observableOrValue)
-                ? observableOrValue
-                : of(observableOrValue);
-            return observable$
-                .pipe(takeUntil(this.destroy$))
-                .subscribe((value) => {
-                    // any new 👇 value is pushed into a stream
-                    origin$.next(value as TObservableType);
-                });
-        }) as unknown as TReturnType;
-    }
-
-    onCanvasReady(
-        ready$: Observable<boolean>,
-        callback: () => void,
-        useEffect = false
-    ): Subscription {
-        const operator = useEffect ? tapEffect : tap;
-        return this.effect<boolean>(operator(() => callback()))(ready$);
-    }
-
-    private update<
-        // Allow to force-provide the type
-        TProvidedType = void,
-        // This type is derived from the `value` property, defaulting to void if it's missing
-        TOriginType = TProvidedType,
-        // The Value type is assigned from the Origin
-        TValueType = TOriginType,
-        // Return either an empty callback or a function requiring specific types as inputs
-        TReturnType = TOriginType extends void
-            ? () => void
-            : (
-                  observableOrValue: TValueType | Observable<TValueType>
-              ) => Subscription
-    >(updaterFn: (state: TState, value: TOriginType) => TState): TReturnType {
-        return ((
-            observableOrValue?: TOriginType | Observable<TOriginType>
-        ): Subscription => {
-            const observable$ = isObservable(observableOrValue)
-                ? observableOrValue
-                : of(observableOrValue);
-
-            return observable$
-                .pipe(
-                    concatMap((value) =>
-                        scheduled([value], queueScheduler).pipe(
-                            withLatestFrom(
-                                this.stateSubject$.pipe(startWith({}))
-                            )
-                        )
-                    ),
-                    takeUntil(this.destroy$)
-                )
-                .subscribe({
-                    next: ([value, currentState]) => {
-                        this.stateSubject$.next(
-                            updaterFn((currentState || {}) as TState, value!)
+                // WebXR session manager
+                xr = {
+                    connect: () => {
+                        const gl = this.get((s) => s.gl);
+                        gl.xr.addEventListener(
+                            'sessionstart',
+                            handleSessionChange
+                        );
+                        gl.xr.addEventListener(
+                            'sessionend',
+                            handleSessionChange
                         );
                     },
-                    error: (error: Error) => {
-                        this.stateSubject$.error(error);
+                    disconnect: () => {
+                        const gl = this.get((s) => s.gl);
+                        gl.xr.removeEventListener(
+                            'sessionstart',
+                            handleSessionChange
+                        );
+                        gl.xr.removeEventListener(
+                            'sessionend',
+                            handleSessionChange
+                        );
                     },
-                });
-        }) as unknown as TReturnType;
+                };
+
+                // Subscribe to WebXR session events
+                if (gl.xr) xr.connect();
+            }
+
+            // Set shadowmap
+            if (gl.shadowMap) {
+                if (state.shadows) {
+                    gl.shadowMap.enabled = true;
+                    if (typeof state.shadows === 'object') {
+                        Object.assign(gl.shadowMap, state.shadows);
+                    } else {
+                        gl.shadowMap.type = THREE.PCFSoftShadowMap;
+                    }
+                    gl.shadowMap.needsUpdate = true;
+                }
+            }
+
+            // Set color management
+            if ((THREE as any).ColorManagement) {
+                (THREE as any).ColorManagement.legacyMode = state.legacy;
+            }
+            const outputEncoding = state.linear
+                ? THREE.LinearEncoding
+                : THREE.sRGBEncoding;
+            const toneMapping = state.flat
+                ? THREE.NoToneMapping
+                : THREE.ACESFilmicToneMapping;
+
+            if (gl.outputEncoding !== outputEncoding) {
+                gl.outputEncoding = outputEncoding;
+            }
+
+            if (gl.toneMapping !== toneMapping) {
+                gl.toneMapping = toneMapping;
+            }
+
+            gl.setClearAlpha(0);
+            gl.setPixelRatio(makeDpr(state.viewport.dpr));
+            gl.setSize(state.size.width, state.size.height);
+
+            if (
+                typeof state.glOptions === 'object' &&
+                typeof state.glOptions !== 'function' &&
+                !(state.glOptions instanceof THREE.WebGLRenderer)
+            ) {
+                applyProps(gl as any, state.glOptions as UnknownRecord);
+            }
+
+            this.set({ gl, camera, scene, raycaster });
+
+            return () => {
+                const gl = this.get((s) => s.gl);
+                if (gl) {
+                    gl.renderLists.dispose();
+                    gl.forceContextLoss();
+
+                    if (gl.xr && gl.xr.enabled) {
+                        gl.xr.setAnimationLoop(null);
+                    }
+                }
+            };
+        })
+    );
+
+    private readonly resize = this.effect<NgtResizeResult>(
+        tap(({ width, height, dpr }) => {
+            this.set(({ viewport, camera }) => {
+                const size = { width, height };
+                return {
+                    size,
+                    viewport: {
+                        ...viewport,
+                        ...viewport.getCurrentViewport(
+                            camera,
+                            this.defaultTarget,
+                            size
+                        ),
+                        dpr: makeDpr(dpr),
+                    },
+                };
+            });
+        })
+    );
+
+    private readonly updateDimensions = this.effect<{
+        size: NgtSize;
+        viewport: NgtViewport;
+    }>(
+        tap(({ size, viewport }) => {
+            const { camera, gl, ready, cameraOptions } = this.get();
+            if (ready) {
+                // leave the userland camera alone
+                if (!(cameraOptions instanceof THREE.Camera || camera.manual)) {
+                    if (isOrthographicCamera(camera)) {
+                        camera.left = size.width / -2;
+                        camera.right = size.width / 2;
+                        camera.top = size.height / 2;
+                        camera.bottom = size.height / -2;
+                    } else {
+                        camera.aspect = size.width / size.height;
+                    }
+
+                    camera.updateProjectionMatrix();
+                    // https://github.com/pmndrs/react-three-fiber/issues/178
+                    // Update matrix world since the renderer is a frame late
+                    camera.updateMatrixWorld();
+                }
+
+                // update renderer
+                gl.setPixelRatio(viewport.dpr);
+                gl.setSize(size.width, size.height);
+            }
+        })
+    );
+
+    private readonly registerAnimation =
+        this.effect<NgtAnimationRecordWithUuid>(
+            tapEffect(({ uuid, ...record }) => {
+                if (uuid) {
+                    this.set((state) => ({
+                        internal: {
+                            ...state.internal,
+                            animations: new Map<string, NgtAnimationRecord>(
+                                state.internal.animations
+                            ).set(uuid, record),
+                            priority:
+                                state.internal.priority +
+                                ((record.priority || 0) > 0 ? 1 : 0),
+                        },
+                    }));
+                }
+
+                return ({ prev: { uuid: prevUuid } = {}, complete }) => {
+                    if (prevUuid !== uuid || complete) {
+                        this.unregister(uuid);
+                    }
+                };
+            })
+        );
+
+    private readonly updateSubscribers = this.effect<{
+        animations: NgtInternalState['animations'];
+        priority: NgtInternalState['priority'];
+    }>(
+        tap(({ animations, priority }) => {
+            if (!animations.size) return;
+            const subscribers = Array.from(animations.values());
+            subscribers.sort((a, b) => (a.priority || 0) - (b.priority || 0));
+            this.set((state) => ({
+                internal: { ...state.internal, subscribers },
+            }));
+        })
+    );
+
+    private initEvents(canvasElement: HTMLCanvasElement) {
+        const { handlePointer } = createEvents(() => this.get());
+
+        this.set((state) => ({
+            events: {
+                ...state.events,
+                handlers: Object.keys(DOM_EVENTS).reduce(
+                    (handlers: UnknownRecord, supportedEventName) => {
+                        handlers[supportedEventName] =
+                            handlePointer(supportedEventName);
+                        return handlers;
+                    },
+                    {}
+                ) as NgtEvents,
+            },
+        }));
+
+        this.connectElement(canvasElement);
+    }
+
+    private connectElement(canvasElement: HTMLCanvasElement) {
+        this.set((state) => ({
+            events: { ...state.events, connected: canvasElement },
+        }));
+        const handlers = this.get((s) => s.events.handlers);
+        Object.entries(handlers ?? {}).forEach(([eventName, handler]) => {
+            const passive = DOM_EVENTS[eventName as keyof typeof DOM_EVENTS];
+            canvasElement.addEventListener(eventName, handler, { passive });
+        });
+    }
+
+    private disconnectElement() {
+        const { handlers, connected } = this.get((s) => s.events);
+        if (connected) {
+            Object.entries(handlers ?? {}).forEach(([eventName, handler]) => {
+                if (connected instanceof HTMLElement) {
+                    connected.removeEventListener(eventName, handler);
+                }
+            });
+        }
+    }
+
+    override ngOnDestroy() {
+        this.disconnectElement();
+        super.ngOnDestroy();
     }
 }
 
-/**
- * An extended `tap` operator that accepts an `effectFn` which:
- * - runs on every `next` notification from `source$`
- * - can optionally return a `cleanUp` function that
- * invokes from the 2nd `next` notification onward and on `unsubscribe` (destroyed)
- *
- *
- * @example
- * ```typescript
- * source$.pipe(
- *  tapEffect((sourceValue) = {
- *    const cb = () => {
- *      doStuff(sourceValue);
- *    };
- *    addListener('event', cb);
- *
- *    return () => {
- *      removeListener('event', cb);
- *    }
- *  })
- * )
- * ```
- */
-export function tapEffect<TValue>(
-    effectFn: (
-        value: TValue
-    ) =>
-        | ((cleanUpParams: {
-              prev: TValue | undefined;
-              complete: boolean;
-              error: boolean;
-          }) => void)
-        | void
-): MonoTypeOperatorFunction<TValue> {
-    let cleanupFn: (cleanUpParams: {
-        prev: TValue | undefined;
-        complete: boolean;
-        error: boolean;
-    }) => void = noop;
-    let firstRun = false;
-    let prev: TValue | undefined = undefined;
+function createRenderer(
+    glOptions: NgtGLOptions,
+    canvasElement: HTMLCanvasElement
+): THREE.WebGLRenderer {
+    const customRenderer = (
+        typeof glOptions === 'function' ? glOptions(canvasElement) : glOptions
+    ) as THREE.WebGLRenderer;
 
-    const teardown = (error: boolean) => {
-        return () => {
-            if (cleanupFn) {
-                cleanupFn({ prev, complete: true, error });
-            }
-        };
-    };
+    if (customRenderer?.render != null) {
+        return customRenderer;
+    }
 
-    return tap<TValue>({
-        next: (value: TValue) => {
-            if (cleanupFn && firstRun) {
-                cleanupFn({ prev, complete: false, error: false });
-            }
-
-            const cleanUpOrVoid = effectFn(value);
-            if (cleanUpOrVoid) {
-                cleanupFn = cleanUpOrVoid;
-            }
-
-            prev = value;
-
-            if (!firstRun) {
-                firstRun = true;
-            }
-        },
-        complete: teardown(false),
-        unsubscribe: teardown(false),
-        error: teardown(true),
+    return new THREE.WebGLRenderer({
+        powerPreference: 'high-performance',
+        canvas: canvasElement,
+        antialias: true,
+        alpha: true,
+        ...glOptions,
     });
-}
-
-export function debounceSync<T>(): MonoTypeOperatorFunction<T> {
-    return (source) =>
-        new Observable<T>((observer) => {
-            let actionSubscription: Subscription | undefined;
-            let actionValue: T | undefined;
-            const rootSubscription = new Subscription();
-            rootSubscription.add(
-                source.subscribe({
-                    complete: () => {
-                        if (actionSubscription) {
-                            observer.next(actionValue);
-                        }
-                        observer.complete();
-                    },
-                    error: (error) => {
-                        observer.error(error);
-                    },
-                    next: (value) => {
-                        actionValue = value;
-                        if (!actionSubscription) {
-                            actionSubscription = asapScheduler.schedule(() => {
-                                observer.next(actionValue);
-                                actionSubscription = undefined;
-                            });
-                            rootSubscription.add(actionSubscription);
-                        }
-                    },
-                })
-            );
-            return rootSubscription;
-        });
-}
-
-export function skipUndefined<TValue>(): MonoTypeOperatorFunction<TValue> {
-    return filter<TValue>((value) => value !== undefined);
-}
-
-export function startWithUndefined<TValue>(): OperatorFunction<TValue, TValue> {
-    return startWith<TValue>(undefined) as OperatorFunction<TValue, TValue>;
-}
-
-function processSelectorArgs<
-    TSelectors extends Array<Observable<unknown> | TProjectorFn>,
-    TResult,
-    TProjectorFn = (...a: unknown[]) => TResult
->(
-    args: TSelectors
-): {
-    observables: Observable<unknown>[];
-    projector: TProjectorFn;
-} {
-    const selectorArgs = Array.from(args);
-    // Last argument is either projector or config
-    const projector = selectorArgs.pop() as TProjectorFn;
-
-    // The Observables to combine, if there are any.
-    const observables = selectorArgs as Observable<unknown>[];
-    return {
-        observables,
-        projector,
-    };
 }

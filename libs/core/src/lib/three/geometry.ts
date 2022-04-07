@@ -1,77 +1,76 @@
-import {
-    Directive,
-    Inject,
-    NgZone,
-    OnDestroy,
-    OnInit,
-    Optional,
-    Output,
-} from '@angular/core';
+import { Directive, Inject, NgZone, Optional, SkipSelf } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_PARENT_OBJECT } from '../di/parent-object';
-import { NgtCanvasStore } from '../stores/canvas';
-import { NgtStore, tapEffect } from '../stores/store';
-import type { AnyConstructor, AnyFunction } from '../types';
+import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
+import { NGT_INSTANCE_FACTORY } from '../di/instance';
+import { tapEffect } from '../stores/component-store';
+import { NgtStore } from '../stores/store';
+import type { AnyConstructor, AnyFunction, NgtUnknownInstance } from '../types';
+import { prepare } from '../utils/instance';
 
-interface NgtGeometryState<
+export interface NgtCommonGeometryState<
     TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
-> {
+> extends NgtInstanceState<TGeometry> {
     geometry: TGeometry;
     geometryArgs: unknown[];
 }
 
 @Directive()
-export abstract class NgtGeometry<
-        TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
-    >
-    extends NgtStore<NgtGeometryState<TGeometry>>
-    implements OnInit, OnDestroy
-{
-    @Output() ready = this.select((s) => s.geometry);
+export abstract class NgtCommonGeometry<
+    TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
+> extends NgtInstance<TGeometry, NgtCommonGeometryState<TGeometry>> {
+    abstract get geometryType(): AnyConstructor<TGeometry>;
 
     constructor(
-        protected zone: NgZone,
-        protected canvasStore: NgtCanvasStore,
+        zone: NgZone,
         @Optional()
-        @Inject(NGT_PARENT_OBJECT)
-        protected parentObjectFactory: AnyFunction
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_FACTORY)
+        parentInstanceFactory: AnyFunction,
+        protected store: NgtStore
     ) {
-        super();
+        super({ zone, shouldAttach: true, parentInstanceFactory });
         this.set({ geometryArgs: [] });
     }
-
-    abstract geometryType: AnyConstructor<TGeometry>;
 
     protected set geometryArgs(v: unknown | unknown[]) {
         this.set({ geometryArgs: Array.isArray(v) ? v : [v] });
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            this.onCanvasReady(this.canvasStore.ready$, () => {
+            this.onCanvasReady(this.store.ready$, () => {
                 this.init(this.select((s) => s.geometryArgs));
             });
         });
+        super.ngOnInit();
+    }
+
+    get geometry(): TGeometry {
+        return this.get((s) => s.geometry);
+    }
+
+    protected override destroy() {
+        if (this.geometry) {
+            this.geometry.dispose();
+        }
+        super.destroy();
     }
 
     private readonly init = this.effect<
-        NgtGeometryState<TGeometry>['geometryArgs']
+        NgtCommonGeometryState<TGeometry>['geometryArgs']
     >(
         tapEffect((geometryArgs) => {
-            const geometry = new this.geometryType(...geometryArgs);
-            const parentObject = this.parentObjectFactory?.() as THREE.Mesh;
-            if (parentObject) {
-                parentObject.geometry = geometry;
-            }
-            this.set({ geometry });
+            const geometry = prepare(
+                new this.geometryType(...geometryArgs),
+                () => this.store.get(),
+                this.parentInstanceFactory?.() as NgtUnknownInstance
+            );
+            this.set({ geometry, instance: geometry });
+            this.emitReady();
 
             return () => {
                 geometry.dispose();
             };
         })
     );
-
-    get geometry(): TGeometry {
-        return this.get((s) => s.geometry) as TGeometry;
-    }
 }

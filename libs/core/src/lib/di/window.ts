@@ -1,5 +1,5 @@
-import { inject, InjectionToken } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { inject, InjectionToken } from '@angular/core';
 
 export const WINDOW = new InjectionToken<Window & typeof globalThis>('window', {
     factory: () => {

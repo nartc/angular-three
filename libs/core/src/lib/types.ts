@@ -1,11 +1,21 @@
 import * as THREE from 'three';
 
+/* Coercion */
+export type BooleanInput = string | boolean | null | undefined;
+
+/* Common + Utility */
 export type UnknownRecord = Record<string, unknown>;
-export type AnyFunction = <TReturn = any>(...args: any[]) => TReturn;
+export type AnyFunction<TReturn = any> = (...args: any[]) => TReturn;
 export type AnyConstructor<TObject> = new (...args: any[]) => TObject;
 export type AnyAbstractConstructor<TObject> = abstract new (
     ...args: any[]
 ) => TObject;
+/**
+ * If **T** contains a constructor, @see ConstructorParameters must be used, otherwise **T**.
+ */
+type NgtArgs<T> = T extends new (...args: any) => any
+    ? ConstructorParameters<T>
+    : T;
 
 export type AnyCtor<TObject> = AnyConstructor<TObject> &
     AnyAbstractConstructor<TObject>;
@@ -28,6 +38,22 @@ export type ConditionalType<Child, Parent, Truthy, Falsy> = Child extends Parent
     ? Truthy
     : Falsy;
 
+export interface NgtLoaderProto<T> extends THREE.Loader {
+    load(
+        url: string | string[],
+        onLoad?: (result: T) => void,
+        onProgress?: (event: ProgressEvent) => void,
+        onError?: (event: ErrorEvent) => void
+    ): unknown;
+}
+
+export interface LoaderExtensions {
+    (loader: THREE.Loader): void;
+}
+
+export type NgtLoaderResult<T> = T extends any[]
+    ? NgtLoaderProto<T[number]>
+    : NgtLoaderProto<T>;
 export type BranchingReturn<
     T = any,
     Parent = any,
@@ -39,113 +65,111 @@ export type NonFunctionKeys<T> = {
 }[keyof T];
 export type Overwrite<T, O> = Omit<T, NonFunctionKeys<O>> & O;
 
-export type NgtTriplet = [x: number, y: number, z: number];
-export type NgtQuad = [x: number, y: number, z: number, w: number];
+/* AngularThree */
+export type NgtDouble = [x: number, y: number];
+export type NgtTriple = [x: number, y: number, z: number];
+export type NgtQuadruple = [x: number, y: number, z: number, w: number];
 
 export type NgtEuler = THREE.Euler | Parameters<THREE.Euler['set']>;
 export type NgtMatrix4 = THREE.Matrix4 | Parameters<THREE.Matrix4['set']>;
 export type NgtVector2 =
     | THREE.Vector2
     | Parameters<THREE.Vector2['set']>
-    | Parameters<THREE.Vector2['setScalar']>[0];
+    | Parameters<THREE.Vector2['setScalar']>[0]
+    | NgtDouble;
 export type NgtVector3 =
     | THREE.Vector3
     | Parameters<THREE.Vector3['set']>
-    | Parameters<THREE.Vector3['setScalar']>[0];
+    | Parameters<THREE.Vector3['setScalar']>[0]
+    | NgtTriple;
 export type NgtVector4 =
     | THREE.Vector4
     | Parameters<THREE.Vector4['set']>
-    | Parameters<THREE.Vector4['setScalar']>[0];
-export type NgtColor = THREE.ColorRepresentation;
-export type NgtColorArray = typeof THREE.Color | Parameters<THREE.Color['set']>;
+    | Parameters<THREE.Vector4['setScalar']>[0]
+    | NgtQuadruple;
 export type NgtLayers = THREE.Layers | Parameters<THREE.Layers['set']>[0];
 export type NgtQuaternion =
     | THREE.Quaternion
-    | Parameters<THREE.Quaternion['set']>;
+    | Parameters<THREE.Quaternion['set']>
+    | NgtQuadruple;
 
-export interface NgtCommonParameters {
-    position?: NgtVector3;
-    up?: NgtVector3;
-    scale?: NgtVector3;
-    rotation?: NgtEuler;
-    matrix?: NgtMatrix4;
-    quaternion?: NgtQuaternion;
-    layers?: NgtLayers;
-    background?: NgtColor;
-    dispose?: (() => void) | null;
-}
+export type NgtColor =
+    | ConstructorParameters<typeof THREE.Color>
+    | THREE.ColorRepresentation;
 
-export interface NgtCanvasOptions {
-    initialLog?: boolean;
-    projectContent?: boolean;
-}
-
-export type NgtGLOptions =
-    | THREE.Renderer
-    | ((canvas: HTMLCanvasElement) => THREE.Renderer)
-    | Partial<Properties<THREE.WebGLRenderer> | THREE.WebGLRendererParameters>;
-
-export type NgtCamera = THREE.OrthographicCamera | THREE.PerspectiveCamera;
-
-export type NgtCameraOptions =
-    | NgtCamera
-    | Overwrite<Partial<THREE.PerspectiveCamera>, NgtCommonParameters>
-    | Overwrite<Partial<THREE.OrthographicCamera>, NgtCommonParameters>;
-
-export type NgtDpr = number | [min: number, max: number];
-
-export interface NgtSize {
-    width: number;
-    height: number;
-}
-
-export type NgtViewport = NgtSize & {
-    initialDpr: number;
-    dpr: number;
-    factor: number;
-    distance: number;
-    aspect: number;
+export type NgtExtendedColors<T> = {
+    [K in keyof T]: T[K] extends THREE.Color | undefined ? NgtColor : T[K];
 };
 
-export type NgtCurrentViewport = Omit<NgtViewport, 'dpr' | 'initialDpr'>;
-
-export interface NgtRender {
-    clock: THREE.Clock;
-    size: NgtSize;
-    viewport: NgtViewport;
-    renderer: THREE.WebGLRenderer;
-    camera: NgtCamera;
-    scene: THREE.Scene;
-    mouse: THREE.Vector2;
-    delta: number;
-}
-
 export interface NgtIntersection extends THREE.Intersection {
+    /** The event source (the object which registered the handler) */
     eventObject: THREE.Object3D;
 }
 
 export interface NgtIntersectionEvent<TSourceEvent> extends NgtIntersection {
+    /** An array of intersections */
     intersections: NgtIntersection[];
+    /** If the event was stopped by calling stopPropagation */
     stopped: boolean;
+    /** vec3.set(pointer.x, pointer.y, 0).unproject(camera) */
     unprojectedPoint: THREE.Vector3;
-    ray: THREE.Ray;
-    camera: THREE.Camera;
-    stopPropagation: () => void;
-    /**
-     * @deprecated use {@link nativeEvent}
-     */
-    sourceEvent: TSourceEvent;
-    nativeEvent: TSourceEvent;
+    /** Normalized event coordinates */
+    pointer: THREE.Vector2;
+    /** Delta between first click and this event */
     delta: number;
+    /** The ray that pierced it */
+    ray: THREE.Ray;
+    /** The camera that was used by the raycaster */
+    camera: THREE.Camera;
+    /** stopPropagation will stop underlying handlers from firing */
+    stopPropagation: () => void;
+    /** The original host event */
+    nativeEvent: TSourceEvent;
 }
-
-export interface NgtPointerCaptureTarget {
-    intersection: NgtIntersection;
-    target: Element;
-}
-
 export type NgtEvent<TEvent> = NgtIntersectionEvent<TEvent>;
 export type NgtDomEvent = PointerEvent | MouseEvent | WheelEvent;
+
+export type NgtEvents = {
+    click: EventListener;
+    contextmenu: EventListener;
+    dblclick: EventListener;
+    wheel: EventListener;
+    pointerdown: EventListener;
+    pointerup: EventListener;
+    pointerleave: EventListener;
+    pointermove: EventListener;
+    pointercancel: EventListener;
+    lostpointercapture: EventListener;
+};
+
+export type NgtFilterFunction = (
+    items: THREE.Intersection[],
+    state: NgtState
+) => THREE.Intersection[];
+export type NgtComputeFunction = (
+    event: NgtDomEvent,
+    root: NgtState,
+    previous?: NgtState
+) => void;
+
+export interface NgtEventManager<TTarget = any> {
+    /** Determines if the event layer is active */
+    enabled: boolean;
+    /** Event layer priority, higher prioritized layers come first and may stop(-propagate) lower layer  */
+    priority: number;
+    /** The compute function needs to set up the raycaster and an xy- pointer  */
+    compute?: NgtComputeFunction;
+    /** The filter can re-order or re-structure the intersections  */
+    filter?: NgtFilterFunction;
+    /** The target node the event layer is tied to */
+    connected?: TTarget;
+    /** All the pointer event handlers through which the host forwards native events */
+    handlers?: NgtEvents;
+    /** Allows re-connecting to another target */
+    connect?: (target: TTarget) => void;
+    /** Removes all existing events handlers from the target */
+    disconnect?: () => void;
+}
 
 export interface NgtEventHandlers {
     click?: (event: NgtEvent<MouseEvent>) => void;
@@ -163,8 +187,107 @@ export interface NgtEventHandlers {
     wheel?: (event: NgtEvent<WheelEvent>) => void;
 }
 
+export interface NgtPointerCaptureTarget {
+    intersection: NgtIntersection;
+    target: Element;
+}
+
+export interface NgtNodeProps<P> {
+    attach?: string[];
+    /** Constructor arguments */
+    args?: NgtArgs<P>;
+}
+
+export type NgtNode<T, P> = NgtExtendedColors<
+    Overwrite<Partial<T>, NgtNodeProps<P>>
+>;
+
+export type NgtObject3dNode<T, P> = Overwrite<
+    NgtNode<T, P>,
+    {
+        position?: NgtVector3;
+        up?: NgtVector3;
+        scale?: NgtVector3;
+        rotation?: NgtEuler;
+        matrix?: NgtMatrix4;
+        quaternion?: NgtQuaternion;
+        layers?: NgtLayers;
+        dispose?: (() => void) | null;
+    }
+> &
+    NgtEventHandlers;
+
+export type NgtCamera = THREE.PerspectiveCamera | THREE.OrthographicCamera;
+
+export type NgtCameraOptions = (
+    | NgtCamera
+    | Partial<
+          NgtObject3dNode<THREE.Camera, typeof THREE.Camera> &
+              NgtObject3dNode<
+                  THREE.PerspectiveCamera,
+                  typeof THREE.PerspectiveCamera
+              > &
+              NgtObject3dNode<
+                  THREE.OrthographicCamera,
+                  typeof THREE.OrthographicCamera
+              >
+      >
+) & { manual?: boolean };
+
+export type NgtSceneOptions = Overwrite<
+    Partial<
+        Omit<
+            THREE.Scene,
+            'isScene' | 'onBeforeRender' | 'onAfterRender' | 'type'
+        >
+    >,
+    {
+        position?: NgtVector3;
+        up?: NgtVector3;
+        scale?: NgtVector3;
+        rotation?: NgtEuler;
+        matrix?: NgtMatrix4;
+        quaternion?: NgtQuaternion;
+        layers?: NgtLayers;
+        dispose?: (() => void) | null;
+    }
+>;
+
+export type NgtGLOptions =
+    | THREE.Renderer
+    | ((canvas: HTMLCanvasElement) => THREE.Renderer)
+    | Partial<Properties<THREE.WebGLRenderer> | THREE.WebGLRendererParameters>;
+
+export type NgtDpr = number | [min: number, max: number];
+export interface NgtSize {
+    width: number;
+    height: number;
+}
+
+export type NgtViewport = NgtSize & {
+    /** The initial pixel ratio */
+    initialDpr: number;
+    /** Current pixel ratio */
+    dpr: number;
+    /** size.width / viewport.width */
+    factor: number;
+    /** Camera distance */
+    distance: number;
+    /** Camera aspect ratio: width / height */
+    aspect: number;
+};
+
+export type NgtCurrentViewport = Omit<NgtViewport, 'dpr' | 'initialDpr'>;
+
+export interface NgtRenderState extends NgtState {
+    delta: number;
+    frame?: THREE.XRFrame;
+}
+
+/* Animation */
+
 export type NgtAnimationCallback<TObject> = (
-    state: NgtRender,
+    state: NgtRenderState,
     obj: TObject
 ) => void;
 
@@ -174,73 +297,6 @@ export interface NgtAnimationRecord {
     priority?: number;
 }
 
-export interface NgtAnimationFrameState {
-    animations: Map<string, NgtAnimationRecord>;
-    subscribers: NgtAnimationRecord[];
-    hasPriority: boolean;
-}
-
-export type NgtSupportedEvents =
-    | 'click'
-    | 'contextmenu'
-    | 'dblclick'
-    | 'wheel'
-    | 'pointerdown'
-    | 'pointerup'
-    | 'pointerleave'
-    | 'pointermove'
-    | 'pointercancel'
-    | 'pointermissed'
-    | 'lostpointercapture';
-
-export interface NgtEventsInternal {
-    interaction: THREE.Object3D[];
-    hovered: Map<string, NgtEvent<NgtDomEvent>>;
-    capturedMap: Map<number, Map<THREE.Object3D, NgtPointerCaptureTarget>>;
-    initialClick: [x: number, y: number];
-    initialHits: THREE.Object3D[];
-}
-
-export type FilterFunction = (
-    items: THREE.Intersection[],
-    state: NgtRender
-) => THREE.Intersection[];
-
-export type ComputeOffsetsFunction = <TEvent = unknown>(
-    event: TEvent,
-    state: NgtRender
-) => { offsetX: number; offsetY: number; width?: number; height?: number };
-
-export interface NgtRaycaster extends THREE.Raycaster {
-    enabled: boolean;
-    filter?: FilterFunction;
-    computeOffsets?: ComputeOffsetsFunction;
-}
-
-export interface NgtRaycasterOptions {
-    origin?: NgtVector3;
-    direction?: NgtVector3;
-    near?: number;
-    far?: number;
-}
-
-export type NgtSceneOptions = Overwrite<
-    Partial<
-        Omit<
-            THREE.Scene,
-            'isScene' | 'onBeforeRender' | 'onAfterRender' | 'type'
-        >
-    >,
-    NgtCommonParameters
->;
-
-export interface NgtEventsState {
-    pointerMissed?: (event: MouseEvent) => void;
-    connected: false | HTMLElement;
-    internal: NgtEventsInternal;
-    handlers?: Record<NgtSupportedEvents, EventListener>;
-}
-
 export interface NgtPerformanceOptions {
     current?: number;
     min?: number;
@@ -248,91 +304,105 @@ export interface NgtPerformanceOptions {
     debounce?: number;
 }
 
-export interface NgtInstanceInternal {
-    stateGetter: () => NgtCanvasState;
-    eventsStateGetter: () => NgtEventsState;
-    handlers?: NgtEventHandlers;
-    eventCount: number;
-    linear: boolean;
+export interface NgtPerformance extends NgtPerformanceOptions {
+    regress: () => void;
 }
 
-export type NgtInstance = THREE.Object3D & { __ngt?: NgtInstanceInternal };
+/* Store states */
+export type NgtInternalState = {
+    active: boolean;
+    priority: number;
+    frames: number;
+    lastEvent: NgtDomEvent | null;
+    interaction: THREE.Object3D[];
+    hovered: Map<string, NgtEvent<NgtDomEvent>>;
+    capturedMap: Map<number, Map<THREE.Object3D, NgtPointerCaptureTarget>>;
+    initialClick: [x: number, y: number];
+    initialHits: THREE.Object3D[];
+    animations: Map<string, NgtAnimationRecord>;
+    subscribers: NgtAnimationRecord[];
+};
 
-export interface NgtCanvasState {
+export interface NgtState {
     ready: boolean;
-    vr: boolean;
-    linear: boolean;
-    flat: boolean;
-    orthographic: boolean;
-    mouse: THREE.Vector2;
-    clock: THREE.Clock;
-    frameloop: 'always' | 'demand' | 'never';
-    performance: NgtPerformanceOptions;
-    dpr: NgtDpr;
-    size: NgtSize;
-    viewport: NgtViewport & {
-        getCurrentViewport: (
-            camera?: NgtCamera,
-            target?: NgtVector3,
-            size?: NgtSize
-        ) => NgtCurrentViewport;
-    };
-    controls: THREE.EventDispatcher | null;
-    raycasterOptions: Partial<NgtRaycaster>;
-    shadows: boolean | Partial<THREE.WebGLShadowMap>;
+    raycasterOptions: Partial<THREE.Raycaster>;
     cameraOptions: NgtCameraOptions;
     sceneOptions: NgtSceneOptions;
     glOptions: NgtGLOptions;
-    renderer: THREE.WebGLRenderer;
-    camera: NgtCamera;
+    /* WebGLRenderer instance */
+    gl: THREE.WebGLRenderer;
+    /* default camera */
+    camera: NgtCamera & { manual?: boolean };
+    /* default scene */
     scene: THREE.Scene;
-    raycaster: NgtRaycaster;
-    objects: Record<string, NgtInstance>;
-}
-
-export interface NgtCreatedState {
-    mouse: THREE.Vector2;
+    /* default raycaster */
+    raycaster: THREE.Raycaster;
+    /** Default clock */
     clock: THREE.Clock;
-    renderer: THREE.WebGLRenderer;
+    /** Event layer interface, contains the event handler and the node they're connected to */
+    events: NgtEventManager;
+    /** XR interface */
+    xr: { connect: () => void; disconnect: () => void };
+    /** Currently used controls */
+    controls: THREE.EventDispatcher | null;
+    /** Normalized event coordinates */
+    pointer: THREE.Vector2;
+    /** @deprecated Normalized event coordinates, use "pointer" instead! */
+    mouse: THREE.Vector2;
+    /* Whether to enable r139's THREE.ColorManagement.legacyMode */
+    legacy: boolean;
+    /** Shortcut to gl.outputEncoding = LinearEncoding */
+    linear: boolean;
+    /** Shortcut to gl.toneMapping = NoTonemapping */
+    flat: boolean;
+    /** Shortcut to gl.shadowMap */
+    shadows: boolean | Partial<THREE.WebGLShadowMap>;
+    /** Render loop flags */
+    frameloop: 'always' | 'demand' | 'never';
+    /** Whether to initialize an OrthographicCamera instead */
+    orthographic: boolean;
+    /** Adaptive performance interface */
+    performance: NgtPerformance;
+    /** Reactive dpr of the canvas */
+    dpr: NgtDpr;
+    /** Reactive pixel-size of the canvas */
     size: NgtSize;
-    viewport: NgtViewport;
-    camera: NgtCamera;
-    scene: THREE.Scene;
-    raycaster: NgtRaycaster;
+    /** Reactive size of the viewport in threejs units */
+    viewport: NgtViewport & {
+        getCurrentViewport: (
+            camera?: NgtCamera,
+            target?: THREE.Vector3 | Parameters<THREE.Vector3['set']>,
+            size?: NgtSize
+        ) => NgtCurrentViewport;
+    };
+    /** When the canvas was clicked but nothing was hit */
+    pointerMissed?: (event: MouseEvent) => void;
+    /** Flags the canvas for render, but doesn't render in itself */
+    invalidate: () => void;
+    /** Advance (render) one step */
+    advance: (timestamp: number) => void;
+    /** If this state model is layerd (via createPortal) then this contains the previous layer */
+    previousState?: NgtState;
+    /** Internals */
+    internal: NgtInternalState;
 }
 
-export interface NgtLoaderProto<T> extends THREE.Loader {
-    load(
-        url: string | string[],
-        onLoad?: (result: T) => void,
-        onProgress?: (event: ProgressEvent) => void,
-        onError?: (event: ErrorEvent) => void
-    ): unknown;
+export interface NgtInstanceInternal {
+    root: () => NgtState;
+    // objects and parent are used when children are added with `attach` instead of being added to the Object3D scene graph
+    objects: UnknownRecord[];
+    parent: UnknownRecord | null;
+    primitive?: boolean;
+    eventCount: number;
+    handlers: Partial<NgtEventHandlers>;
+    previousAttach?: string[] | (() => void);
 }
 
-export interface LoaderExtensions {
-    (loader: THREE.Loader): void;
-}
+export type AttachFunction = (parent: any, child: any) => void | (() => void);
 
-export type NgtLoaderResult<T> = T extends any[]
-    ? NgtLoaderProto<T[number]>
-    : NgtLoaderProto<T>;
-
-export interface NgtObject3dProps {
-    name?: string;
-    position?: NgtVector3;
-    rotation?: NgtEuler;
-    quaternion?: NgtQuaternion;
-    scale?: NgtVector3;
-    color?: NgtColor;
-    userData?: UnknownRecord;
-    dispose?: (() => void) | null;
-    raycast?: THREE.Object3D['raycast'] | null;
-    castShadow?: boolean;
-    receiveShadow?: boolean;
-    visible?: boolean;
-    matrixAutoUpdate?: boolean;
-}
+export type NgtUnknownInstance<TInstance = UnknownRecord> = TInstance & {
+    __ngt__: NgtInstanceInternal;
+};
 
 export interface NgtObjectMap {
     nodes: { [name: string]: THREE.Object3D };

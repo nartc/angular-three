@@ -1,36 +1,15 @@
-import {
-    Directive,
-    EventEmitter,
-    Inject,
-    Optional,
-    Output,
-} from '@angular/core';
+import { Directive } from '@angular/core';
 import * as THREE from 'three';
-import {
-    NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER,
-    NgtMaterialGeometryController,
-} from '../controllers/material-geometry.controller';
-import { NGT_OBJECT_TYPE } from '../di/object-init';
+import { NgtMaterialGeometry } from '../abstracts/material-geometry';
+import { AnyConstructor } from '../types';
 
-@Directive({
-    providers: [{ provide: NGT_OBJECT_TYPE, useValue: THREE.Line }],
-})
-export abstract class NgtCommonLine<TLine extends THREE.Line = THREE.Line> {
-    @Output() ready = new EventEmitter<TLine>();
+@Directive()
+export abstract class NgtCommonLine<
+    TLine extends THREE.Line = THREE.Line
+> extends NgtMaterialGeometry<TLine> {
+    abstract get lineType(): AnyConstructor<TLine>;
 
-    constructor(
-        @Optional()
-        @Inject(NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER)
-        protected materialGeometryController: NgtMaterialGeometryController
-    ) {
-        if (materialGeometryController) {
-            materialGeometryController.readyFn = () => {
-                this.ready.emit(this.line);
-            };
-        }
-    }
-
-    get line() {
-        return this.materialGeometryController?.object as TLine;
+    override get objectType(): AnyConstructor<TLine> {
+        return this.lineType;
     }
 }

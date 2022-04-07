@@ -1,62 +1,35 @@
-import {
-    ContentChild,
-    Directive,
-    EventEmitter,
-    Inject,
-    Input,
-    OnInit,
-    Output,
-} from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import {
-    NGT_OBJECT_WATCHED_CONTROLLER,
-    NgtObjectController,
-} from '../controllers/object.controller';
+import { NgtObject, NgtObjectState } from '../abstracts/object';
 import type { AnyConstructor } from '../types';
-import { NgtMaterial } from './material';
+
+export interface NgtCommonSpriteState<
+    TSprite extends THREE.Sprite = THREE.Sprite
+> extends NgtObjectState<TSprite> {
+    material?: THREE.SpriteMaterial;
+}
 
 @Directive()
 export abstract class NgtCommonSprite<
     TSprite extends THREE.Sprite = THREE.Sprite
-> implements OnInit
-{
-    @Input() material?: THREE.SpriteMaterial;
-    @Output() ready = new EventEmitter<TSprite>();
-
-    @ContentChild(NgtMaterial) ngtMaterial?: NgtMaterial;
-
-    abstract spriteType: AnyConstructor<TSprite>;
-
-    private _sprite!: TSprite;
-
-    constructor(
-        @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
-        protected objectController: NgtObjectController
-    ) {
-        objectController.initFn = () => {
-            if (this.material) {
-                this._sprite = new this.spriteType(this.material);
-            } else if (this.ngtMaterial) {
-                if (this.ngtMaterial.material instanceof THREE.SpriteMaterial) {
-                    this._sprite = new this.spriteType(
-                        this.ngtMaterial.material
-                    );
-                }
-            }
-
-            return this._sprite;
-        };
-
-        objectController.readyFn = () => {
-            this.ready.emit(this.sprite);
-        };
+> extends NgtObject<TSprite, NgtCommonSpriteState<TSprite>> {
+    @Input() set material(material: THREE.SpriteMaterial) {
+        this.set({ material });
     }
 
-    ngOnInit() {
-        this.objectController.init();
+    abstract get spriteType(): AnyConstructor<TSprite>;
+
+    protected override objectInitFn(): TSprite {
+        const { material } = this.get();
+        return new this.spriteType(material);
     }
 
-    get sprite() {
-        return this._sprite;
+    override ngOnInit() {
+        this.init();
+        super.ngOnInit();
+    }
+
+    protected override get subInputs(): Record<string, boolean> {
+        return { material: true };
     }
 }

@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { inject, InjectionToken } from '@angular/core';
+import { inject, InjectionToken, Provider } from '@angular/core';
 import { WINDOW } from './window';
 
 export interface NgtResizeOptions {
@@ -22,6 +21,22 @@ export const NGT_RESIZE_OPTIONS = new InjectionToken<NgtResizeOptions>(
         }),
     }
 );
+
+export function provideResizeOptions(
+    resizeOptions: Partial<NgtResizeOptions>
+): Provider {
+    return {
+        provide: NGT_RESIZE_OPTIONS,
+        useValue: {
+            ...resizeOptions,
+            box: NGT_RESIZE_BOX_DEFAULT,
+            scroll: false,
+            offsetSize: false,
+            debounce: NGT_RESIZE_DEBOUNCE_DEFAULT,
+        },
+    };
+}
+
 export const NGT_RESIZE_OBSERVER_SUPPORT = new InjectionToken<boolean>(
     'Resize Observer API support',
     {

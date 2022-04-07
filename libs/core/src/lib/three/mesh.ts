@@ -1,33 +1,15 @@
-import {
-    Directive,
-    EventEmitter,
-    Inject,
-    Optional,
-    Output,
-} from '@angular/core';
+import { Directive } from '@angular/core';
 import * as THREE from 'three';
-import {
-    NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER,
-    NgtMaterialGeometryController,
-} from '../controllers/material-geometry.controller';
+import { NgtMaterialGeometry } from '../abstracts/material-geometry';
+import { AnyConstructor } from '../types';
 
 @Directive()
-export abstract class NgtCommonMesh<TMesh extends THREE.Mesh = THREE.Mesh> {
-    @Output() ready = new EventEmitter<TMesh>();
+export abstract class NgtCommonMesh<
+    TMesh extends THREE.Mesh = THREE.Mesh
+> extends NgtMaterialGeometry<TMesh> {
+    abstract get meshType(): AnyConstructor<TMesh>;
 
-    constructor(
-        @Optional()
-        @Inject(NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER)
-        protected materialGeometryController: NgtMaterialGeometryController
-    ) {
-        if (materialGeometryController) {
-            materialGeometryController.readyFn = () => {
-                this.ready.emit(this.mesh);
-            };
-        }
-    }
-
-    get mesh() {
-        return this.materialGeometryController?.object as TMesh;
+    override get objectType(): AnyConstructor<TMesh> {
+        return this.meshType;
     }
 }

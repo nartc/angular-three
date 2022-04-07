@@ -1,91 +1,108 @@
-import { Directive, Inject, NgZone, OnInit } from '@angular/core';
+import { Directive, Inject, NgZone, Optional } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_PARENT_OBJECT } from '../di/parent-object';
-import { NgtAnimationFrameStore } from '../stores/animation-frame';
-import { NgtCanvasStore } from '../stores/canvas';
-import { NgtStore, tapEffect } from '../stores/store';
-import type { AnyConstructor, AnyFunction } from '../types';
+import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
+import { NGT_OBJECT_FACTORY } from '../di/object';
+import { tapEffect } from '../stores/component-store';
+import { NgtStore } from '../stores/store';
+import { AnyConstructor, AnyFunction } from '../types';
+import { prepare } from '../utils/instance';
+
+export interface NgtCommonObjectHelperState<
+    TObjectHelper extends THREE.Object3D
+> extends NgtInstanceState<TObjectHelper> {
+    objectHelper: TObjectHelper;
+    objectHelperArgs: unknown[];
+}
 
 @Directive()
-export abstract class NgtObjectHelper<TObjectHelper extends THREE.Object3D>
-    extends NgtStore<{ args: unknown[] }>
-    implements OnInit
-{
-    abstract objectHelperType: AnyConstructor<TObjectHelper>;
+export abstract class NgtCommonObjectHelper<
+    TObjectHelper extends THREE.Object3D
+> extends NgtInstance<
+    TObjectHelper,
+    NgtCommonObjectHelperState<TObjectHelper>
+> {
+    abstract get objectHelperType(): AnyConstructor<TObjectHelper>;
 
     protected set objectHelperArgs(v: unknown | unknown[]) {
-        this.set({ args: Array.isArray(v) ? v : [v] });
+        this.set({ objectHelperArgs: Array.isArray(v) ? v : [v] });
     }
-
-    private _object?: THREE.Object3D;
 
     constructor(
-        @Inject(NGT_PARENT_OBJECT)
-        protected objectFn: AnyFunction,
-        protected canvasStore: NgtCanvasStore,
-        protected animationFrameStore: NgtAnimationFrameStore,
-        protected zone: NgZone
+        zone: NgZone,
+        @Optional()
+        @Inject(NGT_OBJECT_FACTORY)
+        protected parentObjectFactory: AnyFunction,
+        protected store: NgtStore
     ) {
-        super();
-    }
-
-    ngOnInit() {
-        this.zone.runOutsideAngular(() => {
-            this.effect<unknown[]>(
-                tapEffect((args) => {
-                    this._object = this.objectFn();
-
-                    if (!this._object) {
-                        console.info('Parent is not an object3d');
-                        return;
-                    }
-
-                    this._objectHelper = new this.objectHelperType(
-                        this._object,
-                        ...args
-                    );
-
-                    const scene = this.canvasStore.get((s) => s.scene);
-                    if (this.objectHelper && scene) {
-                        scene.add(this.objectHelper);
-                        const animationUuid = this.animationFrameStore.register(
-                            {
-                                callback: () => {
-                                    if (this.objectHelper) {
-                                        (
-                                            this
-                                                .objectHelper as TObjectHelper & {
-                                                update: () => void;
-                                            }
-                                        ).update();
-                                    }
-                                },
-                            }
-                        );
-                        return () => {
-                            if (this.objectHelper && scene) {
-                                scene.remove(this.objectHelper);
-                                this.animationFrameStore.unregister(
-                                    animationUuid
-                                );
-                            }
-                        };
-                    }
-
-                    return;
-                })
-            )(
-                this.select(
-                    this.select((s) => s.args),
-                    this.canvasStore.ready$,
-                    (args) => args
-                )
-            );
+        super({
+            zone,
+            shouldAttach: false,
+            parentInstanceFactory: parentObjectFactory,
         });
+        this.set({ objectHelperArgs: [] });
     }
 
-    private _objectHelper?: TObjectHelper;
-    get objectHelper() {
-        return this._objectHelper;
+    get objectHelper(): TObjectHelper {
+        return this.get((s) => s.objectHelper);
     }
+
+    override ngOnInit() {
+        this.zone.runOutsideAngular(() => {
+            this.onCanvasReady(this.store.ready$, () => {
+                this.init(this.select((s) => s.objectHelperArgs));
+            });
+        });
+        super.ngOnInit();
+    }
+
+    protected override destroy() {
+        if (this.objectHelper) {
+            this.objectHelper.clear();
+        }
+        super.destroy();
+    }
+
+    private readonly init = this.effect<
+        NgtCommonObjectHelperState<TObjectHelper>['objectHelperArgs']
+    >(
+        tapEffect((objectHelperArgs) => {
+            const parentObject = this.parentObjectFactory?.();
+            if (!parentObject) {
+                console.info('Parent is not an object3d');
+                return;
+            }
+
+            const objectHelper = prepare(
+                new this.objectHelperType(parentObject, ...objectHelperArgs),
+                () => this.store.get(),
+                parentObject
+            );
+            this.set({ objectHelper, instance: objectHelper });
+            this.emitReady();
+
+            const scene = this.store.get((s) => s.scene);
+            if (objectHelper && scene) {
+                scene.add(objectHelper);
+                const animationUuid = this.store.register({
+                    callback: () => {
+                        if (objectHelper) {
+                            (
+                                objectHelper as unknown as TObjectHelper & {
+                                    update: () => void;
+                                }
+                            ).update();
+                        }
+                    },
+                    obj: objectHelper,
+                });
+                return () => {
+                    if (objectHelper && scene) {
+                        scene.remove(objectHelper);
+                        this.store.unregister(animationUuid);
+                    }
+                };
+            }
+            return;
+        })
+    );
 }
