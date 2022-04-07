@@ -1,3 +1,4 @@
+export * from './lib/canvas';
 export * from './lib/types';
 
 export * from './lib/di/parent-object';
@@ -5,8 +6,6 @@ export * from './lib/di/performance';
 export * from './lib/di/resize';
 export * from './lib/di/is-webgl-available';
 export * from './lib/di/window';
-
-export * from './lib/canvas';
 
 export * from './lib/pipes/math';
 export * from './lib/pipes/vector';
@@ -18,6 +17,10 @@ export * from './lib/pipes/radian';
 
 export * from './lib/directives/repeat';
 export * from './lib/directives/cursor';
+
+export * from './lib/abstracts/object';
+export * from './lib/abstracts/instance';
+export * from './lib/abstracts/material-geometry';
 
 export * from './lib/controllers/controller';
 export * from './lib/controllers/object.controller';
@@ -42,6 +45,7 @@ export * from './lib/three/camera';
 // export * from './lib/three/extender';
 export * from './lib/three/object-helper';
 
+export * from './lib/stores/component-store';
 export * from './lib/stores/store';
 
 export * from './lib/services/destroyed';

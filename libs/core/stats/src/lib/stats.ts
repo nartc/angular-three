@@ -1,11 +1,8 @@
-import {
-    NgtAnimationFrameStore,
-    NgtCanvasStore,
-    NgtStore,
-} from '@angular-three/core';
+import { NgtComponentStore, NgtStore } from '@angular-three/core';
 import { DOCUMENT } from '@angular/common';
 import {
-    Directive,
+    ChangeDetectionStrategy,
+    Component,
     Inject,
     Input,
     NgModule,
@@ -14,31 +11,30 @@ import {
 } from '@angular/core';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
-@Directive({
+@Component({
     selector: 'ngt-stats',
-    exportAs: 'ngtStats',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NgtStats extends NgtStore implements OnInit {
+export class NgtStats extends NgtComponentStore implements OnInit {
     @Input() parent?: HTMLElement;
 
     private node: HTMLElement;
     private stats?: Stats;
-    private animationUuid = '';
 
     constructor(
         private zone: NgZone,
-        private animationFrameStore: NgtAnimationFrameStore,
-        private canvasStore: NgtCanvasStore,
-        @Inject(DOCUMENT) document: Document
+        private store: NgtStore,
+        @Inject(DOCUMENT) { body }: Document
     ) {
         super();
-        this.node = document.body;
+        this.node = body;
     }
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(
-                this.canvasStore.ready$,
+                this.store.ready$,
                 () => {
                     if (this.parent) {
                         this.node = this.parent;
@@ -46,14 +42,12 @@ export class NgtStats extends NgtStore implements OnInit {
 
                     this.stats = Stats();
                     this.node.appendChild(this.stats.dom);
-                    this.animationUuid = this.animationFrameStore.register({
+                    const animationUuid = this.store.register({
                         callback: this.stats.update.bind(this.stats),
                     });
                     return () => {
                         if (this.stats) {
-                            this.animationFrameStore.unregister(
-                                this.animationUuid
-                            );
+                            this.store.unregister(animationUuid);
                             this.stats.end();
                             this.node.removeChild(this.stats.dom);
                         }
