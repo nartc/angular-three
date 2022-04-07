@@ -1,4 +1,5 @@
 import { InjectionToken, Provider } from '@angular/core';
+import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonLight } from '../three/light';
 import type { AnyConstructor } from '../types';
@@ -9,7 +10,8 @@ export const NGT_COMMON_LIGHT_FACTORY = new InjectionToken(
 );
 
 export function provideCommonLightFactory<TSubLight extends NgtCommonLight>(
-    subLightType: AnyConstructor<TSubLight>
+    subLightType: AnyConstructor<TSubLight>,
+    factory?: (sub: TSubLight) => THREE.Object3D
 ): Provider {
     return [
         provideObjectFactory(
@@ -19,7 +21,7 @@ export function provideCommonLightFactory<TSubLight extends NgtCommonLight>(
         {
             provide: NGT_COMMON_LIGHT_FACTORY,
             useFactory: (subLight: TSubLight) => {
-                return () => subLight.object3d;
+                return () => factory?.(subLight) || subLight.object3d;
             },
             deps: [subLightType],
         },

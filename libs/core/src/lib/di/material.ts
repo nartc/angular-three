@@ -16,7 +16,10 @@ export function provideCommonMaterialFactory<
         TMaterialParameters,
         TMaterial
     > = NgtCommonMaterial<TMaterialParameters, TMaterial>
->(subMaterialType: AnyConstructor<TSubMaterial>): Provider {
+>(
+    subMaterialType: AnyConstructor<TSubMaterial>,
+    factory?: (sub: TSubMaterial) => TMaterial
+): Provider {
     return [
         provideInstanceFactory<TMaterial>(
             subMaterialType as unknown as AnyConstructor<NgtInstance<TMaterial>>
@@ -25,7 +28,7 @@ export function provideCommonMaterialFactory<
         {
             provide: NGT_COMMON_MATERIAL_FACTORY,
             useFactory: (subMaterial: TSubMaterial) => {
-                return () => subMaterial.material;
+                return () => factory?.(subMaterial) || subMaterial.material;
             },
             deps: [subMaterialType],
         },

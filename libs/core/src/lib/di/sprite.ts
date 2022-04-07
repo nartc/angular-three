@@ -1,4 +1,5 @@
 import { InjectionToken, Provider } from '@angular/core';
+import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonSprite } from '../three/sprite';
 import type { AnyConstructor } from '../types';
@@ -9,7 +10,8 @@ export const NGT_COMMON_SPRITE_FACTORY = new InjectionToken(
 );
 
 export function provideCommonSpriteFactory<TSubSprite extends NgtCommonSprite>(
-    subSpriteType: AnyConstructor<TSubSprite>
+    subSpriteType: AnyConstructor<TSubSprite>,
+    factory?: (sub: TSubSprite) => THREE.Object3D
 ): Provider {
     return [
         provideObjectFactory(
@@ -19,7 +21,7 @@ export function provideCommonSpriteFactory<TSubSprite extends NgtCommonSprite>(
         {
             provide: NGT_COMMON_SPRITE_FACTORY,
             useFactory: (subSprite: TSubSprite) => {
-                return () => subSprite.object3d;
+                return () => factory?.(subSprite) || subSprite.object3d;
             },
             deps: [subSpriteType],
         },

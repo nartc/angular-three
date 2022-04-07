@@ -1,4 +1,5 @@
 import { InjectionToken, Provider } from '@angular/core';
+import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonCamera } from '../three/camera';
 import type { AnyConstructor } from '../types';
@@ -9,7 +10,8 @@ export const NGT_COMMON_CAMERA_FACTORY = new InjectionToken(
 );
 
 export function provideCommonCameraFactory<TSubCamera extends NgtCommonCamera>(
-    subCameraType: AnyConstructor<TSubCamera>
+    subCameraType: AnyConstructor<TSubCamera>,
+    factory?: (sub: TSubCamera) => THREE.Object3D
 ): Provider {
     return [
         provideObjectFactory(
@@ -19,7 +21,7 @@ export function provideCommonCameraFactory<TSubCamera extends NgtCommonCamera>(
         {
             provide: NGT_COMMON_CAMERA_FACTORY,
             useFactory: (subCamera: TSubCamera) => {
-                return () => subCamera.object3d;
+                return () => factory?.(subCamera) || subCamera.object3d;
             },
             deps: [subCameraType],
         },

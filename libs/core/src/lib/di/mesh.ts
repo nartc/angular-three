@@ -1,4 +1,5 @@
 import { InjectionToken, Provider } from '@angular/core';
+import * as THREE from 'three';
 import { NgtMaterialGeometry } from '../abstracts/material-geometry';
 import { NgtCommonMesh } from '../three/mesh';
 import type { AnyConstructor, AnyFunction } from '../types';
@@ -9,7 +10,8 @@ export const NGT_COMMON_MESH_FACTORY = new InjectionToken<AnyFunction>(
 );
 
 export function provideCommonMeshFactory<TSubMesh extends NgtCommonMesh>(
-    subMeshType: AnyConstructor<TSubMesh>
+    subMeshType: AnyConstructor<TSubMesh>,
+    factory?: (sub: TSubMesh) => THREE.Object3D
 ): Provider {
     return [
         provideMaterialGeometryObjectFactory(
@@ -19,7 +21,7 @@ export function provideCommonMeshFactory<TSubMesh extends NgtCommonMesh>(
         {
             provide: NGT_COMMON_MESH_FACTORY,
             useFactory: (subMesh: TSubMesh) => {
-                return () => subMesh.object3d;
+                return () => factory?.(subMesh) || subMesh.object3d;
             },
             deps: [subMeshType],
         },

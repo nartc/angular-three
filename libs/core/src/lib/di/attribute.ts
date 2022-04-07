@@ -12,7 +12,10 @@ export const NGT_COMMON_ATTRIBUTE_FACTORY = new InjectionToken(
 export function provideCommonAttributeFactory<
     TAttribute extends THREE.BufferAttribute | THREE.InterleavedBufferAttribute,
     TSubAttribute extends NgtCommonAttribute<TAttribute> = NgtCommonAttribute<TAttribute>
->(subAttributeType: AnyConstructor<TSubAttribute>): Provider {
+>(
+    subAttributeType: AnyConstructor<TSubAttribute>,
+    factory?: (sub: TSubAttribute) => TAttribute
+): Provider {
     return [
         provideInstanceFactory<TAttribute>(
             subAttributeType as unknown as AnyConstructor<
@@ -23,7 +26,7 @@ export function provideCommonAttributeFactory<
         {
             provide: NGT_COMMON_ATTRIBUTE_FACTORY,
             useFactory: (subAttribute: TSubAttribute) => {
-                return () => subAttribute.attribute;
+                return () => factory?.(subAttribute) || subAttribute.attribute;
             },
             deps: [subAttributeType],
         },

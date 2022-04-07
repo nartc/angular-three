@@ -1,4 +1,5 @@
 import { InjectionToken, Provider } from '@angular/core';
+import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonHelper } from '../three/helper';
 import type { AnyConstructor } from '../types';
@@ -9,7 +10,8 @@ export const NGT_COMMON_HELPER_FACTORY = new InjectionToken(
 );
 
 export function provideCommonHelperFactory<TSubHelper extends NgtCommonHelper>(
-    subHelperType: AnyConstructor<TSubHelper>
+    subHelperType: AnyConstructor<TSubHelper>,
+    factory?: (sub: TSubHelper) => THREE.Object3D
 ): Provider {
     return [
         provideObjectFactory(
@@ -19,7 +21,7 @@ export function provideCommonHelperFactory<TSubHelper extends NgtCommonHelper>(
         {
             provide: NGT_COMMON_HELPER_FACTORY,
             useFactory: (subHelper: TSubHelper) => {
-                return () => subHelper.object3d;
+                return () => factory?.(subHelper) || subHelper.object3d;
             },
             deps: [subHelperType],
         },

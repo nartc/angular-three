@@ -6,6 +6,8 @@ export * from './lib/di/performance';
 export * from './lib/di/resize';
 export * from './lib/di/is-webgl-available';
 export * from './lib/di/window';
+export * from './lib/di/object';
+export * from './lib/di/material-geometry';
 
 export * from './lib/pipes/math';
 export * from './lib/pipes/vector';

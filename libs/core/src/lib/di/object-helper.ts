@@ -12,7 +12,10 @@ export const NGT_COMMON_OBJECT_HELPER_FACTORY = new InjectionToken(
 export function provideCommonObjectHelperFactory<
     TObjectHelper extends THREE.Object3D,
     TSubObjectHelper extends NgtCommonObjectHelper<TObjectHelper> = NgtCommonObjectHelper<TObjectHelper>
->(subObjectHelperType: AnyConstructor<TSubObjectHelper>): Provider {
+>(
+    subObjectHelperType: AnyConstructor<TSubObjectHelper>,
+    factory?: (sub: TSubObjectHelper) => TObjectHelper
+): Provider {
     return [
         provideInstanceFactory<TObjectHelper>(
             subObjectHelperType as unknown as AnyConstructor<
@@ -23,7 +26,8 @@ export function provideCommonObjectHelperFactory<
         {
             provide: NGT_COMMON_OBJECT_HELPER_FACTORY,
             useFactory: (subObjectHelper: TSubObjectHelper) => {
-                return () => subObjectHelper.objectHelper;
+                return () =>
+                    factory?.(subObjectHelper) || subObjectHelper.objectHelper;
             },
             deps: [subObjectHelperType],
         },

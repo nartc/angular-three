@@ -12,7 +12,10 @@ export const NGT_COMMON_CURVE_FACTORY = new InjectionToken(
 export function provideCommonCurveFactory<
     TCurve extends THREE.Curve<THREE.Vector>,
     TSubCurve extends NgtCommonCurve<TCurve> = NgtCommonCurve<TCurve>
->(subCurveType: AnyConstructor<TSubCurve>): Provider {
+>(
+    subCurveType: AnyConstructor<TSubCurve>,
+    factory?: (sub: TSubCurve) => TCurve
+): Provider {
     return [
         provideInstanceFactory<TCurve>(
             subCurveType as unknown as AnyConstructor<NgtInstance<TCurve>>
@@ -21,7 +24,7 @@ export function provideCommonCurveFactory<
         {
             provide: NGT_COMMON_CURVE_FACTORY,
             useFactory: (subCurve: TSubCurve) => {
-                return () => subCurve.curve;
+                return () => factory?.(subCurve) || subCurve.curve;
             },
             deps: [subCurveType],
         },

@@ -12,7 +12,10 @@ export const NGT_COMMON_GEOMETRY_FACTORY = new InjectionToken(
 export function provideCommonGeometryFactory<
     TGeometry extends THREE.BufferGeometry,
     TSubGeometry extends NgtCommonGeometry<TGeometry> = NgtCommonGeometry<TGeometry>
->(subGeometryType: AnyConstructor<TSubGeometry>): Provider {
+>(
+    subGeometryType: AnyConstructor<TSubGeometry>,
+    factory?: (sub: TSubGeometry) => TGeometry
+): Provider {
     return [
         provideInstanceFactory<TGeometry>(
             subGeometryType as unknown as AnyConstructor<NgtInstance<TGeometry>>
@@ -21,7 +24,7 @@ export function provideCommonGeometryFactory<
         {
             provide: NGT_COMMON_GEOMETRY_FACTORY,
             useFactory: (subGeometry: TSubGeometry) => {
-                return () => subGeometry.geometry;
+                return () => factory?.(subGeometry) || subGeometry.geometry;
             },
             deps: [subGeometryType],
         },

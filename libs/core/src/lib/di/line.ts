@@ -1,4 +1,5 @@
 import { InjectionToken, Provider } from '@angular/core';
+import * as THREE from 'three';
 import { NgtMaterialGeometry } from '../abstracts/material-geometry';
 import { NgtCommonLine } from '../three/line';
 import type { AnyConstructor, AnyFunction } from '../types';
@@ -9,7 +10,8 @@ export const NGT_COMMON_LINE_FACTORY = new InjectionToken<AnyFunction>(
 );
 
 export function provideCommonLineFactory<TSubLine extends NgtCommonLine>(
-    subLineType: AnyConstructor<TSubLine>
+    subLineType: AnyConstructor<TSubLine>,
+    factory?: (sub: TSubLine) => THREE.Object3D
 ): Provider {
     return [
         provideMaterialGeometryObjectFactory(
@@ -19,7 +21,7 @@ export function provideCommonLineFactory<TSubLine extends NgtCommonLine>(
         {
             provide: NGT_COMMON_LINE_FACTORY,
             useFactory: (subLine: TSubLine) => {
-                return () => subLine.object3d;
+                return () => factory?.(subLine) || subLine.object3d;
             },
             deps: [subLineType],
         },

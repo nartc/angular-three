@@ -13,13 +13,16 @@ export function provideInstanceFactory<
         TInstance,
         TInstanceState
     >
->(subInstanceType: AnyConstructor<TSubInstance>): Provider {
+>(
+    subInstanceType: AnyConstructor<TSubInstance>,
+    factory?: (sub: TSubInstance) => TInstance
+): Provider {
     return [
         { provide: NgtInstance, useExisting: subInstanceType },
         {
             provide: NGT_INSTANCE_FACTORY,
             useFactory: (subInstance: TSubInstance) => {
-                return () => subInstance.instance;
+                return () => factory?.(subInstance) || subInstance.instance;
             },
             deps: [subInstanceType],
         },

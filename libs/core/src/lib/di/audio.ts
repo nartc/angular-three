@@ -1,4 +1,5 @@
 import { InjectionToken, Provider } from '@angular/core';
+import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonAudio } from '../three/audio';
 import type { AnyConstructor } from '../types';
@@ -9,7 +10,8 @@ export const NGT_COMMON_AUDIO_FACTORY = new InjectionToken(
 );
 
 export function provideCommonAudioFactory<TSubAudio extends NgtCommonAudio>(
-    subAudioType: AnyConstructor<TSubAudio>
+    subAudioType: AnyConstructor<TSubAudio>,
+    factory?: (sub: TSubAudio) => THREE.Object3D
 ): Provider {
     return [
         provideObjectFactory(
@@ -19,7 +21,7 @@ export function provideCommonAudioFactory<TSubAudio extends NgtCommonAudio>(
         {
             provide: NGT_COMMON_AUDIO_FACTORY,
             useFactory: (subAudio: TSubAudio) => {
-                return () => subAudio.object3d;
+                return () => factory?.(subAudio) || subAudio.object3d;
             },
             deps: [subAudioType],
         },

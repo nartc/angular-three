@@ -12,7 +12,10 @@ export const NGT_COMMON_TEXTURE_FACTORY = new InjectionToken(
 export function provideCommonTextureFactory<
     TTexture extends THREE.Texture,
     TSubTexture extends NgtCommonTexture<TTexture> = NgtCommonTexture<TTexture>
->(subTextureType: AnyConstructor<TSubTexture>): Provider {
+>(
+    subTextureType: AnyConstructor<TSubTexture>,
+    factory?: (sub: TSubTexture) => TTexture
+): Provider {
     return [
         provideInstanceFactory<TTexture>(
             subTextureType as unknown as AnyConstructor<NgtInstance<TTexture>>
@@ -21,7 +24,7 @@ export function provideCommonTextureFactory<
         {
             provide: NGT_COMMON_TEXTURE_FACTORY,
             useFactory: (subTexture: TSubTexture) => {
-                return () => subTexture.texture;
+                return () => factory?.(subTexture) || subTexture.texture;
             },
             deps: [subTextureType],
         },
