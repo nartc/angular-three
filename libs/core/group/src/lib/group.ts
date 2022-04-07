@@ -1,51 +1,26 @@
-import {
-    createParentObjectProvider,
-    NGT_OBJECT_CONTROLLER_PROVIDER,
-    NGT_OBJECT_WATCHED_CONTROLLER,
-    NgtObjectController,
-    NgtObjectControllerModule,
-} from '@angular-three/core';
-import {
-    Directive,
-    EventEmitter,
-    Inject,
-    NgModule,
-    OnInit,
-    Output,
-} from '@angular/core';
+import { NgtObject, provideObjectFactory } from '@angular-three/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
-@Directive({
+@Component({
     selector: 'ngt-group',
-    exportAs: 'ngtGroup',
-    providers: [
-        NGT_OBJECT_CONTROLLER_PROVIDER,
-        createParentObjectProvider(NgtGroup, (group) => group.group),
-    ],
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideObjectFactory<THREE.Group>(NgtGroup)],
 })
-export class NgtGroup implements OnInit {
-    @Output() ready = new EventEmitter<THREE.Group>();
-
-    private _group?: THREE.Group;
-    get group() {
-        return this._group!;
+export class NgtGroup extends NgtObject<THREE.Group> {
+    protected override objectInitFn(): THREE.Group {
+        return new THREE.Group();
     }
 
-    constructor(
-        @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
-        private objectController: NgtObjectController
-    ) {
-        objectController.initFn = () => (this._group = new THREE.Group());
-        objectController.readyFn = () => this.ready.emit(this.group);
-    }
-
-    ngOnInit() {
-        this.objectController.init();
+    override ngOnInit() {
+        this.init();
+        super.ngOnInit();
     }
 }
 
 @NgModule({
     declarations: [NgtGroup],
-    exports: [NgtGroup, NgtObjectControllerModule],
+    exports: [NgtGroup],
 })
 export class NgtGroupModule {}
