@@ -1,0 +1,26 @@
+// GENERATED
+import {
+    AnyConstructor,
+    NgtCommonAudio,
+    provideCommonAudioFactory,
+} from '@angular-three/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideCommonAudioFactory<<%= audioNode %>, THREE.<%= name %>>(Ngt<%= name %>)],
+})
+export class Ngt<%= name %> extends NgtCommonAudio<<%= audioNode %>, THREE.<%= name %>> {
+    override get audioType(): AnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+}
+
+@NgModule({
+    declarations: [Ngt<%= name %>],
+    exports: [Ngt<%= name %>],
+})
+export class Ngt<%= name %>Module {}

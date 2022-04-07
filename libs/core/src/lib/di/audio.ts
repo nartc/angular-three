@@ -9,7 +9,14 @@ export const NGT_COMMON_AUDIO_FACTORY = new InjectionToken(
     'NgtCommonAudio factory'
 );
 
-export function provideCommonAudioFactory<TSubAudio extends NgtCommonAudio>(
+export function provideCommonAudioFactory<
+    TAudioNode extends AudioNode,
+    TAudio extends THREE.Audio<TAudioNode>,
+    TSubAudio extends NgtCommonAudio<TAudioNode, TAudio> = NgtCommonAudio<
+        TAudioNode,
+        TAudio
+    >
+>(
     subAudioType: AnyConstructor<TSubAudio>,
     factory?: (sub: TSubAudio) => THREE.Object3D
 ): Provider {

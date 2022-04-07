@@ -1,8 +1,9 @@
 import type { Tree } from '@nrwl/devkit';
 import attributesGenerator from './attributes/attributes';
+import audiosGenerator from './audios/audios';
 
 /**
- * import audiosGenerator from './audios/audios';
+ *
  * import camerasGenerator from './cameras/cameras';
  * import cannonBodyControllerGenerator from './cannon-body-controller/cannon-body-controller';
  * import cannonConstraintControllerGenerator from './cannon-constraint-controller/cannon-constraint-controller';
@@ -30,27 +31,27 @@ export default async function (tree: Tree) {
         // texturesGenerator(tree),
     ]);
 
-    // const [
-    //     audioSelectors,
-    //     cameraSelectors,
-    //     helperSelectors,
-    //     lightSelectors,
-    //     lineSelectors,
-    //     spriteSelectors,
-    //     simpleEffectSelectors,
-    //     physicBodySelectors,
-    //     physicConstraintSelectors,
-    // ] = await Promise.all([
-    //     audiosGenerator(tree),
-    //     camerasGenerator(tree),
-    //     helpersGenerator(tree),
-    //     lightsGenerator(tree),
-    //     linesGenerator(tree),
-    //     spritesGenerator(tree),
-    //     simpleEffectsGenerator(tree),
-    //     physicBodiesGenerator(tree),
-    //     physicConstraintsGenerator(tree),
-    // ]);
+    const [
+        audioSelectors,
+        // cameraSelectors,
+        // helperSelectors,
+        // lightSelectors,
+        // lineSelectors,
+        // spriteSelectors,
+        // simpleEffectSelectors,
+        // physicBodySelectors,
+        // physicConstraintSelectors,
+    ] = await Promise.all([
+        audiosGenerator(tree),
+        // camerasGenerator(tree),
+        // helpersGenerator(tree),
+        // lightsGenerator(tree),
+        // linesGenerator(tree),
+        // spritesGenerator(tree),
+        // simpleEffectsGenerator(tree),
+        // physicBodiesGenerator(tree),
+        // physicConstraintsGenerator(tree),
+    ]);
 
     // await Promise.all([
     //     controllersGenerator(
