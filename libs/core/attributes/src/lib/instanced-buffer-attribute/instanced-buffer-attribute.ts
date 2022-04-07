@@ -4,18 +4,12 @@ import {
     NgtCommonAttribute,
     provideCommonAttributeFactory,
 } from '@angular-three/core';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    Input,
-    NgModule,
-} from '@angular/core';
+import { NgModule, Component, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
     selector: 'ngt-instanced-buffer-attribute',
     template: '<ng-content></ng-content>',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         provideCommonAttributeFactory<THREE.InstancedBufferAttribute>(
             NgtInstancedBufferAttribute
