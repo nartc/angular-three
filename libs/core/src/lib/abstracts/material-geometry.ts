@@ -10,6 +10,7 @@ export interface NgtMaterialGeometryState<
     geometry: THREE.BufferGeometry;
     morphTargetInfluences?: number[];
     morphTargetDictionary?: Record<string, number>;
+    [propKey: string]: any;
 }
 
 @Directive()
@@ -37,39 +38,45 @@ export abstract class NgtMaterialGeometry<
         this.set({ morphTargetDictionary });
     }
 
-    private _materialGeometryObjectArgs: unknown[] = [];
-    set materialGeometryObjectArgs(v: unknown | unknown[]) {
-        this._materialGeometryObjectArgs = Array.isArray(v) ? v : [v];
-    }
-
-    get materialGeometryObjectArgs(): unknown[] {
-        return this._materialGeometryObjectArgs;
-    }
-
     abstract get objectType(): AnyConstructor<TMaterialGeometryObject>;
 
     protected override objectInitFn(): TMaterialGeometryObject {
-        const {
-            material,
-            geometry,
-            morphTargetDictionary,
-            morphTargetInfluences,
-        } = this.get();
+        const props = this.get();
 
-        const object = new this.objectType(
-            geometry,
-            material,
-            ...this.materialGeometryObjectArgs
+        // this is the additional arguments to pass into the
+        // object constructor that is not the 4 on MaterialGeometry
+        // eg: InstancedMesh has "count" -> objectArgs = [count]
+        const objectArgs = Object.keys(this.subInputs).reduce(
+            (args, subInputKey) => {
+                if (
+                    ![
+                        'geometry',
+                        'material',
+                        'morphTargetDictionary',
+                        'morphTargetInfluences',
+                    ].includes(subInputKey)
+                ) {
+                    args.push(props[subInputKey]);
+                }
+                return args;
+            },
+            [] as unknown[]
         );
 
-        if (morphTargetDictionary && 'morphTargetDictionary' in object) {
+        const object = new this.objectType(
+            props.geometry,
+            props.material,
+            ...objectArgs
+        );
+
+        if (props.morphTargetDictionary && 'morphTargetDictionary' in object) {
             (object as unknown as UnknownRecord)['morphTargetDictionary'] =
-                morphTargetDictionary;
+                props.morphTargetDictionary;
         }
 
-        if (morphTargetInfluences && 'morphTargetInfluences' in object) {
+        if (props.morphTargetInfluences && 'morphTargetInfluences' in object) {
             (object as unknown as UnknownRecord)['morphTargetInfluences'] =
-                morphTargetInfluences;
+                props.morphTargetInfluences;
         }
 
         if (this.postInit) {

@@ -1,50 +1,46 @@
 import {
-    createParentObjectProvider,
-    NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
-    NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER,
-    NGT_OBJECT_POST_INIT,
-    NGT_OBJECT_TYPE,
+    AnyConstructor,
+    coerceNumberProperty,
     NgtCommonMesh,
-    NgtMaterialGeometryController,
-    NgtMaterialGeometryControllerModule,
+    NumberInput,
+    provideCommonMeshFactory,
 } from '@angular-three/core';
-import { Directive, Inject, Input, NgModule, Optional } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    NgModule,
+} from '@angular/core';
 import * as THREE from 'three';
 
-@Directive({
-    selector: 'ngt-instanced-mesh',
-    exportAs: 'ngtInstancedMesh',
+@Component({
+    selector: 'ngt-instanced-mesh[count]',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        { provide: NgtCommonMesh, useExisting: NgtInstancedMesh },
-        NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
-        { provide: NGT_OBJECT_TYPE, useValue: THREE.InstancedMesh },
-        {
-            provide: NGT_OBJECT_POST_INIT,
-            useValue: (object: THREE.InstancedMesh) => {
-                object.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-            },
-        },
-        createParentObjectProvider(NgtInstancedMesh, (mesh) => mesh.mesh),
+        provideCommonMeshFactory<THREE.InstancedMesh>(NgtInstancedMesh),
     ],
 })
 export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {
-    @Input() set args(value: [number]) {
-        if (this.materialGeometryController) {
-            this.materialGeometryController.meshArgs = value;
-        }
+    @Input() set count(count: NumberInput) {
+        this.set({ count: coerceNumberProperty(count) });
     }
 
-    constructor(
-        @Optional()
-        @Inject(NGT_MATERIAL_GEOMETRY_WATCHED_CONTROLLER)
-        materialGeometryController: NgtMaterialGeometryController
-    ) {
-        super(materialGeometryController);
+    override get meshType(): AnyConstructor<THREE.InstancedMesh> {
+        return THREE.InstancedMesh;
+    }
+
+    protected override postInit() {
+        this.object3d.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    }
+
+    protected override get subInputs(): Record<string, boolean> {
+        return { ...super.subInputs, count: false };
     }
 }
 
 @NgModule({
     declarations: [NgtInstancedMesh],
-    exports: [NgtInstancedMesh, NgtMaterialGeometryControllerModule],
+    exports: [NgtInstancedMesh],
 })
 export class NgtInstancedMeshModule {}

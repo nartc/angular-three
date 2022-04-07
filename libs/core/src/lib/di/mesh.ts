@@ -9,9 +9,12 @@ export const NGT_COMMON_MESH_FACTORY = new InjectionToken<AnyFunction>(
     'NgtCommonMesh factory'
 );
 
-export function provideCommonMeshFactory<TSubMesh extends NgtCommonMesh>(
+export function provideCommonMeshFactory<
+    TMesh extends THREE.Mesh,
+    TSubMesh extends NgtCommonMesh<TMesh> = NgtCommonMesh<TMesh>
+>(
     subMeshType: AnyConstructor<TSubMesh>,
-    factory?: (sub: TSubMesh) => THREE.Object3D
+    factory?: (sub: TSubMesh) => TMesh
 ): Provider {
     return [
         provideMaterialGeometryObjectFactory(

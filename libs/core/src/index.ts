@@ -8,6 +8,7 @@ export * from './lib/di/is-webgl-available';
 export * from './lib/di/window';
 export * from './lib/di/object';
 export * from './lib/di/material-geometry';
+export * from './lib/di/mesh';
 
 export * from './lib/pipes/math';
 export * from './lib/pipes/vector';
@@ -58,4 +59,5 @@ export * from './lib/utils/apply-props';
 export * from './lib/utils/build-graph';
 export * from './lib/utils/make';
 export * from './lib/utils/is-orthographic';
+export * from './lib/utils/coercion';
 export * from './lib/utils/shader-material';

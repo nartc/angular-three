@@ -1,27 +1,25 @@
 import {
-    createParentObjectProvider,
-    NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
-    NGT_OBJECT_TYPE,
+    AnyConstructor,
     NgtCommonMesh,
-    NgtMaterialGeometryControllerModule,
+    provideCommonMeshFactory,
 } from '@angular-three/core';
-import { Directive, NgModule } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
-@Directive({
+@Component({
     selector: 'ngt-mesh',
-    exportAs: 'ngtMesh',
-    providers: [
-        { provide: NgtCommonMesh, useExisting: NgtMesh },
-        NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
-        { provide: NGT_OBJECT_TYPE, useValue: THREE.Mesh },
-        createParentObjectProvider(NgtMesh, (mesh) => mesh.mesh),
-    ],
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideCommonMeshFactory(NgtMesh)],
 })
-export class NgtMesh extends NgtCommonMesh {}
+export class NgtMesh extends NgtCommonMesh {
+    override get meshType(): AnyConstructor<THREE.Mesh> {
+        return THREE.Mesh;
+    }
+}
 
 @NgModule({
     declarations: [NgtMesh],
-    exports: [NgtMesh, NgtMaterialGeometryControllerModule],
+    exports: [NgtMesh],
 })
 export class NgtMeshModule {}
