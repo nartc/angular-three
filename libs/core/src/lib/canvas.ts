@@ -12,23 +12,22 @@ import {
     Output,
     ViewChild,
 } from '@angular/core';
-import { NgtLoop } from './services/loop';
-import { NgtPerformance } from './services/performance';
+import * as THREE from 'three';
+import { provideCanvasInstanceFactory } from './di/instance';
 import { NgtResize } from './services/resize';
-import { NgtAnimationFrameStore } from './stores/animation-frame';
-import { NgtCanvasStore } from './stores/canvas';
-import { NgtEventsStore } from './stores/events';
+import { NgtComponentStore } from './stores/component-store';
 import { NgtStore } from './stores/store';
-import type {
+import {
+    BooleanInput,
     NgtCameraOptions,
-    NgtCreatedState,
     NgtDpr,
     NgtGLOptions,
-    NgtPerformanceOptions,
-    NgtRaycaster,
     NgtSceneOptions,
     NgtSize,
+    NgtState,
 } from './types';
+import { coerceBooleanProperty } from './utils/coercion';
+import { createLoop } from './utils/loop';
 
 @Component({
     selector: 'ngt-canvas',
@@ -37,12 +36,12 @@ import type {
         <ng-container
             *ngIf="projectContent"
             [ngTemplateOutlet]="contentTemplate"
-        >
-        </ng-container>
+        ></ng-container>
         <ng-template #contentTemplate>
             <ng-content></ng-content>
         </ng-template>
     `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     styles: [
         `
             :host {
@@ -58,93 +57,92 @@ import type {
             }
         `,
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        NgtCanvasStore,
-        NgtAnimationFrameStore,
-        NgtEventsStore,
-        NgtResize,
-        NgtLoop,
-        NgtPerformance,
-    ],
+    providers: [NgtStore, NgtResize, provideCanvasInstanceFactory(NgtCanvas)],
 })
-export class NgtCanvas extends NgtStore implements OnInit {
+export class NgtCanvas extends NgtComponentStore implements OnInit {
     @HostBinding('class.ngt-canvas') hostClass = true;
 
-    @Input() set vr(vr: boolean | '') {
-        this.canvasStore.set({ vr: vr === '' ? true : vr });
-    }
-
     @Input() set linear(linear: boolean | '') {
-        this.canvasStore.set({ linear: linear === '' ? true : linear });
+        this.store.set({ linear: linear === '' ? true : linear });
     }
 
     @Input() set flat(flat: boolean | '') {
-        this.canvasStore.set({ flat: flat === '' ? true : flat });
+        this.store.set({ flat: flat === '' ? true : flat });
     }
 
     @Input() set frameloop(frameloop: 'always' | 'demand' | 'never') {
-        this.canvasStore.set({ frameloop });
+        this.store.set({ frameloop });
     }
 
     @Input() set orthographic(orthographic: boolean | '') {
-        this.canvasStore.set({
+        this.store.set({
             orthographic: orthographic === '' ? true : orthographic,
         });
     }
 
-    @Input() set performance(performance: NgtPerformanceOptions) {
-        this.canvasStore.set({ performance });
-    }
-
     @Input() set size(size: NgtSize) {
-        this.canvasStore.set({ size });
+        this.store.set({ size });
     }
 
     @Input() set dpr(dpr: NgtDpr) {
-        this.canvasStore.set({ dpr });
+        this.store.set({ dpr });
     }
 
     @Input() set clock(clock: THREE.Clock) {
-        this.canvasStore.set({ clock });
+        this.store.set({ clock });
     }
 
-    @Input() set raycaster(raycaster: Partial<NgtRaycaster>) {
-        this.canvasStore.set({ raycasterOptions: raycaster });
+    @Input() set raycaster(raycaster: Partial<THREE.Raycaster>) {
+        this.store.set({ raycasterOptions: raycaster });
     }
 
     @Input() set shadows(shadows: boolean | Partial<THREE.WebGLShadowMap>) {
-        this.canvasStore.set({ shadows });
+        this.store.set({ shadows });
     }
 
     @Input() set camera(cameraOptions: NgtCameraOptions) {
-        this.canvasStore.set({ cameraOptions });
+        this.store.set({ cameraOptions });
+    }
+    get camera() {
+        return this.store.get((s) => s.camera);
     }
 
     @Input() set scene(sceneOptions: NgtSceneOptions) {
-        this.canvasStore.set({ sceneOptions });
+        this.store.set({ sceneOptions });
+    }
+    get scene() {
+        return this.store.get((s) => s.scene);
     }
 
     @Input() set gl(glOptions: NgtGLOptions) {
-        this.canvasStore.set({ glOptions });
+        this.store.set({ glOptions });
     }
 
-    @Input() initialLog = false;
-    @Input() projectContent = false;
+    private _initialLog = false;
+    get initialLog(): boolean {
+        return this._initialLog;
+    }
+    @Input() set initialLog(value: BooleanInput) {
+        this._initialLog = coerceBooleanProperty(value);
+    }
 
-    @Output() created = new EventEmitter<NgtCreatedState>();
+    private _projectContent = false;
+    get projectContent(): boolean {
+        return this._projectContent;
+    }
+    @Input() set projectContent(value: BooleanInput) {
+        this._projectContent = coerceBooleanProperty(value);
+    }
+
+    @Output() created = new EventEmitter<NgtState>();
     @Output() pointermissed = new EventEmitter<MouseEvent>();
 
     @ViewChild('rendererCanvas', { static: true })
     rendererCanvas!: ElementRef<HTMLCanvasElement>;
 
-    constructor(
-        private canvasStore: NgtCanvasStore,
-        private eventsStore: NgtEventsStore,
-        private animationFrameStore: NgtAnimationFrameStore,
-        private loop: NgtLoop,
-        private zone: NgZone
-    ) {
+    private readonly rootStateMap = new Map<Element, () => NgtState>();
+
+    constructor(private zone: NgZone, private store: NgtStore) {
         super();
     }
 
@@ -154,25 +152,32 @@ export class NgtCanvas extends NgtStore implements OnInit {
             // update pointermissed in events store so that
             // events util will handle it
             if (this.pointermissed.observed) {
-                this.eventsStore.set({
+                this.store.set({
                     pointerMissed: (event) => {
                         this.pointermissed.emit(event);
                     },
                 });
             }
-
-            this.canvasStore.init(this.rendererCanvas.nativeElement);
-            this.onCanvasReady(this.canvasStore.ready$, () => {
-                const canvasState = this.canvasStore.get();
-                this.eventsStore.init(canvasState.renderer.domElement);
-                this.animationFrameStore.init();
-                this.loop.invalidate(canvasState);
+            this.rootStateMap.set(this.rendererCanvas.nativeElement, () =>
+                this.store.get()
+            );
+            const { invalidate, advance } = createLoop(this.rootStateMap);
+            // init canvas
+            this.store.init(
+                this.rendererCanvas.nativeElement,
+                invalidate,
+                advance
+            );
+            // onCanvasReady -> init loop
+            this.onCanvasReady(this.store.ready$, () => {
+                const canvasState = this.store.get();
                 this.created.emit(canvasState);
                 if (this.initialLog) {
-                    console.group('Canvas initialized');
+                    console.group('[NgtCanvas] Initialized');
                     console.log(canvasState);
                     console.groupEnd();
                 }
+                this.store.startLoop(this.store.select());
             });
         });
     }
@@ -182,5 +187,14 @@ export class NgtCanvas extends NgtStore implements OnInit {
     declarations: [NgtCanvas],
     exports: [NgtCanvas],
     imports: [CommonModule],
+})
+export class NgtCanvasModule {}
+
+/**
+ * @deprecated Use {@link NgtCanvasModule} instead. Will be removed in next major version
+ */
+@NgModule({
+    imports: [NgtCanvasModule],
+    exports: [NgtCanvasModule],
 })
 export class NgtCoreModule {}

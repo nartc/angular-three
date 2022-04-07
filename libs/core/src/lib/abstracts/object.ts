@@ -29,7 +29,7 @@ import type {
 import { applyProps } from '../utils/apply-props';
 import { coerceBooleanProperty } from '../utils/coercion';
 import { prepare } from '../utils/instance';
-import { makeColor, makeForSet, makeVector3 } from '../utils/make';
+import { make, makeColor, makeVector3 } from '../utils/make';
 import { NgtInstance, NgtInstanceState } from './instance';
 
 const supportedEvents = [
@@ -85,13 +85,13 @@ export abstract class NgtObject<
 
     @Input() set rotation(rotation: NgtEuler | undefined) {
         this.set({
-            rotation: makeForSet(THREE.Euler, rotation),
+            rotation: make(THREE.Euler, rotation),
         } as Partial<TObjectState>);
     }
 
     @Input() set quaternion(quaternion: NgtQuaternion | undefined) {
         this.set({
-            quaternion: makeForSet(THREE.Quaternion, quaternion),
+            quaternion: make(THREE.Quaternion, quaternion),
         } as Partial<TObjectState>);
     }
 

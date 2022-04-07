@@ -2,7 +2,7 @@ import {
     AnyConstructor,
     applyProps,
     coerceBooleanProperty,
-    makeForSet,
+    make,
     NgtCommonMesh,
     NgtInstance,
     NgtInstanceState,
@@ -43,12 +43,12 @@ export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
     }
 
     @Input() set bindMatrix(bindMatrix: NgtMatrix4) {
-        this.set({ bindMatrix: makeForSet(THREE.Matrix4, bindMatrix) });
+        this.set({ bindMatrix: make(THREE.Matrix4, bindMatrix) });
     }
 
     @Input() set bindMatrixInverse(bindMatrixInverse: NgtMatrix4) {
         this.set({
-            bindMatrixInverse: makeForSet(THREE.Matrix4, bindMatrixInverse),
+            bindMatrixInverse: make(THREE.Matrix4, bindMatrixInverse),
         });
     }
 
@@ -108,7 +108,7 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
     @Input() set boneInverses(boneInverses: NgtMatrix4[]) {
         this.set({
             boneInverses: boneInverses.map((datum) =>
-                makeForSet(THREE.Matrix4, datum)
+                make(THREE.Matrix4, datum)
             ),
         });
     }

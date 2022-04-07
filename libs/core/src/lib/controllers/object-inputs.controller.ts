@@ -16,7 +16,7 @@ import type {
     NgtVector3,
     UnknownRecord,
 } from '../types';
-import { makeColor, makeForSet, makeVector3 } from '../utils/make';
+import { make, makeColor, makeVector3 } from '../utils/make';
 import { Controller, createControllerProviderFactory } from './controller';
 
 @Directive({
@@ -92,7 +92,7 @@ export class NgtObjectInputsController extends Controller {
     private _position?: THREE.Vector3;
 
     @Input() set rotation(rotation: NgtEuler | undefined) {
-        this._rotation = makeForSet(THREE.Euler, rotation);
+        this._rotation = make(THREE.Euler, rotation);
     }
 
     get rotation() {
@@ -102,7 +102,7 @@ export class NgtObjectInputsController extends Controller {
     private _rotation?: THREE.Euler;
 
     @Input() set quaternion(quaternion: NgtQuaternion | undefined) {
-        this._quaternion = makeForSet(THREE.Quaternion, quaternion);
+        this._quaternion = make(THREE.Quaternion, quaternion);
     }
 
     get quaternion() {

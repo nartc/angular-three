@@ -6,6 +6,10 @@ export const NGT_INSTANCE_FACTORY = new InjectionToken<AnyFunction>(
     'NgtInstance Factory'
 );
 
+export const NGT_CAMERA_INSTANCE_FACTORY = new InjectionToken<AnyFunction>(
+    'NgtInstance factory for root Camera'
+);
+
 export function provideInstanceFactory<
     TInstance extends object,
     TInstanceState extends NgtInstanceState<TInstance> = NgtInstanceState<TInstance>,
@@ -29,12 +33,21 @@ export function provideInstanceFactory<
     ];
 }
 
-export function provideSceneInstanceFactory(canvasType: Type<any>): Provider {
-    return {
-        provide: NGT_INSTANCE_FACTORY,
-        useFactory: (canvas: any) => {
-            return () => canvas.scene;
+export function provideCanvasInstanceFactory(canvasType: Type<any>): Provider {
+    return [
+        {
+            provide: NGT_INSTANCE_FACTORY,
+            useFactory: (canvas: any) => {
+                return () => canvas.scene;
+            },
+            deps: [canvasType],
         },
-        deps: [canvasType],
-    };
+        {
+            provide: NGT_CAMERA_INSTANCE_FACTORY,
+            useFactory: (canvas: any) => {
+                return () => canvas.camera;
+            },
+            deps: [canvasType],
+        },
+    ];
 }

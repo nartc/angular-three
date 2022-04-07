@@ -50,9 +50,12 @@ export function makeVector4(input?: NgtVector4): THREE.Vector4 {
     return new THREE.Vector4(input, input, input, input);
 }
 
-export function makeForSet<TType extends AnyConstructor<any>>(
+export function make<TType extends AnyConstructor<any>>(
     type: TType,
-    input?: InstanceType<TType> | Parameters<typeof type.prototype['set']>
+    input?:
+        | InstanceType<TType>
+        | Parameters<typeof type.prototype['set']>
+        | ConstructorParameters<TType>
 ): InstanceType<TType> {
     if (!input) return new type();
 

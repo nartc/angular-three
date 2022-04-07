@@ -72,6 +72,7 @@ export type NgtTriple = [x: number, y: number, z: number];
 export type NgtQuadruple = [x: number, y: number, z: number, w: number];
 
 export type NgtEuler = THREE.Euler | Parameters<THREE.Euler['set']>;
+export type NgtMatrix3 = THREE.Matrix3 | Parameters<THREE.Matrix3['set']>;
 export type NgtMatrix4 = THREE.Matrix4 | Parameters<THREE.Matrix4['set']>;
 export type NgtVector2 =
     | THREE.Vector2
@@ -97,6 +98,11 @@ export type NgtQuaternion =
 export type NgtColor =
     | ConstructorParameters<typeof THREE.Color>
     | THREE.ColorRepresentation;
+
+export type NgtFog = THREE.Fog | ConstructorParameters<typeof THREE.Fog>;
+export type NgtFogExp2 =
+    | THREE.FogExp2
+    | ConstructorParameters<typeof THREE.FogExp2>;
 
 export type NgtExtendedColors<T> = {
     [K in keyof T]: T[K] extends THREE.Color | undefined ? NgtColor : T[K];

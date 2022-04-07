@@ -1,19 +1,28 @@
 // GENERATED
-import { NgtAttribute } from '@angular-three/core';
-import { NgModule, Directive, Input } from '@angular/core';
+import {
+    AnyConstructor,
+    NgtCommonAttribute,
+    provideCommonAttributeFactory,
+} from '@angular-three/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    NgModule,
+} from '@angular/core';
 import * as THREE from 'three';
 
-@Directive({
+@Component({
     selector: 'ngt-instanced-buffer-attribute',
-    exportAs: 'ngtInstancedBufferAttribute',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        {
-            provide: NgtAttribute,
-            useExisting: NgtInstancedBufferAttribute,
-        },
+        provideCommonAttributeFactory<THREE.InstancedBufferAttribute>(
+            NgtInstancedBufferAttribute
+        ),
     ],
 })
-export class NgtInstancedBufferAttribute extends NgtAttribute<THREE.InstancedBufferAttribute> {
+export class NgtInstancedBufferAttribute extends NgtCommonAttribute<THREE.InstancedBufferAttribute> {
     static ngAcceptInputType_args:
         | ConstructorParameters<typeof THREE.InstancedBufferAttribute>
         | undefined;
@@ -24,7 +33,9 @@ export class NgtInstancedBufferAttribute extends NgtAttribute<THREE.InstancedBuf
         this.attributeArgs = v;
     }
 
-    attributeType = THREE.InstancedBufferAttribute;
+    override get attributeType(): AnyConstructor<THREE.InstancedBufferAttribute> {
+        return THREE.InstancedBufferAttribute;
+    }
 }
 
 @NgModule({
