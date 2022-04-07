@@ -19,7 +19,7 @@ export function provideCommonLineFactory<TSubLine extends NgtCommonLine>(
         {
             provide: NGT_COMMON_LINE_FACTORY,
             useFactory: (subLine: TSubLine) => {
-                return () => subLine.object;
+                return () => subLine.object3d;
             },
             deps: [subLineType],
         },

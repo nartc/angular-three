@@ -19,7 +19,7 @@ export function provideCommonCameraFactory<TSubCamera extends NgtCommonCamera>(
         {
             provide: NGT_COMMON_CAMERA_FACTORY,
             useFactory: (subCamera: TSubCamera) => {
-                return () => subCamera.object;
+                return () => subCamera.object3d;
             },
             deps: [subCameraType],
         },

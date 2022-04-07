@@ -19,7 +19,7 @@ export function provideCommonLightFactory<TSubLight extends NgtCommonLight>(
         {
             provide: NGT_COMMON_LIGHT_FACTORY,
             useFactory: (subLight: TSubLight) => {
-                return () => subLight.object;
+                return () => subLight.object3d;
             },
             deps: [subLightType],
         },

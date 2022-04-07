@@ -21,7 +21,7 @@ export function provideObjectFactory<
         {
             provide: NGT_OBJECT_FACTORY,
             useFactory: (subObject: TSubObject) => {
-                return () => subObject.object;
+                return () => subObject.object3d;
             },
             deps: [subObjectType],
         },

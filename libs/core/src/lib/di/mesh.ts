@@ -19,7 +19,7 @@ export function provideCommonMeshFactory<TSubMesh extends NgtCommonMesh>(
         {
             provide: NGT_COMMON_MESH_FACTORY,
             useFactory: (subMesh: TSubMesh) => {
-                return () => subMesh.object;
+                return () => subMesh.object3d;
             },
             deps: [subMeshType],
         },

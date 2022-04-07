@@ -19,7 +19,7 @@ export function provideCommonHelperFactory<TSubHelper extends NgtCommonHelper>(
         {
             provide: NGT_COMMON_HELPER_FACTORY,
             useFactory: (subHelper: TSubHelper) => {
-                return () => subHelper.object;
+                return () => subHelper.object3d;
             },
             deps: [subHelperType],
         },

@@ -19,7 +19,7 @@ export function provideCommonSpriteFactory<TSubSprite extends NgtCommonSprite>(
         {
             provide: NGT_COMMON_SPRITE_FACTORY,
             useFactory: (subSprite: TSubSprite) => {
-                return () => subSprite.object;
+                return () => subSprite.object3d;
             },
             deps: [subSpriteType],
         },

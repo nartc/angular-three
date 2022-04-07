@@ -19,7 +19,7 @@ export function provideCommonAudioFactory<TSubAudio extends NgtCommonAudio>(
         {
             provide: NGT_COMMON_AUDIO_FACTORY,
             useFactory: (subAudio: TSubAudio) => {
-                return () => subAudio.object;
+                return () => subAudio.object3d;
             },
             deps: [subAudioType],
         },

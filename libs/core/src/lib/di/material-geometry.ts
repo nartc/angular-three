@@ -18,7 +18,7 @@ export function provideMaterialGeometryObjectFactory<
         {
             provide: NGT_MATERIAL_GEOMETRY_OBJECT_FACTORY,
             useFactory: (subMaterialGeometryObject: TSubMaterialGeometry) => {
-                return () => subMaterialGeometryObject.object;
+                return () => subMaterialGeometryObject.object3d;
             },
             deps: [subMaterialGeometryType],
         },
