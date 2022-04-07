@@ -1,0 +1,34 @@
+// GENERATED
+import {
+    AnyConstructor,
+    NgtCommonAttribute,
+    provideCommonAttributeFactory,
+} from '@angular-three/core';
+import { NgModule, Component, Input } from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+  selector: 'ngt-<%= fileName %>',
+  template: '<ng-content></ng-content>',
+  providers: [
+    provideCommonAttributeFactory<THREE.<%= name %>>(Ngt<%= name %>)
+  ],
+})
+export class Ngt<%= name %> extends NgtCommonAttribute<THREE.<%= name %>> {
+
+  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.<%= name %>> | undefined;
+
+  @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
+    this.attributeArgs = v;
+  }
+
+  override get attributeType(): AnyConstructor<THREE.<%= name %>> {
+      return THREE.<%= name %>;
+  }
+}
+
+@NgModule({
+  declarations: [Ngt<%= name %>],
+  exports: [Ngt<%= name %>],
+})
+export class Ngt<%= name %>Module {}

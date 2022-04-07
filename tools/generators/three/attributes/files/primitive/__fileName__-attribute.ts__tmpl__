@@ -1,0 +1,72 @@
+// GENERATED
+import {
+    AnyFunction,
+    applyProps,
+    <%= makeFunction %>,
+    NGT_INSTANCE_FACTORY,
+    NgtInstance,
+    NgtInstanceState,
+    NgtStore,
+    NgtUnknownInstance,
+    prepare,
+    provideInstanceFactory,
+    <%= inputType %>
+} from '@angular-three/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Inject,
+    Input,
+    NgModule,
+    NgZone,
+    Optional,
+    SkipSelf,
+} from '@angular/core';
+import * as THREE from 'three';
+
+export interface Ngt<%= name %>State extends NgtInstanceState<THREE.<%= name %>> {
+    <%= propertyName %>: <%= inputType %>;
+}
+
+@Component({
+    selector: 'ngt-<%= fileName %>[<%= propertyName %>]',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideInstanceFactory<THREE.<%= name %>, Ngt<%= name %>State>(Ngt<%= name %>Attribute),
+    ],
+})
+export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>, Ngt<%= name %>State> {
+    @Input() set <%= propertyName %>(<%= propertyName %>: <%= inputType %>) {
+        this.zone.runOutsideAngular(() => {
+            if (this.instance) {
+                applyProps(this.instance as unknown as NgtUnknownInstance, { <%= propertyName %> })
+            } else {
+                this.set({
+                    instance: prepare(
+                        <%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>),
+                        () => this.store.get(),
+                        this.parentInstanceFactory?.() as NgtUnknownInstance
+                    ),
+                });
+            }
+        });
+    }
+
+    constructor(
+        zone: NgZone,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_FACTORY)
+        parentInstanceFactory: AnyFunction,
+        private store: NgtStore
+    ) {
+        super({ zone, shouldAttach: true, parentInstanceFactory });
+    }
+}
+
+@NgModule({
+    declarations: [Ngt<%= name %>Attribute],
+    exports: [Ngt<%= name %>Attribute],
+})
+export class Ngt<%= name %>AttributeModule {}
