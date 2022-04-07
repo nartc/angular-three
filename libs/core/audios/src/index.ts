@@ -1,4 +1,4 @@
 // GENERATED
-export * from './lib/audio/audio.directive';
-export * from './lib/positional-audio/positional-audio.directive';
-export * from './lib/audio-listener/audio-listener.directive';
+export * from './lib/audio/audio';
+export * from './lib/positional-audio/positional-audio';
+export * from './lib/audio-listener/audio-listener';
