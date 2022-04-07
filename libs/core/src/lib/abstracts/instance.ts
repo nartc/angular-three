@@ -1,4 +1,3 @@
-import { checkNeedsUpdate } from '@angular-three/core';
 import {
     Directive,
     EventEmitter,
@@ -14,12 +13,11 @@ import { NgtComponentStore } from '../stores/component-store';
 import type {
     AnyFunction,
     AttachFunction,
-    BooleanInput,
     NgtInstanceInternal,
     NgtUnknownInstance,
     UnknownRecord,
 } from '../types';
-import { coerceBooleanProperty } from '../utils/coercion';
+import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { removeInteractivity } from '../utils/events';
 import { isGeometry } from '../utils/is-geometry';
 import { isMaterial } from '../utils/is-material';
@@ -76,14 +74,7 @@ export abstract class NgtInstance<
         return (this.instance as NgtUnknownInstance)['__ngt__'];
     }
 
-    private _shouldAttach = false;
-    get shouldAttach(): boolean {
-        return this._shouldAttach;
-    }
-    @Input()
-    set shouldAttach(value: BooleanInput) {
-        this._shouldAttach = coerceBooleanProperty(value);
-    }
+    private shouldAttach = false;
 
     protected zone: NgZone;
     protected parentInstanceFactory?: AnyFunction<UnknownRecord>;
@@ -166,9 +157,7 @@ export abstract class NgtInstance<
             // assigning
             this.assignToSelf(this.select((s) => s.assign));
             // attaching
-            if (this.shouldAttach) {
-                this.attachToParent();
-            }
+            this.attachToParent();
         })
     );
 
@@ -191,9 +180,15 @@ export abstract class NgtInstance<
             tap(([, attach]) => {
                 if (!this.parentInstanceFactory) return;
 
+                if (!this.shouldAttach) {
+                    this.shouldAttach =
+                        typeof attach === 'function' || attach.length > 0;
+                }
+
+                if (!this.shouldAttach) return;
+
                 const parentInstance = this.parentInstanceFactory();
                 if (!parentInstance) return;
-
                 if (typeof attach === 'function') {
                     const attachCleanUp = attach(parentInstance, this.instance);
                     if (attachCleanUp) {
@@ -231,7 +226,6 @@ export abstract class NgtInstance<
                         attach: propertyToAttach,
                     } as Partial<TInstanceState>);
                 }
-
                 checkNeedsUpdate(parentInstance);
                 checkNeedsUpdate(this.instance);
             })

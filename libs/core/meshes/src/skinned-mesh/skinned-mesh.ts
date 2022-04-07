@@ -1,162 +1,264 @@
 import {
-    createParentObjectProvider,
-    NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
-    NGT_OBJECT_CONTROLLER_PROVIDER,
-    NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-    NGT_OBJECT_TYPE,
-    NGT_OBJECT_WATCHED_CONTROLLER,
-    NgtCanvasStore,
+    AnyConstructor,
+    applyProps,
+    coerceBooleanProperty,
+    makeForSet,
     NgtCommonMesh,
-    NgtMaterialGeometryControllerModule,
+    NgtInstance,
+    NgtInstanceState,
     NgtMatrix4,
-    NgtObjectController,
-    NgtObjectInputsController,
+    NgtObject,
     NgtStore,
+    NgtUnknownInstance,
+    prepare,
+    provideCommonMeshFactory,
+    provideInstanceFactory,
+    provideObjectFactory,
+    tapEffect,
 } from '@angular-three/core';
 import {
-    Directive,
-    EventEmitter,
-    Inject,
+    ChangeDetectionStrategy,
+    Component,
     Input,
     NgModule,
     NgZone,
-    OnInit,
     Optional,
-    Output,
+    SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
 
-@Directive({
+@Component({
     selector: 'ngt-skinned-mesh',
-    exportAs: 'ngtSkinnedMesh',
-    providers: [
-        { provide: NgtCommonMesh, useExisting: NgtSkinnedMesh },
-        NGT_MATERIAL_GEOMETRY_CONTROLLER_PROVIDER,
-        { provide: NGT_OBJECT_TYPE, useValue: THREE.SkinnedMesh },
-        createParentObjectProvider(NgtSkinnedMesh, (mesh) => mesh.mesh),
-    ],
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideCommonMeshFactory<THREE.SkinnedMesh>(NgtSkinnedMesh)],
 })
 export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
-    @Input() set args(v: [boolean]) {
-        if (this.materialGeometryController) {
-            this.materialGeometryController.meshArgs = v;
-        }
+    @Input() set skeleton(skeleton: THREE.Skeleton) {
+        this.set({ skeleton });
     }
 
-    @Input() bindMatrix?: NgtMatrix4;
-    @Input() bindMode?: string;
-}
-
-@Directive({
-    selector: 'ngt-skeleton',
-    exportAs: 'ngtSkeleton',
-})
-export class NgtSkeleton extends NgtStore implements OnInit {
-    @Input() boneInverses?: NgtMatrix4[];
-    @Output() ready = new EventEmitter<THREE.Skeleton>();
-
-    private _skeleton?: THREE.Skeleton;
-    get skeleton() {
-        return this._skeleton;
+    @Input() set useVertexTexture(useVertexTexture: boolean) {
+        this.set({ useVertexTexture: coerceBooleanProperty(useVertexTexture) });
     }
 
-    constructor(
-        private zone: NgZone,
-        private canvasStore: NgtCanvasStore,
-        @Optional() private skinnedMesh: NgtSkinnedMesh
-    ) {
-        super();
-        if (!skinnedMesh) {
-            throw new Error(
-                'ngt-skeleton must be used within a ngt-skinned-mesh'
-            );
-        }
+    @Input() set bindMatrix(bindMatrix: NgtMatrix4) {
+        this.set({ bindMatrix: makeForSet(THREE.Matrix4, bindMatrix) });
     }
 
-    ngOnInit() {
-        this.zone.runOutsideAngular(() => {
-            this.onCanvasReady(this.canvasStore.ready$, () => {
-                const boneInverses: THREE.Matrix4[] | undefined = this
-                    .boneInverses
-                    ? this.boneInverses.map((threeMaxtrix) => {
-                          if (threeMaxtrix instanceof THREE.Matrix4)
-                              return threeMaxtrix;
-                          return new THREE.Matrix4().set(...threeMaxtrix);
-                      })
-                    : undefined;
-                this._skeleton = new THREE.Skeleton([], boneInverses);
-                this.ready.emit(this.skeleton);
-
-                if (this.skinnedMesh) {
-                    const bindMatrix: THREE.Matrix4 | undefined = this
-                        .skinnedMesh.bindMatrix
-                        ? this.skinnedMesh.bindMatrix instanceof THREE.Matrix4
-                            ? this.skinnedMesh.bindMatrix
-                            : new THREE.Matrix4().set(
-                                  ...this.skinnedMesh.bindMatrix
-                              )
-                        : undefined;
-                    this.skinnedMesh.mesh.bind(this.skeleton!, bindMatrix);
-                }
-            });
+    @Input() set bindMatrixInverse(bindMatrixInverse: NgtMatrix4) {
+        this.set({
+            bindMatrixInverse: makeForSet(THREE.Matrix4, bindMatrixInverse),
         });
     }
+
+    @Input() set bindMode(bindMode: string) {
+        this.set({ bindMode });
+    }
+
+    override get meshType(): AnyConstructor<THREE.SkinnedMesh> {
+        return THREE.SkinnedMesh;
+    }
+
+    protected override get argsKeys(): string[] {
+        return ['useVertexTexture'];
+    }
+
+    protected override get subInputs(): Record<string, boolean> {
+        return {
+            ...super.subInputs,
+            bindMatrix: true,
+            bindMatrixInverse: true,
+            bindMode: true,
+            skeleton: true,
+        };
+    }
+
+    bind(skeleton: THREE.Skeleton) {
+        this.object3d.bind(
+            skeleton,
+            this.get((s) => s['bindMatrix'])
+        );
+    }
 }
 
-@Directive({
-    selector: 'ngt-bone',
-    exportAs: 'ngtBone',
+export interface NgtSkeletonState extends NgtInstanceState<THREE.Skeleton> {
+    skeleton: THREE.Skeleton;
+    bones: THREE.Bone[];
+    boneInverses: THREE.Matrix4[];
+    boneMatrices: Float32Array;
+    boneTexture: null | THREE.DataTexture;
+    boneTextureSize: number;
+    frame: number;
+}
+
+@Component({
+    selector: 'ngt-skeleton',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        NGT_OBJECT_CONTROLLER_PROVIDER,
-        createParentObjectProvider(NgtBone, (bone) => bone.bone!),
+        provideInstanceFactory<THREE.Skeleton, NgtSkeletonState>(NgtSkeleton),
     ],
 })
-export class NgtBone implements OnInit {
-    @Output() ready = new EventEmitter<THREE.Bone>();
+export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
+    @Input() set bones(bones: THREE.Bone[]) {
+        this.set({ bones });
+    }
 
-    private _bone?: THREE.Bone;
-    get bone() {
-        return this._bone;
+    @Input() set boneInverses(boneInverses: NgtMatrix4[]) {
+        this.set({
+            boneInverses: boneInverses.map((datum) =>
+                makeForSet(THREE.Matrix4, datum)
+            ),
+        });
+    }
+
+    @Input() set boneMatrices(boneMatrices: Float32Array) {
+        this.set({ boneMatrices });
+    }
+
+    @Input() set boneTexture(boneTexture: null | THREE.DataTexture) {
+        this.set({ boneTexture });
+    }
+
+    @Input() set boneTextureSize(boneTextureSize: number) {
+        this.set({ boneTextureSize });
+    }
+
+    @Input() set frame(frame: number) {
+        this.set({ frame });
     }
 
     constructor(
-        private zone: NgZone,
-        @Inject(NGT_OBJECT_WATCHED_CONTROLLER)
-        private objectController: NgtObjectController,
-        @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-        private objectInputsController: NgtObjectInputsController,
-        @Optional()
-        private parentSkinnedMesh: NgtSkinnedMesh,
-        @Optional()
-        private parentSkeleton: NgtSkeleton
+        zone: NgZone,
+        @Optional() private skinnedMesh: NgtSkinnedMesh,
+        private store: NgtStore
     ) {
-        if (!parentSkinnedMesh) {
-            throw new Error('ngt-bone must be used within a ngt-skinned-mesh');
-        }
-        objectInputsController.appendTo = parentSkinnedMesh.mesh;
-        objectController.initFn = () => (this._bone = new THREE.Bone());
-        objectController.readyFn = () => this.ready.emit(this.bone);
+        super({
+            zone,
+            shouldAttach: true,
+            parentInstanceFactory: () =>
+                skinnedMesh?.object3d as unknown as NgtUnknownInstance,
+        });
+
+        this.set({
+            bones: [],
+            boneInverses: [],
+            boneMatrices: null as unknown as Float32Array,
+            boneTexture: null,
+            boneTextureSize: 0,
+            frame: -1,
+        });
     }
 
-    ngOnInit() {
-        this.objectController.init();
-        this.zone.runOutsideAngular(() => {
-            requestAnimationFrame(() => {
-                if (this.parentSkeleton && this.parentSkeleton.skeleton) {
-                    this.parentSkeleton.skeleton.bones.push(this.bone!);
-                }
-            });
+    get skeleton(): THREE.Skeleton {
+        return this.get((s) => s.skeleton);
+    }
+
+    override ngOnInit() {
+        this.onCanvasReady(this.store.ready$, () => {
+            this.init(
+                this.select(
+                    this.select((s) => s.bones),
+                    this.select((s) => s.boneTexture),
+                    this.select((s) => s.boneTextureSize),
+                    this.select((s) => s.boneMatrices),
+                    this.select((s) => s.boneInverses),
+                    this.select((s) => s.frame),
+                    (
+                        bones,
+                        boneTexture,
+                        boneTextureSize,
+                        boneMatrices,
+                        boneInverses,
+                        frame
+                    ) => ({
+                        bones,
+                        boneTexture,
+                        boneTextureSize,
+                        boneMatrices,
+                        boneInverses,
+                        frame,
+                    })
+                )
+            );
         });
+        super.ngOnInit();
+    }
+
+    private readonly init = this.effect<
+        Pick<
+            NgtSkeletonState,
+            | 'bones'
+            | 'frame'
+            | 'boneInverses'
+            | 'boneTextureSize'
+            | 'boneTexture'
+            | 'boneMatrices'
+        >
+    >(
+        tapEffect((inputs) => {
+            if (!this.instance) {
+                const skeleton = prepare(
+                    new THREE.Skeleton(inputs.bones, inputs.boneInverses),
+                    () => this.store.get(),
+                    this.skinnedMesh.object3d as unknown as NgtUnknownInstance
+                );
+                this.set({ skeleton, instance: skeleton });
+                this.emitReady();
+
+                if (!this.skinnedMesh.object3d.skeleton) {
+                    this.skinnedMesh.bind(this.skeleton);
+                }
+            } else {
+                applyProps(
+                    this.skeleton as unknown as NgtUnknownInstance,
+                    inputs
+                );
+            }
+        })
+    );
+}
+
+@Component({
+    selector: 'ngt-bone',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideObjectFactory<THREE.Bone>(NgtBone)],
+})
+export class NgtBone extends NgtObject<THREE.Bone> {
+    constructor(
+        zone: NgZone,
+        store: NgtStore,
+        @Optional() @SkipSelf() private parentBone: NgtBone,
+        @Optional() private parentSkinnedMesh: NgtSkinnedMesh,
+        @Optional() private parentSkeleton: NgtSkeleton
+    ) {
+        super(
+            zone,
+            store,
+            () => parentBone?.object3d || parentSkinnedMesh?.object3d
+        );
+    }
+
+    protected override objectInitFn(): THREE.Bone {
+        const bone = new THREE.Bone();
+
+        if (this.parentSkeleton) {
+            this.parentSkeleton.skeleton.bones.push(bone);
+        }
+
+        return bone;
+    }
+
+    override ngOnInit() {
+        this.init();
+        super.ngOnInit();
     }
 }
 
 @NgModule({
-    declarations: [NgtSkinnedMesh, NgtBone, NgtSkeleton],
-    exports: [
-        NgtSkinnedMesh,
-        NgtBone,
-        NgtSkeleton,
-        NgtMaterialGeometryControllerModule,
-    ],
+    declarations: [NgtSkinnedMesh, NgtSkeleton, NgtBone],
+    exports: [NgtSkinnedMesh, NgtSkeleton, NgtBone],
 })
 export class NgtSkinnedMeshModule {}

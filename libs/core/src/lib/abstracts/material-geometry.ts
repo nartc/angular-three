@@ -43,25 +43,12 @@ export abstract class NgtMaterialGeometry<
     protected override objectInitFn(): TMaterialGeometryObject {
         const props = this.get();
 
-        // this is the additional arguments to pass into the
-        // object constructor that is not the 4 on MaterialGeometry
+        // this is the additional arguments to pass into the object constructor
         // eg: InstancedMesh has "count" -> objectArgs = [count]
-        const objectArgs = Object.keys(this.subInputs).reduce(
-            (args, subInputKey) => {
-                if (
-                    ![
-                        'geometry',
-                        'material',
-                        'morphTargetDictionary',
-                        'morphTargetInfluences',
-                    ].includes(subInputKey)
-                ) {
-                    args.push(props[subInputKey]);
-                }
-                return args;
-            },
-            [] as unknown[]
-        );
+        const objectArgs = this.argsKeys.reduce((args, argKey) => {
+            args.push(props[argKey]);
+            return args;
+        }, [] as unknown[]);
 
         const object = new this.objectType(
             props.geometry,
@@ -96,6 +83,10 @@ export abstract class NgtMaterialGeometry<
      */
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     protected postInit(): void {}
+
+    protected get argsKeys(): string[] {
+        return [];
+    }
 
     protected override get subInputs(): Record<string, boolean> {
         return {
