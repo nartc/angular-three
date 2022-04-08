@@ -2,6 +2,7 @@ import type { Tree } from '@nrwl/devkit';
 import attributesGenerator from './attributes/attributes';
 import audiosGenerator from './audios/audios';
 import geometriesGenerator from './geometries/geometries';
+import materialsGenerator from './materials/materials';
 
 /**
  *
@@ -13,7 +14,6 @@ import geometriesGenerator from './geometries/geometries';
  * import helpersGenerator from './helpers/helpers';
  * import lightsGenerator from './lights/lights';
  * import linesGenerator from './lines/lines';
- * import materialsGenerator from './materials/materials';
  * import physicBodiesGenerator from './physic-bodies/physic-bodies';
  * import physicConstraintsGenerator from './physic-constraints/physic-constraints';
  * import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
@@ -25,7 +25,7 @@ import geometriesGenerator from './geometries/geometries';
 export default async function (tree: Tree) {
     await Promise.all([
         geometriesGenerator(tree),
-        // materialsGenerator(tree),
+        materialsGenerator(tree),
         attributesGenerator(tree),
         // curvesGenerator(tree),
         // texturesGenerator(tree),

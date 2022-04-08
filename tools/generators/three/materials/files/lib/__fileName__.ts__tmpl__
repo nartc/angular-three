@@ -1,28 +1,38 @@
 // GENERATED
-import { NgtMaterial } from '@angular-three/core';
-import { NgModule, Directive } from '@angular/core';
+import {
+    AnyConstructor,
+    NgtCommonMaterial,
+    provideCommonMaterialFactory,
+} from '@angular-three/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
-@Directive({
-  selector: 'ngt-<%= fileName %>',
-  exportAs: 'ngt<%= name %>',
-  providers: [
-    {
-      provide: NgtMaterial,
-      useExisting: Ngt<%= name %>,
-    }
-  ],
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideCommonMaterialFactory<
+            THREE.<%= name %>,
+            THREE.<%= name %>Parameters
+        >(Ngt<%= name %>),
+    ],
 })
-export class Ngt<%= name %> extends NgtMaterial<THREE.<%= parameters %>, THREE.<%= name %>> {
+export class Ngt<%= name %> extends NgtCommonMaterial<
+    THREE.<%= name %>Parameters,
+    THREE.<%= name %>
+> {
+    static ngAcceptInputType_parameters:
+        | THREE.<%= name %>Parameters
+        | undefined;
 
-  static ngAcceptInputType_parameters: THREE.<%= parameters %> | undefined;
-
-  materialType = THREE.<%= name %>;
+    get materialType(): AnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
 }
 
 @NgModule({
-  declarations: [Ngt<%= name %>],
-  exports: [Ngt<%= name %>],
+    declarations: [Ngt<%= name %>],
+    exports: [Ngt<%= name %>],
 })
 export class Ngt<%= name %>Module {}
-
