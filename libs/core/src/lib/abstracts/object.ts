@@ -356,6 +356,9 @@ export abstract class NgtObject<
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected postApplyCustomProps(): void {}
+
     protected get subInputs(): Record<string, boolean> {
         return {};
     }

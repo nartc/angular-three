@@ -9,7 +9,10 @@ export const NGT_COMMON_CAMERA_FACTORY = new InjectionToken(
     'NgtCommonCamera factory'
 );
 
-export function provideCommonCameraFactory<TSubCamera extends NgtCommonCamera>(
+export function provideCommonCameraFactory<
+    TCamera extends THREE.Camera,
+    TSubCamera extends NgtCommonCamera<TCamera> = NgtCommonCamera<TCamera>
+>(
     subCameraType: AnyConstructor<TSubCamera>,
     factory?: (sub: TSubCamera) => THREE.Object3D
 ): Provider {
