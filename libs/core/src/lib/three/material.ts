@@ -69,6 +69,7 @@ export interface NgtCommonMaterialState<
     stencilZFail?: THREE.StencilOp;
     stencilZPass?: THREE.StencilOp;
     userData?: any;
+    [prop: string]: any;
 }
 
 @Directive()

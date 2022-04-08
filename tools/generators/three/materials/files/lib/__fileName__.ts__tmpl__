@@ -4,8 +4,9 @@ import {
     NgtCommonMaterial,
     provideCommonMaterialFactory,
 } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule<% if (hasInput) { %>, Input<% } %> } from '@angular/core';
 import * as THREE from 'three';
+<% if (extend && extend.path) { %>import { <%= extend.material %> } from '<%= extend.path %>'<% } %>
 
 @Component({
     selector: 'ngt-<%= fileName %>',
@@ -14,21 +15,34 @@ import * as THREE from 'three';
     providers: [
         provideCommonMaterialFactory<
             THREE.<%= name %>,
-            THREE.<%= name %>Parameters
-        >(Ngt<%= name %>),
-    ],
+            THREE.<%= parameters %>
+        >(Ngt<%= name %><% if (extend) { %> as unknown as AnyConstructor<NgtCommonMaterial<THREE.<%= parameters %>,THREE.<%= name %>>><% } %>),
+    ]
 })
-export class Ngt<%= name %> extends NgtCommonMaterial<
-    THREE.<%= name %>Parameters,
+export class Ngt<%= name %><% if (typeDef) { %><<%= typeDef %>><% } %> extends <% if (extend && extend.material) { %><%= extend.material %><% } else { %>NgtCommonMaterial<% } %><
+    THREE.<%= parameters %>,
     THREE.<%= name %>
 > {
-    static ngAcceptInputType_parameters:
-        | THREE.<%= name %>Parameters
+    static<% if (extend) { %> override<% } %> ngAcceptInputType_parameters:
+        | THREE.<%= parameters %>
         | undefined;
 
-    get materialType(): AnyConstructor<THREE.<%= name %>> {
+    <% for (const input of inputs) { %>
+    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <%= input.type %>) {
+        this.set({ <%= input.name %> });
+    }
+    <% } %>
+
+    <% if (extend) { %>override <% } %>get materialType(): AnyConstructor<THREE.<%= name %>> {
         return THREE.<%= name %>;
     }
+    <% if (hasInput) { %>
+    protected override get subParameters(): Record<string, boolean> {
+        return {
+            ...super.subParameters,<% for (const input of inputs) { %>
+            <%= input.name %>: <%= input.isOptional %>,<% } %>
+        };
+    }<% } %>
 }
 
 @NgModule({

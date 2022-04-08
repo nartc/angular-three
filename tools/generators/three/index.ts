@@ -1,7 +1,4 @@
 import type { Tree } from '@nrwl/devkit';
-import attributesGenerator from './attributes/attributes';
-import audiosGenerator from './audios/audios';
-import geometriesGenerator from './geometries/geometries';
 import materialsGenerator from './materials/materials';
 
 /**
@@ -23,56 +20,57 @@ import materialsGenerator from './materials/materials';
  */
 
 export default async function (tree: Tree) {
-    await Promise.all([
-        geometriesGenerator(tree),
-        materialsGenerator(tree),
-        attributesGenerator(tree),
-        // curvesGenerator(tree),
-        // texturesGenerator(tree),
-    ]);
-
-    const [
-        audioSelectors,
-        // cameraSelectors,
-        // helperSelectors,
-        // lightSelectors,
-        // lineSelectors,
-        // spriteSelectors,
-        // simpleEffectSelectors,
-        // physicBodySelectors,
-        // physicConstraintSelectors,
-    ] = await Promise.all([
-        audiosGenerator(tree),
-        // camerasGenerator(tree),
-        // helpersGenerator(tree),
-        // lightsGenerator(tree),
-        // linesGenerator(tree),
-        // spritesGenerator(tree),
-        // simpleEffectsGenerator(tree),
-        // physicBodiesGenerator(tree),
-        // physicConstraintsGenerator(tree),
-    ]);
-
+    await materialsGenerator(tree);
     // await Promise.all([
-    //     controllersGenerator(
-    //         tree,
-    //         [
-    //             ...lightSelectors,
-    //             ...helperSelectors,
-    //             ...spriteSelectors,
-    //             ...cameraSelectors,
-    //         ],
-    //         audioSelectors,
-    //         lineSelectors
-    //     ),
-    //     cannonBodyControllerGenerator(
-    //         tree,
-    //         physicBodySelectors.map(({ name }) => name)
-    //     ),
-    //     cannonConstraintControllerGenerator(
-    //         tree,
-    //         physicConstraintSelectors.map(({ name }) => name)
-    //     ),
-    //     simpleEffectControllerGenerator(tree, simpleEffectSelectors),
+    //     geometriesGenerator(tree),
+    //     materialsGenerator(tree),
+    //     attributesGenerator(tree),
+    //     // curvesGenerator(tree),
+    //     // texturesGenerator(tree),
     // ]);
+    //
+    // const [
+    //     audioSelectors,
+    //     // cameraSelectors,
+    //     // helperSelectors,
+    //     // lightSelectors,
+    //     // lineSelectors,
+    //     // spriteSelectors,
+    //     // simpleEffectSelectors,
+    //     // physicBodySelectors,
+    //     // physicConstraintSelectors,
+    // ] = await Promise.all([
+    //     audiosGenerator(tree),
+    //     // camerasGenerator(tree),
+    //     // helpersGenerator(tree),
+    //     // lightsGenerator(tree),
+    //     // linesGenerator(tree),
+    //     // spritesGenerator(tree),
+    //     // simpleEffectsGenerator(tree),
+    //     // physicBodiesGenerator(tree),
+    //     // physicConstraintsGenerator(tree),
+    // ]);
+    //
+    // // await Promise.all([
+    // //     controllersGenerator(
+    // //         tree,
+    // //         [
+    // //             ...lightSelectors,
+    // //             ...helperSelectors,
+    // //             ...spriteSelectors,
+    // //             ...cameraSelectors,
+    // //         ],
+    // //         audioSelectors,
+    // //         lineSelectors
+    // //     ),
+    // //     cannonBodyControllerGenerator(
+    // //         tree,
+    // //         physicBodySelectors.map(({ name }) => name)
+    // //     ),
+    // //     cannonConstraintControllerGenerator(
+    // //         tree,
+    // //         physicConstraintSelectors.map(({ name }) => name)
+    // //     ),
+    // //     simpleEffectControllerGenerator(tree, simpleEffectSelectors),
+    // // ]);
 }
