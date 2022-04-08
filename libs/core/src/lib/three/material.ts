@@ -22,9 +22,11 @@ import type {
 import { prepare } from '../utils/instance';
 
 export interface NgtCommonMaterialState<
+    TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
     TMaterial extends THREE.Material = THREE.Material
 > extends NgtInstanceState<TMaterial> {
     material: TMaterial;
+    materialParameters: TMaterialParameters;
     alphaTest?: number;
     alphaToCoverage?: boolean;
     blendDst?: THREE.BlendingDstFactor;
@@ -71,8 +73,12 @@ export interface NgtCommonMaterialState<
 
 @Directive()
 export abstract class NgtCommonMaterial<
+    TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
     TMaterial extends THREE.Material = THREE.Material
-> extends NgtInstance<TMaterial, NgtCommonMaterialState<TMaterial>> {
+> extends NgtInstance<
+    TMaterial,
+    NgtCommonMaterialState<TMaterialParameters, TMaterial>
+> {
     @Input() set alphaTest(alphaTest: number) {
         this.set({ alphaTest });
     }
@@ -243,6 +249,17 @@ export abstract class NgtCommonMaterial<
         this.set({ userData });
     }
 
+    /**
+     * @deprecated Use individual inputs instead. Notice: Do not mix [parameters] and individual inputs, they will not be merged. Will be removed in next major version
+     */
+    @Input() set parameters(v: TMaterialParameters | undefined) {
+        this.set({ materialParameters: v });
+    }
+
+    get parameters(): TMaterialParameters | undefined {
+        return this.get((s) => s.materialParameters);
+    }
+
     abstract get materialType(): AnyConstructor<TMaterial>;
 
     get material(): TMaterial {
@@ -258,6 +275,7 @@ export abstract class NgtCommonMaterial<
         protected store: NgtStore
     ) {
         super({ zone, shouldAttach: true, parentInstanceFactory });
+        this.set({ materialParameters: {} as TMaterialParameters });
     }
 
     override ngOnInit() {
@@ -267,11 +285,19 @@ export abstract class NgtCommonMaterial<
                 this.setParameters(
                     this.select(
                         this.select((s) => s.material),
+                        this.select((s) => s.materialParameters),
                         this.parameters$,
                         this.subParameters$,
-                        (material, parameters, subParameters) => ({
+                        (
                             material,
-                            parameters: { ...parameters, ...subParameters },
+                            materialParameters,
+                            parameters,
+                            subParameters
+                        ) => ({
+                            material,
+                            parameters: Object.keys(materialParameters).length
+                                ? (materialParameters as UnknownRecord)
+                                : { ...parameters, ...subParameters },
                         })
                     )
                 );
