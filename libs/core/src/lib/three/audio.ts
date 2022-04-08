@@ -130,7 +130,6 @@ export abstract class NgtCommonAudio<
 
     protected override get subInputs(): Record<string, boolean> {
         return {
-            listener: false,
             autoplay: true,
             buffer: false,
             detune: false,

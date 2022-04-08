@@ -148,6 +148,14 @@ export abstract class NgtObject<
         this.set({ appendTo } as Partial<TObjectState>);
     }
 
+    private _reconstruct = false;
+    get reconstruct(): boolean {
+        return this._reconstruct;
+    }
+    @Input() set reconstruct(reconstruct: BooleanInput) {
+        this._reconstruct = coerceBooleanProperty(reconstruct);
+    }
+
     // events
     @Output() click = new EventEmitter<NgtEvent<MouseEvent>>();
     @Output() contextmenu = new EventEmitter<NgtEvent<MouseEvent>>();
@@ -249,7 +257,7 @@ export abstract class NgtObject<
         return this.get((s) => s.object3d) as TObject;
     }
 
-    init() {
+    init(reconstruct = false) {
         this.zone.runOutsideAngular(() => {
             if (this.initSubscription) {
                 this.initSubscription.unsubscribe();
@@ -258,7 +266,11 @@ export abstract class NgtObject<
             this.initSubscription = this.onCanvasReady(
                 this.store.ready$,
                 () => {
-                    if (this.object3d) {
+                    if (reconstruct !== this.reconstruct) {
+                        reconstruct = this.reconstruct;
+                    }
+
+                    if (this.object3d && reconstruct) {
                         this.switch();
                     } else {
                         const object = prepare(
