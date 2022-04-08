@@ -4,7 +4,12 @@ import {
     NgtCommonMaterial,
     provideCommonMaterialFactory,
 } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    NgModule,
+    Input,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -26,8 +31,19 @@ export class NgtShadowMaterial extends NgtCommonMaterial<
         | THREE.ShadowMaterialParameters
         | undefined;
 
+    @Input() set color(color: THREE.ColorRepresentation) {
+        this.set({ color });
+    }
+
     get materialType(): AnyConstructor<THREE.ShadowMaterial> {
         return THREE.ShadowMaterial;
+    }
+
+    protected override get subParameters(): Record<string, boolean> {
+        return {
+            ...super.subParameters,
+            color: true,
+        };
     }
 }
 

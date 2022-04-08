@@ -4,7 +4,12 @@ import {
     NgtCommonMaterial,
     provideCommonMaterialFactory,
 } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    NgModule,
+    Input,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -26,8 +31,69 @@ export class NgtMeshNormalMaterial extends NgtCommonMaterial<
         | THREE.MeshNormalMaterialParameters
         | undefined;
 
+    @Input() set bumpMap(bumpMap: THREE.Texture | null) {
+        this.set({ bumpMap });
+    }
+
+    @Input() set bumpScale(bumpScale: number) {
+        this.set({ bumpScale });
+    }
+
+    @Input() set normalMap(normalMap: THREE.Texture | null) {
+        this.set({ normalMap });
+    }
+
+    @Input() set normalMapType(normalMapType: THREE.NormalMapTypes) {
+        this.set({ normalMapType });
+    }
+
+    @Input() set normalScale(normalScale: THREE.Vector2) {
+        this.set({ normalScale });
+    }
+
+    @Input() set displacementMap(displacementMap: THREE.Texture | null) {
+        this.set({ displacementMap });
+    }
+
+    @Input() set displacementScale(displacementScale: number) {
+        this.set({ displacementScale });
+    }
+
+    @Input() set displacementBias(displacementBias: number) {
+        this.set({ displacementBias });
+    }
+
+    @Input() set wireframe(wireframe: boolean) {
+        this.set({ wireframe });
+    }
+
+    @Input() set wireframeLinewidth(wireframeLinewidth: number) {
+        this.set({ wireframeLinewidth });
+    }
+
+    @Input() set flatShading(flatShading: boolean) {
+        this.set({ flatShading });
+    }
+
     get materialType(): AnyConstructor<THREE.MeshNormalMaterial> {
         return THREE.MeshNormalMaterial;
+    }
+
+    protected override get subParameters(): Record<string, boolean> {
+        return {
+            ...super.subParameters,
+            bumpMap: true,
+            bumpScale: true,
+            normalMap: true,
+            normalMapType: true,
+            normalScale: true,
+            displacementMap: true,
+            displacementScale: true,
+            displacementBias: true,
+            wireframe: true,
+            wireframeLinewidth: true,
+            flatShading: true,
+        };
     }
 }
 

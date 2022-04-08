@@ -4,7 +4,12 @@ import {
     NgtCommonMaterial,
     provideCommonMaterialFactory,
 } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    NgModule,
+    Input,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -26,8 +31,54 @@ export class NgtMeshDistanceMaterial extends NgtCommonMaterial<
         | THREE.MeshDistanceMaterialParameters
         | undefined;
 
+    @Input() set map(map: THREE.Texture | null) {
+        this.set({ map });
+    }
+
+    @Input() set alphaMap(alphaMap: THREE.Texture | null) {
+        this.set({ alphaMap });
+    }
+
+    @Input() set displacementMap(displacementMap: THREE.Texture | null) {
+        this.set({ displacementMap });
+    }
+
+    @Input() set displacementScale(displacementScale: number) {
+        this.set({ displacementScale });
+    }
+
+    @Input() set displacementBias(displacementBias: number) {
+        this.set({ displacementBias });
+    }
+
+    @Input() set farDistance(farDistance: number) {
+        this.set({ farDistance });
+    }
+
+    @Input() set nearDistance(nearDistance: number) {
+        this.set({ nearDistance });
+    }
+
+    @Input() set referencePosition(referencePosition: THREE.Vector3) {
+        this.set({ referencePosition });
+    }
+
     get materialType(): AnyConstructor<THREE.MeshDistanceMaterial> {
         return THREE.MeshDistanceMaterial;
+    }
+
+    protected override get subParameters(): Record<string, boolean> {
+        return {
+            ...super.subParameters,
+            map: true,
+            alphaMap: true,
+            displacementMap: true,
+            displacementScale: true,
+            displacementBias: true,
+            farDistance: true,
+            nearDistance: true,
+            referencePosition: true,
+        };
     }
 }
 

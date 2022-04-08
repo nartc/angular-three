@@ -4,8 +4,14 @@ import {
     NgtCommonMaterial,
     provideCommonMaterialFactory,
 } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    NgModule,
+    Input,
+} from '@angular/core';
 import * as THREE from 'three';
+import { NgtLineBasicMaterial } from '../line-basic-material/line-basic-material';
 
 @Component({
     selector: 'ngt-line-dashed-material',
@@ -15,19 +21,47 @@ import * as THREE from 'three';
         provideCommonMaterialFactory<
             THREE.LineDashedMaterial,
             THREE.LineDashedMaterialParameters
-        >(NgtLineDashedMaterial),
+        >(
+            NgtLineDashedMaterial as unknown as AnyConstructor<
+                NgtCommonMaterial<
+                    THREE.LineDashedMaterialParameters,
+                    THREE.LineDashedMaterial
+                >
+            >
+        ),
     ],
 })
-export class NgtLineDashedMaterial extends NgtCommonMaterial<
+export class NgtLineDashedMaterial extends NgtLineBasicMaterial<
     THREE.LineDashedMaterialParameters,
     THREE.LineDashedMaterial
 > {
-    static ngAcceptInputType_parameters:
+    static override ngAcceptInputType_parameters:
         | THREE.LineDashedMaterialParameters
         | undefined;
 
-    get materialType(): AnyConstructor<THREE.LineDashedMaterial> {
+    @Input() set scale(scale: number) {
+        this.set({ scale });
+    }
+
+    @Input() set dashSize(dashSize: number) {
+        this.set({ dashSize });
+    }
+
+    @Input() set gapSize(gapSize: number) {
+        this.set({ gapSize });
+    }
+
+    override get materialType(): AnyConstructor<THREE.LineDashedMaterial> {
         return THREE.LineDashedMaterial;
+    }
+
+    protected override get subParameters(): Record<string, boolean> {
+        return {
+            ...super.subParameters,
+            scale: true,
+            dashSize: true,
+            gapSize: true,
+        };
     }
 }
 

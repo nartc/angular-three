@@ -14,16 +14,16 @@ import * as THREE from 'three';
     providers: [
         provideCommonMaterialFactory<
             THREE.RawShaderMaterial,
-            THREE.RawShaderMaterialParameters
+            THREE.ShaderMaterialParameters
         >(NgtRawShaderMaterial),
     ],
 })
 export class NgtRawShaderMaterial extends NgtCommonMaterial<
-    THREE.RawShaderMaterialParameters,
+    THREE.ShaderMaterialParameters,
     THREE.RawShaderMaterial
 > {
     static ngAcceptInputType_parameters:
-        | THREE.RawShaderMaterialParameters
+        | THREE.ShaderMaterialParameters
         | undefined;
 
     get materialType(): AnyConstructor<THREE.RawShaderMaterial> {

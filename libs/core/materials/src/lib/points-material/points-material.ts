@@ -4,7 +4,12 @@ import {
     NgtCommonMaterial,
     provideCommonMaterialFactory,
 } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    NgModule,
+    Input,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -26,8 +31,39 @@ export class NgtPointsMaterial extends NgtCommonMaterial<
         | THREE.PointsMaterialParameters
         | undefined;
 
+    @Input() set color(color: THREE.ColorRepresentation) {
+        this.set({ color });
+    }
+
+    @Input() set map(map: THREE.Texture | null) {
+        this.set({ map });
+    }
+
+    @Input() set alphaMap(alphaMap: THREE.Texture | null) {
+        this.set({ alphaMap });
+    }
+
+    @Input() set size(size: number) {
+        this.set({ size });
+    }
+
+    @Input() set sizeAttenuation(sizeAttenuation: boolean) {
+        this.set({ sizeAttenuation });
+    }
+
     get materialType(): AnyConstructor<THREE.PointsMaterial> {
         return THREE.PointsMaterial;
+    }
+
+    protected override get subParameters(): Record<string, boolean> {
+        return {
+            ...super.subParameters,
+            color: true,
+            map: true,
+            alphaMap: true,
+            size: true,
+            sizeAttenuation: true,
+        };
     }
 }
 

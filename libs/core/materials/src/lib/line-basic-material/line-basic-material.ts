@@ -4,7 +4,12 @@ import {
     NgtCommonMaterial,
     provideCommonMaterialFactory,
 } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    NgModule,
+    Input,
+} from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -18,7 +23,10 @@ import * as THREE from 'three';
         >(NgtLineBasicMaterial),
     ],
 })
-export class NgtLineBasicMaterial extends NgtCommonMaterial<
+export class NgtLineBasicMaterial<
+    TLineBasicMaterialParameters extends THREE.LineBasicMaterialParameters = THREE.LineBasicMaterialParameters,
+    TLineBasicMaterial extends THREE.LineBasicMaterial = THREE.LineBasicMaterial
+> extends NgtCommonMaterial<
     THREE.LineBasicMaterialParameters,
     THREE.LineBasicMaterial
 > {
@@ -26,8 +34,34 @@ export class NgtLineBasicMaterial extends NgtCommonMaterial<
         | THREE.LineBasicMaterialParameters
         | undefined;
 
+    @Input() set color(color: THREE.ColorRepresentation) {
+        this.set({ color });
+    }
+
+    @Input() set linewidth(linewidth: number) {
+        this.set({ linewidth });
+    }
+
+    @Input() set linecap(linecap: string) {
+        this.set({ linecap });
+    }
+
+    @Input() set linejoin(linejoin: string) {
+        this.set({ linejoin });
+    }
+
     get materialType(): AnyConstructor<THREE.LineBasicMaterial> {
         return THREE.LineBasicMaterial;
+    }
+
+    protected override get subParameters(): Record<string, boolean> {
+        return {
+            ...super.subParameters,
+            color: true,
+            linewidth: true,
+            linecap: true,
+            linejoin: true,
+        };
     }
 }
 
