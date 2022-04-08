@@ -1,3 +1,4 @@
+import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
 import {
     formatFiles,
     generateFiles,
@@ -9,36 +10,16 @@ import {
 import { join } from 'path';
 import * as THREE from 'three';
 import {
-    createSourceFile,
     Identifier,
-    isArrayTypeNode,
-    isIndexSignatureDeclaration,
     isInterfaceDeclaration,
-    isLiteralTypeNode,
     isPropertySignature,
-    isTypeLiteralNode,
-    isTypeReferenceNode,
-    isUnionTypeNode,
     PropertySignature,
-    ScriptKind,
-    ScriptTarget,
     SourceFile,
-    SyntaxKind,
-    TypeLiteralNode,
-    TypeNode,
-    UnionTypeNode,
 } from 'typescript/lib/tsserverlibrary';
+import { astFromPath, pathToSourceFile } from '../ast-utils';
 
 const baseMaterialPath =
     'node_modules/@types/three/src/materials/Material.d.ts';
-
-interface GeneratorMaterial {
-    name: string;
-    parameters: string;
-    defPath: string;
-    extend?: { path: string; material: string };
-    typeDef?: string;
-}
 
 const materials = [
     {
@@ -162,11 +143,11 @@ export default async function materialsGenerator(tree: Tree) {
     logger.log('Generating materials...');
 
     if (!tree.exists(materialDir)) {
-        // await librarySecondaryEntryPointGenerator(tree, {
-        //     name: 'materials',
-        //     library: 'core',
-        //     skipModule: true,
-        // });
+        await librarySecondaryEntryPointGenerator(tree, {
+            name: 'materials',
+            library: 'core',
+            skipModule: true,
+        });
     }
 
     const generatedMaterials = [];
@@ -174,7 +155,60 @@ export default async function materialsGenerator(tree: Tree) {
         const normalizedNames = names(name);
 
         // inputs stuffs
-        const inputRecord = generateInputs(tree, defPath);
+        const inputRecord = astFromPath(tree, defPath, (sourceFile) => {
+            const mainProperties = [];
+            const base: [string, SourceFile, PropertySignature[]] = [
+                '',
+                null,
+                [],
+            ];
+
+            sourceFile.forEachChild((node) => {
+                if (isInterfaceDeclaration(node)) {
+                    if (node.heritageClauses?.length) {
+                        const baseParameter = (
+                            node.heritageClauses[0].types[0]
+                                .expression as Identifier
+                        ).getText(sourceFile);
+                        const baseDtsPath =
+                            baseParameter === 'MaterialParameters'
+                                ? baseMaterialPath
+                                : materials.find(
+                                      (material) =>
+                                          material.parameters === baseParameter
+                                  )?.defPath;
+                        if (baseDtsPath) {
+                            const baseSourceFile = pathToSourceFile(
+                                tree,
+                                baseDtsPath
+                            );
+                            base[0] = baseParameter;
+                            base[1] = baseSourceFile;
+
+                            baseSourceFile.forEachChild((baseNode) => {
+                                if (isInterfaceDeclaration(baseNode)) {
+                                    baseNode.forEachChild((baseChildNode) => {
+                                        if (
+                                            isPropertySignature(baseChildNode)
+                                        ) {
+                                            base[2].push(baseChildNode);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+
+                    node.forEachChild((childNode) => {
+                        if (isPropertySignature(childNode)) {
+                            mainProperties.push(childNode);
+                        }
+                    });
+                }
+            });
+
+            return { mainProperties, base };
+        });
 
         const inputs = Object.entries(inputRecord).map(
             ([inputName, inputInfo]) => ({
@@ -213,166 +247,4 @@ export default async function materialsGenerator(tree: Tree) {
     );
 
     await formatFiles(tree);
-}
-
-// @ts-ignore
-function generateInputs(tree: Tree, typeDefPath: string): Record<string, any> {
-    const typeDefContent = tree.read(typeDefPath, 'utf-8');
-    const inputs = {};
-
-    const sourceFile = createSourceFile(
-        'material.d.ts',
-        typeDefContent,
-        ScriptTarget.Latest,
-        true,
-        ScriptKind.TS
-    );
-
-    let base = {};
-
-    sourceFile.forEachChild((node) => {
-        if (isInterfaceDeclaration(node)) {
-            if (node.heritageClauses?.length) {
-                const baseParameter = (
-                    node.heritageClauses[0].types[0].expression as Identifier
-                ).getText(sourceFile);
-
-                if (!parameterInheritanceMap.has(baseParameter)) {
-                    if (baseParameter === 'MaterialParameters') {
-                        base = generateInputs(tree, baseMaterialPath);
-                    } else {
-                        const path = materials.find(
-                            (material) => material.parameters === baseParameter
-                        )?.defPath;
-                        if (path) {
-                            base = generateInputs(tree, path);
-                        }
-                    }
-
-                    if (Object.keys(base).length) {
-                        parameterInheritanceMap.set(baseParameter, base);
-                    }
-                } else {
-                    base = parameterInheritanceMap.get(baseParameter);
-                }
-            }
-
-            node.forEachChild((childNode) => {
-                if (isPropertySignature(childNode)) {
-                    const { propertyName, ...typeInfo } =
-                        propertySignatureToType(sourceFile, childNode);
-                    inputs[propertyName] = {
-                        ...typeInfo,
-                        shouldOverride: !!base[propertyName],
-                    };
-                }
-            });
-
-            parameterInheritanceMap.set(node.name.getText(sourceFile), inputs);
-        }
-    });
-
-    return inputs;
-}
-
-function getType(sourceFile: SourceFile, type: TypeNode, isArray = false) {
-    if (isArrayTypeNode(type)) {
-        return getType(sourceFile, type.elementType, true);
-    }
-
-    if (type.kind === SyntaxKind.NumberKeyword) {
-        return concatArraySymbol(isArray, 'number');
-    }
-
-    if (type.kind === SyntaxKind.StringKeyword) {
-        return concatArraySymbol(isArray, 'string');
-    }
-
-    if (type.kind === SyntaxKind.BooleanKeyword) {
-        return concatArraySymbol(isArray, 'boolean');
-    }
-
-    if (isLiteralTypeNode(type)) {
-        if (type.literal.kind === SyntaxKind.NullKeyword) {
-            return 'null';
-        }
-
-        if (type.literal.kind === SyntaxKind.StringKeyword) {
-            return type.literal.getText();
-        }
-    }
-
-    if (isTypeLiteralNode(type)) {
-        return concatArraySymbol(isArray, getTypeLiteral(sourceFile, type));
-    }
-
-    if (type.kind === SyntaxKind.NullKeyword) {
-        return 'null';
-    }
-
-    if (isTypeReferenceNode(type)) {
-        return concatArraySymbol(isArray, `THREE.${type.typeName.getText()}`);
-    }
-}
-
-function concatArraySymbol(isArray: boolean, type: string) {
-    return isArray ? `${type}[]` : type;
-}
-
-function propertySignatureToType(
-    sourceFile: SourceFile,
-    propertySignature: PropertySignature
-): { propertyName: string; type: string; isOptional: boolean } {
-    const propertyName = propertySignature.name.getText(sourceFile);
-    const isOptional = !!propertySignature.questionToken;
-    if (isUnionTypeNode(propertySignature.type)) {
-        return {
-            propertyName,
-            type: (propertySignature.type as UnionTypeNode).types
-                .filter(
-                    (typeNode) => typeNode.kind !== SyntaxKind.UndefinedKeyword
-                )
-                .map((type) => getType(sourceFile, type))
-                .filter(Boolean)
-                .join(' | '),
-            isOptional,
-        };
-    }
-
-    return {
-        propertyName,
-        type: getType(sourceFile, propertySignature.type),
-        isOptional,
-    };
-}
-
-function getTypeLiteral(
-    sourceFile: SourceFile,
-    typeLiteral: TypeLiteralNode
-): string {
-    const firstMember = typeLiteral.members[0];
-    if (isIndexSignatureDeclaration(firstMember)) {
-        const firstParameter = firstMember.parameters[0];
-        return `{[${firstParameter.name.getText(sourceFile)}: ${getType(
-            sourceFile,
-            firstParameter.type
-        )}]: ${getType(sourceFile, firstMember.type)}}`;
-    }
-
-    return typeLiteral.members
-        .reduce((typeString, member) => {
-            if (isPropertySignature(member)) {
-                const { propertyName, type, isOptional } =
-                    propertySignatureToType(sourceFile, member);
-                typeString = typeString.concat(
-                    propertyName,
-                    isOptional ? '?:' : ':',
-                    type,
-                    ';'
-                );
-            }
-
-            return typeString;
-        }, '{')
-        .concat('}');
 }
