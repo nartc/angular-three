@@ -360,7 +360,7 @@ export abstract class NgtCommonMaterial<
         return {};
     }
 
-    protected get subParameters$(): Observable<UnknownRecord> {
+    private get subParameters$(): Observable<UnknownRecord> {
         const subInputEntries = Object.entries(this.subParameters);
         if (subInputEntries.length === 0) return of({});
         return this.select(

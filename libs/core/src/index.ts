@@ -13,6 +13,7 @@ export * from './lib/di/instance';
 export * from './lib/di/attribute';
 export * from './lib/di/audio';
 export * from './lib/di/geometry';
+export * from './lib/di/material';
 
 export * from './lib/pipes/math';
 export * from './lib/pipes/vector';
