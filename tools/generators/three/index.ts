@@ -1,6 +1,7 @@
 import type { Tree } from '@nrwl/devkit';
 import attributesGenerator from './attributes/attributes';
 import audiosGenerator from './audios/audios';
+import geometriesGenerator from './geometries/geometries';
 
 /**
  *
@@ -9,7 +10,6 @@ import audiosGenerator from './audios/audios';
  * import cannonConstraintControllerGenerator from './cannon-constraint-controller/cannon-constraint-controller';
  * import controllersGenerator from './controllers/controllers';
  * import curvesGenerator from './curves/curves';
- * import geometriesGenerator from './geometries/geometries';
  * import helpersGenerator from './helpers/helpers';
  * import lightsGenerator from './lights/lights';
  * import linesGenerator from './lines/lines';
@@ -24,7 +24,7 @@ import audiosGenerator from './audios/audios';
 
 export default async function (tree: Tree) {
     await Promise.all([
-        // geometriesGenerator(tree),
+        geometriesGenerator(tree),
         // materialsGenerator(tree),
         attributesGenerator(tree),
         // curvesGenerator(tree),
