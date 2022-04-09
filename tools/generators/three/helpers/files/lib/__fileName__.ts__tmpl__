@@ -1,0 +1,88 @@
+// GENERATED<% if (objectHelper) { %>
+import {
+    AnyConstructor,
+    NgtCommonObjectHelper,
+    provideCommonObjectHelperFactory,
+    Tail,
+} from '@angular-three/core';
+import { Directive, Input, NgModule } from '@angular/core';
+import * as THREE from 'three';
+
+@Directive({
+    selector: '[ngt<%= name %>]',
+    exportAs: 'ngt<%= name %>',
+    providers: [
+        provideCommonObjectHelperFactory<THREE.<%= name %>>(Ngt<%= name %>),
+    ],
+})
+export class Ngt<%= name %> extends NgtCommonObjectHelper<THREE.<%= name %>> {
+    static ngAcceptInputType_ngt<%= name %>:
+        | Tail<ConstructorParameters<typeof THREE.<%= name %>>>
+        | ''
+        | undefined;
+
+    @Input() set ngt<%= name %>(
+        v: Tail<ConstructorParameters<typeof THREE.<%= name %>>> | ''
+    ) {
+        if (v) {
+            this.objectHelperArgs = v;
+        }
+    }
+
+    override get objectHelperType(): AnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+}<% } else { %>
+import {
+    AnyConstructor,
+    NgtCommonHelper,
+    provideCommonHelperFactory,
+} from '@angular-three/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    NgModule,
+} from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideCommonHelperFactory<THREE.<%= name %>>(Ngt<%= name %>)],
+})
+export class Ngt<%= name %> extends NgtCommonHelper<THREE.<%= name %>> {
+    static ngAcceptInputType_args:
+        | ConstructorParameters<typeof THREE.<%= name %>>
+        | undefined;
+
+    @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
+        this.helperArgs = v;
+    }
+
+    <% for (const input of inputs) { %>
+    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <%= input.type %>) {
+        this.set({ <%= input.name %> });
+    }
+    <% } %>
+
+    override get helperType(): AnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+
+    <% if (hasInput) { %>
+    protected override get subInputs(): Record<string, boolean> {
+        return {
+            ...super.subInputs,<% for (const input of inputs) { %>
+           <%= input.name %>: <%= input.isOptional %>,<% } %>
+        };
+    }<% } %>
+}<% } %>
+
+@NgModule({
+  declarations: [Ngt<%= name %>],
+  exports: [Ngt<%= name %>],
+})
+export class Ngt<%= name %>Module {}
+
