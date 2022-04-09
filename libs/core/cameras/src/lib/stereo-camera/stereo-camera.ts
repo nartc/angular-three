@@ -1,23 +1,23 @@
 // GENERATED
 import {
-    createParentObjectProvider,
+    AnyConstructor,
     NgtCommonCamera,
-    NGT_OBJECT_CONTROLLER_PROVIDER,
-    NgtObjectControllerModule,
+    provideCommonCameraFactory,
 } from '@angular-three/core';
-import { NgModule, Directive, Input } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    NgModule,
+} from '@angular/core';
 import * as THREE from 'three';
 
-@Directive({
+@Component({
     selector: 'ngt-stereo-camera',
-    exportAs: 'ngtStereoCamera',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        {
-            provide: NgtCommonCamera,
-            useExisting: NgtStereoCamera,
-        },
-        NGT_OBJECT_CONTROLLER_PROVIDER,
-        createParentObjectProvider(NgtStereoCamera, (parent) => parent.camera),
+        provideCommonCameraFactory<THREE.StereoCamera>(NgtStereoCamera),
     ],
 })
 export class NgtStereoCamera extends NgtCommonCamera<THREE.StereoCamera> {
@@ -29,11 +29,13 @@ export class NgtStereoCamera extends NgtCommonCamera<THREE.StereoCamera> {
         this.cameraArgs = v;
     }
 
-    cameraType = THREE.StereoCamera;
+    override get cameraType(): AnyConstructor<THREE.StereoCamera> {
+        return THREE.StereoCamera;
+    }
 }
 
 @NgModule({
     declarations: [NgtStereoCamera],
-    exports: [NgtStereoCamera, NgtObjectControllerModule],
+    exports: [NgtStereoCamera],
 })
 export class NgtStereoCameraModule {}
