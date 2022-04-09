@@ -68,6 +68,7 @@ export interface NgtObjectState<TObject extends THREE.Object3D = THREE.Object3D>
     dispose?: (() => void) | null;
     raycast?: THREE.Object3D['raycast'] | null;
     appendTo?: () => THREE.Object3D;
+    [prop: string]: any;
 }
 
 @Directive()

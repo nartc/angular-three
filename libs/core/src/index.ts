@@ -12,6 +12,7 @@ export * from './lib/di/mesh';
 export * from './lib/di/instance';
 export * from './lib/di/attribute';
 export * from './lib/di/audio';
+export * from './lib/di/camera';
 export * from './lib/di/geometry';
 export * from './lib/di/material';
 
