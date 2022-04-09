@@ -9,10 +9,11 @@ import {
 } from '@nrwl/devkit';
 import { join } from 'path';
 import * as THREE from 'three';
-
-/**
- * node_modules/@types/three/src/cameras/PerspectiveCamera.d.ts
- */
+import {
+    isClassDeclaration,
+    isConstructorDeclaration,
+} from 'typescript/lib/tsserverlibrary';
+import { astFromPath } from '../ast-utils';
 
 export const cameras = [
     {
@@ -52,7 +53,29 @@ export default async function camerasGenerator(tree: Tree): Promise<string[]> {
     for (const camera of cameras) {
         const normalizedNames = names(camera.name);
 
-        // do inputs stuffs
+        const inputRecord = astFromPath(tree, camera.defPath, (sourceFile) => {
+            const mainParameters = [];
+            sourceFile.forEachChild((node) => {
+                if (isClassDeclaration(node)) {
+                    node.members.forEach((member) => {
+                        if (isConstructorDeclaration(member)) {
+                            member.parameters.forEach((parameter) => {
+                                mainParameters.push(parameter);
+                            });
+                        }
+                    });
+                }
+            });
+
+            return { mainProperties: mainParameters };
+        });
+
+        const inputs = Object.entries(inputRecord).map(
+            ([inputName, inputInfo]) => ({
+                name: inputName,
+                ...inputInfo,
+            })
+        );
 
         generateFiles(
             tree,
@@ -61,6 +84,8 @@ export default async function camerasGenerator(tree: Tree): Promise<string[]> {
             {
                 ...normalizedNames,
                 tmpl: '',
+                inputs,
+                hasInput: inputs.length > 0,
             }
         );
 

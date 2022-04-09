@@ -38,7 +38,7 @@ export function astFromPath(
     dtsPath: string,
     propertiesFactory: (sourceFile: SourceFile) => {
         mainProperties: PropertySignature[] | ParameterDeclaration[];
-        base: [string, SourceFile, PropertySignature[]];
+        base?: [string, SourceFile, PropertySignature[]];
     }
 ): Record<
     string,
@@ -52,30 +52,33 @@ export function astFromPath(
     const record = {};
     const sourceFile = pathToSourceFile(tree, dtsPath);
 
-    const {
-        mainProperties,
-        base: [baseName, baseSourceFile, baseProperties],
-    } = propertiesFactory(sourceFile);
+    const { mainProperties, base } = propertiesFactory(sourceFile);
 
-    if (baseName !== '') {
-        if (!cached.has(baseName)) {
-            const test = baseProperties.reduce((baseRecord, baseProperty) => {
-                const typeInfo = propertySignatureToType(
-                    baseSourceFile,
-                    baseProperty
+    let baseRecord = {};
+    if (base) {
+        const [baseName, baseSourceFile, baseProperties] = base;
+        if (baseName !== '') {
+            if (!cached.has(baseName)) {
+                const test = baseProperties.reduce(
+                    (baseRecord, baseProperty) => {
+                        const typeInfo = propertySignatureToType(
+                            baseSourceFile,
+                            baseProperty
+                        );
+                        baseRecord[typeInfo.propertyName] = {
+                            ...typeInfo,
+                            shouldOverride: false,
+                        };
+                        return baseRecord;
+                    },
+                    {}
                 );
-                baseRecord[typeInfo.propertyName] = {
-                    ...typeInfo,
-                    shouldOverride: false,
-                };
-                return baseRecord;
-            }, {});
 
-            cached.set(baseName, test);
+                cached.set(baseName, test);
+            }
         }
+        baseRecord = cached.get(baseName) || {};
     }
-
-    const baseRecord = cached.get(baseName) || {};
 
     mainProperties.forEach((mainProperty) => {
         const typeInfo = propertySignatureToType(sourceFile, mainProperty);

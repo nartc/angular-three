@@ -1,0 +1,59 @@
+// GENERATED
+import {
+    AnyConstructor,
+    NgtCommonCamera,
+    provideCommonCameraFactory,
+} from '@angular-three/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    NgModule,
+} from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideCommonCameraFactory<THREE.<%= name %>>(
+            Ngt<%= name %>
+        ),
+    ],
+})
+export class Ngt<%= name %> extends NgtCommonCamera<THREE.<%= name %>> {
+    static ngAcceptInputType_args:
+        | ConstructorParameters<typeof THREE.<%= name %>>
+        | undefined;
+
+    @Input() set args(
+        v: ConstructorParameters<typeof THREE.<%= name %>>
+    ) {
+        this.cameraArgs = v;
+    }
+
+    <% for (const input of inputs) { %>
+    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <%= input.type %>) {
+        this.set({ <%= input.name %> });
+    }
+    <% } %>
+
+    override get cameraType(): AnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+
+    <% if (hasInput) { %>
+    protected override get subInputs(): Record<string, boolean> {
+        return {
+            ...super.subInputs,<% for (const input of inputs) { %>
+           <%= input.name %>: <%= input.isOptional %>,<% } %>
+        };
+    }<% } %>
+}
+
+@NgModule({
+    declarations: [Ngt<%= name %>],
+    exports: [Ngt<%= name %>],
+})
+export class Ngt<%= name %>Module {}

@@ -1,4 +1,8 @@
 import type { Tree } from '@nrwl/devkit';
+import attributesGenerator from './attributes/attributes';
+import audiosGenerator from './audios/audios';
+import camerasGenerator from './cameras/cameras';
+import geometriesGenerator from './geometries/geometries';
 import materialsGenerator from './materials/materials';
 
 /**
@@ -20,14 +24,15 @@ import materialsGenerator from './materials/materials';
  */
 
 export default async function (tree: Tree) {
-    await materialsGenerator(tree);
-    // await Promise.all([
-    //     geometriesGenerator(tree),
-    //     materialsGenerator(tree),
-    //     attributesGenerator(tree),
-    //     // curvesGenerator(tree),
-    //     // texturesGenerator(tree),
-    // ]);
+    await Promise.all([
+        geometriesGenerator(tree),
+        materialsGenerator(tree),
+        attributesGenerator(tree),
+        audiosGenerator(tree),
+        camerasGenerator(tree),
+        //     // curvesGenerator(tree),
+        //     // texturesGenerator(tree),
+    ]);
     //
     // const [
     //     audioSelectors,
