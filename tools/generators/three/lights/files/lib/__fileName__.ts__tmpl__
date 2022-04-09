@@ -1,34 +1,51 @@
 // GENERATED
-import { createParentObjectProvider, NgtLight, NGT_OBJECT_CONTROLLER_PROVIDER, NgtObjectControllerModule } from '@angular-three/core';
-import { NgModule, Directive, Input } from '@angular/core';
+import {
+    AnyConstructor,
+    NgtCommonLight,
+    provideCommonLightFactory,
+} from '@angular-three/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    NgModule,
+} from '@angular/core';
 import * as THREE from 'three';
 
-@Directive({
-  selector: 'ngt-<%= fileName %>',
-  exportAs: 'ngt<%= name %>',
-  providers: [
-    {
-      provide: NgtLight,
-      useExisting: Ngt<%= name %>,
-    },
-    NGT_OBJECT_CONTROLLER_PROVIDER,
-    createParentObjectProvider(Ngt<%= name %>, parent => parent.light)
-  ],
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideCommonLightFactory<THREE.<%= name %>>(Ngt<%= name %>)],
 })
-export class Ngt<%= name %> extends NgtLight<THREE.<%= name %>> {
+export class Ngt<%= name %> extends NgtCommonLight<THREE.<%= name %>> {
+    static ngAcceptInputType_args:
+        | ConstructorParameters<typeof THREE.<%= name %>>
+        | undefined;
 
-  static ngAcceptInputType_args: ConstructorParameters<typeof THREE.<%= name %>> | undefined;
+    @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
+        this.lightArgs = v;
+    }
+    <% for (const input of inputs) { %>
+    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <%= input.type %>) {
+        this.set({ <%= input.name %> });
+    }
+    <% } %>
 
-  @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
-    this.lightArgs = v;
-  }
-
-  lightType = THREE.<%= name %>;
+    override get lightType(): AnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+    <% if (hasInput) { %>
+    protected override get subInputs(): Record<string, boolean> {
+        return {
+            ...super.subInputs,<% for (const input of inputs) { %>
+           <%= input.name %>: <%= input.isOptional %>,<% } %>
+        };
+    }<% } %>
 }
 
 @NgModule({
-  declarations: [Ngt<%= name %>],
-  exports: [Ngt<%= name %>, NgtObjectControllerModule],
+    declarations: [Ngt<%= name %>],
+    exports: [Ngt<%= name %>],
 })
 export class Ngt<%= name %>Module {}
-

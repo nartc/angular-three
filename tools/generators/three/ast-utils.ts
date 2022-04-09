@@ -38,6 +38,7 @@ export function astFromPath(
     dtsPath: string,
     propertiesFactory: (sourceFile: SourceFile) => {
         mainProperties: PropertySignature[] | ParameterDeclaration[];
+        overrideOptional?: Record<string, boolean>;
         base?: [string, SourceFile, PropertySignature[]];
     }
 ): Record<
@@ -52,7 +53,11 @@ export function astFromPath(
     const record = {};
     const sourceFile = pathToSourceFile(tree, dtsPath);
 
-    const { mainProperties, base } = propertiesFactory(sourceFile);
+    const {
+        mainProperties,
+        base,
+        overrideOptional = {},
+    } = propertiesFactory(sourceFile);
 
     let baseRecord = {};
     if (base) {
@@ -82,6 +87,11 @@ export function astFromPath(
 
     mainProperties.forEach((mainProperty) => {
         const typeInfo = propertySignatureToType(sourceFile, mainProperty);
+
+        if (overrideOptional[typeInfo.propertyName] != undefined) {
+            typeInfo.isOptional = overrideOptional[typeInfo.propertyName];
+        }
+
         record[typeInfo.propertyName] = {
             ...typeInfo,
             shouldOverride: !!baseRecord[typeInfo.propertyName],

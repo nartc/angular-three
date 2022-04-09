@@ -42,7 +42,6 @@ export class Ngt<%= name %> extends NgtCommonCamera<THREE.<%= name %>> {
     override get cameraType(): AnyConstructor<THREE.<%= name %>> {
         return THREE.<%= name %>;
     }
-
     <% if (hasInput) { %>
     protected override get subInputs(): Record<string, boolean> {
         return {
