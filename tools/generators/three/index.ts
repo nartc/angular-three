@@ -2,12 +2,12 @@ import type { Tree } from '@nrwl/devkit';
 import attributesGenerator from './attributes/attributes';
 import audiosGenerator from './audios/audios';
 import camerasGenerator from './cameras/cameras';
+import curvesGenerator from './curves/curves';
 import geometriesGenerator from './geometries/geometries';
 import materialsGenerator from './materials/materials';
 
 /**
  *
- * import camerasGenerator from './cameras/cameras';
  * import cannonBodyControllerGenerator from './cannon-body-controller/cannon-body-controller';
  * import cannonConstraintControllerGenerator from './cannon-constraint-controller/cannon-constraint-controller';
  * import controllersGenerator from './controllers/controllers';
@@ -30,7 +30,7 @@ export default async function (tree: Tree) {
         attributesGenerator(tree),
         audiosGenerator(tree),
         camerasGenerator(tree),
-        //     // curvesGenerator(tree),
+        curvesGenerator(tree),
         //     // texturesGenerator(tree),
     ]);
     //
