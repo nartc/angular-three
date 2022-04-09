@@ -37,6 +37,7 @@ export abstract class NgtCommonCamera<
     }
 
     override ngOnInit() {
+        this.set({ cameraArgs: [] });
         this.init();
         super.ngOnInit();
     }

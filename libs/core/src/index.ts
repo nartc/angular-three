@@ -16,6 +16,8 @@ export * from './lib/di/camera';
 export * from './lib/di/geometry';
 export * from './lib/di/material';
 export * from './lib/di/curve';
+export * from './lib/di/helper';
+export * from './lib/di/object-helper';
 
 export * from './lib/pipes/math';
 export * from './lib/pipes/vector';

@@ -9,7 +9,10 @@ export const NGT_COMMON_HELPER_FACTORY = new InjectionToken(
     'NgtCommonHelper factory'
 );
 
-export function provideCommonHelperFactory<TSubHelper extends NgtCommonHelper>(
+export function provideCommonHelperFactory<
+    THelper extends THREE.Object3D,
+    TSubHelper extends NgtCommonHelper<THelper> = NgtCommonHelper<THelper>
+>(
     subHelperType: AnyConstructor<TSubHelper>,
     factory?: (sub: TSubHelper) => THREE.Object3D
 ): Provider {
