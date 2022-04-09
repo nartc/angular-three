@@ -9,7 +9,10 @@ export const NGT_COMMON_LIGHT_FACTORY = new InjectionToken(
     'NgtCommonLight factory'
 );
 
-export function provideCommonLightFactory<TSubLight extends NgtCommonLight>(
+export function provideCommonLightFactory<
+    TLight extends THREE.Light,
+    TSubLight extends NgtCommonLight<TLight> = NgtCommonLight<TLight>
+>(
     subLightType: AnyConstructor<TSubLight>,
     factory?: (sub: TSubLight) => THREE.Object3D
 ): Provider {

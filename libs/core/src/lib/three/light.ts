@@ -5,6 +5,7 @@ import type { AnyConstructor } from '../types';
 
 export interface NgtCommonLightState<TLight extends THREE.Light = THREE.Light>
     extends NgtObjectState<TLight> {
+    lightArgs: unknown[];
     intensity: number;
 }
 
@@ -18,10 +19,14 @@ export abstract class NgtCommonLight<
         this.set({ intensity });
     }
 
-    protected override objectInitFn(): TLight {
-        const { intensity } = this.get();
+    protected set lightArgs(v: unknown | unknown[]) {
+        this.set({ lightArgs: Array.isArray(v) ? v : [v] });
+    }
 
-        const light = new this.lightType();
+    protected override objectInitFn(): TLight {
+        const { intensity, lightArgs } = this.get();
+
+        const light = new this.lightType(...lightArgs);
 
         if (intensity != undefined) {
             light.intensity = intensity;
@@ -31,7 +36,7 @@ export abstract class NgtCommonLight<
     }
 
     override ngOnInit() {
-        this.set({ intensity: 1 });
+        this.set({ intensity: 1, lightArgs: [] });
         this.init();
         super.ngOnInit();
     }
