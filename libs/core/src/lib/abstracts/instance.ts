@@ -180,6 +180,19 @@ export abstract class NgtInstance<
             tap(([, attach]) => {
                 if (!this.parentInstanceFactory) return;
 
+                const propertyToAttach = [];
+                if (Array.isArray(attach)) {
+                    if (attach.length === 0) {
+                        if (this.instance) {
+                            if (isMaterial(this.instance)) {
+                                propertyToAttach.push('material');
+                            } else if (isGeometry(this.instance)) {
+                                propertyToAttach.push('geometry');
+                            }
+                        }
+                    }
+                }
+
                 if (!this.shouldAttach) {
                     this.shouldAttach =
                         typeof attach === 'function' || attach.length > 0;
@@ -195,17 +208,6 @@ export abstract class NgtInstance<
                         this.__ngt__.previousAttach = attachCleanUp;
                     }
                 } else {
-                    const propertyToAttach = [...attach];
-                    if (propertyToAttach.length === 0) {
-                        if (this.instance) {
-                            if (isMaterial(this.instance)) {
-                                propertyToAttach.push('material');
-                            } else if (isGeometry(this.instance)) {
-                                propertyToAttach.push('geometry');
-                            }
-                        }
-                    }
-
                     if (propertyToAttach.length === 0) {
                         // TODO: warn users about invalid attach params
                         return;
