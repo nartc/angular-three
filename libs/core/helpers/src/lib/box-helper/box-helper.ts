@@ -1,5 +1,10 @@
 // GENERATED
-import { NgtObjectHelper, Tail } from '@angular-three/core';
+import {
+    AnyConstructor,
+    NgtCommonObjectHelper,
+    provideCommonObjectHelperFactory,
+    Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,13 +12,10 @@ import * as THREE from 'three';
     selector: '[ngtBoxHelper]',
     exportAs: 'ngtBoxHelper',
     providers: [
-        {
-            provide: NgtObjectHelper,
-            useExisting: NgtBoxHelper,
-        },
+        provideCommonObjectHelperFactory<THREE.BoxHelper>(NgtBoxHelper),
     ],
 })
-export class NgtBoxHelper extends NgtObjectHelper<THREE.BoxHelper> {
+export class NgtBoxHelper extends NgtCommonObjectHelper<THREE.BoxHelper> {
     static ngAcceptInputType_ngtBoxHelper:
         | Tail<ConstructorParameters<typeof THREE.BoxHelper>>
         | ''
@@ -27,7 +29,9 @@ export class NgtBoxHelper extends NgtObjectHelper<THREE.BoxHelper> {
         }
     }
 
-    objectHelperType = THREE.BoxHelper;
+    override get objectHelperType(): AnyConstructor<THREE.BoxHelper> {
+        return THREE.BoxHelper;
+    }
 }
 
 @NgModule({

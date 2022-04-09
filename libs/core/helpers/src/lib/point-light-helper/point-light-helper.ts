@@ -1,5 +1,10 @@
 // GENERATED
-import { NgtObjectHelper, Tail } from '@angular-three/core';
+import {
+    AnyConstructor,
+    NgtCommonObjectHelper,
+    provideCommonObjectHelperFactory,
+    Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,13 +12,12 @@ import * as THREE from 'three';
     selector: '[ngtPointLightHelper]',
     exportAs: 'ngtPointLightHelper',
     providers: [
-        {
-            provide: NgtObjectHelper,
-            useExisting: NgtPointLightHelper,
-        },
+        provideCommonObjectHelperFactory<THREE.PointLightHelper>(
+            NgtPointLightHelper
+        ),
     ],
 })
-export class NgtPointLightHelper extends NgtObjectHelper<THREE.PointLightHelper> {
+export class NgtPointLightHelper extends NgtCommonObjectHelper<THREE.PointLightHelper> {
     static ngAcceptInputType_ngtPointLightHelper:
         | Tail<ConstructorParameters<typeof THREE.PointLightHelper>>
         | ''
@@ -27,7 +31,9 @@ export class NgtPointLightHelper extends NgtObjectHelper<THREE.PointLightHelper>
         }
     }
 
-    objectHelperType = THREE.PointLightHelper;
+    override get objectHelperType(): AnyConstructor<THREE.PointLightHelper> {
+        return THREE.PointLightHelper;
+    }
 }
 
 @NgModule({

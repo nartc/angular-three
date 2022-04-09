@@ -1,5 +1,10 @@
 // GENERATED
-import { NgtObjectHelper, Tail } from '@angular-three/core';
+import {
+    AnyConstructor,
+    NgtCommonObjectHelper,
+    provideCommonObjectHelperFactory,
+    Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,13 +12,10 @@ import * as THREE from 'three';
     selector: '[ngtCameraHelper]',
     exportAs: 'ngtCameraHelper',
     providers: [
-        {
-            provide: NgtObjectHelper,
-            useExisting: NgtCameraHelper,
-        },
+        provideCommonObjectHelperFactory<THREE.CameraHelper>(NgtCameraHelper),
     ],
 })
-export class NgtCameraHelper extends NgtObjectHelper<THREE.CameraHelper> {
+export class NgtCameraHelper extends NgtCommonObjectHelper<THREE.CameraHelper> {
     static ngAcceptInputType_ngtCameraHelper:
         | Tail<ConstructorParameters<typeof THREE.CameraHelper>>
         | ''
@@ -27,7 +29,9 @@ export class NgtCameraHelper extends NgtObjectHelper<THREE.CameraHelper> {
         }
     }
 
-    objectHelperType = THREE.CameraHelper;
+    override get objectHelperType(): AnyConstructor<THREE.CameraHelper> {
+        return THREE.CameraHelper;
+    }
 }
 
 @NgModule({

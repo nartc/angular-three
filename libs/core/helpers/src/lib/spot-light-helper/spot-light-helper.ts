@@ -1,5 +1,10 @@
 // GENERATED
-import { NgtObjectHelper, Tail } from '@angular-three/core';
+import {
+    AnyConstructor,
+    NgtCommonObjectHelper,
+    provideCommonObjectHelperFactory,
+    Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,13 +12,12 @@ import * as THREE from 'three';
     selector: '[ngtSpotLightHelper]',
     exportAs: 'ngtSpotLightHelper',
     providers: [
-        {
-            provide: NgtObjectHelper,
-            useExisting: NgtSpotLightHelper,
-        },
+        provideCommonObjectHelperFactory<THREE.SpotLightHelper>(
+            NgtSpotLightHelper
+        ),
     ],
 })
-export class NgtSpotLightHelper extends NgtObjectHelper<THREE.SpotLightHelper> {
+export class NgtSpotLightHelper extends NgtCommonObjectHelper<THREE.SpotLightHelper> {
     static ngAcceptInputType_ngtSpotLightHelper:
         | Tail<ConstructorParameters<typeof THREE.SpotLightHelper>>
         | ''
@@ -27,7 +31,9 @@ export class NgtSpotLightHelper extends NgtObjectHelper<THREE.SpotLightHelper> {
         }
     }
 
-    objectHelperType = THREE.SpotLightHelper;
+    override get objectHelperType(): AnyConstructor<THREE.SpotLightHelper> {
+        return THREE.SpotLightHelper;
+    }
 }
 
 @NgModule({

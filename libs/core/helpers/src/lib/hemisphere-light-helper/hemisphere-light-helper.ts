@@ -1,5 +1,10 @@
 // GENERATED
-import { NgtObjectHelper, Tail } from '@angular-three/core';
+import {
+    AnyConstructor,
+    NgtCommonObjectHelper,
+    provideCommonObjectHelperFactory,
+    Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,13 +12,12 @@ import * as THREE from 'three';
     selector: '[ngtHemisphereLightHelper]',
     exportAs: 'ngtHemisphereLightHelper',
     providers: [
-        {
-            provide: NgtObjectHelper,
-            useExisting: NgtHemisphereLightHelper,
-        },
+        provideCommonObjectHelperFactory<THREE.HemisphereLightHelper>(
+            NgtHemisphereLightHelper
+        ),
     ],
 })
-export class NgtHemisphereLightHelper extends NgtObjectHelper<THREE.HemisphereLightHelper> {
+export class NgtHemisphereLightHelper extends NgtCommonObjectHelper<THREE.HemisphereLightHelper> {
     static ngAcceptInputType_ngtHemisphereLightHelper:
         | Tail<ConstructorParameters<typeof THREE.HemisphereLightHelper>>
         | ''
@@ -27,7 +31,9 @@ export class NgtHemisphereLightHelper extends NgtObjectHelper<THREE.HemisphereLi
         }
     }
 
-    objectHelperType = THREE.HemisphereLightHelper;
+    override get objectHelperType(): AnyConstructor<THREE.HemisphereLightHelper> {
+        return THREE.HemisphereLightHelper;
+    }
 }
 
 @NgModule({
