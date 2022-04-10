@@ -30,12 +30,12 @@ export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {
         return THREE.InstancedMesh;
     }
 
-    protected override postInit() {
-        this.object3d.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    protected override postPrepare(instancedMesh: THREE.InstancedMesh) {
+        instancedMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     }
 
-    protected override get subInputs(): Record<string, boolean> {
-        return { ...super.subInputs, count: false };
+    protected override get optionFields(): Record<string, boolean> {
+        return { ...super.optionFields, count: false };
     }
 }
 

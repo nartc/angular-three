@@ -1,6 +1,5 @@
 import {
     AnyConstructor,
-    applyProps,
     coerceBooleanProperty,
     make,
     NgtCommonMesh,
@@ -10,7 +9,6 @@ import {
     NgtObject,
     NgtStore,
     NgtUnknownInstance,
-    prepare,
     provideCommonMeshFactory,
     provideInstanceFactory,
     provideObjectFactory,
@@ -25,6 +23,7 @@ import {
     Optional,
     SkipSelf,
 } from '@angular/core';
+import { pipe, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
 
 @Component({
@@ -64,9 +63,9 @@ export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
         return ['useVertexTexture'];
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             bindMatrix: true,
             bindMatrixInverse: true,
             bindMode: true,
@@ -101,6 +100,10 @@ export interface NgtSkeletonState extends NgtInstanceState<THREE.Skeleton> {
     ],
 })
 export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
+    @Input() set args(args: ConstructorParameters<typeof THREE.Skeleton>) {
+        this.set({ instanceArgs: args });
+    }
+
     @Input() set bones(bones: THREE.Bone[]) {
         this.set({ bones });
     }
@@ -131,17 +134,18 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
 
     constructor(
         zone: NgZone,
-        @Optional() private skinnedMesh: NgtSkinnedMesh,
-        private store: NgtStore
+        store: NgtStore,
+        @Optional() private skinnedMesh: NgtSkinnedMesh
     ) {
         super({
             zone,
-            shouldAttach: true,
+            store,
             parentInstanceFactory: () =>
                 skinnedMesh?.object3d as unknown as NgtUnknownInstance,
         });
 
         this.set({
+            attach: ['skeleton'],
             bones: [],
             boneInverses: [],
             boneMatrices: null as unknown as Float32Array,
@@ -157,67 +161,64 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
 
     override ngOnInit() {
         this.onCanvasReady(this.store.ready$, () => {
-            this.init(
-                this.select(
-                    this.select((s) => s.bones),
-                    this.select((s) => s.boneTexture),
-                    this.select((s) => s.boneTextureSize),
-                    this.select((s) => s.boneMatrices),
-                    this.select((s) => s.boneInverses),
-                    this.select((s) => s.frame),
-                    (
-                        bones,
-                        boneTexture,
-                        boneTextureSize,
-                        boneMatrices,
-                        boneInverses,
-                        frame
-                    ) => ({
-                        bones,
-                        boneTexture,
-                        boneTextureSize,
-                        boneMatrices,
-                        boneInverses,
-                        frame,
-                    })
-                )
-            );
+            this.init(this.instanceArgs$);
         });
         super.ngOnInit();
     }
 
-    private readonly init = this.effect<
-        Pick<
-            NgtSkeletonState,
-            | 'bones'
-            | 'frame'
-            | 'boneInverses'
-            | 'boneTextureSize'
-            | 'boneTexture'
-            | 'boneMatrices'
-        >
-    >(
-        tapEffect((inputs) => {
-            if (!this.instance) {
-                const skeleton = prepare(
-                    new THREE.Skeleton(inputs.bones, inputs.boneInverses),
-                    () => this.store.get(),
-                    this.skinnedMesh.object3d as unknown as NgtUnknownInstance
+    private readonly init = this.effect<unknown[]>(
+        pipe(
+            withLatestFrom(
+                this.select(
+                    this.select((s) => s.bones),
+                    this.select((s) => s.boneInverses),
+                    (bones, boneInverses) => ({ bones, boneInverses })
+                )
+            ),
+            tapEffect(([instanceArgs, { bones, boneInverses }]) => {
+                const skeletonArgs = [...instanceArgs];
+
+                if (skeletonArgs.length === 0) {
+                    if (bones.length) {
+                        skeletonArgs[0] = bones;
+                    }
+
+                    if (boneInverses.length) {
+                        skeletonArgs[1] = boneInverses;
+                    }
+                }
+
+                const skeleton = this.prepareInstance(
+                    new THREE.Skeleton(
+                        ...(skeletonArgs as ConstructorParameters<
+                            typeof THREE.Skeleton
+                        >)
+                    ),
+                    'skeleton'
                 );
-                this.set({ skeleton, instance: skeleton });
-                this.emitReady();
 
                 if (!this.skinnedMesh.object3d.skeleton) {
-                    this.skinnedMesh.bind(this.skeleton);
+                    this.skinnedMesh.bind(skeleton);
                 }
-            } else {
-                applyProps(
-                    this.skeleton as unknown as NgtUnknownInstance,
-                    inputs
-                );
-            }
-        })
+
+                return () => {
+                    skeleton.dispose();
+                };
+            })
+        )
     );
+
+    protected override get optionFields(): Record<string, boolean> {
+        return {
+            ...super.optionFields,
+            bones: false,
+            boneTexture: false,
+            boneTextureSize: false,
+            boneMatrices: false,
+            boneInverses: false,
+            frame: false,
+        };
+    }
 }
 
 @Component({
@@ -242,18 +243,13 @@ export class NgtBone extends NgtObject<THREE.Bone> {
     }
 
     protected override objectInitFn(): THREE.Bone {
-        const bone = new THREE.Bone();
+        return new THREE.Bone();
+    }
 
+    protected override postPrepare(bone: THREE.Bone) {
         if (this.parentSkeleton) {
             this.parentSkeleton.skeleton.bones.push(bone);
         }
-
-        return bone;
-    }
-
-    override ngOnInit() {
-        this.init();
-        super.ngOnInit();
     }
 }
 
