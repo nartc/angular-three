@@ -1,0 +1,53 @@
+// GENERATED
+import {
+    AnyConstructor,
+    NgtCommonTexture,
+    provideCommonTextureFactory,
+} from '@angular-three/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    NgModule,
+} from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideCommonTextureFactory<THREE.<%= name %>>(Ngt<%= name %>),
+    ],
+})
+export class Ngt<%= name %> extends NgtCommonTexture<THREE.<%= name %>> {
+    override get textureType(): AnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+
+    static ngAcceptInputType_args:
+        | ConstructorParameters<typeof THREE.<%= name %>>
+        | undefined;
+
+    @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
+        this.instanceArgs = v;
+    }
+    <% for (const input of inputs) { %>
+    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <%= input.type %>) {
+        this.set({ <%= input.name %> });
+    }
+    <% } %>
+    <% if (hasInput) { %>
+    protected override get optionFields(): Record<string, boolean> {
+        return {
+            ...super.optionFields,<% for (const input of inputs) { %>
+           <%= input.name %>: <%= input.isOptional %>,<% } %>
+        };
+    }<% } %>
+}
+
+@NgModule({
+    declarations: [Ngt<%= name %>],
+    exports: [Ngt<%= name %>],
+})
+export class Ngt<%= name %>Module {}

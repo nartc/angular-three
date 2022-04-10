@@ -39,7 +39,11 @@ export function astFromPath(
     propertiesFactory: (sourceFile: SourceFile) => {
         mainProperties: PropertySignature[] | ParameterDeclaration[];
         overrideOptional?: Record<string, boolean>;
-        base?: [string, SourceFile, PropertySignature[]];
+        base?: [
+            string,
+            SourceFile,
+            (PropertySignature | ParameterDeclaration)[]
+        ];
     }
 ): Record<
     string,
@@ -64,22 +68,20 @@ export function astFromPath(
         const [baseName, baseSourceFile, baseProperties] = base;
         if (baseName !== '') {
             if (!cached.has(baseName)) {
-                const test = baseProperties.reduce(
-                    (baseRecord, baseProperty) => {
+                cached.set(
+                    baseName,
+                    baseProperties.reduce((baseRecord, baseProperty) => {
                         const typeInfo = propertySignatureToType(
                             baseSourceFile,
-                            baseProperty
+                            baseProperty as PropertySignature
                         );
                         baseRecord[typeInfo.propertyName] = {
                             ...typeInfo,
                             shouldOverride: false,
                         };
                         return baseRecord;
-                    },
-                    {}
+                    }, {})
                 );
-
-                cached.set(baseName, test);
             }
         }
         baseRecord = cached.get(baseName) || {};
@@ -128,7 +130,7 @@ export function getType(
         }
 
         if (type.literal.kind === SyntaxKind.StringKeyword) {
-            return type.literal.getText();
+            return type.literal.getText(sourceFile);
         }
     }
 
@@ -140,9 +142,29 @@ export function getType(
         return 'null';
     }
 
-    if (isTypeReferenceNode(type)) {
-        return concatArraySymbol(isArray, `THREE.${type.typeName.getText()}`);
+    if (type.kind === SyntaxKind.AnyKeyword) {
+        return concatArraySymbol(isArray, 'any');
     }
+
+    if (isTypeReferenceNode(type)) {
+        return concatArraySymbol(
+            isArray,
+            getThreeType(type.typeName.getText(sourceFile))
+        );
+    }
+}
+
+export function getThreeType(type: string): string {
+    return [
+        'HTMLImageElement',
+        'HTMLCanvasElement',
+        'HTMLVideoElement',
+        'ImageBitmap',
+        'ImageData',
+        'BufferSource',
+    ].includes(type)
+        ? type
+        : `THREE.${type}`;
 }
 
 export function concatArraySymbol(isArray: boolean, type: string) {
