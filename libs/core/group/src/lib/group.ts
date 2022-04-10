@@ -12,11 +12,6 @@ export class NgtGroup extends NgtObject<THREE.Group> {
     protected override objectInitFn(): THREE.Group {
         return new THREE.Group();
     }
-
-    override ngOnInit() {
-        this.init();
-        super.ngOnInit();
-    }
 }
 
 @NgModule({
