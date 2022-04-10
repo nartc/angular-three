@@ -24,7 +24,7 @@ export class NgtLightProbe extends NgtCommonLight<THREE.LightProbe> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.LightProbe>) {
-        this.lightArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set sh(sh: THREE.SphericalHarmonics3) {
@@ -35,9 +35,9 @@ export class NgtLightProbe extends NgtCommonLight<THREE.LightProbe> {
         return THREE.LightProbe;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             sh: true,
         };
     }

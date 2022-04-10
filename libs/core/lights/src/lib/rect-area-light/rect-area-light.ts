@@ -26,7 +26,7 @@ export class NgtRectAreaLight extends NgtCommonLight<THREE.RectAreaLight> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.RectAreaLight>) {
-        this.lightArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set width(width: number) {
@@ -45,9 +45,9 @@ export class NgtRectAreaLight extends NgtCommonLight<THREE.RectAreaLight> {
         return THREE.RectAreaLight;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             width: true,
             height: true,
             power: true,

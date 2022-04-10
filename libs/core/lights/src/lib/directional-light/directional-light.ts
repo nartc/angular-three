@@ -26,7 +26,7 @@ export class NgtDirectionalLight extends NgtCommonLight<THREE.DirectionalLight> 
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.DirectionalLight>) {
-        this.lightArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set target(target: THREE.Object3D) {
@@ -41,9 +41,9 @@ export class NgtDirectionalLight extends NgtCommonLight<THREE.DirectionalLight> 
         return THREE.DirectionalLight;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             target: true,
             shadow: true,
         };

@@ -24,7 +24,7 @@ export class NgtAmbientLight extends NgtCommonLight<THREE.AmbientLight> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.AmbientLight>) {
-        this.lightArgs = v;
+        this.instanceArgs = v;
     }
 
     override get lightType(): AnyConstructor<THREE.AmbientLight> {

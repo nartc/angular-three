@@ -26,7 +26,7 @@ export class NgtHemisphereLight extends NgtCommonLight<THREE.HemisphereLight> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.HemisphereLight>) {
-        this.lightArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set skyColor(skyColor: THREE.ColorRepresentation) {
@@ -41,9 +41,9 @@ export class NgtHemisphereLight extends NgtCommonLight<THREE.HemisphereLight> {
         return THREE.HemisphereLight;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             skyColor: true,
             groundColor: true,
         };

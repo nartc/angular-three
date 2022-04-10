@@ -24,7 +24,7 @@ export class NgtPointLight extends NgtCommonLight<THREE.PointLight> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.PointLight>) {
-        this.lightArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set distance(distance: number) {
@@ -47,9 +47,9 @@ export class NgtPointLight extends NgtCommonLight<THREE.PointLight> {
         return THREE.PointLight;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             distance: true,
             decay: true,
             shadow: true,

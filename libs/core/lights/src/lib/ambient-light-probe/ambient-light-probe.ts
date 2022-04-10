@@ -30,7 +30,7 @@ export class NgtAmbientLightProbe extends NgtCommonLight<THREE.AmbientLightProbe
     @Input() set args(
         v: ConstructorParameters<typeof THREE.AmbientLightProbe>
     ) {
-        this.lightArgs = v;
+        this.instanceArgs = v;
     }
 
     override get lightType(): AnyConstructor<THREE.AmbientLightProbe> {
