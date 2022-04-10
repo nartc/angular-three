@@ -32,19 +32,11 @@ export * from './lib/pipes/pi';
 export * from './lib/pipes/radian';
 
 export * from './lib/directives/repeat';
-// export * from './lib/directives/cursor';
+export * from './lib/directives/cursor';
 
 export * from './lib/abstracts/object';
 export * from './lib/abstracts/instance';
 export * from './lib/abstracts/material-geometry';
-
-export * from './lib/controllers/controller';
-export * from './lib/controllers/object.controller';
-export * from './lib/controllers/material-geometry.controller';
-export * from './lib/controllers/with-material.controller';
-export * from './lib/controllers/with-geometry.controller';
-export * from './lib/controllers/object-inputs.controller';
-export * from './lib/controllers/audio.controller';
 
 export * from './lib/three/audio';
 export * from './lib/three/line';
