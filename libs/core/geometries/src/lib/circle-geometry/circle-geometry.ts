@@ -26,7 +26,7 @@ export class NgtCircleGeometry extends NgtCommonGeometry<THREE.CircleGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.CircleGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.CircleGeometry> {

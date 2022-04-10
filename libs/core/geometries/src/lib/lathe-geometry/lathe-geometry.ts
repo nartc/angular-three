@@ -26,7 +26,7 @@ export class NgtLatheGeometry extends NgtCommonGeometry<THREE.LatheGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.LatheGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.LatheGeometry> {

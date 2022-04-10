@@ -30,7 +30,7 @@ export class NgtTetrahedronGeometry extends NgtCommonGeometry<THREE.TetrahedronG
     @Input() set args(
         v: ConstructorParameters<typeof THREE.TetrahedronGeometry>
     ) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.TetrahedronGeometry> {

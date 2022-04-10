@@ -26,7 +26,7 @@ export class NgtShapeGeometry extends NgtCommonGeometry<THREE.ShapeGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.ShapeGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.ShapeGeometry> {

@@ -26,7 +26,7 @@ export class NgtPlaneGeometry extends NgtCommonGeometry<THREE.PlaneGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.PlaneGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.PlaneGeometry> {

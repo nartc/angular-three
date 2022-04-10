@@ -30,7 +30,7 @@ export class NgtWireframeGeometry extends NgtCommonGeometry<THREE.WireframeGeome
     @Input() set args(
         v: ConstructorParameters<typeof THREE.WireframeGeometry>
     ) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.WireframeGeometry> {

@@ -26,7 +26,7 @@ export class NgtRingGeometry extends NgtCommonGeometry<THREE.RingGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.RingGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.RingGeometry> {

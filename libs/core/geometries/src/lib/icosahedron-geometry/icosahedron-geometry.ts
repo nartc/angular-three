@@ -30,7 +30,7 @@ export class NgtIcosahedronGeometry extends NgtCommonGeometry<THREE.IcosahedronG
     @Input() set args(
         v: ConstructorParameters<typeof THREE.IcosahedronGeometry>
     ) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.IcosahedronGeometry> {

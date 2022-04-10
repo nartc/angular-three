@@ -30,7 +30,7 @@ export class NgtPolyhedronGeometry extends NgtCommonGeometry<THREE.PolyhedronGeo
     @Input() set args(
         v: ConstructorParameters<typeof THREE.PolyhedronGeometry>
     ) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.PolyhedronGeometry> {

@@ -30,7 +30,7 @@ export class NgtDodecahedronGeometry extends NgtCommonGeometry<THREE.Dodecahedro
     @Input() set args(
         v: ConstructorParameters<typeof THREE.DodecahedronGeometry>
     ) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.DodecahedronGeometry> {

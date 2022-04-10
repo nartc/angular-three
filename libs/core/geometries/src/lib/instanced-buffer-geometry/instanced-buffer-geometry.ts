@@ -30,7 +30,7 @@ export class NgtInstancedBufferGeometry extends NgtCommonGeometry<THREE.Instance
     @Input() set args(
         v: ConstructorParameters<typeof THREE.InstancedBufferGeometry>
     ) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.InstancedBufferGeometry> {

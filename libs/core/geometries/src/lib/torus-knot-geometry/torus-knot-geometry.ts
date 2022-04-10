@@ -30,7 +30,7 @@ export class NgtTorusKnotGeometry extends NgtCommonGeometry<THREE.TorusKnotGeome
     @Input() set args(
         v: ConstructorParameters<typeof THREE.TorusKnotGeometry>
     ) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.TorusKnotGeometry> {

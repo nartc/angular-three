@@ -28,7 +28,7 @@ export class NgtCylinderGeometry extends NgtCommonGeometry<THREE.CylinderGeometr
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.CylinderGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.CylinderGeometry> {

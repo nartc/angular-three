@@ -26,7 +26,7 @@ export class NgtEdgesGeometry extends NgtCommonGeometry<THREE.EdgesGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.EdgesGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.EdgesGeometry> {

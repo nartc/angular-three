@@ -26,7 +26,7 @@ export class NgtBufferGeometry extends NgtCommonGeometry<THREE.BufferGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.BufferGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.BufferGeometry> {

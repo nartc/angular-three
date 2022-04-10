@@ -26,7 +26,7 @@ export class NgtConeGeometry extends NgtCommonGeometry<THREE.ConeGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.ConeGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.ConeGeometry> {

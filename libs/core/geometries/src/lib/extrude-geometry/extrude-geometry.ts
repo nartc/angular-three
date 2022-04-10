@@ -26,7 +26,7 @@ export class NgtExtrudeGeometry extends NgtCommonGeometry<THREE.ExtrudeGeometry>
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.ExtrudeGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.ExtrudeGeometry> {

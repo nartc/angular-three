@@ -26,7 +26,7 @@ export class NgtBoxGeometry extends NgtCommonGeometry<THREE.BoxGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.BoxGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.BoxGeometry> {

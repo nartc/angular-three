@@ -30,7 +30,7 @@ export class NgtOctahedronGeometry extends NgtCommonGeometry<THREE.OctahedronGeo
     @Input() set args(
         v: ConstructorParameters<typeof THREE.OctahedronGeometry>
     ) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.OctahedronGeometry> {

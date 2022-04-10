@@ -26,7 +26,7 @@ export class NgtTubeGeometry extends NgtCommonGeometry<THREE.TubeGeometry> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.TubeGeometry>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.TubeGeometry> {
