@@ -24,7 +24,7 @@ export class Ngt<%= name %> extends NgtCommonLight<THREE.<%= name %>> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
-        this.lightArgs = v;
+        this.instanceArgs = v;
     }
     <% for (const input of inputs) { %>
     @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <%= input.type %>) {
@@ -36,9 +36,9 @@ export class Ngt<%= name %> extends NgtCommonLight<THREE.<%= name %>> {
         return THREE.<%= name %>;
     }
     <% if (hasInput) { %>
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,<% for (const input of inputs) { %>
+            ...super.optionFields,<% for (const input of inputs) { %>
            <%= input.name %>: <%= input.isOptional %>,<% } %>
         };
     }<% } %>
