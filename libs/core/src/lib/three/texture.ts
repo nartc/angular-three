@@ -52,7 +52,9 @@ export abstract class NgtCommonTexture<
         this.set({ minFilter });
     }
 
-    @Input() set format(format: THREE.PixelFormat) {
+    @Input() set format(
+        format: THREE.PixelFormat | THREE.CompressedPixelFormat
+    ) {
         this.set({ format });
     }
 
