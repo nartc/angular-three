@@ -13,7 +13,7 @@ import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
 import { WINDOW } from '../di/window';
 import { NgtResize, NgtResizeResult } from '../services/resize';
 import type {
-    NgtAnimationRecord,
+    NgtBeforeRenderRecord,
     NgtCamera,
     NgtEvents,
     NgtGLOptions,
@@ -31,7 +31,7 @@ import { prepare } from '../utils/instance';
 import { makeDpr, makeId } from '../utils/make';
 import { NgtComponentStore, tapEffect } from './component-store';
 
-type NgtAnimationRecordWithUuid = NgtAnimationRecord & { uuid: string };
+type NgtAnimationRecordWithUuid = NgtBeforeRenderRecord & { uuid: string };
 
 function isOrthographicCamera(
     def: THREE.Camera
@@ -132,6 +132,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             glOptions: {},
             raycasterOptions: {},
             sceneOptions: {},
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             pointerMissed: () => {},
             internal: {
                 active: false,
@@ -260,18 +261,18 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         this.set(this.allConstructed$);
     }
 
-    register(record: NgtAnimationRecord) {
+    registerBeforeRender(record: NgtBeforeRenderRecord) {
         const uuid =
             record.obj instanceof THREE.Object3D
                 ? record.obj.uuid
                 : typeof record.obj === 'function'
                 ? record.obj().uuid
                 : makeId();
-        this.registerAnimation({ ...record, uuid });
+        this.registerBeforeRenderEffect({ ...record, uuid });
         return uuid;
     }
 
-    unregister(uuid: string) {
+    unregisterBeforeRender(uuid: string) {
         if (!uuid) return;
         const currentAnimations = this.get((s) => s.internal.animations);
         const record = currentAnimations.get(uuid);
@@ -549,14 +550,14 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         })
     );
 
-    private readonly registerAnimation =
+    private readonly registerBeforeRenderEffect =
         this.effect<NgtAnimationRecordWithUuid>(
             tapEffect(({ uuid, ...record }) => {
                 if (uuid) {
                     this.set((state) => ({
                         internal: {
                             ...state.internal,
-                            animations: new Map<string, NgtAnimationRecord>(
+                            animations: new Map<string, NgtBeforeRenderRecord>(
                                 state.internal.animations
                             ).set(uuid, record),
                             priority:
@@ -568,7 +569,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
 
                 return ({ prev: { uuid: prevUuid } = {}, complete }) => {
                     if (prevUuid !== uuid || complete) {
-                        this.unregister(uuid);
+                        this.unregisterBeforeRender(uuid);
                     }
                 };
             })

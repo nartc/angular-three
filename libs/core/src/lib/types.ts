@@ -293,14 +293,14 @@ export interface NgtRenderState extends NgtState {
 
 /* Animation */
 
-export type NgtAnimationCallback<TObject> = (
+export type NgtBeforeRenderCallback<TObject> = (
     state: NgtRenderState,
     obj: TObject
 ) => void;
 
-export interface NgtAnimationRecord {
+export interface NgtBeforeRenderRecord {
     obj?: THREE.Object3D | (() => THREE.Object3D);
-    callback: NgtAnimationCallback<THREE.Object3D | undefined>;
+    callback: NgtBeforeRenderCallback<THREE.Object3D | undefined>;
     priority?: number;
 }
 
@@ -326,8 +326,8 @@ export type NgtInternalState = {
     capturedMap: Map<number, Map<THREE.Object3D, NgtPointerCaptureTarget>>;
     initialClick: [x: number, y: number];
     initialHits: THREE.Object3D[];
-    animations: Map<string, NgtAnimationRecord>;
-    subscribers: NgtAnimationRecord[];
+    animations: Map<string, NgtBeforeRenderRecord>;
+    subscribers: NgtBeforeRenderRecord[];
 };
 
 export interface NgtState {
@@ -403,6 +403,7 @@ export interface NgtInstanceInternal {
     eventCount: number;
     handlers: Partial<NgtEventHandlers>;
     previousAttach?: string[] | (() => void);
+    previousAttachValue?: unknown;
 }
 
 export type AttachFunction = (parent: any, child: any) => void | (() => void);
