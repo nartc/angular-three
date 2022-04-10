@@ -1,6 +1,7 @@
 import {
     NgtObject,
     NgtObjectState,
+    NgtPreObjectInit,
     provideObjectFactory,
     tapEffect,
 } from '@angular-three/core';
@@ -42,14 +43,15 @@ export class NgtPrimitive extends NgtObject<THREE.Object3D, NgtPrimitiveState> {
         return this.object;
     }
 
-    override ngOnInit() {
-        this.effect<THREE.Object3D>(
-            tapEffect(() => {
-                // TODO: determine whether we should run clean up logic if object is undefined/null
-                this.init();
-            })
-        )(this.object$);
-        super.ngOnInit();
+    protected override get preObjectInit(): NgtPreObjectInit {
+        return (initFn) => {
+            this.effect<THREE.Object3D>(
+                tapEffect(() => {
+                    // TODO: determine whether we should run clean up logic if object is undefined/null
+                    initFn();
+                })
+            )(this.object$);
+        };
     }
 }
 
