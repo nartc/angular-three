@@ -30,7 +30,7 @@ export class NgtPerspectiveCamera extends NgtCommonCamera<THREE.PerspectiveCamer
     @Input() set args(
         v: ConstructorParameters<typeof THREE.PerspectiveCamera>
     ) {
-        this.cameraArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set fov(fov: number) {
@@ -53,9 +53,9 @@ export class NgtPerspectiveCamera extends NgtCommonCamera<THREE.PerspectiveCamer
         return THREE.PerspectiveCamera;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             fov: true,
             aspect: true,
             near: true,

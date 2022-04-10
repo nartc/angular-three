@@ -30,7 +30,7 @@ export class NgtOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCam
     @Input() set args(
         v: ConstructorParameters<typeof THREE.OrthographicCamera>
     ) {
-        this.cameraArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set left(left: number) {
@@ -61,9 +61,9 @@ export class NgtOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCam
         return THREE.OrthographicCamera;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             left: true,
             right: true,
             top: true,

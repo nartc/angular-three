@@ -24,7 +24,7 @@ export class NgtArrayCamera extends NgtCommonCamera<THREE.ArrayCamera> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.ArrayCamera>) {
-        this.cameraArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set cameras(cameras: THREE.PerspectiveCamera[]) {
@@ -35,9 +35,9 @@ export class NgtArrayCamera extends NgtCommonCamera<THREE.ArrayCamera> {
         return THREE.ArrayCamera;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             cameras: true,
         };
     }
