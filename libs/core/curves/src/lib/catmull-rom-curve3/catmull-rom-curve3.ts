@@ -26,7 +26,7 @@ export class NgtCatmullRomCurve3 extends NgtCommonCurve<THREE.CatmullRomCurve3> 
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.CatmullRomCurve3>) {
-        this.curveArgs = v;
+        this.instanceArgs = v;
     }
 
     override get curveType(): AnyConstructor<THREE.CatmullRomCurve3> {

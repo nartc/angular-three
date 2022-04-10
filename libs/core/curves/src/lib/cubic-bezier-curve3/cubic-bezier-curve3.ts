@@ -30,7 +30,7 @@ export class NgtCubicBezierCurve3 extends NgtCommonCurve<THREE.CubicBezierCurve3
     @Input() set args(
         v: ConstructorParameters<typeof THREE.CubicBezierCurve3>
     ) {
-        this.curveArgs = v;
+        this.instanceArgs = v;
     }
 
     override get curveType(): AnyConstructor<THREE.CubicBezierCurve3> {

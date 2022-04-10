@@ -24,7 +24,7 @@ export class NgtSplineCurve extends NgtCommonCurve<THREE.SplineCurve> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.SplineCurve>) {
-        this.curveArgs = v;
+        this.instanceArgs = v;
     }
 
     override get curveType(): AnyConstructor<THREE.SplineCurve> {

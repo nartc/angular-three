@@ -24,7 +24,7 @@ export class NgtLineCurve extends NgtCommonCurve<THREE.LineCurve> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.LineCurve>) {
-        this.curveArgs = v;
+        this.instanceArgs = v;
     }
 
     override get curveType(): AnyConstructor<THREE.LineCurve> {
