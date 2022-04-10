@@ -135,7 +135,8 @@ export abstract class NgtInstance<
         const prepInstance = prepare(
             instance,
             () => this.store.get(),
-            this.parentInstanceFactory?.() as NgtUnknownInstance
+            this.parentInstanceFactory?.() as NgtUnknownInstance,
+            this.instance as NgtUnknownInstance
         );
         this.postPrepare(prepInstance);
 
@@ -260,6 +261,9 @@ export abstract class NgtInstance<
     private readonly setOptions = this.effect<UnknownRecord>(
         tap((options) => {
             this.zone.runOutsideAngular(() => {
+                // no options; return early
+                if (Object.keys(options).length === 0) return;
+
                 if (this.instance) {
                     // TODO: Material is handling this on their own. To be changed when [parameters] is removed
                     if (isMaterial(this.instance)) return;

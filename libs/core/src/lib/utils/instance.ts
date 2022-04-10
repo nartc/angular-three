@@ -15,16 +15,27 @@ export function prepare<TInstance extends object = UnknownRecord>(
     instance: TInstance,
     root: () => NgtState,
     parentInstance?: NgtUnknownInstance,
+    previousInstance?: NgtUnknownInstance,
     isPrimitive = false
 ): NgtUnknownInstance<TInstance> {
     return Object.assign(instance, {
         __ngt__: {
             root,
-            primitive: isPrimitive,
-            eventCount: 0,
-            handlers: {},
-            objects: [],
-            parent: parentInstance || null,
+            primitive: !isPrimitive
+                ? previousInstance
+                    ? previousInstance.__ngt__.primitive
+                    : isPrimitive
+                : isPrimitive,
+            eventCount: previousInstance
+                ? previousInstance.__ngt__.eventCount
+                : 0,
+            handlers: previousInstance ? previousInstance.__ngt__.handlers : {},
+            objects: previousInstance ? previousInstance.__ngt__.objects : [],
+            parent: parentInstance
+                ? parentInstance
+                : previousInstance
+                ? previousInstance.__ngt__.parent
+                : null,
         },
     });
 }
