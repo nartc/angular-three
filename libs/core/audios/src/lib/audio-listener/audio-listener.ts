@@ -1,4 +1,9 @@
-import { NgtObject, NgtObjectState } from '@angular-three/core';
+import {
+    NgtObject,
+    NgtObjectState,
+    NgtPreObjectInit,
+    provideObjectFactory,
+} from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -12,17 +17,29 @@ export interface NgtAudioListenerState
     selector: 'ngt-audio-listener',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideObjectFactory<THREE.AudioListener, NgtAudioListenerState>(
+            NgtAudioListener
+        ),
+    ],
 })
 export class NgtAudioListener extends NgtObject<
     THREE.AudioListener,
     NgtAudioListenerState
 > {
     protected override objectInitFn(): THREE.AudioListener {
-        this.set({ appendMode: 'none' });
+        return new THREE.AudioListener();
+    }
 
+    protected override get preObjectInit(): NgtPreObjectInit {
+        return (initFn) => {
+            this.set({ appendMode: 'none' });
+            initFn();
+        };
+    }
+
+    protected override postPrepare(audioListener: THREE.AudioListener) {
         const { filter, timeDelta } = this.get();
-
-        const audioListener = new THREE.AudioListener();
 
         if (filter != null) {
             audioListener.filter = filter;
@@ -36,25 +53,18 @@ export class NgtAudioListener extends NgtObject<
         if (camera) {
             camera.add(audioListener);
         }
-
-        return audioListener;
-    }
-
-    override ngOnInit() {
-        this.init();
-        super.ngOnInit();
     }
 
     protected override destroy() {
-        super.destroy();
         const camera = this.store.get((s) => s.camera);
         if (camera) {
             camera.remove(this.object3d);
         }
+        super.destroy();
     }
 
-    protected override get subInputs(): Record<string, boolean> {
-        return { filter: true, timeDelta: true };
+    protected override get optionFields(): Record<string, boolean> {
+        return { ...super.optionFields, filter: true, timeDelta: true };
     }
 }
 
