@@ -9,7 +9,10 @@ export const NGT_COMMON_LINE_FACTORY = new InjectionToken<AnyFunction>(
     'NgtCommonLine factory'
 );
 
-export function provideCommonLineFactory<TSubLine extends NgtCommonLine>(
+export function provideCommonLineFactory<
+    TLine extends THREE.Line,
+    TSubLine extends NgtCommonLine<TLine> = NgtCommonLine<TLine>
+>(
     subLineType: AnyConstructor<TSubLine>,
     factory?: (sub: TSubLine) => THREE.Object3D
 ): Provider {

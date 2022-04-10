@@ -18,6 +18,7 @@ export * from './lib/di/material';
 export * from './lib/di/curve';
 export * from './lib/di/helper';
 export * from './lib/di/object-helper';
+export * from './lib/di/line';
 export * from './lib/di/light';
 export * from './lib/di/sprite';
 export * from './lib/di/texture';
