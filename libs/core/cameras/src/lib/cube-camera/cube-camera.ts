@@ -1,6 +1,6 @@
 import {
     NgtObject,
-    NgtObjectState,
+    NgtPreObjectInit,
     provideObjectFactory,
     tapEffect,
 } from '@angular-three/core';
@@ -12,26 +12,15 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 
-export interface NgtCubeCameraState extends NgtObjectState<THREE.CubeCamera> {
-    args: ConstructorParameters<typeof THREE.CubeCamera>;
-}
-
 @Component({
     selector: 'ngt-cube-camera',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectFactory<THREE.CubeCamera, NgtCubeCameraState>(
-            NgtCubeCamera
-        ),
-    ],
+    providers: [provideObjectFactory<THREE.CubeCamera>(NgtCubeCamera)],
 })
-export class NgtCubeCamera extends NgtObject<
-    THREE.CubeCamera,
-    NgtCubeCameraState
-> {
+export class NgtCubeCamera extends NgtObject<THREE.CubeCamera> {
     @Input() set args(args: ConstructorParameters<typeof THREE.CubeCamera>) {
-        this.set({ args });
+        this.set({ instanceArgs: args });
     }
 
     @Input() set near(near: number) {
@@ -47,29 +36,33 @@ export class NgtCubeCamera extends NgtObject<
     }
 
     protected override objectInitFn(): THREE.CubeCamera {
-        const args = this.get((s) => s.args);
+        const args = this.get((s) => s.instanceArgs) as ConstructorParameters<
+            typeof THREE.CubeCamera
+        >;
         return new THREE.CubeCamera(...args);
     }
 
-    override ngOnInit() {
-        const args = this.get((s) => s.args);
-        if (args && args.length) {
-            this.set({
-                near: args[0],
-                far: args[1],
-                renderTarget: args[2],
-            });
-        }
-        this.effect<NgtCubeCameraState['args']>(
-            tapEffect(() => {
-                this.init();
-            })
-        )(this.select((s) => s.args));
-        super.ngOnInit();
+    protected override get preObjectInit(): NgtPreObjectInit {
+        return (initFn) => {
+            const args = this.get((s) => s.instanceArgs);
+            if (args && args.length) {
+                this.set({
+                    near: args[0],
+                    far: args[1],
+                    renderTarget: args[2],
+                });
+            }
+            this.effect<unknown[]>(
+                tapEffect(() => {
+                    initFn();
+                })
+            )(this.instanceArgs$);
+        };
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
+            ...super.optionFields,
             near: false,
             far: false,
             renderTarget: false,
