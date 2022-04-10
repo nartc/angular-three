@@ -24,7 +24,7 @@ export class NgtUint8ClampedBufferAttribute extends NgtCommonAttribute<THREE.Uin
     @Input() set args(
         v: ConstructorParameters<typeof THREE.Uint8ClampedBufferAttribute>
     ) {
-        this.attributeArgs = v;
+        this.instanceArgs = v;
     }
 
     override get attributeType(): AnyConstructor<THREE.Uint8ClampedBufferAttribute> {

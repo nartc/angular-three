@@ -24,7 +24,7 @@ export class NgtInterleavedBufferAttribute extends NgtCommonAttribute<THREE.Inte
     @Input() set args(
         v: ConstructorParameters<typeof THREE.InterleavedBufferAttribute>
     ) {
-        this.attributeArgs = v;
+        this.instanceArgs = v;
     }
 
     override get attributeType(): AnyConstructor<THREE.InterleavedBufferAttribute> {

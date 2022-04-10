@@ -24,7 +24,7 @@ export class NgtInstancedBufferAttribute extends NgtCommonAttribute<THREE.Instan
     @Input() set args(
         v: ConstructorParameters<typeof THREE.InstancedBufferAttribute>
     ) {
-        this.attributeArgs = v;
+        this.instanceArgs = v;
     }
 
     override get attributeType(): AnyConstructor<THREE.InstancedBufferAttribute> {

@@ -24,7 +24,7 @@ export class NgtInt32BufferAttribute extends NgtCommonAttribute<THREE.Int32Buffe
     @Input() set args(
         v: ConstructorParameters<typeof THREE.Int32BufferAttribute>
     ) {
-        this.attributeArgs = v;
+        this.instanceArgs = v;
     }
 
     override get attributeType(): AnyConstructor<THREE.Int32BufferAttribute> {

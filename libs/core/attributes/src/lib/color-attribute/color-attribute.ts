@@ -1,14 +1,10 @@
 // GENERATED
 import {
     AnyFunction,
-    applyProps,
     makeColor,
     NGT_INSTANCE_FACTORY,
     NgtInstance,
-    NgtInstanceState,
     NgtStore,
-    NgtUnknownInstance,
-    prepare,
     provideInstanceFactory,
     NgtColor,
 } from '@angular-three/core';
@@ -24,46 +20,29 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 
-export interface NgtColorState extends NgtInstanceState<THREE.Color> {
-    color: NgtColor;
-}
-
 @Component({
     selector: 'ngt-color[color]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideInstanceFactory<THREE.Color, NgtColorState>(NgtColorAttribute),
-    ],
+    providers: [provideInstanceFactory<THREE.Color>(NgtColorAttribute)],
 })
-export class NgtColorAttribute extends NgtInstance<THREE.Color, NgtColorState> {
+export class NgtColorAttribute extends NgtInstance<THREE.Color> {
     @Input() set color(color: NgtColor) {
         this.zone.runOutsideAngular(() => {
-            if (this.instance) {
-                applyProps(this.instance as unknown as NgtUnknownInstance, {
-                    color,
-                });
-            } else {
-                this.set({
-                    instance: prepare(
-                        makeColor(color),
-                        () => this.store.get(),
-                        this.parentInstanceFactory?.() as NgtUnknownInstance
-                    ),
-                });
-            }
+            const instance = this.prepareInstance(makeColor(color));
+            this.set({ instance });
         });
     }
 
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
-        private store: NgtStore
+        parentInstanceFactory: AnyFunction
     ) {
-        super({ zone, shouldAttach: true, parentInstanceFactory });
+        super({ zone, store, parentInstanceFactory });
     }
 }
 

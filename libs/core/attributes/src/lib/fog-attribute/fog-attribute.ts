@@ -1,14 +1,10 @@
 // GENERATED
 import {
     AnyFunction,
-    applyProps,
     make,
     NGT_INSTANCE_FACTORY,
     NgtInstance,
-    NgtInstanceState,
     NgtStore,
-    NgtUnknownInstance,
-    prepare,
     provideInstanceFactory,
     NgtFog,
 } from '@angular-three/core';
@@ -24,46 +20,29 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 
-export interface NgtFogState extends NgtInstanceState<THREE.Fog> {
-    fog: NgtFog;
-}
-
 @Component({
     selector: 'ngt-fog[fog]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideInstanceFactory<THREE.Fog, NgtFogState>(NgtFogAttribute),
-    ],
+    providers: [provideInstanceFactory<THREE.Fog>(NgtFogAttribute)],
 })
-export class NgtFogAttribute extends NgtInstance<THREE.Fog, NgtFogState> {
+export class NgtFogAttribute extends NgtInstance<THREE.Fog> {
     @Input() set fog(fog: NgtFog) {
         this.zone.runOutsideAngular(() => {
-            if (this.instance) {
-                applyProps(this.instance as unknown as NgtUnknownInstance, {
-                    fog,
-                });
-            } else {
-                this.set({
-                    instance: prepare(
-                        make(THREE.Fog, fog),
-                        () => this.store.get(),
-                        this.parentInstanceFactory?.() as NgtUnknownInstance
-                    ),
-                });
-            }
+            const instance = this.prepareInstance(make(THREE.Fog, fog));
+            this.set({ instance });
         });
     }
 
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
-        private store: NgtStore
+        parentInstanceFactory: AnyFunction
     ) {
-        super({ zone, shouldAttach: true, parentInstanceFactory });
+        super({ zone, store, parentInstanceFactory });
     }
 }
 

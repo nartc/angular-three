@@ -24,7 +24,7 @@ export class NgtFloat32BufferAttribute extends NgtCommonAttribute<THREE.Float32B
     @Input() set args(
         v: ConstructorParameters<typeof THREE.Float32BufferAttribute>
     ) {
-        this.attributeArgs = v;
+        this.instanceArgs = v;
     }
 
     override get attributeType(): AnyConstructor<THREE.Float32BufferAttribute> {

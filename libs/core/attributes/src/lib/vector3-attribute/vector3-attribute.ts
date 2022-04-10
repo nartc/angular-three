@@ -1,14 +1,10 @@
 // GENERATED
 import {
     AnyFunction,
-    applyProps,
     makeVector3,
     NGT_INSTANCE_FACTORY,
     NgtInstance,
-    NgtInstanceState,
     NgtStore,
-    NgtUnknownInstance,
-    prepare,
     provideInstanceFactory,
     NgtVector3,
 } from '@angular-three/core';
@@ -24,51 +20,29 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 
-export interface NgtVector3State extends NgtInstanceState<THREE.Vector3> {
-    vector3: NgtVector3;
-}
-
 @Component({
     selector: 'ngt-vector3[vector3]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideInstanceFactory<THREE.Vector3, NgtVector3State>(
-            NgtVector3Attribute
-        ),
-    ],
+    providers: [provideInstanceFactory<THREE.Vector3>(NgtVector3Attribute)],
 })
-export class NgtVector3Attribute extends NgtInstance<
-    THREE.Vector3,
-    NgtVector3State
-> {
+export class NgtVector3Attribute extends NgtInstance<THREE.Vector3> {
     @Input() set vector3(vector3: NgtVector3) {
         this.zone.runOutsideAngular(() => {
-            if (this.instance) {
-                applyProps(this.instance as unknown as NgtUnknownInstance, {
-                    vector3,
-                });
-            } else {
-                this.set({
-                    instance: prepare(
-                        makeVector3(vector3),
-                        () => this.store.get(),
-                        this.parentInstanceFactory?.() as NgtUnknownInstance
-                    ),
-                });
-            }
+            const instance = this.prepareInstance(makeVector3(vector3));
+            this.set({ instance });
         });
     }
 
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
-        private store: NgtStore
+        parentInstanceFactory: AnyFunction
     ) {
-        super({ zone, shouldAttach: true, parentInstanceFactory });
+        super({ zone, store, parentInstanceFactory });
     }
 }
 

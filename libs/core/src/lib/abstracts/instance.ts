@@ -71,8 +71,8 @@ export abstract class NgtInstance<
         )
     );
 
-    get instance(): TInstance {
-        return this.get((s) => s.instance) as TInstance;
+    get instance(): NgtUnknownInstance<TInstance> {
+        return this.get((s) => s.instance) as NgtUnknownInstance<TInstance>;
     }
 
     protected readonly instanceArgs$ = this.select((s) => s.instanceArgs);
@@ -131,7 +131,7 @@ export abstract class NgtInstance<
     protected prepareInstance(
         instance: TInstance,
         keyToSet?: keyof TInstanceState
-    ): TInstance {
+    ): NgtUnknownInstance<TInstance> {
         const prepInstance = prepare(
             instance,
             () => this.store.get(),
@@ -157,12 +157,12 @@ export abstract class NgtInstance<
             if (parentInstance && parentInstance['isObject3D']) {
                 removeInteractivity(
                     this.__ngt__.root.bind(this.__ngt__),
-                    this.instance as THREE.Object3D
+                    this.instance as unknown as THREE.Object3D
                 );
             }
 
-            if ((this.instance as THREE.Object3D).clear) {
-                (this.instance as THREE.Object3D).clear();
+            if ((this.instance as unknown as THREE.Object3D).clear) {
+                (this.instance as unknown as THREE.Object3D).clear();
             }
         } else {
             // non-scene objects

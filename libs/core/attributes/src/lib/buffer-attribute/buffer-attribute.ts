@@ -22,7 +22,7 @@ export class NgtBufferAttribute extends NgtCommonAttribute<THREE.BufferAttribute
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.BufferAttribute>) {
-        this.attributeArgs = v;
+        this.instanceArgs = v;
     }
 
     override get attributeType(): AnyConstructor<THREE.BufferAttribute> {

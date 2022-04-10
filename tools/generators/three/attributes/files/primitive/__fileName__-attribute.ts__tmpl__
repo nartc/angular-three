@@ -1,14 +1,10 @@
 // GENERATED
 import {
     AnyFunction,
-    applyProps,
     <%= makeFunction %>,
     NGT_INSTANCE_FACTORY,
     NgtInstance,
-    NgtInstanceState,
     NgtStore,
-    NgtUnknownInstance,
-    prepare,
     provideInstanceFactory,
     <%= inputType %>
 } from '@angular-three/core';

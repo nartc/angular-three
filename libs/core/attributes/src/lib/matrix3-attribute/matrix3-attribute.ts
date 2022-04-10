@@ -1,14 +1,10 @@
 // GENERATED
 import {
     AnyFunction,
-    applyProps,
     make,
     NGT_INSTANCE_FACTORY,
     NgtInstance,
-    NgtInstanceState,
     NgtStore,
-    NgtUnknownInstance,
-    prepare,
     provideInstanceFactory,
     NgtMatrix3,
 } from '@angular-three/core';
@@ -24,51 +20,29 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 
-export interface NgtMatrix3State extends NgtInstanceState<THREE.Matrix3> {
-    matrix3: NgtMatrix3;
-}
-
 @Component({
     selector: 'ngt-matrix3[matrix3]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideInstanceFactory<THREE.Matrix3, NgtMatrix3State>(
-            NgtMatrix3Attribute
-        ),
-    ],
+    providers: [provideInstanceFactory<THREE.Matrix3>(NgtMatrix3Attribute)],
 })
-export class NgtMatrix3Attribute extends NgtInstance<
-    THREE.Matrix3,
-    NgtMatrix3State
-> {
+export class NgtMatrix3Attribute extends NgtInstance<THREE.Matrix3> {
     @Input() set matrix3(matrix3: NgtMatrix3) {
         this.zone.runOutsideAngular(() => {
-            if (this.instance) {
-                applyProps(this.instance as unknown as NgtUnknownInstance, {
-                    matrix3,
-                });
-            } else {
-                this.set({
-                    instance: prepare(
-                        make(THREE.Matrix3, matrix3),
-                        () => this.store.get(),
-                        this.parentInstanceFactory?.() as NgtUnknownInstance
-                    ),
-                });
-            }
+            const instance = this.prepareInstance(make(THREE.Matrix3, matrix3));
+            this.set({ instance });
         });
     }
 
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
-        private store: NgtStore
+        parentInstanceFactory: AnyFunction
     ) {
-        super({ zone, shouldAttach: true, parentInstanceFactory });
+        super({ zone, store, parentInstanceFactory });
     }
 }
 

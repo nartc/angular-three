@@ -24,7 +24,7 @@ export class NgtUint8BufferAttribute extends NgtCommonAttribute<THREE.Uint8Buffe
     @Input() set args(
         v: ConstructorParameters<typeof THREE.Uint8BufferAttribute>
     ) {
-        this.attributeArgs = v;
+        this.instanceArgs = v;
     }
 
     override get attributeType(): AnyConstructor<THREE.Uint8BufferAttribute> {
