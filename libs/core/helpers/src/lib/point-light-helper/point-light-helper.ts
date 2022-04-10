@@ -27,7 +27,7 @@ export class NgtPointLightHelper extends NgtCommonObjectHelper<THREE.PointLightH
         v: Tail<ConstructorParameters<typeof THREE.PointLightHelper>> | ''
     ) {
         if (v) {
-            this.objectHelperArgs = v;
+            this.instanceArgs = v;
         }
     }
 

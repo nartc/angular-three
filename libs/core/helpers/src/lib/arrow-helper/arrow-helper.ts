@@ -24,7 +24,7 @@ export class NgtArrowHelper extends NgtCommonHelper<THREE.ArrowHelper> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.ArrowHelper>) {
-        this.helperArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set dir(dir: THREE.Vector3) {
@@ -51,9 +51,9 @@ export class NgtArrowHelper extends NgtCommonHelper<THREE.ArrowHelper> {
         return THREE.ArrowHelper;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             dir: true,
             origin: true,
             length: true,

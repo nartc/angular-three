@@ -27,7 +27,7 @@ export class NgtDirectionalLightHelper extends NgtCommonObjectHelper<THREE.Direc
         v: Tail<ConstructorParameters<typeof THREE.DirectionalLightHelper>> | ''
     ) {
         if (v) {
-            this.objectHelperArgs = v;
+            this.instanceArgs = v;
         }
     }
 

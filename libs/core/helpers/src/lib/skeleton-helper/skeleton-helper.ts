@@ -27,7 +27,7 @@ export class NgtSkeletonHelper extends NgtCommonObjectHelper<THREE.SkeletonHelpe
         v: Tail<ConstructorParameters<typeof THREE.SkeletonHelper>> | ''
     ) {
         if (v) {
-            this.objectHelperArgs = v;
+            this.instanceArgs = v;
         }
     }
 

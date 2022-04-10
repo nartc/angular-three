@@ -25,7 +25,7 @@ export class NgtPlaneHelper extends NgtCommonObjectHelper<THREE.PlaneHelper> {
         v: Tail<ConstructorParameters<typeof THREE.PlaneHelper>> | ''
     ) {
         if (v) {
-            this.objectHelperArgs = v;
+            this.instanceArgs = v;
         }
     }
 

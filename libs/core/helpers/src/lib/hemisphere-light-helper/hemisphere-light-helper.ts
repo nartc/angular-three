@@ -27,7 +27,7 @@ export class NgtHemisphereLightHelper extends NgtCommonObjectHelper<THREE.Hemisp
         v: Tail<ConstructorParameters<typeof THREE.HemisphereLightHelper>> | ''
     ) {
         if (v) {
-            this.objectHelperArgs = v;
+            this.instanceArgs = v;
         }
     }
 

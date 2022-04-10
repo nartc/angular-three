@@ -24,7 +24,7 @@ export class NgtGridHelper extends NgtCommonHelper<THREE.GridHelper> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.GridHelper>) {
-        this.helperArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set size(size: number) {
@@ -47,9 +47,9 @@ export class NgtGridHelper extends NgtCommonHelper<THREE.GridHelper> {
         return THREE.GridHelper;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             size: true,
             divisions: true,
             color1: true,

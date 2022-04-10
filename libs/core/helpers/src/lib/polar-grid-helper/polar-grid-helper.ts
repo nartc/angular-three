@@ -26,7 +26,7 @@ export class NgtPolarGridHelper extends NgtCommonHelper<THREE.PolarGridHelper> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.PolarGridHelper>) {
-        this.helperArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set radius(radius: number) {
@@ -57,9 +57,9 @@ export class NgtPolarGridHelper extends NgtCommonHelper<THREE.PolarGridHelper> {
         return THREE.PolarGridHelper;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             radius: true,
             radials: true,
             circles: true,

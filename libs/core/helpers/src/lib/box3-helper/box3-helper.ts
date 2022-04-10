@@ -25,7 +25,7 @@ export class NgtBox3Helper extends NgtCommonObjectHelper<THREE.Box3Helper> {
         v: Tail<ConstructorParameters<typeof THREE.Box3Helper>> | ''
     ) {
         if (v) {
-            this.objectHelperArgs = v;
+            this.instanceArgs = v;
         }
     }
 

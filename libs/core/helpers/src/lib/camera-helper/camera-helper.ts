@@ -25,7 +25,7 @@ export class NgtCameraHelper extends NgtCommonObjectHelper<THREE.CameraHelper> {
         v: Tail<ConstructorParameters<typeof THREE.CameraHelper>> | ''
     ) {
         if (v) {
-            this.objectHelperArgs = v;
+            this.instanceArgs = v;
         }
     }
 

@@ -24,7 +24,7 @@ export class NgtAxesHelper extends NgtCommonHelper<THREE.AxesHelper> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.AxesHelper>) {
-        this.helperArgs = v;
+        this.instanceArgs = v;
     }
 
     @Input() set size(size: number) {
@@ -35,9 +35,9 @@ export class NgtAxesHelper extends NgtCommonHelper<THREE.AxesHelper> {
         return THREE.AxesHelper;
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subInputs,
+            ...super.optionFields,
             size: true,
         };
     }
