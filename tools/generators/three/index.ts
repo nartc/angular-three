@@ -7,6 +7,7 @@ import geometriesGenerator from './geometries/geometries';
 import helpersGenerator from './helpers/helpers';
 import lightsGenerator from './lights/lights';
 import materialsGenerator from './materials/materials';
+import spritesGenerator from './sprites/sprites';
 
 /**
  *
@@ -35,6 +36,7 @@ export default async function (tree: Tree) {
         curvesGenerator(tree),
         helpersGenerator(tree),
         lightsGenerator(tree),
+        spritesGenerator(tree),
         //     // texturesGenerator(tree),
     ]);
     //

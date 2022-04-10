@@ -1,0 +1,48 @@
+// GENERATED
+import {
+    AnyConstructor,
+    NgtCommonSprite,
+    provideCommonSpriteFactory,
+} from '@angular-three/core';
+import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideCommonSpriteFactory<THREE.<%= name %>>(Ngt<%= name %>)],
+})
+export class Ngt<%= name %> extends NgtCommon<%= name %><THREE.<%= name %>> {
+    static ngAcceptInputType_args:
+        | ConstructorParameters<typeof THREE.<%= name %>>
+        | undefined;
+
+    @Input() set args(
+        v: ConstructorParameters<typeof THREE.<%= name %>>
+    ) {
+        this.instanceArgs = v;
+    }
+    <% for (const input of inputs) { %>
+    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <%= input.type %>) {
+        this.set({ <%= input.name %> });
+    }
+    <% } %>
+
+    override get spriteType(): AnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+    <% if (hasInput) { %>
+    protected override get optionFields(): Record<string, boolean> {
+        return {
+            ...super.optionFields,<% for (const input of inputs) { %>
+           <%= input.name %>: <%= input.isOptional %>,<% } %>
+        };
+    }<% } %>
+}
+
+@NgModule({
+    declarations: [Ngt<%= name %>],
+    exports: [Ngt<%= name %>],
+})
+export class Ngt<%= name %>Module {}
