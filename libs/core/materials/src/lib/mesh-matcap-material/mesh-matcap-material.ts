@@ -87,9 +87,9 @@ export class NgtMeshMatcapMaterial extends NgtCommonMaterial<
         return THREE.MeshMatcapMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             color: true,
             matcap: true,
             map: true,

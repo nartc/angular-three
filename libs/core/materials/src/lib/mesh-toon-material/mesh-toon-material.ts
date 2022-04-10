@@ -131,9 +131,9 @@ export class NgtMeshToonMaterial extends NgtCommonMaterial<
         return THREE.MeshToonMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             color: true,
             opacity: true,
             gradientMap: true,

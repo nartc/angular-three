@@ -39,9 +39,9 @@ export class NgtShadowMaterial extends NgtCommonMaterial<
         return THREE.ShadowMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             color: true,
         };
     }

@@ -79,9 +79,9 @@ export class NgtMeshNormalMaterial extends NgtCommonMaterial<
         return THREE.MeshNormalMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             bumpMap: true,
             bumpScale: true,
             normalMap: true,

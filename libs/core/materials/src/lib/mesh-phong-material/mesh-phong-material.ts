@@ -159,9 +159,9 @@ export class NgtMeshPhongMaterial extends NgtCommonMaterial<
         return THREE.MeshPhongMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             color: true,
             specular: true,
             shininess: true,

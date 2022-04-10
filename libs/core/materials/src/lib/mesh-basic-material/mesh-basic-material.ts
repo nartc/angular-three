@@ -103,9 +103,9 @@ export class NgtMeshBasicMaterial extends NgtCommonMaterial<
         return THREE.MeshBasicMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             color: true,
             opacity: true,
             map: true,

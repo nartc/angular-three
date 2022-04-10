@@ -123,9 +123,9 @@ export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<
         return THREE.MeshPhysicalMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             clearcoat: true,
             clearcoatMap: true,
             clearcoatRoughness: true,

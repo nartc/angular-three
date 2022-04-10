@@ -55,9 +55,9 @@ export class NgtLineDashedMaterial extends NgtLineBasicMaterial<
         return THREE.LineDashedMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             scale: true,
             dashSize: true,
             gapSize: true,

@@ -67,9 +67,9 @@ export class NgtMeshDistanceMaterial extends NgtCommonMaterial<
         return THREE.MeshDistanceMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             map: true,
             alphaMap: true,
             displacementMap: true,

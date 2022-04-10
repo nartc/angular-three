@@ -111,9 +111,9 @@ export class NgtMeshLambertMaterial extends NgtCommonMaterial<
         return THREE.MeshLambertMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             color: true,
             emissive: true,
             emissiveIntensity: true,

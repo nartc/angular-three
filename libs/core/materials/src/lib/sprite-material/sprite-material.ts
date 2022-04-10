@@ -55,9 +55,9 @@ export class NgtSpriteMaterial extends NgtCommonMaterial<
         return THREE.SpriteMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             color: true,
             map: true,
             alphaMap: true,

@@ -54,9 +54,9 @@ export class NgtLineBasicMaterial<
         return THREE.LineBasicMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             color: true,
             linewidth: true,
             linecap: true,

@@ -67,9 +67,9 @@ export class NgtMeshDepthMaterial extends NgtCommonMaterial<
         return THREE.MeshDepthMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             map: true,
             alphaMap: true,
             depthPacking: true,

@@ -80,9 +80,9 @@ export class NgtShaderMaterial extends NgtCommonMaterial<
         return THREE.ShaderMaterial;
     }
 
-    protected override get subParameters(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
-            ...super.subParameters,
+            ...super.optionFields,
             uniforms: true,
             vertexShader: true,
             fragmentShader: true,
