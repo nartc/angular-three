@@ -9,7 +9,10 @@ export const NGT_COMMON_SPRITE_FACTORY = new InjectionToken(
     'NgtCommonSprite factory'
 );
 
-export function provideCommonSpriteFactory<TSubSprite extends NgtCommonSprite>(
+export function provideCommonSpriteFactory<
+    TSprite extends THREE.Sprite,
+    TSubSprite extends NgtCommonSprite<TSprite> = NgtCommonSprite<TSprite>
+>(
     subSpriteType: AnyConstructor<TSubSprite>,
     factory?: (sub: TSubSprite) => THREE.Object3D
 ): Provider {
