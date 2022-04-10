@@ -24,44 +24,31 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 
-export interface Ngt<%= name %>State extends NgtInstanceState<THREE.<%= name %>> {
-    <%= propertyName %>: <%= inputType %>;
-}
-
 @Component({
     selector: 'ngt-<%= fileName %>[<%= propertyName %>]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideInstanceFactory<THREE.<%= name %>, Ngt<%= name %>State>(Ngt<%= name %>Attribute),
+        provideInstanceFactory<THREE.<%= name %>>(Ngt<%= name %>Attribute),
     ],
 })
-export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>, Ngt<%= name %>State> {
+export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
     @Input() set <%= propertyName %>(<%= propertyName %>: <%= inputType %>) {
         this.zone.runOutsideAngular(() => {
-            if (this.instance) {
-                applyProps(this.instance as unknown as NgtUnknownInstance, { <%= propertyName %> })
-            } else {
-                this.set({
-                    instance: prepare(
-                        <%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>),
-                        () => this.store.get(),
-                        this.parentInstanceFactory?.() as NgtUnknownInstance
-                    ),
-                });
-            }
+            const instance = this.prepareInstance(<%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>))
+            this.set({ instance });
         });
     }
 
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
-        private store: NgtStore
+        parentInstanceFactory: AnyFunction
     ) {
-        super({ zone, shouldAttach: true, parentInstanceFactory });
+        super({ zone, store, parentInstanceFactory });
     }
 }
 

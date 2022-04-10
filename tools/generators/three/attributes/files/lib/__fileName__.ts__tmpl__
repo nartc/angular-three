@@ -19,7 +19,7 @@ export class Ngt<%= name %> extends NgtCommonAttribute<THREE.<%= name %>> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.<%= name %>> | undefined;
 
   @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
-    this.attributeArgs = v;
+    this.instanceArgs = v;
   }
 
   override get attributeType(): AnyConstructor<THREE.<%= name %>> {
