@@ -26,7 +26,7 @@ export class Ngt<%= name %> extends NgtCommonGeometry<THREE.<%= name %>> {
         | undefined;
 
     @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
-        this.geometryArgs = v;
+        this.instanceArgs = v;
     }
 
     get geometryType(): AnyConstructor<THREE.<%= name %>> {
