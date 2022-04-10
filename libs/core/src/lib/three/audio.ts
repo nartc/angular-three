@@ -1,6 +1,10 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import { NgtObject, NgtObjectState } from '../abstracts/object';
+import {
+    NgtObject,
+    NgtObjectState,
+    NgtPreObjectInit,
+} from '../abstracts/object';
 import { tapEffect } from '../stores/component-store';
 import type { AnyConstructor } from '../types';
 
@@ -104,32 +108,34 @@ export abstract class NgtCommonAudio<
         return new this.audioType(listener);
     }
 
-    override ngOnInit() {
-        this.set({
-            buffer: null,
-            detune: 0,
-            loop: false,
-            loopStart: 0,
-            loopEnd: 0,
-            offset: 0,
-            duration: undefined,
-            playbackRate: 1,
-            isPlaying: false,
-            hasPlaybackControl: true,
-            sourceType: 'empty',
-            source: null,
-            filters: [],
-        });
-        this.effect<THREE.AudioListener>(
-            tapEffect(() => {
-                this.init();
-            })
-        )(this.select((s) => s.listener));
-        super.ngOnInit();
+    protected override get preObjectInit(): NgtPreObjectInit {
+        return (initFn) => {
+            this.set({
+                buffer: null,
+                detune: 0,
+                loop: false,
+                loopStart: 0,
+                loopEnd: 0,
+                offset: 0,
+                duration: undefined,
+                playbackRate: 1,
+                isPlaying: false,
+                hasPlaybackControl: true,
+                sourceType: 'empty',
+                source: null,
+                filters: [],
+            });
+            this.effect<THREE.AudioListener>(
+                tapEffect(() => {
+                    initFn();
+                })
+            )(this.select((s) => s.listener));
+        };
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
+            ...super.optionFields,
             autoplay: true,
             buffer: false,
             detune: false,

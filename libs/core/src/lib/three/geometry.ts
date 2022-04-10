@@ -1,17 +1,15 @@
 import { Directive, Inject, NgZone, Optional, SkipSelf } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
-import { NGT_INSTANCE_FACTORY } from '../di/instance';
+import { NGT_OBJECT_FACTORY } from '../di/object';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import type { AnyConstructor, AnyFunction, NgtUnknownInstance } from '../types';
-import { prepare } from '../utils/instance';
+import type { AnyConstructor, AnyFunction } from '../types';
 
 export interface NgtCommonGeometryState<
     TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
 > extends NgtInstanceState<TGeometry> {
     geometry: TGeometry;
-    geometryArgs: unknown[];
 }
 
 @Directive()
@@ -24,22 +22,17 @@ export abstract class NgtCommonGeometry<
         zone: NgZone,
         @Optional()
         @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
+        @Inject(NGT_OBJECT_FACTORY)
         parentInstanceFactory: AnyFunction,
-        protected store: NgtStore
+        store: NgtStore
     ) {
-        super({ zone, shouldAttach: true, parentInstanceFactory });
-        this.set({ geometryArgs: [] });
-    }
-
-    protected set geometryArgs(v: unknown | unknown[]) {
-        this.set({ geometryArgs: Array.isArray(v) ? v : [v] });
+        super({ zone, store, parentInstanceFactory });
     }
 
     override ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
-                this.init(this.select((s) => s.geometryArgs));
+                this.init(this.instanceArgs$);
             });
         });
         super.ngOnInit();
@@ -49,24 +42,12 @@ export abstract class NgtCommonGeometry<
         return this.get((s) => s.geometry);
     }
 
-    protected override destroy() {
-        if (this.geometry) {
-            this.geometry.dispose();
-        }
-        super.destroy();
-    }
-
-    private readonly init = this.effect<
-        NgtCommonGeometryState<TGeometry>['geometryArgs']
-    >(
-        tapEffect((geometryArgs) => {
-            const geometry = prepare(
-                new this.geometryType(...geometryArgs),
-                () => this.store.get(),
-                this.parentInstanceFactory?.() as NgtUnknownInstance
+    private readonly init = this.effect<unknown[]>(
+        tapEffect((instanceArgs) => {
+            const geometry = this.prepareInstance(
+                new this.geometryType(...instanceArgs),
+                'geometry'
             );
-            this.set({ geometry, instance: geometry });
-            this.emitReady();
 
             return () => {
                 geometry.dispose();

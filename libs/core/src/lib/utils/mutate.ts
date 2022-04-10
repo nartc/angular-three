@@ -37,8 +37,7 @@ function decomposePath(path: string[]): {
 }
 
 function assignEmpty(obj: Record<string, unknown>, base: string) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (!obj.hasOwnProperty(base)) {
+    if (!Object.prototype.hasOwnProperty.call(obj, base)) {
         obj[base] = {};
     }
 }

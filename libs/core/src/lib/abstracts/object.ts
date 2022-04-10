@@ -8,10 +8,8 @@ import {
     Output,
     SkipSelf,
 } from '@angular/core';
-import { Observable, of, Subscription, tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_INSTANCE_FACTORY } from '../di/instance';
-import { startWithUndefined } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import type {
     AnyFunction,
@@ -20,15 +18,14 @@ import type {
     NgtEuler,
     NgtEvent,
     NgtEventHandlers,
-    NgtInstanceInternal,
     NgtQuaternion,
     NgtRenderState,
+    NgtUnknownInstance,
     NgtVector3,
     UnknownRecord,
 } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { coerceBooleanProperty } from '../utils/coercion';
-import { prepare } from '../utils/instance';
 import { make, makeColor, makeVector3 } from '../utils/make';
 import { NgtInstance, NgtInstanceState } from './instance';
 
@@ -47,6 +44,8 @@ const supportedEvents = [
     'pointercancel',
     'wheel',
 ] as const;
+
+export type NgtPreObjectInit = ((initFn: () => void) => void) | undefined;
 
 export interface NgtObjectState<TObject extends THREE.Object3D = THREE.Object3D>
     extends NgtInstanceState<TObject> {
@@ -68,7 +67,6 @@ export interface NgtObjectState<TObject extends THREE.Object3D = THREE.Object3D>
     dispose?: (() => void) | null;
     raycast?: THREE.Object3D['raycast'] | null;
     appendTo?: () => THREE.Object3D;
-    [prop: string]: any;
 }
 
 @Directive()
@@ -172,70 +170,27 @@ export abstract class NgtObject<
     @Output() pointercancel = new EventEmitter<NgtEvent<PointerEvent>>();
     @Output() wheel = new EventEmitter<NgtEvent<WheelEvent>>();
 
-    @Output() animateReady = new EventEmitter<{
+    @Output() appended = new EventEmitter<TObject>();
+    @Output() beforeRender = new EventEmitter<{
         state: NgtRenderState;
         object: TObject;
     }>();
-
-    private readonly inputs$ = this.select(
-        this.select((s) => s.name),
-        this.select((s) => s.position),
-        this.select((s) => s.rotation),
-        this.select((s) => s.quaternion),
-        this.select((s) => s.scale),
-        this.select((s) => s.color),
-        this.select((s) => s.castShadow),
-        this.select((s) => s.receiveShadow),
-        this.select((s) => s.visible),
-        this.select((s) => s.matrixAutoUpdate),
-        this.select((s) => s.userData),
-        this.select((s) => s.dispose).pipe(startWithUndefined()),
-        this.select((s) => s.raycast).pipe(startWithUndefined()),
-        (
-            name,
-            position,
-            rotation,
-            quaternion,
-            scale,
-            color,
-            castShadow,
-            receiveShadow,
-            visible,
-            matrixAutoUpdate,
-            userData,
-            dispose,
-            raycast
-        ) => ({
-            name,
-            position,
-            rotation,
-            quaternion,
-            scale,
-            color,
-            castShadow,
-            receiveShadow,
-            visible,
-            matrixAutoUpdate,
-            userData,
-            dispose,
-            raycast,
-        })
-    );
-
-    private initSubscription?: Subscription;
-    private inputChangesSubscription?: Subscription;
+    /**
+     * @deprecated Use {@link beforeRender} instead
+     */
+    @Output() animateReady = this.beforeRender;
 
     protected abstract objectInitFn(): TObject;
 
     constructor(
         zone: NgZone,
-        protected store: NgtStore,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_FACTORY)
         protected parentObjectFactory: AnyFunction
     ) {
-        super({ zone, parentInstanceFactory: parentObjectFactory });
+        super({ zone, store, parentInstanceFactory: parentObjectFactory });
         this.set({
             name: '',
             position: new THREE.Vector3(),
@@ -258,161 +213,129 @@ export abstract class NgtObject<
         return this.get((s) => s.object3d) as TObject;
     }
 
-    init(reconstruct = false) {
+    override ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            if (this.initSubscription) {
-                this.initSubscription.unsubscribe();
-            }
-
-            this.initSubscription = this.onCanvasReady(
-                this.store.ready$,
-                () => {
-                    if (reconstruct !== this.reconstruct) {
-                        reconstruct = this.reconstruct;
-                    }
-
-                    if (this.object3d && reconstruct) {
-                        this.switch();
-                    } else {
-                        const object = prepare(
-                            this.objectInitFn(),
-                            () => this.store.get(),
-                            this.parentObjectFactory?.()
-                        );
-                        this.set({
-                            object3d: object,
-                            instance: object,
-                        } as unknown as Partial<TObjectState>);
-                    }
-
-                    if (this.object3d) {
-                        if (this.inputChangesSubscription) {
-                            this.inputChangesSubscription.unsubscribe();
-                        }
-
-                        this.inputChangesSubscription = this.applyCustomProps(
-                            this.select(
-                                this.inputs$,
-                                this.subInputs$,
-                                (objectInputs, subInputs) => ({
-                                    objectInputs,
-                                    subInputs,
-                                })
-                            )
-                        );
-
-                        const observedEvents = supportedEvents.reduce(
-                            (result, event) => {
-                                const controllerEvent = this[event].observed
-                                    ? this[event]
-                                    : null;
-                                if (controllerEvent) {
-                                    result.handlers[event] =
-                                        this.eventNameToHandler(
-                                            controllerEvent as EventEmitter<
-                                                NgtEvent<any>
-                                            >
-                                        );
-                                    result.eventCount += 1;
-                                }
-                                return result;
-                            },
-                            { handlers: {}, eventCount: 0 } as {
-                                handlers: NgtEventHandlers;
-                                eventCount: number;
-                            }
-                        );
-
-                        // patch __ngt__ with events
-                        applyProps(
-                            this.__ngt__ as any,
-                            {
-                                handlers: observedEvents.handlers,
-                                eventCount: observedEvents.eventCount,
-                            } as Partial<NgtInstanceInternal>
-                        );
-
-                        // add as an interaction if there are events observed
-                        if (observedEvents.eventCount > 0) {
-                            this.store.addInteraction(this.object3d);
-                        }
-
-                        // append to parent
-                        if (
-                            this.object3d.isObject3D &&
-                            this.get((s) => s.appendMode) !== 'none'
-                        ) {
-                            // appendToParent is late a frame due to appendTo
-                            // only emit the object is ready after it's been added to the scene
-                            this.appendToParent();
-                        } else {
-                            // the object is ready
-                            this.emitReady();
-                        }
-
-                        // setup animateReady
-                        if (this.animateReady.observed) {
-                            this.store.register({
-                                obj: () => this.object3d,
-                                callback: (state) => {
-                                    this.animateReady.emit({
-                                        state,
-                                        object: this.object3d,
-                                    });
-                                },
-                                priority: this.get((s) => s.priority),
-                            });
-                        }
-                    }
+            this.onCanvasReady(this.store.ready$, () => {
+                if (this.preObjectInit) {
+                    this.preObjectInit(() => this.init());
+                } else {
+                    this.init();
                 }
-            );
+            });
         });
+        super.ngOnInit();
     }
 
+    /**
+     * Sub-classes can use this function to add additional logic BEFORE
+     * initializing the object3d. The actual `initFn` is passed in so
+     * the implementor needs to call this initFn() manually.
+     *
+     * This function is also called outside of Angular Zone
+     * @protected
+     */
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    protected postApplyCustomProps(): void {}
-
-    protected get subInputs(): Record<string, boolean> {
-        return {};
+    protected get preObjectInit(): NgtPreObjectInit {
+        return undefined;
     }
 
-    private get subInputs$(): Observable<UnknownRecord> {
-        const subInputEntries = Object.entries(this.subInputs);
-        if (subInputEntries.length === 0) return of({});
-        return this.select(
-            ...subInputEntries.map(([inputKey, shouldStartWithUndefined]) => {
-                const subInput$ = this.select(
-                    (s) => (s as UnknownRecord)[inputKey]
-                );
-                if (shouldStartWithUndefined)
-                    return subInput$.pipe(startWithUndefined());
-                return subInput$;
-            }),
-            (...args: any[]) =>
-                args.reduce((record, arg, index) => {
-                    record[subInputEntries[index][0]] = arg;
-                    return record;
-                }, {} as UnknownRecord)
-        );
-    }
+    private init(reconstruct = false) {
+        if (reconstruct !== this.reconstruct) {
+            reconstruct = this.reconstruct;
+        }
 
-    protected override destroy() {
-        if (this.initSubscription) {
-            this.initSubscription.unsubscribe();
+        if (this.object3d && reconstruct) {
+            this.switch();
+        } else {
+            this.prepareInstance(this.objectInitFn(), 'object3d');
         }
 
         if (this.object3d) {
-            this.store.unregister(this.object3d.uuid);
+            const observedEvents = supportedEvents.reduce(
+                (result, event) => {
+                    const controllerEvent = this[event].observed
+                        ? this[event]
+                        : null;
+                    if (controllerEvent) {
+                        result.handlers[event] = this.eventNameToHandler(
+                            controllerEvent as EventEmitter<NgtEvent<any>>
+                        );
+                        result.eventCount += 1;
+                    }
+                    return result;
+                },
+                { handlers: {}, eventCount: 0 } as {
+                    handlers: NgtEventHandlers;
+                    eventCount: number;
+                }
+            );
 
+            // patch __ngt__ with events
+            applyProps(this.__ngt__ as unknown as NgtUnknownInstance, {
+                handlers: observedEvents.handlers,
+                eventCount: observedEvents.eventCount,
+            });
+
+            // add as an interaction if there are events observed
+            if (observedEvents.eventCount > 0) {
+                this.store.addInteraction(this.object3d);
+            }
+
+            // append to parent
+            if (
+                this.object3d.isObject3D &&
+                this.get((s) => s.appendMode) !== 'none'
+            ) {
+                // appendToParent is late a frame due to appendTo
+                // only emit the object is ready after it's been added to the scene
+                this.appendToParent();
+            }
+
+            // setup beforeRender
+            if (this.beforeRender.observed) {
+                this.store.registerBeforeRender({
+                    obj: () => this.object3d,
+                    callback: (state) => {
+                        this.beforeRender.emit({
+                            state,
+                            object: this.object3d,
+                        });
+                    },
+                    priority: this.get((s) => s.priority),
+                });
+            }
+        }
+    }
+
+    protected override get optionFields(): Record<string, boolean> {
+        return {
+            name: false,
+            position: false,
+            rotation: false,
+            quaternion: false,
+            scale: false,
+            color: false,
+            castShadow: false,
+            receiveShadow: false,
+            visible: false,
+            matrixAutoUpdate: false,
+            userData: false,
+            dispose: true,
+            raycast: true,
+        };
+    }
+
+    protected override destroy() {
+        if (this.object3d) {
+            // remove beforeRender callback
+            this.store.unregisterBeforeRender(this.object3d.uuid);
+
+            // remove interaction
             if (this.__ngt__.eventCount > 0) {
                 this.store.removeInteraction(this.object3d.uuid);
             }
 
             this.remove();
-
-            if (this.object3d.clear) {
-                this.object3d.clear();
-            }
         }
         super.destroy();
     }
@@ -423,7 +346,7 @@ export abstract class NgtObject<
             const appendTo = appendToFactory?.();
             if (appendTo) {
                 appendTo.add(this.object3d);
-                this.emitReady();
+                this.appended.emit(this.object3d);
                 return;
             }
 
@@ -431,13 +354,13 @@ export abstract class NgtObject<
 
             if (appendMode === 'root') {
                 this.addToScene();
-                this.emitReady();
+                this.appended.emit(this.object3d);
                 return;
             }
 
             if (appendMode === 'immediate') {
                 this.addToParent();
-                this.emitReady();
+                this.appended.emit(this.object3d);
             }
         });
     }
@@ -464,8 +387,7 @@ export abstract class NgtObject<
     }
 
     private remove() {
-        const appendMode = this.get((s) => s.appendMode);
-        const appendToFactory = this.get((s) => s.appendTo);
+        const { appendMode, appendToFactory } = this.get();
         const appendTo = appendToFactory?.();
         if (appendTo) {
             appendTo.remove(this.object3d);
@@ -484,11 +406,7 @@ export abstract class NgtObject<
     }
 
     private switch() {
-        const newObject3d = prepare(
-            this.objectInitFn(),
-            () => this.store.get(),
-            this.parentObjectFactory?.()
-        );
+        const newObject3d = this.prepareInstance(this.objectInitFn());
         if (this.object3d.children) {
             this.object3d.traverse((object) => {
                 if (
@@ -530,62 +448,4 @@ export abstract class NgtObject<
             });
         };
     }
-
-    private readonly applyCustomProps = this.effect<{
-        objectInputs: UnknownRecord;
-        subInputs: UnknownRecord;
-    }>(
-        tap(({ subInputs }) => {
-            this.zone.runOutsideAngular(() => {
-                if (this.object3d) {
-                    const state = this.get();
-                    const customProps = {} as UnknownRecord;
-
-                    customProps['castShadow'] = state.castShadow;
-                    customProps['receiveShadow'] = state.receiveShadow;
-                    customProps['visible'] = state.visible;
-                    customProps['matrixAutoUpdate'] = state.matrixAutoUpdate;
-
-                    if (state.name) {
-                        customProps['name'] = state.name;
-                    }
-                    if (state.position) {
-                        customProps['position'] = state.position;
-                    }
-                    if (state.rotation) {
-                        customProps['rotation'] = state.rotation;
-                    } else if (state.quaternion) {
-                        customProps['quaternion'] = state.quaternion;
-                    }
-                    if (state.scale) {
-                        customProps['scale'] = state.scale;
-                    }
-                    if (state.userData) {
-                        customProps['userData'] = state.userData;
-                    }
-                    if (state.color) {
-                        customProps['color'] = state.color;
-                    }
-                    if (state.dispose) {
-                        customProps['dispose'] = state.dispose;
-                    }
-                    if (state.raycast) {
-                        customProps['raycast'] = state.raycast;
-                    }
-
-                    for (const subInput of Object.keys(subInputs)) {
-                        if (
-                            state[subInput as keyof typeof state] != undefined
-                        ) {
-                            customProps[subInput] =
-                                state[subInput as keyof typeof state];
-                        }
-                    }
-
-                    applyProps(this.object3d as any, customProps);
-                    this.object3d.updateMatrix?.();
-                }
-            });
-        })
-    );
 }

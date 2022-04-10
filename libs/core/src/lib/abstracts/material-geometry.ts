@@ -10,7 +10,6 @@ export interface NgtMaterialGeometryState<
     geometry: THREE.BufferGeometry;
     morphTargetInfluences?: number[];
     morphTargetDictionary?: Record<string, number>;
-    [propKey: string]: any;
 }
 
 @Directive()
@@ -41,55 +40,41 @@ export abstract class NgtMaterialGeometry<
     abstract get objectType(): AnyConstructor<TMaterialGeometryObject>;
 
     protected override objectInitFn(): TMaterialGeometryObject {
-        const props = this.get();
+        const state = this.get();
 
         // this is the additional arguments to pass into the object constructor
         // eg: InstancedMesh has "count" -> objectArgs = [count]
         const objectArgs = this.argsKeys.reduce((args, argKey) => {
-            args.push(props[argKey]);
+            args.push(state[argKey]);
             return args;
         }, [] as unknown[]);
 
         const object = new this.objectType(
-            props.geometry,
-            props.material,
+            state.geometry,
+            state.material,
             ...objectArgs
         );
 
-        if (props.morphTargetDictionary && 'morphTargetDictionary' in object) {
+        if (state.morphTargetDictionary && 'morphTargetDictionary' in object) {
             (object as unknown as UnknownRecord)['morphTargetDictionary'] =
-                props.morphTargetDictionary;
+                state.morphTargetDictionary;
         }
 
-        if (props.morphTargetInfluences && 'morphTargetInfluences' in object) {
+        if (state.morphTargetInfluences && 'morphTargetInfluences' in object) {
             (object as unknown as UnknownRecord)['morphTargetInfluences'] =
-                props.morphTargetInfluences;
-        }
-
-        if (this.postInit) {
-            this.postInit();
+                state.morphTargetInfluences;
         }
 
         return object;
     }
 
-    override ngOnInit() {
-        this.init();
-        super.ngOnInit();
-    }
-
-    /**
-     * to run after object has been initialized
-     */
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    protected postInit(): void {}
-
     protected get argsKeys(): string[] {
         return [];
     }
 
-    protected override get subInputs(): Record<string, boolean> {
+    protected override get optionFields(): Record<string, boolean> {
         return {
+            ...super.optionFields,
             material: true,
             geometry: true,
             morphTargetInfluences: true,

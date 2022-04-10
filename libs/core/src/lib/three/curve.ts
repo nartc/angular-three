@@ -11,14 +11,12 @@ import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { NGT_INSTANCE_FACTORY } from '../di/instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import type { AnyConstructor, AnyFunction, NgtUnknownInstance } from '../types';
-import { prepare } from '../utils/instance';
+import type { AnyConstructor, AnyFunction } from '../types';
 
 export interface NgtCommonCurveState<
     TCurve extends THREE.Curve<THREE.Vector> = THREE.Curve<THREE.Vector>
 > extends NgtInstanceState<TCurve> {
     curve: TCurve;
-    curveArgs: unknown[];
     arcLengthDivisions?: number;
 }
 
@@ -32,26 +30,21 @@ export abstract class NgtCommonCurve<
         this.set({ arcLengthDivisions });
     }
 
-    protected set curveArgs(v: unknown | unknown[]) {
-        this.set({ curveArgs: Array.isArray(v) ? v : [v] });
-    }
-
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
-        protected store: NgtStore
+        parentInstanceFactory: AnyFunction
     ) {
-        super({ zone, shouldAttach: true, parentInstanceFactory });
-        this.set({ curveArgs: [] });
+        super({ zone, store, parentInstanceFactory });
     }
 
     override ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
-                this.init(this.select((s) => s.curveArgs));
+                this.init(this.instanceArgs$);
             });
         });
         super.ngOnInit();
@@ -61,23 +54,16 @@ export abstract class NgtCommonCurve<
         return this.get((s) => s.curve);
     }
 
-    private readonly init = this.effect<
-        NgtCommonCurveState<TCurve>['curveArgs']
-    >(
-        tapEffect((curveArgs) => {
-            const curve = prepare(
-                new this.curveType(...curveArgs),
-                () => this.store.get(),
-                this.parentInstanceFactory?.() as NgtUnknownInstance
-            );
+    protected override postPrepare(curve: TCurve) {
+        const arcLengthDivisions = this.get((s) => s.arcLengthDivisions);
+        if (arcLengthDivisions != undefined) {
+            curve.arcLengthDivisions = arcLengthDivisions;
+        }
+    }
 
-            const arcLengthDivisions = this.get((s) => s.arcLengthDivisions);
-            if (arcLengthDivisions != undefined) {
-                curve.arcLengthDivisions = arcLengthDivisions;
-            }
-
-            this.set({ curve, instance: curve });
-            this.emitReady();
+    private readonly init = this.effect<unknown[]>(
+        tapEffect((instanceArgs) => {
+            this.prepareInstance(new this.curveType(...instanceArgs), 'curve');
         })
     );
 }

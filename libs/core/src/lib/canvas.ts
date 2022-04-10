@@ -13,7 +13,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
-import { provideCanvasInstanceFactory } from './di/instance';
+import { provideCanvasInstanceFactory } from './di/object';
 import { NgtResize } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore } from './stores/store';

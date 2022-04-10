@@ -24,12 +24,7 @@ export abstract class NgtCommonSprite<
         return new this.spriteType(material);
     }
 
-    override ngOnInit() {
-        this.init();
-        super.ngOnInit();
-    }
-
-    protected override get subInputs(): Record<string, boolean> {
-        return { material: true };
+    protected override get optionFields(): Record<string, boolean> {
+        return { ...super.optionFields, material: true };
     }
 }

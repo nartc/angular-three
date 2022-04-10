@@ -5,13 +5,11 @@ import { NGT_OBJECT_FACTORY } from '../di/object';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { AnyConstructor, AnyFunction } from '../types';
-import { prepare } from '../utils/instance';
 
 export interface NgtCommonObjectHelperState<
     TObjectHelper extends THREE.Object3D
 > extends NgtInstanceState<TObjectHelper> {
     objectHelper: TObjectHelper;
-    objectHelperArgs: unknown[];
 }
 
 @Directive()
@@ -23,23 +21,18 @@ export abstract class NgtCommonObjectHelper<
 > {
     abstract get objectHelperType(): AnyConstructor<TObjectHelper>;
 
-    protected set objectHelperArgs(v: unknown | unknown[]) {
-        this.set({ objectHelperArgs: Array.isArray(v) ? v : [v] });
-    }
-
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @Inject(NGT_OBJECT_FACTORY)
-        protected parentObjectFactory: AnyFunction,
-        protected store: NgtStore
+        parentInstanceFactory: AnyFunction
     ) {
         super({
             zone,
-            shouldAttach: false,
-            parentInstanceFactory: parentObjectFactory,
+            store,
+            parentInstanceFactory,
         });
-        this.set({ objectHelperArgs: [] });
     }
 
     get objectHelper(): TObjectHelper {
@@ -49,41 +42,29 @@ export abstract class NgtCommonObjectHelper<
     override ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
-                this.init(this.select((s) => s.objectHelperArgs));
+                this.init(this.instanceArgs$);
             });
         });
         super.ngOnInit();
     }
 
-    protected override destroy() {
-        if (this.objectHelper) {
-            this.objectHelper.clear();
-        }
-        super.destroy();
-    }
-
-    private readonly init = this.effect<
-        NgtCommonObjectHelperState<TObjectHelper>['objectHelperArgs']
-    >(
-        tapEffect((objectHelperArgs) => {
-            const parentObject = this.parentObjectFactory?.();
+    private readonly init = this.effect<unknown[]>(
+        tapEffect((instanceArgs) => {
+            const parentObject = this.parentInstanceFactory?.();
             if (!parentObject) {
                 console.info('Parent is not an object3d');
                 return;
             }
 
-            const objectHelper = prepare(
-                new this.objectHelperType(parentObject, ...objectHelperArgs),
-                () => this.store.get(),
-                parentObject
+            const objectHelper = this.prepareInstance(
+                new this.objectHelperType(parentObject, ...instanceArgs),
+                'objectHelper'
             );
-            this.set({ objectHelper, instance: objectHelper });
-            this.emitReady();
 
             const scene = this.store.get((s) => s.scene);
             if (objectHelper && scene) {
                 scene.add(objectHelper);
-                const animationUuid = this.store.register({
+                const animationUuid = this.store.registerBeforeRender({
                     callback: () => {
                         if (objectHelper) {
                             (
@@ -98,7 +79,7 @@ export abstract class NgtCommonObjectHelper<
                 return () => {
                     if (objectHelper && scene) {
                         scene.remove(objectHelper);
-                        this.store.unregister(animationUuid);
+                        this.store.unregisterBeforeRender(animationUuid);
                     }
                 };
             }

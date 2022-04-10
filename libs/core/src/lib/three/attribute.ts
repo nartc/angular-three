@@ -4,8 +4,7 @@ import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { NGT_INSTANCE_FACTORY } from '../di/instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import { AnyConstructor, AnyFunction, NgtUnknownInstance } from '../types';
-import { prepare } from '../utils/instance';
+import { AnyConstructor, AnyFunction } from '../types';
 
 export interface NgtCommonAttributeState<
     TAttribute extends
@@ -13,7 +12,6 @@ export interface NgtCommonAttributeState<
         | THREE.InterleavedBufferAttribute = THREE.BufferAttribute
 > extends NgtInstanceState<TAttribute> {
     attribute: TAttribute;
-    attributeArgs: unknown[];
 }
 
 @Directive()
@@ -24,20 +22,15 @@ export abstract class NgtCommonAttribute<
 > extends NgtInstance<TAttribute, NgtCommonAttributeState<TAttribute>> {
     abstract get attributeType(): AnyConstructor<TAttribute>;
 
-    protected set attributeArgs(v: unknown | unknown[]) {
-        this.set({ attributeArgs: Array.isArray(v) ? v : [v] });
-    }
-
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
-        protected store: NgtStore
+        parentInstanceFactory: AnyFunction
     ) {
-        super({ zone, shouldAttach: true, parentInstanceFactory });
-        this.set({ attributeArgs: [] });
+        super({ zone, store, parentInstanceFactory });
     }
 
     get attribute(): TAttribute {
@@ -46,24 +39,28 @@ export abstract class NgtCommonAttribute<
 
     override ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            this.onCanvasReady(this.store.ready$, () => {
-                this.init(this.select((s) => s.attributeArgs));
-            });
+            this.onCanvasReady(
+                this.store.ready$,
+                () => {
+                    const initSub = this.init(this.instanceArgs$);
+                    return () => {
+                        if (initSub && initSub.unsubscribe) {
+                            initSub.unsubscribe();
+                        }
+                    };
+                },
+                true
+            );
         });
         super.ngOnInit();
     }
 
-    private readonly init = this.effect<
-        NgtCommonAttributeState<TAttribute>['attributeArgs']
-    >(
-        tapEffect((attributeArgs) => {
-            const attribute = prepare(
-                new this.attributeType(...attributeArgs),
-                () => this.store.get(),
-                this.parentInstanceFactory?.() as NgtUnknownInstance
+    private readonly init = this.effect<unknown[]>(
+        tapEffect((instanceArgs) => {
+            this.prepareInstance(
+                new this.attributeType(...instanceArgs),
+                'attribute'
             );
-            this.set({ attribute, instance: attribute });
-            this.emitReady();
         })
     );
 }

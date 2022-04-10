@@ -10,16 +10,10 @@ import { Observable, of, tap } from 'rxjs';
 import * as THREE from 'three';
 import { Plane } from 'three/src/math/Plane';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
-import { NGT_INSTANCE_FACTORY } from '../di/instance';
+import { NGT_OBJECT_FACTORY } from '../di/object';
 import { startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import type {
-    AnyConstructor,
-    AnyFunction,
-    NgtUnknownInstance,
-    UnknownRecord,
-} from '../types';
-import { prepare } from '../utils/instance';
+import type { AnyConstructor, AnyFunction, UnknownRecord } from '../types';
 
 export interface NgtCommonMaterialState<
     TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
@@ -69,7 +63,6 @@ export interface NgtCommonMaterialState<
     stencilZFail?: THREE.StencilOp;
     stencilZPass?: THREE.StencilOp;
     userData?: any;
-    [prop: string]: any;
 }
 
 @Directive()
@@ -269,13 +262,13 @@ export abstract class NgtCommonMaterial<
 
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
-        protected store: NgtStore
+        @Inject(NGT_OBJECT_FACTORY)
+        parentInstanceFactory: AnyFunction
     ) {
-        super({ zone, shouldAttach: true, parentInstanceFactory });
+        super({ zone, store, parentInstanceFactory });
         this.set({ materialParameters: {} as TMaterialParameters });
     }
 
@@ -307,24 +300,12 @@ export abstract class NgtCommonMaterial<
         super.ngOnInit();
     }
 
-    protected override destroy() {
-        if (this.material) {
-            this.material.dispose();
-        }
-        super.destroy();
-    }
-
     private readonly init = this.effect<void>(
         tapEffect(() => {
-            const material = prepare(
+            const material = this.prepareInstance(
                 new this.materialType(),
-                () => this.store.get(),
-                this.parentInstanceFactory?.() as NgtUnknownInstance
+                'material'
             );
-
-            this.set({ material, instance: material });
-            this.emitReady();
-
             return () => {
                 material.dispose();
             };
@@ -357,30 +338,78 @@ export abstract class NgtCommonMaterial<
         })
     );
 
-    protected get subParameters(): Record<string, boolean> {
-        return {};
-    }
+    // TODO: put these back after [parameters] is removed. Right now, Material needs to handle their own update options logic
+    // protected override get optionFields(): Record<string, boolean> {
+    //     return { ...super.optionFields,
+    //         alphaTest: true,
+    //         alphaToCoverage: true,
+    //         blendDst: true,
+    //         blendDstAlpha: true,
+    //         blendEquation: true,
+    //         blendEquationAlpha: true,
+    //         blending: true,
+    //         blendSrc: true,
+    //         blendSrcAlpha: true,
+    //         clipIntersection: true,
+    //         clippingPlanes: true,
+    //         clipShadows: true,
+    //         colorWrite: true,
+    //         defines: true,
+    //         depthFunc: true,
+    //         depthTest: true,
+    //         depthWrite: true,
+    //         fog: true,
+    //         name: true,
+    //         opacity: true,
+    //         polygonOffset: true,
+    //         polygonOffsetFactor: true,
+    //         polygonOffsetUnits: true,
+    //         precision: true,
+    //         premultipliedAlpha: true,
+    //         dithering: true,
+    //         side: true,
+    //         shadowSide: true,
+    //         toneMapped: true,
+    //         transparent: true,
+    //         vertexColors: true,
+    //         visible: true,
+    //         format: true,
+    //         stencilWrite: true,
+    //         stencilFunc: true,
+    //         stencilRef: true,
+    //         stencilWriteMask: true,
+    //         stencilFuncMask: true,
+    //         stencilFail: true,
+    //         stencilZFail: true,
+    //         stencilZPass: true,
+    //         userData: true,
+    //     };
+    // }
 
+    // TODO: remove when [parameters] is removed
     private get subParameters$(): Observable<UnknownRecord> {
-        const subInputEntries = Object.entries(this.subParameters);
-        if (subInputEntries.length === 0) return of({});
+        const optionFieldEntries = Object.entries(this.optionFields);
+        if (optionFieldEntries.length === 0) return of({});
         return this.select(
-            ...subInputEntries.map(([inputKey, shouldStartWithUndefined]) => {
-                const subInput$ = this.select(
-                    (s) => (s as unknown as UnknownRecord)[inputKey]
-                );
-                if (shouldStartWithUndefined)
-                    return subInput$.pipe(startWithUndefined());
-                return subInput$;
-            }),
+            ...optionFieldEntries.map(
+                ([inputKey, shouldStartWithUndefined]) => {
+                    const option$ = this.select(
+                        (s) => (s as unknown as UnknownRecord)[inputKey]
+                    );
+                    if (shouldStartWithUndefined)
+                        return option$.pipe(startWithUndefined());
+                    return option$;
+                }
+            ),
             (...args: any[]) =>
                 args.reduce((record, arg, index) => {
-                    record[subInputEntries[index][0]] = arg;
+                    record[optionFieldEntries[index][0]] = arg;
                     return record;
                 }, {} as UnknownRecord)
         );
     }
 
+    // TODO: remove when [parameters] is removed
     protected readonly parameters$ = this.select(
         this.select((s) => s.alphaTest).pipe(startWithUndefined()),
         this.select((s) => s.alphaToCoverage).pipe(startWithUndefined()),
