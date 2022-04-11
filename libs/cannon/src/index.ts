@@ -1,16 +1,70 @@
 export * from './lib/physics';
 export * from './lib/physics.store';
 
-export * from './lib/models/api';
-export * from './lib/models/body';
-export * from './lib/models/types';
-export * from './lib/models/constraints';
-export * from './lib/models/physics-state';
-export * from './lib/models/subscription-names';
-export * from './lib/models/messages';
-export * from './lib/models/prop-value';
-export * from './lib/models/atomic';
-export * from './lib/models/vector';
-
-export { default as propsToBody } from './lib/utils/props-to-body';
-export * from './lib/utils/worker';
+export type {
+    AtomicName,
+    AtomicProps,
+    BodyProps,
+    BodyPropsArgsRequired,
+    BodyShapeType,
+    BoxProps,
+    Broadphase,
+    Buffers,
+    CannonMessage,
+    CannonMessageBody,
+    CannonMessageMap,
+    CannonMessageProps,
+    CannonWebWorker,
+    CollideBeginEvent,
+    CollideEndEvent,
+    CollideEvent,
+    CompoundBodyProps,
+    ConeTwistConstraintOpts,
+    ConstraintOptns,
+    ConstraintTypes,
+    ConvexPolyhedronArgs,
+    ConvexPolyhedronProps,
+    CylinderArgs,
+    CylinderProps,
+    DistanceConstraintOpts,
+    HeightfieldArgs,
+    HeightfieldProps,
+    HingeConstraintOpts,
+    IncomingWorkerMessage,
+    LockConstraintOpts,
+    Observation,
+    ParticleProps,
+    PlaneProps,
+    PointToPointConstraintOpts,
+    PropValue,
+    Quad,
+    RayhitEvent,
+    RayMode,
+    RayOptions,
+    Refs,
+    SetOpName,
+    ShapeType,
+    Solver,
+    SphereArgs,
+    SphereProps,
+    SpringOptns,
+    StepProps,
+    Subscription,
+    SubscriptionName,
+    Subscriptions,
+    SubscriptionTarget,
+    TrimeshArgs,
+    TrimeshProps,
+    Triplet,
+    VectorName,
+    VectorProps,
+    WheelInfoOptions,
+    WorkerCollideBeginEvent,
+    WorkerCollideEndEvent,
+    WorkerCollideEvent,
+    WorkerEventMessage,
+    WorkerFrameMessage,
+    WorkerRayhitEvent,
+    WorldPropName,
+    WorldProps,
+} from '@pmndrs/cannon-worker-api';

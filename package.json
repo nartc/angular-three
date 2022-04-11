@@ -16,8 +16,8 @@
   },
   "private": true,
   "dependencies": {
-    "tslib": "^2.3.1",
-    "@storybook/core-server": "6.4.21"
+    "@storybook/core-server": "6.4.21",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "13.3.2",
@@ -49,6 +49,7 @@
     "@nrwl/nx-plugin": "13.10.1",
     "@nrwl/storybook": "13.10.1",
     "@nrwl/workspace": "13.10.1",
+    "@pmndrs/cannon-worker-api": "~2.1.0",
     "@release-it/bumper": "3.0.1",
     "@release-it/conventional-changelog": "4.2.2",
     "@storybook/addon-essentials": "~6.4.21",
@@ -97,4 +98,3 @@
     }
   }
 }
-

@@ -1,8 +1,11 @@
-import type { NgtTriplet } from '@angular-three/core';
+import type { NgtTriple } from '@angular-three/core';
 import { Directive, Input, NgModule, OnInit } from '@angular/core';
-import type { Broadphase } from './models/broadphase';
-import type { DefaultContactMaterial } from './models/default-contact-material';
-import type { Solver } from './models/solver';
+import type {
+    Broadphase,
+    CannonWorkerProps,
+    ContactMaterialOptions,
+    Solver,
+} from '@pmndrs/cannon-worker-api';
 import { NgtPhysicsStore } from './physics.store';
 
 @Directive({
@@ -23,8 +26,8 @@ export class NgtPhysics implements OnInit {
         this.physicsStore.set({ tolerance });
     }
 
-    @Input() set step(step: number) {
-        this.physicsStore.set({ step });
+    @Input() set stepSize(stepSize: number) {
+        this.physicsStore.set({ stepSize });
     }
 
     @Input() set iterations(iterations: number) {
@@ -39,7 +42,7 @@ export class NgtPhysics implements OnInit {
         this.physicsStore.set({ broadphase });
     }
 
-    @Input() set gravity(gravity: NgtTriplet) {
+    @Input() set gravity(gravity: NgtTriple) {
         this.physicsStore.set({ gravity });
     }
 
@@ -55,12 +58,12 @@ export class NgtPhysics implements OnInit {
         this.physicsStore.set({ solver });
     }
 
-    @Input() set axisIndex(axisIndex: number) {
+    @Input() set axisIndex(axisIndex: CannonWorkerProps['axisIndex']) {
         this.physicsStore.set({ axisIndex });
     }
 
     @Input() set defaultContactMaterial(
-        defaultContactMaterial: DefaultContactMaterial
+        defaultContactMaterial: ContactMaterialOptions
     ) {
         this.physicsStore.set({ defaultContactMaterial });
     }

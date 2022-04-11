@@ -30,6 +30,7 @@ specifiers:
   '@nrwl/nx-plugin': 13.10.1
   '@nrwl/storybook': 13.10.1
   '@nrwl/workspace': 13.10.1
+  '@pmndrs/cannon-worker-api': 2.1.0
   '@release-it/bumper': 3.0.1
   '@release-it/conventional-changelog': 4.2.2
   '@storybook/addon-essentials': ~6.4.21
@@ -107,6 +108,7 @@ devDependencies:
   '@nrwl/nx-plugin': 13.10.1_f11458f3b5a9aac7eb7b6e83671a32b3
   '@nrwl/storybook': 13.10.1_f11458f3b5a9aac7eb7b6e83671a32b3
   '@nrwl/workspace': 13.10.1_f11458f3b5a9aac7eb7b6e83671a32b3
+  '@pmndrs/cannon-worker-api': 2.1.0_three@0.139.2
   '@release-it/bumper': 3.0.1_release-it@14.14.1
   '@release-it/conventional-changelog': 4.2.2_release-it@14.14.1
   '@storybook/addon-essentials': 6.4.21_dded7d174ff9fe06afa22e57020a20df
@@ -4248,6 +4250,14 @@ packages:
     dependencies:
       esquery: 1.4.0
       typescript: 4.6.3
+    dev: true
+
+  /@pmndrs/cannon-worker-api/2.1.0_three@0.139.2:
+    resolution: {integrity: sha512-sXqDYEWfY99LYwnHcr3nPeTSqkXii2MBFG2O2Yv/+PIy63tiBJz5CIijkPr1+dmLV2YGSQjSzQFcaTNFMcOcRA==}
+    peerDependencies:
+      three: '>=0.139'
+    dependencies:
+      three: 0.139.2
     dev: true
 
   /@popperjs/core/2.11.5:
