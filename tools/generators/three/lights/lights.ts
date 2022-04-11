@@ -87,7 +87,7 @@ export default async function lightsGenerator(tree: Tree): Promise<string[]> {
                                 const parameterName =
                                     parameter.name.getText(sourceFile);
                                 if (
-                                    ['intensity', 'color'].includes(
+                                    ['intensity', 'color', 'shadow'].includes(
                                         parameterName
                                     )
                                 ) {
@@ -106,6 +106,7 @@ export default async function lightsGenerator(tree: Tree): Promise<string[]> {
                                     'type',
                                     'color',
                                     'intensity',
+                                    'shadow',
                                     `is${nodeName}`,
                                 ].includes(memberName)
                             ) {
