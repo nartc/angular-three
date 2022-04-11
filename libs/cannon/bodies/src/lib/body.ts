@@ -1,7 +1,12 @@
 import type { CannonEvents } from '@angular-three/cannon';
 import { NgtPhysicsStore } from '@angular-three/cannon';
 import { NgtCannonDebug } from '@angular-three/cannon/debug';
-import type { AnyFunction, NgtQuadruple, NgtTriple } from '@angular-three/core';
+import type {
+    AnyConstructor,
+    AnyFunction,
+    NgtQuadruple,
+    NgtTriple,
+} from '@angular-three/core';
 import {
     NGT_OBJECT_FACTORY,
     NgtComponentStore,
@@ -15,6 +20,7 @@ import {
     NgZone,
     OnInit,
     Optional,
+    Provider,
 } from '@angular/core';
 import type {
     AtomicName,
@@ -97,6 +103,20 @@ function setupCollision(
 
 export function makeTriplet(v: THREE.Vector3 | NgtTriple): NgtTriple {
     return v instanceof THREE.Vector3 ? [v.x, v.y, v.z] : v;
+}
+
+export function providePhysicsBody<
+    TBodyType extends BodyShapeType,
+    TBodyProps extends BodyProps,
+    TBody extends NgtPhysicsBody<TBodyType, TBodyProps> = NgtPhysicsBody<
+        TBodyType,
+        TBodyProps
+    >
+>(body: AnyConstructor<TBody>): Provider {
+    return {
+        provide: NgtPhysicsBody,
+        useExisting: body,
+    };
 }
 
 export type GetByIndex<T extends BodyProps> = (index: number) => T;
