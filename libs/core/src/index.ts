@@ -22,7 +22,6 @@ export * from './lib/di/line';
 export * from './lib/di/light';
 export * from './lib/di/sprite';
 export * from './lib/di/texture';
-export * from './lib/di/light-shadow';
 
 export * from './lib/pipes/math';
 export * from './lib/pipes/vector';
@@ -53,7 +52,6 @@ export * from './lib/three/sprite';
 export * from './lib/three/camera';
 // export * from './lib/three/extender';
 export * from './lib/three/object-helper';
-export * from './lib/three/light-shadow';
 
 export * from './lib/stores/component-store';
 export * from './lib/stores/store';

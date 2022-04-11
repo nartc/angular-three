@@ -9,14 +9,6 @@ import {
 } from '@nrwl/devkit';
 import { join } from 'path';
 import * as THREE from 'three';
-import {
-    isClassDeclaration,
-    isConstructorDeclaration,
-    ParameterDeclaration,
-    PropertySignature,
-    SourceFile,
-} from 'typescript/lib/tsserverlibrary';
-import { astFromPath, pathToSourceFile } from '../ast-utils';
 
 export const attributes = [
     THREE.BufferAttribute.name,
@@ -80,26 +72,6 @@ export const primitiveAttributes = [
     },
 ];
 
-export const lightShadows = [
-    {
-        name: THREE.LightShadow.name,
-        defPath: 'node_modules/@types/three/src/lights/LightShadow.d.ts',
-    },
-    {
-        name: THREE.DirectionalLightShadow.name,
-        defPath:
-            'node_modules/@types/three/src/lights/DirectionalLightShadow.d.ts',
-    },
-    {
-        name: THREE.PointLightShadow.name,
-        defPath: 'node_modules/@types/three/src/lights/PointLightShadow.d.ts',
-    },
-    {
-        name: THREE.SpotLightShadow.name,
-        defPath: 'node_modules/@types/three/src/lights/SpotLightShadow.d.ts',
-    },
-];
-
 export default async function attributesGenerator(tree: Tree) {
     const { libsDir } = getWorkspaceLayout(tree);
     const attributeDir = join(libsDir, 'core', 'attributes');
@@ -151,79 +123,6 @@ export default async function attributesGenerator(tree: Tree) {
         );
 
         generatedAttributes.push(`${normalizedNames.fileName}-attribute`);
-    }
-
-    for (const lightShadow of lightShadows) {
-        const normalizedNames = names(lightShadow.name);
-
-        const inputRecord = astFromPath(
-            tree,
-            lightShadow.defPath,
-            (sourceFile) => {
-                const mainParameters = [];
-                const base: [
-                    string,
-                    SourceFile,
-                    (PropertySignature | ParameterDeclaration)[]
-                ] = ['', null, []];
-
-                sourceFile.forEachChild((node) => {
-                    if (isClassDeclaration(node)) {
-                        if (node.heritageClauses?.length) {
-                            const baseSourceFile = pathToSourceFile(
-                                tree,
-                                lightShadows[0].defPath
-                            );
-                            base[0] = 'LightShadow';
-                            base[1] = baseSourceFile;
-
-                            baseSourceFile.forEachChild((baseNode) => {
-                                if (isClassDeclaration(baseNode)) {
-                                    baseNode.members.forEach((member) => {
-                                        if (isConstructorDeclaration(member)) {
-                                            member.parameters.forEach(
-                                                (parameter) => {
-                                                    base[2].push(parameter);
-                                                }
-                                            );
-                                        }
-                                    });
-                                }
-                            });
-                        }
-
-                        node.members.forEach((member) => {
-                            if (isConstructorDeclaration(member)) {
-                                member.parameters.forEach((parameter) => {
-                                    mainParameters.push(parameter);
-                                });
-                            }
-                        });
-                    }
-                });
-
-                return { mainProperties: mainParameters, base };
-            }
-        );
-
-        const inputs = Object.entries(inputRecord).map(
-            ([inputName, inputInfo]) => ({
-                name: inputName,
-                ...inputInfo,
-            })
-        );
-
-        generateFiles(
-            tree,
-            join(__dirname, 'files/light-shadow'),
-            join(attributeDir, 'src', 'lib', normalizedNames.fileName),
-            {
-                ...normalizedNames,
-                tmpl: '',
-                inputs,
-                hasInput: inputs.length > 0,
-            }
-        );
     }
 
     generateFiles(
