@@ -47,10 +47,6 @@ export class NgtSpotLight extends NgtCommonLight<THREE.SpotLight> {
         this.set({ target });
     }
 
-    @Input() set shadow(shadow: THREE.SpotLightShadow) {
-        this.set({ shadow });
-    }
-
     @Input() set power(power: number) {
         this.set({ power });
     }
@@ -67,7 +63,6 @@ export class NgtSpotLight extends NgtCommonLight<THREE.SpotLight> {
             penumbra: true,
             decay: true,
             target: true,
-            shadow: true,
             power: true,
         };
     }

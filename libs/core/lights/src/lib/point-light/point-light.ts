@@ -35,10 +35,6 @@ export class NgtPointLight extends NgtCommonLight<THREE.PointLight> {
         this.set({ decay });
     }
 
-    @Input() set shadow(shadow: THREE.PointLightShadow) {
-        this.set({ shadow });
-    }
-
     @Input() set power(power: number) {
         this.set({ power });
     }
@@ -52,7 +48,6 @@ export class NgtPointLight extends NgtCommonLight<THREE.PointLight> {
             ...super.optionFields,
             distance: true,
             decay: true,
-            shadow: true,
             power: true,
         };
     }

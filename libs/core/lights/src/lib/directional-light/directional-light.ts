@@ -33,10 +33,6 @@ export class NgtDirectionalLight extends NgtCommonLight<THREE.DirectionalLight> 
         this.set({ target });
     }
 
-    @Input() set shadow(shadow: THREE.DirectionalLightShadow) {
-        this.set({ shadow });
-    }
-
     override get lightType(): AnyConstructor<THREE.DirectionalLight> {
         return THREE.DirectionalLight;
     }
@@ -45,7 +41,6 @@ export class NgtDirectionalLight extends NgtCommonLight<THREE.DirectionalLight> 
         return {
             ...super.optionFields,
             target: true,
-            shadow: true,
         };
     }
 }
