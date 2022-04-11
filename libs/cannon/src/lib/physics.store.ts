@@ -181,13 +181,15 @@ export class NgtPhysicsStore extends NgtComponentStore<NgtPhysicsState> {
                 callback: ({ delta }) => {
                     if (isPaused) return;
                     const worker = this.get((s) => s.worker);
-                    this.timeSinceLastCalled += delta;
-                    worker.step({
-                        maxSubSteps,
-                        stepSize: stepSize as number,
-                        timeSinceLastCalled: this.timeSinceLastCalled,
-                    });
-                    this.timeSinceLastCalled = 0;
+                    if (worker) {
+                        this.timeSinceLastCalled += delta;
+                        worker.step({
+                            maxSubSteps,
+                            stepSize: stepSize as number,
+                            timeSinceLastCalled: this.timeSinceLastCalled,
+                        });
+                        this.timeSinceLastCalled = 0;
+                    }
                 },
             });
 
@@ -241,6 +243,7 @@ export class NgtPhysicsStore extends NgtComponentStore<NgtPhysicsState> {
     private readonly initWorker = this.effect<WorkerInputs>(
         tapEffect((physicsInputs) => {
             const worker = new CannonWorkerAPI(physicsInputs);
+            this.set({ worker });
 
             worker.connect();
             worker.init();
