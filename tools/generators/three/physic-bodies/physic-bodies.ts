@@ -12,7 +12,7 @@ import { join } from 'path';
 export const physicBodies = [
     {
         name: 'Box',
-        props: 'BoxProps',
+        physicProps: 'BoxProps',
         argsFn: {
             withArgs: true,
             defaultArgs: '[1, 1, 1]',
@@ -22,7 +22,7 @@ export const physicBodies = [
     },
     {
         name: 'Plane',
-        props: 'PlaneProps',
+        physicProps: 'PlaneProps',
         argsFn: {
             withArgs: false,
             defaultArgs: '',
@@ -32,7 +32,7 @@ export const physicBodies = [
     },
     {
         name: 'Cylinder',
-        props: 'CylinderProps',
+        physicProps: 'CylinderProps',
         argsFn: {
             withArgs: true,
             defaultArgs: '[]',
@@ -42,12 +42,12 @@ export const physicBodies = [
     },
     {
         name: 'Heightfield',
-        props: 'HeightfieldProps',
+        physicProps: 'HeightfieldProps',
         utilImports: [],
     },
     {
         name: 'Particle',
-        props: 'ParticleProps',
+        physicProps: 'ParticleProps',
         argsFn: {
             withArgs: false,
             defaultArgs: '',
@@ -57,7 +57,7 @@ export const physicBodies = [
     },
     {
         name: 'Sphere',
-        props: 'SphereProps',
+        physicProps: 'SphereProps',
         argsFn: {
             withArgs: true,
             defaultArgs: '[1]',
@@ -70,12 +70,12 @@ export const physicBodies = [
     },
     {
         name: 'Trimesh',
-        props: 'TrimeshProps',
+        physicProps: 'TrimeshProps',
         utilImports: [],
     },
     {
         name: 'ConvexPolyhedron',
-        props: 'ConvexPolyhedronProps',
+        physicProps: 'ConvexPolyhedronProps',
         argsFn: {
             withArgs: true,
             defaultArgs: '[]',
@@ -93,7 +93,7 @@ export const physicBodies = [
     },
     {
         name: 'Compound',
-        props: 'CompoundBodyProps',
+        physicProps: 'CompoundBodyProps',
         utilImports: [],
     },
 ];

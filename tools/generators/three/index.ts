@@ -8,6 +8,7 @@ import helpersGenerator from './helpers/helpers';
 import lightsGenerator from './lights/lights';
 import linesGenerator from './lines/lines';
 import materialsGenerator from './materials/materials';
+import physicBodiesGenerator from './physic-bodies/physic-bodies';
 import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
 
@@ -35,6 +36,7 @@ export default async function (tree: Tree) {
         spritesGenerator(tree),
         texturesGenerator(tree),
         linesGenerator(tree),
+        physicBodiesGenerator(tree),
     ]);
     //
     // const [
