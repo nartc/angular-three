@@ -319,7 +319,15 @@ export abstract class NgtCommonMaterial<
         tap(({ parameters, material }) => {
             material.setValues(
                 Object.assign(
-                    parameters as THREE.MaterialParameters,
+                    Object.entries(parameters).reduce(
+                        (result, [key, value]) => {
+                            if (value !== undefined) {
+                                result[key as keyof typeof result] = value;
+                            }
+                            return result;
+                        },
+                        {} as THREE.MaterialParameters
+                    ),
                     'uniforms' in material && 'uniforms' in parameters
                         ? {
                               uniforms: {
