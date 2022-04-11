@@ -1,0 +1,30 @@
+// GENERATED
+import { Directive, NgModule } from '@angular/core';
+import { <%= options %> } from '@pmndrs/cannon-worker-api';
+import { NgtPhysicsConstraint, providePhysicsConstraint } from '../constraint';
+
+@Directive({
+    selector: 'ng-container[ngtPhysic<%= name %>Constraint]',
+    exportAs: 'ngtPhysic<%= name %>Constraint',
+    providers: [
+        providePhysicsConstraint<'<%= name %>', <%= options %>>(
+            NgtPhysic<%= name %>Constraint
+        ),
+    ],
+})
+export class NgtPhysic<%= name %>Constraint extends NgtPhysicsConstraint<
+    '<%= name %>',
+    <%= options %>
+> {
+    static ngAcceptInputType_options: <%= options %> | undefined;
+
+    override get constraintType(): '<%= name %>' {
+        return '<%= name %>';
+    }
+}
+
+@NgModule({
+    declarations: [NgtPhysic<%= name %>Constraint],
+    exports: [NgtPhysic<%= name %>Constraint],
+})
+export class NgtPhysic<%= name %>ConstraintModule {}

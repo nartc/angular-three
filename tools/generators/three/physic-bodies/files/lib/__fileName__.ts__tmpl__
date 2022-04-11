@@ -1,11 +1,12 @@
 // GENERATED
 import { Directive, NgModule } from '@angular/core';
 import { <%= physicProps %> } from '@pmndrs/cannon-worker-api';
-import { GetByIndex, NgtPhysicsBody<% for (let utilImport of utilImports) { %>, <%= utilImport %><% } %> } from '../body';
+import { GetByIndex, NgtPhysicsBody, providePhysicsBody<% for (let utilImport of utilImports) { %>, <%= utilImport %><% } %> } from '../body';
 
 @Directive({
     selector: '[ngtPhysic<%= name %>]',
     exportAs: 'ngtPhysic<%= name %>',
+    providers: [providePhysicsBody<'<%= name %>', <%= physicProps %>>(NgtPhysic<%= name %>)],
 })
 export class NgtPhysic<%= name %> extends NgtPhysicsBody<'<%= name %>', <%= physicProps %>> {
     static ngAcceptInputType_getPhysicProps: GetByIndex<<%= physicProps %>>;

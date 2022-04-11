@@ -9,16 +9,12 @@ import lightsGenerator from './lights/lights';
 import linesGenerator from './lines/lines';
 import materialsGenerator from './materials/materials';
 import physicBodiesGenerator from './physic-bodies/physic-bodies';
+import physicConstraintsGenerator from './physic-constraints/physic-constraints';
 import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
 
 /**
  *
- * import cannonBodyControllerGenerator from './cannon-body-controller/cannon-body-controller';
- * import cannonConstraintControllerGenerator from './cannon-constraint-controller/cannon-constraint-controller';
- * import controllersGenerator from './controllers/controllers';
- * import physicBodiesGenerator from './physic-bodies/physic-bodies';
- * import physicConstraintsGenerator from './physic-constraints/physic-constraints';
  * import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
  * import simpleEffectsGenerator from './postprocessing/simple-effects';
  */
@@ -37,6 +33,7 @@ export default async function (tree: Tree) {
         texturesGenerator(tree),
         linesGenerator(tree),
         physicBodiesGenerator(tree),
+        physicConstraintsGenerator(tree),
     ]);
     //
     // const [
