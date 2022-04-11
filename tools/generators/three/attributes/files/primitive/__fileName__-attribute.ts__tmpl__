@@ -31,10 +31,27 @@ import * as THREE from 'three';
 export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
     @Input() set <%= propertyName %>(<%= propertyName %>: <%= inputType %>) {
         this.zone.runOutsideAngular(() => {
-            const instance = this.prepareInstance(<%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>))
-            this.set({ instance });
+            if (this.initSubscription) {
+                this.initSubscription.unsubscribe();
+            }
+
+            this.initSubscription = this.onCanvasReady(
+                this.store.ready$,
+                () => {
+                    this.set({
+                        instance: this.prepareInstance(<%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>)),
+                    });
+
+                    return () => {
+                        this.initSubscription?.unsubscribe();
+                    };
+                },
+                true
+            );
         });
     }
+
+    private initSubscription?: Subscription;
 
     constructor(
         zone: NgZone,
