@@ -9,7 +9,7 @@ import {
     SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_INSTANCE_FACTORY } from '../di/instance';
+import { NGT_OBJECT_FACTORY } from '../di/object';
 import { NgtStore } from '../stores/store';
 import type {
     AnyFunction,
@@ -187,7 +187,7 @@ export abstract class NgtObject<
         store: NgtStore,
         @Optional()
         @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
+        @Inject(NGT_OBJECT_FACTORY)
         protected parentObjectFactory: AnyFunction
     ) {
         super({ zone, store, parentInstanceFactory: parentObjectFactory });
