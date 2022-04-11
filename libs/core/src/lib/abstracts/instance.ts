@@ -7,7 +7,17 @@ import {
     OnInit,
     Output,
 } from '@angular/core';
-import { filter, Observable, of, pipe, tap, withLatestFrom } from 'rxjs';
+import {
+    filter,
+    map,
+    Observable,
+    of,
+    pairwise,
+    pipe,
+    startWith,
+    tap,
+    withLatestFrom,
+} from 'rxjs';
 import * as THREE from 'three';
 import {
     NgtComponentStore,
@@ -26,10 +36,7 @@ import { applyProps } from '../utils/apply-props';
 import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { removeInteractivity } from '../utils/events';
 import { prepare } from '../utils/instance';
-import { isGeometry } from '../utils/is-geometry';
-import { isMaterial } from '../utils/is-material';
-import { isOrthographicCamera } from '../utils/is-orthographic';
-import { isPerspectiveCamera } from '../utils/is-perspective';
+import { is } from '../utils/is';
 import { mutate } from '../utils/mutate';
 
 export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
@@ -224,9 +231,24 @@ export abstract class NgtInstance<
             }),
             (...args: any[]) =>
                 args.reduce((record, arg, index) => {
+                    // console.log(optionEntries[index], prev, curr);
                     record[optionEntries[index][0]] = arg;
                     return record;
                 }, {} as UnknownRecord)
+        ).pipe(
+            startWith({}),
+            pairwise(),
+            map(([prev, curr]) => {
+                return Object.entries(curr).reduce(
+                    (options, [currKey, currValue]) => {
+                        if (!is.equ(prev[currKey], currValue)) {
+                            options[currKey] = currValue;
+                        }
+                        return options;
+                    },
+                    {} as UnknownRecord
+                );
+            })
         );
     }
 
@@ -266,7 +288,7 @@ export abstract class NgtInstance<
 
                 if (this.instance) {
                     // TODO: Material is handling this on their own. To be changed when [parameters] is removed
-                    if (isMaterial(this.instance)) return;
+                    if (is.material(this.instance)) return;
 
                     const state = this.get();
                     const customOptions = {} as UnknownRecord;
@@ -294,8 +316,8 @@ export abstract class NgtInstance<
                         this.instance.updateMatrix();
                     } else if (this.instance instanceof THREE.Camera) {
                         if (
-                            isPerspectiveCamera(this.instance) ||
-                            isOrthographicCamera(this.instance)
+                            is.perspective(this.instance) ||
+                            is.orthographic(this.instance)
                         ) {
                             this.instance.updateProjectionMatrix();
                         }
@@ -313,9 +335,19 @@ export abstract class NgtInstance<
         pipe(
             withLatestFrom(this.select((s) => s.attach)),
             tap(([, attach]) => {
-                // return early if no parent
-                const parentInstance = this.__ngt__.parent;
-                if (!parentInstance) return;
+                let parentInstance = this.__ngt__.parent;
+
+                // if no parentInstance, try re-run the factory due to late init
+                if (!parentInstance) {
+                    const parentInstanceFromFactory =
+                        this.parentInstanceFactory?.();
+                    // return early if failed to retrieve
+                    if (!parentInstanceFromFactory) return;
+
+                    // reassign on instance internal state
+                    this.__ngt__.parent = parentInstanceFromFactory;
+                    parentInstance = parentInstanceFromFactory;
+                }
 
                 if (typeof attach === 'function') {
                     const attachCleanUp = attach(parentInstance, this.instance);
@@ -330,9 +362,9 @@ export abstract class NgtInstance<
                 } else {
                     const propertyToAttach = [...attach];
                     if (propertyToAttach.length === 0) {
-                        if (isMaterial(this.instance)) {
+                        if (is.material(this.instance)) {
                             propertyToAttach.push('material');
-                        } else if (isGeometry(this.instance)) {
+                        } else if (is.geometry(this.instance)) {
                             propertyToAttach.push('geometry');
                         }
                     }
