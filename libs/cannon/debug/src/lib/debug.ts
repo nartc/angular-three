@@ -1,14 +1,11 @@
+import { NgtPhysicsStore } from '@angular-three/cannon';
 import {
-    BodyProps,
-    BodyShapeType,
-    NgtPhysicsStore,
-    propsToBody,
-} from '@angular-three/cannon';
-import {
-    NgtAnimationFrameStore,
-    NgtCanvasStore,
-    NgtColor,
+    BooleanInput,
+    coerceBooleanProperty,
+    NgtInstance,
+    NgtInstanceState,
     NgtStore,
+    provideInstanceFactory,
     tapEffect,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
@@ -18,16 +15,40 @@ import {
     Input,
     NgModule,
     NgZone,
-    OnInit,
 } from '@angular/core';
-import { Quaternion, Vec3, World } from 'cannon-es';
-import cannonDebugger from 'cannon-es-debugger';
+import {
+    BodyProps,
+    BodyShapeType,
+    propsToBody,
+} from '@pmndrs/cannon-worker-api';
+import { Body, Quaternion, Vec3, World } from 'cannon-es';
+import CannonDebugger from 'cannon-es-debugger';
 import * as THREE from 'three';
-import { NgtCannonDebugApi, NgtCannonDebugState } from './models/debug';
 
-const v = new THREE.Vector3();
-const s = new THREE.Vector3(1, 1, 1);
 const q = new THREE.Quaternion();
+const s = new THREE.Vector3(1, 1, 1);
+const v = new THREE.Vector3();
+const m = new THREE.Matrix4();
+
+const getMatrix = (o: THREE.Object3D): THREE.Matrix4 => {
+    if (o instanceof THREE.InstancedMesh) {
+        o.getMatrixAt(parseInt(o.uuid.split('/')[1]), m);
+        return m;
+    }
+    return o.matrix;
+};
+
+export interface NgtCannonDebugState extends NgtInstanceState<THREE.Scene> {
+    scene: THREE.Scene;
+    cannonDebugger: typeof CannonDebugger.prototype;
+    bodies: Body[];
+    bodyMap: { [uuid: string]: Body };
+
+    color: THREE.ColorRepresentation;
+    impl: typeof CannonDebugger;
+    scale: number;
+    disabled: boolean;
+}
 
 @Component({
     selector: 'ngt-cannon-debug',
@@ -36,12 +57,17 @@ const q = new THREE.Quaternion();
         <ng-content></ng-content>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideInstanceFactory<THREE.Scene, NgtCannonDebugState>(
+            NgtCannonDebug
+        ),
+    ],
 })
-export class NgtCannonDebug
-    extends NgtStore<NgtCannonDebugState>
-    implements OnInit
-{
-    @Input() set color(color: NgtColor) {
+export class NgtCannonDebug extends NgtInstance<
+    THREE.Scene,
+    NgtCannonDebugState
+> {
+    @Input() set color(color: THREE.ColorRepresentation) {
         this.set({ color });
     }
 
@@ -53,19 +79,16 @@ export class NgtCannonDebug
         this.set({ impl });
     }
 
-    @Input() set disabled(disabled: boolean) {
-        this.set({ disabled });
+    @Input() set disabled(disabled: BooleanInput) {
+        this.set({ disabled: coerceBooleanProperty(disabled) });
     }
 
-    scene = new THREE.Scene();
-
     constructor(
-        private zone: NgZone,
-        private physicsStore: NgtPhysicsStore,
-        private animationFrameStore: NgtAnimationFrameStore,
-        private canvasStore: NgtCanvasStore
+        zone: NgZone,
+        store: NgtStore,
+        private physicsStore: NgtPhysicsStore
     ) {
-        super();
+        super({ zone, store });
 
         if (!physicsStore) {
             throw new Error('ngt-cannon-debug must be used within ngt-physics');
@@ -74,70 +97,72 @@ export class NgtCannonDebug
         this.set({
             color: 'black',
             scale: 1,
-            impl: cannonDebugger,
-            bodies: [],
-            refs: {},
+            impl: CannonDebugger,
             disabled: false,
+            bodies: [],
+            bodyMap: {},
         });
     }
 
-    ngOnInit() {
+    get scene() {
+        return this.get((s) => s.scene);
+    }
+
+    override ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            this.onCanvasReady(this.canvasStore.ready$, () => {
-                this.registerAnimation();
+            this.onCanvasReady(this.store.ready$, () => {
+                this.prepareInstance(new THREE.Scene(), 'scene');
+                this.set((state) => ({
+                    cannonDebugger: state.impl(
+                        state.scene,
+                        { bodies: state.bodies } as World,
+                        { color: state.color, scale: state.scale }
+                    ),
+                }));
+                this.registerBeforeRender();
             });
         });
+        super.ngOnInit();
     }
 
     get api() {
-        const { bodies, refs } = this.get();
+        const { bodies, bodyMap } = this.get();
         return {
-            add(id: string, props: BodyProps, type: BodyShapeType) {
-                const body = propsToBody(id, props, type);
+            add(uuid: string, props: BodyProps, type: BodyShapeType) {
+                const body = propsToBody({ uuid, props, type });
                 bodies.push(body);
-                refs[id] = body;
+                bodyMap[uuid] = body;
             },
-            remove(id: string) {
-                const debugBodyIndex = bodies.indexOf(refs[id]);
+            remove(uuid: string) {
+                const debugBodyIndex = bodies.indexOf(bodyMap[uuid]);
                 if (debugBodyIndex > -1) bodies.splice(debugBodyIndex, 1);
-                delete refs[id];
+                delete bodyMap[uuid];
             },
         };
     }
 
-    private readonly registerAnimation = this.effect<void>(
+    private readonly registerBeforeRender = this.effect<void>(
         tapEffect(() => {
-            let instance: NgtCannonDebugApi;
-            let lastBodies = 0;
-
-            const animationUuid = this.animationFrameStore.register({
+            const uuid = this.store.registerBeforeRender({
                 callback: () => {
-                    const { bodies, refs, impl, color, scale, disabled } =
-                        this.get();
+                    const { bodyMap, cannonDebugger, disabled } = this.get();
+
                     if (disabled) return;
-                    const { refs: physicsRefs } = this.physicsStore.get();
 
-                    if (!instance || lastBodies !== bodies.length) {
-                        lastBodies = bodies.length;
-                        this.scene.children = [];
-                        instance = impl!(this.scene, { bodies } as World, {
-                            color: color as THREE.ColorRepresentation,
-                            scale,
-                        });
+                    const refs = this.physicsStore.get((s) => s.refs);
+                    for (const bodyUuid in bodyMap) {
+                        getMatrix(refs[bodyUuid]).decompose(v, q, s);
+                        bodyMap[bodyUuid].position.copy(v as unknown as Vec3);
+                        bodyMap[bodyUuid].quaternion.copy(
+                            q as unknown as Quaternion
+                        );
                     }
-
-                    for (const uuid in refs) {
-                        physicsRefs[uuid].matrix.decompose(v, q, s);
-                        refs[uuid].position.copy(v as unknown as Vec3);
-                        refs[uuid].quaternion.copy(q as unknown as Quaternion);
-                    }
-
-                    instance.update();
+                    cannonDebugger.update();
                 },
             });
 
             return () => {
-                this.animationFrameStore.unregister(animationUuid);
+                this.store.unregisterBeforeRender(uuid);
             };
         })
     );
