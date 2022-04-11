@@ -19,6 +19,7 @@ import {
     SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
+import type { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ngt-fog-exp2[fogExp2]',
@@ -29,10 +30,29 @@ import * as THREE from 'three';
 export class NgtFogExp2Attribute extends NgtInstance<THREE.FogExp2> {
     @Input() set fogExp2(fogExp2: NgtFogExp2) {
         this.zone.runOutsideAngular(() => {
-            const instance = this.prepareInstance(make(THREE.FogExp2, fogExp2));
-            this.set({ instance });
+            if (this.initSubscription) {
+                this.initSubscription.unsubscribe();
+            }
+
+            this.initSubscription = this.onCanvasReady(
+                this.store.ready$,
+                () => {
+                    this.set({
+                        instance: this.prepareInstance(
+                            make(THREE.FogExp2, fogExp2)
+                        ),
+                    });
+
+                    return () => {
+                        this.initSubscription?.unsubscribe();
+                    };
+                },
+                true
+            );
         });
     }
+
+    private initSubscription?: Subscription;
 
     constructor(
         zone: NgZone,

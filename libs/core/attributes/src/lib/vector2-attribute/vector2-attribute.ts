@@ -19,6 +19,7 @@ import {
     SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
+import type { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ngt-vector2[vector2]',
@@ -29,10 +30,27 @@ import * as THREE from 'three';
 export class NgtVector2Attribute extends NgtInstance<THREE.Vector2> {
     @Input() set vector2(vector2: NgtVector2) {
         this.zone.runOutsideAngular(() => {
-            const instance = this.prepareInstance(makeVector2(vector2));
-            this.set({ instance });
+            if (this.initSubscription) {
+                this.initSubscription.unsubscribe();
+            }
+
+            this.initSubscription = this.onCanvasReady(
+                this.store.ready$,
+                () => {
+                    this.set({
+                        instance: this.prepareInstance(makeVector2(vector2)),
+                    });
+
+                    return () => {
+                        this.initSubscription?.unsubscribe();
+                    };
+                },
+                true
+            );
         });
     }
+
+    private initSubscription?: Subscription;
 
     constructor(
         zone: NgZone,

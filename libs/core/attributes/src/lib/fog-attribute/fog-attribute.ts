@@ -19,6 +19,7 @@ import {
     SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
+import type { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ngt-fog[fog]',
@@ -29,10 +30,27 @@ import * as THREE from 'three';
 export class NgtFogAttribute extends NgtInstance<THREE.Fog> {
     @Input() set fog(fog: NgtFog) {
         this.zone.runOutsideAngular(() => {
-            const instance = this.prepareInstance(make(THREE.Fog, fog));
-            this.set({ instance });
+            if (this.initSubscription) {
+                this.initSubscription.unsubscribe();
+            }
+
+            this.initSubscription = this.onCanvasReady(
+                this.store.ready$,
+                () => {
+                    this.set({
+                        instance: this.prepareInstance(make(THREE.Fog, fog)),
+                    });
+
+                    return () => {
+                        this.initSubscription?.unsubscribe();
+                    };
+                },
+                true
+            );
         });
     }
+
+    private initSubscription?: Subscription;
 
     constructor(
         zone: NgZone,

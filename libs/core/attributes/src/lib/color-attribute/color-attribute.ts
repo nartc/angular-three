@@ -19,6 +19,7 @@ import {
     SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
+import type { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ngt-color[color]',
@@ -29,10 +30,27 @@ import * as THREE from 'three';
 export class NgtColorAttribute extends NgtInstance<THREE.Color> {
     @Input() set color(color: NgtColor) {
         this.zone.runOutsideAngular(() => {
-            const instance = this.prepareInstance(makeColor(color));
-            this.set({ instance });
+            if (this.initSubscription) {
+                this.initSubscription.unsubscribe();
+            }
+
+            this.initSubscription = this.onCanvasReady(
+                this.store.ready$,
+                () => {
+                    this.set({
+                        instance: this.prepareInstance(makeColor(color)),
+                    });
+
+                    return () => {
+                        this.initSubscription?.unsubscribe();
+                    };
+                },
+                true
+            );
         });
     }
+
+    private initSubscription?: Subscription;
 
     constructor(
         zone: NgZone,
