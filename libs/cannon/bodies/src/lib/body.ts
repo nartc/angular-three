@@ -1,5 +1,6 @@
 import type { CannonEvents } from '@angular-three/cannon';
 import { NgtPhysicsStore } from '@angular-three/cannon';
+import { NgtPhysicsConstraint } from '@angular-three/cannon/constraints';
 import { NgtCannonDebug } from '@angular-three/cannon/debug';
 import type {
     AnyConstructor,
@@ -21,6 +22,7 @@ import {
     OnInit,
     Optional,
     Provider,
+    SkipSelf,
 } from '@angular/core';
 import type {
     AtomicName,
@@ -190,7 +192,10 @@ export abstract class NgtPhysicsBody<
         protected debug: NgtCannonDebug,
         @Optional()
         @Inject(NGT_OBJECT_FACTORY)
-        protected parentObjectFactory: AnyFunction
+        protected parentObjectFactory: AnyFunction,
+        @Optional()
+        @SkipSelf()
+        protected physicConstraint: NgtPhysicsConstraint<any, any>
     ) {
         super();
         this.set({
@@ -410,6 +415,10 @@ export abstract class NgtPhysicsBody<
             }
 
             const { object, argsFn, getPhysicProps } = this.get();
+
+            if (this.physicConstraint) {
+                this.physicConstraint.addBody(object);
+            }
 
             const { worker, refs, events } = this.physicsStore.get();
             const currentWorker = worker;
