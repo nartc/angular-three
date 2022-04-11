@@ -377,6 +377,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                     camera.position.z = 5;
                     if (state.cameraOptions) {
                         applyProps(camera as any, state.cameraOptions as any);
+                        // Update projection matrix after applying props
+                        camera.updateProjectionMatrix();
                     }
                     // Always look at center by default
                     if (!state.cameraOptions?.rotation) {
