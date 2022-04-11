@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonSprite } from '../three/sprite';
+import { NGT_COMMON_SPRITE_FACTORY } from '../tokens';
 import type { AnyConstructor } from '../types';
 import { provideObjectFactory } from './object';
-
-export const NGT_COMMON_SPRITE_FACTORY = new InjectionToken(
-    'NgtCommonSprite factory'
-);
 
 export function provideCommonSpriteFactory<
     TSprite extends THREE.Sprite,

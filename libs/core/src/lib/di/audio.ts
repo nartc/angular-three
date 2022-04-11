@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonAudio } from '../three/audio';
+import { NGT_COMMON_AUDIO_FACTORY } from '../tokens';
 import type { AnyConstructor } from '../types';
 import { provideObjectFactory } from './object';
-
-export const NGT_COMMON_AUDIO_FACTORY = new InjectionToken(
-    'NgtCommonAudio factory'
-);
 
 export function provideCommonAudioFactory<
     TAudioNode extends AudioNode,

@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonLight } from '../three/light';
+import { NGT_COMMON_LIGHT_FACTORY } from '../tokens';
 import type { AnyConstructor } from '../types';
 import { provideObjectFactory } from './object';
-
-export const NGT_COMMON_LIGHT_FACTORY = new InjectionToken(
-    'NgtCommonLight factory'
-);
 
 export function provideCommonLightFactory<
     TLight extends THREE.Light,

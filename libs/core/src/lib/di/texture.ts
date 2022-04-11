@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonTexture } from '../three/texture';
+import { NGT_COMMON_TEXTURE_FACTORY } from '../tokens';
 import type { AnyConstructor } from '../types';
 import { provideInstanceFactory } from './instance';
-
-export const NGT_COMMON_TEXTURE_FACTORY = new InjectionToken(
-    'NgtCommonTexture factory'
-);
 
 export function provideCommonTextureFactory<
     TTexture extends THREE.Texture,

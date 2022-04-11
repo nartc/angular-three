@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonHelper } from '../three/helper';
+import { NGT_COMMON_HELPER_FACTORY } from '../tokens';
 import type { AnyConstructor } from '../types';
 import { provideObjectFactory } from './object';
-
-export const NGT_COMMON_HELPER_FACTORY = new InjectionToken(
-    'NgtCommonHelper factory'
-);
 
 export function provideCommonHelperFactory<
     THelper extends THREE.Object3D,

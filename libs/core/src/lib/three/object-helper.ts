@@ -1,9 +1,9 @@
 import { Directive, Inject, NgZone, Optional } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
-import { NGT_OBJECT_FACTORY } from '../di/object';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
+import { NGT_OBJECT_FACTORY } from '../tokens';
 import { AnyConstructor, AnyFunction } from '../types';
 
 export interface NgtCommonObjectHelperState<

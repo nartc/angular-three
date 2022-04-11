@@ -9,8 +9,8 @@ import {
     SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_OBJECT_FACTORY } from '../di/object';
 import { NgtStore } from '../stores/store';
+import { NGT_OBJECT_FACTORY } from '../tokens';
 import type {
     AnyFunction,
     BooleanInput,

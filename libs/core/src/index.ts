@@ -1,5 +1,6 @@
 export * from './lib/canvas';
 export * from './lib/types';
+export * from './lib/tokens';
 
 export * from './lib/di/parent-object';
 export * from './lib/di/performance';

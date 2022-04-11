@@ -1,12 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtMaterialGeometry } from '../abstracts/material-geometry';
 import { NgtObject } from '../abstracts/object';
-import type { AnyConstructor, AnyFunction } from '../types';
+import { NGT_MATERIAL_GEOMETRY_OBJECT_FACTORY } from '../tokens';
+import type { AnyConstructor } from '../types';
 import { provideObjectFactory } from './object';
-
-export const NGT_MATERIAL_GEOMETRY_OBJECT_FACTORY =
-    new InjectionToken<AnyFunction>('NgtMaterialGeometry factory');
 
 export function provideMaterialGeometryObjectFactory<
     TObject extends THREE.Object3D,

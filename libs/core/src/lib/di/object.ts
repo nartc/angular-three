@@ -1,13 +1,15 @@
-import { InjectionToken, Provider, Type } from '@angular/core';
+import { Provider, Type } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtObject, NgtObjectState } from '../abstracts/object';
-import type { AnyConstructor, AnyFunction } from '../types';
-import { NGT_INSTANCE_FACTORY, provideInstanceFactory } from './instance';
-
-export const NGT_OBJECT_FACTORY = new InjectionToken<AnyFunction>(
-    'NgtObject factory'
-);
+import {
+    NGT_CAMERA_INSTANCE_FACTORY,
+    NGT_INSTANCE_FACTORY,
+    NGT_OBJECT_FACTORY,
+    NGT_SCENE_INSTANCE_FACTORY,
+} from '../tokens';
+import type { AnyConstructor } from '../types';
+import { provideInstanceFactory } from './instance';
 
 export function provideObjectFactory<
     TObject extends THREE.Object3D,
@@ -34,14 +36,6 @@ export function provideObjectFactory<
         },
     ];
 }
-
-export const NGT_CAMERA_INSTANCE_FACTORY = new InjectionToken<AnyFunction>(
-    'NgtObject factory for root Camera'
-);
-
-export const NGT_SCENE_INSTANCE_FACTORY = new InjectionToken<AnyFunction>(
-    'NgtObject factory for root Scene'
-);
 
 export function provideCanvasInstanceFactory(canvasType: Type<any>): Provider {
     return [

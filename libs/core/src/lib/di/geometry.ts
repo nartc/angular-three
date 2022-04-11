@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonGeometry } from '../three/geometry';
+import { NGT_COMMON_GEOMETRY_FACTORY } from '../tokens';
 import { AnyConstructor } from '../types';
 import { provideInstanceFactory } from './instance';
-
-export const NGT_COMMON_GEOMETRY_FACTORY = new InjectionToken(
-    'NgtCommonGeometry factory'
-);
 
 export function provideCommonGeometryFactory<
     TGeometry extends THREE.BufferGeometry,

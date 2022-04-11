@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonAttribute } from '../three/attribute';
+import { NGT_COMMON_ATTRIBUTE_FACTORY } from '../tokens';
 import type { AnyConstructor } from '../types';
 import { provideInstanceFactory } from './instance';
-
-export const NGT_COMMON_ATTRIBUTE_FACTORY = new InjectionToken(
-    'NgtCommonAttribute factory'
-);
 
 export function provideCommonAttributeFactory<
     TAttribute extends THREE.BufferAttribute | THREE.InterleavedBufferAttribute,

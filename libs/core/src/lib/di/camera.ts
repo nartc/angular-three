@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonCamera } from '../three/camera';
+import { NGT_COMMON_CAMERA_FACTORY } from '../tokens';
 import type { AnyConstructor } from '../types';
 import { provideObjectFactory } from './object';
-
-export const NGT_COMMON_CAMERA_FACTORY = new InjectionToken(
-    'NgtCommonCamera factory'
-);
 
 export function provideCommonCameraFactory<
     TCamera extends THREE.Camera,

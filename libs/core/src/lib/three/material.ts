@@ -10,9 +10,9 @@ import { Observable, of, tap } from 'rxjs';
 import * as THREE from 'three';
 import { Plane } from 'three/src/math/Plane';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
-import { NGT_OBJECT_FACTORY } from '../di/object';
 import { startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
+import { NGT_OBJECT_FACTORY } from '../tokens';
 import type { AnyConstructor, AnyFunction, UnknownRecord } from '../types';
 
 export interface NgtCommonMaterialState<

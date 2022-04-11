@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonMaterial } from '../three/material';
+import { NGT_COMMON_MATERIAL_FACTORY } from '../tokens';
 import type { AnyConstructor } from '../types';
 import { provideInstanceFactory } from './instance';
-
-export const NGT_COMMON_MATERIAL_FACTORY = new InjectionToken(
-    'NgtCommonMaterial factory'
-);
 
 export function provideCommonMaterialFactory<
     TMaterial extends THREE.Material,

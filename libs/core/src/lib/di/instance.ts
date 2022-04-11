@@ -1,10 +1,7 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
-import type { AnyConstructor, AnyFunction } from '../types';
-
-export const NGT_INSTANCE_FACTORY = new InjectionToken<AnyFunction>(
-    'NgtInstance Factory'
-);
+import { NGT_INSTANCE_FACTORY } from '../tokens';
+import type { AnyConstructor } from '../types';
 
 export function provideInstanceFactory<
     TInstance extends object,

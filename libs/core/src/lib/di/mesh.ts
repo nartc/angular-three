@@ -1,13 +1,10 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtMaterialGeometry } from '../abstracts/material-geometry';
 import { NgtCommonMesh } from '../three/mesh';
-import type { AnyConstructor, AnyFunction } from '../types';
+import { NGT_COMMON_MESH_FACTORY } from '../tokens';
+import type { AnyConstructor } from '../types';
 import { provideMaterialGeometryObjectFactory } from './material-geometry';
-
-export const NGT_COMMON_MESH_FACTORY = new InjectionToken<AnyFunction>(
-    'NgtCommonMesh factory'
-);
 
 export function provideCommonMeshFactory<
     TMesh extends THREE.Mesh,
