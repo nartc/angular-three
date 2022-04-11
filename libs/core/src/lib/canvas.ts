@@ -62,21 +62,25 @@ import { createLoop } from './utils/loop';
 export class NgtCanvas extends NgtComponentStore implements OnInit {
     @HostBinding('class.ngt-canvas') hostClass = true;
 
-    @Input() set linear(linear: boolean | '') {
-        this.store.set({ linear: linear === '' ? true : linear });
+    @Input() set linear(linear: BooleanInput) {
+        this.store.set({ linear: coerceBooleanProperty(linear) });
     }
 
-    @Input() set flat(flat: boolean | '') {
-        this.store.set({ flat: flat === '' ? true : flat });
+    @Input() set legacy(legacy: BooleanInput) {
+        this.store.set({ legacy: coerceBooleanProperty(legacy) });
+    }
+
+    @Input() set flat(flat: BooleanInput) {
+        this.store.set({ flat: coerceBooleanProperty(flat) });
     }
 
     @Input() set frameloop(frameloop: 'always' | 'demand' | 'never') {
         this.store.set({ frameloop });
     }
 
-    @Input() set orthographic(orthographic: boolean | '') {
+    @Input() set orthographic(orthographic: BooleanInput) {
         this.store.set({
-            orthographic: orthographic === '' ? true : orthographic,
+            orthographic: coerceBooleanProperty(orthographic),
         });
     }
 
@@ -96,8 +100,15 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
         this.store.set({ raycasterOptions: raycaster });
     }
 
-    @Input() set shadows(shadows: boolean | Partial<THREE.WebGLShadowMap>) {
-        this.store.set({ shadows });
+    @Input() set shadows(
+        shadows: BooleanInput | Partial<THREE.WebGLShadowMap>
+    ) {
+        this.store.set({
+            shadows:
+                typeof shadows === 'object'
+                    ? (shadows as Partial<THREE.WebGLShadowMap>)
+                    : coerceBooleanProperty(shadows),
+        });
     }
 
     @Input() set camera(cameraOptions: NgtCameraOptions) {
