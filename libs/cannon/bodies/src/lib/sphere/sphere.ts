@@ -1,11 +1,12 @@
 // GENERATED
 import { Directive, NgModule } from '@angular/core';
 import { SphereProps } from '@pmndrs/cannon-worker-api';
-import { GetByIndex, NgtPhysicsBody } from '../body';
+import { GetByIndex, NgtPhysicsBody, providePhysicsBody } from '../body';
 
 @Directive({
     selector: '[ngtPhysicSphere]',
     exportAs: 'ngtPhysicSphere',
+    providers: [providePhysicsBody<'Sphere', SphereProps>(NgtPhysicSphere)],
 })
 export class NgtPhysicSphere extends NgtPhysicsBody<'Sphere', SphereProps> {
     static ngAcceptInputType_getPhysicProps: GetByIndex<SphereProps>;

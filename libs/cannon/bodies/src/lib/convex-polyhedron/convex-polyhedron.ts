@@ -1,11 +1,21 @@
 // GENERATED
 import { Directive, NgModule } from '@angular/core';
 import { ConvexPolyhedronProps } from '@pmndrs/cannon-worker-api';
-import { GetByIndex, NgtPhysicsBody, makeTriplet } from '../body';
+import {
+    GetByIndex,
+    NgtPhysicsBody,
+    providePhysicsBody,
+    makeTriplet,
+} from '../body';
 
 @Directive({
     selector: '[ngtPhysicConvexPolyhedron]',
     exportAs: 'ngtPhysicConvexPolyhedron',
+    providers: [
+        providePhysicsBody<'ConvexPolyhedron', ConvexPolyhedronProps>(
+            NgtPhysicConvexPolyhedron
+        ),
+    ],
 })
 export class NgtPhysicConvexPolyhedron extends NgtPhysicsBody<
     'ConvexPolyhedron',

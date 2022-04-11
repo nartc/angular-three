@@ -1,11 +1,14 @@
 // GENERATED
 import { Directive, NgModule } from '@angular/core';
 import { CompoundBodyProps } from '@pmndrs/cannon-worker-api';
-import { GetByIndex, NgtPhysicsBody } from '../body';
+import { GetByIndex, NgtPhysicsBody, providePhysicsBody } from '../body';
 
 @Directive({
     selector: '[ngtPhysicCompound]',
     exportAs: 'ngtPhysicCompound',
+    providers: [
+        providePhysicsBody<'Compound', CompoundBodyProps>(NgtPhysicCompound),
+    ],
 })
 export class NgtPhysicCompound extends NgtPhysicsBody<
     'Compound',

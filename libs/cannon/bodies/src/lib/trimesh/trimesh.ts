@@ -1,11 +1,12 @@
 // GENERATED
 import { Directive, NgModule } from '@angular/core';
 import { TrimeshProps } from '@pmndrs/cannon-worker-api';
-import { GetByIndex, NgtPhysicsBody } from '../body';
+import { GetByIndex, NgtPhysicsBody, providePhysicsBody } from '../body';
 
 @Directive({
     selector: '[ngtPhysicTrimesh]',
     exportAs: 'ngtPhysicTrimesh',
+    providers: [providePhysicsBody<'Trimesh', TrimeshProps>(NgtPhysicTrimesh)],
 })
 export class NgtPhysicTrimesh extends NgtPhysicsBody<'Trimesh', TrimeshProps> {
     static ngAcceptInputType_getPhysicProps: GetByIndex<TrimeshProps>;

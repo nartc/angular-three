@@ -1,11 +1,14 @@
 // GENERATED
 import { Directive, NgModule } from '@angular/core';
 import { CylinderProps } from '@pmndrs/cannon-worker-api';
-import { GetByIndex, NgtPhysicsBody } from '../body';
+import { GetByIndex, NgtPhysicsBody, providePhysicsBody } from '../body';
 
 @Directive({
     selector: '[ngtPhysicCylinder]',
     exportAs: 'ngtPhysicCylinder',
+    providers: [
+        providePhysicsBody<'Cylinder', CylinderProps>(NgtPhysicCylinder),
+    ],
 })
 export class NgtPhysicCylinder extends NgtPhysicsBody<
     'Cylinder',

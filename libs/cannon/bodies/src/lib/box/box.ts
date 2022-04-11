@@ -1,11 +1,12 @@
 // GENERATED
 import { Directive, NgModule } from '@angular/core';
 import { BoxProps } from '@pmndrs/cannon-worker-api';
-import { GetByIndex, NgtPhysicsBody } from '../body';
+import { GetByIndex, NgtPhysicsBody, providePhysicsBody } from '../body';
 
 @Directive({
     selector: '[ngtPhysicBox]',
     exportAs: 'ngtPhysicBox',
+    providers: [providePhysicsBody<'Box', BoxProps>(NgtPhysicBox)],
 })
 export class NgtPhysicBox extends NgtPhysicsBody<'Box', BoxProps> {
     static ngAcceptInputType_getPhysicProps: GetByIndex<BoxProps>;
