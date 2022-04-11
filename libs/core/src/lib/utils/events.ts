@@ -136,7 +136,7 @@ export function createEvents(state: () => NgtState) {
                         : [];
                 })
                 // Sort by event priority and distance
-                .sort((a: NgtIntersection, b: NgtIntersection) => {
+                .sort((a: any, b: any) => {
                     const aState = getInstanceRootState(a.object);
                     const bState = getInstanceRootState(b.object);
                     if (!aState || !bState) return 0;
@@ -146,7 +146,7 @@ export function createEvents(state: () => NgtState) {
                     );
                 })
                 // Filter out duplicates
-                .filter((item: NgtIntersection) => {
+                .filter((item: any) => {
                     const id = makeId(item as NgtIntersection);
                     if (duplicates.has(id)) return false;
                     duplicates.add(id);
