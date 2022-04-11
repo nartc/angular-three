@@ -5,6 +5,14 @@ export type BooleanInput = string | boolean | null | undefined;
 export type NumberInput = string | number | null | undefined;
 
 /* Common + Utility */
+export type EquConfig = {
+    /** Compare arrays by reference equality a === b (default), or by shallow equality */
+    arrays?: 'reference' | 'shallow';
+    /** Compare objects by reference equality a === b (default), or by shallow equality */
+    objects?: 'reference' | 'shallow';
+    /** If true the keys in both a and b must match 1:1 (default), if false a's keys must intersect b's */
+    strict?: boolean;
+};
 export type UnknownRecord = Record<string, unknown>;
 export type AnyFunction<TReturn = any> = (...args: any[]) => TReturn;
 export type AnyConstructor<TObject> = new (...args: any[]) => TObject;

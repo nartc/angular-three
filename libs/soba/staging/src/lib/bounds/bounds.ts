@@ -3,7 +3,7 @@ import {
     createExtenderProvider,
     createHostParentObjectProvider,
     createParentObjectProvider,
-    isOrthographicCamera,
+    is,
     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
     NGT_PARENT_OBJECT,
@@ -123,10 +123,10 @@ export class NgtSobaBoundsContext {
         const size = this.box.getSize(new THREE.Vector3());
         const center = this.box.getCenter(new THREE.Vector3());
         const maxSize = Math.max(size.x, size.y, size.z);
-        const fitHeightDistance = isOrthographicCamera(camera)
+        const fitHeightDistance = is.orthographic(camera)
             ? maxSize * 4
             : maxSize / (2 * Math.atan((Math.PI * camera.fov) / 360));
-        const fitWidthDistance = isOrthographicCamera(camera)
+        const fitWidthDistance = is.orthographic(camera)
             ? maxSize * 4
             : fitHeightDistance / camera.aspect;
         const distance =
@@ -201,7 +201,7 @@ export class NgtSobaBoundsContext {
         this._goalCamera.copy(center).sub(direction);
         this._goalFocus.copy(center);
 
-        if (isOrthographicCamera(camera)) {
+        if (is.orthographic(camera)) {
             this._currentZoom = camera.zoom;
 
             let maxHeight = 0,
@@ -424,7 +424,7 @@ export class NgtSobaBounds extends NgtExtender<THREE.Group> implements OnInit {
                         );
                         camera.position.copy(this.context.currentCamera);
 
-                        if (isOrthographicCamera(camera)) {
+                        if (is.orthographic(camera)) {
                             camera.zoom = this.context.currentZoom;
                             camera.updateProjectionMatrix();
                         }
@@ -438,7 +438,7 @@ export class NgtSobaBounds extends NgtExtender<THREE.Group> implements OnInit {
 
                         this.loop.invalidate();
                         if (
-                            isOrthographicCamera(camera) &&
+                            is.orthographic(camera) &&
                             !(
                                 Math.abs(
                                     this.context.currentZoom -
@@ -448,7 +448,7 @@ export class NgtSobaBounds extends NgtExtender<THREE.Group> implements OnInit {
                         )
                             return;
                         if (
-                            !isOrthographicCamera(camera) &&
+                            !is.orthographic(camera) &&
                             !this.equals(
                                 this.context.currentCamera,
                                 this.context.goalCamera
