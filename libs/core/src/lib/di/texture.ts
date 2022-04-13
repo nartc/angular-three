@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonTexture } from '../three/texture';
 import { NGT_COMMON_TEXTURE_FACTORY } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideInstanceFactory } from './instance';
 
 export function provideCommonTextureFactory<
@@ -15,7 +15,8 @@ export function provideCommonTextureFactory<
 ): Provider {
     return [
         provideInstanceFactory<TTexture>(
-            subTextureType as unknown as AnyConstructor<NgtInstance<TTexture>>
+            subTextureType as unknown as AnyConstructor<NgtInstance<TTexture>>,
+            factory as AnyFunction
         ),
         { provide: NgtCommonTexture, useExisting: subTextureType },
         {

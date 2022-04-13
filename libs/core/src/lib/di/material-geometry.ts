@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtMaterialGeometry } from '../abstracts/material-geometry';
 import { NgtObject } from '../abstracts/object';
 import { NGT_MATERIAL_GEOMETRY_OBJECT_FACTORY } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideObjectFactory } from './object';
 
 export function provideMaterialGeometryObjectFactory<
@@ -15,7 +15,8 @@ export function provideMaterialGeometryObjectFactory<
 ): Provider {
     return [
         provideObjectFactory(
-            subMaterialGeometryType as unknown as AnyConstructor<NgtObject>
+            subMaterialGeometryType as unknown as AnyConstructor<NgtObject>,
+            factory as AnyFunction
         ),
         { provide: NgtMaterialGeometry, useExisting: subMaterialGeometryType },
         {

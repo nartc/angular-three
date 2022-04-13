@@ -18,6 +18,12 @@ export function prepare<TInstance extends object = UnknownRecord>(
     previousInstance?: NgtUnknownInstance,
     isPrimitive = false
 ): NgtUnknownInstance<TInstance> {
+    const parent = parentInstance
+        ? parentInstance
+        : previousInstance
+        ? previousInstance.__ngt__.parent
+        : undefined;
+
     return Object.assign(instance, {
         __ngt__: {
             root,
@@ -31,11 +37,7 @@ export function prepare<TInstance extends object = UnknownRecord>(
                 : 0,
             handlers: previousInstance ? previousInstance.__ngt__.handlers : {},
             objects: previousInstance ? previousInstance.__ngt__.objects : [],
-            parent: parentInstance
-                ? parentInstance
-                : previousInstance
-                ? previousInstance.__ngt__.parent
-                : null,
+            parent: parent ? (parent === instance ? null : parent) : null,
         },
     });
 }

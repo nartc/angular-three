@@ -67,3 +67,7 @@ export const NGT_COMMON_SPRITE_FACTORY = new InjectionToken(
 export const NGT_COMMON_TEXTURE_FACTORY = new InjectionToken(
     'NgtCommonTexture factory'
 );
+
+export const NGT_WRAPPED_OBJECT_FACTORY = new InjectionToken(
+    'NgtWrapper Factory'
+);

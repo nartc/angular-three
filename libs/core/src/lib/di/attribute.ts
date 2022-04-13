@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonAttribute } from '../three/attribute';
 import { NGT_COMMON_ATTRIBUTE_FACTORY } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideInstanceFactory } from './instance';
 
 export function provideCommonAttributeFactory<
@@ -17,7 +17,8 @@ export function provideCommonAttributeFactory<
         provideInstanceFactory<TAttribute>(
             subAttributeType as unknown as AnyConstructor<
                 NgtInstance<TAttribute>
-            >
+            >,
+            factory as AnyFunction
         ),
         { provide: NgtCommonAttribute, useExisting: subAttributeType },
         {

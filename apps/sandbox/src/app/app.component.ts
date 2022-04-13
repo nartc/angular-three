@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
     template: `
         <!--        <sandbox-cubes></sandbox-cubes>-->
         <sandbox-physic-cubes></sandbox-physic-cubes>
+        <!--        <sandbox-monday-morning></sandbox-monday-morning>-->
     `,
     styles: [],
 })

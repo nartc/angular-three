@@ -47,9 +47,9 @@ const supportedEvents = [
 
 export type NgtPreObjectInit = ((initFn: () => void) => void) | undefined;
 
-export interface NgtObjectState<TObject extends THREE.Object3D = THREE.Object3D>
-    extends NgtInstanceState<TObject> {
-    object3d: TObject;
+export interface NgtObjectInputsState<
+    TObject extends THREE.Object3D = THREE.Object3D
+> extends NgtInstanceState<TObject> {
     name: string;
     position: THREE.Vector3;
     rotation: THREE.Euler;
@@ -70,89 +70,136 @@ export interface NgtObjectState<TObject extends THREE.Object3D = THREE.Object3D>
 }
 
 @Directive()
-export abstract class NgtObject<
+export abstract class NgtObjectInputs<
     TObject extends THREE.Object3D = THREE.Object3D,
-    TObjectState extends NgtObjectState<TObject> = NgtObjectState<TObject>
-> extends NgtInstance<TObject, TObjectState> {
+    TObjectInputsState extends NgtObjectInputsState<TObject> = NgtObjectInputsState<TObject>
+> extends NgtInstance<TObject, TObjectInputsState> {
     @Input() set name(name: string) {
-        this.set({ name } as Partial<TObjectState>);
+        this.set({ name } as Partial<TObjectInputsState>);
+    }
+    get name(): string {
+        return this.get((s) => s.name);
     }
 
     @Input() set position(position: NgtVector3 | undefined) {
-        this.set({ position: makeVector3(position) } as Partial<TObjectState>);
+        this.set({
+            position: makeVector3(position),
+        } as Partial<TObjectInputsState>);
+    }
+    get position(): THREE.Vector3 {
+        return this.get((s) => s.position);
     }
 
+    get rotation() {
+        return this.get((s) => s.rotation);
+    }
     @Input() set rotation(rotation: NgtEuler | undefined) {
         this.set({
             rotation: make(THREE.Euler, rotation),
-        } as Partial<TObjectState>);
+        } as Partial<TObjectInputsState>);
     }
 
+    get quaternion() {
+        return this.get((s) => s.quaternion);
+    }
     @Input() set quaternion(quaternion: NgtQuaternion | undefined) {
         this.set({
             quaternion: make(THREE.Quaternion, quaternion),
-        } as Partial<TObjectState>);
+        } as Partial<TObjectInputsState>);
     }
 
+    get scale() {
+        return this.get((s) => s.scale);
+    }
     @Input() set scale(scale: NgtVector3 | undefined) {
-        this.set({ scale: makeVector3(scale) } as Partial<TObjectState>);
+        this.set({ scale: makeVector3(scale) } as Partial<TObjectInputsState>);
     }
 
+    get color() {
+        return this.get((s) => s.color);
+    }
     @Input() set color(color: NgtColor | undefined) {
-        this.set({ color: makeColor(color) } as Partial<TObjectState>);
+        this.set({ color: makeColor(color) } as Partial<TObjectInputsState>);
     }
 
+    get castShadow() {
+        return this.get((s) => s.castShadow);
+    }
     @Input() set castShadow(value: BooleanInput) {
         this.set({
             castShadow: coerceBooleanProperty(value),
-        } as Partial<TObjectState>);
+        } as Partial<TObjectInputsState>);
     }
 
+    get receiveShadow() {
+        return this.get((s) => s.receiveShadow);
+    }
     @Input() set receiveShadow(value: BooleanInput) {
         this.set({
             receiveShadow: coerceBooleanProperty(value),
-        } as Partial<TObjectState>);
+        } as Partial<TObjectInputsState>);
     }
 
+    get priority() {
+        return this.get((s) => s.priority);
+    }
     @Input() set priority(priority: number) {
-        this.set({ priority } as Partial<TObjectState>);
+        this.set({ priority } as Partial<TObjectInputsState>);
+    }
+    get useHostParent() {
+        return this.get((s) => s.useHostParent);
     }
     @Input() set useHostParent(useHostParent: boolean) {
-        this.set({ useHostParent } as Partial<TObjectState>);
+        this.set({ useHostParent } as Partial<TObjectInputsState>);
+    }
+    get visible() {
+        return this.get((s) => s.visible);
     }
     @Input() set visible(visible: boolean) {
-        this.set({ visible } as Partial<TObjectState>);
+        this.set({ visible } as Partial<TObjectInputsState>);
+    }
+    get matrixAutoUpdate() {
+        return this.get((s) => s.matrixAutoUpdate);
     }
     @Input() set matrixAutoUpdate(matrixAutoUpdate: boolean) {
-        this.set({ matrixAutoUpdate } as Partial<TObjectState>);
+        this.set({ matrixAutoUpdate } as Partial<TObjectInputsState>);
     }
 
-    @Input() set userData(userData: UnknownRecord) {
-        this.set({ userData } as Partial<TObjectState>);
+    get userData() {
+        return this.get((s) => s.userData);
+    }
+    @Input() set userData(userData: UnknownRecord | undefined) {
+        this.set({ userData } as Partial<TObjectInputsState>);
     }
 
-    @Input() set dispose(dispose: (() => void) | null) {
-        this.set({ dispose } as Partial<TObjectState>);
+    get dispose() {
+        return this.get((s) => s.dispose);
+    }
+    @Input() set dispose(dispose: (() => void) | null | undefined) {
+        this.set({ dispose } as Partial<TObjectInputsState>);
     }
 
-    @Input() set raycast(raycast: THREE.Object3D['raycast'] | null) {
-        this.set({ raycast } as Partial<TObjectState>);
+    get raycast() {
+        return this.get((s) => s.raycast);
+    }
+    @Input() set raycast(
+        raycast: THREE.Object3D['raycast'] | null | undefined
+    ) {
+        this.set({ raycast } as Partial<TObjectInputsState>);
     }
 
+    get appendMode() {
+        return this.get((s) => s.appendMode);
+    }
     @Input() set appendMode(appendMode: 'immediate' | 'root' | 'none') {
-        this.set({ appendMode } as Partial<TObjectState>);
+        this.set({ appendMode } as Partial<TObjectInputsState>);
     }
 
-    @Input() set appendTo(appendTo: () => THREE.Object3D) {
-        this.set({ appendTo } as Partial<TObjectState>);
+    get appendTo() {
+        return this.get((s) => s.appendTo);
     }
-
-    private _reconstruct = false;
-    get reconstruct(): boolean {
-        return this._reconstruct;
-    }
-    @Input() set reconstruct(reconstruct: BooleanInput) {
-        this._reconstruct = coerceBooleanProperty(reconstruct);
+    @Input() set appendTo(appendTo: (() => THREE.Object3D) | undefined) {
+        this.set({ appendTo } as Partial<TObjectInputsState>);
     }
 
     // events
@@ -169,6 +216,25 @@ export abstract class NgtObject<
     @Output() pointermissed = new EventEmitter<NgtEvent<PointerEvent>>();
     @Output() pointercancel = new EventEmitter<NgtEvent<PointerEvent>>();
     @Output() wheel = new EventEmitter<NgtEvent<WheelEvent>>();
+}
+
+export interface NgtObjectState<TObject extends THREE.Object3D = THREE.Object3D>
+    extends NgtObjectInputsState<TObject> {
+    object3d: TObject;
+}
+
+@Directive()
+export abstract class NgtObject<
+    TObject extends THREE.Object3D = THREE.Object3D,
+    TObjectState extends NgtObjectState<TObject> = NgtObjectState<TObject>
+> extends NgtObjectInputs<TObject, TObjectState> {
+    private _reconstruct = false;
+    get reconstruct(): boolean {
+        return this._reconstruct;
+    }
+    @Input() set reconstruct(reconstruct: BooleanInput) {
+        this._reconstruct = coerceBooleanProperty(reconstruct);
+    }
 
     @Output() appended = new EventEmitter<TObject>();
     @Output() beforeRender = new EventEmitter<{

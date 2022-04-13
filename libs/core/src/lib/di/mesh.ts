@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtMaterialGeometry } from '../abstracts/material-geometry';
 import { NgtCommonMesh } from '../three/mesh';
 import { NGT_COMMON_MESH_FACTORY } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideMaterialGeometryObjectFactory } from './material-geometry';
 
 export function provideCommonMeshFactory<
@@ -15,7 +15,8 @@ export function provideCommonMeshFactory<
 ): Provider {
     return [
         provideMaterialGeometryObjectFactory(
-            subMeshType as unknown as AnyConstructor<NgtMaterialGeometry>
+            subMeshType as unknown as AnyConstructor<NgtMaterialGeometry>,
+            factory as AnyFunction
         ),
         { provide: NgtCommonMesh, useExisting: subMeshType },
         {

@@ -15,6 +15,7 @@ import {
     Provider,
 } from '@angular/core';
 import { ConstraintOptns, ConstraintTypes } from '@pmndrs/cannon-worker-api';
+import { tap } from 'rxjs';
 import * as THREE from 'three';
 
 export function providePhysicsConstraint<
@@ -53,6 +54,7 @@ export interface NgtPhysicsConstraintState<
 > {
     bodies: THREE.Object3D[];
     options: TConstraintOptions;
+    previous?: () => THREE.Object3D;
 }
 
 @Directive()
@@ -66,6 +68,15 @@ export abstract class NgtPhysicsConstraint<
     abstract get constraintType(): TConstraintType;
 
     private readonly uuid = makeId();
+
+    @Input() set previous(previous: (() => THREE.Object3D) | undefined) {
+        if (previous) {
+            this.set((state) => ({
+                ...state,
+                previous,
+            }));
+        }
+    }
 
     @Input() set options(options: TConstraintOptions) {
         this.set({ options });
@@ -95,9 +106,17 @@ export abstract class NgtPhysicsConstraint<
         });
     }
 
-    addBody(body: THREE.Object3D) {
-        this.set((state) => ({ bodies: [...state.bodies, body] }));
-    }
+    readonly addBody = this.effect<THREE.Object3D>(
+        tap((body) => {
+            this.set((state) => {
+                if (state.previous) {
+                    return { ...state, bodies: [body, state.previous()] };
+                }
+
+                return { ...state, bodies: [...state.bodies, body] };
+            });
+        })
+    );
 
     get api(): NgtConstraintORHingeApi<TConstraintType> {
         const worker = this.physicsStore.get((s) => s.worker);

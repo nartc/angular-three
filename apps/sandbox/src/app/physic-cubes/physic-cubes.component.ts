@@ -11,6 +11,8 @@ import {
     NgtEuler,
     NgtTriple,
     NgtVector3,
+    NgtWrapper,
+    provideWrappedObjectFactory,
 } from '@angular-three/core';
 import {
     NgtColorAttributeModule,
@@ -35,6 +37,7 @@ import {
     Input,
     NgModule,
 } from '@angular/core';
+import * as THREE from 'three';
 
 @Component({
     selector: 'sandbox-physic-cubes',
@@ -70,13 +73,7 @@ export class SandboxPhysicCubesComponent {}
 @Component({
     selector: 'sandbox-plane',
     template: `
-        <ngt-mesh
-            ngtPhysicPlane
-            [getPhysicProps]="getPlaneProps"
-            receiveShadow
-            [position]="position"
-            [rotation]="rotation"
-        >
+        <ngt-mesh ngtPhysicPlane [getPhysicProps]="getPlaneProps" receiveShadow>
             <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
             <ngt-shadow-material
                 color="#171717"
@@ -99,17 +96,9 @@ export class SandboxPlaneComponent {
 }
 
 @Component({
-    selector: 'sandbox-cube',
+    selector: 'sandbox-box',
     template: `
-        <ngt-mesh
-            ngtPhysicBox
-            [getPhysicProps]="getCubeProps"
-            receiveShadow
-            castShadow
-            [position]="position"
-            [rotation]="rotation"
-            [scale]="scale"
-        >
+        <ngt-mesh receiveShadow castShadow (ready)="wrapped = $event">
             <ngt-box-geometry></ngt-box-geometry>
             <ngt-mesh-lambert-material
                 color="hotpink"
@@ -117,19 +106,25 @@ export class SandboxPlaneComponent {
         </ngt-mesh>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideWrappedObjectFactory<THREE.Mesh>(SandboxBoxComponent)],
+})
+export class SandboxBoxComponent extends NgtWrapper<THREE.Mesh> {}
+
+@Component({
+    selector: 'sandbox-cube',
+    template: `
+        <sandbox-box ngtPhysicBox [getPhysicProps]="getCubeProps"></sandbox-box>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SandboxCubeComponent {
     @Input() position?: NgtVector3;
-    @Input() scale?: NgtVector3 = 1;
     rotation = [0.4, 0.2, 0.5] as NgtEuler;
 
     getCubeProps: GetByIndex<BoxProps> = () => ({
         mass: 1,
         position: this.position as NgtTriple,
         rotation: this.rotation as NgtTriple,
-        args: (Array.isArray(this.scale)
-            ? this.scale
-            : [this.scale, this.scale, this.scale]) as NgtTriple,
     });
 }
 
@@ -138,8 +133,9 @@ export class SandboxCubeComponent {
         SandboxPhysicCubesComponent,
         SandboxPlaneComponent,
         SandboxCubeComponent,
+        SandboxBoxComponent,
     ],
-    exports: [SandboxPhysicCubesComponent],
+    exports: [SandboxPhysicCubesComponent, SandboxPlaneComponent],
     imports: [
         NgtCanvasModule,
         NgtColorAttributeModule,

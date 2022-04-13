@@ -23,6 +23,7 @@ export * from './lib/di/line';
 export * from './lib/di/light';
 export * from './lib/di/sprite';
 export * from './lib/di/texture';
+export * from './lib/di/wrapper';
 
 export * from './lib/pipes/math';
 export * from './lib/pipes/vector';
@@ -38,6 +39,7 @@ export * from './lib/directives/cursor';
 export * from './lib/abstracts/object';
 export * from './lib/abstracts/instance';
 export * from './lib/abstracts/material-geometry';
+export * from './lib/abstracts/wrapper';
 
 export * from './lib/three/audio';
 export * from './lib/three/line';

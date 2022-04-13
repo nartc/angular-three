@@ -8,7 +8,7 @@ import {
     NGT_OBJECT_FACTORY,
     NGT_SCENE_INSTANCE_FACTORY,
 } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideInstanceFactory } from './instance';
 
 export function provideObjectFactory<
@@ -24,7 +24,8 @@ export function provideObjectFactory<
 ): Provider {
     return [
         provideInstanceFactory<TObject>(
-            subObjectType as unknown as AnyConstructor<NgtInstance<TObject>>
+            subObjectType as unknown as AnyConstructor<NgtInstance<TObject>>,
+            factory as AnyFunction
         ),
         { provide: NgtObject, useExisting: subObjectType },
         {

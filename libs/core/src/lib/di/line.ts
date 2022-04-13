@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtMaterialGeometry } from '../abstracts/material-geometry';
 import { NgtCommonLine } from '../three/line';
 import { NGT_COMMON_LINE_FACTORY } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideMaterialGeometryObjectFactory } from './material-geometry';
 
 export function provideCommonLineFactory<
@@ -15,7 +15,8 @@ export function provideCommonLineFactory<
 ): Provider {
     return [
         provideMaterialGeometryObjectFactory(
-            subLineType as unknown as AnyConstructor<NgtMaterialGeometry>
+            subLineType as unknown as AnyConstructor<NgtMaterialGeometry>,
+            factory as AnyFunction
         ),
         { provide: NgtCommonLine, useExisting: subLineType },
         {

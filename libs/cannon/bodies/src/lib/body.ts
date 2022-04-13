@@ -2,17 +2,21 @@ import type { CannonEvents } from '@angular-three/cannon';
 import { NgtPhysicsStore } from '@angular-three/cannon';
 import { NgtPhysicsConstraint } from '@angular-three/cannon/constraints';
 import { NgtCannonDebug } from '@angular-three/cannon/debug';
-import type {
+import {
     AnyConstructor,
     AnyFunction,
-    NgtQuadruple,
-    NgtTriple,
-} from '@angular-three/core';
-import {
+    applyProps,
+    make,
+    makeVector3,
     NGT_OBJECT_FACTORY,
     NgtComponentStore,
+    NgtInstance,
+    NgtQuadruple,
     NgtStore,
+    NgtTriple,
+    NgtUnknownInstance,
     tapEffect,
+    UnknownRecord,
 } from '@angular-three/core';
 import {
     Directive,
@@ -37,6 +41,7 @@ import type {
     SubscriptionTarget,
     VectorName,
 } from '@pmndrs/cannon-worker-api';
+import { defer, switchMap } from 'rxjs';
 import * as THREE from 'three';
 
 const temp = new THREE.Object3D();
@@ -195,7 +200,8 @@ export abstract class NgtPhysicsBody<
         protected parentObjectFactory: AnyFunction,
         @Optional()
         @SkipSelf()
-        protected physicConstraint: NgtPhysicsConstraint<any, any>
+        protected physicConstraint: NgtPhysicsConstraint<any, any>,
+        @Optional() protected instance: NgtInstance<THREE.Object3D>
     ) {
         super();
         this.set({
@@ -208,7 +214,31 @@ export abstract class NgtPhysicsBody<
         this.zone.runOutsideAngular(() => {
             this.preInit();
             this.onCanvasReady(this.store.ready$, () => {
-                this.init(this.select((s) => s.getPhysicProps));
+                this.init(
+                    defer(() => {
+                        const getPhysicProps$ = this.select(
+                            (s) => s.getPhysicProps
+                        );
+                        if (this.instance) {
+                            return this.instance.ready.pipe(
+                                switchMap(() => getPhysicProps$)
+                            );
+                        }
+                        return getPhysicProps$;
+                    })
+                );
+                if (this.physicConstraint) {
+                    const object$ = this.select((s) => s.object);
+                    const deferred$ = defer(() => {
+                        if (this.instance) {
+                            return this.instance.ready.pipe(
+                                switchMap(() => object$)
+                            );
+                        }
+                        return object$;
+                    });
+                    this.physicConstraint.addBody(deferred$);
+                }
             });
         });
     }
@@ -404,6 +434,29 @@ export abstract class NgtPhysicsBody<
         };
     }
 
+    private applyProps(props: TBodyProps) {
+        const object = this.get((s) => s.object);
+        const objectProps: UnknownRecord = {};
+        if (props.position) {
+            objectProps['position'] = makeVector3(props.position);
+        }
+
+        if (props.quaternion) {
+            objectProps['quaternion'] = make(
+                THREE.Quaternion,
+                props.quaternion
+            );
+        } else if (props.rotation) {
+            objectProps['rotation'] = make(THREE.Euler, props.rotation);
+        }
+
+        if (props.userData) {
+            objectProps['userData'] = props.userData;
+        }
+
+        applyProps(object as unknown as NgtUnknownInstance, objectProps);
+    }
+
     private readonly init = this.effect<
         NgtPhysicsBodyState<TBodyProps>['getPhysicProps']
     >(
@@ -416,9 +469,7 @@ export abstract class NgtPhysicsBody<
 
             const { object, argsFn, getPhysicProps } = this.get();
 
-            if (this.physicConstraint) {
-                this.physicConstraint.addBody(object);
-            }
+            console.log(object);
 
             const { worker, refs, events } = this.physicsStore.get();
             const currentWorker = worker;
@@ -449,18 +500,30 @@ export abstract class NgtPhysicsBody<
                         this.debug.api.add(id, props, this.bodyType);
                     }
                     setupCollision(events, props, id);
+                    if (!(object instanceof THREE.InstancedMesh)) {
+                        this.applyProps(props);
+                    }
                     return { ...props, args: argsFn(props.args) };
                 }
             );
 
             // Register on mount, unregister on unmount
             currentWorker.addBodies({
-                props: props.map(({ onCollide, ...serializableProps }) => {
-                    return {
-                        onCollide: Boolean(onCollide),
-                        ...serializableProps,
-                    };
-                }),
+                props: props.map(
+                    ({
+                        onCollide,
+                        onCollideBegin,
+                        onCollideEnd,
+                        ...serializableProps
+                    }) => {
+                        return {
+                            onCollide: Boolean(onCollide),
+                            onCollideBegin: Boolean(onCollideBegin),
+                            onCollideEnd: Boolean(onCollideEnd),
+                            ...serializableProps,
+                        };
+                    }
+                ),
                 type: this.bodyType,
                 uuid,
             });

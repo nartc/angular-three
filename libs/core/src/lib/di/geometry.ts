@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonGeometry } from '../three/geometry';
 import { NGT_COMMON_GEOMETRY_FACTORY } from '../tokens';
-import { AnyConstructor } from '../types';
+import { AnyConstructor, AnyFunction } from '../types';
 import { provideInstanceFactory } from './instance';
 
 export function provideCommonGeometryFactory<
@@ -15,7 +15,10 @@ export function provideCommonGeometryFactory<
 ): Provider {
     return [
         provideInstanceFactory<TGeometry>(
-            subGeometryType as unknown as AnyConstructor<NgtInstance<TGeometry>>
+            subGeometryType as unknown as AnyConstructor<
+                NgtInstance<TGeometry>
+            >,
+            factory as AnyFunction
         ),
         { provide: NgtCommonGeometry, useExisting: subGeometryType },
         {

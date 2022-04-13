@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonCamera } from '../three/camera';
 import { NGT_COMMON_CAMERA_FACTORY } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideObjectFactory } from './object';
 
 export function provideCommonCameraFactory<
@@ -15,7 +15,8 @@ export function provideCommonCameraFactory<
 ): Provider {
     return [
         provideObjectFactory(
-            subCameraType as unknown as AnyConstructor<NgtObject>
+            subCameraType as unknown as AnyConstructor<NgtObject>,
+            factory as AnyFunction
         ),
         { provide: NgtCommonCamera, useExisting: subCameraType },
         {

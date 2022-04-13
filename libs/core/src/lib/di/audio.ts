@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtObject } from '../abstracts/object';
 import { NgtCommonAudio } from '../three/audio';
 import { NGT_COMMON_AUDIO_FACTORY } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideObjectFactory } from './object';
 
 export function provideCommonAudioFactory<
@@ -19,7 +19,8 @@ export function provideCommonAudioFactory<
 ): Provider {
     return [
         provideObjectFactory(
-            subAudioType as unknown as AnyConstructor<NgtObject>
+            subAudioType as unknown as AnyConstructor<NgtObject>,
+            factory as AnyFunction
         ),
         { provide: NgtCommonAudio, useExisting: subAudioType },
         {

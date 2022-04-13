@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonMaterial } from '../three/material';
 import { NGT_COMMON_MATERIAL_FACTORY } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideInstanceFactory } from './instance';
 
 export function provideCommonMaterialFactory<
@@ -19,7 +19,10 @@ export function provideCommonMaterialFactory<
 ): Provider {
     return [
         provideInstanceFactory<TMaterial>(
-            subMaterialType as unknown as AnyConstructor<NgtInstance<TMaterial>>
+            subMaterialType as unknown as AnyConstructor<
+                NgtInstance<TMaterial>
+            >,
+            factory as AnyFunction
         ),
         { provide: NgtCommonMaterial, useExisting: subMaterialType },
         {

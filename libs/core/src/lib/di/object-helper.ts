@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonObjectHelper } from '../three/object-helper';
 import { NGT_COMMON_OBJECT_HELPER_FACTORY } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 import { provideInstanceFactory } from './instance';
 
 export function provideCommonObjectHelperFactory<
@@ -17,7 +17,8 @@ export function provideCommonObjectHelperFactory<
         provideInstanceFactory<TObjectHelper>(
             subObjectHelperType as unknown as AnyConstructor<
                 NgtInstance<TObjectHelper>
-            >
+            >,
+            factory as AnyFunction
         ),
         { provide: NgtCommonObjectHelper, useExisting: subObjectHelperType },
         {
