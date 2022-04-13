@@ -27,7 +27,8 @@ import type {
 import { applyProps } from '../utils/apply-props';
 import { coerceBooleanProperty } from '../utils/coercion';
 import { make, makeColor, makeVector3 } from '../utils/make';
-import { NgtInstance, NgtInstanceState } from './instance';
+import type { NgtInstanceState } from './instance';
+import { NgtInstance } from './instance';
 
 const supportedEvents = [
     'click',
@@ -216,26 +217,31 @@ export abstract class NgtObjectInputs<
     @Output() pointermissed = new EventEmitter<NgtEvent<PointerEvent>>();
     @Output() pointercancel = new EventEmitter<NgtEvent<PointerEvent>>();
     @Output() wheel = new EventEmitter<NgtEvent<WheelEvent>>();
-}
 
-export interface NgtObjectState<TObject extends THREE.Object3D = THREE.Object3D>
-    extends NgtObjectInputsState<TObject> {
-    object3d: TObject;
+    protected override get optionFields(): Record<string, boolean> {
+        return {
+            name: false,
+            position: false,
+            rotation: false,
+            quaternion: false,
+            scale: false,
+            color: false,
+            castShadow: false,
+            receiveShadow: false,
+            visible: false,
+            matrixAutoUpdate: false,
+            userData: false,
+            dispose: true,
+            raycast: true,
+        };
+    }
 }
 
 @Directive()
 export abstract class NgtObject<
     TObject extends THREE.Object3D = THREE.Object3D,
-    TObjectState extends NgtObjectState<TObject> = NgtObjectState<TObject>
+    TObjectState extends NgtObjectInputsState<TObject> = NgtObjectInputsState<TObject>
 > extends NgtObjectInputs<TObject, TObjectState> {
-    private _reconstruct = false;
-    get reconstruct(): boolean {
-        return this._reconstruct;
-    }
-    @Input() set reconstruct(reconstruct: BooleanInput) {
-        this._reconstruct = coerceBooleanProperty(reconstruct);
-    }
-
     @Output() appended = new EventEmitter<TObject>();
     @Output() beforeRender = new EventEmitter<{
         state: NgtRenderState;
@@ -275,10 +281,6 @@ export abstract class NgtObject<
         } as Partial<TObjectState>);
     }
 
-    get object3d(): TObject {
-        return this.get((s) => s.object3d) as TObject;
-    }
-
     override ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
@@ -305,18 +307,14 @@ export abstract class NgtObject<
         return undefined;
     }
 
-    private init(reconstruct = false) {
-        if (reconstruct !== this.reconstruct) {
-            reconstruct = this.reconstruct;
-        }
-
-        if (this.object3d && reconstruct) {
+    private init() {
+        if (this.instance) {
             this.switch();
         } else {
-            this.prepareInstance(this.objectInitFn(), 'object3d');
+            this.prepareInstance(this.objectInitFn());
         }
 
-        if (this.object3d) {
+        if (this.instance) {
             const observedEvents = supportedEvents.reduce(
                 (result, event) => {
                     const controllerEvent = this[event].observed
@@ -344,12 +342,12 @@ export abstract class NgtObject<
 
             // add as an interaction if there are events observed
             if (observedEvents.eventCount > 0) {
-                this.store.addInteraction(this.object3d);
+                this.store.addInteraction(this.instance);
             }
 
             // append to parent
             if (
-                this.object3d.isObject3D &&
+                this.instance.isObject3D &&
                 this.get((s) => s.appendMode) !== 'none'
             ) {
                 // appendToParent is late a frame due to appendTo
@@ -360,11 +358,11 @@ export abstract class NgtObject<
             // setup beforeRender
             if (this.beforeRender.observed) {
                 this.store.registerBeforeRender({
-                    obj: () => this.object3d,
+                    obj: () => this.instance,
                     callback: (state) => {
                         this.beforeRender.emit({
                             state,
-                            object: this.object3d,
+                            object: this.instance,
                         });
                     },
                     priority: this.get((s) => s.priority),
@@ -373,32 +371,14 @@ export abstract class NgtObject<
         }
     }
 
-    protected override get optionFields(): Record<string, boolean> {
-        return {
-            name: false,
-            position: false,
-            rotation: false,
-            quaternion: false,
-            scale: false,
-            color: false,
-            castShadow: false,
-            receiveShadow: false,
-            visible: false,
-            matrixAutoUpdate: false,
-            userData: false,
-            dispose: true,
-            raycast: true,
-        };
-    }
-
     protected override destroy() {
-        if (this.object3d) {
+        if (this.instance) {
             // remove beforeRender callback
-            this.store.unregisterBeforeRender(this.object3d.uuid);
+            this.store.unregisterBeforeRender(this.instance.uuid);
 
             // remove interaction
             if (this.__ngt__.eventCount > 0) {
-                this.store.removeInteraction(this.object3d.uuid);
+                this.store.removeInteraction(this.instance.uuid);
             }
 
             this.remove();
@@ -411,8 +391,8 @@ export abstract class NgtObject<
             const appendToFactory = this.get((s) => s.appendTo);
             const appendTo = appendToFactory?.();
             if (appendTo) {
-                appendTo.add(this.object3d);
-                this.appended.emit(this.object3d);
+                appendTo.add(this.instance);
+                this.appended.emit(this.instance);
                 return;
             }
 
@@ -420,13 +400,13 @@ export abstract class NgtObject<
 
             if (appendMode === 'root') {
                 this.addToScene();
-                this.appended.emit(this.object3d);
+                this.appended.emit(this.instance);
                 return;
             }
 
             if (appendMode === 'immediate') {
                 this.addToParent();
-                this.appended.emit(this.object3d);
+                this.appended.emit(this.instance);
             }
         });
     }
@@ -434,7 +414,7 @@ export abstract class NgtObject<
     private addToScene() {
         const scene = this.store.get((s) => s.scene);
         if (scene) {
-            scene.add(this.object3d);
+            scene.add(this.instance);
         }
     }
 
@@ -445,8 +425,8 @@ export abstract class NgtObject<
         //     parentObject = this.hostParentObjectFn?.();
         // }
 
-        if (parentObject && parentObject.uuid !== this.object3d.uuid) {
-            parentObject.add(this.object3d);
+        if (parentObject && parentObject.uuid !== this.instance.uuid) {
+            parentObject.add(this.instance);
         } else {
             this.addToScene();
         }
@@ -456,44 +436,41 @@ export abstract class NgtObject<
         const { appendMode, appendToFactory } = this.get();
         const appendTo = appendToFactory?.();
         if (appendTo) {
-            appendTo.remove(this.object3d);
+            appendTo.remove(this.instance);
         } else if (
             this.parentObjectFactory?.() &&
-            this.parentObjectFactory()?.uuid !== this.object3d.uuid &&
+            this.parentObjectFactory()?.uuid !== this.instance.uuid &&
             appendMode === 'immediate'
         ) {
-            this.parentObjectFactory().remove(this.object3d);
+            this.parentObjectFactory().remove(this.instance);
         } else {
             const scene = this.store.get((s) => s.scene);
             if (scene) {
-                scene.remove(this.object3d);
+                scene.remove(this.instance);
             }
         }
     }
 
     private switch() {
-        const newObject3d = this.prepareInstance(this.objectInitFn());
-        if (this.object3d.children) {
-            this.object3d.traverse((object) => {
+        const newObject3d = this.objectInitFn();
+        if (this.instance.children) {
+            this.instance.traverse((object) => {
                 if (
-                    object !== this.object3d &&
-                    object.parent === this.object3d
+                    object !== this.instance &&
+                    object.parent === this.instance
                 ) {
                     object.parent = newObject3d;
                 }
             });
-            this.object3d.children = [];
+            this.instance.children = [];
         }
 
         if (this.__ngt__.eventCount > 0) {
-            this.store.removeInteraction(this.object3d.uuid);
+            this.store.removeInteraction(this.instance.uuid);
         }
 
         this.remove();
-        this.set({
-            object: newObject3d,
-            instance: newObject3d,
-        } as unknown as Partial<TObjectState>);
+        this.prepareInstance(newObject3d);
     }
 
     private eventNameToHandler(

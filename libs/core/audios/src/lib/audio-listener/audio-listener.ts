@@ -1,6 +1,6 @@
 import {
     NgtObject,
-    NgtObjectState,
+    NgtObjectInputsState,
     NgtPreObjectInit,
     provideObjectFactory,
 } from '@angular-three/core';
@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 export interface NgtAudioListenerState
-    extends NgtObjectState<THREE.AudioListener> {
+    extends NgtObjectInputsState<THREE.AudioListener> {
     filter: AudioNode;
     timeDelta: number;
 }
@@ -58,7 +58,7 @@ export class NgtAudioListener extends NgtObject<
     protected override destroy() {
         const camera = this.store.get((s) => s.camera);
         if (camera) {
-            camera.remove(this.object3d);
+            camera.remove(this.instance);
         }
         super.destroy();
     }

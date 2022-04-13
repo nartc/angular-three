@@ -39,10 +39,7 @@ export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
             this.initSubscription = this.onCanvasReady(
                 this.store.ready$,
                 () => {
-                    this.set({
-                        instance: this.prepareInstance(<%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>)),
-                    });
-
+                    this.prepareInstance(<%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>))
                     return () => {
                         this.initSubscription?.unsubscribe();
                     };

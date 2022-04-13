@@ -22,7 +22,7 @@ export function provideCommonLineFactory<
         {
             provide: NGT_COMMON_LINE_FACTORY,
             useFactory: (subLine: TSubLine) => {
-                return () => factory?.(subLine) || subLine.object3d;
+                return () => factory?.(subLine) || subLine.instance;
             },
             deps: [subLineType],
         },

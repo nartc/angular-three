@@ -1,11 +1,11 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import type { AnyConstructor, UnknownRecord } from '../types';
-import { NgtObject, NgtObjectState } from './object';
+import { NgtObject, NgtObjectInputsState } from './object';
 
 export interface NgtMaterialGeometryState<
     TObject extends THREE.Object3D = THREE.Object3D
-> extends NgtObjectState<TObject> {
+> extends NgtObjectInputsState<TObject> {
     material: THREE.Material | THREE.Material[];
     geometry: THREE.BufferGeometry;
     morphTargetInfluences?: number[];

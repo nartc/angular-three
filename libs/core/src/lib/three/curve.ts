@@ -16,7 +16,6 @@ import type { AnyConstructor, AnyFunction } from '../types';
 export interface NgtCommonCurveState<
     TCurve extends THREE.Curve<THREE.Vector> = THREE.Curve<THREE.Vector>
 > extends NgtInstanceState<TCurve> {
-    curve: TCurve;
     arcLengthDivisions?: number;
 }
 
@@ -50,10 +49,6 @@ export abstract class NgtCommonCurve<
         super.ngOnInit();
     }
 
-    get curve(): TCurve {
-        return this.get((s) => s.curve);
-    }
-
     protected override postPrepare(curve: TCurve) {
         const arcLengthDivisions = this.get((s) => s.arcLengthDivisions);
         if (arcLengthDivisions != undefined) {
@@ -63,7 +58,7 @@ export abstract class NgtCommonCurve<
 
     private readonly init = this.effect<unknown[]>(
         tapEffect((instanceArgs) => {
-            this.prepareInstance(new this.curveType(...instanceArgs), 'curve');
+            this.prepareInstance(new this.curveType(...instanceArgs));
         })
     );
 }

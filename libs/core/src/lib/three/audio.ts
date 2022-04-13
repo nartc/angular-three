@@ -2,7 +2,7 @@ import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import {
     NgtObject,
-    NgtObjectState,
+    NgtObjectInputsState,
     NgtPreObjectInit,
 } from '../abstracts/object';
 import { tapEffect } from '../stores/component-store';
@@ -11,7 +11,7 @@ import type { AnyConstructor } from '../types';
 export interface NgtCommonAudioState<
     TAudioNode extends AudioNode = GainNode,
     TAudio extends THREE.Audio<TAudioNode> = THREE.Audio<TAudioNode>
-> extends NgtObjectState<TAudio> {
+> extends NgtObjectInputsState<TAudio> {
     listener: THREE.AudioListener;
     buffer: null | AudioBuffer;
     detune: number;
@@ -125,6 +125,7 @@ export abstract class NgtCommonAudio<
                 source: null,
                 filters: [],
             });
+
             this.effect<THREE.AudioListener>(
                 tapEffect(() => {
                     initFn();

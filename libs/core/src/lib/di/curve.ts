@@ -22,7 +22,7 @@ export function provideCommonCurveFactory<
         {
             provide: NGT_COMMON_CURVE_FACTORY,
             useFactory: (subCurve: TSubCurve) => {
-                return () => factory?.(subCurve) || subCurve.curve;
+                return () => factory?.(subCurve) || subCurve.instance;
             },
             deps: [subCurveType],
         },

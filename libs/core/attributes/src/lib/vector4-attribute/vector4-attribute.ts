@@ -37,10 +37,7 @@ export class NgtVector4Attribute extends NgtInstance<THREE.Vector4> {
             this.initSubscription = this.onCanvasReady(
                 this.store.ready$,
                 () => {
-                    this.set({
-                        instance: this.prepareInstance(makeVector4(vector4)),
-                    });
-
+                    this.prepareInstance(makeVector4(vector4));
                     return () => {
                         this.initSubscription?.unsubscribe();
                     };

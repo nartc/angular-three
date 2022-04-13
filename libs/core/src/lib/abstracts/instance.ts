@@ -8,6 +8,7 @@ import {
     Output,
 } from '@angular/core';
 import {
+    BehaviorSubject,
     filter,
     map,
     Observable,
@@ -15,6 +16,7 @@ import {
     pairwise,
     pipe,
     startWith,
+    switchMap,
     tap,
     withLatestFrom,
 } from 'rxjs';
@@ -40,7 +42,7 @@ import { is } from '../utils/is';
 import { mutate } from '../utils/mutate';
 
 export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
-    instance: NgtUnknownInstance<TInstance>;
+    instance: BehaviorSubject<NgtUnknownInstance<TInstance>>;
     instanceArgs: unknown[];
     attach: string[] | AttachFunction;
     [option: string]: any;
@@ -72,14 +74,20 @@ export abstract class NgtInstance<
     }
 
     readonly instance$ = this.select((s) => s.instance).pipe(
-        filter(
-            (instance): instance is NgtUnknownInstance<TInstance> =>
-                instance != null
+        switchMap((instance$) =>
+            instance$.pipe(
+                filter(
+                    (instance): instance is NgtUnknownInstance<TInstance> =>
+                        instance != null
+                )
+            )
         )
     );
 
     get instance(): NgtUnknownInstance<TInstance> {
-        return this.get((s) => s.instance) as NgtUnknownInstance<TInstance>;
+        return this.get(
+            (s) => s.instance
+        ).getValue() as NgtUnknownInstance<TInstance>;
     }
 
     protected readonly instanceArgs$ = this.select((s) => s.instanceArgs);
@@ -112,7 +120,7 @@ export abstract class NgtInstance<
         this.parentInstanceFactory = parentInstanceFactory;
 
         this.set({
-            instance: undefined,
+            instance: new BehaviorSubject(null),
             instanceArgs: [],
             attach: [],
         } as unknown as TInstanceState);
@@ -136,8 +144,7 @@ export abstract class NgtInstance<
     }
 
     protected prepareInstance(
-        instance: TInstance,
-        keyToSet?: keyof TInstanceState
+        instance: TInstance
     ): NgtUnknownInstance<TInstance> {
         const prepInstance = prepare(
             instance,
@@ -145,16 +152,12 @@ export abstract class NgtInstance<
             this.parentInstanceFactory?.() as NgtUnknownInstance,
             this.instance as NgtUnknownInstance
         );
+
         this.postPrepare(prepInstance);
 
-        if (keyToSet) {
-            this.set({
-                instance: prepInstance,
-                [keyToSet]: prepInstance,
-            } as Partial<TInstanceState>);
-        }
-
+        this.get((s) => s.instance).next(prepInstance);
         this.emitReady();
+
         return prepInstance;
     }
 
@@ -200,10 +203,8 @@ export abstract class NgtInstance<
             dispose();
         }
 
-        this.set({
-            instance: undefined,
-            attach: [],
-        } as unknown as Partial<TInstanceState>);
+        this.set({ attach: [] } as unknown as Partial<TInstanceState>);
+        this.get((s) => s.instance).complete();
     }
 
     /**
@@ -231,7 +232,6 @@ export abstract class NgtInstance<
             }),
             (...args: any[]) =>
                 args.reduce((record, arg, index) => {
-                    // console.log(optionEntries[index], prev, curr);
                     record[optionEntries[index][0]] = arg;
                     return record;
                 }, {} as UnknownRecord)

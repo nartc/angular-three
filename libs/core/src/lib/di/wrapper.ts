@@ -1,12 +1,9 @@
-import {
-    AnyConstructor,
-    AnyFunction,
-    NGT_WRAPPED_OBJECT_FACTORY,
-    provideObjectFactory,
-} from '@angular-three/core';
 import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtWrapper } from '../abstracts/wrapper';
+import { NGT_WRAPPED_OBJECT_FACTORY } from '../tokens';
+import type { AnyConstructor, AnyFunction } from '../types';
+import { provideObjectFactory } from './object';
 
 export function provideWrappedObjectFactory<
     TObject extends THREE.Object3D,

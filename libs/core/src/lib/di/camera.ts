@@ -22,7 +22,7 @@ export function provideCommonCameraFactory<
         {
             provide: NGT_COMMON_CAMERA_FACTORY,
             useFactory: (subCamera: TSubCamera) => {
-                return () => factory?.(subCamera) || subCamera.object3d;
+                return () => factory?.(subCamera) || subCamera.instance;
             },
             deps: [subCameraType],
         },

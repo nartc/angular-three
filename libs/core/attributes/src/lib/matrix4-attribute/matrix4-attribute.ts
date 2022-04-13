@@ -37,12 +37,7 @@ export class NgtMatrix4Attribute extends NgtInstance<THREE.Matrix4> {
             this.initSubscription = this.onCanvasReady(
                 this.store.ready$,
                 () => {
-                    this.set({
-                        instance: this.prepareInstance(
-                            make(THREE.Matrix4, matrix4)
-                        ),
-                    });
-
+                    this.prepareInstance(make(THREE.Matrix4, matrix4));
                     return () => {
                         this.initSubscription?.unsubscribe();
                     };

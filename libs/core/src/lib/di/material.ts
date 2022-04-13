@@ -28,7 +28,7 @@ export function provideCommonMaterialFactory<
         {
             provide: NGT_COMMON_MATERIAL_FACTORY,
             useFactory: (subMaterial: TSubMaterial) => {
-                return () => factory?.(subMaterial) || subMaterial.material;
+                return () => factory?.(subMaterial) || subMaterial.instance;
             },
             deps: [subMaterialType],
         },

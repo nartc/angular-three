@@ -37,10 +37,7 @@ export class NgtFogAttribute extends NgtInstance<THREE.Fog> {
             this.initSubscription = this.onCanvasReady(
                 this.store.ready$,
                 () => {
-                    this.set({
-                        instance: this.prepareInstance(make(THREE.Fog, fog)),
-                    });
-
+                    this.prepareInstance(make(THREE.Fog, fog));
                     return () => {
                         this.initSubscription?.unsubscribe();
                     };

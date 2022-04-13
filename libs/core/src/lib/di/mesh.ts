@@ -22,7 +22,7 @@ export function provideCommonMeshFactory<
         {
             provide: NGT_COMMON_MESH_FACTORY,
             useFactory: (subMesh: TSubMesh) => {
-                return () => factory?.(subMesh) || subMesh.object3d;
+                return () => factory?.(subMesh) || subMesh.instance;
             },
             deps: [subMeshType],
         },

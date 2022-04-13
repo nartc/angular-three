@@ -14,16 +14,10 @@ import { NGT_INSTANCE_FACTORY } from '../tokens';
 import type { AnyConstructor } from '../types';
 import { AnyFunction } from '../types';
 
-export interface NgtCommonTextureState<
-    TTexture extends THREE.Texture = THREE.Texture
-> extends NgtInstanceState<TTexture> {
-    texture: TTexture;
-}
-
 @Directive()
 export abstract class NgtCommonTexture<
     TTexture extends THREE.Texture = THREE.Texture
-> extends NgtInstance<TTexture, NgtCommonTextureState<TTexture>> {
+> extends NgtInstance<TTexture, NgtInstanceState<TTexture>> {
     abstract get textureType(): AnyConstructor<TTexture>;
 
     @Input() set image(
@@ -81,10 +75,6 @@ export abstract class NgtCommonTexture<
         super({ zone, store, parentInstanceFactory });
     }
 
-    get texture(): TTexture {
-        return this.get((s) => s.texture);
-    }
-
     override ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
@@ -97,8 +87,7 @@ export abstract class NgtCommonTexture<
     private readonly init = this.effect<unknown[]>(
         tapEffect((instanceArgs) => {
             const texture = this.prepareInstance(
-                new this.textureType(...instanceArgs),
-                'texture'
+                new this.textureType(...instanceArgs)
             );
 
             return () => {

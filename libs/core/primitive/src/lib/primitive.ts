@@ -1,6 +1,6 @@
 import {
     NgtObject,
-    NgtObjectState,
+    NgtObjectInputsState,
     NgtPreObjectInit,
     provideObjectFactory,
     tapEffect,
@@ -14,7 +14,7 @@ import {
 import { filter } from 'rxjs';
 import * as THREE from 'three';
 
-export interface NgtPrimitiveState extends NgtObjectState {
+export interface NgtPrimitiveState extends NgtObjectInputsState {
     object: THREE.Object3D;
 }
 

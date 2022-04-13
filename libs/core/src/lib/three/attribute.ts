@@ -4,22 +4,14 @@ import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_INSTANCE_FACTORY } from '../tokens';
-import { AnyConstructor, AnyFunction } from '../types';
-
-export interface NgtCommonAttributeState<
-    TAttribute extends
-        | THREE.BufferAttribute
-        | THREE.InterleavedBufferAttribute = THREE.BufferAttribute
-> extends NgtInstanceState<TAttribute> {
-    attribute: TAttribute;
-}
+import type { AnyConstructor, AnyFunction } from '../types';
 
 @Directive()
 export abstract class NgtCommonAttribute<
     TAttribute extends
         | THREE.BufferAttribute
         | THREE.InterleavedBufferAttribute = THREE.BufferAttribute
-> extends NgtInstance<TAttribute, NgtCommonAttributeState<TAttribute>> {
+> extends NgtInstance<TAttribute, NgtInstanceState<TAttribute>> {
     abstract get attributeType(): AnyConstructor<TAttribute>;
 
     constructor(
@@ -31,10 +23,6 @@ export abstract class NgtCommonAttribute<
         parentInstanceFactory: AnyFunction
     ) {
         super({ zone, store, parentInstanceFactory });
-    }
-
-    get attribute(): TAttribute {
-        return this.get((s) => s.attribute);
     }
 
     override ngOnInit() {
@@ -57,10 +45,7 @@ export abstract class NgtCommonAttribute<
 
     private readonly init = this.effect<unknown[]>(
         tapEffect((instanceArgs) => {
-            this.prepareInstance(
-                new this.attributeType(...instanceArgs),
-                'attribute'
-            );
+            this.prepareInstance(new this.attributeType(...instanceArgs));
         })
     );
 }

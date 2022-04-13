@@ -6,19 +6,10 @@ import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_FACTORY } from '../tokens';
 import { AnyConstructor, AnyFunction } from '../types';
 
-export interface NgtCommonObjectHelperState<
-    TObjectHelper extends THREE.Object3D
-> extends NgtInstanceState<TObjectHelper> {
-    objectHelper: TObjectHelper;
-}
-
 @Directive()
 export abstract class NgtCommonObjectHelper<
     TObjectHelper extends THREE.Object3D
-> extends NgtInstance<
-    TObjectHelper,
-    NgtCommonObjectHelperState<TObjectHelper>
-> {
+> extends NgtInstance<TObjectHelper, NgtInstanceState<TObjectHelper>> {
     abstract get objectHelperType(): AnyConstructor<TObjectHelper>;
 
     constructor(
@@ -33,10 +24,6 @@ export abstract class NgtCommonObjectHelper<
             store,
             parentInstanceFactory,
         });
-    }
-
-    get objectHelper(): TObjectHelper {
-        return this.get((s) => s.objectHelper);
     }
 
     override ngOnInit() {
@@ -57,8 +44,7 @@ export abstract class NgtCommonObjectHelper<
             }
 
             const objectHelper = this.prepareInstance(
-                new this.objectHelperType(parentObject, ...instanceArgs),
-                'objectHelper'
+                new this.objectHelperType(parentObject, ...instanceArgs)
             );
 
             const scene = this.store.get((s) => s.scene);

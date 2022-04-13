@@ -9,7 +9,8 @@ import {
 import { Observable, of, tap } from 'rxjs';
 import * as THREE from 'three';
 import { Plane } from 'three/src/math/Plane';
-import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
+import type { NgtInstanceState } from '../abstracts/instance';
+import { NgtInstance } from '../abstracts/instance';
 import { startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_FACTORY } from '../tokens';
@@ -19,7 +20,6 @@ export interface NgtCommonMaterialState<
     TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
     TMaterial extends THREE.Material = THREE.Material
 > extends NgtInstanceState<TMaterial> {
-    material: TMaterial;
     materialParameters: TMaterialParameters;
     alphaTest?: number;
     alphaToCoverage?: boolean;
@@ -256,10 +256,6 @@ export abstract class NgtCommonMaterial<
 
     abstract get materialType(): AnyConstructor<TMaterial>;
 
-    get material(): TMaterial {
-        return this.get((s) => s.material);
-    }
-
     constructor(
         zone: NgZone,
         store: NgtStore,
@@ -278,7 +274,7 @@ export abstract class NgtCommonMaterial<
                 this.init();
                 this.setParameters(
                     this.select(
-                        this.select((s) => s.material),
+                        this.instance$,
                         this.select((s) => s.materialParameters),
                         this.parameters$,
                         this.subParameters$,
@@ -302,10 +298,7 @@ export abstract class NgtCommonMaterial<
 
     private readonly init = this.effect<void>(
         tapEffect(() => {
-            const material = this.prepareInstance(
-                new this.materialType(),
-                'material'
-            );
+            const material = this.prepareInstance(new this.materialType());
             return () => {
                 material.dispose();
             };

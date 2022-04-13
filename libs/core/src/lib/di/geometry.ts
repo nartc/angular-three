@@ -24,7 +24,7 @@ export function provideCommonGeometryFactory<
         {
             provide: NGT_COMMON_GEOMETRY_FACTORY,
             useFactory: (subGeometry: TSubGeometry) => {
-                return () => factory?.(subGeometry) || subGeometry.geometry;
+                return () => factory?.(subGeometry) || subGeometry.instance;
             },
             deps: [subGeometryType],
         },

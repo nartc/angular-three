@@ -1,7 +1,7 @@
 import { Provider, Type } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
-import { NgtObject, NgtObjectState } from '../abstracts/object';
+import { NgtObject, NgtObjectInputsState } from '../abstracts/object';
 import {
     NGT_CAMERA_INSTANCE_FACTORY,
     NGT_INSTANCE_FACTORY,
@@ -13,7 +13,7 @@ import { provideInstanceFactory } from './instance';
 
 export function provideObjectFactory<
     TObject extends THREE.Object3D,
-    TObjectState extends NgtObjectState<TObject> = NgtObjectState<TObject>,
+    TObjectState extends NgtObjectInputsState<TObject> = NgtObjectInputsState<TObject>,
     TSubObject extends NgtObject<TObject, TObjectState> = NgtObject<
         TObject,
         TObjectState
@@ -31,7 +31,7 @@ export function provideObjectFactory<
         {
             provide: NGT_OBJECT_FACTORY,
             useFactory: (subObject: TSubObject) => {
-                return () => factory?.(subObject) || subObject.object3d;
+                return () => factory?.(subObject) || subObject.instance;
             },
             deps: [subObjectType],
         },

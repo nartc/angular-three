@@ -37,10 +37,7 @@ export class NgtColorAttribute extends NgtInstance<THREE.Color> {
             this.initSubscription = this.onCanvasReady(
                 this.store.ready$,
                 () => {
-                    this.set({
-                        instance: this.prepareInstance(makeColor(color)),
-                    });
-
+                    this.prepareInstance(makeColor(color));
                     return () => {
                         this.initSubscription?.unsubscribe();
                     };

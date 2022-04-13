@@ -22,7 +22,7 @@ export function provideCommonLightFactory<
         {
             provide: NGT_COMMON_LIGHT_FACTORY,
             useFactory: (subLight: TSubLight) => {
-                return () => factory?.(subLight) || subLight.object3d;
+                return () => factory?.(subLight) || subLight.instance;
             },
             deps: [subLightType],
         },

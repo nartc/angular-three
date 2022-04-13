@@ -74,7 +74,7 @@ export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
     }
 
     bind(skeleton: THREE.Skeleton) {
-        this.object3d.bind(
+        this.instance.bind(
             skeleton,
             this.get((s) => s['bindMatrix'])
         );
@@ -141,7 +141,7 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
             zone,
             store,
             parentInstanceFactory: () =>
-                skinnedMesh?.object3d as unknown as NgtUnknownInstance,
+                skinnedMesh?.instance as unknown as NgtUnknownInstance,
         });
 
         this.set({
@@ -193,11 +193,10 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
                         ...(skeletonArgs as ConstructorParameters<
                             typeof THREE.Skeleton
                         >)
-                    ),
-                    'skeleton'
+                    )
                 );
 
-                if (!this.skinnedMesh.object3d.skeleton) {
+                if (!this.skinnedMesh.instance.skeleton) {
                     this.skinnedMesh.bind(skeleton);
                 }
 
@@ -238,7 +237,7 @@ export class NgtBone extends NgtObject<THREE.Bone> {
         super(
             zone,
             store,
-            () => parentBone?.object3d || parentSkinnedMesh?.object3d
+            () => parentBone?.instance || parentSkinnedMesh?.instance
         );
     }
 
