@@ -39,7 +39,6 @@ const getMatrix = (o: THREE.Object3D): THREE.Matrix4 => {
 };
 
 export interface NgtCannonDebugState extends NgtInstanceState<THREE.Scene> {
-    scene: THREE.Scene;
     cannonDebugger: typeof CannonDebugger.prototype;
     bodies: Body[];
     bodyMap: { [uuid: string]: Body };
@@ -53,7 +52,7 @@ export interface NgtCannonDebugState extends NgtInstanceState<THREE.Scene> {
 @Component({
     selector: 'ngt-cannon-debug',
     template: `
-        <ngt-primitive [object]="scene"></ngt-primitive>
+        <ngt-primitive [object]="instance.value"></ngt-primitive>
         <ng-content></ng-content>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -104,17 +103,13 @@ export class NgtCannonDebug extends NgtInstance<
         });
     }
 
-    get scene() {
-        return this.get((s) => s.scene);
-    }
-
     override ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
-                this.prepareInstance(new THREE.Scene(), 'scene');
+                this.prepareInstance(new THREE.Scene());
                 this.set((state) => ({
                     cannonDebugger: state.impl(
-                        state.scene,
+                        this.instance.value,
                         { bodies: state.bodies } as World,
                         { color: state.color, scale: state.scale }
                     ),
