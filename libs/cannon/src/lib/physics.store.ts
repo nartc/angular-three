@@ -158,19 +158,17 @@ export class NgtPhysicsStore extends NgtComponentStore<NgtPhysicsState> {
 
     init() {
         this.zone.runOutsideAngular(() => {
-            this.onCanvasReady(this.store.ready$, () => {
-                this.initWorker(this.workerInputs);
+            this.initWorker(this.workerInputs);
 
-                this.setAxisIndex(this.select((s) => s.axisIndex));
-                this.setBroadphase(this.select((s) => s.broadphase));
-                this.setGravity(this.select((s) => s.gravity));
-                this.setIterations(this.select((s) => s.iterations));
-                this.setTolerance(this.select((s) => s.tolerance));
+            this.setAxisIndex(this.select((s) => s.axisIndex));
+            this.setBroadphase(this.select((s) => s.broadphase));
+            this.setGravity(this.select((s) => s.gravity));
+            this.setIterations(this.select((s) => s.iterations));
+            this.setTolerance(this.select((s) => s.tolerance));
 
-                // register physics beforeRender on next frame
-                requestAnimationFrame(() => {
-                    this.initBeforeRender(this.beforeRenderParams$);
-                });
+            // register physics beforeRender on next frame
+            requestAnimationFrame(() => {
+                this.initBeforeRender(this.beforeRenderParams$);
             });
         });
     }
