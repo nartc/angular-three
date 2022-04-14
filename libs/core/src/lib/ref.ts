@@ -7,16 +7,12 @@ export class Ref<TValue> {
         this._ref = new BehaviorSubject<TValue>(value!);
     }
 
-    get ref(): () => TValue {
-        return this._ref.getValue.bind(this._ref);
-    }
-
     get ref$(): Observable<TValue> {
         return this._ref.asObservable();
     }
 
     get value(): TValue {
-        return this.ref();
+        return this._ref.getValue();
     }
 
     set(value: TValue) {
