@@ -9,6 +9,7 @@ import {
     SkipSelf,
 } from '@angular/core';
 import * as THREE from 'three';
+import { Ref } from '../ref';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_FACTORY } from '../tokens';
 import type {
@@ -67,7 +68,7 @@ export interface NgtObjectInputsState<
     userData?: UnknownRecord;
     dispose?: (() => void) | null;
     raycast?: THREE.Object3D['raycast'] | null;
-    appendTo?: () => THREE.Object3D;
+    appendTo?: Ref<THREE.Object3D>;
 }
 
 @Directive()
@@ -199,7 +200,7 @@ export abstract class NgtObjectInputs<
     get appendTo() {
         return this.get((s) => s.appendTo);
     }
-    @Input() set appendTo(appendTo: (() => THREE.Object3D) | undefined) {
+    @Input() set appendTo(appendTo: Ref<THREE.Object3D> | undefined) {
         this.set({ appendTo } as Partial<TObjectInputsState>);
     }
 
@@ -308,13 +309,16 @@ export abstract class NgtObject<
     }
 
     private init() {
-        if (this.instance) {
+        if (this.instance.value && this.__ngt__) {
             this.switch();
         } else {
-            this.prepareInstance(this.objectInitFn());
+            this.prepareInstance(
+                this.objectInitFn(),
+                this.instance?.value?.uuid
+            );
         }
 
-        if (this.instance) {
+        if (this.instance.value) {
             const observedEvents = supportedEvents.reduce(
                 (result, event) => {
                     const controllerEvent = this[event].observed
@@ -342,12 +346,12 @@ export abstract class NgtObject<
 
             // add as an interaction if there are events observed
             if (observedEvents.eventCount > 0) {
-                this.store.addInteraction(this.instance);
+                this.store.addInteraction(this.instance.value);
             }
 
             // append to parent
             if (
-                this.instance.isObject3D &&
+                this.instance.value.isObject3D &&
                 this.get((s) => s.appendMode) !== 'none'
             ) {
                 // appendToParent is late a frame due to appendTo
@@ -358,11 +362,11 @@ export abstract class NgtObject<
             // setup beforeRender
             if (this.beforeRender.observed) {
                 this.store.registerBeforeRender({
-                    obj: () => this.instance,
+                    obj: () => this.instance.value,
                     callback: (state) => {
                         this.beforeRender.emit({
                             state,
-                            object: this.instance,
+                            object: this.instance.value,
                         });
                     },
                     priority: this.get((s) => s.priority),
@@ -372,13 +376,13 @@ export abstract class NgtObject<
     }
 
     protected override destroy() {
-        if (this.instance) {
+        if (this.instance.value) {
             // remove beforeRender callback
-            this.store.unregisterBeforeRender(this.instance.uuid);
+            this.store.unregisterBeforeRender(this.instance.value.uuid);
 
             // remove interaction
             if (this.__ngt__.eventCount > 0) {
-                this.store.removeInteraction(this.instance.uuid);
+                this.store.removeInteraction(this.instance.value.uuid);
             }
 
             this.remove();
@@ -388,11 +392,10 @@ export abstract class NgtObject<
 
     private appendToParent(): void {
         requestAnimationFrame(() => {
-            const appendToFactory = this.get((s) => s.appendTo);
-            const appendTo = appendToFactory?.();
-            if (appendTo) {
-                appendTo.add(this.instance);
-                this.appended.emit(this.instance);
+            const appendToRef = this.get((s) => s.appendTo);
+            if (appendToRef && appendToRef.value) {
+                appendToRef.value.add(this.instance.value);
+                this.appended.emit(this.instance.value);
                 return;
             }
 
@@ -400,13 +403,13 @@ export abstract class NgtObject<
 
             if (appendMode === 'root') {
                 this.addToScene();
-                this.appended.emit(this.instance);
+                this.appended.emit(this.instance.value);
                 return;
             }
 
             if (appendMode === 'immediate') {
                 this.addToParent();
-                this.appended.emit(this.instance);
+                this.appended.emit(this.instance.value);
             }
         });
     }
@@ -414,7 +417,7 @@ export abstract class NgtObject<
     private addToScene() {
         const scene = this.store.get((s) => s.scene);
         if (scene) {
-            scene.add(this.instance);
+            scene.add(this.instance.value);
         }
     }
 
@@ -425,48 +428,47 @@ export abstract class NgtObject<
         //     parentObject = this.hostParentObjectFn?.();
         // }
 
-        if (parentObject && parentObject.uuid !== this.instance.uuid) {
-            parentObject.add(this.instance);
+        if (parentObject && parentObject.uuid !== this.instance.value.uuid) {
+            parentObject.add(this.instance.value);
         } else {
             this.addToScene();
         }
     }
 
     private remove() {
-        const { appendMode, appendToFactory } = this.get();
-        const appendTo = appendToFactory?.();
-        if (appendTo) {
-            appendTo.remove(this.instance);
+        const { appendMode, appendTo } = this.get();
+        if (appendTo && appendTo.value) {
+            appendTo.value.remove(this.instance.value);
         } else if (
             this.parentObjectFactory?.() &&
-            this.parentObjectFactory()?.uuid !== this.instance.uuid &&
+            this.parentObjectFactory()?.uuid !== this.instance.value.uuid &&
             appendMode === 'immediate'
         ) {
-            this.parentObjectFactory().remove(this.instance);
+            this.parentObjectFactory().remove(this.instance.value);
         } else {
             const scene = this.store.get((s) => s.scene);
             if (scene) {
-                scene.remove(this.instance);
+                scene.remove(this.instance.value);
             }
         }
     }
 
     private switch() {
         const newObject3d = this.objectInitFn();
-        if (this.instance.children) {
-            this.instance.traverse((object) => {
+        if (this.instance.value.children) {
+            this.instance.value.traverse((object) => {
                 if (
-                    object !== this.instance &&
-                    object.parent === this.instance
+                    object !== this.instance.value &&
+                    object.parent === this.instance.value
                 ) {
                     object.parent = newObject3d;
                 }
             });
-            this.instance.children = [];
+            this.instance.value.children = [];
         }
 
         if (this.__ngt__.eventCount > 0) {
-            this.store.removeInteraction(this.instance.uuid);
+            this.store.removeInteraction(this.instance.value.uuid);
         }
 
         this.remove();

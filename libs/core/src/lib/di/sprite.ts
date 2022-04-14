@@ -22,7 +22,7 @@ export function provideCommonSpriteFactory<
         {
             provide: NGT_COMMON_SPRITE_FACTORY,
             useFactory: (subSprite: TSubSprite) => {
-                return () => factory?.(subSprite) || subSprite.instance;
+                return () => factory?.(subSprite) || subSprite.instance.value;
             },
             deps: [subSpriteType],
         },

@@ -24,7 +24,7 @@ export function provideMaterialGeometryObjectFactory<
             useFactory: (subMaterialGeometryObject: TSubMaterialGeometry) => {
                 return () =>
                     factory?.(subMaterialGeometryObject) ||
-                    subMaterialGeometryObject.instance;
+                    subMaterialGeometryObject.instance.value;
             },
             deps: [subMaterialGeometryType],
         },

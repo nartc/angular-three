@@ -1,3 +1,5 @@
+import { applyProps, NgtUnknownInstance } from '@angular-three/core';
+
 export function mutate<T extends Record<string, unknown>>(
     object: T,
     path: string[],
@@ -14,7 +16,7 @@ export function mutate<T extends Record<string, unknown>>(
 
     // Determine if there is still layers to traverse
     if (decomposedPath.length <= 1) {
-        (object as Record<string, unknown>)[base] = value;
+        applyProps(object as NgtUnknownInstance, { [base]: value });
     } else {
         mutate(
             object[base] as Record<string, unknown>,

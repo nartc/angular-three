@@ -8,7 +8,6 @@ import {
     Output,
 } from '@angular/core';
 import {
-    BehaviorSubject,
     filter,
     map,
     Observable,
@@ -21,6 +20,7 @@ import {
     withLatestFrom,
 } from 'rxjs';
 import * as THREE from 'three';
+import { Ref } from '../ref';
 import {
     NgtComponentStore,
     startWithUndefined,
@@ -42,7 +42,7 @@ import { is } from '../utils/is';
 import { mutate } from '../utils/mutate';
 
 export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
-    instance: BehaviorSubject<NgtUnknownInstance<TInstance>>;
+    instance: Ref<NgtUnknownInstance<TInstance>>;
     instanceArgs: unknown[];
     attach: string[] | AttachFunction;
     [option: string]: any;
@@ -56,6 +56,10 @@ export abstract class NgtInstance<
     extends NgtComponentStore<TInstanceState>
     implements OnInit, OnDestroy
 {
+    @Input() set ref(ref: Ref<any>) {
+        this.set({ instance: ref } as Partial<TInstanceState>);
+    }
+
     @Output() ready = new EventEmitter<TInstance>();
     protected hasEmittedAlready = false;
 
@@ -74,8 +78,8 @@ export abstract class NgtInstance<
     }
 
     readonly instance$ = this.select((s) => s.instance).pipe(
-        switchMap((instance$) =>
-            instance$.pipe(
+        switchMap((ref) =>
+            ref.ref$.pipe(
                 filter(
                     (instance): instance is NgtUnknownInstance<TInstance> =>
                         instance != null
@@ -84,10 +88,8 @@ export abstract class NgtInstance<
         )
     );
 
-    get instance(): NgtUnknownInstance<TInstance> {
-        return this.get(
-            (s) => s.instance
-        ).getValue() as NgtUnknownInstance<TInstance>;
+    get instance(): Ref<NgtUnknownInstance<TInstance>> {
+        return this.get((s) => s.instance);
     }
 
     protected readonly instanceArgs$ = this.select((s) => s.instanceArgs);
@@ -98,7 +100,7 @@ export abstract class NgtInstance<
     }
 
     get __ngt__(): NgtInstanceInternal {
-        return (this.instance as NgtUnknownInstance)['__ngt__'];
+        return (this.instance.value as NgtUnknownInstance)['__ngt__'];
     }
 
     protected zone: NgZone;
@@ -120,7 +122,7 @@ export abstract class NgtInstance<
         this.parentInstanceFactory = parentInstanceFactory;
 
         this.set({
-            instance: new BehaviorSubject(null),
+            instance: new Ref(null),
             instanceArgs: [],
             attach: [],
         } as unknown as TInstanceState);
@@ -138,41 +140,46 @@ export abstract class NgtInstance<
     protected emitReady() {
         // only emit ready once to prevent reconstruct
         if (!this.hasEmittedAlready) {
-            this.ready.emit(this.instance);
+            this.ready.emit(this.instance.value);
             this.hasEmittedAlready = true;
         }
     }
 
-    protected prepareInstance(
-        instance: TInstance
+    prepareInstance(
+        instance: TInstance,
+        uuid?: string
     ): NgtUnknownInstance<TInstance> {
+        if (uuid && 'uuid' in instance) {
+            (instance as UnknownRecord)['uuid'] = uuid;
+        }
+
         const prepInstance = prepare(
             instance,
             () => this.store.get(),
             this.parentInstanceFactory?.() as NgtUnknownInstance,
-            this.instance as NgtUnknownInstance
+            this.instance?.value as NgtUnknownInstance
         );
 
         this.postPrepare(prepInstance);
 
-        this.get((s) => s.instance).next(prepInstance);
+        this.get((s) => s.instance).set(prepInstance);
         this.emitReady();
 
         return prepInstance;
     }
 
     protected destroy() {
-        if ((this.instance as UnknownRecord)['isObject3D']) {
+        if ((this.instance.value as UnknownRecord)['isObject3D']) {
             const parentInstance = this.parentInstanceFactory?.();
             if (parentInstance && parentInstance['isObject3D']) {
                 removeInteractivity(
                     this.__ngt__.root.bind(this.__ngt__),
-                    this.instance as unknown as THREE.Object3D
+                    this.instance.value as unknown as THREE.Object3D
                 );
             }
 
-            if ((this.instance as unknown as THREE.Object3D).clear) {
-                (this.instance as unknown as THREE.Object3D).clear();
+            if ((this.instance.value as unknown as THREE.Object3D).clear) {
+                (this.instance.value as unknown as THREE.Object3D).clear();
             }
         } else {
             // non-scene objects
@@ -198,7 +205,7 @@ export abstract class NgtInstance<
             }
         }
 
-        const dispose = (this.instance as UnknownRecord)['dispose'];
+        const dispose = (this.instance.value as UnknownRecord)['dispose'];
         if (dispose && typeof dispose === 'function') {
             dispose();
         }
@@ -286,9 +293,9 @@ export abstract class NgtInstance<
                 // no options; return early
                 if (Object.keys(options).length === 0) return;
 
-                if (this.instance) {
+                if (this.instance.value) {
                     // TODO: Material is handling this on their own. To be changed when [parameters] is removed
-                    if (is.material(this.instance)) return;
+                    if (is.material(this.instance.value)) return;
 
                     const state = this.get();
                     const customOptions = {} as UnknownRecord;
@@ -308,24 +315,24 @@ export abstract class NgtInstance<
                     }
 
                     applyProps(
-                        this.instance as NgtUnknownInstance,
+                        this.instance.value as NgtUnknownInstance,
                         customOptions
                     );
 
-                    if (this.instance instanceof THREE.Object3D) {
-                        this.instance.updateMatrix();
-                    } else if (this.instance instanceof THREE.Camera) {
+                    if (this.instance.value instanceof THREE.Object3D) {
+                        this.instance.value.updateMatrix();
+                    } else if (this.instance.value instanceof THREE.Camera) {
                         if (
-                            is.perspective(this.instance) ||
-                            is.orthographic(this.instance)
+                            is.perspective(this.instance.value) ||
+                            is.orthographic(this.instance.value)
                         ) {
-                            this.instance.updateProjectionMatrix();
+                            this.instance.value.updateProjectionMatrix();
                         }
-                        this.instance.updateMatrixWorld();
+                        this.instance.value.updateMatrixWorld();
                     }
 
-                    this.postSetOptions(this.instance);
-                    checkNeedsUpdate(this.instance);
+                    this.postSetOptions(this.instance.value);
+                    checkNeedsUpdate(this.instance.value);
                 }
             });
         })
@@ -350,7 +357,10 @@ export abstract class NgtInstance<
                 }
 
                 if (typeof attach === 'function') {
-                    const attachCleanUp = attach(parentInstance, this.instance);
+                    const attachCleanUp = attach(
+                        parentInstance,
+                        this.instance.value
+                    );
                     if (attachCleanUp) {
                         applyProps(
                             this.__ngt__ as unknown as NgtUnknownInstance,
@@ -362,9 +372,9 @@ export abstract class NgtInstance<
                 } else {
                     const propertyToAttach = [...attach];
                     if (propertyToAttach.length === 0) {
-                        if (is.material(this.instance)) {
+                        if (is.material(this.instance.value)) {
                             propertyToAttach.push('material');
-                        } else if (is.geometry(this.instance)) {
+                        } else if (is.geometry(this.instance.value)) {
                             propertyToAttach.push('geometry');
                         }
                     }
@@ -380,7 +390,11 @@ export abstract class NgtInstance<
                     );
 
                     // attach the instance value on the parent
-                    mutate(parentInstance, propertyToAttach, this.instance);
+                    mutate(
+                        parentInstance,
+                        propertyToAttach,
+                        this.instance.value
+                    );
 
                     // validate on the instance
                     if (this.__ngt__) {
@@ -400,7 +414,7 @@ export abstract class NgtInstance<
                     } as Partial<TInstanceState>);
                 }
                 checkNeedsUpdate(parentInstance);
-                checkNeedsUpdate(this.instance);
+                checkNeedsUpdate(this.instance.value);
             })
         )
     );

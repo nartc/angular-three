@@ -19,7 +19,8 @@ export function provideInstanceFactory<
         {
             provide: NGT_INSTANCE_FACTORY,
             useFactory: (subInstance: TSubInstance) => {
-                return () => factory?.(subInstance) || subInstance.instance;
+                return () =>
+                    factory?.(subInstance) || subInstance.instance.value;
             },
             deps: [subInstanceType],
         },

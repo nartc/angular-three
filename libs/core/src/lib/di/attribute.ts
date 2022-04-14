@@ -24,7 +24,8 @@ export function provideCommonAttributeFactory<
         {
             provide: NGT_COMMON_ATTRIBUTE_FACTORY,
             useFactory: (subAttribute: TSubAttribute) => {
-                return () => factory?.(subAttribute) || subAttribute.instance;
+                return () =>
+                    factory?.(subAttribute) || subAttribute.instance.value;
             },
             deps: [subAttributeType],
         },

@@ -74,7 +74,7 @@ export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
     }
 
     bind(skeleton: THREE.Skeleton) {
-        this.instance.bind(
+        this.instance.value.bind(
             skeleton,
             this.get((s) => s['bindMatrix'])
         );
@@ -196,7 +196,7 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
                     )
                 );
 
-                if (!this.skinnedMesh.instance.skeleton) {
+                if (!this.skinnedMesh.instance.value.skeleton) {
                     this.skinnedMesh.bind(skeleton);
                 }
 

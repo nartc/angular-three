@@ -25,7 +25,8 @@ export function provideCommonObjectHelperFactory<
             provide: NGT_COMMON_OBJECT_HELPER_FACTORY,
             useFactory: (subObjectHelper: TSubObjectHelper) => {
                 return () =>
-                    factory?.(subObjectHelper) || subObjectHelper.instance;
+                    factory?.(subObjectHelper) ||
+                    subObjectHelper.instance.value;
             },
             deps: [subObjectHelperType],
         },

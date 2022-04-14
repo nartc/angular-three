@@ -26,7 +26,7 @@ export function provideCommonAudioFactory<
         {
             provide: NGT_COMMON_AUDIO_FACTORY,
             useFactory: (subAudio: TSubAudio) => {
-                return () => factory?.(subAudio) || subAudio.instance;
+                return () => factory?.(subAudio) || subAudio.instance.value;
             },
             deps: [subAudioType],
         },

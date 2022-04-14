@@ -21,22 +21,18 @@ export function prepare<TInstance extends object = UnknownRecord>(
     const parent = parentInstance
         ? parentInstance
         : previousInstance
-        ? previousInstance.__ngt__.parent
+        ? previousInstance.__ngt__?.parent
         : undefined;
 
     return Object.assign(instance, {
         __ngt__: {
             root,
             primitive: !isPrimitive
-                ? previousInstance
-                    ? previousInstance.__ngt__.primitive
-                    : isPrimitive
+                ? previousInstance?.__ngt__?.primitive
                 : isPrimitive,
-            eventCount: previousInstance
-                ? previousInstance.__ngt__.eventCount
-                : 0,
-            handlers: previousInstance ? previousInstance.__ngt__.handlers : {},
-            objects: previousInstance ? previousInstance.__ngt__.objects : [],
+            eventCount: previousInstance?.__ngt__?.eventCount ?? 0,
+            handlers: previousInstance?.__ngt__?.handlers ?? {},
+            objects: previousInstance?.__ngt__?.objects ?? [],
             parent: parent ? (parent === instance ? null : parent) : null,
         },
     });

@@ -31,7 +31,7 @@ export function provideObjectFactory<
         {
             provide: NGT_OBJECT_FACTORY,
             useFactory: (subObject: TSubObject) => {
-                return () => factory?.(subObject) || subObject.instance;
+                return () => factory?.(subObject) || subObject.instance.value;
             },
             deps: [subObjectType],
         },

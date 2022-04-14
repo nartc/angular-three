@@ -22,7 +22,7 @@ export function provideCommonHelperFactory<
         {
             provide: NGT_COMMON_HELPER_FACTORY,
             useFactory: (subHelper: TSubHelper) => {
-                return () => factory?.(subHelper) || subHelper.instance;
+                return () => factory?.(subHelper) || subHelper.instance.value;
             },
             deps: [subHelperType],
         },

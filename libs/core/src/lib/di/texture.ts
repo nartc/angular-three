@@ -22,7 +22,7 @@ export function provideCommonTextureFactory<
         {
             provide: NGT_COMMON_TEXTURE_FACTORY,
             useFactory: (subTexture: TSubTexture) => {
-                return () => factory?.(subTexture) || subTexture.instance;
+                return () => factory?.(subTexture) || subTexture.instance.value;
             },
             deps: [subTextureType],
         },
