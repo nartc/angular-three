@@ -12,6 +12,7 @@ import {
 } from '@angular-three/cannon/constraints';
 import {
     NgtCanvasModule,
+    NgtLoader,
     NgtObject,
     NgtRenderState,
     NgtTriple,
@@ -25,6 +26,7 @@ import {
 } from '@angular-three/core/attributes';
 import {
     NgtBoxGeometryModule,
+    NgtConeGeometryModule,
     NgtPlaneGeometryModule,
     NgtSphereGeometryModule,
 } from '@angular-three/core/geometries';
@@ -32,6 +34,7 @@ import { NgtGroupModule } from '@angular-three/core/group';
 import {
     NgtAmbientLightModule,
     NgtPointLightModule,
+    NgtSpotLightModule,
 } from '@angular-three/core/lights';
 import {
     NgtMeshBasicMaterialModule,
@@ -52,8 +55,9 @@ import {
     SkipSelf,
     TemplateRef,
 } from '@angular/core';
-import { takeUntil } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import * as THREE from 'three';
+import { GLTF, GLTFLoader } from 'three-stdlib';
 import { createRagdoll, ShapeConfig, ShapeName } from './monday-morning.config';
 
 const { joints, shapes } = createRagdoll(4.8, Math.PI / 16, Math.PI / 16, 0);
@@ -94,16 +98,10 @@ const cursor = new Ref<THREE.Object3D>();
                 <sandbox-cursor></sandbox-cursor>
                 <sandbox-ragdoll [position]="[0, 0, 0]"></sandbox-ragdoll>
                 <sandbox-plane></sandbox-plane>
+                <sandbox-chair></sandbox-chair>
+                <sandbox-table></sandbox-table>
+                <sandbox-lamp></sandbox-lamp>
             </ngt-physics>
-
-            <!--            <Physics iterations={15} gravity={[0, -200, 0]} allowSleep={false}>-->
-            <!--                <Cursor />-->
-            <!--                <Ragdoll position={[0, 0, 0]} />-->
-            <!--                <Plane position={[0, -5, 0]} rotation={[-Math.PI / 2, 0, 0]} />-->
-            <!--                <Chair />-->
-            <!--                <Table />-->
-            <!--                <Lamp />-->
-            <!--            </Physics>-->
         </ngt-canvas>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -116,6 +114,7 @@ export class SandboxMondayMorningComponent {}
         <ngt-mesh
             [ref]="sphereRef.ref"
             (beforeRender)="onCursorBeforeRender($event.state)"
+            [position]="[0, 0, 10000]"
         >
             <ngt-sphere-geometry [args]="[0.5, 32, 32]"></ngt-sphere-geometry>
             <ngt-mesh-basic-material
@@ -136,6 +135,7 @@ export class SandboxCursorComponent {
             position: [0, 0, 10000],
             type: 'Static',
         }),
+        true,
         cursor
     );
 
@@ -456,6 +456,298 @@ export class SandboxPlaneComponent {
     constructor(private physicBody: NgtPhysicBody) {}
 }
 
+@Component({
+    selector: 'sandbox-chair',
+    template: `
+        <ngt-group
+            sandboxDragConstraint
+            [ref]="chairRef.ref"
+            [position]="[-6, 0, 0]"
+        >
+            <ngt-mesh [position]="[0, 0, 0]">
+                <ngt-vector3
+                    attach="scale"
+                    [vector3]="[3, 3, 0.5]"
+                ></ngt-vector3>
+                <ngt-box-geometry></ngt-box-geometry>
+                <ngt-mesh-standard-material></ngt-mesh-standard-material>
+            </ngt-mesh>
+
+            <ngt-mesh [position]="[0, -1.75, 1.25]">
+                <ngt-vector3
+                    attach="scale"
+                    [vector3]="[3, 0.5, 3]"
+                ></ngt-vector3>
+                <ngt-box-geometry></ngt-box-geometry>
+                <ngt-mesh-standard-material></ngt-mesh-standard-material>
+            </ngt-mesh>
+
+            <ngt-mesh [position]="[5 + -6.25, -3.5, 0]">
+                <ngt-vector3
+                    attach="scale"
+                    [vector3]="[0.5, 3, 0.5]"
+                ></ngt-vector3>
+                <ngt-box-geometry></ngt-box-geometry>
+                <ngt-mesh-standard-material></ngt-mesh-standard-material>
+            </ngt-mesh>
+
+            <ngt-mesh [position]="[5 + -3.75, -3.5, 0]">
+                <ngt-vector3
+                    attach="scale"
+                    [vector3]="[0.5, 3, 0.5]"
+                ></ngt-vector3>
+                <ngt-box-geometry></ngt-box-geometry>
+                <ngt-mesh-standard-material></ngt-mesh-standard-material>
+            </ngt-mesh>
+
+            <ngt-mesh [position]="[5 + -6.25, -3.5, 2.5]">
+                <ngt-vector3
+                    attach="scale"
+                    [vector3]="[0.5, 3, 0.5]"
+                ></ngt-vector3>
+                <ngt-box-geometry></ngt-box-geometry>
+                <ngt-mesh-standard-material></ngt-mesh-standard-material>
+            </ngt-mesh>
+
+            <ngt-mesh [position]="[5 + -3.75, -3.5, 2.5]">
+                <ngt-vector3
+                    attach="scale"
+                    [vector3]="[0.5, 3, 0.5]"
+                ></ngt-vector3>
+                <ngt-box-geometry></ngt-box-geometry>
+                <ngt-mesh-standard-material></ngt-mesh-standard-material>
+            </ngt-mesh>
+        </ngt-group>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgtPhysicBody],
+})
+export class SandboxChairComponent {
+    chairRef = this.physicBody.useCompoundBody(() => ({
+        mass: 1,
+        position: [-6, 0, 0],
+        shapes: [
+            {
+                args: [1.5, 1.5, 0.25],
+                mass: 1,
+                position: [0, 0, 0],
+                type: 'Box',
+            },
+            {
+                args: [1.5, 0.25, 1.5],
+                mass: 1,
+                position: [0, -1.75, 1.25],
+                type: 'Box',
+            },
+            {
+                args: [0.25, 1.5, 0.25],
+                mass: 10,
+                position: [5 + -6.25, -3.5, 0],
+                type: 'Box',
+            },
+            {
+                args: [0.25, 1.5, 0.25],
+                mass: 10,
+                position: [5 + -3.75, -3.5, 0],
+                type: 'Box',
+            },
+            {
+                args: [0.25, 1.5, 0.25],
+                mass: 10,
+                position: [5 + -6.25, -3.5, 2.5],
+                type: 'Box',
+            },
+            {
+                args: [0.25, 1.5, 0.25],
+                mass: 10,
+                position: [5 + -3.75, -3.5, 2.5],
+                type: 'Box',
+            },
+        ],
+        type: 'Dynamic',
+    }));
+
+    constructor(private physicBody: NgtPhysicBody) {}
+}
+
+@Component({
+    selector: 'sandbox-lamp',
+    template: `
+        <ngt-mesh
+            sandboxDragConstraint
+            [ref]="lampRef.ref"
+            [position]="[0, 16, 0]"
+        >
+            <ngt-cone-geometry [args]="[2, 2.5, 32]"></ngt-cone-geometry>
+            <ngt-mesh-standard-material></ngt-mesh-standard-material>
+            <ngt-point-light [intensity]="10" [distance]="5"></ngt-point-light>
+            <ngt-spot-light
+                [position]="[0, 20, 0]"
+                [angle]="0.4"
+                [penumbra]="1"
+                [intensity]="0.6"
+                castShadow
+            ></ngt-spot-light>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgtPhysicBody, NgtPhysicConstraint],
+})
+export class SandboxLampComponent implements OnInit {
+    fixtureRef = this.physicBody.useSphere(
+        () => ({
+            args: [1],
+            position: [0, 16, 0],
+            type: 'Static',
+        }),
+        false
+    );
+    lampRef = this.physicBody.useBox(() => ({
+        angulardamping: 1.99,
+        args: [1, 0, 5],
+        linearDamping: 0.9,
+        mass: 1,
+        position: [0, 16, 0],
+    }));
+
+    constructor(
+        private physicBody: NgtPhysicBody,
+        private physicConstraint: NgtPhysicConstraint
+    ) {}
+
+    ngOnInit() {
+        this.physicConstraint.usePointToPointConstraint(
+            this.fixtureRef.ref,
+            this.lampRef.ref,
+            { pivotA: [0, 0, 0], pivotB: [0, 2, 0] }
+        );
+    }
+}
+
+@Component({
+    selector: 'sandbox-table',
+    template: `
+        <ngt-mesh [ref]="seatRef.ref" [position]="[9, -0.8, 0]">
+            <ngt-vector3 attach="scale" [vector3]="[5, 0.5, 5]"></ngt-vector3>
+            <ngt-box-geometry></ngt-box-geometry>
+            <ngt-mesh-standard-material></ngt-mesh-standard-material>
+        </ngt-mesh>
+
+        <ngt-mesh [ref]="leg1Ref.ref" [position]="[7.2, -3, 1.8]">
+            <ngt-vector3 attach="scale" [vector3]="[0.5, 4, 0.5]"></ngt-vector3>
+            <ngt-box-geometry></ngt-box-geometry>
+            <ngt-mesh-standard-material></ngt-mesh-standard-material>
+        </ngt-mesh>
+
+        <ngt-mesh [ref]="leg2Ref.ref" [position]="[10.8, -3, 1.8]">
+            <ngt-vector3 attach="scale" [vector3]="[0.5, 4, 0.5]"></ngt-vector3>
+            <ngt-box-geometry></ngt-box-geometry>
+            <ngt-mesh-standard-material></ngt-mesh-standard-material>
+        </ngt-mesh>
+
+        <ngt-mesh [ref]="leg3Ref.ref" [position]="[7.2, -3, -1.8]">
+            <ngt-vector3 attach="scale" [vector3]="[0.5, 4, 0.5]"></ngt-vector3>
+            <ngt-box-geometry></ngt-box-geometry>
+            <ngt-mesh-standard-material></ngt-mesh-standard-material>
+        </ngt-mesh>
+
+        <ngt-mesh [ref]="leg4Ref.ref" [position]="[10.8, -3, -1.8]">
+            <ngt-vector3 attach="scale" [vector3]="[0.5, 4, 0.5]"></ngt-vector3>
+            <ngt-box-geometry></ngt-box-geometry>
+            <ngt-mesh-standard-material></ngt-mesh-standard-material>
+        </ngt-mesh>
+
+        <sandbox-mug></sandbox-mug>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgtPhysicBody],
+})
+export class SandboxTableComponent {
+    seatRef = this.physicBody.useBox(() => ({
+        args: [2.5, 0.25, 2.5],
+        position: [9, -0.8, 0],
+        type: 'Static',
+    }));
+    leg1Ref = this.physicBody.useBox(() => ({
+        args: [0.25, 2, 0.25],
+        position: [7.2, -3, 1.8],
+        type: 'Static',
+    }));
+    leg2Ref = this.physicBody.useBox(() => ({
+        args: [0.25, 2, 0.25],
+        position: [10.8, -3, 1.8],
+        type: 'Static',
+    }));
+    leg3Ref = this.physicBody.useBox(() => ({
+        args: [0.25, 2, 0.25],
+        position: [7.2, -3, -1.8],
+        type: 'Static',
+    }));
+    leg4Ref = this.physicBody.useBox(() => ({
+        args: [0.25, 2, 0.25],
+        position: [10.8, -3, -1.8],
+        type: 'Static',
+    }));
+
+    constructor(private physicBody: NgtPhysicBody) {}
+}
+
+interface CupGLTF extends GLTF {
+    materials: {
+        default: THREE.Material;
+        Liquid: THREE.Material;
+    };
+    nodes: {
+        'buffer-0-mesh-0': THREE.Mesh;
+        'buffer-0-mesh-0_1': THREE.Mesh;
+    };
+}
+
+@Component({
+    selector: 'sandbox-mug',
+    template: `
+        <ng-container *ngIf="cup$ | async as cup">
+            <ngt-group
+                sandboxDragConstraint
+                [ref]="mugRef.ref"
+                [dispose]="null"
+            >
+                <ngt-group [scale]="[0.01, 0.01, 0.01]">
+                    <ngt-mesh
+                        receiveShadow
+                        castShadow
+                        [material]="cup.materials.default"
+                        [geometry]="cup.nodes['buffer-0-mesh-0'].geometry"
+                    ></ngt-mesh>
+                    <ngt-mesh
+                        receiveShadow
+                        castShadow
+                        [material]="cup.materials.Liquid"
+                        [geometry]="cup.nodes['buffer-0-mesh-0_1'].geometry"
+                    ></ngt-mesh>
+                </ngt-group>
+            </ngt-group>
+        </ng-container>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgtPhysicBody],
+})
+export class SandboxMugComponent {
+    cup$ = this.loader.use(
+        GLTFLoader,
+        '/assets/cup.glb'
+    ) as Observable<CupGLTF>;
+
+    mugRef = this.physicBody.useCylinder(() => ({
+        args: [0.6, 0.6, 1, 16],
+        mass: 1,
+        position: [9, 0, 0],
+        rotation: [Math.PI / 2, 0, 0],
+    }));
+
+    constructor(private loader: NgtLoader, private physicBody: NgtPhysicBody) {}
+}
+
 @NgModule({
     declarations: [
         SandboxMondayMorningComponent,
@@ -464,6 +756,10 @@ export class SandboxPlaneComponent {
         SandboxRagdollComponent,
         SandboxPlaneComponent,
         SandboxDragConstraintDirective,
+        SandboxChairComponent,
+        SandboxLampComponent,
+        SandboxTableComponent,
+        SandboxMugComponent,
     ],
     exports: [SandboxMondayMorningComponent, SandboxBoxComponent],
     imports: [
@@ -482,6 +778,8 @@ export class SandboxPlaneComponent {
         NgtPhysicsModule,
         NgtSphereGeometryModule,
         NgtMeshBasicMaterialModule,
+        NgtConeGeometryModule,
+        NgtSpotLightModule,
     ],
 })
 export class SandboxMondayMorningModule {}
