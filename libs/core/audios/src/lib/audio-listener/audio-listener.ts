@@ -58,7 +58,7 @@ export class NgtAudioListener extends NgtObject<
     protected override destroy() {
         const camera = this.store.get((s) => s.camera);
         if (camera) {
-            camera.remove(this.instance);
+            camera.remove(this.instance.value);
         }
         super.destroy();
     }
