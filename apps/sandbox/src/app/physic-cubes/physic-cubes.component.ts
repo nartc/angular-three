@@ -64,7 +64,12 @@ export class SandboxPhysicCubesComponent {}
 @Component({
     selector: 'sandbox-plane',
     template: `
-        <ngt-mesh receiveShadow [ref]="planeRef.ref">
+        <ngt-mesh
+            receiveShadow
+            [ref]="planeRef.ref"
+            [position]="position"
+            [rotation]="rotation"
+        >
             <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
             <ngt-shadow-material
                 color="#171717"
@@ -92,7 +97,13 @@ export class SandboxPlaneComponent {
 @Component({
     selector: 'sandbox-cube',
     template: `
-        <ngt-mesh receiveShadow castShadow [ref]="boxRef.ref">
+        <ngt-mesh
+            receiveShadow
+            castShadow
+            [ref]="boxRef.ref"
+            [position]="position"
+            [rotation]="rotation"
+        >
             <ngt-box-geometry></ngt-box-geometry>
             <ngt-mesh-lambert-material
                 color="hotpink"
