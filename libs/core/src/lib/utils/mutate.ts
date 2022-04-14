@@ -1,4 +1,5 @@
-import { applyProps, NgtUnknownInstance } from '@angular-three/core';
+import type { NgtUnknownInstance } from '../types';
+import { applyProps } from './apply-props';
 
 export function mutate<T extends Record<string, unknown>>(
     object: T,
