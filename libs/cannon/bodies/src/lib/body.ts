@@ -80,6 +80,11 @@ export interface NgtPhysicsBodyPublicApi extends WorkerApi {
     at: (index: number) => WorkerApi;
 }
 
+export interface NgtPhysicBodyReturn {
+    ref: Ref<THREE.Object3D>;
+    api: NgtPhysicsBodyPublicApi;
+}
+
 export type GetByIndex<T extends BodyProps> = (index: number) => T;
 type ArgFn<T> = (args: T) => unknown[];
 
