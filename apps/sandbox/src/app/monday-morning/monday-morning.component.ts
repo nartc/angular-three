@@ -1,36 +1,27 @@
 import {
-    BoxProps,
+    ConeTwistConstraintOpts,
     NgtPhysicsModule,
-    PlaneProps,
-    SphereProps,
 } from '@angular-three/cannon';
 import {
-    GetByIndex,
-    NgtPhysicBoxModule,
-    NgtPhysicPlaneModule,
-    NgtPhysicSphere,
-    NgtPhysicSphereModule,
+    NgtPhysicBody,
+    NgtPhysicsBodyPublicApi,
 } from '@angular-three/cannon/bodies';
 import {
-    NgtPhysicConeTwistConstraint,
-    NgtPhysicConeTwistConstraintModule,
-    NgtPhysicPointToPointConstraint,
-    NgtPhysicPointToPointConstraintModule,
-    NgtPhysicsConstraint,
+    NgtConstraintReturn,
+    NgtPhysicConstraint,
 } from '@angular-three/cannon/constraints';
-import type {
+import {
+    NgtCanvasModule,
+    NgtObject,
     NgtRenderState,
     NgtTriple,
     NgtVector3,
-} from '@angular-three/core';
-import {
-    NgtCanvasModule,
-    NgtWrapper,
-    provideWrappedObjectFactory,
+    Ref,
 } from '@angular-three/core';
 import {
     NgtColorAttributeModule,
     NgtFogAttributeModule,
+    NgtVector3AttributeModule,
 } from '@angular-three/core/attributes';
 import {
     NgtBoxGeometryModule,
@@ -57,11 +48,11 @@ import {
     NgModule,
     OnInit,
     Optional,
+    Self,
     SkipSelf,
     TemplateRef,
-    ViewChild,
 } from '@angular/core';
-import { ConeTwistConstraintOpts } from '@pmndrs/cannon-worker-api';
+import { takeUntil } from 'rxjs';
 import * as THREE from 'three';
 import { createRagdoll, ShapeConfig, ShapeName } from './monday-morning.config';
 
@@ -73,6 +64,8 @@ const double = ([x, y, z]: Readonly<NgtTriple>): NgtTriple => [
     z * 2,
 ];
 
+const cursor = new Ref<THREE.Object3D>();
+
 @Component({
     selector: 'sandbox-monday-morning',
     template: `
@@ -80,25 +73,37 @@ const double = ([x, y, z]: Readonly<NgtTriple>): NgtTriple => [
             [camera]="{ far: 100, near: 1, position: [-25, 20, 25], zoom: 25 }"
             orthographic
             shadows
-            style="cursor: none;"
+            style="cursor: none"
             initialLog
         >
             <ngt-color attach="background" color="#171720"></ngt-color>
             <ngt-fog attach="fog" [fog]="['#171720', 20, 70]"></ngt-fog>
+
             <ngt-ambient-light [intensity]="0.2"></ngt-ambient-light>
             <ngt-point-light
                 [position]="[-10, -10, -10]"
                 color="red"
                 [intensity]="1.5"
             ></ngt-point-light>
+
             <ngt-physics
                 [iterations]="15"
                 [gravity]="[0, -200, 0]"
                 [allowSleep]="false"
             >
+                <sandbox-cursor></sandbox-cursor>
                 <sandbox-ragdoll [position]="[0, 0, 0]"></sandbox-ragdoll>
                 <sandbox-plane></sandbox-plane>
             </ngt-physics>
+
+            <!--            <Physics iterations={15} gravity={[0, -200, 0]} allowSleep={false}>-->
+            <!--                <Cursor />-->
+            <!--                <Ragdoll position={[0, 0, 0]} />-->
+            <!--                <Plane position={[0, -5, 0]} rotation={[-Math.PI / 2, 0, 0]} />-->
+            <!--                <Chair />-->
+            <!--                <Table />-->
+            <!--                <Lamp />-->
+            <!--            </Physics>-->
         </ngt-canvas>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -109,9 +114,7 @@ export class SandboxMondayMorningComponent {}
     selector: 'sandbox-cursor',
     template: `
         <ngt-mesh
-            ngtPhysicSphere
-            [getPhysicProps]="getSphereProps"
-            (ready)="wrapped = $event"
+            [ref]="sphereRef.ref"
             (beforeRender)="onCursorBeforeRender($event.state)"
         >
             <ngt-sphere-geometry [args]="[0.5, 32, 32]"></ngt-sphere-geometry>
@@ -122,142 +125,102 @@ export class SandboxMondayMorningComponent {}
                 [opacity]="0.5"
             ></ngt-mesh-basic-material>
         </ngt-mesh>
-        <ng-content></ng-content>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideWrappedObjectFactory<THREE.Mesh>(SandboxCursorComponent),
-    ],
+    providers: [NgtPhysicBody],
 })
-export class SandboxCursorComponent extends NgtWrapper<THREE.Mesh> {
-    @ViewChild(NgtPhysicSphere, { static: true })
-    physicSphere!: NgtPhysicSphere;
+export class SandboxCursorComponent {
+    sphereRef = this.physicBody.useSphere(
+        () => ({
+            args: [0.5],
+            position: [0, 0, 10000],
+            type: 'Static',
+        }),
+        cursor
+    );
 
-    getSphereProps: GetByIndex<SphereProps> = () => ({
-        args: [0.5],
-        position: [0, 0, 10000],
-        type: 'Static',
-    });
+    constructor(private physicBody: NgtPhysicBody) {}
 
     onCursorBeforeRender({
         pointer,
-        viewport: { height, width },
+        viewport: { width, height },
     }: NgtRenderState) {
         const x = pointer.x * width;
         const y = (pointer.y * height) / 1.9 + -x / 3.5;
-        this.physicSphere.api.position.set(x / 1.4, y, 0);
+        this.sphereRef.api.position.set(x / 1.4, y, 0);
     }
-}
-
-@Component({
-    selector: 'sandbox-box',
-    template: `
-        <ngt-mesh
-            castShadow
-            receiveShadow
-            (ready)="wrapped = $event"
-            (beforeRender)="beforeRender.emit($event)"
-            [name]="name"
-            [position]="position"
-            [color]="color"
-            [appendMode]="appendMode"
-            [appendTo]="appendTo"
-            [dispose]="dispose"
-            [matrixAutoUpdate]="matrixAutoUpdate"
-            [scale]="scale"
-            [rotation]="rotation"
-            [quaternion]="quaternion"
-            [raycast]="raycast"
-        >
-            <ngt-box-geometry [args]="args"></ngt-box-geometry>
-            <ngt-mesh-standard-material
-                [color]="$any(color)"
-                [opacity]="opacity"
-                [transparent]="transparent"
-            ></ngt-mesh-standard-material>
-            <ng-content></ng-content>
-        </ngt-mesh>
-    `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideWrappedObjectFactory<THREE.Mesh>(SandboxBoxComponent)],
-})
-export class SandboxBoxComponent extends NgtWrapper<THREE.Mesh> {
-    @Input() args: ConstructorParameters<typeof THREE.BoxGeometry> = [1, 1, 1];
-    @Input() opacity = 1;
-    @Input() transparent = false;
 }
 
 @Directive({
-    selector: 'sandbox-box[sandboxDrag]',
+    selector: '[sandboxDragConstraint]',
+    providers: [NgtPhysicConstraint],
 })
 export class SandboxDragConstraintDirective implements OnInit {
+    private constraint!: NgtConstraintReturn<'PointToPoint'>;
+
     constructor(
-        @Optional()
-        @SkipSelf()
-        private pointToPointConstraint: NgtPhysicPointToPointConstraint,
-        private box: SandboxBoxComponent
-    ) {}
+        private physicConstraint: NgtPhysicConstraint,
+        @Self()
+        private object: NgtObject
+    ) {
+        object.pointerdown
+            .pipe(takeUntil(object.destroy$))
+            .subscribe((event: any) => {
+                event.stopPropagation();
+                event.target.setPointerCapture(event.pointerId);
+                this.constraint.api.enable();
+            });
+        object.pointerup.pipe(takeUntil(object.destroy$)).subscribe(() => {
+            this.constraint.api.disable();
+        });
+    }
 
     ngOnInit() {
-        this.box.pointerdown.subscribe((e: any) => {
-            e.stopPropagation();
-            e.target.setPointerCapture(e.pointerId);
-            this.pointToPointConstraint.api.enable();
-        });
-
-        this.box.pointerup.subscribe(() => {
-            this.pointToPointConstraint.api.disable();
-        });
-
-        if (this.pointToPointConstraint) {
-            setTimeout(() => {
-                console.log(this.pointToPointConstraint.get((s) => s.bodies));
-                this.pointToPointConstraint.addBody(this.box.wrapped);
-            });
-            this.pointToPointConstraint.api.disable();
-        }
+        this.constraint = this.physicConstraint.usePointToPointConstraint(
+            cursor,
+            this.object.instance as unknown as Ref<THREE.Object3D>,
+            { pivotA: [0, 0, 0], pivotB: [0, 0, 0] }
+        );
+        this.constraint.api.disable();
     }
 }
 
 @Component({
-    selector: 'sandbox-body-part[name]',
+    selector: 'sandbox-box[name]',
     template: `
-        <ng-container
-            ngtPhysicConeTwistConstraint
-            [previous]="parentBodyPart?.boxComponent?.wrappedFactory"
-        >
-            <sandbox-box
-                ngtPhysicBox
-                [getPhysicProps]="getBoxProps"
-                [transparent]="transparent"
-                [opacity]="opacity"
-                [color]="shape.color"
-                [scale]="scale"
-                [args]="args"
+        <ng-container *ngIf="boxRef">
+            <ngt-mesh
+                castShadow
+                receiveShadow
+                sandboxDragConstraint
+                [ref]="boxRef.ref"
                 [name]="name"
                 [position]="position"
             >
+                <ngt-vector3 attach="scale" [vector3]="scale"></ngt-vector3>
+                <ngt-box-geometry [args]="args"></ngt-box-geometry>
+                <ngt-mesh-standard-material
+                    [color]="shape.color"
+                    [opacity]="opacity"
+                    [transparent]="transparent"
+                ></ngt-mesh-standard-material>
                 <ng-container
-                    *ngIf="boxChildrenTemplate"
-                    [ngTemplateOutlet]="boxChildrenTemplate"
+                    *ngIf="renderTemplate && name !== 'upperBody'"
+                    [ngTemplateOutlet]="renderTemplate"
+                    [ngTemplateOutletContext]="{ scale, parent: boxRef.ref }"
                 ></ng-container>
-            </sandbox-box>
+            </ngt-mesh>
+            <ng-container
+                *ngIf="childTemplate"
+                [ngTemplateOutlet]="childTemplate"
+            ></ng-container>
             <ng-content></ng-content>
         </ng-container>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: NgtPhysicsConstraint,
-            useFactory: (bodyPart: SandboxBodyPartComponent) => {
-                return bodyPart.coneTwistConstraint;
-            },
-            deps: [SandboxBodyPartComponent],
-        },
-    ],
+    providers: [NgtPhysicBody, NgtPhysicConstraint],
 })
-export class SandboxBodyPartComponent implements OnInit {
-    // Box Inputs
+export class SandboxBoxComponent implements OnInit {
     @Input() position?: NgtVector3;
     @Input() args: ConstructorParameters<typeof THREE.BoxGeometry> = [1, 1, 1];
     @Input() opacity = 1;
@@ -266,125 +229,182 @@ export class SandboxBodyPartComponent implements OnInit {
     @Input() name!: ShapeName;
     @Input() config: ConeTwistConstraintOpts = {};
 
-    @ContentChild(TemplateRef) boxChildrenTemplate?: TemplateRef<unknown>;
-
-    @ViewChild(NgtPhysicConeTwistConstraint, { static: true })
-    coneTwistConstraint!: NgtPhysicConeTwistConstraint;
-
-    @ViewChild(SandboxBoxComponent, { static: true })
-    boxComponent!: SandboxBoxComponent;
+    @ContentChild('child', { read: TemplateRef })
+    childTemplate?: TemplateRef<unknown>;
+    @ContentChild('render', { read: TemplateRef })
+    renderTemplate?: TemplateRef<unknown>;
 
     shape!: ShapeConfig;
-    scale!: NgtVector3;
+    scale!: NgtTriple;
+    boxRef!: { ref: Ref<THREE.Object3D>; api: NgtPhysicsBodyPublicApi };
 
     constructor(
-        @Optional() @SkipSelf() public parentBodyPart: SandboxBodyPartComponent,
-        @Optional() @SkipSelf() public parentCursor: SandboxCursorComponent
+        @Optional()
+        @SkipSelf()
+        private parentBox: SandboxBoxComponent,
+        private physicBody: NgtPhysicBody,
+        private physicConstraint: NgtPhysicConstraint
     ) {}
 
     ngOnInit() {
         this.shape = shapes[this.name];
         this.scale = double(this.shape.args);
-    }
-
-    getBoxProps: GetByIndex<BoxProps> = () => {
-        return {
+        this.boxRef = this.physicBody.useBox(() => ({
+            args: [...this.shape.args],
+            linearDamping: 0.99,
             mass: this.shape.mass,
             position: [...this.shape.position],
-            linearDamping: 0.99,
-            args: [...this.shape.args],
-        };
-    };
+        }));
+        if (this.parentBox) {
+            this.physicConstraint.useConeTwistConstraint(
+                this.boxRef.ref,
+                this.parentBox.boxRef.ref,
+                this.config
+            );
+        }
+    }
 }
 
 @Component({
     selector: 'sandbox-ragdoll',
     template: `
-        <sandbox-body-part name="upperBody" [position]="position">
-            <sandbox-body-part
-                name="head"
-                [config]="joints['neckJoint']"
-                [position]="position"
-            >
-                <ng-template>
-                    <ngt-group (beforeRender)="onEyesBeforeRender($event)">
-                        <sandbox-box
-                            [args]="[0.3, 0.01, 0.1]"
-                            color="black"
-                            [opacity]="0.8"
-                            [position]="[-0.3, 0.1, 0.5]"
-                            [transparent]="true"
-                        ></sandbox-box>
-                        <sandbox-box
-                            [args]="[0.3, 0.01, 0.1]"
-                            color="black"
-                            [opacity]="0.8"
-                            [position]="[0.3, 0.1, 0.5]"
-                            [transparent]="true"
-                        ></sandbox-box>
-                    </ngt-group>
-                    <sandbox-box
-                        [args]="[0.3, 0.05, 0.1]"
-                        color="#270000"
-                        [opacity]="0.8"
-                        [position]="[0, -0.2, 0.5]"
-                        [transparent]="true"
-                        (beforeRender)="onMountBeforeRender($event)"
-                    ></sandbox-box>
-                </ng-template>
-            </sandbox-body-part>
-            <sandbox-body-part
-                name="upperLeftArm"
-                [position]="position"
-                [config]="joints['leftShoulder']"
-            >
-                <sandbox-body-part
-                    name="lowerLeftArm"
+        <sandbox-box [position]="position" name="upperBody">
+            <ng-template #child>
+                <sandbox-box
+                    name="head"
                     [position]="position"
-                    [config]="joints['leftElbowJoint']"
-                ></sandbox-body-part>
-            </sandbox-body-part>
-            <sandbox-body-part
-                name="upperRightArm"
-                [position]="position"
-                [config]="joints['rightShoulder']"
-            >
-                <sandbox-body-part
-                    name="lowerRightArm"
-                    [position]="position"
-                    [config]="joints['rightElbowJoint']"
-                ></sandbox-body-part>
-            </sandbox-body-part>
-            <sandbox-body-part
-                name="pelvis"
-                [position]="position"
-                [config]="joints['spineJoint']"
-            >
-                <sandbox-body-part
-                    name="upperLeftLeg"
-                    [position]="position"
-                    [config]="joints['leftHipJoint']"
+                    [config]="joints['neckJoint']"
                 >
-                    <sandbox-body-part
-                        name="lowerLeftLeg"
-                        [position]="position"
-                        [config]="joints['leftKneeJoint']"
-                    ></sandbox-body-part>
-                </sandbox-body-part>
+                    <ng-template #render let-scale="scale" let-parent="parent">
+                        <ngt-group
+                            (beforeRender)="onEyesBeforeRender($event)"
+                            [appendTo]="parent"
+                        >
+                            <ngt-mesh
+                                castShadow
+                                receiveShadow
+                                [position]="[-0.3, 0.1, 0.5]"
+                            >
+                                <ngt-vector3
+                                    attach="scale"
+                                    [vector3]="scale"
+                                ></ngt-vector3>
+                                <ngt-box-geometry
+                                    [args]="[0.3, 0.01, 0.1]"
+                                ></ngt-box-geometry>
+                                <ngt-mesh-standard-material
+                                    color="black"
+                                    [opacity]="0.8"
+                                    [transparent]="true"
+                                ></ngt-mesh-standard-material>
+                            </ngt-mesh>
+                            <ngt-mesh
+                                castShadow
+                                receiveShadow
+                                [position]="[0.3, 0.1, 0.5]"
+                            >
+                                <ngt-vector3
+                                    attach="scale"
+                                    [vector3]="scale"
+                                ></ngt-vector3>
+                                <ngt-box-geometry
+                                    [args]="[0.3, 0.01, 0.1]"
+                                ></ngt-box-geometry>
+                                <ngt-mesh-standard-material
+                                    color="black"
+                                    [opacity]="0.8"
+                                    [transparent]="true"
+                                ></ngt-mesh-standard-material>
+                            </ngt-mesh>
+                        </ngt-group>
+                        <ngt-mesh
+                            castShadow
+                            receiveShadow
+                            [position]="[0, -0.2, 0.5]"
+                            (beforeRender)="onMouthBeforeRender($event)"
+                            [appendTo]="parent"
+                        >
+                            <ngt-vector3
+                                attach="scale"
+                                [vector3]="scale"
+                            ></ngt-vector3>
+                            <ngt-box-geometry
+                                [args]="[0.3, 0.05, 0.1]"
+                            ></ngt-box-geometry>
+                            <ngt-mesh-standard-material
+                                color="black"
+                                [opacity]="0.8"
+                                [transparent]="true"
+                            ></ngt-mesh-standard-material>
+                        </ngt-mesh>
+                    </ng-template>
+                </sandbox-box>
 
-                <sandbox-body-part
-                    name="upperRightLeg"
+                <sandbox-box
+                    name="upperLeftArm"
+                    [config]="joints['leftShoulder']"
                     [position]="position"
-                    [config]="joints['rightHipJoint']"
                 >
-                    <sandbox-body-part
-                        name="lowerRightLeg"
-                        [position]="position"
-                        [config]="joints['rightKneeJoint']"
-                    ></sandbox-body-part>
-                </sandbox-body-part>
-            </sandbox-body-part>
-        </sandbox-body-part>
+                    <ng-template #child>
+                        <sandbox-box
+                            [position]="position"
+                            name="lowerLeftArm"
+                            [config]="joints['leftElbowJoint']"
+                        ></sandbox-box>
+                    </ng-template>
+                </sandbox-box>
+
+                <sandbox-box
+                    name="upperRightArm"
+                    [config]="joints['rightShoulder']"
+                    [position]="position"
+                >
+                    <ng-template #child>
+                        <sandbox-box
+                            [position]="position"
+                            name="lowerRightArm"
+                            [config]="joints['rightElbowJoint']"
+                        ></sandbox-box>
+                    </ng-template>
+                </sandbox-box>
+
+                <sandbox-box
+                    name="pelvis"
+                    [config]="joints['spineJoint']"
+                    [position]="position"
+                >
+                    <ng-template #child>
+                        <sandbox-box
+                            name="upperLeftLeg"
+                            [config]="joints['leftHipJoint']"
+                            [position]="position"
+                        >
+                            <ng-template #child>
+                                <sandbox-box
+                                    name="lowerLeftLeg"
+                                    [config]="joints['leftKneeJoint']"
+                                    [position]="position"
+                                ></sandbox-box>
+                            </ng-template>
+                        </sandbox-box>
+
+                        <sandbox-box
+                            name="upperRightLeg"
+                            [config]="joints['rightHipJoint']"
+                            [position]="position"
+                        >
+                            <ng-template #child>
+                                <sandbox-box
+                                    name="lowerRightLeg"
+                                    [config]="joints['rightKneeJoint']"
+                                    [position]="position"
+                                ></sandbox-box>
+                            </ng-template>
+                        </sandbox-box>
+                    </ng-template>
+                </sandbox-box>
+            </ng-template>
+        </sandbox-box>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -393,8 +413,8 @@ export class SandboxRagdollComponent {
     readonly joints = joints;
 
     onEyesBeforeRender({
-        state: { clock },
         object,
+        state: { clock },
     }: {
         state: NgtRenderState;
         object: THREE.Group;
@@ -402,9 +422,9 @@ export class SandboxRagdollComponent {
         object.position.y = Math.sin(clock.getElapsedTime()) * 0.06;
     }
 
-    onMountBeforeRender({
-        state: { clock },
+    onMouthBeforeRender({
         object,
+        state: { clock },
     }: {
         state: NgtRenderState;
         object: THREE.Mesh;
@@ -416,7 +436,7 @@ export class SandboxRagdollComponent {
 @Component({
     selector: 'sandbox-plane',
     template: `
-        <ngt-mesh ngtPhysicPlane [getPhysicProps]="getPlaneProps">
+        <ngt-mesh receiveShadow [ref]="planeRef.ref">
             <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
             <ngt-mesh-standard-material
                 color="#171720"
@@ -424,12 +444,16 @@ export class SandboxRagdollComponent {
         </ngt-mesh>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgtPhysicBody],
 })
 export class SandboxPlaneComponent {
-    getPlaneProps: GetByIndex<PlaneProps> = () => ({
+    planeRef = this.physicBody.usePlane(() => ({
+        args: [1000, 1000],
         position: [0, -5, 0],
         rotation: [-Math.PI / 2, 0, 0],
-    });
+    }));
+
+    constructor(private physicBody: NgtPhysicBody) {}
 }
 
 @NgModule({
@@ -437,7 +461,6 @@ export class SandboxPlaneComponent {
         SandboxMondayMorningComponent,
         SandboxCursorComponent,
         SandboxBoxComponent,
-        SandboxBodyPartComponent,
         SandboxRagdollComponent,
         SandboxPlaneComponent,
         SandboxDragConstraintDirective,
@@ -448,14 +471,8 @@ export class SandboxPlaneComponent {
         NgtBoxGeometryModule,
         NgtMeshStandardMaterialModule,
         CommonModule,
-        NgtPhysicConeTwistConstraintModule,
-        NgtSphereGeometryModule,
-        NgtMeshBasicMaterialModule,
-        NgtPhysicSphereModule,
-        NgtPhysicBoxModule,
-        NgtPhysicPointToPointConstraintModule,
         NgtGroupModule,
-        NgtPhysicPlaneModule,
+        NgtVector3AttributeModule,
         NgtPlaneGeometryModule,
         NgtCanvasModule,
         NgtColorAttributeModule,
@@ -463,6 +480,8 @@ export class SandboxPlaneComponent {
         NgtAmbientLightModule,
         NgtPointLightModule,
         NgtPhysicsModule,
+        NgtSphereGeometryModule,
+        NgtMeshBasicMaterialModule,
     ],
 })
 export class SandboxMondayMorningModule {}

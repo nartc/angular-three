@@ -4,8 +4,8 @@ import { Component } from '@angular/core';
     selector: 'sandbox-root',
     template: `
         <!--        <sandbox-cubes></sandbox-cubes>-->
-        <sandbox-physic-cubes></sandbox-physic-cubes>
-        <!--        <sandbox-monday-morning></sandbox-monday-morning>-->
+        <!--                <sandbox-physic-cubes></sandbox-physic-cubes>-->
+        <sandbox-monday-morning></sandbox-monday-morning>
     `,
     styles: [],
 })

@@ -1,18 +1,10 @@
-import { BoxProps, NgtPhysicsModule, PlaneProps } from '@angular-three/cannon';
-import {
-    GetByIndex,
-    NgtPhysicBoxModule,
-    NgtPhysicPlaneModule,
-} from '@angular-three/cannon/bodies';
+import { NgtPhysicsModule } from '@angular-three/cannon';
+import { NgtPhysicBody } from '@angular-three/cannon/bodies';
 import { NgtCannonDebugModule } from '@angular-three/cannon/debug';
 import {
     NgtCanvasModule,
     NgtColorPipeModule,
-    NgtEuler,
     NgtTriple,
-    NgtVector3,
-    NgtWrapper,
-    provideWrappedObjectFactory,
 } from '@angular-three/core';
 import {
     NgtColorAttributeModule,
@@ -37,7 +29,6 @@ import {
     Input,
     NgModule,
 } from '@angular/core';
-import * as THREE from 'three';
 
 @Component({
     selector: 'sandbox-physic-cubes',
@@ -73,7 +64,7 @@ export class SandboxPhysicCubesComponent {}
 @Component({
     selector: 'sandbox-plane',
     template: `
-        <ngt-mesh ngtPhysicPlane [getPhysicProps]="getPlaneProps" receiveShadow>
+        <ngt-mesh receiveShadow [ref]="planeRef.ref">
             <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
             <ngt-shadow-material
                 color="#171717"
@@ -83,22 +74,25 @@ export class SandboxPhysicCubesComponent {}
         </ngt-mesh>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgtPhysicBody],
 })
 export class SandboxPlaneComponent {
-    @Input() position?: NgtVector3;
-    rotation = [-Math.PI / 2, 0, 0] as NgtEuler;
+    @Input() position?: NgtTriple;
+    rotation = [-Math.PI / 2, 0, 0] as NgtTriple;
 
-    getPlaneProps: GetByIndex<PlaneProps> = () => ({
+    planeRef = this.physicBody.usePlane(() => ({
         args: [1000, 1000],
-        rotation: this.rotation as NgtTriple,
-        position: this.position as NgtTriple,
-    });
+        rotation: this.rotation,
+        position: this.position,
+    }));
+
+    constructor(private physicBody: NgtPhysicBody) {}
 }
 
 @Component({
-    selector: 'sandbox-box',
+    selector: 'sandbox-cube',
     template: `
-        <ngt-mesh receiveShadow castShadow (ready)="wrapped = $event">
+        <ngt-mesh receiveShadow castShadow [ref]="boxRef.ref">
             <ngt-box-geometry></ngt-box-geometry>
             <ngt-mesh-lambert-material
                 color="hotpink"
@@ -106,26 +100,19 @@ export class SandboxPlaneComponent {
         </ngt-mesh>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideWrappedObjectFactory<THREE.Mesh>(SandboxBoxComponent)],
-})
-export class SandboxBoxComponent extends NgtWrapper<THREE.Mesh> {}
-
-@Component({
-    selector: 'sandbox-cube',
-    template: `
-        <sandbox-box ngtPhysicBox [getPhysicProps]="getCubeProps"></sandbox-box>
-    `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgtPhysicBody],
 })
 export class SandboxCubeComponent {
-    @Input() position?: NgtVector3;
-    rotation = [0.4, 0.2, 0.5] as NgtEuler;
+    @Input() position?: NgtTriple;
+    rotation = [0.4, 0.2, 0.5] as NgtTriple;
 
-    getCubeProps: GetByIndex<BoxProps> = () => ({
+    boxRef = this.physicBody.useBox(() => ({
         mass: 1,
-        position: this.position as NgtTriple,
-        rotation: this.rotation as NgtTriple,
-    });
+        position: this.position,
+        rotation: this.rotation,
+    }));
+
+    constructor(private physicBody: NgtPhysicBody) {}
 }
 
 @NgModule({
@@ -133,7 +120,6 @@ export class SandboxCubeComponent {
         SandboxPhysicCubesComponent,
         SandboxPlaneComponent,
         SandboxCubeComponent,
-        SandboxBoxComponent,
     ],
     exports: [SandboxPhysicCubesComponent, SandboxPlaneComponent],
     imports: [
@@ -143,11 +129,9 @@ export class SandboxCubeComponent {
         NgtDirectionalLightModule,
         NgtVector2AttributeModule,
         NgtPhysicsModule,
-        NgtPhysicPlaneModule,
         NgtMeshModule,
         NgtPlaneGeometryModule,
         NgtShadowMaterialModule,
-        NgtPhysicBoxModule,
         NgtBoxGeometryModule,
         NgtMeshLambertMaterialModule,
         NgtCannonDebugModule,
