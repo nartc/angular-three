@@ -320,15 +320,19 @@ export class NgtPhysicBody extends NgtComponentStore {
                                     }
 
                                     refs[id] = object;
+
                                     if (this.debug) {
                                         this.debug.api.add(id, props, type);
                                     }
+
                                     setupCollision(events, props, id);
+
                                     if (
                                         !(object instanceof THREE.InstancedMesh)
                                     ) {
                                         applyBodyProps(props);
                                     }
+
                                     return {
                                         ...props,
                                         args: argsFn(props.args),
