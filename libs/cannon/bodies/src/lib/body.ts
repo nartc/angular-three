@@ -39,7 +39,7 @@ import type {
     VectorName,
 } from '@pmndrs/cannon-worker-api';
 import { CannonWorkerAPI } from '@pmndrs/cannon-worker-api';
-import { combineLatest, skip } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import * as THREE from 'three';
 
 export type AtomicApi<K extends AtomicName> = {
@@ -384,8 +384,16 @@ export class NgtPhysicBody extends NgtComponentStore {
                         physicsStore.select((s) => s.worker),
                         ref.ref$,
                         isUsedRef.ref$,
-                        // TODO: not sure why we need to skip 1 :(
-                    ]).pipe(skip(1))
+                    ])
+
+                    /**
+                     * .pipe(
+                     *                         map((args, index) => {
+                     *                             // console.log('-->', args, args[1]?.uuid, index);
+                     *                             return args;
+                     *                         })
+                     *                     )
+                     */
                 );
             });
 
