@@ -4,5 +4,5 @@
     "lib": {
         "entryFile": "src/index.ts"
     },
-    "allowedNonPeerDependencies": ["cannon-es"]
+    "allowedNonPeerDependencies": ["cannon-es", "@pmndrs/cannon-worker-api", "cannon-es-debugger"]
 }
