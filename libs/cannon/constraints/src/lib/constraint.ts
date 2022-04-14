@@ -2,7 +2,6 @@ import { NgtPhysicsStore } from '@angular-three/cannon';
 import {
     NgtComponentStore,
     NgtStore,
-    NgtUnknownInstance,
     Ref,
     tapEffect,
 } from '@angular-three/core';
@@ -125,22 +124,8 @@ export class NgtPhysicConstraint extends NgtComponentStore {
                     )(
                         combineLatest([
                             physicsStore.select((s) => s.worker),
-                            bodyA.ref$.pipe(
-                                filter(
-                                    (ref) =>
-                                        (
-                                            ref as unknown as NgtUnknownInstance
-                                        )?.['__ngt__'] != undefined
-                                )
-                            ),
-                            bodyB.ref$.pipe(
-                                filter(
-                                    (ref) =>
-                                        (
-                                            ref as unknown as NgtUnknownInstance
-                                        )?.['__ngt__'] != undefined
-                                )
-                            ),
+                            bodyA.ref$.pipe(filter((ref) => ref != undefined)),
+                            bodyB.ref$.pipe(filter((ref) => ref != undefined)),
                         ])
                     );
                 },
@@ -155,14 +140,10 @@ export class NgtPhysicConstraint extends NgtComponentStore {
 
                     const enableDisable = {
                         disable: () => {
-                            requestAnimationFrame(() => {
-                                worker.disableConstraint({ uuid });
-                            });
+                            worker.disableConstraint({ uuid });
                         },
                         enable: () => {
-                            requestAnimationFrame(() => {
-                                worker.enableConstraint({ uuid });
-                            });
+                            worker.enableConstraint({ uuid });
                         },
                     } as NgtConstraintORHingeApi<TConstraintType>;
 
@@ -170,29 +151,21 @@ export class NgtPhysicConstraint extends NgtComponentStore {
                         return {
                             ...enableDisable,
                             disableMotor: () => {
-                                requestAnimationFrame(() => {
-                                    worker.disableConstraintMotor({ uuid });
-                                });
+                                worker.disableConstraintMotor({ uuid });
                             },
                             enableMotor: () => {
-                                requestAnimationFrame(() => {
-                                    worker.enableConstraintMotor({ uuid });
-                                });
+                                worker.enableConstraintMotor({ uuid });
                             },
                             setMotorMaxForce: (value: number) => {
-                                requestAnimationFrame(() => {
-                                    worker.setConstraintMotorMaxForce({
-                                        props: value,
-                                        uuid,
-                                    });
+                                worker.setConstraintMotorMaxForce({
+                                    props: value,
+                                    uuid,
                                 });
                             },
                             setMotorSpeed: (value: number) => {
-                                requestAnimationFrame(() => {
-                                    worker.setConstraintMotorSpeed({
-                                        props: value,
-                                        uuid,
-                                    });
+                                worker.setConstraintMotorSpeed({
+                                    props: value,
+                                    uuid,
                                 });
                             },
                         };
