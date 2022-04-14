@@ -39,6 +39,7 @@ import type {
     VectorName,
 } from '@pmndrs/cannon-worker-api';
 import { CannonWorkerAPI } from '@pmndrs/cannon-worker-api';
+import { combineLatest, skip } from 'rxjs';
 import * as THREE from 'three';
 
 export type AtomicApi<K extends AtomicName> = {
@@ -83,6 +84,28 @@ export type GetByIndex<T extends BodyProps> = (index: number) => T;
 type ArgFn<T> = (args: T) => unknown[];
 
 const temp = new THREE.Object3D();
+
+function applyBodyProps<TBodyProps extends BodyProps>(
+    ref: Ref<THREE.Object3D>,
+    props: TBodyProps
+) {
+    const objectProps: UnknownRecord = {};
+    if (props.position) {
+        objectProps['position'] = makeVector3(props.position);
+    }
+
+    if (props.quaternion) {
+        objectProps['quaternion'] = make(THREE.Quaternion, props.quaternion);
+    } else if (props.rotation) {
+        objectProps['rotation'] = make(THREE.Euler, props.rotation);
+    }
+
+    if (props.userData) {
+        objectProps['userData'] = props.userData;
+    }
+
+    applyProps(ref.value as unknown as NgtUnknownInstance, objectProps);
+}
 
 function capitalize<T extends string>(str: T): Capitalize<T> {
     return (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>;
@@ -252,132 +275,122 @@ export class NgtPhysicBody extends NgtComponentStore {
         instanceRef?: Ref<THREE.Object3D>
     ): { ref: Ref<THREE.Object3D>; api: NgtPhysicsBodyPublicApi } {
         return this.zone.runOutsideAngular(() => {
+            const isUsedRef = new Ref(false);
+
             let ref = instanceRef as Ref<THREE.Object3D>;
 
             if (!ref) {
-                ref = new Ref<THREE.Object3D>(new THREE.Object3D());
-            } else if (!ref.value) {
-                ref.set(new THREE.Object3D());
-            }
-
-            function applyBodyProps(props: TBodyProps) {
-                const objectProps: UnknownRecord = {};
-                if (props.position) {
-                    objectProps['position'] = makeVector3(props.position);
-                }
-
-                if (props.quaternion) {
-                    objectProps['quaternion'] = make(
-                        THREE.Quaternion,
-                        props.quaternion
-                    );
-                } else if (props.rotation) {
-                    objectProps['rotation'] = make(THREE.Euler, props.rotation);
-                }
-
-                if (props.userData) {
-                    objectProps['userData'] = props.userData;
-                }
-
-                applyProps(
-                    ref.value as unknown as NgtUnknownInstance,
-                    objectProps
-                );
+                ref = new Ref<THREE.Object3D>();
             }
 
             const physicsStore = this.physicsStore;
 
-            requestAnimationFrame(() => {
-                this.onCanvasReady(this.store.ready$, () => {
-                    this.effect<CannonWorkerAPI>(
-                        tapEffect(() => {
-                            const { worker, refs, events } = physicsStore.get();
-                            const object = ref.value;
-                            let objectCount = 1;
-
-                            if (object instanceof THREE.InstancedMesh) {
-                                object.instanceMatrix.setUsage(
-                                    THREE.DynamicDrawUsage
-                                );
-                                objectCount = object.count;
+            this.onCanvasReady(this.store.ready$, () => {
+                this.effect<[CannonWorkerAPI, THREE.Object3D, boolean]>(
+                    tapEffect(() => {
+                        // if ref.value is null and it is not being used on a ngt object, assign a blank Object3d
+                        if (ref.value == null) {
+                            if (isUsedRef.value) {
+                                return;
                             }
 
-                            const uuid =
-                                object instanceof THREE.InstancedMesh
-                                    ? new Array(objectCount)
-                                          .fill(0)
-                                          .map((_, i) => `${object.uuid}/${i}`)
-                                    : [object.uuid];
+                            ref.set(new THREE.Object3D());
+                        }
 
-                            const props: (TBodyProps & { args: unknown })[] =
-                                uuid.map((id, i) => {
-                                    const props = getPropsFn(i);
-                                    prepare(temp, props);
-                                    if (object instanceof THREE.InstancedMesh) {
-                                        object.setMatrixAt(i, temp.matrix);
-                                        object.instanceMatrix.needsUpdate =
-                                            true;
-                                    }
+                        const { worker, refs, events } = physicsStore.get();
+                        const object = ref.value;
+                        let objectCount = 1;
 
-                                    refs[id] = object;
+                        if (object instanceof THREE.InstancedMesh) {
+                            object.instanceMatrix.setUsage(
+                                THREE.DynamicDrawUsage
+                            );
+                            objectCount = object.count;
+                        }
 
-                                    if (this.debug) {
-                                        this.debug.api.add(id, props, type);
-                                    }
+                        const uuid =
+                            object instanceof THREE.InstancedMesh
+                                ? new Array(objectCount)
+                                      .fill(0)
+                                      .map((_, i) => `${object.uuid}/${i}`)
+                                : [object.uuid];
 
-                                    setupCollision(events, props, id);
+                        const props: (TBodyProps & { args: unknown })[] =
+                            uuid.map((id, i) => {
+                                const props = getPropsFn(i);
+                                prepare(temp, props);
+                                if (object instanceof THREE.InstancedMesh) {
+                                    object.setMatrixAt(i, temp.matrix);
+                                    object.instanceMatrix.needsUpdate = true;
+                                }
 
-                                    if (
-                                        !(object instanceof THREE.InstancedMesh)
-                                    ) {
-                                        applyBodyProps(props);
-                                    }
+                                refs[id] = object;
 
-                                    return {
-                                        ...props,
-                                        args: argsFn(props.args),
-                                    };
-                                });
+                                if (this.debug) {
+                                    this.debug.api.add(id, props, type);
+                                }
 
-                            // Register on mount, unregister on unmount
-                            worker.addBodies({
-                                props: props.map(
-                                    ({
-                                        onCollide,
-                                        onCollideBegin,
-                                        onCollideEnd,
-                                        ...serializableProps
-                                    }) => {
-                                        return {
-                                            onCollide: Boolean(onCollide),
-                                            onCollideBegin:
-                                                Boolean(onCollideBegin),
-                                            onCollideEnd: Boolean(onCollideEnd),
-                                            ...serializableProps,
-                                        };
-                                    }
-                                ),
-                                type,
-                                uuid,
+                                setupCollision(events, props, id);
+
+                                if (!(object instanceof THREE.InstancedMesh)) {
+                                    applyBodyProps(ref, props);
+                                }
+
+                                return {
+                                    ...props,
+                                    args: argsFn(props.args),
+                                };
                             });
 
-                            return () => {
-                                uuid.forEach((id) => {
-                                    delete refs[id];
-                                    if (this.debug) {
-                                        this.debug.api.remove(id);
-                                    }
-                                    delete events[id];
-                                });
-                                worker.removeBodies({ uuid });
-                            };
-                        })
-                    )(physicsStore.select((s) => s.worker));
-                });
+                        // Register on mount, unregister on unmount
+                        worker.addBodies({
+                            props: props.map(
+                                ({
+                                    onCollide,
+                                    onCollideBegin,
+                                    onCollideEnd,
+                                    ...serializableProps
+                                }) => {
+                                    return {
+                                        onCollide: Boolean(onCollide),
+                                        onCollideBegin: Boolean(onCollideBegin),
+                                        onCollideEnd: Boolean(onCollideEnd),
+                                        ...serializableProps,
+                                    };
+                                }
+                            ),
+                            type,
+                            uuid,
+                        });
+
+                        return () => {
+                            uuid.forEach((id) => {
+                                delete refs[id];
+                                if (this.debug) {
+                                    this.debug.api.remove(id);
+                                }
+                                delete events[id];
+                            });
+                            worker.removeBodies({ uuid });
+                        };
+                    })
+                )(
+                    combineLatest([
+                        physicsStore.select((s) => s.worker),
+                        ref.ref$,
+                        isUsedRef.ref$,
+                        // TODO: not sure why we need to skip 1 :(
+                    ]).pipe(skip(1))
+                );
             });
 
             return {
-                ref,
+                get ref() {
+                    if (!isUsedRef.value) {
+                        isUsedRef.set(true);
+                    }
+                    return ref;
+                },
                 get api() {
                     const { worker, subscriptions, scaleOverrides } =
                         physicsStore.get();
