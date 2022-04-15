@@ -5,12 +5,12 @@
         "access": "public"
     },
     "peerDependencies": {
-        "@angular/common": "^13.2.0",
-        "@angular/core": "^13.2.0"
+        "@angular/common": "^13.0.0",
+        "@angular/core": "^13.0.0"
     },
     "dependencies": {
-        "three-stdlib": "~2.8.6",
-        "troika-three-text": "~0.45.0",
+        "three-stdlib": "~2.9.0",
+        "troika-three-text": "~0.46.0",
         "tslib": "^2.3.0"
     }
 }
