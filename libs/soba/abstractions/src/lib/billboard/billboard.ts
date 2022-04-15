@@ -1,122 +1,139 @@
 import {
-    AnyFunction,
-    createExtenderProvider,
-    createHostParentObjectProvider,
-    createParentObjectProvider,
-    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-    NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-    NGT_PARENT_OBJECT,
-    NgtExtender,
-    NgtObjectInputsController,
-    NgtObjectInputsControllerModule,
-    NgtRender,
+    NgtObjectInputs,
+    NgtRenderState,
+    provideInstanceWrapperFactory,
+    provideObjectWrapperFactory,
+    Ref,
 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
+import { NgtGroup, NgtGroupModule } from '@angular-three/core/group';
 import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
-    Inject,
+    ContentChild,
+    Directive,
+    EventEmitter,
     Input,
     NgModule,
-    Optional,
-    SkipSelf,
+    Output,
+    TemplateRef,
+    ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
+
+@Directive({
+    selector: 'ng-template[ngt-soba-billboard-content]',
+})
+export class NgtSobaBillboardContent {
+    constructor(
+        public templateRef: TemplateRef<{ billboard: Ref<THREE.Group> }>
+    ) {}
+
+    static ngTemplateContextGuard(
+        dir: NgtSobaBillboardContent,
+        ctx: any
+    ): ctx is { billboard: Ref<THREE.Group> } {
+        return true;
+    }
+}
 
 @Component({
     selector: 'ngt-soba-billboard',
     template: `
         <ngt-group
-            (ready)="object = $event"
-            (animateReady)="onGroupAnimate($event.object, $event.state)"
-            [name]="objectInputsController.name"
-            [position]="objectInputsController.position"
-            [rotation]="objectInputsController.rotation"
-            [quaternion]="objectInputsController.quaternion"
-            [scale]="objectInputsController.scale"
-            [color]="objectInputsController.color"
-            [userData]="objectInputsController.userData"
-            [castShadow]="objectInputsController.castShadow"
-            [receiveShadow]="objectInputsController.receiveShadow"
-            [visible]="objectInputsController.visible"
-            [matrixAutoUpdate]="objectInputsController.matrixAutoUpdate"
-            [dispose]="objectInputsController.dispose"
-            [raycast]="objectInputsController.raycast"
-            [appendMode]="objectInputsController.appendMode"
-            [appendTo]="objectInputsController.appendTo"
-            (click)="objectInputsController.click.emit($event)"
-            (contextmenu)="objectInputsController.contextmenu.emit($event)"
-            (dblclick)="objectInputsController.dblclick.emit($event)"
-            (pointerup)="objectInputsController.pointerup.emit($event)"
-            (pointerdown)="objectInputsController.pointerdown.emit($event)"
-            (pointerover)="objectInputsController.pointerover.emit($event)"
-            (pointerout)="objectInputsController.pointerout.emit($event)"
-            (pointerenter)="objectInputsController.pointerenter.emit($event)"
-            (pointerleave)="objectInputsController.pointerleave.emit($event)"
-            (pointermove)="objectInputsController.pointermove.emit($event)"
-            (pointermissed)="objectInputsController.pointermissed.emit($event)"
-            (pointercancel)="objectInputsController.pointercancel.emit($event)"
-            (wheel)="objectInputsController.wheel.emit($event)"
+            #ngtGroup
+            (ready)="ready.emit($event)"
+            (beforeRender)="onBeforeRender($event)"
+            [name]="name"
+            [position]="position"
+            [rotation]="rotation"
+            [quaternion]="quaternion"
+            [scale]="scale"
+            [color]="color"
+            [userData]="userData"
+            [castShadow]="castShadow"
+            [receiveShadow]="receiveShadow"
+            [visible]="visible"
+            [matrixAutoUpdate]="matrixAutoUpdate"
+            [dispose]="dispose"
+            [raycast]="raycast"
+            [appendMode]="appendMode"
+            [appendTo]="appendTo"
+            (click)="click.emit($event)"
+            (contextmenu)="contextmenu.emit($event)"
+            (dblclick)="dblclick.emit($event)"
+            (pointerup)="pointerup.emit($event)"
+            (pointerdown)="pointerdown.emit($event)"
+            (pointerover)="pointerover.emit($event)"
+            (pointerout)="pointerout.emit($event)"
+            (pointerenter)="pointerenter.emit($event)"
+            (pointerleave)="pointerleave.emit($event)"
+            (pointermove)="pointermove.emit($event)"
+            (pointermissed)="pointermissed.emit($event)"
+            (pointercancel)="pointercancel.emit($event)"
+            (wheel)="wheel.emit($event)"
         >
             <ng-container
-                *ngIf="object"
-                [ngTemplateOutlet]="contentTemplate"
+                *ngIf="content"
+                [ngTemplateOutlet]="content.templateRef"
+                [ngTemplateOutletContext]="{ billboard: ngtGroup.instance }"
             ></ng-container>
         </ngt-group>
-        <ng-template #contentTemplate>
-            <ng-content></ng-content>
-        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-        createExtenderProvider(NgtSobaBillboard),
-        createParentObjectProvider(
+        provideInstanceWrapperFactory(
             NgtSobaBillboard,
-            (billboard) => billboard.object
+            (billboard) => billboard.group.instance.value,
+            (billboard) => billboard.parentInstanceFactory
         ),
-        createHostParentObjectProvider(NgtSobaBillboard),
+        provideObjectWrapperFactory(
+            NgtSobaBillboard,
+            (billboard) => billboard.group.instance.value,
+            (billboard) => billboard.parentObjectFactory
+        ),
     ],
 })
-export class NgtSobaBillboard extends NgtExtender<THREE.Group> {
+export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
     @Input() follow = true;
     @Input() lockX = false;
     @Input() lockY = false;
     @Input() lockZ = false;
 
-    constructor(
-        @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-        public objectInputsController: NgtObjectInputsController,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_PARENT_OBJECT)
-        public parentObjectFn: AnyFunction
-    ) {
-        super();
-    }
+    @ContentChild(NgtSobaBillboardContent) content?: NgtSobaBillboardContent;
 
-    onGroupAnimate(group: THREE.Object3D, state: NgtRender) {
+    @ViewChild(NgtGroup, { static: true }) group!: NgtGroup;
+
+    @Output() beforeRender = new EventEmitter<{
+        state: NgtRenderState;
+        object: THREE.Group;
+    }>();
+
+    onBeforeRender({
+        state: { camera },
+        object,
+    }: {
+        state: NgtRenderState;
+        object: THREE.Group;
+    }) {
         if (!this.follow) return;
 
-        this.animateReady.emit({ entity: group as THREE.Group, state });
-
         // save previous rotation in case we're locking an axis
-        const prevRotation = group.rotation.clone();
+        const prevRotation = object.rotation.clone();
 
         // always face the camera
-        group.quaternion.copy(state.camera.quaternion);
+        object.quaternion.copy(camera.quaternion);
 
         // readjust any axis that is locked
-        if (this.lockX) group.rotation.x = prevRotation.x;
-        if (this.lockY) group.rotation.y = prevRotation.y;
-        if (this.lockZ) group.rotation.z = prevRotation.z;
+        if (this.lockX) object.rotation.x = prevRotation.x;
+        if (this.lockY) object.rotation.y = prevRotation.y;
+        if (this.lockZ) object.rotation.z = prevRotation.z;
     }
 }
 
 @NgModule({
-    declarations: [NgtSobaBillboard],
-    exports: [NgtSobaBillboard, NgtObjectInputsControllerModule],
+    declarations: [NgtSobaBillboard, NgtSobaBillboardContent],
+    exports: [NgtSobaBillboard, NgtSobaBillboardContent],
     imports: [NgtGroupModule, CommonModule],
 })
 export class NgtSobaBillboardModule {}
