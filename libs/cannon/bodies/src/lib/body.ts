@@ -39,7 +39,7 @@ import type {
     VectorName,
 } from '@pmndrs/cannon-worker-api';
 import { CannonWorkerAPI } from '@pmndrs/cannon-worker-api';
-import { combineLatest } from 'rxjs';
+import { combineLatest, filter } from 'rxjs';
 import * as THREE from 'three';
 
 export type AtomicApi<K extends AtomicName> = {
@@ -196,36 +196,70 @@ export class NgtPhysicBody extends NgtComponentStore {
         super();
     }
 
-    usePlane(fn: GetByIndex<PlaneProps>, ref?: Ref<THREE.Object3D>) {
-        return this.useBody('Plane', fn, () => [], ref);
+    usePlane(
+        fn: GetByIndex<PlaneProps>,
+        useOnTemplate = true,
+        ref?: Ref<THREE.Object3D>
+    ) {
+        return this.useBody('Plane', fn, () => [], useOnTemplate, ref);
     }
 
-    useBox(fn: GetByIndex<BoxProps>, ref?: Ref<THREE.Object3D>) {
+    useBox(
+        fn: GetByIndex<BoxProps>,
+        useOnTemplate = true,
+        ref?: Ref<THREE.Object3D>
+    ) {
         const defaultBoxArgs: NgtTriple = [1, 1, 1];
         return this.useBody(
             'Box',
             fn,
             (args = defaultBoxArgs): NgtTriple => args,
+            useOnTemplate,
             ref
         );
     }
 
-    useCylinder(fn: GetByIndex<CylinderProps>, ref?: Ref<THREE.Object3D>) {
-        return this.useBody('Cylinder', fn, (args = [] as []) => args, ref);
+    useCylinder(
+        fn: GetByIndex<CylinderProps>,
+        useOnTemplate = true,
+        ref?: Ref<THREE.Object3D>
+    ) {
+        return this.useBody(
+            'Cylinder',
+            fn,
+            (args = [] as []) => args,
+            useOnTemplate,
+            ref
+        );
     }
 
     useHeightfield(
         fn: GetByIndex<HeightfieldProps>,
+        useOnTemplate = true,
         ref?: Ref<THREE.Object3D>
     ) {
-        return this.useBody('Heightfield', fn, (args) => args, ref);
+        return this.useBody(
+            'Heightfield',
+            fn,
+            (args) => args,
+            useOnTemplate,
+            ref
+        );
     }
 
-    useParticle(fn: GetByIndex<ParticleProps>, ref?: Ref<THREE.Object3D>) {
-        return this.useBody('Particle', fn, () => [], ref);
+    useParticle(
+        fn: GetByIndex<ParticleProps>,
+        useOnTemplate = true,
+        ref?: Ref<THREE.Object3D>
+    ) {
+        return this.useBody('Particle', fn, () => [], useOnTemplate, ref);
     }
 
-    useSphere(fn: GetByIndex<SphereProps>, ref?: Ref<THREE.Object3D>) {
+    useSphere(
+        fn: GetByIndex<SphereProps>,
+        useOnTemplate = true,
+        ref?: Ref<THREE.Object3D>
+    ) {
         return this.useBody(
             'Sphere',
             fn,
@@ -234,16 +268,28 @@ export class NgtPhysicBody extends NgtComponentStore {
                     throw new Error('useSphere args must be an array');
                 return [args[0]];
             },
+            useOnTemplate,
             ref
         );
     }
 
-    useTrimesh(fn: GetByIndex<TrimeshProps>, ref?: Ref<THREE.Object3D>) {
-        return this.useBody<TrimeshProps>('Trimesh', fn, (args) => args, ref);
+    useTrimesh(
+        fn: GetByIndex<TrimeshProps>,
+        useOnTemplate = true,
+        ref?: Ref<THREE.Object3D>
+    ) {
+        return this.useBody<TrimeshProps>(
+            'Trimesh',
+            fn,
+            (args) => args,
+            useOnTemplate,
+            ref
+        );
     }
 
     useConvexPolyhedron(
         fn: GetByIndex<ConvexPolyhedronProps>,
+        useOnTemplate = true,
         ref?: Ref<THREE.Object3D>
     ) {
         return this.useBody<ConvexPolyhedronProps>(
@@ -262,46 +308,48 @@ export class NgtPhysicBody extends NgtComponentStore {
                 axes && axes.map(makeTriplet),
                 boundingSphereRadius,
             ],
+            useOnTemplate,
             ref
         );
     }
 
     useCompoundBody(
         fn: GetByIndex<CompoundBodyProps>,
+        useOnTemplate = true,
         ref?: Ref<THREE.Object3D>
     ) {
-        return this.useBody('Compound', fn, (args) => args as unknown[], ref);
+        return this.useBody(
+            'Compound',
+            fn,
+            (args) => args as unknown[],
+            useOnTemplate,
+            ref
+        );
     }
 
     private useBody<TBodyProps extends BodyProps>(
         type: BodyShapeType,
         getPropsFn: GetByIndex<TBodyProps>,
         argsFn: ArgFn<TBodyProps['args']>,
+        useOnTemplate = true,
         instanceRef?: Ref<THREE.Object3D>
     ): { ref: Ref<THREE.Object3D>; api: NgtPhysicsBodyPublicApi } {
         return this.zone.runOutsideAngular(() => {
-            const isUsedRef = new Ref(false);
-
             let ref = instanceRef as Ref<THREE.Object3D>;
 
             if (!ref) {
                 ref = new Ref<THREE.Object3D>();
             }
 
+            if (!ref.value && !useOnTemplate) {
+                ref.set(new THREE.Object3D());
+            }
+
             const physicsStore = this.physicsStore;
 
             this.onCanvasReady(this.store.ready$, () => {
-                this.effect<[CannonWorkerAPI, THREE.Object3D, boolean]>(
+                this.effect<[CannonWorkerAPI, THREE.Object3D]>(
                     tapEffect(() => {
-                        // if ref.value is null and it is not being used on a ngt object, assign a blank Object3d
-                        if (ref.value == null) {
-                            if (isUsedRef.value) {
-                                return;
-                            }
-
-                            ref.set(new THREE.Object3D());
-                        }
-
                         const { worker, refs, events } = physicsStore.get();
                         const object = ref.value;
                         let objectCount = 1;
@@ -382,28 +430,15 @@ export class NgtPhysicBody extends NgtComponentStore {
                 )(
                     combineLatest([
                         physicsStore.select((s) => s.worker),
-                        ref.ref$,
-                        isUsedRef.ref$,
+                        ref.ref$.pipe(
+                            filter((obj): obj is THREE.Object3D => !!obj)
+                        ),
                     ])
-
-                    /**
-                     * .pipe(
-                     *                         map((args, index) => {
-                     *                             // console.log('-->', args, args[1]?.uuid, index);
-                     *                             return args;
-                     *                         })
-                     *                     )
-                     */
                 );
             });
 
             return {
-                get ref() {
-                    if (!isUsedRef.value) {
-                        isUsedRef.set(true);
-                    }
-                    return ref;
-                },
+                ref,
                 get api() {
                     const { worker, subscriptions, scaleOverrides } =
                         physicsStore.get();
