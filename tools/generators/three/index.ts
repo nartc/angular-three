@@ -8,14 +8,9 @@ import helpersGenerator from './helpers/helpers';
 import lightsGenerator from './lights/lights';
 import linesGenerator from './lines/lines';
 import materialsGenerator from './materials/materials';
+import simpleEffectsGenerator from './postprocessing/simple-effects';
 import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
-
-/**
- *
- * import simpleEffectControllerGenerator from './postprocessing/simple-effect-controller';
- * import simpleEffectsGenerator from './postprocessing/simple-effects';
- */
 
 export default async function (tree: Tree) {
     await Promise.all([
@@ -30,27 +25,6 @@ export default async function (tree: Tree) {
         spritesGenerator(tree),
         texturesGenerator(tree),
         linesGenerator(tree),
+        simpleEffectsGenerator(tree),
     ]);
-    //
-    // const [
-    //     // simpleEffectSelectors,
-    //     // physicBodySelectors,
-    //     // physicConstraintSelectors,
-    // ] = await Promise.all([
-    //     // simpleEffectsGenerator(tree),
-    //     // physicBodiesGenerator(tree),
-    //     // physicConstraintsGenerator(tree),
-    // ]);
-    //
-    // // await Promise.all([
-    // //     cannonBodyControllerGenerator(
-    // //         tree,
-    // //         physicBodySelectors.map(({ name }) => name)
-    // //     ),
-    // //     cannonConstraintControllerGenerator(
-    // //         tree,
-    // //         physicConstraintSelectors.map(({ name }) => name)
-    // //     ),
-    // //     simpleEffectControllerGenerator(tree, simpleEffectSelectors),
-    // // ]);
 }
