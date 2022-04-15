@@ -1,5 +1,6 @@
 import { NgtPhysicsStore } from '@angular-three/cannon';
 import {
+    makeId,
     NgtComponentStore,
     NgtStore,
     Ref,
@@ -105,32 +106,26 @@ export class NgtPhysicConstraint extends NgtComponentStore {
     ): NgtConstraintReturn<TConstraintType> {
         return this.zone.runOutsideAngular(() => {
             const physicsStore = this.physicsStore;
-            const uuid = THREE.MathUtils.generateUUID();
+            const uuid = makeId();
 
-            this.onCanvasReady(
-                this.store.ready$,
-                () => {
-                    this.effect<
-                        [CannonWorkerAPI, THREE.Object3D, THREE.Object3D]
-                    >(
-                        tapEffect(([worker, a, b]) => {
-                            worker.addConstraint({
-                                props: [a.uuid, b.uuid, opts],
-                                type,
-                                uuid,
-                            });
-                            return () => worker.removeConstraint({ uuid });
-                        })
-                    )(
-                        combineLatest([
-                            physicsStore.select((s) => s.worker),
-                            bodyA.ref$.pipe(filter((ref) => ref != undefined)),
-                            bodyB.ref$.pipe(filter((ref) => ref != undefined)),
-                        ])
-                    );
-                },
-                true
-            );
+            this.onCanvasReady(this.store.ready$, () => {
+                this.effect<[CannonWorkerAPI, THREE.Object3D, THREE.Object3D]>(
+                    tapEffect(([worker, a, b]) => {
+                        worker.addConstraint({
+                            props: [a.uuid, b.uuid, opts],
+                            type,
+                            uuid,
+                        });
+                        return () => worker.removeConstraint({ uuid });
+                    })
+                )(
+                    combineLatest([
+                        physicsStore.select((s) => s.worker),
+                        bodyA.ref$.pipe(filter((ref) => ref != undefined)),
+                        bodyB.ref$.pipe(filter((ref) => ref != undefined)),
+                    ])
+                );
+            });
 
             return {
                 bodyA,

@@ -122,6 +122,7 @@ export class NgtCannonDebug extends NgtInstance<
 
     get api() {
         const { bodies, bodyMap } = this.get();
+
         return {
             add(uuid: string, props: BodyProps, type: BodyShapeType) {
                 const body = propsToBody({ uuid, props, type });
@@ -152,6 +153,7 @@ export class NgtCannonDebug extends NgtInstance<
                             q as unknown as Quaternion
                         );
                     }
+
                     cannonDebugger.update();
                 },
             });
