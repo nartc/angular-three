@@ -112,6 +112,9 @@ export class NgtComponentStore<TState extends object = any>
             projector: Projector<TSelectors, TResult>
         ]
     ): Observable<TResult>;
+    select<TSelectors extends Observable<unknown>[]>(
+        ...args: [...selectors: TSelectors]
+    ): Observable<{}>;
     select<
         TSelectors extends Array<Observable<unknown> | TProjectorFn>,
         TResult,
@@ -129,6 +132,12 @@ export class NgtComponentStore<TState extends object = any>
                 }),
                 takeUntil(this.destroy$)
             );
+        }
+
+        // if last item is an observable, then the project is missing
+        if (isObservable(args[args.length - 1])) {
+            const defaultProjector = (() => ({})) as unknown as TProjectorFn;
+            args.push(defaultProjector);
         }
 
         const { observables, projector } = processSelectorArgs<
