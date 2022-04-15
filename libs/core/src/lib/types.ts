@@ -405,8 +405,8 @@ export interface NgtState {
 export interface NgtInstanceInternal {
     root: () => NgtState;
     // objects and parent are used when children are added with `attach` instead of being added to the Object3D scene graph
-    objects: UnknownRecord[];
-    parent: UnknownRecord | null;
+    objects: NgtUnknownInstance[];
+    parent: NgtUnknownInstance | null;
     primitive?: boolean;
     eventCount: number;
     handlers: Partial<NgtEventHandlers>;
