@@ -165,6 +165,10 @@ export abstract class NgtInstance<
         this.get((s) => s.instance).set(prepInstance);
         this.emitReady();
 
+        if (!(prepInstance instanceof THREE.Object3D)) {
+            prepInstance.__ngt__.parent?.__ngt__.objects.push(prepInstance);
+        }
+
         return prepInstance;
     }
 
@@ -352,8 +356,10 @@ export abstract class NgtInstance<
                     if (!parentInstanceFromFactory) return;
 
                     // reassign on instance internal state
-                    this.__ngt__.parent = parentInstanceFromFactory;
-                    parentInstance = parentInstanceFromFactory;
+                    this.__ngt__.parent =
+                        parentInstanceFromFactory as NgtUnknownInstance;
+                    parentInstance =
+                        parentInstanceFromFactory as NgtUnknownInstance;
                 }
 
                 if (typeof attach === 'function') {
@@ -391,7 +397,7 @@ export abstract class NgtInstance<
 
                     // attach the instance value on the parent
                     mutate(
-                        parentInstance,
+                        parentInstance as UnknownRecord,
                         propertyToAttach,
                         this.instance.value
                     );
