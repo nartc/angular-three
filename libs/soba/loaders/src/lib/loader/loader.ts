@@ -1,4 +1,4 @@
-import { NgtStore, tapEffect } from '@angular-three/core';
+import { NgtComponentStore, tapEffect } from '@angular-three/core';
 import { CommonModule } from '@angular/common';
 import {
     AfterViewInit,
@@ -9,7 +9,7 @@ import {
     NgZone,
     ViewChild,
 } from '@angular/core';
-import { timer } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { NgtSobaProgress } from '../progress/progress';
 
 interface NgtSobaLoaderState {
@@ -103,10 +103,18 @@ interface NgtSobaLoaderState {
     providers: [NgtSobaProgress],
 })
 export class NgtSobaLoader
-    extends NgtStore<NgtSobaLoaderState>
+    extends NgtComponentStore<NgtSobaLoaderState>
     implements AfterViewInit
 {
-    readonly vm$ = this.select(
+    readonly vm$: Observable<{
+        shown: boolean;
+        containerClass: string | undefined;
+        innerContainerClass: string | undefined;
+        dataClass: string | undefined;
+        barClass: string | undefined;
+        active: boolean;
+        progress: number;
+    }> = this.select(
         this.select((s) => s.shown),
         this.select((s) => s.loaderConfig),
         this.sobaProgress.select((s) => s.active),

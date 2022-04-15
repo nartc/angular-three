@@ -1,4 +1,4 @@
-import { NgtCanvasStore, NgtLoader } from '@angular-three/core';
+import { NgtLoader, NgtStore } from '@angular-three/core';
 import { Injectable } from '@angular/core';
 import { defer, map, Observable, tap } from 'rxjs';
 import * as THREE from 'three';
@@ -8,10 +8,7 @@ export const IsObject = (url: any): url is Record<string, string> =>
 
 @Injectable()
 export class NgtTextureLoader {
-    constructor(
-        private canvasStore: NgtCanvasStore,
-        private loader: NgtLoader
-    ) {}
+    constructor(private store: NgtStore, private loader: NgtLoader) {}
 
     load<TInput extends string | string[] | Record<string, string>>(
         input: TInput
@@ -29,10 +26,10 @@ export class NgtTextureLoader {
             )
         ).pipe(
             tap((textures: THREE.Texture | THREE.Texture[]) => {
-                const renderer = this.canvasStore.get((s) => s.renderer);
-                if (renderer) {
+                const gl = this.store.get((s) => s.gl);
+                if (gl) {
                     (Array.isArray(textures) ? textures : [textures]).forEach(
-                        renderer.initTexture.bind(renderer)
+                        gl.initTexture.bind(gl)
                     );
                 }
             }),

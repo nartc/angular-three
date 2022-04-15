@@ -1,4 +1,4 @@
-import { NgtStore } from '@angular-three/core';
+import { NgtComponentStore } from '@angular-three/core';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
@@ -12,7 +12,7 @@ interface NgtSobaProgressResult {
 }
 
 @Injectable()
-export class NgtSobaProgress extends NgtStore<NgtSobaProgressResult> {
+export class NgtSobaProgress extends NgtComponentStore<NgtSobaProgressResult> {
     constructor() {
         super();
         let saveLastTotalLoaded = 0;
