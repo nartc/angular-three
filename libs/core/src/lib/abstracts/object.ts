@@ -13,6 +13,7 @@ import { Ref } from '../ref';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
 import type {
+    AnyFunction,
     BooleanInput,
     NgtColor,
     NgtEuler,
@@ -21,6 +22,7 @@ import type {
     NgtQuaternion,
     NgtRef,
     NgtRenderState,
+    NgtTriple,
     NgtUnknownInstance,
     NgtVector3,
     UnknownRecord,
@@ -95,7 +97,7 @@ export abstract class NgtObjectInputs<
     get rotation() {
         return this.get((s) => s.rotation);
     }
-    @Input() set rotation(rotation: NgtEuler | undefined) {
+    @Input() set rotation(rotation: NgtEuler | NgtTriple | undefined) {
         this.set({
             rotation: make(THREE.Euler, rotation),
         } as Partial<TObjectInputsState>);
@@ -256,11 +258,11 @@ export abstract class NgtObject<
         @Optional()
         @SkipSelf()
         @Inject(NGT_OBJECT_REF)
-        protected parentObjectRef: NgtRef<THREE.Object3D>,
+        protected parentObjectRef: AnyFunction<NgtRef<THREE.Object3D>>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_OBJECT_HOST_REF)
-        protected parentObjectHostRef: NgtRef<THREE.Object3D>
+        protected parentObjectHostRef: AnyFunction<NgtRef<THREE.Object3D>>
     ) {
         super(zone, store, parentObjectRef, parentObjectHostRef);
         this.set({

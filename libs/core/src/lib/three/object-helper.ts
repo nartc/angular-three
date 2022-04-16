@@ -4,7 +4,7 @@ import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
-import { AnyConstructor, NgtRef } from '../types';
+import { AnyConstructor, AnyFunction, NgtRef } from '../types';
 
 @Directive()
 export abstract class NgtCommonObjectHelper<
@@ -17,10 +17,10 @@ export abstract class NgtCommonObjectHelper<
         store: NgtStore,
         @Optional()
         @Inject(NGT_OBJECT_REF)
-        parentRef: NgtRef<THREE.Object3D>,
+        parentRef: AnyFunction<NgtRef<THREE.Object3D>>,
         @Optional()
         @Inject(NGT_OBJECT_HOST_REF)
-        parentHostRef: NgtRef<THREE.Object3D>
+        parentHostRef: AnyFunction<NgtRef<THREE.Object3D>>
     ) {
         super(zone, store, parentRef, parentHostRef);
     }

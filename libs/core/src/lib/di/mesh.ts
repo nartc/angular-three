@@ -1,36 +1,8 @@
 import { Provider } from '@angular/core';
-import * as THREE from 'three';
-import { NgtMaterialGeometry } from '../abstracts/material-geometry';
 import { NgtCommonMesh } from '../three/mesh';
-import { NGT_COMMON_MESH_FACTORY, NGT_COMMON_MESH_REF } from '../tokens';
-import type { AnyConstructor, AnyFunction, NgtRef } from '../types';
-import {
-    provideMaterialGeometryObjectFactory,
-    provideMaterialGeometryObjectRef,
-} from './material-geometry';
-
-export function provideCommonMeshFactory<
-    TMesh extends THREE.Mesh,
-    TSubMesh extends NgtCommonMesh<TMesh> = NgtCommonMesh<TMesh>
->(
-    subMeshType: AnyConstructor<TSubMesh>,
-    factory?: (sub: TSubMesh) => TMesh
-): Provider {
-    return [
-        provideMaterialGeometryObjectFactory(
-            subMeshType as unknown as AnyConstructor<NgtMaterialGeometry>,
-            factory as AnyFunction
-        ),
-        { provide: NgtCommonMesh, useExisting: subMeshType },
-        {
-            provide: NGT_COMMON_MESH_FACTORY,
-            useFactory: (subMesh: TSubMesh) => {
-                return () => factory?.(subMesh) || subMesh.instance.value;
-            },
-            deps: [subMeshType],
-        },
-    ];
-}
+import { NGT_COMMON_MESH_REF } from '../tokens';
+import type { AnyConstructor, NgtRef } from '../types';
+import { provideMaterialGeometryObjectRef } from './material-geometry';
 
 export function provideCommonMeshRef<TType extends AnyConstructor<any>>(
     subMeshType: TType,
@@ -42,7 +14,7 @@ export function provideCommonMeshRef<TType extends AnyConstructor<any>>(
         {
             provide: NGT_COMMON_MESH_REF,
             useFactory: (instance: InstanceType<TType>) => {
-                return factory?.(instance) || instance.instance;
+                return () => factory?.(instance) || instance.instance;
             },
             deps: [subMeshType],
         },

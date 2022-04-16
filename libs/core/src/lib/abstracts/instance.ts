@@ -31,6 +31,7 @@ import {
 import { NgtStore } from '../stores/store';
 import { NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF } from '../tokens';
 import type {
+    AnyFunction,
     AttachFunction,
     BooleanInput,
     NgtInstanceInternal,
@@ -108,10 +109,10 @@ export abstract class NgtInstance<
         return this.instance.value.__ngt__;
     }
 
-    protected get parent(): NgtRef {
+    get parent(): NgtRef {
         const skipParent = this.get((s) => s.skipParent);
-        if (!skipParent) return this.parentRef;
-        return this.parentHostRef || this.parentRef;
+        if (!skipParent) return this.parentRef?.();
+        return this.parentHostRef?.() || this.parentRef?.();
     }
 
     protected readonly instanceArgs$ = this.select((s) => s.instanceArgs);
@@ -128,11 +129,11 @@ export abstract class NgtInstance<
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_REF)
-        protected parentRef: NgtRef,
+        protected parentRef: AnyFunction<NgtRef>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_HOST_REF)
-        protected parentHostRef: NgtRef
+        protected parentHostRef: AnyFunction<NgtRef>
     ) {
         super();
         this.set({
@@ -362,9 +363,9 @@ export abstract class NgtInstance<
                 let parentInstanceRef = this.__ngt__.parent;
 
                 // if no parentInstance, try re-run the factory due to late init
-                if (!parentInstanceRef) {
+                if (!parentInstanceRef || !parentInstanceRef.value) {
                     // return early if failed to retrieve
-                    if (!this.parent.value) return;
+                    if (!this.parent?.value) return;
 
                     // reassign on instance internal state
                     this.__ngt__.parent = this.parent;

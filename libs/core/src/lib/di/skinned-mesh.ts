@@ -12,7 +12,9 @@ export function provideSkinnedMeshHostRef<TType extends AnyConstructor<any>>(
 ): Provider {
     return {
         provide: NGT_HOST_SKINNED_MESH_REF,
-        useFactory: factory,
+        useFactory: (instance: InstanceType<TType>) => {
+            return () => factory(instance);
+        },
         deps: [subType],
     };
 }
@@ -23,7 +25,9 @@ export function provideSkeletonHostRef<TType extends AnyConstructor<any>>(
 ): Provider {
     return {
         provide: NGT_HOST_SKELETON_REF,
-        useFactory: factory,
+        useFactory: (instance: InstanceType<TType>) => {
+            return () => factory(instance);
+        },
         deps: [subType],
     };
 }
@@ -34,7 +38,9 @@ export function provideBoneHostRef<TType extends AnyConstructor<any>>(
 ): Provider {
     return {
         provide: NGT_HOST_BONE_REF,
-        useFactory: factory,
+        useFactory: (instance: InstanceType<TType>) => {
+            return () => factory(instance);
+        },
         deps: [subType],
     };
 }

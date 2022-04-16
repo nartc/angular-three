@@ -1,5 +1,6 @@
 import {
     AnyConstructor,
+    AnyFunction,
     coerceBooleanProperty,
     make,
     NGT_HOST_BONE_REF,
@@ -139,16 +140,16 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
         @Optional()
         @SkipSelf()
         @Inject(NGT_HOST_SKINNED_MESH_REF)
-        parentHostRef: NgtRef<THREE.SkinnedMesh>,
+        parentHostRef: AnyFunction<NgtRef<THREE.SkinnedMesh>>,
         @Optional() private skinnedMesh: NgtSkinnedMesh
     ) {
-        if (parentHostRef && !parentHostRef.value.isSkinnedMesh) {
+        if (parentHostRef && !parentHostRef().value.isSkinnedMesh) {
             throw new Error(
                 '<ngt-skeleton> can only be used within <ngt-skinned-mesh>'
             );
         }
 
-        super(zone, store, skinnedMesh?.instance, parentHostRef);
+        super(zone, store, () => skinnedMesh?.instance, parentHostRef);
 
         this.set({
             attach: ['skeleton'],
@@ -238,21 +239,22 @@ export class NgtBone extends NgtObject<THREE.Bone> {
         @Optional()
         @SkipSelf()
         @Inject(NGT_HOST_BONE_REF)
-        private hostBoneRef: NgtRef<THREE.Bone>,
+        private hostBoneRef: AnyFunction<NgtRef<THREE.Bone>>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_HOST_SKELETON_REF)
-        private hostSkeletonRef: NgtRef<THREE.Skeleton>,
+        private hostSkeletonRef: AnyFunction<NgtRef<THREE.Skeleton>>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_HOST_SKINNED_MESH_REF)
-        private hostSkinnedMeshRef: NgtRef<THREE.SkinnedMesh>
+        private hostSkinnedMeshRef: AnyFunction<NgtRef<THREE.SkinnedMesh>>
     ) {
         super(
             zone,
             store,
-            (parentBone?.instance || parentSkinnedMesh?.instance) as NgtRef,
-            (hostBoneRef || hostSkinnedMeshRef) as NgtRef
+            () =>
+                (parentBone?.instance || parentSkinnedMesh?.instance) as NgtRef,
+            (hostBoneRef || hostSkinnedMeshRef) as AnyFunction
         );
     }
 
@@ -264,7 +266,7 @@ export class NgtBone extends NgtObject<THREE.Bone> {
         if (this.parentSkeleton) {
             this.parentSkeleton.instance.value.bones.push(bone);
         } else if (this.hostSkeletonRef) {
-            this.hostSkeletonRef.value.bones.push(bone);
+            this.hostSkeletonRef().value.bones.push(bone);
         }
     }
 }
