@@ -9,7 +9,7 @@ import {
     NGT_OBJECT_REF,
     NGT_SCENE_REF,
 } from '../tokens';
-import type { AnyConstructor, NgtRef } from '../types';
+import type { AnyConstructor, AnyFunction, NgtRef } from '../types';
 import { provideInstanceRef } from './instance';
 
 export function provideObjectRef<TType extends AnyConstructor<any>>(
@@ -31,8 +31,8 @@ export function provideObjectRef<TType extends AnyConstructor<any>>(
 
 export function provideObjectHosRef<TType extends AnyConstructor<any>>(
     subType: TType,
-    factory: (instance: InstanceType<TType>) => NgtRef<THREE.Object3D>,
-    hostFactory?: (instance: InstanceType<TType>) => NgtRef<THREE.Object3D>
+    factory: (instance: InstanceType<TType>) => NgtRef,
+    hostFactory?: (instance: InstanceType<TType>) => AnyFunction<NgtRef>
 ): Provider {
     return [
         {
@@ -45,7 +45,9 @@ export function provideObjectHosRef<TType extends AnyConstructor<any>>(
         {
             provide: NGT_INSTANCE_HOST_REF,
             useFactory: (instance: InstanceType<TType>) => {
-                return () => hostFactory?.(instance) || instance.parent;
+                return hostFactory
+                    ? hostFactory(instance)
+                    : () => instance.parent;
             },
             deps: [subType],
         },
@@ -59,7 +61,9 @@ export function provideObjectHosRef<TType extends AnyConstructor<any>>(
         {
             provide: NGT_OBJECT_HOST_REF,
             useFactory: (instance: InstanceType<TType>) => {
-                return () => hostFactory?.(instance) || instance.parent;
+                return hostFactory
+                    ? hostFactory(instance)
+                    : () => instance.parent;
             },
             deps: [subType],
         },

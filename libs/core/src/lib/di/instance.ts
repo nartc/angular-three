@@ -1,7 +1,7 @@
 import { Provider } from '@angular/core';
 import { NgtInstance } from '../abstracts/instance';
 import { NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF } from '../tokens';
-import type { AnyConstructor, NgtRef } from '../types';
+import type { AnyConstructor, AnyFunction, NgtRef } from '../types';
 
 export function provideInstanceRef<TType extends AnyConstructor<any>>(
     subType: TType,
@@ -22,7 +22,7 @@ export function provideInstanceRef<TType extends AnyConstructor<any>>(
 export function provideInstanceHostRef<TType extends AnyConstructor<any>>(
     subType: TType,
     factory: (instance: InstanceType<TType>) => NgtRef,
-    hostFactory?: (instance: InstanceType<TType>) => NgtRef
+    hostFactory?: (instance: InstanceType<TType>) => AnyFunction<NgtRef>
 ): Provider {
     return [
         {
@@ -35,7 +35,9 @@ export function provideInstanceHostRef<TType extends AnyConstructor<any>>(
         {
             provide: NGT_INSTANCE_HOST_REF,
             useFactory: (instance: InstanceType<TType>) => {
-                return () => hostFactory?.(instance) || instance.parent;
+                return hostFactory
+                    ? hostFactory(instance)
+                    : () => instance.parent;
             },
             deps: [subType],
         },
