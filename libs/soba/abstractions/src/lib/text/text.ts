@@ -1,237 +1,136 @@
 import {
-    AnyFunction,
-    applyProps,
-    createExtenderProvider,
-    createHostParentObjectProvider,
-    createParentObjectProvider,
-    makeColor,
-    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-    NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-    NGT_PARENT_OBJECT,
-    NGT_WITH_MATERIAL_CONTROLLER_PROVIDER,
-    NGT_WITH_MATERIAL_WATCHED_CONTROLLER,
-    NgtCanvasStore,
     NgtColor,
-    NgtExtender,
-    NgtLoop,
-    NgtObjectInputsController,
-    NgtObjectInputsControllerModule,
-    NgtStore,
-    NgtVector4,
-    NgtWithMaterialController,
-    NgtWithMaterialControllerModule,
-    tapEffect,
+    NgtObjectInputs,
+    NgtRef,
+    NgtRenderState,
+    provideObjectHosRef,
 } from '@angular-three/core';
-import { NgtPrimitiveModule } from '@angular-three/core/primitive';
+import {
+    NgtPrimitive,
+    NgtPrimitiveModule,
+} from '@angular-three/core/primitive';
 import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
-    ElementRef,
+    ContentChild,
+    Directive,
     EventEmitter,
-    Inject,
     Input,
     NgModule,
-    NgZone,
-    OnInit,
-    Optional,
     Output,
-    SkipSelf,
+    TemplateRef,
+    ViewChild,
 } from '@angular/core';
+import { tap } from 'rxjs';
 // @ts-ignore
-import { Text as TextMeshImpl } from 'troika-three-text';
+import { preloadFont, Text as TextMeshImpl } from 'troika-three-text';
 
-interface NgtSobaTextState {
-    object: TextMeshImpl;
-    text: string;
-    anchorX: number | 'left' | 'center' | 'right';
-    anchorY:
-        | number
-        | 'top'
-        | 'top-baseline'
-        | 'middle'
-        | 'bottom-baseline'
-        | 'bottom';
-    color?: NgtColor;
-    fontSize?: number;
-    maxWidth?: number;
-    lineHeight?: number;
-    letterSpacing?: number;
-    textAlign?: 'left' | 'right' | 'center' | 'justify';
-    font?: string;
-    clipRect?: NgtVector4;
-    depthOffset?: number;
-    direction?: 'auto' | 'ltr' | 'rtl';
-    overflowWrap?: 'normal' | 'break-word';
-    whiteSpace?: 'normal' | 'overflowWrap' | 'overflowWrap';
-    outlineWidth?: number | string;
-    outlineOffsetX?: number | string;
-    outlineOffsetY?: number | string;
-    outlineBlur?: number | string;
-    outlineColor?: NgtColor;
-    outlineOpacity?: number;
-    strokeWidth?: number | string;
-    strokeColor?: NgtColor;
-    strokeOpacity?: number;
-    fillOpacity?: number;
-    debugSDF?: boolean;
+@Directive({
+    selector: 'ng-template[ngt-soba-text-content]',
+})
+export class NgtSobaTextContent {
+    constructor(
+        public templateRef: TemplateRef<{ text: NgtRef<TextMeshImpl> }>
+    ) {}
+
+    static ngTemplateContextGuard(
+        dir: NgtSobaTextContent,
+        ctx: any
+    ): ctx is { text: NgtRef<TextMeshImpl> } {
+        return true;
+    }
 }
 
 @Component({
-    selector: 'ngt-soba-text',
+    selector: 'ngt-soba-text[text]',
     template: `
         <ngt-primitive
-            *ngIf="object"
-            [object]="$any(object)"
-            [name]="objectInputsController.name"
-            [position]="objectInputsController.position"
-            [rotation]="objectInputsController.rotation"
-            [quaternion]="objectInputsController.quaternion"
-            [scale]="objectInputsController.scale"
-            [color]="objectInputsController.color"
-            [userData]="objectInputsController.userData"
-            [castShadow]="objectInputsController.castShadow"
-            [receiveShadow]="objectInputsController.receiveShadow"
-            [visible]="objectInputsController.visible"
-            [matrixAutoUpdate]="objectInputsController.matrixAutoUpdate"
-            [dispose]="objectInputsController.dispose"
-            [raycast]="objectInputsController.raycast"
-            [appendMode]="objectInputsController.appendMode"
-            [appendTo]="objectInputsController.appendTo"
-            (click)="objectInputsController.click.emit($event)"
-            (contextmenu)="objectInputsController.contextmenu.emit($event)"
-            (dblclick)="objectInputsController.dblclick.emit($event)"
-            (pointerup)="objectInputsController.pointerup.emit($event)"
-            (pointerdown)="objectInputsController.pointerdown.emit($event)"
-            (pointerover)="objectInputsController.pointerover.emit($event)"
-            (pointerout)="objectInputsController.pointerout.emit($event)"
-            (pointerenter)="objectInputsController.pointerenter.emit($event)"
-            (pointerleave)="objectInputsController.pointerleave.emit($event)"
-            (pointermove)="objectInputsController.pointermove.emit($event)"
-            (pointermissed)="objectInputsController.pointermissed.emit($event)"
-            (pointercancel)="objectInputsController.pointercancel.emit($event)"
-            (wheel)="objectInputsController.wheel.emit($event)"
-            (animateReady)="
-                animateReady.emit({ entity: object, state: $event.state })
-            "
+            *ngIf="textMesh"
+            #textPrimitive
+            [object]="$any(textMesh)"
+            (ready)="ready.emit($event)"
+            (beforeRender)="beforeRender.emit($event)"
+            [name]="name"
+            [position]="position"
+            [rotation]="rotation"
+            [quaternion]="quaternion"
+            [scale]="scale"
+            [color]="color"
+            [userData]="userData"
+            [castShadow]="castShadow"
+            [receiveShadow]="receiveShadow"
+            [visible]="visible"
+            [matrixAutoUpdate]="matrixAutoUpdate"
+            [dispose]="dispose"
+            [raycast]="raycast"
+            [appendMode]="appendMode"
+            [appendTo]="appendTo"
+            (click)="click.emit($event)"
+            (contextmenu)="contextmenu.emit($event)"
+            (dblclick)="dblclick.emit($event)"
+            (pointerup)="pointerup.emit($event)"
+            (pointerdown)="pointerdown.emit($event)"
+            (pointerover)="pointerover.emit($event)"
+            (pointerout)="pointerout.emit($event)"
+            (pointerenter)="pointerenter.emit($event)"
+            (pointerleave)="pointerleave.emit($event)"
+            (pointermove)="pointermove.emit($event)"
+            (pointermissed)="pointermissed.emit($event)"
+            (pointercancel)="pointercancel.emit($event)"
+            (wheel)="wheel.emit($event)"
         >
-            <ng-container [ngTemplateOutlet]="contentTemplate"></ng-container>
+            <ng-container
+                *ngIf="content"
+                [ngTemplateOutlet]="content.templateRef"
+                [ngTemplateOutletContext]="{ textMesh: textPrimitive.instance }"
+            ></ng-container>
         </ngt-primitive>
-        <ng-template #contentTemplate>
-            <ng-content></ng-content>
-        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        NgtStore,
-        NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-        NGT_WITH_MATERIAL_CONTROLLER_PROVIDER,
-        createExtenderProvider(NgtSobaText),
-        createParentObjectProvider(NgtSobaText, (text) => text.object),
-        createHostParentObjectProvider(NgtSobaText),
+        provideObjectHosRef(
+            NgtSobaText,
+            (text) => text.primitive.instance,
+            (text) => text.parentRef
+        ),
     ],
 })
-export class NgtSobaText extends NgtExtender<TextMeshImpl> implements OnInit {
+export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
     @Input() set text(text: string) {
-        this.store.set({ text: text.trim() });
+        this.set({ text });
     }
 
-    @Input() set color(color: NgtColor) {
-        this.store.set({ color });
+    @Input() set characters(characters: string) {
+        this.set({ characters });
     }
 
     @Input() set fontSize(fontSize: number) {
-        this.store.set({ fontSize });
+        this.set({ fontSize });
     }
 
     @Input() set maxWidth(maxWidth: number) {
-        this.store.set({ maxWidth });
+        this.set({ maxWidth });
     }
 
     @Input() set lineHeight(lineHeight: number) {
-        this.store.set({ lineHeight });
+        this.set({ lineHeight });
     }
 
     @Input() set letterSpacing(letterSpacing: number) {
-        this.store.set({ letterSpacing });
+        this.set({ letterSpacing });
     }
 
     @Input() set textAlign(textAlign: 'left' | 'right' | 'center' | 'justify') {
-        this.store.set({ textAlign });
+        this.set({ textAlign });
     }
 
     @Input() set font(font: string) {
-        this.store.set({ font });
-    }
-
-    @Input() set clipRect(clipRect: NgtVector4) {
-        this.store.set({ clipRect });
-    }
-
-    @Input() set depthOffset(depthOffset: number) {
-        this.store.set({ depthOffset });
-    }
-
-    @Input() set direction(direction: 'auto' | 'ltr' | 'rtl') {
-        this.store.set({ direction });
-    }
-
-    @Input() set overflowWrap(overflowWrap: 'normal' | 'break-word') {
-        this.store.set({ overflowWrap });
-    }
-
-    @Input() set whiteSpace(
-        whiteSpace: 'normal' | 'overflowWrap' | 'overflowWrap'
-    ) {
-        this.store.set({ whiteSpace });
-    }
-
-    @Input() set outlineWidth(outlineWidth: number | string) {
-        this.store.set({ outlineWidth });
-    }
-
-    @Input() set outlineOffsetX(outlineOffsetX: number | string) {
-        this.store.set({ outlineOffsetX });
-    }
-
-    @Input() set outlineOffsetY(outlineOffsetY: number | string) {
-        this.store.set({ outlineOffsetY });
-    }
-
-    @Input() set outlineBlur(outlineBlur: number | string) {
-        this.store.set({ outlineBlur });
-    }
-
-    @Input() set outlineColor(outlineColor: NgtColor) {
-        this.store.set({ outlineColor });
-    }
-
-    @Input() set outlineOpacity(outlineOpacity: number) {
-        this.store.set({ outlineOpacity });
-    }
-
-    @Input() set strokeWidth(strokeWidth: number | string) {
-        this.store.set({ strokeWidth });
-    }
-
-    @Input() set strokeColor(strokeColor: NgtColor) {
-        this.store.set({ strokeColor });
-    }
-
-    @Input() set strokeOpacity(strokeOpacity: number) {
-        this.store.set({ strokeOpacity });
-    }
-
-    @Input() set fillOpacity(fillOpacity: number) {
-        this.store.set({ fillOpacity });
-    }
-
-    @Input() set debugSDF(debugSDF: boolean) {
-        this.store.set({ debugSDF });
+        this.set({ font });
     }
 
     @Input() set anchorX(anchorX: number | 'left' | 'center' | 'right') {
-        this.store.set({ anchorX });
+        this.set({ anchorX });
     }
 
     @Input() set anchorY(
@@ -243,87 +142,173 @@ export class NgtSobaText extends NgtExtender<TextMeshImpl> implements OnInit {
             | 'bottom-baseline'
             | 'bottom'
     ) {
-        this.store.set({ anchorY });
+        this.set({ anchorY });
     }
 
+    @Input() set clipRect(clipRect: [number, number, number, number]) {
+        this.set({ clipRect });
+    }
+
+    @Input() set depthOffset(depthOffset: number) {
+        this.set({ depthOffset });
+    }
+
+    @Input() set direction(direction: 'auto' | 'ltr' | 'rtl') {
+        this.set({ direction });
+    }
+
+    @Input() set overflowWrap(overflowWrap: 'normal' | 'break-word') {
+        this.set({ overflowWrap });
+    }
+
+    @Input() set whiteSpace(
+        whiteSpace: 'normal' | 'overflowWrap' | 'overflowWrap'
+    ) {
+        this.set({ whiteSpace });
+    }
+
+    @Input() set outlineWidth(outlineWidth: number | string) {
+        this.set({ outlineWidth });
+    }
+
+    @Input() set outlineOffsetX(outlineOffsetX: number | string) {
+        this.set({ outlineOffsetX });
+    }
+
+    @Input() set outlineOffsetY(outlineOffsetY: number | string) {
+        this.set({ outlineOffsetY });
+    }
+
+    @Input() set outlineBlur(outlineBlur: number | string) {
+        this.set({ outlineBlur });
+    }
+
+    @Input() set outlineColor(outlineColor: NgtColor) {
+        this.set({ outlineColor });
+    }
+
+    @Input() set outlineOpacity(outlineOpacity: number) {
+        this.set({ outlineOpacity });
+    }
+
+    @Input() set strokeWidth(strokeWidth: number | string) {
+        this.set({ strokeWidth });
+    }
+
+    @Input() set strokeColor(strokeColor: NgtColor) {
+        this.set({ strokeColor });
+    }
+
+    @Input() set strokeOpacity(strokeOpacity: number) {
+        this.set({ strokeOpacity });
+    }
+
+    @Input() set fillOpacity(fillOpacity: number) {
+        this.set({ fillOpacity });
+    }
+
+    @Input() set debugSDF(debugSDF: boolean) {
+        this.set({ debugSDF });
+    }
+
+    @Output() beforeRender = new EventEmitter<{
+        state: NgtRenderState;
+        object: TextMeshImpl;
+    }>();
     @Output() sync = new EventEmitter<TextMeshImpl>();
 
-    constructor(
-        @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-        public objectInputsController: NgtObjectInputsController,
-        @Inject(NGT_WITH_MATERIAL_WATCHED_CONTROLLER)
-        private contentMaterialController: NgtWithMaterialController,
-        private elRef: ElementRef<HTMLElement>,
-        private loop: NgtLoop,
-        private store: NgtStore<NgtSobaTextState>,
-        private canvasStore: NgtCanvasStore,
-        private zone: NgZone,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_PARENT_OBJECT)
-        public parentObjectFn: AnyFunction
-    ) {
-        super();
-        store.set({
-            object: new TextMeshImpl(),
-            text: '',
+    @ContentChild(NgtSobaTextContent) content?: NgtSobaTextContent;
+
+    @ViewChild(NgtPrimitive) primitive!: NgtPrimitive;
+
+    private _textMesh!: TextMeshImpl;
+    get textMesh() {
+        return this._textMesh;
+    }
+
+    override ngOnInit() {
+        this.set({
             anchorX: 'center',
             anchorY: 'middle',
+            text: '',
+        });
+        this.zone.runOutsideAngular(() => {
+            this.preloadFont(
+                this.select(
+                    this.select((s) => s['fonts']),
+                    this.select((s) => s['characters'])
+                )
+            );
+            this.onCanvasReady(
+                this.store.ready$,
+                () => {
+                    this._textMesh = new TextMeshImpl();
+
+                    return () => {
+                        this._textMesh.dispose();
+                    };
+                },
+                true
+            );
+        });
+        super.ngOnInit();
+    }
+
+    private readonly preloadFont = this.effect<{}>(
+        tap(() => {
+            const { font, characters } = this.get();
+            if (font && characters) {
+                preloadFont({ font, characters });
+            }
+        })
+    );
+
+    protected override postSetOptions(textMesh: TextMeshImpl) {
+        const invalidate = this.store.get((s) => s.invalidate);
+        textMesh.sync(() => {
+            invalidate();
+            if (this.sync.observed) {
+                this.sync.emit(textMesh);
+            }
         });
     }
 
-    private readonly init = this.store.effect<TextMeshImpl>(
-        tapEffect((textMesh) => {
-            this.object = textMesh;
-
-            if (this.contentMaterialController.material) {
-                this.object.material = this.contentMaterialController.material;
-            }
-
-            return () => {
-                this.object.dispose();
-            };
-        })
-    );
-
-    private readonly applyProps = this.store.effect<NgtSobaTextState>(
-        tapEffect(({ object, ...props }) => {
-            const id = requestAnimationFrame(() => {
-                if (props.color) {
-                    props.color = makeColor(props.color);
-                }
-                applyProps(object, props as Omit<NgtSobaTextState, 'object'>);
-                object.sync(() => {
-                    this.loop.invalidate();
-                    if (this.sync.observed) {
-                        this.sync.emit(object);
-                    }
-                });
-            });
-
-            return () => {
-                cancelAnimationFrame(id);
-            };
-        })
-    );
-
-    ngOnInit() {
-        this.zone.runOutsideAngular(() => {
-            this.store.onCanvasReady(this.canvasStore.ready$, () => {
-                this.init(this.store.select((s) => s.object));
-                this.applyProps(this.store.select());
-            });
-        });
+    protected override get optionFields(): Record<string, boolean> {
+        return {
+            ...super.optionFields,
+            text: false,
+            characters: true,
+            fontSize: true,
+            maxWidth: true,
+            lineHeight: true,
+            letterSpacing: true,
+            textAlign: true,
+            font: true,
+            anchorX: false,
+            anchorY: false,
+            clipRect: true,
+            depthOffset: true,
+            direction: true,
+            overflowWrap: true,
+            whiteSpace: true,
+            outlineWidth: true,
+            outlineOffsetX: true,
+            outlineOffsetY: true,
+            outlineBlur: true,
+            outlineColor: true,
+            outlineOpacity: true,
+            strokeWidth: true,
+            strokeColor: true,
+            strokeOpacity: true,
+            fillOpacity: true,
+            debugSDF: true,
+        };
     }
 }
 
 @NgModule({
-    declarations: [NgtSobaText],
-    exports: [
-        NgtSobaText,
-        NgtObjectInputsControllerModule,
-        NgtWithMaterialControllerModule,
-    ],
-    imports: [CommonModule, NgtPrimitiveModule],
+    declarations: [NgtSobaText, NgtSobaTextContent],
+    exports: [NgtSobaText, NgtSobaTextContent],
+    imports: [NgtPrimitiveModule, CommonModule],
 })
 export class NgtSobaTextModule {}
