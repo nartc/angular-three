@@ -1,5 +1,16 @@
-import { NgtColor, NgtMaterial, shaderMaterial } from '@angular-three/core';
-import { Directive, NgModule } from '@angular/core';
+import {
+    AnyConstructor,
+    NgtColor,
+    provideCommonMaterialRef,
+    shaderMaterial,
+} from '@angular-three/core';
+import { NgtShaderMaterial } from '@angular-three/core/materials';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    NgModule,
+} from '@angular/core';
 import * as THREE from 'three';
 
 export type NgtSobaImageShaderMaterialParameters =
@@ -60,22 +71,58 @@ export const ImageShaderMaterial = shaderMaterial(
 `
 );
 
-@Directive({
+@Component({
     selector: 'ngt-soba-image-shader-material',
-    exportAs: 'ngtSobaImageShaderMaterial',
-    providers: [
-        { provide: NgtMaterial, useExisting: NgtSobaImageShaderMaterial },
-    ],
+    template: `<ng-content></ng-content>`,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideCommonMaterialRef(NgtSobaImageShaderMaterial)],
 })
-export class NgtSobaImageShaderMaterial extends NgtMaterial<
-    NgtSobaImageShaderMaterialParameters,
-    typeof ImageShaderMaterial.prototype
-> {
-    static ngAcceptInputType_parameters:
+export class NgtSobaImageShaderMaterial extends NgtShaderMaterial {
+    static override ngAcceptInputType_parameters:
         | NgtSobaImageShaderMaterialParameters
         | undefined;
 
-    materialType = ImageShaderMaterial;
+    @Input() set map(map: THREE.Texture) {
+        this.set({ map });
+    }
+
+    @Input() set scale(scale: number[]) {
+        this.set({ scale });
+    }
+
+    @Input() set imageBounds(imageBounds: number[]) {
+        this.set({ imageBounds });
+    }
+
+    @Input() set color(color: NgtColor) {
+        this.set({ color });
+    }
+
+    @Input() set zoom(zoom: number) {
+        this.set({ zoom });
+    }
+
+    @Input() set grayscale(grayscale: number) {
+        this.set({ grayscale });
+    }
+
+    override get materialType(): AnyConstructor<
+        typeof ImageShaderMaterial.prototype
+    > {
+        return ImageShaderMaterial;
+    }
+
+    protected override get optionFields(): Record<string, boolean> {
+        return {
+            ...super.optionFields,
+            map: false,
+            scale: true,
+            imageBounds: true,
+            color: true,
+            zoom: true,
+            grayscale: true,
+        };
+    }
 }
 
 @NgModule({

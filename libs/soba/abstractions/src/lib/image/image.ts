@@ -1,146 +1,249 @@
 import {
     AnyFunction,
-    createExtenderProvider,
-    createHostParentObjectProvider,
-    createParentObjectProvider,
-    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-    NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-    NGT_PARENT_OBJECT,
-    NgtColor,
-    NgtExtender,
-    NgtObjectInputsController,
-    NgtObjectInputsControllerModule,
+    NGT_INSTANCE_HOST_REF,
+    NGT_INSTANCE_REF,
+    NgtObjectInputs,
+    NgtObjectInputsState,
+    NgtRef,
+    NgtRenderState,
+    NgtStore,
+    provideObjectHosRef,
+    startWithUndefined,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
-import { NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtMesh, NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtTextureLoader } from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
+    ContentChild,
+    Directive,
+    EventEmitter,
     Inject,
     Input,
     NgModule,
-    OnChanges,
+    NgZone,
     Optional,
+    Output,
     SkipSelf,
+    TemplateRef,
+    ViewChild,
 } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 import * as THREE from 'three';
 import { NgtSobaImageShaderMaterialModule } from './image-shader-material';
+
+@Directive({
+    selector: 'ng-template[ngt-soba-image-content]',
+})
+export class NgtSobaImageContent {
+    constructor(
+        public templateRef: TemplateRef<{ image: NgtRef<THREE.Mesh> }>
+    ) {}
+
+    static ngTemplateContextGuard(
+        dir: NgtSobaImageContent,
+        ctx: any
+    ): ctx is { image: NgtRef<THREE.Mesh> } {
+        return true;
+    }
+}
+
+export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
+    url: string;
+    segments?: number;
+    zoom?: number;
+    grayscale?: number;
+    toneMapped?: boolean;
+    texture: THREE.Texture;
+}
 
 @Component({
     selector: 'ngt-soba-image[url]',
     template: `
-        <ngt-plane-geometry
-            #ngtGeometry="ngtPlaneGeometry"
-            [args]="[1, 1, segments, segments]"
-        ></ngt-plane-geometry>
-        <ngt-soba-image-shader-material
-            #ngtMaterial="ngtSobaImageShaderMaterial"
-            [parameters]="{color, map: (texture$ | async)!, zoom, grayscale, scale: planeBounds, imageBounds}"
-        ></ngt-soba-image-shader-material>
+        <ng-container *ngIf="imageViewModel$ | async as imageViewModel">
+            <ngt-plane-geometry
+                noAttach
+                #ngtPlane
+                [args]="[
+                    1,
+                    1,
+                    imageViewModel.segments,
+                    imageViewModel.segments
+                ]"
+            ></ngt-plane-geometry>
 
-        <ngt-mesh
-            [geometry]="ngtGeometry.geometry"
-            [material]="ngtMaterial.material"
-            [scale]="scale"
-            [name]="objectInputsController.name"
-            [position]="objectInputsController.position"
-            [rotation]="objectInputsController.rotation"
-            [quaternion]="objectInputsController.quaternion"
-            [color]="objectInputsController.color"
-            [userData]="objectInputsController.userData"
-            [castShadow]="objectInputsController.castShadow"
-            [receiveShadow]="objectInputsController.receiveShadow"
-            [visible]="objectInputsController.visible"
-            [matrixAutoUpdate]="objectInputsController.matrixAutoUpdate"
-            [dispose]="objectInputsController.dispose"
-            [raycast]="objectInputsController.raycast"
-            [appendMode]="objectInputsController.appendMode"
-            [appendTo]="objectInputsController.appendTo"
-            (click)="objectInputsController.click.emit($event)"
-            (contextmenu)="objectInputsController.contextmenu.emit($event)"
-            (dblclick)="objectInputsController.dblclick.emit($event)"
-            (pointerup)="objectInputsController.pointerup.emit($event)"
-            (pointerdown)="objectInputsController.pointerdown.emit($event)"
-            (pointerover)="objectInputsController.pointerover.emit($event)"
-            (pointerout)="objectInputsController.pointerout.emit($event)"
-            (pointerenter)="objectInputsController.pointerenter.emit($event)"
-            (pointerleave)="objectInputsController.pointerleave.emit($event)"
-            (pointermove)="objectInputsController.pointermove.emit($event)"
-            (pointermissed)="objectInputsController.pointermissed.emit($event)"
-            (pointercancel)="objectInputsController.pointercancel.emit($event)"
-            (wheel)="objectInputsController.wheel.emit($event)"
-            (ready)="object = $event"
-            (animateReady)="
-                animateReady.emit({ entity: object, state: $event.state })
-            "
-        >
-            <ng-container
-                *ngIf="object"
-                [ngTemplateOutlet]="contentTemplate"
-            ></ng-container>
-        </ngt-mesh>
-        <ng-template #contentTemplate>
-            <ng-content></ng-content>
-        </ng-template>
+            <ngt-soba-image-shader-material
+                #ngtMaterial
+                [color]="color"
+                [map]="imageViewModel.texture"
+                [zoom]="imageViewModel.zoom"
+                [grayscale]="imageViewModel.grayscale"
+                [scale]="imageViewModel.planeBounds"
+                [imageBounds]="imageViewModel.imageBounds"
+                [toneMapped]="imageViewModel.toneMapped"
+            ></ngt-soba-image-shader-material>
+
+            <ngt-mesh
+                #ngtMesh
+                (ready)="ready.emit($event)"
+                (beforeRender)="beforeRender.emit($event)"
+                [material]="ngtMaterial.instance"
+                [geometry]="ngtPlane.instance"
+                [name]="name"
+                [position]="position"
+                [rotation]="rotation"
+                [quaternion]="quaternion"
+                [scale]="scale"
+                [color]="color"
+                [userData]="userData"
+                [castShadow]="castShadow"
+                [receiveShadow]="receiveShadow"
+                [visible]="visible"
+                [matrixAutoUpdate]="matrixAutoUpdate"
+                [dispose]="dispose"
+                [raycast]="raycast"
+                [appendMode]="appendMode"
+                [appendTo]="appendTo"
+                (click)="click.emit($event)"
+                (contextmenu)="contextmenu.emit($event)"
+                (dblclick)="dblclick.emit($event)"
+                (pointerup)="pointerup.emit($event)"
+                (pointerdown)="pointerdown.emit($event)"
+                (pointerover)="pointerover.emit($event)"
+                (pointerout)="pointerout.emit($event)"
+                (pointerenter)="pointerenter.emit($event)"
+                (pointerleave)="pointerleave.emit($event)"
+                (pointermove)="pointermove.emit($event)"
+                (pointermissed)="pointermissed.emit($event)"
+                (pointercancel)="pointercancel.emit($event)"
+                (wheel)="wheel.emit($event)"
+            >
+                <ng-container
+                    *ngIf="content"
+                    [ngTemplateOutlet]="content.templateRef"
+                    [ngTemplateOutletContext]="{ image: ngtMesh.instance }"
+                ></ng-container>
+            </ngt-mesh>
+        </ng-container>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
         NgtTextureLoader,
-        createExtenderProvider(NgtSobaImage),
-        createParentObjectProvider(NgtSobaImage, (image) => image.object),
-        createHostParentObjectProvider(NgtSobaImage),
+        provideObjectHosRef(
+            NgtSobaImage,
+            (image) => image.image.instance,
+            (image) => image.parentRef
+        ),
     ],
 })
-export class NgtSobaImage extends NgtExtender<THREE.Mesh> implements OnChanges {
-    @Input() segments?: number;
-    @Input() scale?: number;
-    @Input() color?: NgtColor;
-    @Input() zoom?: number;
-    @Input() grayscale?: number;
+export class NgtSobaImage extends NgtObjectInputs<
+    THREE.Mesh,
+    NgtSobaImageState
+> {
+    @Output() beforeRender = new EventEmitter<{
+        state: NgtRenderState;
+        object: THREE.Mesh;
+    }>();
 
-    @Input() set url(v: string) {
-        this.texture$ = this.textureLoader.load(v).pipe(
-            tap((texture) => {
-                this.imageBounds = [texture.image.width, texture.image.height];
-            })
-        );
+    @Input() set url(url: string) {
+        this.set({ url });
     }
 
-    planeBounds?: [number, number];
-    imageBounds?: [number, number];
+    @Input() set segments(segments: number) {
+        this.set({ segments });
+    }
 
-    texture$?: Observable<THREE.Texture>;
+    @Input() set zoom(zoom: number) {
+        this.set({ zoom });
+    }
+
+    @Input() set grayscale(grayscale: number) {
+        this.set({ grayscale });
+    }
+
+    @Input() set toneMapped(toneMapped: boolean) {
+        this.set({ toneMapped });
+    }
+
+    @ContentChild(NgtSobaImageContent) content?: NgtSobaImageContent;
+
+    @ViewChild(NgtMesh, { static: true }) image!: NgtMesh;
+
+    texture$!: Observable<THREE.Texture>;
+    imageBounds!: [number, number];
+    planeBounds: [number, number] = [1, 1];
 
     constructor(
-        private textureLoader: NgtTextureLoader,
-        @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-        public objectInputsController: NgtObjectInputsController,
+        zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
-        @Inject(NGT_PARENT_OBJECT)
-        public parentObjectFn: AnyFunction
+        @Inject(NGT_INSTANCE_REF)
+        parentRef: AnyFunction<NgtRef>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_HOST_REF)
+        parentHostRef: AnyFunction<NgtRef>,
+        private textureLoader: NgtTextureLoader
     ) {
-        super();
+        super(zone, store, parentRef, parentHostRef);
+        this.set({
+            segments: 1,
+            zoom: 1,
+            grayscale: 0,
+        });
     }
 
-    ngOnChanges() {
-        this.planeBounds = Array.isArray(this.scale)
-            ? [this.scale[0], this.scale[1]]
-            : [this.scale, this.scale];
+    readonly imageViewModel$ = this.select(
+        this.select((s) => s.texture),
+        this.select((s) => s.zoom),
+        this.select((s) => s.color),
+        this.select((s) => s.segments),
+        this.select((s) => s.scale),
+        this.select((s) => s.grayscale),
+        this.select((s) => s.toneMapped).pipe(startWithUndefined()),
+        (texture, zoom, color, segments, scale, grayscale, toneMapped) => ({
+            texture,
+            zoom,
+            color,
+            segments,
+            grayscale,
+            toneMapped,
+            planeBounds: [scale.x, scale.y],
+            imageBounds: [texture.image.width, texture.image.height],
+        })
+    );
+
+    override ngOnInit() {
+        this.zone.runOutsideAngular(() => {
+            this.onCanvasReady(this.store.ready$, () => {
+                this.setTexture(this.select((s) => s.url));
+            });
+        });
+        super.ngOnInit();
     }
+
+    private readonly setTexture = this.effect<string>(
+        switchMap((url) =>
+            this.textureLoader.load(url).pipe(
+                tap((texture) => {
+                    this.set({ texture });
+                }),
+                catchError(() => EMPTY)
+            )
+        )
+    );
 }
 
 @NgModule({
-    declarations: [NgtSobaImage],
-    exports: [NgtSobaImage, NgtObjectInputsControllerModule],
+    declarations: [NgtSobaImage, NgtSobaImageContent],
+    exports: [NgtSobaImage, NgtSobaImageContent],
     imports: [
-        NgtSobaImageShaderMaterialModule,
         NgtMeshModule,
         NgtPlaneGeometryModule,
+        NgtSobaImageShaderMaterialModule,
         CommonModule,
     ],
 })
