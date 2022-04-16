@@ -333,7 +333,7 @@ export class NgtPhysicBody extends NgtComponentStore {
         argsFn: ArgFn<TBodyProps['args']>,
         useOnTemplate = true,
         instanceRef?: Ref<THREE.Object3D>
-    ): { ref: Ref<THREE.Object3D>; api: NgtPhysicsBodyPublicApi } {
+    ): NgtPhysicBodyReturn {
         return this.zone.runOutsideAngular(() => {
             let ref = instanceRef as Ref<THREE.Object3D>;
 

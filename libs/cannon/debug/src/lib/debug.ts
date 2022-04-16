@@ -5,7 +5,7 @@ import {
     NgtInstance,
     NgtInstanceState,
     NgtStore,
-    provideInstanceFactory,
+    provideInstanceRef,
     tapEffect,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
@@ -56,11 +56,7 @@ export interface NgtCannonDebugState extends NgtInstanceState<THREE.Scene> {
         <ng-content></ng-content>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideInstanceFactory<THREE.Scene, NgtCannonDebugState>(
-            NgtCannonDebug
-        ),
-    ],
+    providers: [provideInstanceRef(NgtCannonDebug)],
 })
 export class NgtCannonDebug extends NgtInstance<
     THREE.Scene,
@@ -87,11 +83,11 @@ export class NgtCannonDebug extends NgtInstance<
         store: NgtStore,
         private physicsStore: NgtPhysicsStore
     ) {
-        super({ zone, store });
-
         if (!physicsStore) {
             throw new Error('ngt-cannon-debug must be used within ngt-physics');
         }
+
+        super(zone, store, null!, null!);
 
         this.set({
             color: 'black',
