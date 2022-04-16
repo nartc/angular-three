@@ -1,13 +1,13 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import type { AnyConstructor, UnknownRecord } from '../types';
+import type { AnyConstructor, NgtRef, UnknownRecord } from '../types';
 import { NgtObject, NgtObjectInputsState } from './object';
 
 export interface NgtMaterialGeometryState<
     TObject extends THREE.Object3D = THREE.Object3D
 > extends NgtObjectInputsState<TObject> {
-    material: THREE.Material | THREE.Material[];
-    geometry: THREE.BufferGeometry;
+    material: NgtRef<THREE.Material> | NgtRef<THREE.Material>[];
+    geometry: NgtRef<THREE.BufferGeometry>;
     morphTargetInfluences?: number[];
     morphTargetDictionary?: Record<string, number>;
 }
@@ -19,11 +19,13 @@ export abstract class NgtMaterialGeometry<
     TMaterialGeometryObject,
     NgtMaterialGeometryState<TMaterialGeometryObject>
 > {
-    @Input() set material(material: THREE.Material | THREE.Material[]) {
+    @Input() set material(
+        material: NgtRef<THREE.Material> | NgtRef<THREE.Material>[]
+    ) {
         this.set({ material });
     }
 
-    @Input() set geometry(geometry: THREE.BufferGeometry) {
+    @Input() set geometry(geometry: NgtRef<THREE.BufferGeometry>) {
         this.set({ geometry });
     }
 
@@ -50,8 +52,10 @@ export abstract class NgtMaterialGeometry<
         }, [] as unknown[]);
 
         const object = new this.objectType(
-            state.geometry,
-            state.material,
+            state.geometry.value,
+            Array.isArray(state.material)
+                ? state.material.map((m) => m.value)
+                : state.material.value,
             ...objectArgs
         );
 
