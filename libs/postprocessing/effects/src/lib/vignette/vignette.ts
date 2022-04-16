@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { VignetteEffect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { VignetteEffect } from 'postprocessing';
     selector: 'ngt-vignette',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<VignetteEffect>(NgtVignette)],
+    providers: [provideCommonEffectRef(NgtVignette)],
 })
 export class NgtVignette extends NgtCommonEffect<VignetteEffect> {
     static ngAcceptInputType_options:

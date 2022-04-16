@@ -1,5 +1,8 @@
 import { AnyConstructor, UnknownRecord } from '@angular-three/core';
-import { NgtCommonEffect } from '@angular-three/postprocessing';
+import {
+    NgtCommonEffect,
+    provideCommonEffectRef,
+} from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { BlendFunction, SSAOEffect } from 'postprocessing';
 
@@ -7,6 +10,7 @@ import { BlendFunction, SSAOEffect } from 'postprocessing';
     selector: 'ngt-ssao',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideCommonEffectRef(NgtSSAO)],
 })
 export class NgtSSAO extends NgtCommonEffect<SSAOEffect> {
     static ngAcceptInputType_options:

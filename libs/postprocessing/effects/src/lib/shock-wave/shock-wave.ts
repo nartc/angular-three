@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { ShockWaveEffect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { ShockWaveEffect } from 'postprocessing';
     selector: 'ngt-shock-wave',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<ShockWaveEffect>(NgtShockWave)],
+    providers: [provideCommonEffectRef(NgtShockWave)],
 })
 export class NgtShockWave extends NgtCommonEffect<ShockWaveEffect> {
     static ngAcceptInputType_options:

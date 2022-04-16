@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { BlendFunction, ScanlineEffect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { BlendFunction, ScanlineEffect } from 'postprocessing';
     selector: 'ngt-scanline',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<ScanlineEffect>(NgtScanline)],
+    providers: [provideCommonEffectRef(NgtScanline)],
 })
 export class NgtScanline extends NgtCommonEffect<ScanlineEffect> {
     static ngAcceptInputType_options:

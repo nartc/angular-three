@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { BrightnessContrastEffect } from 'postprocessing';
@@ -11,11 +11,7 @@ import { BrightnessContrastEffect } from 'postprocessing';
     selector: 'ngt-brightness-contrast',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonEffectFactory<BrightnessContrastEffect>(
-            NgtBrightnessContrast
-        ),
-    ],
+    providers: [provideCommonEffectRef(NgtBrightnessContrast)],
 })
 export class NgtBrightnessContrast extends NgtCommonEffect<BrightnessContrastEffect> {
     static ngAcceptInputType_options:

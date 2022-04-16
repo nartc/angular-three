@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { DepthEffect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { DepthEffect } from 'postprocessing';
     selector: 'ngt-depth',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<DepthEffect>(NgtDepth)],
+    providers: [provideCommonEffectRef(NgtDepth)],
 })
 export class NgtDepth extends NgtCommonEffect<DepthEffect> {
     static ngAcceptInputType_options:

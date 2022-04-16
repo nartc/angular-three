@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { BlendFunction, NoiseEffect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { BlendFunction, NoiseEffect } from 'postprocessing';
     selector: 'ngt-noise',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<NoiseEffect>(NgtNoise)],
+    providers: [provideCommonEffectRef(NgtNoise)],
 })
 export class NgtNoise extends NgtCommonEffect<NoiseEffect> {
     static ngAcceptInputType_options:

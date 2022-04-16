@@ -1,11 +1,13 @@
 import {
     AnyConstructor,
     AnyFunction,
-    NGT_INSTANCE_FACTORY,
+    NGT_INSTANCE_HOST_REF,
+    NGT_INSTANCE_REF,
     NgtInstance,
     NgtInstanceState,
+    NgtRef,
     NgtStore,
-    provideInstanceFactory,
+    provideInstanceRef,
     startWithUndefined,
     tapEffect,
 } from '@angular-three/core';
@@ -23,27 +25,19 @@ import { BlendFunction, Effect } from 'postprocessing';
 import { map, tap } from 'rxjs';
 import { NgtEffectComposer } from './effect-composer';
 
-export const NGT_COMMON_EFFECT_FACTORY = new InjectionToken(
-    'NgtCommonEffect factory'
-);
+export const NGT_COMMON_EFFECT_REF = new InjectionToken('NgtCommonEffect ref');
 
-export function provideCommonEffectFactory<
-    TEffect extends Effect,
-    TSubEffect extends NgtCommonEffect<TEffect> = NgtCommonEffect<TEffect>
->(
-    subEffect: AnyConstructor<TSubEffect>,
-    factory?: (sub: TSubEffect) => TEffect
+export function provideCommonEffectRef<TType extends AnyConstructor<any>>(
+    subEffect: TType,
+    factory?: (instance: InstanceType<TType>) => NgtRef
 ): Provider {
     return [
-        provideInstanceFactory<TEffect>(
-            subEffect as unknown as AnyConstructor<NgtInstance<TEffect>>,
-            factory as AnyFunction
-        ),
+        provideInstanceRef(subEffect, factory),
         { provide: NgtCommonEffect, useExisting: subEffect },
         {
-            provide: NGT_COMMON_EFFECT_FACTORY,
-            useFactory: (sub: TSubEffect) => {
-                return () => factory?.(sub) || sub.instance.value;
+            provide: NGT_COMMON_EFFECT_REF,
+            useFactory: (instance: InstanceType<TType>) => {
+                return () => factory?.(instance) || instance.instance;
             },
             deps: [subEffect],
         },
@@ -93,8 +87,12 @@ export abstract class NgtCommonEffect<
         store: NgtStore,
         @Optional()
         @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
+        @Inject(NGT_INSTANCE_REF)
+        parentRef: AnyFunction<NgtRef>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_HOST_REF)
+        parentHostRef: AnyFunction<NgtRef>,
         @Optional()
         protected effectComposer: NgtEffectComposer
     ) {
@@ -104,7 +102,7 @@ export abstract class NgtCommonEffect<
             );
         }
 
-        super({ zone, store, parentInstanceFactory });
+        super(zone, store, parentRef, parentHostRef);
 
         this.set({ blendFunction: this.defaultBlendMode });
     }

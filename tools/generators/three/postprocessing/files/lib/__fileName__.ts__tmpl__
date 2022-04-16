@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %>Effect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %>Effect } fro
     selector: 'ngt-<%= fileName %>',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<<%= name %>Effect>(Ngt<%= name %>)],
+    providers: [provideCommonEffectRef(Ngt<%= name %>)],
 })
 export class Ngt<%= name %> extends NgtCommonEffect<<%= name %>Effect> {
     static ngAcceptInputType_options:

@@ -1,7 +1,7 @@
 import { AnyConstructor, NgtVector3, UnknownRecord } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import {
     ChangeDetectionStrategy,
@@ -17,9 +17,7 @@ import * as THREE from 'three';
     selector: 'ngt-depth-of-field',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonEffectFactory<DepthOfFieldEffect>(NgtDepthOfField),
-    ],
+    providers: [provideCommonEffectRef(NgtDepthOfField)],
 })
 export class NgtDepthOfField extends NgtCommonEffect<DepthOfFieldEffect> {
     static ngAcceptInputType_options:

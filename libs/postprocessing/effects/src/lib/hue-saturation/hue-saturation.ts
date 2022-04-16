@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { HueSaturationEffect } from 'postprocessing';
@@ -11,9 +11,7 @@ import { HueSaturationEffect } from 'postprocessing';
     selector: 'ngt-hue-saturation',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonEffectFactory<HueSaturationEffect>(NgtHueSaturation),
-    ],
+    providers: [provideCommonEffectRef(NgtHueSaturation)],
 })
 export class NgtHueSaturation extends NgtCommonEffect<HueSaturationEffect> {
     static ngAcceptInputType_options:

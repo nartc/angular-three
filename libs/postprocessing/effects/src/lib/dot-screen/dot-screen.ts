@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { DotScreenEffect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { DotScreenEffect } from 'postprocessing';
     selector: 'ngt-dot-screen',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<DotScreenEffect>(NgtDotScreen)],
+    providers: [provideCommonEffectRef(NgtDotScreen)],
 })
 export class NgtDotScreen extends NgtCommonEffect<DotScreenEffect> {
     static ngAcceptInputType_options:

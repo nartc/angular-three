@@ -1,11 +1,13 @@
 import {
     AnyFunction,
-    NGT_INSTANCE_FACTORY,
+    NGT_INSTANCE_HOST_REF,
+    NGT_INSTANCE_REF,
     NGT_IS_WEBGL_AVAILABLE,
     NgtInstance,
     NgtInstanceState,
+    NgtRef,
     NgtStore,
-    provideInstanceFactory,
+    provideInstanceRef,
     startWithUndefined,
     tapEffect,
 } from '@angular-three/core';
@@ -52,11 +54,7 @@ export interface NgtEffectComposerState
     selector: 'ngt-effect-composer',
     template: ` <ng-content></ng-content> `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideInstanceFactory<EffectComposer, NgtEffectComposerState>(
-            NgtEffectComposer
-        ),
-    ],
+    providers: [provideInstanceRef(NgtEffectComposer)],
 })
 export class NgtEffectComposer extends NgtInstance<
     EffectComposer,
@@ -147,12 +145,16 @@ export class NgtEffectComposer extends NgtInstance<
         store: NgtStore,
         @Optional()
         @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction,
+        @Inject(NGT_INSTANCE_REF)
+        parentRef: AnyFunction<NgtRef>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_HOST_REF)
+        parentHostRef: AnyFunction<NgtRef>,
         @Inject(NGT_IS_WEBGL_AVAILABLE)
         private isWebGLAvailable: boolean
     ) {
-        super({ zone, store, parentInstanceFactory });
+        super(zone, store, parentRef, parentHostRef);
         this.set({
             enabled: true,
             renderPriority: 1,

@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { SepiaEffect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { SepiaEffect } from 'postprocessing';
     selector: 'ngt-sepia',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<SepiaEffect>(NgtSepia)],
+    providers: [provideCommonEffectRef(NgtSepia)],
 })
 export class NgtSepia extends NgtCommonEffect<SepiaEffect> {
     static ngAcceptInputType_options:

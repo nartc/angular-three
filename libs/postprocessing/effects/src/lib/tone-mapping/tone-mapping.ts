@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { ToneMappingEffect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { ToneMappingEffect } from 'postprocessing';
     selector: 'ngt-tone-mapping',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<ToneMappingEffect>(NgtToneMapping)],
+    providers: [provideCommonEffectRef(NgtToneMapping)],
 })
 export class NgtToneMapping extends NgtCommonEffect<ToneMappingEffect> {
     static ngAcceptInputType_options:

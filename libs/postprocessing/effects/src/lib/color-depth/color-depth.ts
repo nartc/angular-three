@@ -2,7 +2,7 @@
 import { AnyConstructor } from '@angular-three/core';
 import {
     NgtCommonEffect,
-    provideCommonEffectFactory,
+    provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { ColorDepthEffect } from 'postprocessing';
@@ -11,7 +11,7 @@ import { ColorDepthEffect } from 'postprocessing';
     selector: 'ngt-color-depth',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectFactory<ColorDepthEffect>(NgtColorDepth)],
+    providers: [provideCommonEffectRef(NgtColorDepth)],
 })
 export class NgtColorDepth extends NgtCommonEffect<ColorDepthEffect> {
     static ngAcceptInputType_options:
