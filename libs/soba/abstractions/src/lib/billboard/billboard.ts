@@ -1,9 +1,10 @@
 import {
+    BooleanInput,
+    coerceBooleanProperty,
     NgtObjectInputs,
+    NgtRef,
     NgtRenderState,
-    provideInstanceWrapperFactory,
-    provideObjectWrapperFactory,
-    Ref,
+    provideObjectHosRef,
 } from '@angular-three/core';
 import { NgtGroup, NgtGroupModule } from '@angular-three/core/group';
 import { CommonModule } from '@angular/common';
@@ -26,13 +27,13 @@ import * as THREE from 'three';
 })
 export class NgtSobaBillboardContent {
     constructor(
-        public templateRef: TemplateRef<{ billboard: Ref<THREE.Group> }>
+        public templateRef: TemplateRef<{ billboard: NgtRef<THREE.Group> }>
     ) {}
 
     static ngTemplateContextGuard(
         dir: NgtSobaBillboardContent,
         ctx: any
-    ): ctx is { billboard: Ref<THREE.Group> } {
+    ): ctx is { billboard: NgtRef<THREE.Group> } {
         return true;
     }
 }
@@ -82,23 +83,45 @@ export class NgtSobaBillboardContent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideInstanceWrapperFactory(
+        provideObjectHosRef(
             NgtSobaBillboard,
-            (billboard) => billboard.group.instance.value,
-            (billboard) => billboard.parentInstanceFactory
-        ),
-        provideObjectWrapperFactory(
-            NgtSobaBillboard,
-            (billboard) => billboard.group.instance.value,
-            (billboard) => billboard.parentObjectFactory
+            (billboard) => billboard.group.instance,
+            (billboard) => billboard.parentRef
         ),
     ],
 })
 export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
-    @Input() follow = true;
-    @Input() lockX = false;
-    @Input() lockY = false;
-    @Input() lockZ = false;
+    get follow(): boolean {
+        return this._follow;
+    }
+    @Input() set follow(value: BooleanInput) {
+        this._follow = coerceBooleanProperty(value);
+    }
+    private _follow = true;
+
+    get lockX(): boolean {
+        return this._lockX;
+    }
+    @Input() set lockX(value: BooleanInput) {
+        this._lockX = coerceBooleanProperty(value);
+    }
+    private _lockX = false;
+
+    get lockY(): boolean {
+        return this._lockY;
+    }
+    @Input() set lockY(value: BooleanInput) {
+        this._lockY = coerceBooleanProperty(value);
+    }
+    private _lockY = false;
+
+    get lockZ(): boolean {
+        return this._lockZ;
+    }
+    @Input() set lockZ(value: BooleanInput) {
+        this._lockZ = coerceBooleanProperty(value);
+    }
+    private _lockZ = false;
 
     @ContentChild(NgtSobaBillboardContent) content?: NgtSobaBillboardContent;
 
@@ -116,7 +139,7 @@ export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
         state: NgtRenderState;
         object: THREE.Group;
     }) {
-        if (!this.follow) return;
+        if (!this._follow) return;
 
         // save previous rotation in case we're locking an axis
         const prevRotation = object.rotation.clone();
@@ -125,9 +148,9 @@ export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
         object.quaternion.copy(camera.quaternion);
 
         // readjust any axis that is locked
-        if (this.lockX) object.rotation.x = prevRotation.x;
-        if (this.lockY) object.rotation.y = prevRotation.y;
-        if (this.lockZ) object.rotation.z = prevRotation.z;
+        if (this._lockX) object.rotation.x = prevRotation.x;
+        if (this._lockY) object.rotation.y = prevRotation.y;
+        if (this._lockZ) object.rotation.z = prevRotation.z;
     }
 }
 
