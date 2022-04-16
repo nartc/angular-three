@@ -13,8 +13,9 @@ import type { NgtInstanceState } from '../abstracts/instance';
 import { NgtInstance } from '../abstracts/instance';
 import { startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import { NGT_OBJECT_FACTORY } from '../tokens';
-import type { AnyConstructor, AnyFunction, UnknownRecord } from '../types';
+import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
+import type { AnyConstructor, UnknownRecord } from '../types';
+import { NgtRef } from '../types';
 
 export interface NgtCommonMaterialState<
     TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
@@ -261,10 +262,14 @@ export abstract class NgtCommonMaterial<
         store: NgtStore,
         @Optional()
         @SkipSelf()
-        @Inject(NGT_OBJECT_FACTORY)
-        parentInstanceFactory: AnyFunction
+        @Inject(NGT_OBJECT_REF)
+        parentRef: NgtRef<THREE.Object3D>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_OBJECT_HOST_REF)
+        parentHostRef: NgtRef<THREE.Object3D>
     ) {
-        super({ zone, store, parentInstanceFactory });
+        super(zone, store, parentRef, parentHostRef);
         this.set({ materialParameters: {} as TMaterialParameters });
     }
 

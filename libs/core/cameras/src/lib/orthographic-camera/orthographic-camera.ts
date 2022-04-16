@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonCamera,
-    provideCommonCameraFactory,
+    provideCommonCameraRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,11 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-orthographic-camera',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonCameraFactory<THREE.OrthographicCamera>(
-            NgtOrthographicCamera
-        ),
-    ],
+    providers: [provideCommonCameraRef(NgtOrthographicCamera)],
 })
 export class NgtOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCamera> {
     static ngAcceptInputType_args:

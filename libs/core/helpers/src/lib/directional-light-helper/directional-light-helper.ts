@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonObjectHelper,
-    provideCommonObjectHelperFactory,
+    provideCommonObjectHelperRef,
     Tail,
 } from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
@@ -11,11 +11,7 @@ import * as THREE from 'three';
 @Directive({
     selector: '[ngtDirectionalLightHelper]',
     exportAs: 'ngtDirectionalLightHelper',
-    providers: [
-        provideCommonObjectHelperFactory<THREE.DirectionalLightHelper>(
-            NgtDirectionalLightHelper
-        ),
-    ],
+    providers: [provideCommonObjectHelperRef(NgtDirectionalLightHelper)],
 })
 export class NgtDirectionalLightHelper extends NgtCommonObjectHelper<THREE.DirectionalLightHelper> {
     static ngAcceptInputType_ngtDirectionalLightHelper:

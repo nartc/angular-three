@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonAttribute,
-    provideCommonAttributeFactory,
+    provideCommonAttributeRef,
 } from '@angular-three/core';
 import { NgModule, Component, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -10,11 +10,7 @@ import * as THREE from 'three';
 @Component({
     selector: 'ngt-int32-buffer-attribute',
     template: '<ng-content></ng-content>',
-    providers: [
-        provideCommonAttributeFactory<THREE.Int32BufferAttribute>(
-            NgtInt32BufferAttribute
-        ),
-    ],
+    providers: [provideCommonAttributeRef(NgtInt32BufferAttribute)],
 })
 export class NgtInt32BufferAttribute extends NgtCommonAttribute<THREE.Int32BufferAttribute> {
     static ngAcceptInputType_args:

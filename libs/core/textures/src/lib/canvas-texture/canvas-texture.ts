@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonTexture,
-    provideCommonTextureFactory,
+    provideCommonTextureRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-canvas-texture',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonTextureFactory<THREE.CanvasTexture>(NgtCanvasTexture),
-    ],
+    providers: [provideCommonTextureRef(NgtCanvasTexture)],
 })
 export class NgtCanvasTexture extends NgtCommonTexture<THREE.CanvasTexture> {
     override get textureType(): AnyConstructor<THREE.CanvasTexture> {

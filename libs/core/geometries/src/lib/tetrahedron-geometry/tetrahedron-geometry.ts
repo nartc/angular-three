@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonGeometry,
-    provideCommonGeometryFactory,
+    provideCommonGeometryRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,11 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-tetrahedron-geometry',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonGeometryFactory<THREE.TetrahedronGeometry>(
-            NgtTetrahedronGeometry
-        ),
-    ],
+    providers: [provideCommonGeometryRef(NgtTetrahedronGeometry)],
 })
 export class NgtTetrahedronGeometry extends NgtCommonGeometry<THREE.TetrahedronGeometry> {
     static ngAcceptInputType_args:

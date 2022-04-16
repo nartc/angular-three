@@ -2,9 +2,12 @@ import { Provider } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance } from '../abstracts/instance';
 import { NgtCommonAttribute } from '../three/attribute';
-import { NGT_COMMON_ATTRIBUTE_FACTORY } from '../tokens';
-import type { AnyConstructor, AnyFunction } from '../types';
-import { provideInstanceFactory } from './instance';
+import {
+    NGT_COMMON_ATTRIBUTE_FACTORY,
+    NGT_COMMON_ATTRIBUTE_REF,
+} from '../tokens';
+import type { AnyConstructor, AnyFunction, NgtRef } from '../types';
+import { provideInstanceFactory, provideInstanceRef } from './instance';
 
 export function provideCommonAttributeFactory<
     TAttribute extends THREE.BufferAttribute | THREE.InterleavedBufferAttribute,
@@ -26,6 +29,25 @@ export function provideCommonAttributeFactory<
             useFactory: (subAttribute: TSubAttribute) => {
                 return () =>
                     factory?.(subAttribute) || subAttribute.instance.value;
+            },
+            deps: [subAttributeType],
+        },
+    ];
+}
+
+export function provideCommonAttributeRef<TType extends AnyConstructor<any>>(
+    subAttributeType: TType,
+    factory?: (
+        instance: InstanceType<TType>
+    ) => NgtRef<THREE.BufferAttribute | THREE.InterleavedBufferAttribute>
+): Provider {
+    return [
+        provideInstanceRef(subAttributeType, factory),
+        { provide: NgtCommonAttribute, useExisting: subAttributeType },
+        {
+            provide: NGT_COMMON_ATTRIBUTE_REF,
+            useFactory: (instance: InstanceType<TType>) => {
+                return factory?.(instance) || instance.instance;
             },
             deps: [subAttributeType],
         },

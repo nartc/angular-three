@@ -1,10 +1,8 @@
-import { Directive, Inject, NgZone, Optional, SkipSelf } from '@angular/core';
+import { Directive } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
-import { NgtStore } from '../stores/store';
-import { NGT_INSTANCE_FACTORY } from '../tokens';
-import type { AnyConstructor, AnyFunction } from '../types';
+import type { AnyConstructor } from '../types';
 
 @Directive()
 export abstract class NgtCommonAttribute<
@@ -13,17 +11,6 @@ export abstract class NgtCommonAttribute<
         | THREE.InterleavedBufferAttribute = THREE.BufferAttribute
 > extends NgtInstance<TAttribute, NgtInstanceState<TAttribute>> {
     abstract get attributeType(): AnyConstructor<TAttribute>;
-
-    constructor(
-        zone: NgZone,
-        store: NgtStore,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction
-    ) {
-        super({ zone, store, parentInstanceFactory });
-    }
 
     override ngOnInit() {
         this.zone.runOutsideAngular(() => {

@@ -5,7 +5,7 @@ import {
     NGT_INSTANCE_FACTORY,
     NgtInstance,
     NgtStore,
-    provideInstanceFactory,
+    provideInstanceRef,
     <%= inputType %>
 } from '@angular-three/core';
 import {
@@ -25,9 +25,7 @@ import type { Subscription } from 'rxjs';
     selector: 'ngt-<%= fileName %>[<%= propertyName %>]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideInstanceFactory<THREE.<%= name %>>(Ngt<%= name %>Attribute),
-    ],
+    providers: [provideInstanceRef(Ngt<%= name %>Attribute)],
 })
 export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
     @Input() set <%= propertyName %>(<%= propertyName %>: <%= inputType %>) {
@@ -50,17 +48,6 @@ export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
     }
 
     private initSubscription?: Subscription;
-
-    constructor(
-        zone: NgZone,
-        store: NgtStore,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction
-    ) {
-        super({ zone, store, parentInstanceFactory });
-    }
 }
 
 @NgModule({

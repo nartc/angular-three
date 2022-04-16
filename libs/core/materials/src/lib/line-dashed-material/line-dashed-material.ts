@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonMaterial,
-    provideCommonMaterialFactory,
+    provideCommonMaterialRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -17,19 +17,7 @@ import { NgtLineBasicMaterial } from '../line-basic-material/line-basic-material
     selector: 'ngt-line-dashed-material',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonMaterialFactory<
-            THREE.LineDashedMaterial,
-            THREE.LineDashedMaterialParameters
-        >(
-            NgtLineDashedMaterial as unknown as AnyConstructor<
-                NgtCommonMaterial<
-                    THREE.LineDashedMaterialParameters,
-                    THREE.LineDashedMaterial
-                >
-            >
-        ),
-    ],
+    providers: [provideCommonMaterialRef(NgtLineDashedMaterial)],
 })
 export class NgtLineDashedMaterial extends NgtLineBasicMaterial<
     THREE.LineDashedMaterialParameters,

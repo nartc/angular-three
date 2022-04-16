@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonObjectHelper,
-    provideCommonObjectHelperFactory,
+    provideCommonObjectHelperRef,
     Tail,
 } from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
@@ -12,7 +12,7 @@ import * as THREE from 'three';
     selector: '[ngt<%= name %>]',
     exportAs: 'ngt<%= name %>',
     providers: [
-        provideCommonObjectHelperFactory<THREE.<%= name %>>(Ngt<%= name %>),
+        provideCommonObjectHelperRef(Ngt<%= name %>),
     ],
 })
 export class Ngt<%= name %> extends NgtCommonObjectHelper<THREE.<%= name %>> {
@@ -36,7 +36,7 @@ export class Ngt<%= name %> extends NgtCommonObjectHelper<THREE.<%= name %>> {
 import {
     AnyConstructor,
     NgtCommonHelper,
-    provideCommonHelperFactory,
+    provideCommonHelperRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -50,7 +50,7 @@ import * as THREE from 'three';
     selector: 'ngt-<%= fileName %>',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonHelperFactory<THREE.<%= name %>>(Ngt<%= name %>)],
+    providers: [provideCommonHelperRef(Ngt<%= name %>)],
 })
 export class Ngt<%= name %> extends NgtCommonHelper<THREE.<%= name %>> {
     static ngAcceptInputType_args:

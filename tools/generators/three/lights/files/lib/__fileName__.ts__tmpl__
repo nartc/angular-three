@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonLight,
-    provideCommonLightFactory,
+    provideCommonLightRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-<%= fileName %>',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonLightFactory<THREE.<%= name %>>(Ngt<%= name %>)],
+    providers: [provideCommonLightRef(Ngt<%= name %>)],
 })
 export class Ngt<%= name %> extends NgtCommonLight<THREE.<%= name %>> {
     static ngAcceptInputType_args:

@@ -3,7 +3,7 @@ import {
     coerceNumberProperty,
     NgtCommonMesh,
     NumberInput,
-    provideCommonMeshFactory,
+    provideCommonMeshRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -17,9 +17,7 @@ import * as THREE from 'three';
     selector: 'ngt-instanced-mesh[count]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonMeshFactory<THREE.InstancedMesh>(NgtInstancedMesh),
-    ],
+    providers: [provideCommonMeshRef(NgtInstancedMesh)],
 })
 export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {
     @Input() set count(count: NumberInput) {

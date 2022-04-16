@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonCurve,
-    provideCommonCurveFactory,
+    provideCommonCurveRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-catmull-rom-curve3',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonCurveFactory<THREE.CatmullRomCurve3>(NgtCatmullRomCurve3),
-    ],
+    providers: [provideCommonCurveRef(NgtCatmullRomCurve3)],
 })
 export class NgtCatmullRomCurve3 extends NgtCommonCurve<THREE.CatmullRomCurve3> {
     static ngAcceptInputType_args:

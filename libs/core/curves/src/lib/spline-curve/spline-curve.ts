@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonCurve,
-    provideCommonCurveFactory,
+    provideCommonCurveRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-spline-curve',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonCurveFactory<THREE.SplineCurve>(NgtSplineCurve)],
+    providers: [provideCommonCurveRef(NgtSplineCurve)],
 })
 export class NgtSplineCurve extends NgtCommonCurve<THREE.SplineCurve> {
     static ngAcceptInputType_args:

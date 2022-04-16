@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonCamera,
-    provideCommonCameraFactory,
+    provideCommonCameraRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-array-camera',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonCameraFactory<THREE.ArrayCamera>(NgtArrayCamera)],
+    providers: [provideCommonCameraRef(NgtArrayCamera)],
 })
 export class NgtArrayCamera extends NgtCommonCamera<THREE.ArrayCamera> {
     static ngAcceptInputType_args:

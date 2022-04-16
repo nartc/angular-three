@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonGeometry,
-    provideCommonGeometryFactory,
+    provideCommonGeometryRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,11 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-dodecahedron-geometry',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonGeometryFactory<THREE.DodecahedronGeometry>(
-            NgtDodecahedronGeometry
-        ),
-    ],
+    providers: [provideCommonGeometryRef(NgtDodecahedronGeometry)],
 })
 export class NgtDodecahedronGeometry extends NgtCommonGeometry<THREE.DodecahedronGeometry> {
     static ngAcceptInputType_args:

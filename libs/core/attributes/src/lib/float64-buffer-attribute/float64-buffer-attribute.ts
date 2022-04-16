@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonAttribute,
-    provideCommonAttributeFactory,
+    provideCommonAttributeRef,
 } from '@angular-three/core';
 import { NgModule, Component, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -10,11 +10,7 @@ import * as THREE from 'three';
 @Component({
     selector: 'ngt-float64-buffer-attribute',
     template: '<ng-content></ng-content>',
-    providers: [
-        provideCommonAttributeFactory<THREE.Float64BufferAttribute>(
-            NgtFloat64BufferAttribute
-        ),
-    ],
+    providers: [provideCommonAttributeRef(NgtFloat64BufferAttribute)],
 })
 export class NgtFloat64BufferAttribute extends NgtCommonAttribute<THREE.Float64BufferAttribute> {
     static ngAcceptInputType_args:

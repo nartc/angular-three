@@ -1,23 +1,23 @@
-import type {
-    BufferGeometry,
-    Material,
-    OrthographicCamera,
-    PerspectiveCamera,
-} from 'three';
 import * as THREE from 'three';
-import type { EquConfig } from '../types';
+import type { EquConfig, NgtUnknownInstance, UnknownRecord } from '../types';
 
 export const is = {
     obj: (a: unknown) =>
         a === Object(a) && !is.arr(a) && typeof a !== 'function',
-    material: (a: unknown): a is Material =>
-        !!(a as Record<string, unknown>)['isMaterial'],
-    geometry: (a: unknown): a is BufferGeometry =>
-        !!(a as Record<string, unknown>)['isBufferGeometry'],
-    orthographic: (a: unknown): a is OrthographicCamera =>
+    material: (a: unknown): a is THREE.Material =>
+        !!a && (a as THREE.Material)['isMaterial'],
+    geometry: (a: unknown): a is THREE.BufferGeometry =>
+        !!a && (a as THREE.BufferGeometry)['isBufferGeometry'],
+    orthographic: (a: unknown): a is THREE.OrthographicCamera =>
         !!a && (a as THREE.OrthographicCamera).isOrthographicCamera,
-    perspective: (a: unknown): a is PerspectiveCamera =>
+    perspective: (a: unknown): a is THREE.PerspectiveCamera =>
         !!a && (a as THREE.PerspectiveCamera).isPerspectiveCamera,
+    camera: (a: unknown): a is THREE.Camera =>
+        !!a && (a as THREE.Camera).isCamera,
+    object3d: (a: unknown): a is THREE.Object3D =>
+        !!a && (a as THREE.Object3D).isObject3D,
+    instance: (a: unknown): a is NgtUnknownInstance =>
+        !!a && !!(a as UnknownRecord)['__ngt__'],
     fun: (a: unknown): a is Function => typeof a === 'function',
     str: (a: unknown): a is string => typeof a === 'string',
     num: (a: unknown): a is number => typeof a === 'number',

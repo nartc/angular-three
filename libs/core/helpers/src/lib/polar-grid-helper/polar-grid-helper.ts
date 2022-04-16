@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonHelper,
-    provideCommonHelperFactory,
+    provideCommonHelperRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-polar-grid-helper',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonHelperFactory<THREE.PolarGridHelper>(NgtPolarGridHelper),
-    ],
+    providers: [provideCommonHelperRef(NgtPolarGridHelper)],
 })
 export class NgtPolarGridHelper extends NgtCommonHelper<THREE.PolarGridHelper> {
     static ngAcceptInputType_args:

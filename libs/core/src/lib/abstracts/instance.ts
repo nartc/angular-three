@@ -1,11 +1,14 @@
 import {
     Directive,
     EventEmitter,
+    Inject,
     Input,
     NgZone,
     OnDestroy,
     OnInit,
+    Optional,
     Output,
+    SkipSelf,
 } from '@angular/core';
 import {
     filter,
@@ -19,7 +22,6 @@ import {
     tap,
     withLatestFrom,
 } from 'rxjs';
-import * as THREE from 'three';
 import { Ref } from '../ref';
 import {
     NgtComponentStore,
@@ -27,24 +29,28 @@ import {
     tapEffect,
 } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
+import { NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF } from '../tokens';
 import type {
-    AnyFunction,
     AttachFunction,
+    BooleanInput,
     NgtInstanceInternal,
+    NgtRef,
     NgtUnknownInstance,
     UnknownRecord,
 } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { checkNeedsUpdate } from '../utils/check-needs-update';
+import { coerceBooleanProperty } from '../utils/coercion';
 import { removeInteractivity } from '../utils/events';
 import { prepare } from '../utils/instance';
 import { is } from '../utils/is';
 import { mutate } from '../utils/mutate';
 
 export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
-    instance: Ref<NgtUnknownInstance<TInstance>>;
+    instance: NgtRef<TInstance>;
     instanceArgs: unknown[];
     attach: string[] | AttachFunction;
+    skipParent: boolean;
     [option: string]: any;
 }
 
@@ -56,8 +62,14 @@ export abstract class NgtInstance<
     extends NgtComponentStore<TInstanceState>
     implements OnInit, OnDestroy
 {
-    @Input() set ref(ref: Ref<any>) {
+    @Input() set ref(ref: Ref) {
         this.set({ instance: ref } as Partial<TInstanceState>);
+    }
+
+    @Input() set skipParent(skipParent: BooleanInput) {
+        this.set({
+            skipParent: coerceBooleanProperty(skipParent),
+        } as Partial<TInstanceState>);
     }
 
     @Output() ready = new EventEmitter<TInstance>();
@@ -88,43 +100,46 @@ export abstract class NgtInstance<
         )
     );
 
-    get instance(): Ref<NgtUnknownInstance<TInstance>> {
+    get instance(): NgtRef<TInstance> {
         return this.get((s) => s.instance);
     }
 
+    get __ngt__(): NgtInstanceInternal {
+        return this.instance.value.__ngt__;
+    }
+
+    protected get parent(): NgtRef {
+        const skipParent = this.get((s) => s.skipParent);
+        if (!skipParent) return this.parentRef;
+        return this.parentHostRef || this.parentRef;
+    }
+
     protected readonly instanceArgs$ = this.select((s) => s.instanceArgs);
+
     protected set instanceArgs(v: unknown | unknown[]) {
         this.set({
             instanceArgs: Array.isArray(v) ? v : [v],
         } as Partial<TInstanceState>);
     }
 
-    get __ngt__(): NgtInstanceInternal {
-        return (this.instance.value as NgtUnknownInstance)['__ngt__'];
-    }
-
-    protected zone: NgZone;
-    protected store: NgtStore;
-    protected parentInstanceFactory?: AnyFunction<UnknownRecord>;
-
-    constructor({
-        zone,
-        store,
-        parentInstanceFactory,
-    }: {
-        zone: NgZone;
-        store: NgtStore;
-        parentInstanceFactory?: AnyFunction<UnknownRecord>;
-    }) {
+    constructor(
+        protected zone: NgZone,
+        protected store: NgtStore,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_REF)
+        protected parentRef: NgtRef,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_HOST_REF)
+        protected parentHostRef: NgtRef
+    ) {
         super();
-        this.zone = zone;
-        this.store = store;
-        this.parentInstanceFactory = parentInstanceFactory;
-
         this.set({
             instance: new Ref(null),
             instanceArgs: [],
             attach: [],
+            skipParent: false,
         } as unknown as TInstanceState);
     }
 
@@ -156,34 +171,35 @@ export abstract class NgtInstance<
         const prepInstance = prepare(
             instance,
             () => this.store.get(),
-            this.parentInstanceFactory?.() as NgtUnknownInstance,
-            this.instance?.value as NgtUnknownInstance
+            this.parent,
+            this.instance
         );
 
         this.postPrepare(prepInstance);
-
-        this.get((s) => s.instance).set(prepInstance);
+        this.instance.set(prepInstance);
         this.emitReady();
 
-        if (!(prepInstance instanceof THREE.Object3D)) {
-            prepInstance.__ngt__.parent?.__ngt__.objects.push(prepInstance);
+        if (!is.object3d(prepInstance)) {
+            prepInstance.__ngt__.parent?.value?.__ngt__.objects.push(
+                this.instance
+            );
         }
 
         return prepInstance;
     }
 
     protected destroy() {
-        if ((this.instance.value as UnknownRecord)['isObject3D']) {
-            const parentInstance = this.parentInstanceFactory?.();
-            if (parentInstance && parentInstance['isObject3D']) {
+        if (is.object3d(this.instance.value)) {
+            const parentInstance = this.parent;
+            if (is.object3d(parentInstance.value)) {
                 removeInteractivity(
                     this.__ngt__.root.bind(this.__ngt__),
-                    this.instance.value as unknown as THREE.Object3D
+                    this.instance.value
                 );
             }
 
-            if ((this.instance.value as unknown as THREE.Object3D).clear) {
-                (this.instance.value as unknown as THREE.Object3D).clear();
+            if (this.instance.value.clear != null) {
+                this.instance.value.clear();
             }
         } else {
             // non-scene objects
@@ -191,19 +207,19 @@ export abstract class NgtInstance<
             if (previousAttach != null) {
                 if (typeof previousAttach === 'function') {
                     previousAttach();
-                    if (this.__ngt__.parent) {
-                        checkNeedsUpdate(this.__ngt__.parent);
+                    if (this.__ngt__.parent && this.__ngt__.parent.value) {
+                        checkNeedsUpdate(this.__ngt__.parent.value);
                     }
                 } else {
                     const previousAttachValue =
                         this.__ngt__.previousAttachValue;
-                    if (this.__ngt__.parent) {
+                    if (this.__ngt__.parent && this.__ngt__.parent.value) {
                         mutate(
-                            this.__ngt__.parent,
+                            this.__ngt__.parent.value,
                             previousAttach,
                             previousAttachValue
                         );
-                        checkNeedsUpdate(this.__ngt__.parent);
+                        checkNeedsUpdate(this.__ngt__.parent.value);
                     }
                 }
             }
@@ -215,7 +231,7 @@ export abstract class NgtInstance<
         }
 
         this.set({ attach: [] } as unknown as Partial<TInstanceState>);
-        this.get((s) => s.instance).complete();
+        this.instance.complete();
     }
 
     /**
@@ -318,14 +334,11 @@ export abstract class NgtInstance<
                         }
                     }
 
-                    applyProps(
-                        this.instance.value as NgtUnknownInstance,
-                        customOptions
-                    );
+                    applyProps(this.instance.value, customOptions);
 
-                    if (this.instance.value instanceof THREE.Object3D) {
+                    if (is.object3d(this.instance.value)) {
                         this.instance.value.updateMatrix();
-                    } else if (this.instance.value instanceof THREE.Camera) {
+                    } else if (is.camera(this.instance.value)) {
                         if (
                             is.perspective(this.instance.value) ||
                             is.orthographic(this.instance.value)
@@ -346,34 +359,25 @@ export abstract class NgtInstance<
         pipe(
             withLatestFrom(this.select((s) => s.attach)),
             tap(([, attach]) => {
-                let parentInstance = this.__ngt__.parent;
+                let parentInstanceRef = this.__ngt__.parent;
 
                 // if no parentInstance, try re-run the factory due to late init
-                if (!parentInstance) {
-                    const parentInstanceFromFactory =
-                        this.parentInstanceFactory?.();
+                if (!parentInstanceRef) {
                     // return early if failed to retrieve
-                    if (!parentInstanceFromFactory) return;
+                    if (!this.parent.value) return;
 
                     // reassign on instance internal state
-                    this.__ngt__.parent =
-                        parentInstanceFromFactory as NgtUnknownInstance;
-                    parentInstance =
-                        parentInstanceFromFactory as NgtUnknownInstance;
+                    this.__ngt__.parent = this.parent;
+                    parentInstanceRef = this.parent;
                 }
 
                 if (typeof attach === 'function') {
                     const attachCleanUp = attach(
-                        parentInstance,
-                        this.instance.value
+                        parentInstanceRef,
+                        this.instance
                     );
                     if (attachCleanUp) {
-                        applyProps(
-                            this.__ngt__ as unknown as NgtUnknownInstance,
-                            {
-                                previousAttach: attachCleanUp,
-                            }
-                        );
+                        this.__ngt__.previousAttach = attachCleanUp;
                     }
                 } else {
                     const propertyToAttach = [...attach];
@@ -392,12 +396,12 @@ export abstract class NgtInstance<
                     // retrieve the current value on the parentInstance so we can reset it later
                     this.__ngt__.previousAttachValue = propertyToAttach.reduce(
                         (value: any, property) => value[property],
-                        parentInstance
+                        parentInstanceRef.value
                     );
 
                     // attach the instance value on the parent
                     mutate(
-                        parentInstance as UnknownRecord,
+                        parentInstanceRef.value,
                         propertyToAttach,
                         this.instance.value
                     );
@@ -408,10 +412,8 @@ export abstract class NgtInstance<
                     }
 
                     // also validate on the parentInstance
-                    if (parentInstance['__ngt__']) {
-                        (parentInstance as NgtUnknownInstance).__ngt__
-                            .root()
-                            .invalidate();
+                    if (parentInstanceRef.value.__ngt__) {
+                        parentInstanceRef.value.__ngt__.root().invalidate();
                     }
 
                     this.__ngt__.previousAttach = propertyToAttach;
@@ -419,7 +421,7 @@ export abstract class NgtInstance<
                         attach: propertyToAttach,
                     } as Partial<TInstanceState>);
                 }
-                checkNeedsUpdate(parentInstance);
+                checkNeedsUpdate(parentInstanceRef.value);
                 checkNeedsUpdate(this.instance.value);
             })
         )

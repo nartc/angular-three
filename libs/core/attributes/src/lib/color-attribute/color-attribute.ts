@@ -5,7 +5,7 @@ import {
     NGT_INSTANCE_FACTORY,
     NgtInstance,
     NgtStore,
-    provideInstanceFactory,
+    provideInstanceRef,
     NgtColor,
 } from '@angular-three/core';
 import {
@@ -25,7 +25,7 @@ import type { Subscription } from 'rxjs';
     selector: 'ngt-color[color]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideInstanceFactory<THREE.Color>(NgtColorAttribute)],
+    providers: [provideInstanceRef(NgtColorAttribute)],
 })
 export class NgtColorAttribute extends NgtInstance<THREE.Color> {
     @Input() set color(color: NgtColor) {
@@ -48,17 +48,6 @@ export class NgtColorAttribute extends NgtInstance<THREE.Color> {
     }
 
     private initSubscription?: Subscription;
-
-    constructor(
-        zone: NgZone,
-        store: NgtStore,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction
-    ) {
-        super({ zone, store, parentInstanceFactory });
-    }
 }
 
 @NgModule({

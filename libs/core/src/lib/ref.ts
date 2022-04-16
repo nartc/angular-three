@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
-export class Ref<TValue> {
+export class Ref<TValue = any> {
     private readonly _ref: BehaviorSubject<TValue>;
 
     constructor(value: TValue | null = null) {

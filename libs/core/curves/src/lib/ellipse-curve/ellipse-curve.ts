@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonCurve,
-    provideCommonCurveFactory,
+    provideCommonCurveRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-ellipse-curve',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonCurveFactory<THREE.EllipseCurve>(NgtEllipseCurve)],
+    providers: [provideCommonCurveRef(NgtEllipseCurve)],
 })
 export class NgtEllipseCurve extends NgtCommonCurve<THREE.EllipseCurve> {
     static ngAcceptInputType_args:

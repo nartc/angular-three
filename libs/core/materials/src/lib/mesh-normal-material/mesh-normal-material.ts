@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonMaterial,
-    provideCommonMaterialFactory,
+    provideCommonMaterialRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,12 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-mesh-normal-material',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonMaterialFactory<
-            THREE.MeshNormalMaterial,
-            THREE.MeshNormalMaterialParameters
-        >(NgtMeshNormalMaterial),
-    ],
+    providers: [provideCommonMaterialRef(NgtMeshNormalMaterial)],
 })
 export class NgtMeshNormalMaterial extends NgtCommonMaterial<
     THREE.MeshNormalMaterialParameters,

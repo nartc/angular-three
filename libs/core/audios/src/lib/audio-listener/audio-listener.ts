@@ -2,7 +2,7 @@ import {
     NgtObject,
     NgtObjectInputsState,
     NgtPreObjectInit,
-    provideObjectFactory,
+    provideObjectRef,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
@@ -17,11 +17,7 @@ export interface NgtAudioListenerState
     selector: 'ngt-audio-listener',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectFactory<THREE.AudioListener, NgtAudioListenerState>(
-            NgtAudioListener
-        ),
-    ],
+    providers: [provideObjectRef(NgtAudioListener)],
 })
 export class NgtAudioListener extends NgtObject<
     THREE.AudioListener,

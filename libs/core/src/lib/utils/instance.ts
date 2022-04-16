@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type {
     NgtInstanceInternal,
+    NgtRef,
     NgtState,
     NgtUnknownInstance,
     UnknownRecord,
@@ -14,25 +15,25 @@ export const getInstanceRootState = (
 export function prepare<TInstance extends object = UnknownRecord>(
     instance: TInstance,
     root: () => NgtState,
-    parentInstance?: NgtUnknownInstance,
-    previousInstance?: NgtUnknownInstance,
+    parentInstance?: NgtRef,
+    previousInstance?: NgtRef,
     isPrimitive = false
 ): NgtUnknownInstance<TInstance> {
     const parent = parentInstance
         ? parentInstance
         : previousInstance
-        ? previousInstance.__ngt__?.parent
+        ? previousInstance.value?.__ngt__?.parent
         : undefined;
 
     return Object.assign(instance, {
         __ngt__: {
             root,
             primitive: !isPrimitive
-                ? previousInstance?.__ngt__?.primitive
+                ? previousInstance?.value?.__ngt__?.primitive
                 : isPrimitive,
-            eventCount: previousInstance?.__ngt__?.eventCount ?? 0,
-            handlers: previousInstance?.__ngt__?.handlers ?? {},
-            objects: previousInstance?.__ngt__?.objects ?? [],
+            eventCount: previousInstance?.value?.__ngt__?.eventCount ?? 0,
+            handlers: previousInstance?.value?.__ngt__?.handlers ?? {},
+            objects: previousInstance?.value?.__ngt__?.objects ?? [],
             parent: parent ? (parent === instance ? null : parent) : null,
         },
     });

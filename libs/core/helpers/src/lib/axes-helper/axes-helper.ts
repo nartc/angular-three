@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonHelper,
-    provideCommonHelperFactory,
+    provideCommonHelperRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-axes-helper',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonHelperFactory<THREE.AxesHelper>(NgtAxesHelper)],
+    providers: [provideCommonHelperRef(NgtAxesHelper)],
 })
 export class NgtAxesHelper extends NgtCommonHelper<THREE.AxesHelper> {
     static ngAcceptInputType_args:

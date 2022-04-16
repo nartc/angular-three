@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonTexture,
-    provideCommonTextureFactory,
+    provideCommonTextureRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-video-texture',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonTextureFactory<THREE.VideoTexture>(NgtVideoTexture),
-    ],
+    providers: [provideCommonTextureRef(NgtVideoTexture)],
 })
 export class NgtVideoTexture extends NgtCommonTexture<THREE.VideoTexture> {
     override get textureType(): AnyConstructor<THREE.VideoTexture> {

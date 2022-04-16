@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonMaterial,
-    provideCommonMaterialFactory,
+    provideCommonMaterialRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,12 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-mesh-depth-material',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonMaterialFactory<
-            THREE.MeshDepthMaterial,
-            THREE.MeshDepthMaterialParameters
-        >(NgtMeshDepthMaterial),
-    ],
+    providers: [provideCommonMaterialRef(NgtMeshDepthMaterial)],
 })
 export class NgtMeshDepthMaterial extends NgtCommonMaterial<
     THREE.MeshDepthMaterialParameters,

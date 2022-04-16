@@ -5,7 +5,7 @@ import {
     NGT_INSTANCE_FACTORY,
     NgtInstance,
     NgtStore,
-    provideInstanceFactory,
+    provideInstanceRef,
     NgtFogExp2,
 } from '@angular-three/core';
 import {
@@ -25,7 +25,7 @@ import type { Subscription } from 'rxjs';
     selector: 'ngt-fog-exp2[fogExp2]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideInstanceFactory<THREE.FogExp2>(NgtFogExp2Attribute)],
+    providers: [provideInstanceRef(NgtFogExp2Attribute)],
 })
 export class NgtFogExp2Attribute extends NgtInstance<THREE.FogExp2> {
     @Input() set fogExp2(fogExp2: NgtFogExp2) {
@@ -48,17 +48,6 @@ export class NgtFogExp2Attribute extends NgtInstance<THREE.FogExp2> {
     }
 
     private initSubscription?: Subscription;
-
-    constructor(
-        zone: NgZone,
-        store: NgtStore,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction
-    ) {
-        super({ zone, store, parentInstanceFactory });
-    }
 }
 
 @NgModule({

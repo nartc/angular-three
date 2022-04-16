@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonSprite,
-    provideCommonSpriteFactory,
+    provideCommonSpriteRef,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -11,7 +11,7 @@ import * as THREE from 'three';
     selector: 'ngt-<%= fileName %>',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonSpriteFactory<THREE.<%= name %>>(Ngt<%= name %>)],
+    providers: [provideCommonSpriteRef(Ngt<%= name %>)],
 })
 export class Ngt<%= name %> extends NgtCommon<%= name %><THREE.<%= name %>> {
     static ngAcceptInputType_args:

@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonGeometry,
-    provideCommonGeometryFactory,
+    provideCommonGeometryRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-plane-geometry',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonGeometryFactory<THREE.PlaneGeometry>(NgtPlaneGeometry),
-    ],
+    providers: [provideCommonGeometryRef(NgtPlaneGeometry)],
 })
 export class NgtPlaneGeometry extends NgtCommonGeometry<THREE.PlaneGeometry> {
     static ngAcceptInputType_args:

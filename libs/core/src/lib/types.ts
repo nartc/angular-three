@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import type { Ref } from './ref';
 
 /* Coercion */
 export type BooleanInput = string | boolean | null | undefined;
@@ -348,8 +349,12 @@ export interface NgtState {
     gl: THREE.WebGLRenderer;
     /* default camera */
     camera: NgtCamera & { manual?: boolean };
+    /* default camera ref */
+    cameraRef: NgtRef<NgtCamera & { manual?: boolean }>;
     /* default scene */
     scene: THREE.Scene;
+    /* default scene ref */
+    sceneRef: NgtRef<THREE.Scene>;
     /* default raycaster */
     raycaster: THREE.Raycaster;
     /** Default clock */
@@ -402,11 +407,13 @@ export interface NgtState {
     internal: NgtInternalState;
 }
 
+export type NgtRef<TValue = any> = Ref<NgtUnknownInstance<TValue>>;
+
 export interface NgtInstanceInternal {
     root: () => NgtState;
     // objects and parent are used when children are added with `attach` instead of being added to the Object3D scene graph
-    objects: NgtUnknownInstance[];
-    parent: NgtUnknownInstance | null;
+    objects: NgtRef[];
+    parent: NgtRef | null;
     primitive?: boolean;
     eventCount: number;
     handlers: Partial<NgtEventHandlers>;
@@ -414,7 +421,10 @@ export interface NgtInstanceInternal {
     previousAttachValue?: unknown;
 }
 
-export type AttachFunction = (parent: any, child: any) => void | (() => void);
+export type AttachFunction = (
+    parent: NgtRef,
+    child: NgtRef
+) => void | (() => void);
 
 export type NgtUnknownInstance<TInstance = UnknownRecord> = TInstance & {
     __ngt__: NgtInstanceInternal;

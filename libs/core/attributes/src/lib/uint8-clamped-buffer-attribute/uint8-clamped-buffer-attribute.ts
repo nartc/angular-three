@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonAttribute,
-    provideCommonAttributeFactory,
+    provideCommonAttributeRef,
 } from '@angular-three/core';
 import { NgModule, Component, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -10,11 +10,7 @@ import * as THREE from 'three';
 @Component({
     selector: 'ngt-uint8-clamped-buffer-attribute',
     template: '<ng-content></ng-content>',
-    providers: [
-        provideCommonAttributeFactory<THREE.Uint8ClampedBufferAttribute>(
-            NgtUint8ClampedBufferAttribute
-        ),
-    ],
+    providers: [provideCommonAttributeRef(NgtUint8ClampedBufferAttribute)],
 })
 export class NgtUint8ClampedBufferAttribute extends NgtCommonAttribute<THREE.Uint8ClampedBufferAttribute> {
     static ngAcceptInputType_args:

@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonMaterial,
-    provideCommonMaterialFactory,
+    provideCommonMaterialRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,12 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-sprite-material',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonMaterialFactory<
-            THREE.SpriteMaterial,
-            THREE.SpriteMaterialParameters
-        >(NgtSpriteMaterial),
-    ],
+    providers: [provideCommonMaterialRef(NgtSpriteMaterial)],
 })
 export class NgtSpriteMaterial extends NgtCommonMaterial<
     THREE.SpriteMaterialParameters,

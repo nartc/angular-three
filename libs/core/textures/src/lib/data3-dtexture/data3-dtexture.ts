@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonTexture,
-    provideCommonTextureFactory,
+    provideCommonTextureRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-data3-dtexture',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonTextureFactory<THREE.Data3DTexture>(NgtData3DTexture),
-    ],
+    providers: [provideCommonTextureRef(NgtData3DTexture)],
 })
 export class NgtData3DTexture extends NgtCommonTexture<THREE.Data3DTexture> {
     override get textureType(): AnyConstructor<THREE.Data3DTexture> {

@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonHelper,
-    provideCommonHelperFactory,
+    provideCommonHelperRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-arrow-helper',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonHelperFactory<THREE.ArrowHelper>(NgtArrowHelper)],
+    providers: [provideCommonHelperRef(NgtArrowHelper)],
 })
 export class NgtArrowHelper extends NgtCommonHelper<THREE.ArrowHelper> {
     static ngAcceptInputType_args:

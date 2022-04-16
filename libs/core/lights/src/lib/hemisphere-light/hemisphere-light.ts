@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonLight,
-    provideCommonLightFactory,
+    provideCommonLightRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-hemisphere-light',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonLightFactory<THREE.HemisphereLight>(NgtHemisphereLight),
-    ],
+    providers: [provideCommonLightRef(NgtHemisphereLight)],
 })
 export class NgtHemisphereLight extends NgtCommonLight<THREE.HemisphereLight> {
     static ngAcceptInputType_args:

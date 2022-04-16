@@ -13,7 +13,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
-import { provideCanvasInstanceFactory } from './di/object';
+import { provideCanvasInstanceRef } from './di/object';
 import { NgtResize } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore } from './stores/store';
@@ -57,7 +57,7 @@ import { createLoop } from './utils/loop';
             }
         `,
     ],
-    providers: [NgtStore, NgtResize, provideCanvasInstanceFactory(NgtCanvas)],
+    providers: [NgtStore, NgtResize, provideCanvasInstanceRef(NgtCanvas)],
 })
 export class NgtCanvas extends NgtComponentStore implements OnInit {
     @HostBinding('class.ngt-canvas') hostClass = true;
@@ -114,15 +114,15 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
     @Input() set camera(cameraOptions: NgtCameraOptions) {
         this.store.set({ cameraOptions });
     }
-    get camera() {
-        return this.store.get((s) => s.camera);
+    get cameraRef() {
+        return this.store.get((s) => s.cameraRef);
     }
 
     @Input() set scene(sceneOptions: NgtSceneOptions) {
         this.store.set({ sceneOptions });
     }
-    get scene() {
-        return this.store.get((s) => s.scene);
+    get sceneRef() {
+        return this.store.get((s) => s.sceneRef);
     }
 
     @Input() set gl(glOptions: NgtGLOptions) {

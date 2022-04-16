@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonCurve,
-    provideCommonCurveFactory,
+    provideCommonCurveRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-cubic-bezier-curve',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonCurveFactory<THREE.CubicBezierCurve>(NgtCubicBezierCurve),
-    ],
+    providers: [provideCommonCurveRef(NgtCubicBezierCurve)],
 })
 export class NgtCubicBezierCurve extends NgtCommonCurve<THREE.CubicBezierCurve> {
     static ngAcceptInputType_args:

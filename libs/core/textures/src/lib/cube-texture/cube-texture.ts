@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonTexture,
-    provideCommonTextureFactory,
+    provideCommonTextureRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-cube-texture',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonTextureFactory<THREE.CubeTexture>(NgtCubeTexture)],
+    providers: [provideCommonTextureRef(NgtCubeTexture)],
 })
 export class NgtCubeTexture extends NgtCommonTexture<THREE.CubeTexture> {
     override get textureType(): AnyConstructor<THREE.CubeTexture> {

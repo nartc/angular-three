@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonGeometry,
-    provideCommonGeometryFactory,
+    provideCommonGeometryRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,11 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-cylinder-geometry',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonGeometryFactory<THREE.CylinderGeometry>(
-            NgtCylinderGeometry
-        ),
-    ],
+    providers: [provideCommonGeometryRef(NgtCylinderGeometry)],
 })
 export class NgtCylinderGeometry extends NgtCommonGeometry<THREE.CylinderGeometry> {
     static ngAcceptInputType_args:

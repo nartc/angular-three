@@ -11,6 +11,7 @@ import { filter, map, Observable, tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
 import { WINDOW } from '../di/window';
+import { Ref } from '../ref';
 import { NgtResize, NgtResizeResult } from '../services/resize';
 import type {
     NgtBeforeRenderRecord,
@@ -28,6 +29,7 @@ import type {
 import { applyProps } from '../utils/apply-props';
 import { createEvents } from '../utils/events';
 import { prepare } from '../utils/instance';
+import { is } from '../utils/is';
 import { makeDpr, makeId } from '../utils/make';
 import { NgtComponentStore, tapEffect } from './component-store';
 
@@ -96,7 +98,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         performanceOptions: NgtPerformanceOptions,
         @Inject(DOCUMENT) document: Document,
         @Inject(WINDOW) window: Window,
-        @Optional() @SkipSelf() private previousStore: NgtStore,
+        @Optional() @SkipSelf() private parentStore: NgtStore,
         @Inject(NgtResize) private resizeResult$: Observable<NgtResizeResult>,
         private zone: NgZone
     ) {
@@ -113,6 +115,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             controls: null,
             pointer: this.pointer,
             mouse: this.pointer,
+            sceneRef: new Ref(),
+            cameraRef: new Ref(),
             events: {
                 priority: 1,
                 enabled: true,
@@ -229,7 +233,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                     });
                 },
             },
-            previousState: previousStore?.get(),
+            previousState: parentStore?.get(),
         });
     }
 
@@ -333,11 +337,10 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             const scene = prepare(
                 new THREE.Scene(),
                 () => this.get(),
-                (this.previousStore?.get(
-                    (s) => s.scene
-                ) as unknown as NgtUnknownInstance) || null
+                this.parentStore?.get((s) => s.sceneRef) || null
             );
             applyProps(scene, state.sceneOptions as UnknownRecord);
+            this.get((s) => s.sceneRef).set(scene);
 
             // Set up renderer (one time only!)
             let gl = state.gl;
@@ -385,6 +388,17 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                         camera.lookAt(0, 0, 0);
                     }
                 }
+
+                if (!is.instance(camera)) {
+                    camera = prepare(
+                        camera,
+                        () => this.get(),
+                        this.parentStore?.get((s) => s.cameraRef)
+                    );
+                }
+                this.get((s) => s.cameraRef).set(
+                    camera as NgtUnknownInstance<NgtCamera>
+                );
             }
 
             // Set up XR (one time only!)
@@ -488,7 +502,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             this.set({ gl, camera, scene, raycaster });
 
             return () => {
-                const gl = this.get((s) => s.gl);
+                const { gl, cameraRef, sceneRef } = this.get();
                 if (gl) {
                     gl.renderLists.dispose();
                     gl.forceContextLoss();
@@ -496,6 +510,9 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                     if (gl.xr && gl.xr.enabled) {
                         gl.xr.setAnimationLoop(null);
                     }
+
+                    cameraRef.complete();
+                    sceneRef.complete();
                 }
             };
         })

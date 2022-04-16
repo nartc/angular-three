@@ -2,21 +2,25 @@ import {
     AnyConstructor,
     coerceBooleanProperty,
     make,
+    NGT_HOST_BONE_REF,
+    NGT_HOST_SKELETON_REF,
+    NGT_HOST_SKINNED_MESH_REF,
     NgtCommonMesh,
     NgtInstance,
     NgtInstanceState,
     NgtMatrix4,
     NgtObject,
+    NgtRef,
     NgtStore,
-    NgtUnknownInstance,
-    provideCommonMeshFactory,
-    provideInstanceFactory,
-    provideObjectFactory,
+    provideCommonMeshRef,
+    provideInstanceRef,
+    provideObjectRef,
     tapEffect,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
     Component,
+    Inject,
     Input,
     NgModule,
     NgZone,
@@ -30,7 +34,7 @@ import * as THREE from 'three';
     selector: 'ngt-skinned-mesh',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonMeshFactory<THREE.SkinnedMesh>(NgtSkinnedMesh)],
+    providers: [provideCommonMeshRef(NgtSkinnedMesh)],
 })
 export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
     @Input() set skeleton(skeleton: THREE.Skeleton) {
@@ -82,7 +86,6 @@ export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
 }
 
 export interface NgtSkeletonState extends NgtInstanceState<THREE.Skeleton> {
-    skeleton: THREE.Skeleton;
     bones: THREE.Bone[];
     boneInverses: THREE.Matrix4[];
     boneMatrices: Float32Array;
@@ -95,9 +98,7 @@ export interface NgtSkeletonState extends NgtInstanceState<THREE.Skeleton> {
     selector: 'ngt-skeleton',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideInstanceFactory<THREE.Skeleton, NgtSkeletonState>(NgtSkeleton),
-    ],
+    providers: [provideInstanceRef(NgtSkeleton)],
 })
 export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
     @Input() set args(args: ConstructorParameters<typeof THREE.Skeleton>) {
@@ -135,14 +136,19 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
     constructor(
         zone: NgZone,
         store: NgtStore,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_HOST_SKINNED_MESH_REF)
+        parentHostRef: NgtRef<THREE.SkinnedMesh>,
         @Optional() private skinnedMesh: NgtSkinnedMesh
     ) {
-        super({
-            zone,
-            store,
-            parentInstanceFactory: () =>
-                skinnedMesh?.instance as unknown as NgtUnknownInstance,
-        });
+        if (parentHostRef && !parentHostRef.value.isSkinnedMesh) {
+            throw new Error(
+                '<ngt-skeleton> can only be used within <ngt-skinned-mesh>'
+            );
+        }
+
+        super(zone, store, skinnedMesh?.instance, parentHostRef);
 
         this.set({
             attach: ['skeleton'],
@@ -153,10 +159,6 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
             boneTextureSize: 0,
             frame: -1,
         });
-    }
-
-    get skeleton(): THREE.Skeleton {
-        return this.get((s) => s.skeleton);
     }
 
     override ngOnInit() {
@@ -224,7 +226,7 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
     selector: 'ngt-bone',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideObjectFactory<THREE.Bone>(NgtBone)],
+    providers: [provideObjectRef(NgtBone)],
 })
 export class NgtBone extends NgtObject<THREE.Bone> {
     constructor(
@@ -232,12 +234,25 @@ export class NgtBone extends NgtObject<THREE.Bone> {
         store: NgtStore,
         @Optional() @SkipSelf() private parentBone: NgtBone,
         @Optional() private parentSkinnedMesh: NgtSkinnedMesh,
-        @Optional() private parentSkeleton: NgtSkeleton
+        @Optional() private parentSkeleton: NgtSkeleton,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_HOST_BONE_REF)
+        private hostBoneRef: NgtRef<THREE.Bone>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_HOST_SKELETON_REF)
+        private hostSkeletonRef: NgtRef<THREE.Skeleton>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_HOST_SKINNED_MESH_REF)
+        private hostSkinnedMeshRef: NgtRef<THREE.SkinnedMesh>
     ) {
         super(
             zone,
             store,
-            () => parentBone?.instance || parentSkinnedMesh?.instance
+            (parentBone?.instance || parentSkinnedMesh?.instance) as NgtRef,
+            (hostBoneRef || hostSkinnedMeshRef) as NgtRef
         );
     }
 
@@ -247,7 +262,9 @@ export class NgtBone extends NgtObject<THREE.Bone> {
 
     protected override postPrepare(bone: THREE.Bone) {
         if (this.parentSkeleton) {
-            this.parentSkeleton.skeleton.bones.push(bone);
+            this.parentSkeleton.instance.value.bones.push(bone);
+        } else if (this.hostSkeletonRef) {
+            this.hostSkeletonRef.value.bones.push(bone);
         }
     }
 }

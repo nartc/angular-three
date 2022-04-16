@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonGeometry,
-    provideCommonGeometryFactory,
+    provideCommonGeometryRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-ring-geometry',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonGeometryFactory<THREE.RingGeometry>(NgtRingGeometry),
-    ],
+    providers: [provideCommonGeometryRef(NgtRingGeometry)],
 })
 export class NgtRingGeometry extends NgtCommonGeometry<THREE.RingGeometry> {
     static ngAcceptInputType_args:

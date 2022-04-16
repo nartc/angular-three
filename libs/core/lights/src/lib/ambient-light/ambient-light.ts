@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonLight,
-    provideCommonLightFactory,
+    provideCommonLightRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-ambient-light',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonLightFactory<THREE.AmbientLight>(NgtAmbientLight)],
+    providers: [provideCommonLightRef(NgtAmbientLight)],
 })
 export class NgtAmbientLight extends NgtCommonLight<THREE.AmbientLight> {
     static ngAcceptInputType_args:

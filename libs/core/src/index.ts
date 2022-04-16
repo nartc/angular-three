@@ -24,6 +24,7 @@ export * from './lib/di/line';
 export * from './lib/di/light';
 export * from './lib/di/sprite';
 export * from './lib/di/texture';
+export * from './lib/di/skinned-mesh';
 
 export * from './lib/pipes/math';
 export * from './lib/pipes/vector';

@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonTexture,
-    provideCommonTextureFactory,
+    provideCommonTextureRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,11 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-compressed-texture',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonTextureFactory<THREE.CompressedTexture>(
-            NgtCompressedTexture
-        ),
-    ],
+    providers: [provideCommonTextureRef(NgtCompressedTexture)],
 })
 export class NgtCompressedTexture extends NgtCommonTexture<THREE.CompressedTexture> {
     override get textureType(): AnyConstructor<THREE.CompressedTexture> {

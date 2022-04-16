@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonMaterial,
-    provideCommonMaterialFactory,
+    provideCommonMaterialRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,12 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-shader-material',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonMaterialFactory<
-            THREE.ShaderMaterial,
-            THREE.ShaderMaterialParameters
-        >(NgtShaderMaterial),
-    ],
+    providers: [provideCommonMaterialRef(NgtShaderMaterial)],
 })
 export class NgtShaderMaterial extends NgtCommonMaterial<
     THREE.ShaderMaterialParameters,

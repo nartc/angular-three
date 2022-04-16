@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonCamera,
-    provideCommonCameraFactory,
+    provideCommonCameraRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-stereo-camera',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonCameraFactory<THREE.StereoCamera>(NgtStereoCamera),
-    ],
+    providers: [provideCommonCameraRef(NgtStereoCamera)],
 })
 export class NgtStereoCamera extends NgtCommonCamera<THREE.StereoCamera> {
     static ngAcceptInputType_args:

@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonLight,
-    provideCommonLightFactory,
+    provideCommonLightRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-directional-light',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonLightFactory<THREE.DirectionalLight>(NgtDirectionalLight),
-    ],
+    providers: [provideCommonLightRef(NgtDirectionalLight)],
 })
 export class NgtDirectionalLight extends NgtCommonLight<THREE.DirectionalLight> {
     static ngAcceptInputType_args:

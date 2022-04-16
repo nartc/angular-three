@@ -1,17 +1,8 @@
-import {
-    Directive,
-    Inject,
-    Input,
-    NgZone,
-    Optional,
-    SkipSelf,
-} from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
-import { NgtStore } from '../stores/store';
-import { NGT_INSTANCE_FACTORY } from '../tokens';
-import type { AnyConstructor, AnyFunction } from '../types';
+import type { AnyConstructor } from '../types';
 
 export interface NgtCommonCurveState<
     TCurve extends THREE.Curve<THREE.Vector> = THREE.Curve<THREE.Vector>
@@ -27,17 +18,6 @@ export abstract class NgtCommonCurve<
 
     @Input() set arcLengthDivisions(arcLengthDivisions: number) {
         this.set({ arcLengthDivisions });
-    }
-
-    constructor(
-        zone: NgZone,
-        store: NgtStore,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction
-    ) {
-        super({ zone, store, parentInstanceFactory });
     }
 
     override ngOnInit() {

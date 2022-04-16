@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonGeometry,
-    provideCommonGeometryFactory,
+    provideCommonGeometryRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-tube-geometry',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonGeometryFactory<THREE.TubeGeometry>(NgtTubeGeometry),
-    ],
+    providers: [provideCommonGeometryRef(NgtTubeGeometry)],
 })
 export class NgtTubeGeometry extends NgtCommonGeometry<THREE.TubeGeometry> {
     static ngAcceptInputType_args:

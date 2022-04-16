@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonMaterial,
-    provideCommonMaterialFactory,
+    provideCommonMaterialRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,12 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-mesh-distance-material',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonMaterialFactory<
-            THREE.MeshDistanceMaterial,
-            THREE.MeshDistanceMaterialParameters
-        >(NgtMeshDistanceMaterial),
-    ],
+    providers: [provideCommonMaterialRef(NgtMeshDistanceMaterial)],
 })
 export class NgtMeshDistanceMaterial extends NgtCommonMaterial<
     THREE.MeshDistanceMaterialParameters,

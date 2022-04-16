@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonLight,
-    provideCommonLightFactory,
+    provideCommonLightRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-rect-area-light',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonLightFactory<THREE.RectAreaLight>(NgtRectAreaLight),
-    ],
+    providers: [provideCommonLightRef(NgtRectAreaLight)],
 })
 export class NgtRectAreaLight extends NgtCommonLight<THREE.RectAreaLight> {
     static ngAcceptInputType_args:

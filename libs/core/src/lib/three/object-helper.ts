@@ -3,8 +3,8 @@ import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import { NGT_OBJECT_FACTORY } from '../tokens';
-import { AnyConstructor, AnyFunction } from '../types';
+import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
+import { AnyConstructor, NgtRef } from '../types';
 
 @Directive()
 export abstract class NgtCommonObjectHelper<
@@ -16,14 +16,13 @@ export abstract class NgtCommonObjectHelper<
         zone: NgZone,
         store: NgtStore,
         @Optional()
-        @Inject(NGT_OBJECT_FACTORY)
-        parentInstanceFactory: AnyFunction
+        @Inject(NGT_OBJECT_REF)
+        parentRef: NgtRef<THREE.Object3D>,
+        @Optional()
+        @Inject(NGT_OBJECT_HOST_REF)
+        parentHostRef: NgtRef<THREE.Object3D>
     ) {
-        super({
-            zone,
-            store,
-            parentInstanceFactory,
-        });
+        super(zone, store, parentRef, parentHostRef);
     }
 
     override ngOnInit() {
@@ -37,14 +36,13 @@ export abstract class NgtCommonObjectHelper<
 
     private readonly init = this.effect<unknown[]>(
         tapEffect((instanceArgs) => {
-            const parentObject = this.parentInstanceFactory?.();
-            if (!parentObject) {
+            if (!this.parent || !this.parent.value) {
                 console.info('Parent is not an object3d');
                 return;
             }
 
             const objectHelper = this.prepareInstance(
-                new this.objectHelperType(parentObject, ...instanceArgs)
+                new this.objectHelperType(this.parent.value, ...instanceArgs)
             );
 
             const scene = this.store.get((s) => s.scene);

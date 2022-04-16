@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonObjectHelper,
-    provideCommonObjectHelperFactory,
+    provideCommonObjectHelperRef,
     Tail,
 } from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
@@ -11,11 +11,7 @@ import * as THREE from 'three';
 @Directive({
     selector: '[ngtSpotLightHelper]',
     exportAs: 'ngtSpotLightHelper',
-    providers: [
-        provideCommonObjectHelperFactory<THREE.SpotLightHelper>(
-            NgtSpotLightHelper
-        ),
-    ],
+    providers: [provideCommonObjectHelperRef(NgtSpotLightHelper)],
 })
 export class NgtSpotLightHelper extends NgtCommonObjectHelper<THREE.SpotLightHelper> {
     static ngAcceptInputType_ngtSpotLightHelper:

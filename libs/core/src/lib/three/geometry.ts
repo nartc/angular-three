@@ -4,8 +4,8 @@ import type { NgtInstanceState } from '../abstracts/instance';
 import { NgtInstance } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import { NGT_OBJECT_FACTORY } from '../tokens';
-import type { AnyConstructor, AnyFunction } from '../types';
+import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
+import type { AnyConstructor, NgtRef } from '../types';
 
 @Directive()
 export abstract class NgtCommonGeometry<
@@ -15,13 +15,17 @@ export abstract class NgtCommonGeometry<
 
     constructor(
         zone: NgZone,
+        store: NgtStore,
         @Optional()
         @SkipSelf()
-        @Inject(NGT_OBJECT_FACTORY)
-        parentInstanceFactory: AnyFunction,
-        store: NgtStore
+        @Inject(NGT_OBJECT_REF)
+        parentRef: NgtRef<THREE.Object3D>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_OBJECT_HOST_REF)
+        parentHostRef: NgtRef<THREE.Object3D>
     ) {
-        super({ zone, store, parentInstanceFactory });
+        super(zone, store, parentRef, parentHostRef);
     }
 
     override ngOnInit() {

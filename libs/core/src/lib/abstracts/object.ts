@@ -11,15 +11,15 @@ import {
 import * as THREE from 'three';
 import { Ref } from '../ref';
 import { NgtStore } from '../stores/store';
-import { NGT_OBJECT_FACTORY } from '../tokens';
+import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
 import type {
-    AnyFunction,
     BooleanInput,
     NgtColor,
     NgtEuler,
     NgtEvent,
     NgtEventHandlers,
     NgtQuaternion,
+    NgtRef,
     NgtRenderState,
     NgtUnknownInstance,
     NgtVector3,
@@ -27,6 +27,7 @@ import type {
 } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { coerceBooleanProperty } from '../utils/coercion';
+import { is } from '../utils/is';
 import { make, makeColor, makeVector3 } from '../utils/make';
 import type { NgtInstanceState } from './instance';
 import { NgtInstance } from './instance';
@@ -61,7 +62,6 @@ export interface NgtObjectInputsState<
     castShadow: boolean;
     receiveShadow: boolean;
     priority: number;
-    useHostParent: boolean;
     visible: boolean;
     matrixAutoUpdate: boolean;
     appendMode: 'immediate' | 'root' | 'none';
@@ -148,12 +148,7 @@ export abstract class NgtObjectInputs<
     @Input() set priority(priority: number) {
         this.set({ priority } as Partial<TObjectInputsState>);
     }
-    get useHostParent() {
-        return this.get((s) => s.useHostParent);
-    }
-    @Input() set useHostParent(useHostParent: boolean) {
-        this.set({ useHostParent } as Partial<TObjectInputsState>);
-    }
+
     get visible() {
         return this.get((s) => s.visible);
     }
@@ -260,10 +255,14 @@ export abstract class NgtObject<
         store: NgtStore,
         @Optional()
         @SkipSelf()
-        @Inject(NGT_OBJECT_FACTORY)
-        protected parentObjectFactory: AnyFunction
+        @Inject(NGT_OBJECT_REF)
+        protected parentObjectRef: NgtRef<THREE.Object3D>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_OBJECT_HOST_REF)
+        protected parentObjectHostRef: NgtRef<THREE.Object3D>
     ) {
-        super({ zone, store, parentInstanceFactory: parentObjectFactory });
+        super(zone, store, parentObjectRef, parentObjectHostRef);
         this.set({
             name: '',
             position: new THREE.Vector3(),
@@ -274,7 +273,6 @@ export abstract class NgtObject<
             castShadow: false,
             receiveShadow: false,
             priority: 0,
-            useHostParent: false,
             visible: true,
             matrixAutoUpdate: true,
             appendMode: 'immediate' as const,
@@ -351,7 +349,7 @@ export abstract class NgtObject<
 
             // append to parent
             if (
-                this.instance.value.isObject3D &&
+                is.object3d(this.instance.value) &&
                 this.get((s) => s.appendMode) !== 'none'
             ) {
                 // appendToParent is late a frame due to appendTo
@@ -422,14 +420,12 @@ export abstract class NgtObject<
     }
 
     private addToParent() {
-        const parentObject = this.parentObjectFactory?.() as THREE.Object3D;
-
-        // if (this.useHostParent) {
-        //     parentObject = this.hostParentObjectFn?.();
-        // }
-
-        if (parentObject && parentObject.uuid !== this.instance.value.uuid) {
-            parentObject.add(this.instance.value);
+        if (
+            this.parent &&
+            this.parent.value &&
+            this.parent.value.uuid !== this.instance.value.uuid
+        ) {
+            this.parent.value.add(this.instance.value);
         } else {
             this.addToScene();
         }
@@ -440,11 +436,12 @@ export abstract class NgtObject<
         if (appendTo && appendTo.value) {
             appendTo.value.remove(this.instance.value);
         } else if (
-            this.parentObjectFactory?.() &&
-            this.parentObjectFactory()?.uuid !== this.instance.value.uuid &&
+            this.parent &&
+            this.parent.value &&
+            this.parent.value.uuid !== this.instance.value.uuid &&
             appendMode === 'immediate'
         ) {
-            this.parentObjectFactory().remove(this.instance.value);
+            this.parent.value.remove(this.instance.value);
         } else {
             const scene = this.store.get((s) => s.scene);
             if (scene) {

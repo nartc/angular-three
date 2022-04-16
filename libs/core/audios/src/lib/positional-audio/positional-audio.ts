@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonAudio,
-    provideCommonAudioFactory,
+    provideCommonAudioRef,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
@@ -11,11 +11,7 @@ import * as THREE from 'three';
     selector: 'ngt-positional-audio',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonAudioFactory<PannerNode, THREE.PositionalAudio>(
-            NgtPositionalAudio
-        ),
-    ],
+    providers: [provideCommonAudioRef(NgtPositionalAudio)],
 })
 export class NgtPositionalAudio extends NgtCommonAudio<
     PannerNode,

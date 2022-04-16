@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonCurve,
-    provideCommonCurveFactory,
+    provideCommonCurveRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-<%= fileName %>',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonCurveFactory<THREE.<%= name %>>(Ngt<%= name %>),
-    ],
+    providers: [provideCommonCurveRef(Ngt<%= name %>)],
 })
 export class Ngt<%= name %> extends NgtCommonCurve<THREE.<%= name %>> {
     static ngAcceptInputType_args:

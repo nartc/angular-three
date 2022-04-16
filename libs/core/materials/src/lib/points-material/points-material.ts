@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonMaterial,
-    provideCommonMaterialFactory,
+    provideCommonMaterialRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,12 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-points-material',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonMaterialFactory<
-            THREE.PointsMaterial,
-            THREE.PointsMaterialParameters
-        >(NgtPointsMaterial),
-    ],
+    providers: [provideCommonMaterialRef(NgtPointsMaterial)],
 })
 export class NgtPointsMaterial extends NgtCommonMaterial<
     THREE.PointsMaterialParameters,

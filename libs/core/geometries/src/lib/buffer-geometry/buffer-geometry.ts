@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonGeometry,
-    provideCommonGeometryFactory,
+    provideCommonGeometryRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-buffer-geometry',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonGeometryFactory<THREE.BufferGeometry>(NgtBufferGeometry),
-    ],
+    providers: [provideCommonGeometryRef(NgtBufferGeometry)],
 })
 export class NgtBufferGeometry extends NgtCommonGeometry<THREE.BufferGeometry> {
     static ngAcceptInputType_args:

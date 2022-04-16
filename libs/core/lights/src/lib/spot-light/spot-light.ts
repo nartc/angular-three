@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonLight,
-    provideCommonLightFactory,
+    provideCommonLightRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-spot-light',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonLightFactory<THREE.SpotLight>(NgtSpotLight)],
+    providers: [provideCommonLightRef(NgtSpotLight)],
 })
 export class NgtSpotLight extends NgtCommonLight<THREE.SpotLight> {
     static ngAcceptInputType_args:

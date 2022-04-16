@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonCamera,
-    provideCommonCameraFactory,
+    provideCommonCameraRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,11 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-<%= fileName %>',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonCameraFactory<THREE.<%= name %>>(
-            Ngt<%= name %>
-        ),
-    ],
+    providers: [provideCommonCameraRef(Ngt<%= name %>)],
 })
 export class Ngt<%= name %> extends NgtCommonCamera<THREE.<%= name %>> {
     static ngAcceptInputType_args:

@@ -5,7 +5,7 @@ import {
     NGT_INSTANCE_FACTORY,
     NgtInstance,
     NgtStore,
-    provideInstanceFactory,
+    provideInstanceRef,
     NgtVector2,
 } from '@angular-three/core';
 import {
@@ -25,7 +25,7 @@ import type { Subscription } from 'rxjs';
     selector: 'ngt-vector2[vector2]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideInstanceFactory<THREE.Vector2>(NgtVector2Attribute)],
+    providers: [provideInstanceRef(NgtVector2Attribute)],
 })
 export class NgtVector2Attribute extends NgtInstance<THREE.Vector2> {
     @Input() set vector2(vector2: NgtVector2) {
@@ -48,17 +48,6 @@ export class NgtVector2Attribute extends NgtInstance<THREE.Vector2> {
     }
 
     private initSubscription?: Subscription;
-
-    constructor(
-        zone: NgZone,
-        store: NgtStore,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction
-    ) {
-        super({ zone, store, parentInstanceFactory });
-    }
 }
 
 @NgModule({

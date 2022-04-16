@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonGeometry,
-    provideCommonGeometryFactory,
+    provideCommonGeometryRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-lathe-geometry',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonGeometryFactory<THREE.LatheGeometry>(NgtLatheGeometry),
-    ],
+    providers: [provideCommonGeometryRef(NgtLatheGeometry)],
 })
 export class NgtLatheGeometry extends NgtCommonGeometry<THREE.LatheGeometry> {
     static ngAcceptInputType_args:

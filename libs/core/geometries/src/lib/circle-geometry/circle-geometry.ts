@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonGeometry,
-    provideCommonGeometryFactory,
+    provideCommonGeometryRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,9 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-circle-geometry',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideCommonGeometryFactory<THREE.CircleGeometry>(NgtCircleGeometry),
-    ],
+    providers: [provideCommonGeometryRef(NgtCircleGeometry)],
 })
 export class NgtCircleGeometry extends NgtCommonGeometry<THREE.CircleGeometry> {
     static ngAcceptInputType_args:

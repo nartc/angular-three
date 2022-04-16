@@ -5,7 +5,7 @@ import {
     NGT_INSTANCE_FACTORY,
     NgtInstance,
     NgtStore,
-    provideInstanceFactory,
+    provideInstanceRef,
     NgtMatrix3,
 } from '@angular-three/core';
 import {
@@ -25,7 +25,7 @@ import type { Subscription } from 'rxjs';
     selector: 'ngt-matrix3[matrix3]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideInstanceFactory<THREE.Matrix3>(NgtMatrix3Attribute)],
+    providers: [provideInstanceRef(NgtMatrix3Attribute)],
 })
 export class NgtMatrix3Attribute extends NgtInstance<THREE.Matrix3> {
     @Input() set matrix3(matrix3: NgtMatrix3) {
@@ -48,17 +48,6 @@ export class NgtMatrix3Attribute extends NgtInstance<THREE.Matrix3> {
     }
 
     private initSubscription?: Subscription;
-
-    constructor(
-        zone: NgZone,
-        store: NgtStore,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_INSTANCE_FACTORY)
-        parentInstanceFactory: AnyFunction
-    ) {
-        super({ zone, store, parentInstanceFactory });
-    }
 }
 
 @NgModule({

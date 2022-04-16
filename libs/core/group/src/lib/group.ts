@@ -1,4 +1,4 @@
-import { NgtObject, provideObjectFactory } from '@angular-three/core';
+import { NgtObject, provideObjectRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -6,7 +6,7 @@ import * as THREE from 'three';
     selector: 'ngt-group',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideObjectFactory<THREE.Group>(NgtGroup)],
+    providers: [provideObjectRef(NgtGroup)],
 })
 export class NgtGroup extends NgtObject<THREE.Group> {
     protected override objectInitFn(): THREE.Group {

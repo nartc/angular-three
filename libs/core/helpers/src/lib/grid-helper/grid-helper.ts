@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonHelper,
-    provideCommonHelperFactory,
+    provideCommonHelperRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -16,7 +16,7 @@ import * as THREE from 'three';
     selector: 'ngt-grid-helper',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonHelperFactory<THREE.GridHelper>(NgtGridHelper)],
+    providers: [provideCommonHelperRef(NgtGridHelper)],
 })
 export class NgtGridHelper extends NgtCommonHelper<THREE.GridHelper> {
     static ngAcceptInputType_args:
