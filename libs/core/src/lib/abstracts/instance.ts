@@ -51,6 +51,7 @@ export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
     instance: NgtRef<TInstance>;
     instanceArgs: unknown[];
     attach: string[] | AttachFunction;
+    noAttach: boolean;
     skipParent: boolean;
     [option: string]: any;
 }
@@ -75,6 +76,12 @@ export abstract class NgtInstance<
 
     @Output() ready = new EventEmitter<TInstance>();
     protected hasEmittedAlready = false;
+
+    @Input() set noAttach(noAttach: BooleanInput) {
+        this.set({
+            noAttach: coerceBooleanProperty(noAttach),
+        } as Partial<TInstanceState>);
+    }
 
     @Input()
     set attach(value: string | string[] | AttachFunction | undefined) {
@@ -140,6 +147,7 @@ export abstract class NgtInstance<
             instance: new Ref(null),
             instanceArgs: [],
             attach: [],
+            noAttach: false,
             skipParent: false,
         } as unknown as TInstanceState);
     }
@@ -293,7 +301,9 @@ export abstract class NgtInstance<
             const setOptionsSub = this.setOptions(this.options$);
 
             // attaching
-            this.attachToParent();
+            if (!this.get((s) => s.noAttach)) {
+                this.attachToParent();
+            }
 
             return () => {
                 setOptionsSub.unsubscribe();
@@ -310,49 +320,47 @@ export abstract class NgtInstance<
 
     private readonly setOptions = this.effect<UnknownRecord>(
         tap((options) => {
-            this.zone.runOutsideAngular(() => {
-                // no options; return early
-                if (Object.keys(options).length === 0) return;
+            // no options; return early
+            if (Object.keys(options).length === 0) return;
 
-                if (this.instance.value) {
-                    // TODO: Material is handling this on their own. To be changed when [parameters] is removed
-                    if (is.material(this.instance.value)) return;
+            if (this.instance.value) {
+                // TODO: Material is handling this on their own. To be changed when [parameters] is removed
+                if (is.material(this.instance.value)) return;
 
-                    const state = this.get();
-                    const customOptions = {} as UnknownRecord;
+                const state = this.get();
+                const customOptions = {} as UnknownRecord;
 
-                    const { rotation, quaternion, ...restOptions } = options;
+                const { rotation, quaternion, ...restOptions } = options;
 
-                    if (rotation) {
-                        customOptions['rotation'] = state['rotation'];
-                    } else if (quaternion) {
-                        customOptions['quaternion'] = state['quaternion'];
-                    }
-
-                    for (const option of Object.keys(restOptions)) {
-                        if (state[option] != null) {
-                            customOptions[option] = state[option];
-                        }
-                    }
-
-                    applyProps(this.instance.value, customOptions);
-
-                    if (is.object3d(this.instance.value)) {
-                        this.instance.value.updateMatrix();
-                    } else if (is.camera(this.instance.value)) {
-                        if (
-                            is.perspective(this.instance.value) ||
-                            is.orthographic(this.instance.value)
-                        ) {
-                            this.instance.value.updateProjectionMatrix();
-                        }
-                        this.instance.value.updateMatrixWorld();
-                    }
-
-                    this.postSetOptions(this.instance.value);
-                    checkNeedsUpdate(this.instance.value);
+                if (rotation) {
+                    customOptions['rotation'] = state['rotation'];
+                } else if (quaternion) {
+                    customOptions['quaternion'] = state['quaternion'];
                 }
-            });
+
+                for (const option of Object.keys(restOptions)) {
+                    if (state[option] != null) {
+                        customOptions[option] = state[option];
+                    }
+                }
+
+                applyProps(this.instance.value, customOptions);
+
+                if (is.object3d(this.instance.value)) {
+                    this.instance.value.updateMatrix();
+                } else if (is.camera(this.instance.value)) {
+                    if (
+                        is.perspective(this.instance.value) ||
+                        is.orthographic(this.instance.value)
+                    ) {
+                        this.instance.value.updateProjectionMatrix();
+                    }
+                    this.instance.value.updateMatrixWorld();
+                }
+
+                this.postSetOptions(this.instance.value);
+                checkNeedsUpdate(this.instance.value);
+            }
         })
     );
 
