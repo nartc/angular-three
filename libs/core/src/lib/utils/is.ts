@@ -18,6 +18,8 @@ export const is = {
         !!a && (a as THREE.Object3D).isObject3D,
     instance: (a: unknown): a is NgtUnknownInstance =>
         !!a && !!(a as UnknownRecord)['__ngt__'],
+    vector3: (a: unknown): a is THREE.Vector3 =>
+        !!a && (a as THREE.Vector3).isVector3,
     fun: (a: unknown): a is Function => typeof a === 'function',
     str: (a: unknown): a is string => typeof a === 'string',
     num: (a: unknown): a is number => typeof a === 'number',
