@@ -22,7 +22,7 @@ import {
     SkipSelf,
 } from '@angular/core';
 import { BlendFunction, Effect } from 'postprocessing';
-import { map, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { NgtEffectComposer } from './effect-composer';
 
 export const NGT_COMMON_EFFECT_REF = new InjectionToken('NgtCommonEffect ref');
@@ -121,33 +121,11 @@ export abstract class NgtCommonEffect<
     }
 
     /**
-     * Sub-classes effects can use this to modify the constructor parameters
-     * before calling new this.effectType()
-     */
-    protected adjustCtorParams(instanceArgs: unknown[]) {
-        return instanceArgs;
-    }
-
-    /**
-     * Sub-classes, if adjust CtorParams, can also use ctorParams$ to ensure ctor is re-invoked
-     */
-    protected get ctorParams$() {
-        return this.instanceArgs$.pipe(map(() => ({})));
-    }
-
-    /**
      * Sub-classes can choose to skip default effect options effect
      */
     protected get skipSetEffectOptions() {
         return false;
     }
-
-    /**
-     * Sub-classes can choose to run additional logic after init
-     * @protected
-     */
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    protected postInit() {}
 
     private readonly init = this.effect<{}>(
         tapEffect(() => {
