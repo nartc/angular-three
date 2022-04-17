@@ -6,7 +6,7 @@ import {
     NgtRenderState,
     provideObjectHosRef,
 } from '@angular-three/core';
-import { NgtGroup, NgtGroupModule } from '@angular-three/core/group';
+import { NgtGroupModule } from '@angular-three/core/group';
 import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
@@ -18,7 +18,6 @@ import {
     NgModule,
     Output,
     TemplateRef,
-    ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
 
@@ -42,9 +41,12 @@ export class NgtSobaBillboardContent {
     selector: 'ngt-soba-billboard',
     template: `
         <ngt-group
-            #ngtGroup
             (ready)="ready.emit($event)"
             (beforeRender)="onBeforeRender($event)"
+            [ref]="instance"
+            [attach]="attach"
+            [skipParent]="skipParent"
+            [noAttach]="noAttach"
             [name]="name"
             [position]="position"
             [rotation]="rotation"
@@ -77,7 +79,7 @@ export class NgtSobaBillboardContent {
             <ng-container
                 *ngIf="content"
                 [ngTemplateOutlet]="content.templateRef"
-                [ngTemplateOutletContext]="{ billboard: ngtGroup.instance }"
+                [ngTemplateOutletContext]="{ billboard: instance }"
             ></ng-container>
         </ngt-group>
     `,
@@ -85,7 +87,7 @@ export class NgtSobaBillboardContent {
     providers: [
         provideObjectHosRef(
             NgtSobaBillboard,
-            (billboard) => billboard.group.instance,
+            (billboard) => billboard.instance,
             (billboard) => billboard.parentRef
         ),
     ],
@@ -124,8 +126,6 @@ export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
     private _lockZ = false;
 
     @ContentChild(NgtSobaBillboardContent) content?: NgtSobaBillboardContent;
-
-    @ViewChild(NgtGroup, { static: true }) group!: NgtGroup;
 
     @Output() beforeRender = new EventEmitter<{
         state: NgtRenderState;

@@ -5,10 +5,7 @@ import {
     NgtRenderState,
     provideObjectHosRef,
 } from '@angular-three/core';
-import {
-    NgtPrimitive,
-    NgtPrimitiveModule,
-} from '@angular-three/core/primitive';
+import { NgtPrimitiveModule } from '@angular-three/core/primitive';
 import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
@@ -20,7 +17,6 @@ import {
     NgModule,
     Output,
     TemplateRef,
-    ViewChild,
 } from '@angular/core';
 import { tap } from 'rxjs';
 // @ts-ignore
@@ -47,10 +43,13 @@ export class NgtSobaTextContent {
     template: `
         <ngt-primitive
             *ngIf="textMesh"
-            #textPrimitive
             [object]="$any(textMesh)"
             (ready)="ready.emit($event)"
             (beforeRender)="beforeRender.emit($event)"
+            [ref]="instance"
+            [attach]="attach"
+            [skipParent]="skipParent"
+            [noAttach]="noAttach"
             [name]="name"
             [position]="position"
             [rotation]="rotation"
@@ -83,7 +82,7 @@ export class NgtSobaTextContent {
             <ng-container
                 *ngIf="content"
                 [ngTemplateOutlet]="content.templateRef"
-                [ngTemplateOutletContext]="{ textMesh: textPrimitive.instance }"
+                [ngTemplateOutletContext]="{ textMesh: instance }"
             ></ng-container>
         </ngt-primitive>
     `,
@@ -91,7 +90,7 @@ export class NgtSobaTextContent {
     providers: [
         provideObjectHosRef(
             NgtSobaText,
-            (text) => text.primitive.instance,
+            (text) => text.instance,
             (text) => text.parentRef
         ),
     ],
@@ -218,8 +217,6 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
     @Output() sync = new EventEmitter<TextMeshImpl>();
 
     @ContentChild(NgtSobaTextContent) content?: NgtSobaTextContent;
-
-    @ViewChild(NgtPrimitive) primitive!: NgtPrimitive;
 
     private _textMesh!: TextMeshImpl;
     get textMesh() {

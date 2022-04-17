@@ -11,7 +11,7 @@ import {
     startWithUndefined,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
-import { NgtMesh, NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtTextureLoader } from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
 import {
@@ -28,7 +28,6 @@ import {
     Output,
     SkipSelf,
     TemplateRef,
-    ViewChild,
 } from '@angular/core';
 import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 import * as THREE from 'three';
@@ -86,11 +85,14 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
             ></ngt-soba-image-shader-material>
 
             <ngt-mesh
-                #ngtMesh
                 (ready)="ready.emit($event)"
                 (beforeRender)="beforeRender.emit($event)"
                 [material]="ngtMaterial.instance"
                 [geometry]="ngtPlane.instance"
+                [ref]="instance"
+                [attach]="attach"
+                [skipParent]="skipParent"
+                [noAttach]="noAttach"
                 [name]="name"
                 [position]="position"
                 [rotation]="rotation"
@@ -123,7 +125,7 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
                 <ng-container
                     *ngIf="content"
                     [ngTemplateOutlet]="content.templateRef"
-                    [ngTemplateOutletContext]="{ image: ngtMesh.instance }"
+                    [ngTemplateOutletContext]="{ image: instance }"
                 ></ng-container>
             </ngt-mesh>
         </ng-container>
@@ -133,7 +135,7 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
         NgtTextureLoader,
         provideObjectHosRef(
             NgtSobaImage,
-            (image) => image.image.instance,
+            (image) => image.instance,
             (image) => image.parentRef
         ),
     ],
@@ -168,8 +170,6 @@ export class NgtSobaImage extends NgtObjectInputs<
     }
 
     @ContentChild(NgtSobaImageContent) content?: NgtSobaImageContent;
-
-    @ViewChild(NgtMesh, { static: true }) image!: NgtMesh;
 
     texture$!: Observable<THREE.Texture>;
     imageBounds!: [number, number];
