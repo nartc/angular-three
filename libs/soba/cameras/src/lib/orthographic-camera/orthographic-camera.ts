@@ -1,213 +1,187 @@
 import {
-    AnyFunction,
-    createExtenderProvider,
-    createHostParentObjectProvider,
-    createParentObjectProvider,
-    NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-    NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-    NGT_PARENT_OBJECT,
     NgtCamera,
-    NgtCanvasStore,
-    NgtExtender,
-    NgtObjectInputsController,
-    NgtObjectInputsControllerModule,
-    NgtSize,
-    NgtStore,
-    startWithUndefined,
+    NgtRef,
+    provideObjectHosRef,
     tapEffect,
 } from '@angular-three/core';
-import { NgtOrthographicCameraModule } from '@angular-three/core/cameras';
+import {
+    NgtOrthographicCamera,
+    NgtOrthographicCameraModule,
+} from '@angular-three/core/cameras';
 import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
-    Inject,
+    ContentChild,
+    Directive,
     Input,
     NgModule,
-    NgZone,
-    Optional,
-    SimpleChanges,
-    SkipSelf,
+    TemplateRef,
 } from '@angular/core';
-import { startWith, tap } from 'rxjs';
 import * as THREE from 'three';
 
-export interface NgtSobaOrthographicCameraState {
-    makeDefault: boolean;
-    manual: boolean;
-    near?: number;
-    far?: number;
-    orthographicCamera?: THREE.OrthographicCamera;
+@Directive({
+    selector: 'ng-template[ngt-soba-orthographic-camera-content]',
+})
+export class NgtSobaOrthographicCameraContent {
+    constructor(
+        public templateRef: TemplateRef<{
+            camera: NgtRef<THREE.OrthographicCamera>;
+        }>
+    ) {}
+
+    static ngTemplateContextGuard(
+        dir: NgtSobaOrthographicCameraContent,
+        ctx: any
+    ): ctx is { camera: NgtRef<THREE.OrthographicCamera> } {
+        return true;
+    }
 }
 
 @Component({
     selector: 'ngt-soba-orthographic-camera',
     template: `
         <ngt-orthographic-camera
-            [args]="(cameraArgs$ | async)!"
-            [name]="objectInputsController.name"
-            [position]="objectInputsController.position"
-            [rotation]="objectInputsController.rotation"
-            [quaternion]="objectInputsController.quaternion"
-            [scale]="objectInputsController.scale"
-            [color]="objectInputsController.color"
-            [userData]="objectInputsController.userData"
-            [castShadow]="objectInputsController.castShadow"
-            [receiveShadow]="objectInputsController.receiveShadow"
-            [visible]="objectInputsController.visible"
-            [matrixAutoUpdate]="objectInputsController.matrixAutoUpdate"
-            [dispose]="objectInputsController.dispose"
-            [raycast]="objectInputsController.raycast"
-            [appendMode]="objectInputsController.appendMode"
-            [appendTo]="objectInputsController.appendTo"
-            (click)="objectInputsController.click.emit($event)"
-            (contextmenu)="objectInputsController.contextmenu.emit($event)"
-            (dblclick)="objectInputsController.dblclick.emit($event)"
-            (pointerup)="objectInputsController.pointerup.emit($event)"
-            (pointerdown)="objectInputsController.pointerdown.emit($event)"
-            (pointerover)="objectInputsController.pointerover.emit($event)"
-            (pointerout)="objectInputsController.pointerout.emit($event)"
-            (pointerenter)="objectInputsController.pointerenter.emit($event)"
-            (pointerleave)="objectInputsController.pointerleave.emit($event)"
-            (pointermove)="objectInputsController.pointermove.emit($event)"
-            (pointermissed)="objectInputsController.pointermissed.emit($event)"
-            (pointercancel)="objectInputsController.pointercancel.emit($event)"
-            (wheel)="objectInputsController.wheel.emit($event)"
-            (ready)="object = $event"
-            (animateReady)="
-                animateReady.emit({ entity: object, state: $event.state })
-            "
+            [args]="instanceArgs"
+            [left]="size.width / -2"
+            [right]="size.width / 2"
+            [top]="size.height / 2"
+            [bottom]="size.height / -2"
+            [near]="near"
+            [far]="far"
+            [ref]="instance"
+            [attach]="attach"
+            [skipParent]="skipParent"
+            [noAttach]="noAttach"
+            [name]="name"
+            (ready)="ready.emit($event)"
+            (beforeRender)="beforeRender.emit($event)"
+            [position]="position"
+            [rotation]="rotation"
+            [quaternion]="quaternion"
+            [scale]="scale"
+            [color]="color"
+            [userData]="userData"
+            [castShadow]="castShadow"
+            [receiveShadow]="receiveShadow"
+            [visible]="visible"
+            [matrixAutoUpdate]="matrixAutoUpdate"
+            [dispose]="dispose"
+            [raycast]="raycast"
+            [appendMode]="appendMode"
+            [appendTo]="appendTo"
+            (click)="click.emit($event)"
+            (contextmenu)="contextmenu.emit($event)"
+            (dblclick)="dblclick.emit($event)"
+            (pointerup)="pointerup.emit($event)"
+            (pointerdown)="pointerdown.emit($event)"
+            (pointerover)="pointerover.emit($event)"
+            (pointerout)="pointerout.emit($event)"
+            (pointerenter)="pointerenter.emit($event)"
+            (pointerleave)="pointerleave.emit($event)"
+            (pointermove)="pointermove.emit($event)"
+            (pointermissed)="pointermissed.emit($event)"
+            (pointercancel)="pointercancel.emit($event)"
+            (wheel)="wheel.emit($event)"
         >
             <ng-container
-                *ngIf="object"
-                [ngTemplateOutlet]="contentTemplate"
+                *ngIf="content"
+                [ngTemplateOutlet]="content.templateRef"
+                [ngTemplateOutletContext]="{ camera: instance }"
             ></ng-container>
         </ngt-orthographic-camera>
-        <ng-template #contentTemplate>
-            <ng-content></ng-content>
-        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-        NgtStore,
-        createExtenderProvider(NgtSobaOrthographicCamera),
-        createParentObjectProvider(
+        provideObjectHosRef(
             NgtSobaOrthographicCamera,
-            (camera) => camera.object
+            (camera) => camera.instance,
+            (camera) => camera.parentRef
         ),
-        createHostParentObjectProvider(NgtSobaOrthographicCamera),
     ],
 })
-export class NgtSobaOrthographicCamera extends NgtExtender<THREE.OrthographicCamera> {
+export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
     @Input() set makeDefault(makeDefault: boolean) {
-        this.store.set({ makeDefault });
+        this.set({ makeDefault });
     }
 
     @Input() set manual(manual: boolean) {
-        this.store.set({ manual });
+        this.set({ manual });
     }
 
-    @Input() set near(near: number) {
-        this.store.set({ near });
+    @ContentChild(NgtSobaOrthographicCameraContent)
+    content?: NgtSobaOrthographicCameraContent;
+
+    get size() {
+        return this.store.get((s) => s.size);
     }
 
-    @Input() set far(far: number) {
-        this.store.set({ far });
+    override get near() {
+        return this.get((s) => s['near']);
     }
 
-    private projectMatrixParams$ = this.store.select(
-        this.canvasStore.select((s) => s.size),
-        this.store.select((s) => s.near).pipe(startWithUndefined()),
-        this.store.select((s) => s.far).pipe(startWithUndefined()),
-        this.objectInputsController.changes$.pipe(startWith({})),
-        (size, near, far, changes) => ({ size, near, far, changes })
-    );
-
-    private cameraParams$ = this.store.select(
-        this.canvasStore.select((s) => s.camera),
-        this.store.select((s) => s.orthographicCamera),
-        this.store.select((s) => s.makeDefault),
-        (camera, orthographicCamera, makeDefault) => ({
-            camera,
-            orthographicCamera,
-            makeDefault,
-        })
-    );
-
-    readonly cameraArgs$ = this.store.select(
-        this.canvasStore.select((s) => s.size),
-        this.store.select((s) => s.near).pipe(startWithUndefined()),
-        this.store.select((s) => s.far).pipe(startWithUndefined()),
-        (size, near, far) =>
-            [
-                size.width / -2,
-                size.width / 2,
-                size.height / 2,
-                size.height / -2,
-                near as number,
-                far as number,
-            ] as ConstructorParameters<typeof THREE.OrthographicCamera>
-    );
-
-    constructor(
-        private zone: NgZone,
-        private canvasStore: NgtCanvasStore,
-        @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-        public objectInputsController: NgtObjectInputsController,
-        private store: NgtStore<NgtSobaOrthographicCameraState>,
-        @Optional()
-        @SkipSelf()
-        @Inject(NGT_PARENT_OBJECT)
-        public parentObjectFn: AnyFunction
-    ) {
-        super();
-        this.store.set({ makeDefault: false, manual: false });
+    override get far() {
+        return this.get((s) => s['far']);
     }
 
-    ngOnInit() {
+    protected override get setOptionsTrigger$() {
+        return this.select((s) => s['manual']);
+    }
+
+    protected override postSetOptions(camera: THREE.OrthographicCamera) {
+        const manual = this.get((s) => s['manual']);
+        if (!manual) {
+            camera.updateProjectionMatrix();
+        }
+    }
+
+    override ngOnInit() {
+        super.ngOnInit();
         this.zone.runOutsideAngular(() => {
-            this.store.onCanvasReady(this.canvasStore.ready$, () => {
-                this.updateProjectMatrix(this.projectMatrixParams$);
-                this.setCamera(this.cameraParams$);
+            this.onCanvasReady(this.store.ready$, () => {
+                this.setDefaultCamera(
+                    this.select(
+                        this.select((s) => s.instance),
+                        this.select((s) => s.instance.value),
+                        this.select((s) => s['makeDefault']),
+                        this.store.select((s) => s.camera),
+                        this.store.select((s) => s.cameraRef)
+                    )
+                );
             });
         });
     }
 
-    private readonly updateProjectMatrix = this.store.effect<{
-        size: NgtSize;
-        near: number | undefined;
-        far: number | undefined;
-        changes: SimpleChanges;
-    }>(
-        tap(() => {
-            const { manual, orthographicCamera } = this.store.get();
-            if (orthographicCamera && !manual) {
-                orthographicCamera.updateProjectionMatrix();
-            }
-        })
-    );
+    private readonly setDefaultCamera = this.effect<{}>(
+        tapEffect(() => {
+            const camera = this.store.get((s) => s.camera);
+            const cameraRef = this.store.get((s) => s.cameraRef);
+            const makeDefault = this.get((s) => s['makeDefault']);
 
-    private readonly setCamera = this.store.effect<{
-        camera: NgtCamera;
-        orthographicCamera: THREE.OrthographicCamera | undefined;
-        makeDefault: boolean;
-    }>(
-        tapEffect(({ camera, orthographicCamera, makeDefault }) => {
-            if (makeDefault && orthographicCamera) {
-                this.canvasStore.set({ camera: orthographicCamera });
+            if (this.instance.value && makeDefault) {
+                const oldCamera = camera;
+                const oldCameraRef = cameraRef;
+                this.store.set({
+                    camera: this.instance.value,
+                    cameraRef: this.instance as NgtRef<NgtCamera>,
+                });
+
+                return () => {
+                    this.store.set({
+                        camera: oldCamera,
+                        cameraRef: oldCameraRef,
+                    });
+                };
             }
 
-            return () => {
-                this.canvasStore.set({ camera });
-            };
+            return;
         })
     );
 }
 
 @NgModule({
-    declarations: [NgtSobaOrthographicCamera],
-    exports: [NgtSobaOrthographicCamera, NgtObjectInputsControllerModule],
-    imports: [CommonModule, NgtOrthographicCameraModule],
+    declarations: [NgtSobaOrthographicCamera, NgtSobaOrthographicCameraContent],
+    exports: [NgtSobaOrthographicCamera, NgtSobaOrthographicCameraContent],
+    imports: [NgtOrthographicCameraModule, CommonModule],
 })
 export class NgtSobaOrthographicCameraModule {}
