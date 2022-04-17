@@ -8,6 +8,7 @@ import {
 import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
+import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -29,6 +30,8 @@ import { Mesh } from 'three';
             <sandbox-cube [position]="[1.2, 0, 0]"></sandbox-cube>
 
             <ngt-stats></ngt-stats>
+
+            <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
         </ngt-canvas>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -77,6 +80,7 @@ export class CubeComponent {
         NgtMeshModule,
         NgtBoxGeometryModule,
         NgtMeshStandardMaterialModule,
+        NgtSobaOrbitControlsModule,
     ],
 })
 export class SandboxCubesModule {}
