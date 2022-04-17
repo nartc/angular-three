@@ -493,3 +493,41 @@ export abstract class NgtObject<
         };
     }
 }
+
+/**
+ * to be copied
+    (ready)="ready.emit($event)"
+    (beforeRender)="beforeRender.emit($event)"
+    [ref]="instance"
+    [attach]="attach"
+    [skipParent]="skipParent"
+    [noAttach]="noAttach"
+    [name]="name"
+    [position]="position"
+    [rotation]="rotation"
+    [quaternion]="quaternion"
+    [scale]="scale"
+    [color]="color"
+    [userData]="userData"
+    [castShadow]="castShadow"
+    [receiveShadow]="receiveShadow"
+    [visible]="visible"
+    [matrixAutoUpdate]="matrixAutoUpdate"
+    [dispose]="dispose"
+    [raycast]="raycast"
+    [appendMode]="appendMode"
+    [appendTo]="appendTo"
+    (click)="click.emit($event)"
+    (contextmenu)="contextmenu.emit($event)"
+    (dblclick)="dblclick.emit($event)"
+    (pointerup)="pointerup.emit($event)"
+    (pointerdown)="pointerdown.emit($event)"
+    (pointerover)="pointerover.emit($event)"
+    (pointerout)="pointerout.emit($event)"
+    (pointerenter)="pointerenter.emit($event)"
+    (pointerleave)="pointerleave.emit($event)"
+    (pointermove)="pointermove.emit($event)"
+    (pointermissed)="pointermissed.emit($event)"
+    (pointercancel)="pointercancel.emit($event)"
+    (wheel)="wheel.emit($event)"
+ */
