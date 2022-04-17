@@ -154,14 +154,18 @@ export abstract class NgtObjectInputs<
     get visible() {
         return this.get((s) => s.visible);
     }
-    @Input() set visible(visible: boolean) {
-        this.set({ visible } as Partial<TObjectInputsState>);
+    @Input() set visible(visible: BooleanInput) {
+        this.set({
+            visible: coerceBooleanProperty(visible),
+        } as Partial<TObjectInputsState>);
     }
     get matrixAutoUpdate() {
         return this.get((s) => s.matrixAutoUpdate);
     }
-    @Input() set matrixAutoUpdate(matrixAutoUpdate: boolean) {
-        this.set({ matrixAutoUpdate } as Partial<TObjectInputsState>);
+    @Input() set matrixAutoUpdate(matrixAutoUpdate: BooleanInput) {
+        this.set({
+            matrixAutoUpdate: coerceBooleanProperty(matrixAutoUpdate),
+        } as Partial<TObjectInputsState>);
     }
 
     get userData() {

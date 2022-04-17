@@ -6,7 +6,8 @@ import {
     NgtPreObjectInit,
 } from '../abstracts/object';
 import { tapEffect } from '../stores/component-store';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, BooleanInput } from '../types';
+import { coerceBooleanProperty } from '../utils/coercion';
 
 export interface NgtCommonAudioState<
     TAudioNode extends AudioNode = GainNode,
@@ -48,8 +49,8 @@ export abstract class NgtCommonAudio<
         this.set({ detune });
     }
 
-    @Input() set loop(loop: boolean) {
-        this.set({ loop });
+    @Input() set loop(loop: BooleanInput) {
+        this.set({ loop: coerceBooleanProperty(loop) });
     }
 
     @Input() set loopStart(loopStart: number) {
@@ -68,12 +69,14 @@ export abstract class NgtCommonAudio<
         this.set({ playbackRate });
     }
 
-    @Input() set isPlaying(isPlaying: boolean) {
-        this.set({ isPlaying });
+    @Input() set isPlaying(isPlaying: BooleanInput) {
+        this.set({ isPlaying: coerceBooleanProperty(isPlaying) });
     }
 
-    @Input() set hasPlaybackControl(hasPlaybackControl: boolean) {
-        this.set({ hasPlaybackControl });
+    @Input() set hasPlaybackControl(hasPlaybackControl: BooleanInput) {
+        this.set({
+            hasPlaybackControl: coerceBooleanProperty(hasPlaybackControl),
+        });
     }
 
     @Input() set sourceType(sourceType: string) {
@@ -92,8 +95,8 @@ export abstract class NgtCommonAudio<
         this.set({ duration });
     }
 
-    @Input() set autoplay(autoplay: boolean) {
-        this.set({ autoplay });
+    @Input() set autoplay(autoplay: BooleanInput) {
+        this.set({ autoplay: coerceBooleanProperty(autoplay) });
     }
 
     protected override objectInitFn(): TAudio {

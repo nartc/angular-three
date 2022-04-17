@@ -1,4 +1,5 @@
-import type { NgtTriple } from '@angular-three/core';
+import type { BooleanInput, NgtTriple } from '@angular-three/core';
+import { coerceBooleanProperty } from '@angular-three/core';
 import { Directive, Input, NgModule, OnInit } from '@angular/core';
 import type {
     Broadphase,
@@ -18,8 +19,10 @@ export class NgtPhysics implements OnInit {
         this.physicsStore.set({ size });
     }
 
-    @Input() set shouldInvalidate(shouldInvalidate: boolean) {
-        this.physicsStore.set({ shouldInvalidate });
+    @Input() set shouldInvalidate(shouldInvalidate: BooleanInput) {
+        this.physicsStore.set({
+            shouldInvalidate: coerceBooleanProperty(shouldInvalidate),
+        });
     }
 
     @Input() set tolerance(tolerance: number) {
@@ -34,8 +37,10 @@ export class NgtPhysics implements OnInit {
         this.physicsStore.set({ iterations });
     }
 
-    @Input() set allowSleep(allowSleep: boolean) {
-        this.physicsStore.set({ allowSleep });
+    @Input() set allowSleep(allowSleep: BooleanInput) {
+        this.physicsStore.set({
+            allowSleep: coerceBooleanProperty(allowSleep),
+        });
     }
 
     @Input() set broadphase(broadphase: Broadphase) {
@@ -46,8 +51,10 @@ export class NgtPhysics implements OnInit {
         this.physicsStore.set({ gravity });
     }
 
-    @Input() set quatNormalizeFast(quatNormalizeFast: boolean) {
-        this.physicsStore.set({ quatNormalizeFast });
+    @Input() set quatNormalizeFast(quatNormalizeFast: BooleanInput) {
+        this.physicsStore.set({
+            quatNormalizeFast: coerceBooleanProperty(quatNormalizeFast),
+        });
     }
 
     @Input() set quatNormalizeSkip(quatNormalizeSkip: number) {

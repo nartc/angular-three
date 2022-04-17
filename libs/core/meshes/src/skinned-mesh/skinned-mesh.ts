@@ -1,6 +1,7 @@
 import {
     AnyConstructor,
     AnyFunction,
+    BooleanInput,
     coerceBooleanProperty,
     make,
     NGT_HOST_BONE_REF,
@@ -42,7 +43,7 @@ export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
         this.set({ skeleton });
     }
 
-    @Input() set useVertexTexture(useVertexTexture: boolean) {
+    @Input() set useVertexTexture(useVertexTexture: BooleanInput) {
         this.set({ useVertexTexture: coerceBooleanProperty(useVertexTexture) });
     }
 

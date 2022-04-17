@@ -1,4 +1,6 @@
 import {
+    BooleanInput,
+    coerceBooleanProperty,
     NgtCamera,
     NgtRef,
     provideObjectHosRef,
@@ -101,12 +103,12 @@ export class NgtSobaOrthographicCameraContent {
     ],
 })
 export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
-    @Input() set makeDefault(makeDefault: boolean) {
-        this.set({ makeDefault });
+    @Input() set makeDefault(makeDefault: BooleanInput) {
+        this.set({ makeDefault: coerceBooleanProperty(makeDefault) });
     }
 
-    @Input() set manual(manual: boolean) {
-        this.set({ manual });
+    @Input() set manual(manual: BooleanInput) {
+        this.set({ manual: coerceBooleanProperty(manual) });
     }
 
     @ContentChild(NgtSobaOrthographicCameraContent)

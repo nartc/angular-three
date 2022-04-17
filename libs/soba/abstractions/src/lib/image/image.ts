@@ -1,5 +1,7 @@
 import {
     AnyFunction,
+    BooleanInput,
+    coerceBooleanProperty,
     NGT_INSTANCE_HOST_REF,
     NGT_INSTANCE_REF,
     NgtObjectInputs,
@@ -165,8 +167,8 @@ export class NgtSobaImage extends NgtObjectInputs<
         this.set({ grayscale });
     }
 
-    @Input() set toneMapped(toneMapped: boolean) {
-        this.set({ toneMapped });
+    @Input() set toneMapped(toneMapped: BooleanInput) {
+        this.set({ toneMapped: coerceBooleanProperty(toneMapped) });
     }
 
     @ContentChild(NgtSobaImageContent) content?: NgtSobaImageContent;

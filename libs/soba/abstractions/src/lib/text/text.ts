@@ -1,4 +1,6 @@
 import {
+    BooleanInput,
+    coerceBooleanProperty,
     NgtColor,
     NgtObjectInputs,
     NgtRef,
@@ -206,8 +208,8 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
         this.set({ fillOpacity });
     }
 
-    @Input() set debugSDF(debugSDF: boolean) {
-        this.set({ debugSDF });
+    @Input() set debugSDF(debugSDF: BooleanInput) {
+        this.set({ debugSDF: coerceBooleanProperty(debugSDF) });
     }
 
     @Output() beforeRender = new EventEmitter<{

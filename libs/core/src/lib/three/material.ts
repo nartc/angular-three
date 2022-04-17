@@ -14,8 +14,14 @@ import { NgtInstance } from '../abstracts/instance';
 import { startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
-import type { AnyConstructor, AnyFunction, UnknownRecord } from '../types';
+import type {
+    AnyConstructor,
+    AnyFunction,
+    BooleanInput,
+    UnknownRecord,
+} from '../types';
 import { NgtRef } from '../types';
+import { coerceBooleanProperty } from '../utils/coercion';
 
 export interface NgtCommonMaterialState<
     TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
@@ -78,8 +84,8 @@ export abstract class NgtCommonMaterial<
         this.set({ alphaTest });
     }
 
-    @Input() set alphaToCoverage(alphaToCoverage: boolean) {
-        this.set({ alphaToCoverage });
+    @Input() set alphaToCoverage(alphaToCoverage: BooleanInput) {
+        this.set({ alphaToCoverage: coerceBooleanProperty(alphaToCoverage) });
     }
 
     @Input() set blendDst(blendDst: THREE.BlendingDstFactor) {
@@ -112,20 +118,20 @@ export abstract class NgtCommonMaterial<
         this.set({ blendSrcAlpha });
     }
 
-    @Input() set clipIntersection(clipIntersection: boolean) {
-        this.set({ clipIntersection });
+    @Input() set clipIntersection(clipIntersection: BooleanInput) {
+        this.set({ clipIntersection: coerceBooleanProperty(clipIntersection) });
     }
 
     @Input() set clippingPlanes(clippingPlanes: Plane[]) {
         this.set({ clippingPlanes });
     }
 
-    @Input() set clipShadows(clipShadows: boolean) {
-        this.set({ clipShadows });
+    @Input() set clipShadows(clipShadows: BooleanInput) {
+        this.set({ clipShadows: coerceBooleanProperty(clipShadows) });
     }
 
-    @Input() set colorWrite(colorWrite: boolean) {
-        this.set({ colorWrite });
+    @Input() set colorWrite(colorWrite: BooleanInput) {
+        this.set({ colorWrite: coerceBooleanProperty(colorWrite) });
     }
 
     @Input() set defines(defines: any) {
@@ -136,16 +142,16 @@ export abstract class NgtCommonMaterial<
         this.set({ depthFunc });
     }
 
-    @Input() set depthTest(depthTest: boolean) {
-        this.set({ depthTest });
+    @Input() set depthTest(depthTest: BooleanInput) {
+        this.set({ depthTest: coerceBooleanProperty(depthTest) });
     }
 
-    @Input() set depthWrite(depthWrite: boolean) {
-        this.set({ depthWrite });
+    @Input() set depthWrite(depthWrite: BooleanInput) {
+        this.set({ depthWrite: coerceBooleanProperty(depthWrite) });
     }
 
-    @Input() set fog(fog: boolean) {
-        this.set({ fog });
+    @Input() set fog(fog: BooleanInput) {
+        this.set({ fog: coerceBooleanProperty(fog) });
     }
 
     @Input() set name(name: string) {
@@ -156,8 +162,8 @@ export abstract class NgtCommonMaterial<
         this.set({ opacity });
     }
 
-    @Input() set polygonOffset(polygonOffset: boolean) {
-        this.set({ polygonOffset });
+    @Input() set polygonOffset(polygonOffset: BooleanInput) {
+        this.set({ polygonOffset: coerceBooleanProperty(polygonOffset) });
     }
 
     @Input() set polygonOffsetFactor(polygonOffsetFactor: number) {
@@ -172,12 +178,14 @@ export abstract class NgtCommonMaterial<
         this.set({ precision });
     }
 
-    @Input() set premultipliedAlpha(premultipliedAlpha: boolean) {
-        this.set({ premultipliedAlpha });
+    @Input() set premultipliedAlpha(premultipliedAlpha: BooleanInput) {
+        this.set({
+            premultipliedAlpha: coerceBooleanProperty(premultipliedAlpha),
+        });
     }
 
-    @Input() set dithering(dithering: boolean) {
-        this.set({ dithering });
+    @Input() set dithering(dithering: BooleanInput) {
+        this.set({ dithering: coerceBooleanProperty(dithering) });
     }
 
     @Input() set side(side: THREE.Side) {
@@ -188,28 +196,28 @@ export abstract class NgtCommonMaterial<
         this.set({ shadowSide });
     }
 
-    @Input() set toneMapped(toneMapped: boolean) {
-        this.set({ toneMapped });
+    @Input() set toneMapped(toneMapped: BooleanInput) {
+        this.set({ toneMapped: coerceBooleanProperty(toneMapped) });
     }
 
-    @Input() set transparent(transparent: boolean) {
-        this.set({ transparent });
+    @Input() set transparent(transparent: BooleanInput) {
+        this.set({ transparent: coerceBooleanProperty(transparent) });
     }
 
-    @Input() set vertexColors(vertexColors: boolean) {
-        this.set({ vertexColors });
+    @Input() set vertexColors(vertexColors: BooleanInput) {
+        this.set({ vertexColors: coerceBooleanProperty(vertexColors) });
     }
 
-    @Input() set visible(visible: boolean) {
-        this.set({ visible });
+    @Input() set visible(visible: BooleanInput) {
+        this.set({ visible: coerceBooleanProperty(visible) });
     }
 
     @Input() set format(format: THREE.PixelFormat) {
         this.set({ format });
     }
 
-    @Input() set stencilWrite(stencilWrite: boolean) {
-        this.set({ stencilWrite });
+    @Input() set stencilWrite(stencilWrite: BooleanInput) {
+        this.set({ stencilWrite: coerceBooleanProperty(stencilWrite) });
     }
 
     @Input() set stencilFunc(stencilFunc: THREE.StencilFunc) {

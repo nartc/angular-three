@@ -1,4 +1,9 @@
-import { NgtComponentStore, NgtStore } from '@angular-three/core';
+import {
+    BooleanInput,
+    coerceBooleanProperty,
+    NgtComponentStore,
+    NgtStore,
+} from '@angular-three/core';
 import { Directive, Input, NgModule, NgZone, OnInit } from '@angular/core';
 import * as THREE from 'three';
 
@@ -16,8 +21,8 @@ export class NgtSobaPreload
     extends NgtComponentStore<NgtSobaPreloadState>
     implements OnInit
 {
-    @Input() set all(v: boolean) {
-        this.set({ all: v });
+    @Input() set all(v: BooleanInput) {
+        this.set({ all: coerceBooleanProperty(v) });
     }
 
     @Input() set scene(v: THREE.Object3D) {
