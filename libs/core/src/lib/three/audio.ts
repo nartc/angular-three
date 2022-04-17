@@ -108,24 +108,26 @@ export abstract class NgtCommonAudio<
         return new this.audioType(listener);
     }
 
+    protected override preInit() {
+        this.set({
+            buffer: null,
+            detune: 0,
+            loop: false,
+            loopStart: 0,
+            loopEnd: 0,
+            offset: 0,
+            duration: undefined,
+            playbackRate: 1,
+            isPlaying: false,
+            hasPlaybackControl: true,
+            sourceType: 'empty',
+            source: null,
+            filters: [],
+        });
+    }
+
     protected override get preObjectInit(): NgtPreObjectInit {
         return (initFn) => {
-            this.set({
-                buffer: null,
-                detune: 0,
-                loop: false,
-                loopStart: 0,
-                loopEnd: 0,
-                offset: 0,
-                duration: undefined,
-                playbackRate: 1,
-                isPlaying: false,
-                hasPlaybackControl: true,
-                sourceType: 'empty',
-                source: null,
-                filters: [],
-            });
-
             this.effect<THREE.AudioListener>(
                 tapEffect(() => {
                     initFn();

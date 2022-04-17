@@ -1,8 +1,19 @@
-import { Directive, Input } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import {
+    Directive,
+    Inject,
+    Input,
+    NgZone,
+    Optional,
+    SkipSelf,
+} from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
+import { NgtStore } from '../stores/store';
+import { NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF } from '../tokens';
 import type { AnyConstructor } from '../types';
+import { AnyFunction, NgtRef } from '../types';
 
 @Directive()
 export abstract class NgtCommonTexture<
@@ -54,20 +65,43 @@ export abstract class NgtCommonTexture<
         this.set({ encoding });
     }
 
-    override ngOnInit() {
-        this.zone.runOutsideAngular(() => {
-            this.onCanvasReady(this.store.ready$, () => {
-                this.init(this.instanceArgs$);
-            });
-        });
-        super.ngOnInit();
+    constructor(
+        zone: NgZone,
+        store: NgtStore,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_REF)
+        parentRef: AnyFunction<NgtRef>,
+        @Optional()
+        @SkipSelf()
+        @Inject(NGT_INSTANCE_HOST_REF)
+        parentHostRef: AnyFunction<NgtRef>,
+        @Inject(DOCUMENT) protected document: Document
+    ) {
+        super(zone, store, parentRef, parentHostRef);
     }
 
-    private readonly init = this.effect<unknown[]>(
-        tapEffect((instanceArgs) => {
+    override ngOnInit() {
+        super.ngOnInit();
+        this.zone.runOutsideAngular(() => {
+            this.onCanvasReady(this.store.ready$, () => {
+                this.init(this.ctorParams$);
+                this.postInit();
+            });
+        });
+    }
+
+    private readonly init = this.effect<{}>(
+        tapEffect(() => {
+            const gl = this.store.get((s) => s.gl);
+            const instanceArgs = this.get((s) => s.instanceArgs);
+            const textureInstanceArgs = this.adjustCtorParams(instanceArgs);
             const texture = this.prepareInstance(
-                new this.textureType(...instanceArgs)
+                new this.textureType(...textureInstanceArgs)
             );
+
+            texture.encoding = gl.outputEncoding;
+            texture.needsUpdate = true;
 
             return () => {
                 texture.dispose();

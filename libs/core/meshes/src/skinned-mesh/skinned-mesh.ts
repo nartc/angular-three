@@ -150,7 +150,9 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
         }
 
         super(zone, store, () => skinnedMesh?.instance, parentHostRef);
+    }
 
+    protected override preInit() {
         this.set({
             attach: ['skeleton'],
             bones: [],
@@ -163,10 +165,10 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
     }
 
     override ngOnInit() {
+        super.ngOnInit();
         this.onCanvasReady(this.store.ready$, () => {
             this.init(this.instanceArgs$);
         });
-        super.ngOnInit();
     }
 
     private readonly init = this.effect<unknown[]>(

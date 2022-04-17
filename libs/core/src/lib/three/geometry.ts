@@ -29,12 +29,13 @@ export abstract class NgtCommonGeometry<
     }
 
     override ngOnInit() {
+        super.ngOnInit();
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
                 this.init(this.instanceArgs$);
+                this.postInit();
             });
         });
-        super.ngOnInit();
     }
 
     private readonly init = this.effect<unknown[]>(

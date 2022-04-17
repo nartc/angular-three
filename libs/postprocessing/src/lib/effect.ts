@@ -103,11 +103,14 @@ export abstract class NgtCommonEffect<
         }
 
         super(zone, store, parentRef, parentHostRef);
+    }
 
+    protected override preInit() {
         this.set({ blendFunction: this.defaultBlendMode });
     }
 
     override ngOnInit() {
+        super.ngOnInit();
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
                 this.init(this.ctorParams$);
@@ -117,7 +120,6 @@ export abstract class NgtCommonEffect<
                 this.postInit();
             });
         });
-        super.ngOnInit();
     }
 
     /**

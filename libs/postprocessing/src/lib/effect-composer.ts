@@ -155,18 +155,22 @@ export class NgtEffectComposer extends NgtInstance<
         private isWebGLAvailable: boolean
     ) {
         super(zone, store, parentRef, parentHostRef);
+    }
+
+    protected override preInit() {
         this.set({
             enabled: true,
             renderPriority: 1,
             autoClear: true,
             multisampling: 8,
-            camera: store.get((s) => s.camera),
-            scene: store.get((s) => s.scene),
+            camera: this.store.get((s) => s.camera),
+            scene: this.store.get((s) => s.scene),
             frameBufferType: THREE.HalfFloatType,
         });
     }
 
     override ngOnInit() {
+        super.ngOnInit();
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
                 this.set(
@@ -186,7 +190,6 @@ export class NgtEffectComposer extends NgtInstance<
                 this.effectPasses(this.effectPassesParams$);
             });
         });
-        super.ngOnInit();
     }
 
     private readonly init = this.effect<{}>(

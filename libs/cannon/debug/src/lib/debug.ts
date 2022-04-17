@@ -88,7 +88,9 @@ export class NgtCannonDebug extends NgtInstance<
         }
 
         super(zone, store, null!, null!);
+    }
 
+    protected override preInit() {
         this.set({
             color: 'black',
             scale: 1,
@@ -100,6 +102,7 @@ export class NgtCannonDebug extends NgtInstance<
     }
 
     override ngOnInit() {
+        super.ngOnInit();
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
                 this.prepareInstance(new THREE.Scene());
@@ -113,7 +116,6 @@ export class NgtCannonDebug extends NgtInstance<
                 this.registerBeforeRender();
             });
         });
-        super.ngOnInit();
     }
 
     get api() {

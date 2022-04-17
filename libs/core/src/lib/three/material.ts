@@ -274,9 +274,11 @@ export abstract class NgtCommonMaterial<
     }
 
     override ngOnInit() {
+        super.ngOnInit();
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
                 this.init();
+                this.postInit();
                 this.setParameters(
                     this.select(
                         this.instance$,
@@ -298,7 +300,6 @@ export abstract class NgtCommonMaterial<
                 );
             });
         });
-        super.ngOnInit();
     }
 
     private readonly init = this.effect<void>(
