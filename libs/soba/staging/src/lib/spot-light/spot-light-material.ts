@@ -1,5 +1,6 @@
-import { NgtMaterial } from '@angular-three/core';
-import { Directive, NgModule } from '@angular/core';
+import { AnyConstructor, provideCommonMaterialRef } from '@angular-three/core';
+import { NgtShaderMaterial } from '@angular-three/core/materials';
+import { Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 export class SpotLightMaterial extends THREE.ShaderMaterial {
@@ -84,22 +85,15 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
     }
 }
 
-@Directive({
+@Component({
     selector: 'ngt-soba-spot-light-material',
-    exportAs: 'ngtSobaSpotLightMaterial',
-    providers: [
-        { provide: NgtMaterial, useExisting: NgtSobaSpotLightMaterial },
-    ],
+    template: `<ng-content></ng-content>`,
+    providers: [provideCommonMaterialRef(NgtSobaSpotLightMaterial)],
 })
-export class NgtSobaSpotLightMaterial extends NgtMaterial<
-    THREE.ShaderMaterialParameters,
-    SpotLightMaterial
-> {
-    static ngAcceptInputType_parameters:
-        | THREE.ShaderMaterialParameters
-        | undefined;
-
-    materialType = SpotLightMaterial;
+export class NgtSobaSpotLightMaterial extends NgtShaderMaterial {
+    override get materialType(): AnyConstructor<SpotLightMaterial> {
+        return SpotLightMaterial;
+    }
 }
 
 @NgModule({

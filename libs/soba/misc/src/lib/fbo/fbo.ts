@@ -1,5 +1,5 @@
 import {
-    NgtCanvasStore,
+    NgtComponentStore,
     NgtSize,
     NgtStore,
     tapEffect,
@@ -27,25 +27,25 @@ interface NgtSobaFBOState {
 }
 
 @Injectable()
-export class NgtSobaFBO extends NgtStore<NgtSobaFBOState> {
+export class NgtSobaFBO extends NgtComponentStore<NgtSobaFBOState> {
     private dprParams$ = this.select(
-        this.canvasStore.renderer$,
-        this.canvasStore.ready$,
-        (renderer) => ({ dpr: renderer.getPixelRatio() })
+        this.store.gl$,
+        this.store.ready$,
+        (gl) => ({ dpr: gl.getPixelRatio() })
     );
 
     private targetParams$ = this.select(
         this.select((s) => s.width),
         this.select((s) => s.height),
         this.select((s) => s.settings),
-        this.canvasStore.ready$,
+        this.store.ready$,
         (width, height, settings) => {
             const { multisample, samples, ...targetSettings } = settings || {};
 
             let target;
             if (
                 multisample &&
-                this.canvasStore.get((s) => s.renderer).capabilities.isWebGL2
+                this.store.get((s) => s.gl).capabilities.isWebGL2
             ) {
                 target = new THREE.WebGLMultisampleRenderTarget(
                     width,
@@ -66,8 +66,8 @@ export class NgtSobaFBO extends NgtStore<NgtSobaFBOState> {
 
     private fboSettingsParams$ = this.select(
         this.select((s) => s.dpr),
-        this.canvasStore.select((s) => s.size),
-        this.canvasStore.ready$,
+        this.store.select((s) => s.size),
+        this.store.ready$,
         (dpr, size) => ({ dpr, size })
     );
 
@@ -78,7 +78,7 @@ export class NgtSobaFBO extends NgtStore<NgtSobaFBOState> {
         (target, width, height) => ({ target, width, height })
     );
 
-    constructor(private canvasStore: NgtCanvasStore) {
+    constructor(private store: NgtStore) {
         super();
     }
 

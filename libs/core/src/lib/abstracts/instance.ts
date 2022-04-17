@@ -133,7 +133,7 @@ export abstract class NgtInstance<
 
     protected readonly instanceArgs$ = this.select((s) => s.instanceArgs);
 
-    protected set instanceArgs(v: unknown | unknown[]) {
+    set instanceArgs(v: unknown | unknown[]) {
         this.set({
             instanceArgs: Array.isArray(v) ? v : [v],
         } as Partial<TInstanceState>);

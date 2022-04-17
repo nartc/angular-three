@@ -1,4 +1,4 @@
-import { NgtCanvasStore, NgtStore } from '@angular-three/core';
+import { NgtComponentStore, NgtStore } from '@angular-three/core';
 import { Directive, Input, NgModule, NgZone, OnInit } from '@angular/core';
 import * as THREE from 'three';
 
@@ -13,7 +13,7 @@ interface NgtSobaPreloadState {
     exportAs: 'ngtSobaPreload',
 })
 export class NgtSobaPreload
-    extends NgtStore<NgtSobaPreloadState>
+    extends NgtComponentStore<NgtSobaPreloadState>
     implements OnInit
 {
     @Input() set all(v: boolean) {
@@ -33,17 +33,17 @@ export class NgtSobaPreload
         const {
             camera: canvasCamera,
             scene: canvasScene,
-            renderer,
-        } = this.canvasStore.get();
+            gl,
+        } = this.store.get();
         return {
             all,
             scene: scene || canvasScene,
             camera: camera || canvasCamera,
-            renderer,
+            gl,
         };
     }
 
-    constructor(private zone: NgZone, private canvasStore: NgtCanvasStore) {
+    constructor(private zone: NgZone, private store: NgtStore) {
         super();
         this.set({
             all: false,
@@ -54,8 +54,8 @@ export class NgtSobaPreload
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            this.onCanvasReady(this.canvasStore.ready$, () => {
-                const { all, scene, camera, renderer } = this.precompileParams;
+            this.onCanvasReady(this.store.ready$, () => {
+                const { all, scene, camera, gl } = this.precompileParams;
                 const invisible: THREE.Object3D[] = [];
 
                 if (all) {
@@ -68,7 +68,7 @@ export class NgtSobaPreload
                 }
 
                 // Now compile
-                renderer!.compile(scene!, camera!);
+                gl!.compile(scene!, camera!);
                 // And for good measure, hit it with a cube camera
                 const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(128);
                 const cubeCamera = new THREE.CubeCamera(
@@ -76,7 +76,7 @@ export class NgtSobaPreload
                     100000,
                     cubeRenderTarget
                 );
-                cubeCamera.update(renderer!, scene as THREE.Scene);
+                cubeCamera.update(gl!, scene as THREE.Scene);
                 cubeRenderTarget.dispose();
                 // Flips these objects back
                 invisible.forEach((object) => (object.visible = false));

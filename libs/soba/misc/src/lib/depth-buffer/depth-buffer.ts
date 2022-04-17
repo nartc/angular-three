@@ -1,6 +1,5 @@
 import {
-    NgtAnimationFrameStore,
-    NgtCanvasStore,
+    NgtComponentStore,
     NgtSize,
     NgtStore,
     NgtViewport,
@@ -21,11 +20,11 @@ interface NgtSobaDepthBufferState {
 }
 
 @Injectable()
-export class NgtSobaDepthBuffer extends NgtStore<NgtSobaDepthBufferState> {
+export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferState> {
     private dimensionsParams$ = this.select(
-        this.canvasStore.select((s) => s.size),
-        this.canvasStore.select((s) => s.viewport),
-        this.canvasStore.ready$,
+        this.store.select((s) => s.size),
+        this.store.select((s) => s.viewport),
+        this.store.ready$,
         (size, viewport) => ({ size, viewport })
     );
 
@@ -37,7 +36,7 @@ export class NgtSobaDepthBuffer extends NgtStore<NgtSobaDepthBufferState> {
             depthTexture.format = THREE.DepthFormat;
             depthTexture.type = THREE.UnsignedShortType;
 
-            if (this.canvasStore.isLinear) {
+            if (this.store.get((s) => s.linear)) {
                 depthTexture.encoding = THREE.LinearEncoding;
             } else {
                 depthTexture.encoding = THREE.sRGBEncoding;
@@ -54,11 +53,7 @@ export class NgtSobaDepthBuffer extends NgtStore<NgtSobaDepthBufferState> {
         (width, height, depthConfig) => ({ width, height, depthConfig })
     );
 
-    constructor(
-        private sobaFbo: NgtSobaFBO,
-        private canvasStore: NgtCanvasStore,
-        private animationFrameStore: NgtAnimationFrameStore
-    ) {
+    constructor(private sobaFbo: NgtSobaFBO, private store: NgtStore) {
         super();
         this.set({ size: 256, frames: Infinity });
     }
@@ -76,7 +71,7 @@ export class NgtSobaDepthBuffer extends NgtStore<NgtSobaDepthBufferState> {
 
         this.setDimensions(this.dimensionsParams$);
         this.set(this.depthConfig$);
-        this.registerAnimation(this.depthFBOParams$);
+        this.registerBeforeRender(this.depthFBOParams$);
 
         return this.select((s) => s.fbo).pipe(map((fbo) => fbo.depthTexture));
     }
@@ -94,7 +89,7 @@ export class NgtSobaDepthBuffer extends NgtStore<NgtSobaDepthBufferState> {
         })
     );
 
-    private readonly registerAnimation = this.effect<
+    private readonly registerBeforeRender = this.effect<
         Pick<NgtSobaDepthBufferState, 'width' | 'height' | 'depthConfig'>
     >(
         pipe(
@@ -104,20 +99,20 @@ export class NgtSobaDepthBuffer extends NgtStore<NgtSobaDepthBufferState> {
             tapEffect((depthFBO) => {
                 this.set({ fbo: depthFBO });
                 let count = 0;
-                const animationUuid = this.animationFrameStore.register({
-                    callback: ({ renderer, scene, camera }) => {
+                const uuid = this.store.registerBeforeRender({
+                    callback: ({ gl, scene, camera }) => {
                         const frames = this.get((s) => s.frames);
                         if (frames === Infinity || count < frames) {
-                            renderer.setRenderTarget(depthFBO);
-                            renderer.render(scene, camera);
-                            renderer.setRenderTarget(null);
+                            gl.setRenderTarget(depthFBO);
+                            gl.render(scene, camera);
+                            gl.setRenderTarget(null);
                             count++;
                         }
                     },
                 });
 
                 return () => {
-                    this.animationFrameStore.unregister(animationUuid);
+                    this.store.unregisterBeforeRender(uuid);
                 };
             })
         )

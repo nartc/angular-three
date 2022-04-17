@@ -1,5 +1,6 @@
-import { NgtMaterial } from '@angular-three/core';
-import { Directive, NgModule } from '@angular/core';
+import { AnyConstructor, provideCommonMaterialRef } from '@angular-three/core';
+import { NgtShaderMaterial } from '@angular-three/core/materials';
+import { Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 export class StarFieldMaterial extends THREE.ShaderMaterial {
@@ -32,22 +33,15 @@ export class StarFieldMaterial extends THREE.ShaderMaterial {
     }
 }
 
-@Directive({
+@Component({
     selector: 'ngt-soba-star-field-material',
-    exportAs: 'ngtSobaStarFieldMaterial',
-    providers: [
-        { provide: NgtMaterial, useExisting: NgtSobaStarFieldMaterial },
-    ],
+    template: `<ng-content></ng-content>`,
+    providers: [provideCommonMaterialRef(NgtSobaStarFieldMaterial)],
 })
-export class NgtSobaStarFieldMaterial extends NgtMaterial<
-    THREE.ShaderMaterialParameters,
-    StarFieldMaterial
-> {
-    static ngAcceptInputType_parameters:
-        | THREE.ShaderMaterialParameters
-        | undefined;
-
-    materialType = StarFieldMaterial;
+export class NgtSobaStarFieldMaterial extends NgtShaderMaterial {
+    override get materialType(): AnyConstructor<StarFieldMaterial> {
+        return StarFieldMaterial;
+    }
 }
 
 @NgModule({

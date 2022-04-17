@@ -42,7 +42,7 @@ export class NgtSobaOrthographicCameraContent {
     selector: 'ngt-soba-orthographic-camera',
     template: `
         <ngt-orthographic-camera
-            [args]="instanceArgs"
+            [args]="$any(instanceArgs)"
             [left]="size.width / -2"
             [right]="size.width / 2"
             [top]="size.height / 2"

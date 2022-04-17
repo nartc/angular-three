@@ -75,13 +75,13 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
 
             <ngt-soba-image-shader-material
                 #ngtMaterial
-                [color]="color"
+                [color]="color!"
                 [map]="imageViewModel.texture"
-                [zoom]="imageViewModel.zoom"
-                [grayscale]="imageViewModel.grayscale"
+                [zoom]="imageViewModel.zoom!"
+                [grayscale]="imageViewModel.grayscale!"
                 [scale]="imageViewModel.planeBounds"
                 [imageBounds]="imageViewModel.imageBounds"
-                [toneMapped]="imageViewModel.toneMapped"
+                [toneMapped]="imageViewModel.toneMapped!"
             ></ngt-soba-image-shader-material>
 
             <ngt-mesh
@@ -98,7 +98,7 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
                 [rotation]="rotation"
                 [quaternion]="quaternion"
                 [scale]="scale"
-                [color]="color"
+                [color]="color!"
                 [userData]="userData"
                 [castShadow]="castShadow"
                 [receiveShadow]="receiveShadow"
