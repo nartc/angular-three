@@ -1,8 +1,6 @@
 import { NgtCanvasModule, NgtVector3 } from '@angular-three/core';
 import { NgtColorAttributeModule } from '@angular-three/core/attributes';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtBoxHelperModule } from '@angular-three/core/helpers';
 import {
     NgtAmbientLightModule,
     NgtPointLightModule,
@@ -16,7 +14,7 @@ import {
     Input,
     NgModule,
 } from '@angular/core';
-import { Group, Mesh } from 'three';
+import { Mesh } from 'three';
 
 @Component({
     selector: 'sandbox-cubes',
@@ -35,11 +33,7 @@ import { Group, Mesh } from 'three';
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SandboxCubesComponent {
-    onGroupBeforeRender(group: Group) {
-        group.rotation.z += 0.01;
-    }
-}
+export class SandboxCubesComponent {}
 
 @Component({
     selector: 'sandbox-cube',
@@ -79,8 +73,6 @@ export class CubeComponent {
         NgtColorAttributeModule,
         NgtAmbientLightModule,
         NgtPointLightModule,
-        NgtGroupModule,
-        NgtBoxHelperModule,
         NgtStatsModule,
         NgtMeshModule,
         NgtBoxGeometryModule,
