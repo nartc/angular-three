@@ -154,12 +154,27 @@ export abstract class NgtInstance<
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
+            this.preInit();
             this.onCanvasReady(this.store.ready$, () => {
                 // make sure `instance()` is available before doing anything
                 this.instanceReady(this.instance$);
             });
         });
     }
+
+    /**
+     * Sub-classes can use this function to run pre-init logic
+     * @protected
+     */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected preInit() {}
+
+    /**
+     * Sub-classes can choose to run additional logic after init
+     * @protected
+     */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected postInit() {}
 
     protected emitReady() {
         // only emit ready once to prevent reconstruct
@@ -195,6 +210,21 @@ export abstract class NgtInstance<
         }
 
         return prepInstance;
+    }
+
+    /**
+     * Sub-classes can use this to modify the constructor parameters
+     * before calling this.prepareInstance
+     */
+    protected adjustCtorParams(instanceArgs: unknown[]) {
+        return instanceArgs;
+    }
+
+    /**
+     * Sub-classes, if adjust CtorParams, can also use ctorParams$ to ensure ctor is re-invoked
+     */
+    protected get ctorParams$() {
+        return this.instanceArgs$.pipe(map(() => ({})));
     }
 
     protected destroy() {
