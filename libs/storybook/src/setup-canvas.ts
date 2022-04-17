@@ -6,6 +6,7 @@ import {
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { NgtSobaLoaderModule } from '@angular-three/soba/loaders';
+import * as THREE from 'three';
 
 export function setupCanvas({
     cameraPosition = [-5, 5, 5],

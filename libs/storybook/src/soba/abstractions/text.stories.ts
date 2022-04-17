@@ -41,7 +41,7 @@ export const Default: Story = (args) => ({
       font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
       anchorX="center"
       anchorY="middle"
-      (animateReady)="onTextAnimate($event.entity)"
+      (beforeRender)="onTextAnimate($event.entity)"
     >
     </ngt-soba-text>
   `,
@@ -68,7 +68,7 @@ export const Garfield: Story = (args) => ({
       font="https://fonts.cdnfonts.com/s/1761/Garfield.woff"
       anchorX="center"
       anchorY="middle"
-      (animateReady)="onTextAnimate($event.entity)"
+      (beforeRender)="onTextAnimate($event.entity)"
     >
     </ngt-soba-text>
   `,
@@ -97,7 +97,7 @@ export const Outline: Story = (args) => ({
       anchorY="middle"
       [outlineWidth]="2"
       outlineColor="#ffffff"
-      (animateReady)="onTextAnimate($event.entity)"
+      (beforeRender)="onTextAnimate($event.entity)"
     >
     </ngt-soba-text>
   `,
@@ -126,7 +126,7 @@ export const TransparentWithStroke: Story = (args) => ({
       [fillOpacity]="0"
       [strokeWidth]="'2.5%'"
       strokeColor="#ffffff"
-      (animateReady)="onTextAnimate($event.entity)"
+      (beforeRender)="onTextAnimate($event.entity)"
     >
     </ngt-soba-text>
   `,
@@ -158,7 +158,7 @@ export const Shadow: Story = (args) => ({
       [outlineBlur]="'30%'"
       [outlineOpacity]="0.3"
       outlineColor="#EC2D2D"
-      (animateReady)="onTextAnimate($event.entity)"
+      (beforeRender)="onTextAnimate($event.entity)"
     >
     </ngt-soba-text>
   `,
@@ -186,7 +186,7 @@ export const LTR: Story = (args) => ({
       font="https://fonts.gstatic.com/s/scheherazade/v20/YA9Ur0yF4ETZN60keViq1kQgtA.woff"
       anchorX="center"
       anchorY="middle"
-      (animateReady)="onTextAnimate($event.entity)"
+      (beforeRender)="onTextAnimate($event.entity)"
     >
       ان عدة الشهور عند الله اثنا عشر شهرا في كتاب الله يوم خلق السماوات والارض SOME LATIN TEXT HERE منها اربعة حرم ذلك
       الدين القيم فلاتظلموا فيهن انفسكم وقاتلوا المشركين كافة كما يقاتلونكم كافة واعلموا ان الله مع المتقين
@@ -216,7 +216,7 @@ export const CustomMaterial: Story = (args) => ({
       font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
       anchorX="center"
       anchorY="middle"
-      (animateReady)="onTextAnimate($event.entity)"
+      (beforeRender)="onTextAnimate($event.entity)"
     >
       <ngt-mesh-basic-material
         [parameters]='{side: DoubleSide, color: "turquoise", transparent: true }'
