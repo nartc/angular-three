@@ -1,13 +1,18 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import type { AnyConstructor, NgtRef, UnknownRecord } from '../types';
+import { is } from '../utils/is';
 import { NgtObject, NgtObjectInputsState } from './object';
 
 export interface NgtMaterialGeometryState<
     TObject extends THREE.Object3D = THREE.Object3D
 > extends NgtObjectInputsState<TObject> {
-    material: NgtRef<THREE.Material> | NgtRef<THREE.Material>[];
-    geometry: NgtRef<THREE.BufferGeometry>;
+    material:
+        | THREE.Material
+        | THREE.Material[]
+        | NgtRef<THREE.Material>
+        | NgtRef<THREE.Material>[];
+    geometry: THREE.BufferGeometry | NgtRef<THREE.BufferGeometry>;
     morphTargetInfluences?: number[];
     morphTargetDictionary?: Record<string, number>;
 }
@@ -20,12 +25,18 @@ export abstract class NgtMaterialGeometry<
     NgtMaterialGeometryState<TMaterialGeometryObject>
 > {
     @Input() set material(
-        material: NgtRef<THREE.Material> | NgtRef<THREE.Material>[]
+        material:
+            | THREE.Material
+            | THREE.Material[]
+            | NgtRef<THREE.Material>
+            | NgtRef<THREE.Material>[]
     ) {
         this.set({ material });
     }
 
-    @Input() set geometry(geometry: NgtRef<THREE.BufferGeometry>) {
+    @Input() set geometry(
+        geometry: THREE.BufferGeometry | NgtRef<THREE.BufferGeometry>
+    ) {
         this.set({ geometry });
     }
 
@@ -52,10 +63,12 @@ export abstract class NgtMaterialGeometry<
         }, [] as unknown[]);
 
         const object = new this.objectType(
-            state.geometry.value,
+            is.ref(state.geometry) ? state.geometry.value : state.geometry,
             Array.isArray(state.material)
-                ? state.material.map((m) => m.value)
-                : state.material.value,
+                ? state.material.map((m) => (is.ref(m) ? m.value : m))
+                : is.ref(state.material)
+                ? state.material.value
+                : state.material,
             ...objectArgs
         );
 
