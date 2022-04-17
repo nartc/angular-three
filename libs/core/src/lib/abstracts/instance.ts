@@ -73,6 +73,9 @@ export abstract class NgtInstance<
             skipParent: coerceBooleanProperty(skipParent),
         } as Partial<TInstanceState>);
     }
+    get skipParent() {
+        return this.get((s) => s.skipParent);
+    }
 
     @Output() ready = new EventEmitter<TInstance>();
     protected hasEmittedAlready = false;
@@ -81,6 +84,9 @@ export abstract class NgtInstance<
         this.set({
             noAttach: coerceBooleanProperty(noAttach),
         } as Partial<TInstanceState>);
+    }
+    get noAttach() {
+        return this.get((s) => s.noAttach);
     }
 
     @Input()
@@ -95,6 +101,9 @@ export abstract class NgtInstance<
                         : [value],
             } as Partial<TInstanceState>);
         }
+    }
+    get attach() {
+        return this.get((s) => s.attach);
     }
 
     readonly instance$ = this.select((s) => s.instance).pipe(
@@ -128,6 +137,9 @@ export abstract class NgtInstance<
         this.set({
             instanceArgs: Array.isArray(v) ? v : [v],
         } as Partial<TInstanceState>);
+    }
+    get instanceArgs() {
+        return this.get((s) => s.instanceArgs);
     }
 
     constructor(
@@ -328,7 +340,13 @@ export abstract class NgtInstance<
     private readonly instanceReady = this.effect<TInstance>(
         tapEffect(() => {
             // assigning
-            const setOptionsSub = this.setOptions(this.options$);
+            const setOptionsSub = this.setOptions(
+                this.select(
+                    this.options$,
+                    this.setOptionsTrigger$,
+                    (options) => options
+                )
+            );
 
             // attaching
             if (!this.get((s) => s.noAttach)) {
@@ -347,6 +365,14 @@ export abstract class NgtInstance<
      */
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     protected postSetOptions(_: TInstance): void {}
+
+    /**
+     * Sub-classes can customize this to run setOptions on custom trigger
+     * @protected
+     */
+    protected get setOptionsTrigger$() {
+        return of(null);
+    }
 
     private readonly setOptions = this.effect<UnknownRecord>(
         tap((options) => {
