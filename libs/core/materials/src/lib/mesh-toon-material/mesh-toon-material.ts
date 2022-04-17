@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceBooleanProperty,
+    BooleanInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -106,8 +108,8 @@ export class NgtMeshToonMaterial extends NgtCommonMaterial<
         this.set({ alphaMap });
     }
 
-    @Input() set wireframe(wireframe: boolean) {
-        this.set({ wireframe });
+    @Input() set wireframe(wireframe: BooleanInput) {
+        this.set({ wireframe: coerceBooleanProperty(wireframe) });
     }
 
     @Input() set wireframeLinewidth(wireframeLinewidth: number) {

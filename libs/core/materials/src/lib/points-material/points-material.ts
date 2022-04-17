@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceBooleanProperty,
+    BooleanInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -42,8 +44,8 @@ export class NgtPointsMaterial extends NgtCommonMaterial<
         this.set({ size });
     }
 
-    @Input() set sizeAttenuation(sizeAttenuation: boolean) {
-        this.set({ sizeAttenuation });
+    @Input() set sizeAttenuation(sizeAttenuation: BooleanInput) {
+        this.set({ sizeAttenuation: coerceBooleanProperty(sizeAttenuation) });
     }
 
     get materialType(): AnyConstructor<THREE.PointsMaterial> {

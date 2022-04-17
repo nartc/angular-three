@@ -1,14 +1,16 @@
 // GENERATED
 import {
     AnyConstructor,
+    BooleanInput,
+    coerceBooleanProperty,
     NgtCommonMaterial,
     provideCommonMaterialRef,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
     Component,
-    NgModule,
     Input,
+    NgModule,
 } from '@angular/core';
 import * as THREE from 'three';
 
@@ -50,8 +52,8 @@ export class NgtMeshDepthMaterial extends NgtCommonMaterial<
         this.set({ displacementBias });
     }
 
-    @Input() set wireframe(wireframe: boolean) {
-        this.set({ wireframe });
+    @Input() set wireframe(wireframe: BooleanInput) {
+        this.set({ wireframe: coerceBooleanProperty(wireframe) });
     }
 
     @Input() set wireframeLinewidth(wireframeLinewidth: number) {

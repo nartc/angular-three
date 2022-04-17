@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceBooleanProperty,
+    BooleanInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -42,29 +44,24 @@ export class NgtShaderMaterial extends NgtCommonMaterial<
         this.set({ linewidth });
     }
 
-    @Input() set wireframe(wireframe: boolean) {
-        this.set({ wireframe });
+    @Input() set wireframe(wireframe: BooleanInput) {
+        this.set({ wireframe: coerceBooleanProperty(wireframe) });
     }
 
     @Input() set wireframeLinewidth(wireframeLinewidth: number) {
         this.set({ wireframeLinewidth });
     }
 
-    @Input() set lights(lights: boolean) {
-        this.set({ lights });
+    @Input() set lights(lights: BooleanInput) {
+        this.set({ lights: coerceBooleanProperty(lights) });
     }
 
-    @Input() set clipping(clipping: boolean) {
-        this.set({ clipping });
+    @Input() set clipping(clipping: BooleanInput) {
+        this.set({ clipping: coerceBooleanProperty(clipping) });
     }
 
-    @Input() set extensions(extensions: {
-        derivatives?: boolean;
-        fragDepth?: boolean;
-        drawBuffers?: boolean;
-        shaderTextureLOD?: boolean;
-    }) {
-        this.set({ extensions });
+    @Input() set extensions(extensions: BooleanInput) {
+        this.set({ extensions: coerceBooleanProperty(extensions) });
     }
 
     @Input() set glslVersion(glslVersion: THREE.GLSLVersion) {

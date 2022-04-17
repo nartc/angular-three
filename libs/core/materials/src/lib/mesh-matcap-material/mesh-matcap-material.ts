@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceBooleanProperty,
+    BooleanInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -74,8 +76,8 @@ export class NgtMeshMatcapMaterial extends NgtCommonMaterial<
         this.set({ alphaMap });
     }
 
-    @Input() set flatShading(flatShading: boolean) {
-        this.set({ flatShading });
+    @Input() set flatShading(flatShading: BooleanInput) {
+        this.set({ flatShading: coerceBooleanProperty(flatShading) });
     }
 
     get materialType(): AnyConstructor<THREE.MeshMatcapMaterial> {

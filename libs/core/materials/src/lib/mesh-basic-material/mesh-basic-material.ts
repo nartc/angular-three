@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceBooleanProperty,
+    BooleanInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -78,8 +80,8 @@ export class NgtMeshBasicMaterial extends NgtCommonMaterial<
         this.set({ refractionRatio });
     }
 
-    @Input() set wireframe(wireframe: boolean) {
-        this.set({ wireframe });
+    @Input() set wireframe(wireframe: BooleanInput) {
+        this.set({ wireframe: coerceBooleanProperty(wireframe) });
     }
 
     @Input() set wireframeLinewidth(wireframeLinewidth: number) {

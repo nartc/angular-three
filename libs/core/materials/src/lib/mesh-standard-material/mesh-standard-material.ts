@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceBooleanProperty,
+    BooleanInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -125,16 +127,16 @@ export class NgtMeshStandardMaterial<
         this.set({ envMapIntensity });
     }
 
-    @Input() set wireframe(wireframe: boolean) {
-        this.set({ wireframe });
+    @Input() set wireframe(wireframe: BooleanInput) {
+        this.set({ wireframe: coerceBooleanProperty(wireframe) });
     }
 
     @Input() set wireframeLinewidth(wireframeLinewidth: number) {
         this.set({ wireframeLinewidth });
     }
 
-    @Input() set flatShading(flatShading: boolean) {
-        this.set({ flatShading });
+    @Input() set flatShading(flatShading: BooleanInput) {
+        this.set({ flatShading: coerceBooleanProperty(flatShading) });
     }
 
     get materialType(): AnyConstructor<THREE.MeshStandardMaterial> {
