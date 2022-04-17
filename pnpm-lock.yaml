@@ -26,13 +26,13 @@ specifiers:
   '@nrwl/jest': 13.10.2
   '@nrwl/js': 13.10.2
   '@nrwl/linter': 13.10.2
-  '@nrwl/nx-cloud': 13.2.2
+  '@nrwl/nx-cloud': 13.3.1
   '@nrwl/nx-plugin': 13.10.2
   '@nrwl/storybook': 13.10.2
   '@nrwl/workspace': 13.10.2
   '@pmndrs/cannon-worker-api': ~2.1.0
   '@release-it/bumper': 3.0.1
-  '@release-it/conventional-changelog': 4.2.2
+  '@release-it/conventional-changelog': 4.3.0
   '@storybook/addon-essentials': ~6.4.22
   '@storybook/addons': ~6.4.22
   '@storybook/angular': ~6.4.22
@@ -104,13 +104,13 @@ devDependencies:
   '@nrwl/jest': 13.10.2
   '@nrwl/js': 13.10.2_f11458f3b5a9aac7eb7b6e83671a32b3
   '@nrwl/linter': 13.10.2_eslint@8.13.0+typescript@4.6.3
-  '@nrwl/nx-cloud': 13.2.2
+  '@nrwl/nx-cloud': 13.3.1
   '@nrwl/nx-plugin': 13.10.2_f11458f3b5a9aac7eb7b6e83671a32b3
   '@nrwl/storybook': 13.10.2_f11458f3b5a9aac7eb7b6e83671a32b3
   '@nrwl/workspace': 13.10.2_f11458f3b5a9aac7eb7b6e83671a32b3
   '@pmndrs/cannon-worker-api': 2.1.0_three@0.139.2
   '@release-it/bumper': 3.0.1_release-it@14.14.2
-  '@release-it/conventional-changelog': 4.2.2_release-it@14.14.2
+  '@release-it/conventional-changelog': 4.3.0_release-it@14.14.2
   '@storybook/addon-essentials': 6.4.22_b32eab503ae41a33928c849147ab9315
   '@storybook/addons': 6.4.22
   '@storybook/angular': 6.4.22_f0d1ea92d36b8c70de5bfda8f16dacfe
@@ -3943,10 +3943,11 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@nrwl/nx-cloud/13.2.2:
-    resolution: {integrity: sha512-ryGE3JBkSGie0Oy+hFHfiYVNt1BQlNGa3Q7RjeZjILFyNFXkSFzufWYCt1gIRiGlQ7+Q48t1m6gLi2afElNGmg==}
+  /@nrwl/nx-cloud/13.3.1:
+    resolution: {integrity: sha512-txVZuDQE7KkpTLNVh4Rr7zWeCudqFt/nJEahaRIudm8uc6HoM41O63976zKG1xEtBbblBQpUBIdmOwSsSRBVbg==}
     hasBin: true
     dependencies:
+      '@nrwl/devkit': 13.10.2
       axios: 0.21.4
       chalk: 4.1.0
       node-machine-id: 1.1.12
@@ -3954,6 +3955,7 @@ packages:
       tar: 6.1.11
     transitivePeerDependencies:
       - debug
+      - supports-color
     dev: true
 
   /@nrwl/nx-plugin/13.10.2_f11458f3b5a9aac7eb7b6e83671a32b3:
@@ -4288,8 +4290,8 @@ packages:
       semver: 7.3.7
     dev: true
 
-  /@release-it/conventional-changelog/4.2.2_release-it@14.14.2:
-    resolution: {integrity: sha512-cbpfMSKTt8VtyltNls6Kt0WXIRmgILNpF1nqGE2oe3acs286Brrb5WFGyPhYR8XUy0nVsnjG1zmUPP6n0Xd6XA==}
+  /@release-it/conventional-changelog/4.3.0_release-it@14.14.2:
+    resolution: {integrity: sha512-SAdattAPXyxADh+cWbNqlk7OBWh/SskYCj0hAb5VPmm/wrIR1dQrlKpsUQ/7O0WGGe7uhvj4YB8kVTIZipcc9w==}
     engines: {node: '>=10'}
     peerDependencies:
       release-it: ^14.12.1
@@ -4297,7 +4299,6 @@ packages:
       concat-stream: 2.0.0
       conventional-changelog: 3.1.25
       conventional-recommended-bump: 6.1.0
-      prepend-file: 2.0.1
       release-it: 14.14.2
     dev: true
 
@@ -16688,13 +16689,6 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prepend-file/2.0.1:
-    resolution: {integrity: sha512-0hXWjmOpz5YBIk6xujS0lYtCw6IAA0wCR3fw49UGTLc3E9BIhcxgqdMa8rzGvrtt2F8wFiGP42oEpQ8fo9zhRw==}
-    engines: {node: ^10.17 || >=11.14}
-    dependencies:
-      temp-write: 4.0.0
-    dev: true
-
   /prepend-http/2.0.0:
     resolution: {integrity: sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc=}
     engines: {node: '>=4'}
@@ -18706,22 +18700,6 @@ packages:
       isobject: 4.0.0
       lodash: 4.17.21
       memoizerific: 1.11.3
-
-  /temp-dir/1.0.0:
-    resolution: {integrity: sha1-CnwOom06Oa+n4OvqnB/AvE2qAR0=}
-    engines: {node: '>=4'}
-    dev: true
-
-  /temp-write/4.0.0:
-    resolution: {integrity: sha512-HIeWmj77uOOHb0QX7siN3OtwV3CTntquin6TNVg6SHOqCP3hYKmox90eeFOGaY1MqJ9WYDDjkyZrW6qS5AWpbw==}
-    engines: {node: '>=8'}
-    dependencies:
-      graceful-fs: 4.2.10
-      is-stream: 2.0.1
-      make-dir: 3.1.0
-      temp-dir: 1.0.0
-      uuid: 3.4.0
-    dev: true
 
   /temp/0.9.4:
     resolution: {integrity: sha512-yYrrsWnrXMcdsnu/7YMYAofM1ktpL5By7vZhf15CrXijWWrEYZks5AXBudalfSWJLlnen/QUJUB5aoB0kqZUGA==}

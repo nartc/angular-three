@@ -44,13 +44,13 @@
     "@nrwl/jest": "13.10.2",
     "@nrwl/js": "13.10.2",
     "@nrwl/linter": "13.10.2",
-    "@nrwl/nx-cloud": "13.2.2",
+    "@nrwl/nx-cloud": "13.3.1",
     "@nrwl/nx-plugin": "13.10.2",
     "@nrwl/storybook": "13.10.2",
     "@nrwl/workspace": "13.10.2",
     "@pmndrs/cannon-worker-api": "~2.1.0",
     "@release-it/bumper": "3.0.1",
-    "@release-it/conventional-changelog": "4.2.2",
+    "@release-it/conventional-changelog": "4.3.0",
     "@storybook/addon-essentials": "~6.4.22",
     "@storybook/addons": "~6.4.22",
     "@storybook/angular": "~6.4.22",
@@ -97,3 +97,4 @@
     }
   }
 }
+
