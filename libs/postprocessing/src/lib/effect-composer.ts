@@ -1,5 +1,7 @@
 import {
     AnyFunction,
+    BooleanInput,
+    coerceBooleanProperty,
     NGT_INSTANCE_HOST_REF,
     NGT_INSTANCE_REF,
     NGT_IS_WEBGL_AVAILABLE,
@@ -60,24 +62,26 @@ export class NgtEffectComposer extends NgtInstance<
     EffectComposer,
     NgtEffectComposerState
 > {
-    @Input() set enabled(enabled: boolean) {
-        this.set({ enabled });
+    @Input() set enabled(enabled: BooleanInput) {
+        this.set({ enabled: coerceBooleanProperty(enabled) });
     }
 
-    @Input() set depthBuffer(depthBuffer: boolean) {
-        this.set({ depthBuffer });
+    @Input() set depthBuffer(depthBuffer: BooleanInput) {
+        this.set({ depthBuffer: coerceBooleanProperty(depthBuffer) });
     }
 
-    @Input() set disableNormalPass(disableNormalPass: boolean) {
-        this.set({ disableNormalPass });
+    @Input() set disableNormalPass(disableNormalPass: BooleanInput) {
+        this.set({
+            disableNormalPass: coerceBooleanProperty(disableNormalPass),
+        });
     }
 
-    @Input() set stencilBuffer(stencilBuffer: boolean) {
-        this.set({ stencilBuffer });
+    @Input() set stencilBuffer(stencilBuffer: BooleanInput) {
+        this.set({ stencilBuffer: coerceBooleanProperty(stencilBuffer) });
     }
 
-    @Input() set autoClear(autoClear: boolean) {
-        this.set({ autoClear });
+    @Input() set autoClear(autoClear: BooleanInput) {
+        this.set({ autoClear: coerceBooleanProperty(autoClear) });
     }
 
     @Input() set resolutionScale(resolutionScale: number) {
