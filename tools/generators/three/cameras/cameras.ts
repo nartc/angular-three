@@ -74,6 +74,8 @@ export default async function camerasGenerator(tree: Tree): Promise<string[]> {
             ([inputName, inputInfo]) => ({
                 name: inputName,
                 ...inputInfo,
+                isNumberInput: inputInfo.type.includes('number'),
+                isBooleanInput: inputInfo.type.includes('boolean'),
             })
         );
 
@@ -86,6 +88,8 @@ export default async function camerasGenerator(tree: Tree): Promise<string[]> {
                 tmpl: '',
                 inputs,
                 hasInput: inputs.length > 0,
+                hasBooleanInput: inputs.some((input) => input.isBooleanInput),
+                hasNumberInput: inputs.some((input) => input.isNumberInput),
             }
         );
 
