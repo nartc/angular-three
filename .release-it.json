@@ -25,6 +25,7 @@
             "infile": "CHANGELOG.md"
         },
         "@release-it/bumper": {
+            "in": "libs/core/package.json",
             "out": [
                 "libs/cannon/package*.json",
                 "libs/core/package*.json",
@@ -45,9 +46,6 @@
         "releaseName": "Release ${version}"
     },
     "hooks": {
-        "after:bump": [
-            "git checkout -- package.json",
-            "npm run build"
-        ]
+        "after:bump": ["git checkout -- package.json", "npm run build"]
     }
 }
