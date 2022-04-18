@@ -1,0 +1,20 @@
+---
+id: ref
+title: Ref
+sidebar_label: Ref
+---
+
+`Ref` is an object that wraps [`BehaviorSubject`](https://rxjs.dev/api/index/class/BehaviorSubject) to provide reactivity to all the objects inside of THREE and Angular Three.
+In NGT, `Ref`s are passed around instead of the raw object value because we want to maintain the same instance of the object as well as observability of the object itself
+(aka when it finishes initialized)
+
+`Ref` has the following API
+
+```ts
+Ref<Value> {
+    get ref$(): Observable<Value>; // the underlying Observable of the BehaviorSubject
+    get value(): Value; // the raw value that the Ref is holding
+    set(value: Value): void; // set AND notify all subscribers that the ref is updated
+    complete(): void; // stop all emissions. the ref is finalized
+}
+```

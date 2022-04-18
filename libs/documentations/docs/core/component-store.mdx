@@ -1,0 +1,29 @@
+---
+id: component-store
+title: ComponentStore
+sidebar_label: ComponentStore
+---
+
+`NgtComponentStore` is a modified version of [NgRx Component Store](https://ngrx.io/guide/component-store). The API is almost identical to `@ngrx/component-store`
+with the following differences:
+
+### `onCanvasReady`
+
+This is a short-cut method for `this.effect() + tap()/tapEffect()`
+
+### `select()`
+
+-   `this.select()` does not emit for `undefined` values. This allows for the `NgtComponentStore` to be initialized with a `Partial<State>`
+-   `this.select()` with multiple selectors has a default `projectorFn` that is `() => ({})`
+
+```ts
+this.select(
+    this.select((s) => s.prop1),
+    this.select((s) => s.prop2),
+    this.select((s) => s.prop3)
+); // this is allowed
+```
+
+### `get()`
+
+`this.get()` is a `public` method instead of `protected`. This is because THREE.js is an imperative library. `get()` allows the objects to expose state in an imperative way (eg: in animation loop)

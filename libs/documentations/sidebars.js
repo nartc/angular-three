@@ -30,13 +30,16 @@ const sidebars = {
             id: 'first-scene',
         },
         {
-          type: 'category',
-          label: 'Core API',
-          items: [
-            'core/canvas',
-            'core/objects'
-          ]
-        }
+            type: 'category',
+            label: 'Core API',
+            items: [
+                'core/canvas',
+                'core/ref',
+                'core/component-store',
+                'core/instance',
+                'core/objects',
+            ],
+        },
     ],
 
     // But you can create a sidebar manually

@@ -1,0 +1,93 @@
+---
+id: instance
+title: Instance
+sidebar_label: Instance
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Everything in NGT is an `NgtInstance`
+
+-   Objects that are participated in rendering
+-   Non-scene objects like materials, geometries, etc...
+-   Attributes like colors, fogs, attributes etc...
+
+:::info
+
+`NgtInstance` extends [`NgtComponentStore`](./component-store) so everything in NGT is their own store which allows for ease of handling side-effects
+as well as reacting to changes.
+
+:::
+
+## Ref
+
+Read more about [Ref](./ref)
+
+An `NgtInstance` always initializes its own `Ref` (internal). But it also has a `[ref]` input that the consumers can pass in if they create
+the `Ref` (external).
+
+<Tabs>
+
+<TabItem value="cubeHtml" label="cube.component.html" default>
+
+```html
+<!-- 👇 this Mesh creates its own internal ref -->
+<ngt-mesh></ngt-mesh>
+
+<!-- 👇 this Mesh has its ref created externally -->
+<ngt-mesh [ref]="physicBox.ref"></ngt-mesh>
+```
+
+</TabItem>
+
+<TabItem value="cubeTs" label="cube.component.ts" default>
+
+```ts
+@Component({
+    template: 'cube.component.html',
+    providers: [NgtPhysicBody],
+})
+export class CubeComponent {
+    physicBox = this.physicBody.useBox(/* ... */);
+    constructor(private physicBody: NgtPhysicBody) {}
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+## Attaching
+
+The idea of _"attaching"_ is that each NGT object put on the template with the purpose of attaching itself on the parent instance's specific properties.
+
+```html
+<ngt-canvas>
+    <!-- attach to the parent Scene.background property -->
+    <ngt-color attach="background" color="blue"></ngt-color>
+
+    <ngt-mesh>
+        <!-- attach to the parent Mesh.geometry -->
+        <ngt-box-geometry attach="geometry"></ngt-box-geometry>
+        <!-- attach to the parent Mesh.material -->
+        <ngt-mesh-basic-material attach="material"></ngt-mesh-basic-material>
+    </ngt-mesh>
+</ngt-canvas>
+```
+
+:::tip
+
+-   NGT geometries have `attach="geometry"` by default
+-   NGT materials have `attach="material"` by default
+
+```html
+<ngt-mesh>
+    <!-- attach to the parent Mesh.geometry -->
+    <ngt-box-geometry></ngt-box-geometry>
+    <!-- attach to the parent Mesh.material -->
+    <ngt-mesh-basic-material></ngt-mesh-basic-material>
+</ngt-mesh>
+```
+
+:::
