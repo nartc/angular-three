@@ -285,7 +285,14 @@ export abstract class NgtCommonMaterial<
         parentHostRef: AnyFunction<NgtRef<THREE.Object3D>>
     ) {
         super(zone, store, parentRef, parentHostRef);
-        this.set({ materialParameters: {} as TMaterialParameters });
+    }
+
+    protected override preInit() {
+        this.set((state) => ({
+            attach: state.attach || ['material'],
+            materialParameters:
+                state.materialParameters || ({} as TMaterialParameters),
+        }));
     }
 
     override ngOnInit() {

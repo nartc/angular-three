@@ -446,13 +446,6 @@ export abstract class NgtInstance<
                     }
                 } else {
                     const propertyToAttach = [...attach];
-                    if (propertyToAttach.length === 0) {
-                        if (is.material(this.instance.value)) {
-                            propertyToAttach.push('material');
-                        } else if (is.geometry(this.instance.value)) {
-                            propertyToAttach.push('geometry');
-                        }
-                    }
 
                     // if propertyToAttach is still empty after material/geometry check
                     // the consumers are not using Geometry/Material and not providing [attach]

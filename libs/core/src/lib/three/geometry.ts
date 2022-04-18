@@ -28,6 +28,10 @@ export abstract class NgtCommonGeometry<
         super(zone, store, parentRef, parentHostRef);
     }
 
+    protected override preInit() {
+        this.set((state) => ({ attach: state.attach || ['geometry'] }));
+    }
+
     override ngOnInit() {
         super.ngOnInit();
         this.zone.runOutsideAngular(() => {
