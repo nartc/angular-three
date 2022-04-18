@@ -81,8 +81,8 @@ export abstract class NgtCommonMaterial<
     TMaterial,
     NgtCommonMaterialState<TMaterialParameters, TMaterial>
 > {
-    @Input() set alphaTest(alphaTest: number) {
-        this.set({ alphaTest });
+    @Input() set alphaTest(alphaTest: NumberInput) {
+        this.set({ alphaTest: coerceNumberProperty(alphaTest) });
     }
 
     @Input() set alphaToCoverage(alphaToCoverage: BooleanInput) {
@@ -93,16 +93,18 @@ export abstract class NgtCommonMaterial<
         this.set({ blendDst });
     }
 
-    @Input() set blendDstAlpha(blendDstAlpha: number) {
-        this.set({ blendDstAlpha });
+    @Input() set blendDstAlpha(blendDstAlpha: NumberInput) {
+        this.set({ blendDstAlpha: coerceNumberProperty(blendDstAlpha) });
     }
 
     @Input() set blendEquation(blendEquation: THREE.BlendingEquation) {
         this.set({ blendEquation });
     }
 
-    @Input() set blendEquationAlpha(blendEquationAlpha: number) {
-        this.set({ blendEquationAlpha });
+    @Input() set blendEquationAlpha(blendEquationAlpha: NumberInput) {
+        this.set({
+            blendEquationAlpha: coerceNumberProperty(blendEquationAlpha),
+        });
     }
 
     @Input() set blending(blending: THREE.Blending) {
@@ -115,8 +117,8 @@ export abstract class NgtCommonMaterial<
         this.set({ blendSrc });
     }
 
-    @Input() set blendSrcAlpha(blendSrcAlpha: number) {
-        this.set({ blendSrcAlpha });
+    @Input() set blendSrcAlpha(blendSrcAlpha: NumberInput) {
+        this.set({ blendSrcAlpha: coerceNumberProperty(blendSrcAlpha) });
     }
 
     @Input() set clipIntersection(clipIntersection: BooleanInput) {
@@ -167,12 +169,16 @@ export abstract class NgtCommonMaterial<
         this.set({ polygonOffset: coerceBooleanProperty(polygonOffset) });
     }
 
-    @Input() set polygonOffsetFactor(polygonOffsetFactor: number) {
-        this.set({ polygonOffsetFactor });
+    @Input() set polygonOffsetFactor(polygonOffsetFactor: NumberInput) {
+        this.set({
+            polygonOffsetFactor: coerceNumberProperty(polygonOffsetFactor),
+        });
     }
 
-    @Input() set polygonOffsetUnits(polygonOffsetUnits: number) {
-        this.set({ polygonOffsetUnits });
+    @Input() set polygonOffsetUnits(polygonOffsetUnits: NumberInput) {
+        this.set({
+            polygonOffsetUnits: coerceNumberProperty(polygonOffsetUnits),
+        });
     }
 
     @Input() set precision(precision: 'highp' | 'mediump' | 'lowp' | null) {
@@ -225,16 +231,16 @@ export abstract class NgtCommonMaterial<
         this.set({ stencilFunc });
     }
 
-    @Input() set stencilRef(stencilRef: number) {
-        this.set({ stencilRef });
+    @Input() set stencilRef(stencilRef: NumberInput) {
+        this.set({ stencilRef: coerceNumberProperty(stencilRef) });
     }
 
-    @Input() set stencilWriteMask(stencilWriteMask: number) {
-        this.set({ stencilWriteMask });
+    @Input() set stencilWriteMask(stencilWriteMask: NumberInput) {
+        this.set({ stencilWriteMask: coerceNumberProperty(stencilWriteMask) });
     }
 
-    @Input() set stencilFuncMask(stencilFuncMask: number) {
-        this.set({ stencilFuncMask });
+    @Input() set stencilFuncMask(stencilFuncMask: NumberInput) {
+        this.set({ stencilFuncMask: coerceNumberProperty(stencilFuncMask) });
     }
 
     @Input() set stencilFail(stencilFail: THREE.StencilOp) {

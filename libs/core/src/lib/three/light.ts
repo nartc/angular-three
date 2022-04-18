@@ -5,7 +5,8 @@ import type {
     NgtPreObjectInit,
 } from '../abstracts/object';
 import { NgtObject } from '../abstracts/object';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, NumberInput } from '../types';
+import { coerceNumberProperty } from '../utils/coercion';
 
 export interface NgtCommonLightState<TLight extends THREE.Light = THREE.Light>
     extends NgtObjectInputsState<TLight> {
@@ -18,8 +19,8 @@ export abstract class NgtCommonLight<
 > extends NgtObject<TLight, NgtCommonLightState<TLight>> {
     abstract get lightType(): AnyConstructor<TLight>;
 
-    @Input() set intensity(intensity: number) {
-        this.set({ intensity });
+    @Input() set intensity(intensity: NumberInput) {
+        this.set({ intensity: coerceNumberProperty(intensity) });
     }
 
     protected override objectInitFn(): TLight {

@@ -2,7 +2,8 @@ import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, NumberInput } from '../types';
+import { coerceNumberProperty } from '../utils/coercion';
 
 export interface NgtCommonCurveState<
     TCurve extends THREE.Curve<THREE.Vector> = THREE.Curve<THREE.Vector>
@@ -16,8 +17,10 @@ export abstract class NgtCommonCurve<
 > extends NgtInstance<TCurve, NgtCommonCurveState<TCurve>> {
     abstract get curveType(): AnyConstructor<TCurve>;
 
-    @Input() set arcLengthDivisions(arcLengthDivisions: number) {
-        this.set({ arcLengthDivisions });
+    @Input() set arcLengthDivisions(arcLengthDivisions: NumberInput) {
+        this.set({
+            arcLengthDivisions: coerceNumberProperty(arcLengthDivisions),
+        });
     }
 
     override ngOnInit() {

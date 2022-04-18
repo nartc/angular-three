@@ -12,8 +12,9 @@ import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF } from '../tokens';
-import type { AnyConstructor } from '../types';
+import type { AnyConstructor, NumberInput } from '../types';
 import { AnyFunction, NgtRef } from '../types';
+import { coerceNumberProperty } from '../utils/coercion';
 
 @Directive()
 export abstract class NgtCommonTexture<
@@ -57,8 +58,8 @@ export abstract class NgtCommonTexture<
         this.set({ type });
     }
 
-    @Input() set anisotropy(anisotropy: number) {
-        this.set({ anisotropy });
+    @Input() set anisotropy(anisotropy: NumberInput) {
+        this.set({ anisotropy: coerceNumberProperty(anisotropy) });
     }
 
     @Input() set encoding(encoding: THREE.TextureEncoding) {
