@@ -1,5 +1,24 @@
 
 
+## [5.0.0-beta.1](https://github.com/nartc/angular-three/compare/5.0.0-beta.0...5.0.0-beta.1) (2022-04-18)
+
+
+### Features
+
+* **core:** mark color, fog, math, and vector pipes as deprecaations ([e893376](https://github.com/nartc/angular-three/commit/e8933761c77858a501bec069f9e6b53c8a92b426))
+* **core:** remove NgtDestroyed ([294e181](https://github.com/nartc/angular-three/commit/294e1817fdcbf2db490fd0054d2696acc126462b))
+
+
+### Bug Fixes
+
+* **core:** use object.destroy$ for cursor ([a18836e](https://github.com/nartc/angular-three/commit/a18836e5c5917ca7acefa25800d6369ea65151e2))
+
+
+### Documentations
+
+* add docusaurus ([de5c557](https://github.com/nartc/angular-three/commit/de5c55784bb4356e41715abd8eba7ecf76e4ed36))
+* start on docusaurus ([c319ed8](https://github.com/nartc/angular-three/commit/c319ed8a79232c08625752187561989619bd947c))
+
 ## [5.0.0-beta.0](https://github.com/nartc/angular-three/compare/4.5.0...5.0.0-beta.0) (2022-04-17)
 
 
