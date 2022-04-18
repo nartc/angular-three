@@ -38,7 +38,6 @@ import {
     NgModule,
     OnInit,
 } from '@angular/core';
-
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
 import * as THREE from 'three';
