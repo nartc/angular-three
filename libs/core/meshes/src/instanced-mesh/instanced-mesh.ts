@@ -35,6 +35,10 @@ export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {
     protected override get optionFields(): Record<string, boolean> {
         return { ...super.optionFields, count: false };
     }
+
+    protected override get argsKeys(): string[] {
+        return ['count'];
+    }
 }
 
 @NgModule({
