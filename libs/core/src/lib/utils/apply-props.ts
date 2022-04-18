@@ -6,6 +6,7 @@ import type {
     UnknownRecord,
 } from '../types';
 import { checkNeedsUpdate } from './check-needs-update';
+import { is } from './is';
 
 export function applyProps<TInstance extends object = UnknownRecord>(
     instance: NgtUnknownInstance<TInstance>,
@@ -49,7 +50,7 @@ export function applyProps<TInstance extends object = UnknownRecord>(
             (target['copy'] || target instanceof THREE.Layers)
         ) {
             // If value is an array
-            if (Array.isArray(prop)) {
+            if (is.arr(prop)) {
                 if (target['fromArray'])
                     (target['fromArray'] as Function)(prop);
                 else (target['set'] as Function)(...prop);

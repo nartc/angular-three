@@ -1,10 +1,10 @@
-import { NgtLoader, NgtStore } from '@angular-three/core';
+import { is, NgtLoader, NgtStore } from '@angular-three/core';
 import { Injectable } from '@angular/core';
 import { defer, map, Observable, tap } from 'rxjs';
 import * as THREE from 'three';
 
 export const IsObject = (url: any): url is Record<string, string> =>
-    url === Object(url) && !Array.isArray(url) && typeof url !== 'function';
+    url === Object(url) && !is.arr(url) && typeof url !== 'function';
 
 @Injectable()
 export class NgtTextureLoader {
@@ -28,7 +28,7 @@ export class NgtTextureLoader {
             tap((textures: THREE.Texture | THREE.Texture[]) => {
                 const gl = this.store.get((s) => s.gl);
                 if (gl) {
-                    (Array.isArray(textures) ? textures : [textures]).forEach(
+                    (is.arr(textures) ? textures : [textures]).forEach(
                         gl.initTexture.bind(gl)
                     );
                 }

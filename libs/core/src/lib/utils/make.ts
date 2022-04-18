@@ -7,6 +7,7 @@ import type {
     NgtVector3,
     NgtVector4,
 } from '../types';
+import { is } from './is';
 
 export function makeVector2(input?: NgtVector2): THREE.Vector2 {
     if (!input) return new THREE.Vector2();
@@ -15,7 +16,7 @@ export function makeVector2(input?: NgtVector2): THREE.Vector2 {
         return input;
     }
 
-    if (Array.isArray(input)) {
+    if (is.arr(input)) {
         return new THREE.Vector2(...input);
     }
 
@@ -29,7 +30,7 @@ export function makeVector3(input?: NgtVector3): THREE.Vector3 {
         return input;
     }
 
-    if (Array.isArray(input)) {
+    if (is.arr(input)) {
         return new THREE.Vector3(...input);
     }
 
@@ -43,7 +44,7 @@ export function makeVector4(input?: NgtVector4): THREE.Vector4 {
         return input;
     }
 
-    if (Array.isArray(input)) {
+    if (is.arr(input)) {
         return new THREE.Vector4(...input);
     }
 
@@ -72,7 +73,7 @@ export function makeColor(color?: NgtColor): THREE.Color {
         return color;
     }
 
-    if (Array.isArray(color)) {
+    if (is.arr(color)) {
         return new THREE.Color(...color);
     }
 
@@ -80,7 +81,7 @@ export function makeColor(color?: NgtColor): THREE.Color {
 }
 
 export function makeDpr(dpr: number) {
-    return Array.isArray(dpr)
+    return is.arr(dpr)
         ? Math.min(Math.max(dpr[0], window.devicePixelRatio), dpr[1])
         : dpr;
 }

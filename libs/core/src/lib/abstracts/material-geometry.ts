@@ -64,7 +64,7 @@ export abstract class NgtMaterialGeometry<
 
         const object = new this.objectType(
             is.ref(state.geometry) ? state.geometry.value : state.geometry,
-            Array.isArray(state.material)
+            is.arr(state.material)
                 ? state.material.map((m) => (is.ref(m) ? m.value : m))
                 : is.ref(state.material)
                 ? state.material.value

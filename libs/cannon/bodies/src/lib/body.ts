@@ -3,6 +3,7 @@ import { NgtPhysicsStore } from '@angular-three/cannon';
 import { NgtCannonDebug } from '@angular-three/cannon/debug';
 import {
     applyProps,
+    is,
     make,
     makeVector3,
     NgtComponentStore,
@@ -264,7 +265,7 @@ export class NgtPhysicBody extends NgtComponentStore {
             'Sphere',
             fn,
             (args: SphereArgs = [1]): SphereArgs => {
-                if (!Array.isArray(args))
+                if (!is.arr(args))
                     throw new Error('useSphere args must be an array');
                 return [args[0]];
             },

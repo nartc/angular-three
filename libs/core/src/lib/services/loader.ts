@@ -20,6 +20,7 @@ import type {
     NgtObjectMap,
 } from '../types';
 import { buildGraph } from '../utils/build-graph';
+import { is } from '../utils/is';
 
 @Injectable({ providedIn: 'root' })
 export class NgtLoader implements OnDestroy {
@@ -33,7 +34,7 @@ export class NgtLoader implements OnDestroy {
     ): TUrl extends any[]
         ? Observable<BranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>[]>
         : Observable<BranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>> {
-        const keys = (Array.isArray(input) ? input : [input]) as string[];
+        const keys = (is.arr(input) ? input : [input]) as string[];
         const loader = new loaderConstructor();
         if (extensions) {
             extensions(loader);
@@ -66,7 +67,7 @@ export class NgtLoader implements OnDestroy {
         >;
 
         return defer(() =>
-            Array.isArray(input)
+            is.arr(input)
                 ? results$
                 : results$.pipe(map((results) => results[0]))
         ).pipe(

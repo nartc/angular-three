@@ -96,7 +96,7 @@ export abstract class NgtInstance<
                 attach:
                     typeof value === 'function'
                         ? value
-                        : Array.isArray(value)
+                        : is.arr(value)
                         ? value
                         : [value],
             } as Partial<TInstanceState>);
@@ -135,7 +135,7 @@ export abstract class NgtInstance<
 
     set instanceArgs(v: unknown | unknown[]) {
         this.set({
-            instanceArgs: Array.isArray(v) ? v : [v],
+            instanceArgs: is.arr(v) ? v : [v],
         } as Partial<TInstanceState>);
     }
     get instanceArgs() {

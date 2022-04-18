@@ -27,7 +27,7 @@ export const is = {
     num: (a: unknown): a is number => typeof a === 'number',
     boo: (a: unknown): a is boolean => typeof a === 'boolean',
     und: (a: unknown) => a === void 0,
-    arr: (a: unknown) => Array.isArray(a),
+    arr: (a: unknown): a is Array<any> => Array.isArray(a),
     equ(
         a: any,
         b: any,
