@@ -1,5 +1,25 @@
 
 
+## [5.0.0-beta.5](https://github.com/nartc/angular-three/compare/5.0.0-beta.4...5.0.0-beta.5) (2022-04-18)
+
+
+### Bug Fixes
+
+* **core:** adjust cameras to use NumberInput ([f0ef280](https://github.com/nartc/angular-three/commit/f0ef280f3a00597435c73f20d0f7c5fb6f172e9d))
+* **core:** adjust cube camera to use NumberInput ([d864c4d](https://github.com/nartc/angular-three/commit/d864c4d223f1eda72268a657feaedb23a7514dbd))
+* **core:** adjust helpers to use NumberInput ([109a8d0](https://github.com/nartc/angular-three/commit/109a8d07cb999cee65bbd4ef51f6068e78919e20))
+* **core:** adjust lights to use NumberInput ([bb1c80f](https://github.com/nartc/angular-three/commit/bb1c80f0ecbebc7cb68dd7d20ecbb854ef285d55))
+* **core:** adjust textures to use NumberInput ([cd82c60](https://github.com/nartc/angular-three/commit/cd82c60a149261d924ec6c5cae58b7a58aa5be79))
+* **core:** adjust three abstracts to use NumberInput ([1122e23](https://github.com/nartc/angular-three/commit/1122e2335d0fb76b86927c6059fb932a663688d3))
+* **postprocessing:** use NumberInput ([c443bc9](https://github.com/nartc/angular-three/commit/c443bc9b93a581ae9b626bacebcfeb6c74e1121e))
+* **soba:** adjust orbit controls to use NumberInput ([e48a504](https://github.com/nartc/angular-three/commit/e48a504123c55430b7bd517e3ecbf8eaf8efb39e))
+* **soba:** use NumberInput ([156a849](https://github.com/nartc/angular-three/commit/156a849a12ff7a3bba7127ac28531ed4fdc741ff))
+
+
+### Documentations
+
+* adjust sandbox to use NumberInput ([2d0f43c](https://github.com/nartc/angular-three/commit/2d0f43c4bfce24728d0b092938b52d5c48a56409))
+
 ## [5.0.0-beta.4](https://github.com/nartc/angular-three/compare/5.0.0-beta.3...5.0.0-beta.4) (2022-04-18)
 
 
