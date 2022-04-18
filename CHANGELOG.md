@@ -1,5 +1,12 @@
 
 
+## [5.0.0-beta.8](https://github.com/nartc/angular-three/compare/5.0.0-beta.7...5.0.0-beta.8) (2022-04-18)
+
+
+### Bug Fixes
+
+* **core:** check for parentInstance before checking if it's object3d ([34cfd65](https://github.com/nartc/angular-three/commit/34cfd65de67944d9b2c395f454a8b4ca8bc7db32))
+
 ## [5.0.0-beta.7](https://github.com/nartc/angular-three/compare/5.0.0-beta.6...5.0.0-beta.7) (2022-04-18)
 
 
