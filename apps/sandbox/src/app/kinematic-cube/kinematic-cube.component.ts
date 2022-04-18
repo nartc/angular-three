@@ -55,12 +55,12 @@ const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
         >
             <ngt-stats></ngt-stats>
 
-            <ngt-hemisphere-light [intensity]="0.35"></ngt-hemisphere-light>
+            <ngt-hemisphere-light intensity="0.35"></ngt-hemisphere-light>
             <ngt-spot-light
                 [position]="[30, 0, 30]"
-                [intensity]="2"
-                [angle]="0.3"
-                [penumbra]="1"
+                intensity="2"
+                angle="0.3"
+                penumbra="1"
                 castShadow
             >
                 <ngt-vector2
@@ -70,7 +70,7 @@ const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
             </ngt-spot-light>
             <ngt-point-light
                 [position]="[-30, 0, -30]"
-                [intensity]="0.5"
+                intensity="0.5"
             ></ngt-point-light>
 
             <ngt-physics [gravity]="[0, 0, -30]">

@@ -83,15 +83,15 @@ const cursor = new Ref<THREE.Object3D>();
             <ngt-color attach="background" color="#171720"></ngt-color>
             <ngt-fog attach="fog" [fog]="['#171720', 20, 70]"></ngt-fog>
 
-            <ngt-ambient-light [intensity]="0.2"></ngt-ambient-light>
+            <ngt-ambient-light intensity="0.2"></ngt-ambient-light>
             <ngt-point-light
                 [position]="[-10, -10, -10]"
                 color="red"
-                [intensity]="1.5"
+                intensity="1.5"
             ></ngt-point-light>
 
             <ngt-physics
-                [iterations]="15"
+                iterations="15"
                 [gravity]="[0, -200, 0]"
                 [allowSleep]="false"
             >
