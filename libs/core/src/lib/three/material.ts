@@ -289,7 +289,7 @@ export abstract class NgtCommonMaterial<
 
     protected override preInit() {
         this.set((state) => ({
-            attach: state.attach || ['material'],
+            attach: state.attach.length ? state.attach : ['material'],
             materialParameters:
                 state.materialParameters || ({} as TMaterialParameters),
         }));

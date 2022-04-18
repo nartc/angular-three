@@ -447,8 +447,7 @@ export abstract class NgtInstance<
                 } else {
                     const propertyToAttach = [...attach];
 
-                    // if propertyToAttach is still empty after material/geometry check
-                    // the consumers are not using Geometry/Material and not providing [attach]
+                    // if propertyToAttach is empty
                     if (propertyToAttach.length === 0) return;
 
                     // retrieve the current value on the parentInstance so we can reset it later

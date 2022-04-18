@@ -64,7 +64,7 @@ export class NgtSobaGradientTexture extends NgtCommonTexture {
     protected override preInit() {
         this.set((state) => ({
             size: state['size'] || 1024,
-            attach: state.attach || ['map'],
+            attach: state.attach.length ? state.attach : ['map'],
         }));
     }
 }

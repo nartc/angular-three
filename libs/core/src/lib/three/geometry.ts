@@ -29,7 +29,9 @@ export abstract class NgtCommonGeometry<
     }
 
     protected override preInit() {
-        this.set((state) => ({ attach: state.attach || ['geometry'] }));
+        this.set((state) => ({
+            attach: state.attach.length ? state.attach : ['geometry'],
+        }));
     }
 
     override ngOnInit() {

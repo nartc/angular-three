@@ -5,9 +5,6 @@ import {
     coerceBooleanProperty,
     coerceNumberProperty,
     make,
-    NGT_HOST_BONE_REF,
-    NGT_HOST_SKELETON_REF,
-    NGT_HOST_SKINNED_MESH_REF,
     NgtCommonMesh,
     NgtInstance,
     NgtInstanceState,
@@ -15,6 +12,9 @@ import {
     NgtObject,
     NgtRef,
     NgtStore,
+    NGT_HOST_BONE_REF,
+    NGT_HOST_SKELETON_REF,
+    NGT_HOST_SKINNED_MESH_REF,
     NumberInput,
     provideCommonMeshRef,
     provideInstanceRef,
@@ -157,7 +157,7 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
 
     protected override preInit() {
         this.set((state) => ({
-            attach: state.attach || ['skeleton'],
+            attach: state.attach.length ? state.attach : ['skeleton'],
             bones: state.bones || [],
             boneInverses: state.boneInverses || [],
             boneMatrices:
