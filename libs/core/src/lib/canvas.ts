@@ -84,16 +84,8 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
         });
     }
 
-    @Input() set size(size: NgtSize) {
-        this.store.set({ size });
-    }
-
     @Input() set dpr(dpr: NgtDpr) {
         this.store.set({ dpr });
-    }
-
-    @Input() set clock(clock: THREE.Clock) {
-        this.store.set({ clock });
     }
 
     @Input() set raycaster(raycaster: Partial<THREE.Raycaster>) {
