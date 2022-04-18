@@ -12,6 +12,14 @@ sidebar_label: Migrate to v5
 
 All `controllers` are removed as the core of Angular Three has been rewritten to use Abstractions with Dependency Injection instead. The Controller approach worked but the trade-off for DX was too big. (eg: auto importing modules is broken, hard to remember and extend etc...)
 
+### Physics Bodies
+
+All Physics Bodies directives are removed. Check [NgtPhysicBody](#ngtphysicbody) for more information on replacement.
+
+### Physics Constraints
+
+All Physics Constraints directives are removed. Check [NgtPhysicConstraint](#ngtphysicconstraint) for more information on replacement.
+
 ### `exportAs`
 
 Previously, most objects in NGT were `Directive` and `exportAs` was used to expose the Directive instances. Now, most objects are `Component` instead as using `Directive` didn't provide any additional benefit and `exportAs` was unnecessary boilerplate.
@@ -63,8 +71,8 @@ Previously, `NgtAnimationFrameStore#register` (and `NgtAnimationFrameStore#unreg
 ```diff
 - const uuid = this.animationFrameStore.register({/* ... */});
 - this.animationFrameStore.unregister(uuid);
-+ const uuid = this.store.registerBeforeRender({/* ... */});
-+ this.store.unregisterBeforeRender(uuid);
++ const unregister = this.store.registerBeforeRender({/* ... */});
++ unregister();
 ```
 
 ### `NgtPerformance`
@@ -196,3 +204,73 @@ Previously, any material directive accepted a `[parameters]` Input to customize 
 Previously, `@angular-three/cannon` shipped its own version of the Cannon API in a Web Worker. Now, `@angular-three/cannon` is using the framework-agnostic [@pmndrs/cannon-web-worker](https://github.com/pmndrs/use-cannon/tree/master/packages/cannon-worker-api).
 
 If you have already been using `@angular-three/cannon` with `tsconfig.worker.json`, please remove `tsconfig.worker.json` (if you don't need it anymore) and remove all references to `tsconfig.worker.json` in your project.
+
+### `NgtPhysicBody`
+
+Instead of individual directive that can be attached on the template, Body is now an `Injectable` named `NgtPhysicBody`
+
+```diff
+@Component({
+    template: `
+        <ngt-mesh
+-           ngtPhysicBox
+-           [getPhysicProps]="getBoxProps"
++           [ref]="boxRef.ref"
+        ></ngt-mesh>
+    `,
++   providers: [NgtPhysicBody]
+})
+export class SomeComponent {
+-   getBoxProps: GetByIndex<BoxProps> = () => ({/* ... */});
+
++   boxRef = this.physicBody.useBox(() => ({/* ... */}));
++   constructor(private physicBody: NgtPhysicBody) {}
+}
+```
+
+To use the `NgtPhysicsBodyPublicApi`, you can use: `this.boxRef.api`
+
+:::caution
+
+`NgtPhysicBody` depends on `NgtStore` (from `ngt-canvas`) and `NgtPhysicsStore` (from `ngt-physics`) so make sure the component that is providing `NgtPhysicBody` needs to be inside of `ngt-canvas` and `ngt-physics`.
+
+:::
+
+### `NgtPhysicConstraint`
+
+Instead of individual directive that can be attached on the template, Constraint is now an `Injectable` named `NgtPhysicConstraint`
+
+```diff
+@Component({
+    template: `
+-       <ng-container ngtPhysicPointToPointConstraint>
+-           <ngt-mesh ngtPhysicBox [getPhysicProps]="getBoxProps"></ngt-mesh>
+-           <ngt-mesh> ngtPhysicPlane [getPhysicProps]="getPlaneProps"</ngt-mesh>
+-       </ng-container>
++       <ngt-mesh [ref]="boxRef.ref"></ngt-mesh>
++       <ngt-mesh [ref]="planeRef.ref"></ngt-mesh>
+    `,
++   providers: [NgtPhysicConstraint, NgtPhysicBody]
+})
+export class SomeComponent {
+
++   boxRef = this.physicBody.useBox();
++   planeRef = this.physicBody.usePlane();
+
++   constructor(
++       private physicConstraint: NgtPhysicConstraint,
++       private physicBody: NgtPhysicBody
++   ) {
++   }
+
++   ngOnInit() {
++       this.physicConstraint.usePointToPointConstraint(this.boxRef.ref, this.planeRef.ref);
++   }
+}
+```
+
+:::caution
+
+`NgtPhysicConstraint` depends on `NgtStore` (from `ngt-canvas`) and `NgtPhysicsStore` (from `ngt-physics`) so make sure the component that is providing `NgtPhysicConstraint` needs to be inside of `ngt-canvas` and `ngt-physics`.
+
+:::
