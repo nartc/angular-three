@@ -108,7 +108,9 @@ export abstract class NgtCommonEffect<
     }
 
     protected override preInit() {
-        this.set({ blendFunction: this.defaultBlendMode });
+        this.set((state) => ({
+            blendFunction: state.blendFunction || this.defaultBlendMode,
+        }));
     }
 
     override ngOnInit() {

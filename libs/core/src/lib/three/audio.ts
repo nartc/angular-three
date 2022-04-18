@@ -112,21 +112,21 @@ export abstract class NgtCommonAudio<
     }
 
     protected override preInit() {
-        this.set({
-            buffer: null,
-            detune: 0,
-            loop: false,
-            loopStart: 0,
-            loopEnd: 0,
-            offset: 0,
-            duration: undefined,
-            playbackRate: 1,
-            isPlaying: false,
-            hasPlaybackControl: true,
-            sourceType: 'empty',
-            source: null,
-            filters: [],
-        });
+        this.set((state) => ({
+            buffer: state.buffer || null,
+            detune: state.detune || 0,
+            loop: state.loop || false,
+            loopStart: state.loopStart || 0,
+            loopEnd: state.loopEnd || 0,
+            offset: state.offset || 0,
+            duration: state.duration || undefined,
+            playbackRate: state.playbackRate || 1,
+            isPlaying: state.isPlaying || false,
+            hasPlaybackControl: state.hasPlaybackControl || true,
+            sourceType: state.sourceType || 'empty',
+            source: state.source || null,
+            filters: state.filters || [],
+        }));
     }
 
     protected override get preObjectInit(): NgtPreObjectInit {

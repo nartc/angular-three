@@ -164,15 +164,15 @@ export class NgtEffectComposer extends NgtInstance<
     }
 
     protected override preInit() {
-        this.set({
-            enabled: true,
-            renderPriority: 1,
-            autoClear: true,
-            multisampling: 8,
-            camera: this.store.get((s) => s.camera),
-            scene: this.store.get((s) => s.scene),
-            frameBufferType: THREE.HalfFloatType,
-        });
+        this.set((state) => ({
+            enabled: state.enabled || true,
+            renderPriority: state.renderPriority || 1,
+            autoClear: state.autoClear || true,
+            multisampling: state.multisampling || 8,
+            camera: state.camera || this.store.get((s) => s.camera),
+            scene: state.scene || this.store.get((s) => s.scene),
+            frameBufferType: state.frameBufferType || THREE.HalfFloatType,
+        }));
     }
 
     override ngOnInit() {

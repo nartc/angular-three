@@ -174,7 +174,7 @@ export class NgtSobaOrbitControls extends NgtInstance<
 
     protected override preInit() {
         this.set((state) => ({
-            enableDamping: true,
+            enableDamping: state.enableDamping || true,
             camera: state.camera || this.store.get((s) => s.camera),
             domElement:
                 state.domElement ||

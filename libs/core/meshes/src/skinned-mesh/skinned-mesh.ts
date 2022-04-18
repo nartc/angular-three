@@ -156,15 +156,16 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
     }
 
     protected override preInit() {
-        this.set({
-            attach: ['skeleton'],
-            bones: [],
-            boneInverses: [],
-            boneMatrices: null as unknown as Float32Array,
-            boneTexture: null,
-            boneTextureSize: 0,
-            frame: -1,
-        });
+        this.set((state) => ({
+            attach: state.attach || ['skeleton'],
+            bones: state.bones || [],
+            boneInverses: state.boneInverses || [],
+            boneMatrices:
+                state.boneMatrices || (null as unknown as Float32Array),
+            boneTexture: state.boneTexture || null,
+            boneTextureSize: state.boneTextureSize || 0,
+            frame: state.frame || -1,
+        }));
     }
 
     override ngOnInit() {
