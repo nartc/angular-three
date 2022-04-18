@@ -1,5 +1,23 @@
 
 
+## [5.0.0-beta.6](https://github.com/nartc/angular-three/compare/5.0.0-beta.5...5.0.0-beta.6) (2022-04-18)
+
+
+### Features
+
+* **core:** remove size and clock inputs on canvas ([2f81334](https://github.com/nartc/angular-three/commit/2f81334e27e2991890097ebc45a86c1971f7e384))
+
+
+### Bug Fixes
+
+* **core:** ensure dispose is called with the instance ([49ff57c](https://github.com/nartc/angular-three/commit/49ff57c678c703cbf8b4d154e99b6e5043f60283))
+* **core:** nullify THREE.Scene dispose function as it's removed ([34facd0](https://github.com/nartc/angular-three/commit/34facd099f5eb877cb7a17be112541e6268d49c7))
+
+
+### Documentations
+
+* more docs ([eb960f8](https://github.com/nartc/angular-three/commit/eb960f804371f89c30942b3375432aa6c78f8677))
+
 ## [5.0.0-beta.5](https://github.com/nartc/angular-three/compare/5.0.0-beta.4...5.0.0-beta.5) (2022-04-18)
 
 
