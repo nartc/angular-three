@@ -1,5 +1,8 @@
-import type { BooleanInput, NgtTriple } from '@angular-three/core';
-import { coerceBooleanProperty } from '@angular-three/core';
+import type { BooleanInput, NgtTriple, NumberInput } from '@angular-three/core';
+import {
+    coerceBooleanProperty,
+    coerceNumberProperty,
+} from '@angular-three/core';
 import { Directive, Input, NgModule, OnInit } from '@angular/core';
 import type {
     Broadphase,
@@ -15,8 +18,8 @@ import { NgtPhysicsStore } from './physics.store';
     providers: [NgtPhysicsStore],
 })
 export class NgtPhysics implements OnInit {
-    @Input() set size(size: number) {
-        this.physicsStore.set({ size });
+    @Input() set size(size: NumberInput) {
+        this.physicsStore.set({ size: coerceNumberProperty(size) });
     }
 
     @Input() set shouldInvalidate(shouldInvalidate: BooleanInput) {
@@ -25,16 +28,16 @@ export class NgtPhysics implements OnInit {
         });
     }
 
-    @Input() set tolerance(tolerance: number) {
-        this.physicsStore.set({ tolerance });
+    @Input() set tolerance(tolerance: NumberInput) {
+        this.physicsStore.set({ tolerance: coerceNumberProperty(tolerance) });
     }
 
-    @Input() set stepSize(stepSize: number) {
-        this.physicsStore.set({ stepSize });
+    @Input() set stepSize(stepSize: NumberInput) {
+        this.physicsStore.set({ stepSize: coerceNumberProperty(stepSize) });
     }
 
-    @Input() set iterations(iterations: number) {
-        this.physicsStore.set({ iterations });
+    @Input() set iterations(iterations: NumberInput) {
+        this.physicsStore.set({ iterations: coerceNumberProperty(iterations) });
     }
 
     @Input() set allowSleep(allowSleep: BooleanInput) {
@@ -57,8 +60,10 @@ export class NgtPhysics implements OnInit {
         });
     }
 
-    @Input() set quatNormalizeSkip(quatNormalizeSkip: number) {
-        this.physicsStore.set({ quatNormalizeSkip });
+    @Input() set quatNormalizeSkip(quatNormalizeSkip: NumberInput) {
+        this.physicsStore.set({
+            quatNormalizeSkip: coerceNumberProperty(quatNormalizeSkip),
+        });
     }
 
     @Input() set solver(solver: Solver) {

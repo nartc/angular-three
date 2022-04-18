@@ -18,10 +18,11 @@ import type {
     AnyConstructor,
     AnyFunction,
     BooleanInput,
+    NumberInput,
     UnknownRecord,
 } from '../types';
 import { NgtRef } from '../types';
-import { coerceBooleanProperty } from '../utils/coercion';
+import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
 
 export interface NgtCommonMaterialState<
     TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
@@ -158,8 +159,8 @@ export abstract class NgtCommonMaterial<
         this.set({ name });
     }
 
-    @Input() set opacity(opacity: number) {
-        this.set({ opacity });
+    @Input() set opacity(opacity: NumberInput) {
+        this.set({ opacity: coerceNumberProperty(opacity) });
     }
 
     @Input() set polygonOffset(polygonOffset: BooleanInput) {

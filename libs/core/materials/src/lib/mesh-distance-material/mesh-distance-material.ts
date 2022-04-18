@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -38,20 +40,22 @@ export class NgtMeshDistanceMaterial extends NgtCommonMaterial<
         this.set({ displacementMap });
     }
 
-    @Input() set displacementScale(displacementScale: number) {
-        this.set({ displacementScale });
+    @Input() set displacementScale(displacementScale: NumberInput) {
+        this.set({
+            displacementScale: coerceNumberProperty(displacementScale),
+        });
     }
 
-    @Input() set displacementBias(displacementBias: number) {
-        this.set({ displacementBias });
+    @Input() set displacementBias(displacementBias: NumberInput) {
+        this.set({ displacementBias: coerceNumberProperty(displacementBias) });
     }
 
-    @Input() set farDistance(farDistance: number) {
-        this.set({ farDistance });
+    @Input() set farDistance(farDistance: NumberInput) {
+        this.set({ farDistance: coerceNumberProperty(farDistance) });
     }
 
-    @Input() set nearDistance(nearDistance: number) {
-        this.set({ nearDistance });
+    @Input() set nearDistance(nearDistance: NumberInput) {
+        this.set({ nearDistance: coerceNumberProperty(nearDistance) });
     }
 
     @Input() set referencePosition(referencePosition: THREE.Vector3) {

@@ -5,6 +5,8 @@ import {
     provideCommonMaterialRef,
     coerceBooleanProperty,
     BooleanInput,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -44,8 +46,8 @@ export class NgtMeshMatcapMaterial extends NgtCommonMaterial<
         this.set({ bumpMap });
     }
 
-    @Input() set bumpScale(bumpScale: number) {
-        this.set({ bumpScale });
+    @Input() set bumpScale(bumpScale: NumberInput) {
+        this.set({ bumpScale: coerceNumberProperty(bumpScale) });
     }
 
     @Input() set normalMap(normalMap: THREE.Texture | null) {
@@ -64,12 +66,14 @@ export class NgtMeshMatcapMaterial extends NgtCommonMaterial<
         this.set({ displacementMap });
     }
 
-    @Input() set displacementScale(displacementScale: number) {
-        this.set({ displacementScale });
+    @Input() set displacementScale(displacementScale: NumberInput) {
+        this.set({
+            displacementScale: coerceNumberProperty(displacementScale),
+        });
     }
 
-    @Input() set displacementBias(displacementBias: number) {
-        this.set({ displacementBias });
+    @Input() set displacementBias(displacementBias: NumberInput) {
+        this.set({ displacementBias: coerceNumberProperty(displacementBias) });
     }
 
     @Input() set alphaMap(alphaMap: THREE.Texture | null) {

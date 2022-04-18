@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -27,16 +29,18 @@ export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<
         | THREE.MeshPhysicalMaterialParameters
         | undefined;
 
-    @Input() set clearcoat(clearcoat: number) {
-        this.set({ clearcoat });
+    @Input() set clearcoat(clearcoat: NumberInput) {
+        this.set({ clearcoat: coerceNumberProperty(clearcoat) });
     }
 
     @Input() set clearcoatMap(clearcoatMap: THREE.Texture | null) {
         this.set({ clearcoatMap });
     }
 
-    @Input() set clearcoatRoughness(clearcoatRoughness: number) {
-        this.set({ clearcoatRoughness });
+    @Input() set clearcoatRoughness(clearcoatRoughness: NumberInput) {
+        this.set({
+            clearcoatRoughness: coerceNumberProperty(clearcoatRoughness),
+        });
     }
 
     @Input() set clearcoatRoughnessMap(
@@ -53,44 +57,48 @@ export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<
         this.set({ clearcoatNormalMap });
     }
 
-    @Input() set reflectivity(reflectivity: number) {
-        this.set({ reflectivity });
+    @Input() set reflectivity(reflectivity: NumberInput) {
+        this.set({ reflectivity: coerceNumberProperty(reflectivity) });
     }
 
-    @Input() set ior(ior: number) {
-        this.set({ ior });
+    @Input() set ior(ior: NumberInput) {
+        this.set({ ior: coerceNumberProperty(ior) });
     }
 
-    @Input() set sheen(sheen: number) {
-        this.set({ sheen });
+    @Input() set sheen(sheen: NumberInput) {
+        this.set({ sheen: coerceNumberProperty(sheen) });
     }
 
     @Input() set sheenColor(sheenColor: THREE.Color) {
         this.set({ sheenColor });
     }
 
-    @Input() set sheenRoughness(sheenRoughness: number) {
-        this.set({ sheenRoughness });
+    @Input() set sheenRoughness(sheenRoughness: NumberInput) {
+        this.set({ sheenRoughness: coerceNumberProperty(sheenRoughness) });
     }
 
-    @Input() set transmission(transmission: number) {
-        this.set({ transmission });
+    @Input() set transmission(transmission: NumberInput) {
+        this.set({ transmission: coerceNumberProperty(transmission) });
     }
 
     @Input() set transmissionMap(transmissionMap: THREE.Texture | null) {
         this.set({ transmissionMap });
     }
 
-    @Input() set attenuationDistance(attenuationDistance: number) {
-        this.set({ attenuationDistance });
+    @Input() set attenuationDistance(attenuationDistance: NumberInput) {
+        this.set({
+            attenuationDistance: coerceNumberProperty(attenuationDistance),
+        });
     }
 
     @Input() set attenuationColor(attenuationColor: THREE.Color) {
         this.set({ attenuationColor });
     }
 
-    @Input() set specularIntensity(specularIntensity: number) {
-        this.set({ specularIntensity });
+    @Input() set specularIntensity(specularIntensity: NumberInput) {
+        this.set({
+            specularIntensity: coerceNumberProperty(specularIntensity),
+        });
     }
 
     @Input() set specularColor(specularColor: THREE.Color) {

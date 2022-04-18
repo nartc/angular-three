@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -27,16 +29,16 @@ export class NgtLineDashedMaterial extends NgtLineBasicMaterial<
         | THREE.LineDashedMaterialParameters
         | undefined;
 
-    @Input() set scale(scale: number) {
-        this.set({ scale });
+    @Input() set scale(scale: NumberInput) {
+        this.set({ scale: coerceNumberProperty(scale) });
     }
 
-    @Input() set dashSize(dashSize: number) {
-        this.set({ dashSize });
+    @Input() set dashSize(dashSize: NumberInput) {
+        this.set({ dashSize: coerceNumberProperty(dashSize) });
     }
 
-    @Input() set gapSize(gapSize: number) {
-        this.set({ gapSize });
+    @Input() set gapSize(gapSize: NumberInput) {
+        this.set({ gapSize: coerceNumberProperty(gapSize) });
     }
 
     override get materialType(): AnyConstructor<THREE.LineDashedMaterial> {

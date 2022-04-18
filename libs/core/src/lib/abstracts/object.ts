@@ -25,10 +25,11 @@ import type {
     NgtTriple,
     NgtUnknownInstance,
     NgtVector3,
+    NumberInput,
     UnknownRecord,
 } from '../types';
 import { applyProps } from '../utils/apply-props';
-import { coerceBooleanProperty } from '../utils/coercion';
+import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
 import { is } from '../utils/is';
 import { make, makeColor, makeVector3 } from '../utils/make';
 import type { NgtInstanceState } from './instance';
@@ -147,8 +148,10 @@ export abstract class NgtObjectInputs<
     get priority() {
         return this.get((s) => s.priority);
     }
-    @Input() set priority(priority: number) {
-        this.set({ priority } as Partial<TObjectInputsState>);
+    @Input() set priority(priority: NumberInput) {
+        this.set({
+            priority: coerceNumberProperty(priority),
+        } as Partial<TObjectInputsState>);
     }
 
     get visible() {

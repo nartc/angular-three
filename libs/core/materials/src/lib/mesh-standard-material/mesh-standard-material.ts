@@ -5,6 +5,8 @@ import {
     provideCommonMaterialRef,
     coerceBooleanProperty,
     BooleanInput,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -35,12 +37,12 @@ export class NgtMeshStandardMaterial<
         this.set({ color });
     }
 
-    @Input() set roughness(roughness: number) {
-        this.set({ roughness });
+    @Input() set roughness(roughness: NumberInput) {
+        this.set({ roughness: coerceNumberProperty(roughness) });
     }
 
-    @Input() set metalness(metalness: number) {
-        this.set({ metalness });
+    @Input() set metalness(metalness: NumberInput) {
+        this.set({ metalness: coerceNumberProperty(metalness) });
     }
 
     @Input() set map(map: THREE.Texture | null) {
@@ -51,24 +53,28 @@ export class NgtMeshStandardMaterial<
         this.set({ lightMap });
     }
 
-    @Input() set lightMapIntensity(lightMapIntensity: number) {
-        this.set({ lightMapIntensity });
+    @Input() set lightMapIntensity(lightMapIntensity: NumberInput) {
+        this.set({
+            lightMapIntensity: coerceNumberProperty(lightMapIntensity),
+        });
     }
 
     @Input() set aoMap(aoMap: THREE.Texture | null) {
         this.set({ aoMap });
     }
 
-    @Input() set aoMapIntensity(aoMapIntensity: number) {
-        this.set({ aoMapIntensity });
+    @Input() set aoMapIntensity(aoMapIntensity: NumberInput) {
+        this.set({ aoMapIntensity: coerceNumberProperty(aoMapIntensity) });
     }
 
     @Input() set emissive(emissive: THREE.ColorRepresentation) {
         this.set({ emissive });
     }
 
-    @Input() set emissiveIntensity(emissiveIntensity: number) {
-        this.set({ emissiveIntensity });
+    @Input() set emissiveIntensity(emissiveIntensity: NumberInput) {
+        this.set({
+            emissiveIntensity: coerceNumberProperty(emissiveIntensity),
+        });
     }
 
     @Input() set emissiveMap(emissiveMap: THREE.Texture | null) {
@@ -79,8 +85,8 @@ export class NgtMeshStandardMaterial<
         this.set({ bumpMap });
     }
 
-    @Input() set bumpScale(bumpScale: number) {
-        this.set({ bumpScale });
+    @Input() set bumpScale(bumpScale: NumberInput) {
+        this.set({ bumpScale: coerceNumberProperty(bumpScale) });
     }
 
     @Input() set normalMap(normalMap: THREE.Texture | null) {
@@ -99,12 +105,14 @@ export class NgtMeshStandardMaterial<
         this.set({ displacementMap });
     }
 
-    @Input() set displacementScale(displacementScale: number) {
-        this.set({ displacementScale });
+    @Input() set displacementScale(displacementScale: NumberInput) {
+        this.set({
+            displacementScale: coerceNumberProperty(displacementScale),
+        });
     }
 
-    @Input() set displacementBias(displacementBias: number) {
-        this.set({ displacementBias });
+    @Input() set displacementBias(displacementBias: NumberInput) {
+        this.set({ displacementBias: coerceNumberProperty(displacementBias) });
     }
 
     @Input() set roughnessMap(roughnessMap: THREE.Texture | null) {
@@ -123,16 +131,18 @@ export class NgtMeshStandardMaterial<
         this.set({ envMap });
     }
 
-    @Input() set envMapIntensity(envMapIntensity: number) {
-        this.set({ envMapIntensity });
+    @Input() set envMapIntensity(envMapIntensity: NumberInput) {
+        this.set({ envMapIntensity: coerceNumberProperty(envMapIntensity) });
     }
 
     @Input() set wireframe(wireframe: BooleanInput) {
         this.set({ wireframe: coerceBooleanProperty(wireframe) });
     }
 
-    @Input() set wireframeLinewidth(wireframeLinewidth: number) {
-        this.set({ wireframeLinewidth });
+    @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
+        this.set({
+            wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
+        });
     }
 
     @Input() set flatShading(flatShading: BooleanInput) {

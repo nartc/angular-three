@@ -1,16 +1,18 @@
 // GENERATED
 import {
     AnyConstructor,
-    BooleanInput,
-    coerceBooleanProperty,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceBooleanProperty,
+    BooleanInput,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
     Component,
-    Input,
     NgModule,
+    Input,
 } from '@angular/core';
 import * as THREE from 'three';
 
@@ -44,20 +46,24 @@ export class NgtMeshDepthMaterial extends NgtCommonMaterial<
         this.set({ displacementMap });
     }
 
-    @Input() set displacementScale(displacementScale: number) {
-        this.set({ displacementScale });
+    @Input() set displacementScale(displacementScale: NumberInput) {
+        this.set({
+            displacementScale: coerceNumberProperty(displacementScale),
+        });
     }
 
-    @Input() set displacementBias(displacementBias: number) {
-        this.set({ displacementBias });
+    @Input() set displacementBias(displacementBias: NumberInput) {
+        this.set({ displacementBias: coerceNumberProperty(displacementBias) });
     }
 
     @Input() set wireframe(wireframe: BooleanInput) {
         this.set({ wireframe: coerceBooleanProperty(wireframe) });
     }
 
-    @Input() set wireframeLinewidth(wireframeLinewidth: number) {
-        this.set({ wireframeLinewidth });
+    @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
+        this.set({
+            wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
+        });
     }
 
     get materialType(): AnyConstructor<THREE.MeshDepthMaterial> {

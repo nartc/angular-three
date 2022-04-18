@@ -5,6 +5,8 @@ import {
     provideCommonMaterialRef,
     coerceBooleanProperty,
     BooleanInput,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -40,16 +42,18 @@ export class NgtShaderMaterial extends NgtCommonMaterial<
         this.set({ fragmentShader });
     }
 
-    @Input() set linewidth(linewidth: number) {
-        this.set({ linewidth });
+    @Input() set linewidth(linewidth: NumberInput) {
+        this.set({ linewidth: coerceNumberProperty(linewidth) });
     }
 
     @Input() set wireframe(wireframe: BooleanInput) {
         this.set({ wireframe: coerceBooleanProperty(wireframe) });
     }
 
-    @Input() set wireframeLinewidth(wireframeLinewidth: number) {
-        this.set({ wireframeLinewidth });
+    @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
+        this.set({
+            wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
+        });
     }
 
     @Input() set lights(lights: BooleanInput) {

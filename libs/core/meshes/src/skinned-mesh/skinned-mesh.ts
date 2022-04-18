@@ -3,6 +3,7 @@ import {
     AnyFunction,
     BooleanInput,
     coerceBooleanProperty,
+    coerceNumberProperty,
     make,
     NGT_HOST_BONE_REF,
     NGT_HOST_SKELETON_REF,
@@ -14,6 +15,7 @@ import {
     NgtObject,
     NgtRef,
     NgtStore,
+    NumberInput,
     provideCommonMeshRef,
     provideInstanceRef,
     provideObjectRef,
@@ -127,12 +129,12 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
         this.set({ boneTexture });
     }
 
-    @Input() set boneTextureSize(boneTextureSize: number) {
-        this.set({ boneTextureSize });
+    @Input() set boneTextureSize(boneTextureSize: NumberInput) {
+        this.set({ boneTextureSize: coerceNumberProperty(boneTextureSize) });
     }
 
-    @Input() set frame(frame: number) {
-        this.set({ frame });
+    @Input() set frame(frame: NumberInput) {
+        this.set({ frame: coerceNumberProperty(frame) });
     }
 
     constructor(

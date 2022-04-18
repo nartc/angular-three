@@ -2,9 +2,11 @@ import { NgtPhysicsStore } from '@angular-three/cannon';
 import {
     BooleanInput,
     coerceBooleanProperty,
+    coerceNumberProperty,
     NgtInstance,
     NgtInstanceState,
     NgtStore,
+    NumberInput,
     provideInstanceRef,
     tapEffect,
 } from '@angular-three/core';
@@ -66,8 +68,8 @@ export class NgtCannonDebug extends NgtInstance<
         this.set({ color });
     }
 
-    @Input() set scale(scale: number) {
-        this.set({ scale });
+    @Input() set scale(scale: NumberInput) {
+        this.set({ scale: coerceNumberProperty(scale) });
     }
 
     @Input() set impl(impl: typeof import('cannon-es-debugger').default) {

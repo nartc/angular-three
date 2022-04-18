@@ -5,6 +5,8 @@ import {
     provideCommonMaterialRef,
     coerceBooleanProperty,
     BooleanInput,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -40,8 +42,8 @@ export class NgtSpriteMaterial extends NgtCommonMaterial<
         this.set({ alphaMap });
     }
 
-    @Input() set rotation(rotation: number) {
-        this.set({ rotation });
+    @Input() set rotation(rotation: NumberInput) {
+        this.set({ rotation: coerceNumberProperty(rotation) });
     }
 
     @Input() set sizeAttenuation(sizeAttenuation: BooleanInput) {

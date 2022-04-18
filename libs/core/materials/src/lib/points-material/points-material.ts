@@ -5,6 +5,8 @@ import {
     provideCommonMaterialRef,
     coerceBooleanProperty,
     BooleanInput,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -40,8 +42,8 @@ export class NgtPointsMaterial extends NgtCommonMaterial<
         this.set({ alphaMap });
     }
 
-    @Input() set size(size: number) {
-        this.set({ size });
+    @Input() set size(size: NumberInput) {
+        this.set({ size: coerceNumberProperty(size) });
     }
 
     @Input() set sizeAttenuation(sizeAttenuation: BooleanInput) {

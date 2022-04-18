@@ -4,12 +4,12 @@
         "cannon": "libs/cannon",
         "core": "libs/core",
         "demo": "apps/demo",
+        "documentations": "libs/documentations",
         "postprocessing": "libs/postprocessing",
         "sandbox": "apps/sandbox",
         "schematics": "libs/schematics",
         "schematics-e2e": "apps/schematics-e2e",
         "soba": "libs/soba",
-        "storybook": "libs/storybook",
-        "documentations": "libs/documentations"
+        "storybook": "libs/storybook"
     }
 }

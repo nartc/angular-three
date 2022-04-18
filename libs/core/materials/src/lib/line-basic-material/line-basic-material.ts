@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonMaterial,
     provideCommonMaterialRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -33,8 +35,8 @@ export class NgtLineBasicMaterial<
         this.set({ color });
     }
 
-    @Input() set linewidth(linewidth: number) {
-        this.set({ linewidth });
+    @Input() set linewidth(linewidth: NumberInput) {
+        this.set({ linewidth: coerceNumberProperty(linewidth) });
     }
 
     @Input() set linecap(linecap: string) {

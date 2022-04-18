@@ -5,6 +5,8 @@ import {
     provideCommonMaterialRef,
     coerceBooleanProperty,
     BooleanInput,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -36,8 +38,10 @@ export class NgtMeshLambertMaterial extends NgtCommonMaterial<
         this.set({ emissive });
     }
 
-    @Input() set emissiveIntensity(emissiveIntensity: number) {
-        this.set({ emissiveIntensity });
+    @Input() set emissiveIntensity(emissiveIntensity: NumberInput) {
+        this.set({
+            emissiveIntensity: coerceNumberProperty(emissiveIntensity),
+        });
     }
 
     @Input() set emissiveMap(emissiveMap: THREE.Texture | null) {
@@ -52,16 +56,18 @@ export class NgtMeshLambertMaterial extends NgtCommonMaterial<
         this.set({ lightMap });
     }
 
-    @Input() set lightMapIntensity(lightMapIntensity: number) {
-        this.set({ lightMapIntensity });
+    @Input() set lightMapIntensity(lightMapIntensity: NumberInput) {
+        this.set({
+            lightMapIntensity: coerceNumberProperty(lightMapIntensity),
+        });
     }
 
     @Input() set aoMap(aoMap: THREE.Texture | null) {
         this.set({ aoMap });
     }
 
-    @Input() set aoMapIntensity(aoMapIntensity: number) {
-        this.set({ aoMapIntensity });
+    @Input() set aoMapIntensity(aoMapIntensity: NumberInput) {
+        this.set({ aoMapIntensity: coerceNumberProperty(aoMapIntensity) });
     }
 
     @Input() set specularMap(specularMap: THREE.Texture | null) {
@@ -80,20 +86,22 @@ export class NgtMeshLambertMaterial extends NgtCommonMaterial<
         this.set({ combine });
     }
 
-    @Input() set reflectivity(reflectivity: number) {
-        this.set({ reflectivity });
+    @Input() set reflectivity(reflectivity: NumberInput) {
+        this.set({ reflectivity: coerceNumberProperty(reflectivity) });
     }
 
-    @Input() set refractionRatio(refractionRatio: number) {
-        this.set({ refractionRatio });
+    @Input() set refractionRatio(refractionRatio: NumberInput) {
+        this.set({ refractionRatio: coerceNumberProperty(refractionRatio) });
     }
 
     @Input() set wireframe(wireframe: BooleanInput) {
         this.set({ wireframe: coerceBooleanProperty(wireframe) });
     }
 
-    @Input() set wireframeLinewidth(wireframeLinewidth: number) {
-        this.set({ wireframeLinewidth });
+    @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
+        this.set({
+            wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
+        });
     }
 
     @Input() set wireframeLinecap(wireframeLinecap: string) {

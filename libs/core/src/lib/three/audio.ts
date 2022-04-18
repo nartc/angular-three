@@ -6,8 +6,8 @@ import {
     NgtPreObjectInit,
 } from '../abstracts/object';
 import { tapEffect } from '../stores/component-store';
-import type { AnyConstructor, BooleanInput } from '../types';
-import { coerceBooleanProperty } from '../utils/coercion';
+import type { AnyConstructor, BooleanInput, NumberInput } from '../types';
+import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
 
 export interface NgtCommonAudioState<
     TAudioNode extends AudioNode = GainNode,
@@ -45,28 +45,28 @@ export abstract class NgtCommonAudio<
         this.set({ buffer });
     }
 
-    @Input() set detune(detune: number) {
-        this.set({ detune });
+    @Input() set detune(detune: NumberInput) {
+        this.set({ detune: coerceNumberProperty(detune) });
     }
 
     @Input() set loop(loop: BooleanInput) {
         this.set({ loop: coerceBooleanProperty(loop) });
     }
 
-    @Input() set loopStart(loopStart: number) {
-        this.set({ loopStart });
+    @Input() set loopStart(loopStart: NumberInput) {
+        this.set({ loopStart: coerceNumberProperty(loopStart) });
     }
 
-    @Input() set loopEnd(loopEnd: number) {
-        this.set({ loopEnd });
+    @Input() set loopEnd(loopEnd: NumberInput) {
+        this.set({ loopEnd: coerceNumberProperty(loopEnd) });
     }
 
-    @Input() set offset(offset: number) {
-        this.set({ offset });
+    @Input() set offset(offset: NumberInput) {
+        this.set({ offset: coerceNumberProperty(offset) });
     }
 
-    @Input() set playbackRate(playbackRate: number) {
-        this.set({ playbackRate });
+    @Input() set playbackRate(playbackRate: NumberInput) {
+        this.set({ playbackRate: coerceNumberProperty(playbackRate) });
     }
 
     @Input() set isPlaying(isPlaying: BooleanInput) {
@@ -91,8 +91,8 @@ export abstract class NgtCommonAudio<
         this.set({ filters });
     }
 
-    @Input() set duration(duration: number) {
-        this.set({ duration });
+    @Input() set duration(duration: NumberInput) {
+        this.set({ duration: coerceNumberProperty(duration) });
     }
 
     @Input() set autoplay(autoplay: BooleanInput) {
