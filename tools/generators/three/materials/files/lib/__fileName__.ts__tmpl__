@@ -2,7 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonMaterial,
-    provideCommonMaterialRef,<% if (hasBooleanInput) { %>coerceBooleanProperty, BooleanInput,<% } %>
+    provideCommonMaterialRef,<% if (hasBooleanInput) { %>coerceBooleanProperty, BooleanInput,<% } %><% if (hasNumberInput) { %> coerceNumberProperty, NumberInput,<% } %>
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule<% if (hasInput) { %>, Input<% } %> } from '@angular/core';
 import * as THREE from 'three';
@@ -23,8 +23,8 @@ export class Ngt<%= name %><% if (typeDef) { %><<%= typeDef %>><% } %> extends <
         | undefined;
 
     <% for (const input of inputs) { %>
-    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <% if (input.type.includes('boolean')) { %>BooleanInput<% } else { %><%= input.type %><% } %>) {
-        this.set({ <% if (input.type.includes('boolean')) { %><%= input.name %>: coerceBooleanProperty(<%= input.name %>)<% } else { %><%= input.name %><% } %> });
+    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <% if (input.isBooleanInput) { %>BooleanInput<% } else if (input.isNumberInput) { %>NumberInput<% } else { %><%= input.type %><% } %>) {
+        this.set({ <% if (input.isBooleanInput || input.isNumberInput) { %><%= input.name %>: <% if (input.isNumberInput) { %>coerceNumberProperty<% } else { %>coerceBooleanProperty<% } %>(<%= input.name %>)<% } else { %><%= input.name %><% } %> });
     }
     <% } %>
 

@@ -214,6 +214,8 @@ export default async function materialsGenerator(tree: Tree) {
             ([inputName, inputInfo]) => ({
                 name: inputName,
                 ...inputInfo,
+                isNumberInput: inputInfo.type.includes('number'),
+                isBooleanInput: inputInfo.type.includes('boolean'),
             })
         );
 
@@ -230,9 +232,8 @@ export default async function materialsGenerator(tree: Tree) {
                 extend,
                 inputs,
                 hasInput: inputs.length > 0,
-                hasBooleanInput: inputs.some((input) =>
-                    input.type.includes('boolean')
-                ),
+                hasBooleanInput: inputs.some((input) => input.isBooleanInput),
+                hasNumberInput: inputs.some((input) => input.isNumberInput),
             }
         );
 
