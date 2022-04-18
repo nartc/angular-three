@@ -242,7 +242,7 @@ export abstract class NgtInstance<
     protected destroy() {
         if (is.object3d(this.instance.value)) {
             const parentInstance = this.parent;
-            if (is.object3d(parentInstance.value)) {
+            if (parentInstance && is.object3d(parentInstance.value)) {
                 removeInteractivity(
                     this.__ngt__.root.bind(this.__ngt__),
                     this.instance.value
