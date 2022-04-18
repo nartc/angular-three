@@ -1,5 +1,22 @@
 
 
+## [5.0.0-beta.4](https://github.com/nartc/angular-three/compare/5.0.0-beta.3...5.0.0-beta.4) (2022-04-18)
+
+
+### Features
+
+* **repo:** registerBeforeRender now returns a function used to clean up instead of the uuid ([1fef6b9](https://github.com/nartc/angular-three/commit/1fef6b9f9348d016ff4bfa12f395824bc5841e75))
+
+
+### Bug Fixes
+
+* **cannon:** make sure preInit runs correctly ([acf6c5c](https://github.com/nartc/angular-three/commit/acf6c5c8ec7d5338c3ef72c457c56b95d64ba363))
+
+
+### Documentations
+
+* more docs work ([8edb425](https://github.com/nartc/angular-three/commit/8edb425817f6547b9739e9057f1ae38f2fd87eac))
+
 ## [5.0.0-beta.3](https://github.com/nartc/angular-three/compare/5.0.0-beta.2...5.0.0-beta.3) (2022-04-18)
 
 
