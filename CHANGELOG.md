@@ -1,5 +1,18 @@
 
 
+## [5.0.0-beta.3](https://github.com/nartc/angular-three/compare/5.0.0-beta.2...5.0.0-beta.3) (2022-04-18)
+
+
+### Bug Fixes
+
+* **repo:** use is.arr instead of Array.isArray ([e03837f](https://github.com/nartc/angular-three/commit/e03837f88e919dbaf102f80c219114ee9ea58349))
+* **repo:** use NumberInput for number inputs ([16895e6](https://github.com/nartc/angular-three/commit/16895e66e81a4ebeae2ed22c865588991b8ed282))
+
+
+### Documentations
+
+* adjust kinematic cube example to use beforeRender instead ([4560b39](https://github.com/nartc/angular-three/commit/4560b396073ad7cf538fbf21ba287916fba7f43c))
+
 ## [5.0.0-beta.2](https://github.com/nartc/angular-three/compare/5.0.0-beta.1...5.0.0-beta.2) (2022-04-18)
 
 
