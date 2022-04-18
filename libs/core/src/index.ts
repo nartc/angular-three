@@ -59,7 +59,6 @@ export * from './lib/three/object-helper';
 export * from './lib/stores/component-store';
 export * from './lib/stores/store';
 
-export * from './lib/services/destroyed';
 export * from './lib/services/loader';
 export * from './lib/services/resize';
 
