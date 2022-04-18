@@ -175,7 +175,7 @@ export class NgtPhysicsStore extends NgtComponentStore<NgtPhysicsState> {
 
     private readonly initBeforeRender = this.effect<BeforeRenderParams>(
         tapEffect(({ isPaused, maxSubSteps, stepSize }) => {
-            const uuid = this.store.registerBeforeRender({
+            const unregister = this.store.registerBeforeRender({
                 callback: ({ delta }) => {
                     if (isPaused) return;
                     const worker = this.get((s) => s.worker);
@@ -192,7 +192,7 @@ export class NgtPhysicsStore extends NgtComponentStore<NgtPhysicsState> {
             });
 
             return () => {
-                this.store.unregisterBeforeRender(uuid);
+                unregister();
             };
         })
     );

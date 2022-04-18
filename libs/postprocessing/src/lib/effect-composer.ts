@@ -267,7 +267,7 @@ export class NgtEffectComposer extends NgtInstance<
     private readonly setBeforeRender = this.effect<{}>(
         tapEffect(() => {
             const { renderPriority, enabled } = this.get();
-            const uuid = this.store.registerBeforeRender({
+            const unregister = this.store.registerBeforeRender({
                 callback: ({ delta }) => {
                     const gl = this.store.get((s) => s.gl);
                     const { instance, autoClear } = this.get();
@@ -281,7 +281,7 @@ export class NgtEffectComposer extends NgtInstance<
             });
 
             return () => {
-                this.store.unregisterBeforeRender(uuid);
+                unregister();
             };
         })
     );

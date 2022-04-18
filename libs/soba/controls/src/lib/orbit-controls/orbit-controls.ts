@@ -209,7 +209,7 @@ export class NgtSobaOrbitControls extends NgtInstance<
 
     private readonly setBeforeRender = this.effect<{}>(
         tapEffect(() => {
-            const uuid = this.store.registerBeforeRender({
+            const unregister = this.store.registerBeforeRender({
                 priority: -1,
                 callback: () => {
                     if (this.instance.value.enabled) {
@@ -219,7 +219,7 @@ export class NgtSobaOrbitControls extends NgtInstance<
             });
 
             return () => {
-                this.store.unregisterBeforeRender(uuid);
+                unregister();
             };
         })
     );

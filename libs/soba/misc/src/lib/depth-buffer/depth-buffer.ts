@@ -99,7 +99,7 @@ export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferStat
             tapEffect((depthFBO) => {
                 this.set({ fbo: depthFBO });
                 let count = 0;
-                const uuid = this.store.registerBeforeRender({
+                const unregister = this.store.registerBeforeRender({
                     callback: ({ gl, scene, camera }) => {
                         const frames = this.get((s) => s.frames);
                         if (frames === Infinity || count < frames) {
@@ -112,7 +112,7 @@ export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferStat
                 });
 
                 return () => {
-                    this.store.unregisterBeforeRender(uuid);
+                    unregister();
                 };
             })
         )

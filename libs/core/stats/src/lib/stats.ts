@@ -42,12 +42,12 @@ export class NgtStats extends NgtComponentStore implements OnInit {
 
                     this.stats = Stats();
                     this.node.appendChild(this.stats.dom);
-                    const animationUuid = this.store.registerBeforeRender({
+                    const unregister = this.store.registerBeforeRender({
                         callback: this.stats.update.bind(this.stats),
                     });
                     return () => {
                         if (this.stats) {
-                            this.store.unregisterBeforeRender(animationUuid);
+                            unregister();
                             this.stats.end();
                             this.node.removeChild(this.stats.dom);
                         }

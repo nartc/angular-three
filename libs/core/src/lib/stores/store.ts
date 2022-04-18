@@ -273,7 +273,9 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                 ? record.obj().uuid
                 : makeId();
         this.registerBeforeRenderEffect({ ...record, uuid });
-        return uuid;
+        return () => {
+            this.unregisterBeforeRender(uuid);
+        };
     }
 
     unregisterBeforeRender(uuid: string) {

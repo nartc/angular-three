@@ -49,7 +49,7 @@ export abstract class NgtCommonObjectHelper<
             const scene = this.store.get((s) => s.scene);
             if (objectHelper && scene) {
                 scene.add(objectHelper);
-                const animationUuid = this.store.registerBeforeRender({
+                const unregister = this.store.registerBeforeRender({
                     callback: () => {
                         if (objectHelper) {
                             (
@@ -64,7 +64,7 @@ export abstract class NgtCommonObjectHelper<
                 return () => {
                     if (objectHelper && scene) {
                         scene.remove(objectHelper);
-                        this.store.unregisterBeforeRender(animationUuid);
+                        unregister();
                     }
                 };
             }
