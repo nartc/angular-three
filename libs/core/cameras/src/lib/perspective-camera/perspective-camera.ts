@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonCamera,
     provideCommonCameraRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -29,20 +31,20 @@ export class NgtPerspectiveCamera extends NgtCommonCamera<THREE.PerspectiveCamer
         this.instanceArgs = v;
     }
 
-    @Input() set fov(fov: number) {
-        this.set({ fov });
+    @Input() set fov(fov: NumberInput) {
+        this.set({ fov: coerceNumberProperty(fov) });
     }
 
-    @Input() set aspect(aspect: number) {
-        this.set({ aspect });
+    @Input() set aspect(aspect: NumberInput) {
+        this.set({ aspect: coerceNumberProperty(aspect) });
     }
 
-    @Input() set near(near: number) {
-        this.set({ near });
+    @Input() set near(near: NumberInput) {
+        this.set({ near: coerceNumberProperty(near) });
     }
 
-    @Input() set far(far: number) {
-        this.set({ far });
+    @Input() set far(far: NumberInput) {
+        this.set({ far: coerceNumberProperty(far) });
     }
 
     override get cameraType(): AnyConstructor<THREE.PerspectiveCamera> {

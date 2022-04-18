@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonCamera,
     provideCommonCameraRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -29,28 +31,28 @@ export class NgtOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCam
         this.instanceArgs = v;
     }
 
-    @Input() set left(left: number) {
-        this.set({ left });
+    @Input() set left(left: NumberInput) {
+        this.set({ left: coerceNumberProperty(left) });
     }
 
-    @Input() set right(right: number) {
-        this.set({ right });
+    @Input() set right(right: NumberInput) {
+        this.set({ right: coerceNumberProperty(right) });
     }
 
-    @Input() set top(top: number) {
-        this.set({ top });
+    @Input() set top(top: NumberInput) {
+        this.set({ top: coerceNumberProperty(top) });
     }
 
-    @Input() set bottom(bottom: number) {
-        this.set({ bottom });
+    @Input() set bottom(bottom: NumberInput) {
+        this.set({ bottom: coerceNumberProperty(bottom) });
     }
 
-    @Input() set near(near: number) {
-        this.set({ near });
+    @Input() set near(near: NumberInput) {
+        this.set({ near: coerceNumberProperty(near) });
     }
 
-    @Input() set far(far: number) {
-        this.set({ far });
+    @Input() set far(far: NumberInput) {
+        this.set({ far: coerceNumberProperty(far) });
     }
 
     override get cameraType(): AnyConstructor<THREE.OrthographicCamera> {
