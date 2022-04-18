@@ -6,6 +6,8 @@ import type {
     NgtUnknownInstance,
     UnknownRecord,
 } from '../types';
+import { applyProps } from './apply-props';
+import { is } from './is';
 
 export const getInstanceRootState = (
     obj: THREE.Object3D
@@ -24,6 +26,12 @@ export function prepare<TInstance extends object = UnknownRecord>(
         : previousInstance
         ? previousInstance.value?.__ngt__?.parent
         : undefined;
+
+    if (is.scene(instance)) {
+        applyProps(instance as unknown as NgtUnknownInstance, {
+            dispose: null,
+        });
+    }
 
     return Object.assign(instance, {
         __ngt__: {

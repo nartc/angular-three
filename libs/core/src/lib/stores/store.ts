@@ -342,8 +342,6 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                 this.parentStore?.get((s) => s.sceneRef) || null
             );
             applyProps(scene, state.sceneOptions as UnknownRecord);
-            // remove dispose function from scene
-            applyProps(scene, { dispose: null });
             this.get((s) => s.sceneRef).set(scene);
 
             // Set up renderer (one time only!)

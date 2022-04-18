@@ -15,6 +15,7 @@ export const is = {
         !!a && (a as THREE.PerspectiveCamera).isPerspectiveCamera,
     camera: (a: unknown): a is THREE.Camera =>
         !!a && (a as THREE.Camera).isCamera,
+    scene: (a: unknown): a is THREE.Scene => !!a && (a as THREE.Scene).isScene,
     object3d: (a: unknown): a is THREE.Object3D =>
         !!a && (a as THREE.Object3D).isObject3D,
     instance: (a: unknown): a is NgtUnknownInstance =>
