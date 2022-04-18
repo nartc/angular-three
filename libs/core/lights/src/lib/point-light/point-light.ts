@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonLight,
     provideCommonLightRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -27,16 +29,16 @@ export class NgtPointLight extends NgtCommonLight<THREE.PointLight> {
         this.instanceArgs = v;
     }
 
-    @Input() set distance(distance: number) {
-        this.set({ distance });
+    @Input() set distance(distance: NumberInput) {
+        this.set({ distance: coerceNumberProperty(distance) });
     }
 
-    @Input() set decay(decay: number) {
-        this.set({ decay });
+    @Input() set decay(decay: NumberInput) {
+        this.set({ decay: coerceNumberProperty(decay) });
     }
 
-    @Input() set power(power: number) {
-        this.set({ power });
+    @Input() set power(power: NumberInput) {
+        this.set({ power: coerceNumberProperty(power) });
     }
 
     override get lightType(): AnyConstructor<THREE.PointLight> {

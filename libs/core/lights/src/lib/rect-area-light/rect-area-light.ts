@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonLight,
     provideCommonLightRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -27,16 +29,16 @@ export class NgtRectAreaLight extends NgtCommonLight<THREE.RectAreaLight> {
         this.instanceArgs = v;
     }
 
-    @Input() set width(width: number) {
-        this.set({ width });
+    @Input() set width(width: NumberInput) {
+        this.set({ width: coerceNumberProperty(width) });
     }
 
-    @Input() set height(height: number) {
-        this.set({ height });
+    @Input() set height(height: NumberInput) {
+        this.set({ height: coerceNumberProperty(height) });
     }
 
-    @Input() set power(power: number) {
-        this.set({ power });
+    @Input() set power(power: NumberInput) {
+        this.set({ power: coerceNumberProperty(power) });
     }
 
     override get lightType(): AnyConstructor<THREE.RectAreaLight> {
