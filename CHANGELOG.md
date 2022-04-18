@@ -1,5 +1,17 @@
 
 
+## [5.0.0-beta.2](https://github.com/nartc/angular-three/compare/5.0.0-beta.1...5.0.0-beta.2) (2022-04-18)
+
+
+### Bug Fixes
+
+* **core:** add missing argsKeys for instanced mesh. count wasn't taken into account ([7085cc0](https://github.com/nartc/angular-three/commit/7085cc01b7aa368c7b238385b26c3fac630146cc))
+
+
+### Documentations
+
+* add kinematic cube example ([8166c0f](https://github.com/nartc/angular-three/commit/8166c0fe60ebe409332f6ecd507d76b7a6473886))
+
 ## [5.0.0-beta.1](https://github.com/nartc/angular-three/compare/5.0.0-beta.0...5.0.0-beta.1) (2022-04-18)
 
 
