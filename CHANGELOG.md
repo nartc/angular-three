@@ -1,5 +1,12 @@
 
 
+## [5.0.0-beta.7](https://github.com/nartc/angular-three/compare/5.0.0-beta.6...5.0.0-beta.7) (2022-04-18)
+
+
+### Bug Fixes
+
+* **core:** all Scene objects will have dispose nullified ([ce88b08](https://github.com/nartc/angular-three/commit/ce88b08b6b5932c595c761ac8e2f47c46aa7cbdc))
+
 ## [5.0.0-beta.6](https://github.com/nartc/angular-three/compare/5.0.0-beta.5...5.0.0-beta.6) (2022-04-18)
 
 
