@@ -2,6 +2,7 @@ import {
     AnyFunction,
     BooleanInput,
     coerceBooleanProperty,
+    coerceNumberProperty,
     NGT_INSTANCE_HOST_REF,
     NGT_INSTANCE_REF,
     NGT_IS_WEBGL_AVAILABLE,
@@ -9,6 +10,7 @@ import {
     NgtInstanceState,
     NgtRef,
     NgtStore,
+    NumberInput,
     provideInstanceRef,
     startWithUndefined,
     tapEffect,
@@ -84,20 +86,20 @@ export class NgtEffectComposer extends NgtInstance<
         this.set({ autoClear: coerceBooleanProperty(autoClear) });
     }
 
-    @Input() set resolutionScale(resolutionScale: number) {
-        this.set({ resolutionScale });
+    @Input() set resolutionScale(resolutionScale: NumberInput) {
+        this.set({ resolutionScale: coerceNumberProperty(resolutionScale) });
     }
 
-    @Input() set multisampling(multisampling: number) {
-        this.set({ multisampling });
+    @Input() set multisampling(multisampling: NumberInput) {
+        this.set({ multisampling: coerceNumberProperty(multisampling) });
     }
 
     @Input() set frameBufferType(frameBufferType: THREE.TextureDataType) {
         this.set({ frameBufferType });
     }
 
-    @Input() set renderPriority(renderPriority: number) {
-        this.set({ renderPriority });
+    @Input() set renderPriority(renderPriority: NumberInput) {
+        this.set({ renderPriority: coerceNumberProperty(renderPriority) });
     }
 
     @Input() set camera(camera: THREE.Camera) {

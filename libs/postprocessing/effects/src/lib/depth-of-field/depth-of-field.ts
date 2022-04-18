@@ -1,4 +1,10 @@
-import { AnyConstructor, NgtVector3, UnknownRecord } from '@angular-three/core';
+import {
+    AnyConstructor,
+    coerceNumberProperty,
+    NgtVector3,
+    NumberInput,
+    UnknownRecord,
+} from '@angular-three/core';
 import {
     NgtCommonEffect,
     provideCommonEffectRef,
@@ -39,8 +45,8 @@ export class NgtDepthOfField extends NgtCommonEffect<DepthOfFieldEffect> {
         this.set({ depthTexture });
     }
 
-    @Input() set blur(blur: number) {
-        this.set({ blur });
+    @Input() set blur(blur: NumberInput) {
+        this.set({ blur: coerceNumberProperty(blur) });
     }
 
     private readonly targetParams$ = this.select(

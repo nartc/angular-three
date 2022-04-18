@@ -1,12 +1,14 @@
 import {
     AnyConstructor,
     AnyFunction,
+    coerceNumberProperty,
     NGT_INSTANCE_HOST_REF,
     NGT_INSTANCE_REF,
     NgtInstance,
     NgtInstanceState,
     NgtRef,
     NgtStore,
+    NumberInput,
     provideInstanceRef,
     startWithUndefined,
     tapEffect,
@@ -54,8 +56,8 @@ export interface NgtCommonEffectState<TEffect extends Effect = Effect>
 export abstract class NgtCommonEffect<
     TEffect extends Effect = Effect
 > extends NgtInstance<TEffect, NgtCommonEffectState<TEffect>> {
-    @Input() set opacity(opacity: number) {
-        this.set({ opacity });
+    @Input() set opacity(opacity: NumberInput) {
+        this.set({ opacity: coerceNumberProperty(opacity) });
     }
 
     @Input() set blendFunction(blendFunction: BlendFunction) {
