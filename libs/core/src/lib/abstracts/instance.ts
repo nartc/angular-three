@@ -196,6 +196,8 @@ export abstract class NgtInstance<
         }
     }
 
+    protected isPrimitive = false;
+
     prepareInstance(
         instance: TInstance,
         uuid?: string
@@ -208,7 +210,8 @@ export abstract class NgtInstance<
             instance,
             () => this.store.get(),
             this.parent,
-            this.instance
+            this.instance,
+            this.isPrimitive
         );
 
         this.postPrepare(prepInstance);
@@ -402,20 +405,9 @@ export abstract class NgtInstance<
 
                 applyProps(this.instance.value, customOptions);
 
-                if (is.object3d(this.instance.value)) {
-                    this.instance.value.updateMatrix();
-                } else if (is.camera(this.instance.value)) {
-                    if (
-                        is.perspective(this.instance.value) ||
-                        is.orthographic(this.instance.value)
-                    ) {
-                        this.instance.value.updateProjectionMatrix();
-                    }
-                    this.instance.value.updateMatrixWorld();
-                }
-
                 this.postSetOptions(this.instance.value);
-                checkNeedsUpdate(this.instance.value);
+
+                this.checkUpdate(this.instance.value);
             }
         })
     );
@@ -478,9 +470,22 @@ export abstract class NgtInstance<
                         attach: propertyToAttach,
                     } as Partial<TInstanceState>);
                 }
-                checkNeedsUpdate(parentInstanceRef.value);
-                checkNeedsUpdate(this.instance.value);
+                this.checkUpdate(parentInstanceRef.value);
+                this.checkUpdate(this.instance.value);
             })
         )
     );
+
+    private checkUpdate(value: NgtUnknownInstance): void {
+        if (is.object3d(value)) {
+            value.updateMatrix();
+        } else if (is.camera(value)) {
+            if (is.perspective(value) || is.orthographic(value)) {
+                value.updateProjectionMatrix();
+            }
+            value.updateMatrixWorld();
+        }
+
+        checkNeedsUpdate(value);
+    }
 }
