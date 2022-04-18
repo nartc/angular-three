@@ -51,6 +51,8 @@ export class NgtPrimitive extends NgtObject<THREE.Object3D, NgtPrimitiveState> {
             )(this.object$);
         };
     }
+
+    override isPrimitive = true;
 }
 
 @NgModule({
