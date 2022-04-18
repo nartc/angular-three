@@ -48,7 +48,11 @@ const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
 @Component({
     selector: 'sandbox-kinematic-cube',
     template: `
-        <ngt-canvas shadows [camera]="{ position: [0, -12, 16] }">
+        <ngt-canvas
+            shadows
+            [gl]="{ alpha: false }"
+            [camera]="{ position: [0, -12, 16] }"
+        >
             <ngt-stats></ngt-stats>
 
             <ngt-hemisphere-light [intensity]="0.35"></ngt-hemisphere-light>
@@ -139,7 +143,7 @@ export class PlaneComponent {
             [ref]="boxRef.ref"
             [castShadow]="true"
             [receiveShadow]="true"
-            (animateReady)="onBoxAnimate($event.state)"
+            (beforeRender)="onBoxBeforeRender($event.state)"
         >
             <ngt-box-geometry [args]="boxSize"></ngt-box-geometry>
             <ngt-mesh-lambert-material></ngt-mesh-lambert-material>
@@ -159,7 +163,7 @@ export class BoxComponent {
 
     constructor(private physicBody: NgtPhysicBody) {}
 
-    onBoxAnimate({ clock }: NgtRenderState) {
+    onBoxBeforeRender({ clock }: NgtRenderState) {
         const t = clock.getElapsedTime();
         this.boxRef.api.position.set(
             Math.sin(t * 2) * 5,
