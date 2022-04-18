@@ -10,6 +10,24 @@
   overflow: hidden;
 }
 
+.logo {
+    width: 30rem;
+    height: 30rem;
+}
+
+.quote {
+    display: block;
+    font-size: 1.5rem;
+    margin: 2rem 0;
+}
+
+.features {
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+    width: 100%;
+}
+
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;
