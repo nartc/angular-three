@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonHelper,
     provideCommonHelperRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -35,16 +37,16 @@ export class NgtArrowHelper extends NgtCommonHelper<THREE.ArrowHelper> {
         this.set({ origin });
     }
 
-    @Input() set length(length: number) {
-        this.set({ length });
+    @Input() set length(length: NumberInput) {
+        this.set({ length: coerceNumberProperty(length) });
     }
 
-    @Input() set headLength(headLength: number) {
-        this.set({ headLength });
+    @Input() set headLength(headLength: NumberInput) {
+        this.set({ headLength: coerceNumberProperty(headLength) });
     }
 
-    @Input() set headWidth(headWidth: number) {
-        this.set({ headWidth });
+    @Input() set headWidth(headWidth: NumberInput) {
+        this.set({ headWidth: coerceNumberProperty(headWidth) });
     }
 
     override get helperType(): AnyConstructor<THREE.ArrowHelper> {

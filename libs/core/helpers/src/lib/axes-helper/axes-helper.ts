@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonHelper,
     provideCommonHelperRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -27,8 +29,8 @@ export class NgtAxesHelper extends NgtCommonHelper<THREE.AxesHelper> {
         this.instanceArgs = v;
     }
 
-    @Input() set size(size: number) {
-        this.set({ size });
+    @Input() set size(size: NumberInput) {
+        this.set({ size: coerceNumberProperty(size) });
     }
 
     override get helperType(): AnyConstructor<THREE.AxesHelper> {

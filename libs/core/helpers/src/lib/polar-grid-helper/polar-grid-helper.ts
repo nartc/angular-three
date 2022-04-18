@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonHelper,
     provideCommonHelperRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -27,20 +29,20 @@ export class NgtPolarGridHelper extends NgtCommonHelper<THREE.PolarGridHelper> {
         this.instanceArgs = v;
     }
 
-    @Input() set radius(radius: number) {
-        this.set({ radius });
+    @Input() set radius(radius: NumberInput) {
+        this.set({ radius: coerceNumberProperty(radius) });
     }
 
-    @Input() set radials(radials: number) {
-        this.set({ radials });
+    @Input() set radials(radials: NumberInput) {
+        this.set({ radials: coerceNumberProperty(radials) });
     }
 
-    @Input() set circles(circles: number) {
-        this.set({ circles });
+    @Input() set circles(circles: NumberInput) {
+        this.set({ circles: coerceNumberProperty(circles) });
     }
 
-    @Input() set divisions(divisions: number) {
-        this.set({ divisions });
+    @Input() set divisions(divisions: NumberInput) {
+        this.set({ divisions: coerceNumberProperty(divisions) });
     }
 
     @Input() set color1(color1: THREE.ColorRepresentation) {

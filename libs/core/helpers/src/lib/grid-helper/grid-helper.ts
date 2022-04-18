@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonHelper,
     provideCommonHelperRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -27,12 +29,12 @@ export class NgtGridHelper extends NgtCommonHelper<THREE.GridHelper> {
         this.instanceArgs = v;
     }
 
-    @Input() set size(size: number) {
-        this.set({ size });
+    @Input() set size(size: NumberInput) {
+        this.set({ size: coerceNumberProperty(size) });
     }
 
-    @Input() set divisions(divisions: number) {
-        this.set({ divisions });
+    @Input() set divisions(divisions: NumberInput) {
+        this.set({ divisions: coerceNumberProperty(divisions) });
     }
 
     @Input() set color1(color1: THREE.ColorRepresentation) {
