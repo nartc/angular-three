@@ -29,6 +29,14 @@ const sidebars = {
             label: 'Our first scene',
             id: 'first-scene',
         },
+        {
+          type: 'category',
+          label: 'Core API',
+          items: [
+            'core/canvas',
+            'core/objects'
+          ]
+        }
     ],
 
     // But you can create a sidebar manually

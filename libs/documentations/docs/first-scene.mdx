@@ -31,12 +31,8 @@ The tutorial is a bit long so here's the TLDR; version for folks that want to ge
 
 ```html
 <ngt-canvas>
-    <ngt-ambient-light [intensity]="0.5"></ngt-ambient-light>
-    <ngt-spot-light
-        [position]="10"
-        [angle]="0.15"
-        [penumbra]="1"
-    ></ngt-spot-light>
+    <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+    <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
     <ngt-point-light [position]="-10"></ngt-point-light>
 
     <app-cube [position]="[1.2, 0, 0]"></app-cube>
@@ -674,12 +670,8 @@ Next, let's start adding lights. We'll use `<ngt-ambient-light>`, `<ngt-spot-lig
 ```html
 <ngt-canvas>
     // highlight-start
-    <ngt-ambient-light [intensity]="0.5"></ngt-ambient-light>
-    <ngt-spot-light
-        [position]="10"
-        [angle]="0.15"
-        [penumbra]="1"
-    ></ngt-spot-light>
+    <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+    <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
     <ngt-point-light [position]="-10"></ngt-point-light>
     // highlight-end
 
@@ -762,12 +754,8 @@ All utilities exported from `@angular-three/soba` are prefixed with `ngt-soba`
 
 ```html
 <ngt-canvas>
-    <ngt-ambient-light [intensity]="0.5"></ngt-ambient-light>
-    <ngt-spot-light
-        [position]="10"
-        [angle]="0.15"
-        [penumbra]="1"
-    ></ngt-spot-light>
+    <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+    <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
     <ngt-point-light [position]="-10"></ngt-point-light>
 
     <app-cube [position]="[1.2, 0, 0]"></app-cube>

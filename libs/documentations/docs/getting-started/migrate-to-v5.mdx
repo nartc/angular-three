@@ -8,6 +8,23 @@ sidebar_label: Migrate to v5
 
 ## API Removals
 
+### `clock` Input
+
+`<ngt-canvas [clock]>` Input is removed.
+
+### `size` Input
+
+`<ngt-canvas [size]>` Input is removed.
+
+### `vr` Input
+
+Previously, `[vr]` Input on the `<ngt-canvas>` was used to let NGT knows that a scene should be using WebXR. Now, NGT should automatically switch to use WebXR if a VR session is requested.
+
+```diff
+- <ngt-canvas [vr]="true"></ngt-canvas>
++ <ngt-canvas></ngt-canvas>
+```
+
 ### Controllers
 
 All `controllers` are removed as the core of Angular Three has been rewritten to use Abstractions with Dependency Injection instead. The Controller approach worked but the trade-off for DX was too big. (eg: auto importing modules is broken, hard to remember and extend etc...)
@@ -49,15 +66,6 @@ Now, we can grab the `get instance()` from **ALL** NGT objects instead. However,
 + <ngt-mesh [geometry]="plane.instance" [material]="standard.instance"></ngt-mesh>
 + <!-- or, both works the same -->
 + <ngt-mesh [geometry]="plane.instance.value" [material]="standard.instance.value"></ngt-mesh>
-```
-
-### `vr` Input
-
-Previously, `[vr]` Input on the `<ngt-canvas>` was used to let NGT knows that a scene should be using WebXR. Now, NGT should automatically switch to use WebXR if a VR session is requested.
-
-```diff
-- <ngt-canvas [vr]="true"></ngt-canvas>
-+ <ngt-canvas></ngt-canvas>
 ```
 
 ### Stores
