@@ -1,6 +1,8 @@
 import {
+    coerceNumberProperty,
     NgtObject,
     NgtPreObjectInit,
+    NumberInput,
     provideObjectRef,
     tapEffect,
 } from '@angular-three/core';
@@ -23,12 +25,12 @@ export class NgtCubeCamera extends NgtObject<THREE.CubeCamera> {
         this.set({ instanceArgs: args });
     }
 
-    @Input() set near(near: number) {
-        this.set({ near });
+    @Input() set near(near: NumberInput) {
+        this.set({ near: coerceNumberProperty(near) });
     }
 
-    @Input() set far(far: number) {
-        this.set({ far });
+    @Input() set far(far: NumberInput) {
+        this.set({ far: coerceNumberProperty(far) });
     }
 
     @Input() set renderTarget(renderTarget: THREE.WebGLCubeRenderTarget) {
