@@ -278,7 +278,7 @@ export abstract class NgtInstance<
 
         const dispose = (this.instance.value as UnknownRecord)['dispose'];
         if (dispose && typeof dispose === 'function') {
-            dispose();
+            dispose.apply(this.instance.value as any);
         }
 
         this.set({ attach: [] } as unknown as Partial<TInstanceState>);
