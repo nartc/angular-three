@@ -11,6 +11,7 @@ import {
     NgtStore,
     NgtTriple,
     NgtUnknownInstance,
+    prepare as prepareInstance,
     Ref,
     tapEffect,
     UnknownRecord,
@@ -343,7 +344,11 @@ export class NgtPhysicBody extends NgtComponentStore {
             }
 
             if (!ref.value && !useOnTemplate) {
-                ref.set(new THREE.Object3D());
+                ref.set(
+                    prepareInstance(new THREE.Object3D(), () =>
+                        this.store.get()
+                    )
+                );
             }
 
             const physicsStore = this.physicsStore;
