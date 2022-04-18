@@ -1,6 +1,8 @@
 import {
     AnyConstructor,
+    coerceNumberProperty,
     NgtCommonTexture,
+    NumberInput,
     provideCommonTextureRef,
 } from '@angular-three/core';
 import {
@@ -26,8 +28,8 @@ export class NgtSobaGradientTexture extends NgtCommonTexture {
         this.set({ colors });
     }
 
-    @Input() set size(size: number) {
-        this.set({ size });
+    @Input() set size(size: NumberInput) {
+        this.set({ size: coerceNumberProperty(size) });
     }
 
     override get textureType(): AnyConstructor<THREE.Texture> {

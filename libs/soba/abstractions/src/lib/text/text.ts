@@ -1,10 +1,12 @@
 import {
     BooleanInput,
     coerceBooleanProperty,
+    coerceNumberProperty,
     NgtColor,
     NgtObjectInputs,
     NgtRef,
     NgtRenderState,
+    NumberInput,
     provideObjectHosRef,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
@@ -106,20 +108,20 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
         this.set({ characters });
     }
 
-    @Input() set fontSize(fontSize: number) {
-        this.set({ fontSize });
+    @Input() set fontSize(fontSize: NumberInput) {
+        this.set({ fontSize: coerceNumberProperty(fontSize) });
     }
 
-    @Input() set maxWidth(maxWidth: number) {
-        this.set({ maxWidth });
+    @Input() set maxWidth(maxWidth: NumberInput) {
+        this.set({ maxWidth: coerceNumberProperty(maxWidth) });
     }
 
-    @Input() set lineHeight(lineHeight: number) {
-        this.set({ lineHeight });
+    @Input() set lineHeight(lineHeight: NumberInput) {
+        this.set({ lineHeight: coerceNumberProperty(lineHeight) });
     }
 
-    @Input() set letterSpacing(letterSpacing: number) {
-        this.set({ letterSpacing });
+    @Input() set letterSpacing(letterSpacing: NumberInput) {
+        this.set({ letterSpacing: coerceNumberProperty(letterSpacing) });
     }
 
     @Input() set textAlign(textAlign: 'left' | 'right' | 'center' | 'justify') {
@@ -150,8 +152,8 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
         this.set({ clipRect });
     }
 
-    @Input() set depthOffset(depthOffset: number) {
-        this.set({ depthOffset });
+    @Input() set depthOffset(depthOffset: NumberInput) {
+        this.set({ depthOffset: coerceNumberProperty(depthOffset) });
     }
 
     @Input() set direction(direction: 'auto' | 'ltr' | 'rtl') {
@@ -188,8 +190,8 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
         this.set({ outlineColor });
     }
 
-    @Input() set outlineOpacity(outlineOpacity: number) {
-        this.set({ outlineOpacity });
+    @Input() set outlineOpacity(outlineOpacity: NumberInput) {
+        this.set({ outlineOpacity: coerceNumberProperty(outlineOpacity) });
     }
 
     @Input() set strokeWidth(strokeWidth: number | string) {
@@ -200,12 +202,12 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
         this.set({ strokeColor });
     }
 
-    @Input() set strokeOpacity(strokeOpacity: number) {
-        this.set({ strokeOpacity });
+    @Input() set strokeOpacity(strokeOpacity: NumberInput) {
+        this.set({ strokeOpacity: coerceNumberProperty(strokeOpacity) });
     }
 
-    @Input() set fillOpacity(fillOpacity: number) {
-        this.set({ fillOpacity });
+    @Input() set fillOpacity(fillOpacity: NumberInput) {
+        this.set({ fillOpacity: coerceNumberProperty(fillOpacity) });
     }
 
     @Input() set debugSDF(debugSDF: BooleanInput) {

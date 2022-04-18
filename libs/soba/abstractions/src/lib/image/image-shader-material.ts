@@ -1,6 +1,8 @@
 import {
     AnyConstructor,
+    coerceNumberProperty,
     NgtColor,
+    NumberInput,
     provideCommonMaterialRef,
     shaderMaterial,
 } from '@angular-three/core';
@@ -98,12 +100,12 @@ export class NgtSobaImageShaderMaterial extends NgtShaderMaterial {
         this.set({ color });
     }
 
-    @Input() set zoom(zoom: number) {
-        this.set({ zoom });
+    @Input() set zoom(zoom: NumberInput) {
+        this.set({ zoom: coerceNumberProperty(zoom) });
     }
 
-    @Input() set grayscale(grayscale: number) {
-        this.set({ grayscale });
+    @Input() set grayscale(grayscale: NumberInput) {
+        this.set({ grayscale: coerceNumberProperty(grayscale) });
     }
 
     override get materialType(): AnyConstructor<

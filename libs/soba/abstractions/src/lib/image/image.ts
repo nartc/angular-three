@@ -2,6 +2,7 @@ import {
     AnyFunction,
     BooleanInput,
     coerceBooleanProperty,
+    coerceNumberProperty,
     NGT_INSTANCE_HOST_REF,
     NGT_INSTANCE_REF,
     NgtObjectInputs,
@@ -9,6 +10,7 @@ import {
     NgtRef,
     NgtRenderState,
     NgtStore,
+    NumberInput,
     provideObjectHosRef,
     startWithUndefined,
 } from '@angular-three/core';
@@ -155,16 +157,16 @@ export class NgtSobaImage extends NgtObjectInputs<
         this.set({ url });
     }
 
-    @Input() set segments(segments: number) {
-        this.set({ segments });
+    @Input() set segments(segments: NumberInput) {
+        this.set({ segments: coerceNumberProperty(segments) });
     }
 
-    @Input() set zoom(zoom: number) {
-        this.set({ zoom });
+    @Input() set zoom(zoom: NumberInput) {
+        this.set({ zoom: coerceNumberProperty(zoom) });
     }
 
-    @Input() set grayscale(grayscale: number) {
-        this.set({ grayscale });
+    @Input() set grayscale(grayscale: NumberInput) {
+        this.set({ grayscale: coerceNumberProperty(grayscale) });
     }
 
     @Input() set toneMapped(toneMapped: BooleanInput) {
