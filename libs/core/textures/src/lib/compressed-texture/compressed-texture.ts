@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonTexture,
     provideCommonTextureRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -37,12 +39,12 @@ export class NgtCompressedTexture extends NgtCommonTexture<THREE.CompressedTextu
         this.set({ mipmaps });
     }
 
-    @Input() set width(width: number) {
-        this.set({ width });
+    @Input() set width(width: NumberInput) {
+        this.set({ width: coerceNumberProperty(width) });
     }
 
-    @Input() set height(height: number) {
-        this.set({ height });
+    @Input() set height(height: NumberInput) {
+        this.set({ height: coerceNumberProperty(height) });
     }
 
     @Input() override set format(format: THREE.CompressedPixelFormat) {
@@ -73,8 +75,8 @@ export class NgtCompressedTexture extends NgtCommonTexture<THREE.CompressedTextu
         this.set({ minFilter });
     }
 
-    @Input() override set anisotropy(anisotropy: number) {
-        this.set({ anisotropy });
+    @Input() override set anisotropy(anisotropy: NumberInput) {
+        this.set({ anisotropy: coerceNumberProperty(anisotropy) });
     }
 
     @Input() override set encoding(encoding: THREE.TextureEncoding) {

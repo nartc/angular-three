@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonTexture,
     provideCommonTextureRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -69,8 +71,8 @@ export class NgtCanvasTexture extends NgtCommonTexture<THREE.CanvasTexture> {
         this.set({ type });
     }
 
-    @Input() override set anisotropy(anisotropy: number) {
-        this.set({ anisotropy });
+    @Input() override set anisotropy(anisotropy: NumberInput) {
+        this.set({ anisotropy: coerceNumberProperty(anisotropy) });
     }
 
     protected override get optionFields(): Record<string, boolean> {

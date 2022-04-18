@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonTexture,
     provideCommonTextureRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -63,8 +65,8 @@ export class NgtCubeTexture extends NgtCommonTexture<THREE.CubeTexture> {
         this.set({ type });
     }
 
-    @Input() override set anisotropy(anisotropy: number) {
-        this.set({ anisotropy });
+    @Input() override set anisotropy(anisotropy: NumberInput) {
+        this.set({ anisotropy: coerceNumberProperty(anisotropy) });
     }
 
     @Input() override set encoding(encoding: THREE.TextureEncoding) {

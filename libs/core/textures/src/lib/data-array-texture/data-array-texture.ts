@@ -3,6 +3,8 @@ import {
     AnyConstructor,
     NgtCommonTexture,
     provideCommonTextureRef,
+    coerceNumberProperty,
+    NumberInput,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
@@ -35,16 +37,16 @@ export class NgtDataArrayTexture extends NgtCommonTexture<THREE.DataArrayTexture
         this.set({ data });
     }
 
-    @Input() set width(width: number) {
-        this.set({ width });
+    @Input() set width(width: NumberInput) {
+        this.set({ width: coerceNumberProperty(width) });
     }
 
-    @Input() set height(height: number) {
-        this.set({ height });
+    @Input() set height(height: NumberInput) {
+        this.set({ height: coerceNumberProperty(height) });
     }
 
-    @Input() set depth(depth: number) {
-        this.set({ depth });
+    @Input() set depth(depth: NumberInput) {
+        this.set({ depth: coerceNumberProperty(depth) });
     }
 
     protected override get optionFields(): Record<string, boolean> {
