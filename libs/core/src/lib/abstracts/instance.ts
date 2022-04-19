@@ -126,8 +126,7 @@ export abstract class NgtInstance<
     }
 
     get parent(): NgtRef {
-        const skipParent = this.get((s) => s.skipParent);
-        if (!skipParent) return this.parentRef?.();
+        if (!this.skipParent) return this.parentRef?.();
         return this.parentHostRef?.() || this.parentRef?.();
     }
 
