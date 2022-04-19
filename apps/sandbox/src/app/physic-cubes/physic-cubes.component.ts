@@ -102,7 +102,7 @@ export class SandboxPlaneComponent {
         >
             <ngt-box-geometry></ngt-box-geometry>
             <ngt-mesh-lambert-material
-                color="hotpink"
+                color="tomato"
             ></ngt-mesh-lambert-material>
         </ngt-mesh>
     `,
