@@ -40,3 +40,6 @@ Thumbs.db
 
 .angular
 .env
+
+# Local Netlify folder
+.netlify
