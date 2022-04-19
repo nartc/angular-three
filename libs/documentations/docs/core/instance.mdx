@@ -20,6 +20,27 @@ as well as reacting to changes.
 
 :::
 
+## Inputs
+
+| name       | description                                                                                                              | type                                | default |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- | ------- |
+| ref        | The external `Ref`                                                                                                       | `Ref`                               | -       |
+| attach     | Which property on the parent to attach to, can also accept an `AttachFn`                                                 | `string`, `string[]`, or `AttachFn` | `[]`    |
+| noAttach   | Enforce that this instance should **NOT** be attached to the parent                                                      | `BooleanInput`                      | `false` |
+| skipParent | Skips the immediate parent and use the Host parent if available instead. Mainly used internally in `@angular-three/soba` | `BooleanInput`                      | `false` |
+
+## Outputs
+
+| name  | description                                    |
+| ----- | ---------------------------------------------- |
+| ready | Emits after the instance finishes initializing |
+
+:::tip
+
+`(ready)` only emits once even if the instance is reconstructed due to arguments' changes.
+
+:::
+
 ## Ref
 
 Read more about [Ref](./ref)
@@ -58,9 +79,12 @@ export class CubeComponent {
 
 </Tabs>
 
+The observability of `Ref` allows NGT to pass references around while maintaining the same instance so that when NGT creates and updates the instance value (eg: `new THREE.Mesh()`), all the other places that are using that same reference get the update as well.
+
 ## Attaching
 
 The idea of _"attaching"_ is that each NGT object put on the template with the purpose of attaching itself on the parent instance's specific properties.
+`NgtInstance` has `[attach]` Input that accepts an array of paths to property that this instance should be attached to on the parent instance, or a function
 
 ```html
 <ngt-canvas>
@@ -91,3 +115,68 @@ The idea of _"attaching"_ is that each NGT object put on the template with the p
 ```
 
 :::
+
+-   `attach=string` attaches to `parent.string`
+-   `[attach]="['nested', 'object']"` attaches to `parent.nested.object`
+-   `[attach]="attachFn"`
+
+`attachFn` is called with `(parent: NgtRef, self: NgtRef)` so you can handle _attaching_ in more complex cases. `attachFn` should return a clean up function that would redo the _attaching_.
+
+```ts
+@Component({
+    template: `
+        <ngt-effect-composer>
+            <ngt-bloom [attach]="attachEffect"></ngt-bloom>
+        </ngt-effect-composer>
+    `,
+})
+export class SomeComponent {
+    attachEffect = (
+        parent: NgtRef<EffectComposer>,
+        self: NgtRef<BloomEffect>
+    ) => {
+        parent.value.addPass(self.value);
+        return () => {
+            parent.value.removePass(self.value);
+        };
+    };
+}
+```
+
+:::info
+
+`NgtRef` is a utility type that wraps `Ref` along with some internal `NgtInstance` state.
+
+:::
+
+## Internal state
+
+When an `NgtInstance` creates its own `Ref`, it will also add some internal state to that `Ref`. `NgtRef` is a `Ref` with some internal states. Most of the time, the two can be used interchangably.
+
+```ts
+export interface NgtInstanceInternal {
+    root: () => NgtState;
+    // objects and parent are used when children are added with `attach` instead of being added to the Object3D scene graph
+    objects: NgtRef[];
+    parent: NgtRef | null;
+    primitive?: boolean;
+    eventCount: number;
+    handlers: Partial<NgtEventHandlers>;
+    previousAttach?: string[] | (() => void);
+    previousAttachValue?: unknown;
+}
+```
+
+## Applying options
+
+Options that are not [**Constructor Arguments**](./inputs#constructor-arguments) are updated automatically on changes by `NgtInstance`. Things like:
+
+-   `position`, `rotation`, `scale` etc... on Objects
+-   `color`, `opacity` etc... on Materials
+-   `intensity`, `angle` etc... on Lights
+
+After applying the options, `NgtInstance` also calls the necessary method to update the changes to the scene:
+
+-   `updateMatrix()` for Object3D
+-   `updateProjectionMatrix()` and `updateMatrixWorld()` for Cameras
+-   `needsUpdate = true` for various other objects

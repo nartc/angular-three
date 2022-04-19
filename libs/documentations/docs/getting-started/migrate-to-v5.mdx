@@ -203,9 +203,11 @@ Previously, any material directive accepted a `[parameters]` Input to customize 
 
 ## API Breaking Changes
 
-### `appendTo`
+### `appendTo` and `appendMode`
 
-`[appendTo]` is an Input that is used to tell NGT where to append the Object3D. Previously, `[appendTo]` accepted either a `THREE.Object3D` instance or a `() => THREE.Object3D` factory. Now, `[appendTo]` accepts a `Ref<THREE.Object3D>` instead (read more about [TODO: Ref documentation](/))
+`[appendTo]` is an Input that is used to tell NGT where to append the Object3D. Previously, `[appendTo]` accepted either a `THREE.Object3D` instance or a `() => THREE.Object3D` factory. Now, `[appendTo]` accepts a `Ref<THREE.Object3D> | THREE.Object3D` instead (read more about [Ref documentation](../core/ref)). If a `THREE.Object3D` is passed in, that `THREE.Object3D` will be used to create a new `Ref`.
+
+Previously, `appendTo` override `appendMode` except for `appendMode = 'none'`. Now, `appendTo` skips `appendMode` completely regardless of `appendMode` value.
 
 ### `@angular-three/cannon` Worker API
 

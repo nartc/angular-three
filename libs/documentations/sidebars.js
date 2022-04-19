@@ -33,11 +33,13 @@ const sidebars = {
             type: 'category',
             label: 'Core API',
             items: [
+                'core/inputs',
                 'core/canvas',
                 'core/ref',
                 'core/component-store',
                 'core/instance',
                 'core/objects',
+                'core/store',
             ],
         },
     ],

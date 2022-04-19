@@ -1,0 +1,103 @@
+---
+id: inputs
+title: Inputs
+sidebar_label: Inputs
+---
+
+Throughout the documentations, we will encounter many types of Inputs that NGT works with. This page attempts to explain those types
+
+## Constructor Arguments
+
+While consulting THREE.js documentations, we will come across objects that can be constructed by passing in different arguments in the constructor.
+
+```ts
+const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+```
+
+NGT supports **Constructor Arguments** by providing `[args]` Input on various objects
+
+```html
+<ngt-sphere-geometry [args]="[1, 32, 32]"></ngt-sphere-geometry>
+```
+
+:::caution
+
+NGT objects that use `[args]` will be reconstructed when `[args]` changes
+
+:::
+
+## Options
+
+Along with **Constructor Arguments**, an object might have a list of Inputs that object accepts as **options**. Options are usually optional when constructing said THREE.js object and will **not** reconstruct the object upon changed.
+
+```ts
+const light = new THREE.AmbientLight('white', 1); // color and intensity
+// or
+const secondLight = new THREE.AmbientLight();
+secondLight.color.set('white');
+secondLight.intensity = 1;
+```
+
+NGT supports similar concept
+
+```html
+<ngt-ambient-light color="white" intensity="1"></ngt-ambient-light>
+```
+
+:::caution
+
+When to use **Constructor Arguments** versus when to use **options** is a case-by-case decision as we work on our scene graph.
+
+:::
+
+### Shortcuts
+
+In the previous example about `THREE.AmbientLight`, we see that we use `color.set()` to set the color of the light. Such method (`set()`) is a _shortcut_. NGT attempts to call the _shortcut_ methods automatically on various options: `position`, `color`, `scale`, `rotation` etc...
+
+### `BooleanInput`
+
+In Angular, we would have to pass `true` or `false` to a `boolean` Input
+
+```html
+<ngt-mesh [castShadow]="true"></ngt-mesh>
+```
+
+`BooleanInput` allows us to pass in different variants for `boolean` Input
+
+```html
+<ngt-mesh [castShadow]="true"></ngt-mesh>
+<ngt-mesh castShadow></ngt-mesh>
+<ngt-mesh castShadow=""></ngt-mesh>
+```
+
+### `NumberInput`
+
+In Angular, we would have to pass in a `number` to a `number` Input
+
+```html
+<ngt-ambient-light [intensity]="1"></ngt-ambient-light>
+```
+
+`NumberInput` allows us to pass in different variants for `number` Input
+
+```html
+<ngt-ambient-light [intensity]="1"></ngt-ambient-light>
+<ngt-ambient-light intensity="1"></ngt-ambient-light>
+```
+
+### `Ngt***`
+
+Throughout the documentations, we will come across `NgtVector3`, `NgtEuler` etc... These are NGT versions of THREE.js counterparts:
+
+-   `NgtVector3` -> `THREE.Vector3`
+-   `NgtEuler` -> `THREE.Euler`
+-   ...
+
+Because NGT automatically deals with [Shortcuts](#shortcuts), NGT provides more relaxed types for these Inputs
+
+```html
+<!--                  👇 instead of constructing THREE.Vector3(1, 2, 3) -->
+<ngt-mesh [position]="[1, 2, 3]"></ngt-mesh>
+<!--                👇 instead of constructing THREE.Vector3(1.5, 1.5, 1.5) -->
+<ngt-mesh [scale]="1.5"></ngt-mesh>
+```

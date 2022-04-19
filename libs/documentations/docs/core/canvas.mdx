@@ -43,6 +43,13 @@ The root of a NGT 3D scene is the `NgtCanvas` component, or `<ngt-canvas>`. This
 | initialLog     | Whether to log the state of the canvas upon creation                                                                                                                                         | `BooleanInput`                                     | `false`                                                  |
 | projectContent | Whether to project the children content. Helpful for debugging with [Angular DevTools](https://chrome.google.com/webstore/detail/angular-devtools/ienfalfjdbdpebioblfackkekamfmbnh?hl=en-US) | `BooleanInput`                                     | `false`                                                  |
 
+### Outputs
+
+| name          | description                                                                                                               |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| created       | Emits after the canvas is created with all the internal building blocks                                                   |
+| pointermissed | If observed, the Canvas will set the internal `pointermissed` event and will emit whenever the Raycaster misses an object |
+
 ### Defaults
 
 `NgtCanvas` sets up a translucent `THREE.WebGLRenderer` with the following constructor arguments:

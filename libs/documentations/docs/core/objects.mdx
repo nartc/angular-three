@@ -1,5 +1,163 @@
 ---
 id: objects
-title: Objects, Refs, Instances
-sidebar_label: Objects, Refs, Instances
+title: Objects
+sidebar_label: Objects
 ---
+
+Everything that applied to [`NgtInstance`](./instance) also applies to `NgtObject`
+
+## Inputs
+
+| name             | description                                                                                                                               | type                                       | default                  |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ------------------------ |
+| name             | Name of the object                                                                                                                        | `string`                                   | `''`                     |
+| position         | Position of the object                                                                                                                    | `NgtVector3`                               | `new THREE.Vector3()`    |
+| rotation         | Rotation of the object, if `quarternion` is not used                                                                                      | `NgtEuler`                                 | `new THREE.Euler()`      |
+| quaternion       | Quaternion of the object, if `rotation` is not used                                                                                       | `NgtQuaternion`                            | `new THREE.Quaternion()` |
+| scale            | Scale of the object                                                                                                                       | `NgtVector3`                               | `new THREE.Vector3()`    |
+| color            | Color of the object                                                                                                                       | `NgtColor`                                 | `new THREE.Color()`      |
+| castShadow       | Whether this object can cast shadow                                                                                                       | `BooleanInput`                             | `false`                  |
+| receiveShadow    | Whether this object can receive shadow                                                                                                    | `BooleanInput`                             | `false`                  |
+| priority         | The render priority of this object (for `beforeRender`)                                                                                   | `NumberInput`                              | `0`                      |
+| visible          | Whether this object is visible on the Scene                                                                                               | `BooleanInput`                             | `true`                   |
+| matrixAutoUpdate | Whether to calculate the matrix of position, (rotation or quaternion) and scale every frame and also recalculate the matrixWorld property | `BooleanInput`                             | `true`                   |
+| userData         | Store custom data                                                                                                                         | `UnknownRecord`                            | `{}`                     |
+| dispose          | Custom dispose function, pass in `null` to nullify the auto `dispose`                                                                     | `(() => void)`, or `null`                  | -                        |
+| raycast          | Custom raycast function, pass in `null` to nullify the raycasting                                                                         | `THREE.Object3D['raycast']`, or `null`     | -                        |
+| appendMode       | Where to append this object on                                                                                                            | 'immediate', 'root', or 'none'             | `'immediate'`            |
+| appendTo         | The parent ref to append this object on, overrides `appendMode`. Can also accept a raw `THREE.Object3D` which will be turned into a `Ref` | `Ref<THREE.Object3D>`, or `THREE.Object3D` | -                        |
+
+## Outputs
+
+| name          | description                                                        |
+| ------------- | ------------------------------------------------------------------ |
+| beforeRender  | If observed, emits before every render                             |
+| click         | If observed, emits when the object is clicked                      |
+| contextmenu   | If observed, emits when the object is right-clicked                |
+| dblclick      | If observed, emits when the object is double clicked               |
+| pointerup     | If observed, emits when the pointer moves up while on the object   |
+| pointerdown   | If observed, emits when the pointer moves down while on the object |
+| pointerover   | If observed, emits when the pointer is over the object             |
+| pointerout    | If observed, emits when the pointer gets on then out of the object |
+| pointerenter  | If observed, emits when the pointer gets on the object             |
+| pointerleave  | If observed, emits when the pointer gets on then out of the object |
+| pointermove   | If observed, emits when the pointer moves while on the object      |
+| pointermissed | If observed, emits when the pointer misses the object              |
+| pointercancel | If observed, emits when the current pointer event gets cancelled   |
+| wheel         | If observed, emits when the wheel is acted on when on the object   |
+
+:::caution
+
+`pointerenter` and `pointerleave` events work exactly the same as `pointerover` and `pointerout`. `pointerenter` and `pointerleave` semantics are not implemented.
+
+:::
+
+## Events
+
+The events system in NGT is completely ported from R3F. For more information, please check [React Three Fiber Events](https://docs.pmnd.rs/react-three-fiber/api/events)
+
+## Hierarchy
+
+Similar to `NgtInstance`, `NgtObject` also has an automatic mechanism to appending itself on the parent object.
+
+```ts
+group.add(mesh);
+parentGroup.add(group);
+scene.add(parentGroup);
+```
+
+In NGT, this happens automatically via **Content Projection** and **Hierarchical Dependency Injection**
+
+```html
+<ngt-canvas>
+    <ngt-group>
+        <ngt-group>
+            <ngt-mesh></ngt-mesh>
+        </ngt-group>
+    </ngt-group>
+</ngt-canvas>
+```
+
+We can modify the default behavior by adjusting `appendMode` and `appendTo` Inputs
+
+### `appendMode`
+
+By default, the `appendMode` is set to `'immediate'` which means that an Object should be appended to its immediate parent.
+
+-   If `appendMode` is `'root'`, the Object will always be appended to the Scene object
+-   If `appendMode` is `'none'`, the Object will **NOT** be appended automatically
+
+### `appendTo`
+
+Sometimes, we would want to control exactly which parent to append the object to by passing in a `Ref<THREE.Object3D>` or (a `THREE.Object3D`) to `[appendTo]`. `appendTo` overrides `appendMode` completely. In other words, even if `appendMode` is set to `'none'` and `appendTo` exists, then NGT will still append the object to `appendTo`
+
+## `(beforeRender)` Output
+
+To register an object as participant in the animation loop, we can listen for the `(beforeRender)` Output.
+
+```ts
+@Component({
+    template: ` <ngt-mesh (beforeRender)="onBeforeRender($event)"></ngt-mesh> `,
+})
+export class CubeComponent {
+    onBeforeRender($event: { state: NgtRenderState; object: THREE.Mesh }) {}
+}
+```
+
+`beforeRender` subscribes to the animation loop, runs the callback (eg: `onBeforeRender`) before every render outside of Angular Zone, and cleans up the subscription when the object is destroyed.
+
+### `[priority]` Input
+
+This behaves the same as [Render Priority](./store#render-priority)
+
+## Referencing NGT objects
+
+Referencing NGT objects is the same as referencing any Angular component.
+
+```ts
+@Component({
+    template: `
+        <!-- 👇 plain NGT object -->
+        <ngt-mesh></ngt-mesh>
+
+        <!--      👇 template variable (note that template variable allows us also use this on the template) -->
+        <ngt-mesh #ngtMesh></ngt-mesh>
+
+        <!--        👇 using (ready) event -->
+        <ngt-mesh (ready)="mesh = $event"></ngt-mesh>
+    `,
+})
+export class CubeComponent {
+    mesh!: THREE.Mesh;
+
+    @ViewChild(NgtMesh, { static: true }) firstMesh!: NgtMesh;
+    @ViewChild('ngtMesh', { static: true }) secondMesh!: NgtMesh;
+}
+```
+
+## Putting models on NGT scene
+
+More often than not, we want load 3D models from an external source and put them on the scene so that we can interact with them in the similar manner to other objects that NGT supports. In these cases, NGT provides a `ngt-primitive` component that can be used to create a primitive object from an existing THREE.js object.
+
+```ts
+@Component({
+    selector: 'some',
+    template: `
+    <ng-container *ngIf="model$ | async as model">
+                    <!-- 👇 NgtPrimitive exposes this object instead of itself like a NgtMesh -->
+      <ngt-primitive [object]="model.scene"></ng-primitive>
+    </ng-container>
+  `,
+})
+export class SomeComponent {
+    model$ = this.loader.use(GLTFLoader, 'path/to/model.gltf');
+
+    constructor(private loader: NgtLoader) {}
+}
+
+@NgModule({
+    //        👇 import from @angular-three/core/primitive
+    imports: [NgtPrimitiveModule],
+})
+export class SomeComponentModule {}
+```
