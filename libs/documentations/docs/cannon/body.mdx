@@ -94,6 +94,72 @@ All body creators accept an optional second argument `useOnTemplate`. This flag 
 
 However, there are cases where we would want to still constraint some object in the physic world without giving it a representation in the 3D scene. Setting `useOnTemplate = false` allows us to do that as `NgtPhysicBody` will create a blank `THREE.Object3D` to give it physic constraints.
 
+```ts
+@Component({
+    selector: 'sandbox-lamp',
+    template: `
+        <ngt-mesh
+            sandboxDragConstraint
+            [ref]="lampRef.ref"
+            [position]="[0, 16, 0]"
+        >
+            <ngt-cone-geometry [args]="[2, 2.5, 32]"></ngt-cone-geometry>
+            <ngt-mesh-standard-material></ngt-mesh-standard-material>
+            <ngt-point-light [intensity]="10" [distance]="5"></ngt-point-light>
+            <ngt-spot-light
+                [position]="[0, 20, 0]"
+                [angle]="0.4"
+                [penumbra]="1"
+                [intensity]="0.6"
+                castShadow
+            ></ngt-spot-light>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgtPhysicBody, NgtPhysicConstraint],
+})
+export class SandboxLampComponent implements OnInit {
+    // highlight-start
+    fixtureRef = this.physicBody.useSphere(
+        () => ({
+            args: [1],
+            position: [0, 16, 0],
+            type: 'Static',
+        }),
+        false
+    );
+    // highlight-end
+    lampRef = this.physicBody.useBox(() => ({
+        angulardamping: 1.99,
+        args: [1, 0, 5],
+        linearDamping: 0.9,
+        mass: 1,
+        position: [0, 16, 0],
+    }));
+
+    constructor(
+        private physicBody: NgtPhysicBody,
+        private physicConstraint: NgtPhysicConstraint
+    ) {}
+
+    ngOnInit() {
+        // highlight-start
+        this.physicConstraint.usePointToPointConstraint(
+            this.fixtureRef.ref,
+            this.lampRef.ref,
+            { pivotA: [0, 0, 0], pivotB: [0, 2, 0] }
+        );
+        // highlight-end
+    }
+}
+```
+
+The above example shows that we create a `fixture` as an `Object3D` that is constrained in the Physic World. However, we're not actually rendering it to the scene as we do not associate it with any 3D representation. That allows us to still create [constraint](./constraint) between the `fixture` and the `lamp`.
+
+![use on template example](/img/use-on-template-example.png)
+
+In this image, the lamp is constrained with the fixture which is **fixed** to the top.
+
 ## `ref`
 
 All body creators accept an optional 3rd argument `ref`. This argument allows us to pass in an existed `Ref`. By default, `NgtPhysicBody` creates a new `Ref` then expects us to pass this `Ref` into a `NgtObject`.
