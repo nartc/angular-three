@@ -236,6 +236,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         invalidate: (state?: () => NgtState) => void,
         advance: (
             timestamp: number,
+            runGlobalCallbacks?: boolean,
             state?: () => NgtState,
             frame?: THREE.XRFrame
         ) => void
@@ -253,7 +254,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         );
         this.set((state) => ({
             invalidate: () => invalidate(() => this.get()),
-            advance: (timestamp) => advance(timestamp, () => this.get()),
+            advance: (timestamp, runGlobalCallbacks) =>
+                advance(timestamp, runGlobalCallbacks, () => this.get()),
             internal: { ...state.internal, active: true },
         }));
         this.set(this.allConstructed$);
@@ -321,6 +323,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         canvasElement: HTMLCanvasElement;
         advance: (
             timestamp: number,
+            runGlobalCallbacks?: boolean,
             state?: () => NgtState,
             frame?: THREE.XRFrame
         ) => void;
@@ -406,7 +409,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                 ) => {
                     const state = this.get();
                     if (state.frameloop === 'never') return;
-                    advance(timestamp, () => state, frame);
+                    advance(timestamp, true, () => state, frame);
                 };
 
                 // Toggle render switching on session

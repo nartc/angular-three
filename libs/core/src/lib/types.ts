@@ -400,7 +400,7 @@ export interface NgtState {
     /** Flags the canvas for render, but doesn't render in itself */
     invalidate: () => void;
     /** Advance (render) one step */
-    advance: (timestamp: number) => void;
+    advance: (timestamp: number, runGlobalCallbacks?: boolean) => void;
     /** If this state model is layerd (via createPortal) then this contains the previous layer */
     previousState?: NgtState;
     /** Internals */

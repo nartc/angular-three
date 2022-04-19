@@ -3,7 +3,6 @@ export * from './lib/types';
 export * from './lib/tokens';
 export * from './lib/ref';
 
-export * from './lib/di/parent-object';
 export * from './lib/di/performance';
 export * from './lib/di/resize';
 export * from './lib/di/is-webgl-available';
@@ -26,13 +25,14 @@ export * from './lib/di/sprite';
 export * from './lib/di/texture';
 export * from './lib/di/skinned-mesh';
 
+export * from './lib/pipes/side';
 export * from './lib/pipes/math';
+export * from './lib/pipes/pi';
+export * from './lib/pipes/radian';
+
 export * from './lib/pipes/vector';
 export * from './lib/pipes/color';
 export * from './lib/pipes/fog';
-export * from './lib/pipes/side';
-export * from './lib/pipes/pi';
-export * from './lib/pipes/radian';
 
 export * from './lib/directives/repeat';
 export * from './lib/directives/cursor';
@@ -69,3 +69,4 @@ export * from './lib/utils/coercion';
 export * from './lib/utils/instance';
 export * from './lib/utils/shader-material';
 export * from './lib/utils/is';
+export * from './lib/utils/loop';

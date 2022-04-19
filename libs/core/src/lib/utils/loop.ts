@@ -1,6 +1,52 @@
 import * as THREE from 'three';
-import type { NgtRenderState, NgtState } from '../types';
+import type { AnyFunction, NgtRenderState, NgtState } from '../types';
 import { is } from './is';
+
+type GlobalRenderCallback = (timeStamp: number) => void;
+
+const globalCallbacks: GlobalRenderCallback[] = [];
+const globalAfterCallbacks: GlobalRenderCallback[] = [];
+const globalTailCallbacks: GlobalRenderCallback[] = [];
+
+function createCallback(
+    callback: GlobalRenderCallback,
+    callbacks: GlobalRenderCallback[]
+): () => void {
+    const index = callbacks.length;
+    callbacks.push(callback);
+    return () => void callbacks.splice(index, 1);
+}
+
+function runCallbacks(effects: GlobalRenderCallback[], timestamp: number) {
+    for (let i = 0, length = effects.length; i < length; i++) {
+        effects[i](timestamp);
+    }
+}
+
+/**
+ * Adds a global render callback which is called before each frame.
+ */
+export function addCallback(callback: GlobalRenderCallback): AnyFunction<void> {
+    return createCallback(callback, globalCallbacks);
+}
+
+/**
+ * Adds a global render callback which is called after each frame has been rendered.
+ */
+export function addAfterCallback(
+    callback: GlobalRenderCallback
+): AnyFunction<void> {
+    return createCallback(callback, globalAfterCallbacks);
+}
+
+/**
+ * Adds a global callback which is called when rendering stops.
+ */
+export function addTailCallback(
+    callback: GlobalRenderCallback
+): AnyFunction<void> {
+    return createCallback(callback, globalTailCallbacks);
+}
 
 export function render(
     timestamp: number,
@@ -50,8 +96,10 @@ export function createLoop(rootStateMap: Map<Element, () => NgtState>) {
         running = true;
         repeat = 0;
 
-        // Run effects
-        // if (globalEffects.length) run(globalEffects, timestamp)
+        // Run callbacks
+        if (globalCallbacks.length) {
+            runCallbacks(globalCallbacks, timestamp);
+        }
 
         // Render all roots
         rootStateMap.forEach((rootState) => {
@@ -66,13 +114,17 @@ export function createLoop(rootStateMap: Map<Element, () => NgtState>) {
             }
         });
 
-        // Run after-effects
-        // if (globalAfterEffects.length) run(globalAfterEffects, timestamp);
+        // Run after-callbacks
+        if (globalAfterCallbacks.length) {
+            runCallbacks(globalAfterCallbacks, timestamp);
+        }
 
         // Stop the loop if nothing invalidates it
         if (repeat === 0) {
             // Tail call effects, they are called when rendering stops
-            // if (globalTailEffects.length) run(globalTailEffects, timestamp);
+            if (globalTailCallbacks.length) {
+                runCallbacks(globalTailCallbacks, timestamp);
+            }
 
             // Flag end of operation
             running = false;
@@ -102,20 +154,20 @@ export function createLoop(rootStateMap: Map<Element, () => NgtState>) {
         }
     }
 
-    /** runGlobalEffects: boolean = true */
     function advance(
         timestamp: number,
+        runGlobalCallbacks = true,
         state?: () => NgtState,
         frame?: THREE.XRFrame
     ): void {
-        // if (runGlobalEffects) run(globalEffects, timestamp);
+        if (runGlobalCallbacks) runCallbacks(globalCallbacks, timestamp);
         const stateToAdvance = state?.();
         if (!stateToAdvance) {
             rootStateMap.forEach((rootState) => render(timestamp, rootState));
         } else {
             render(timestamp, () => stateToAdvance, frame);
         }
-        // if (runGlobalEffects) run(globalAfterEffects, timestamp);
+        if (runGlobalCallbacks) runCallbacks(globalAfterCallbacks, timestamp);
     }
 
     return { loop, advance, invalidate };
