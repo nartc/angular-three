@@ -1,0 +1,130 @@
+---
+id: body
+title: Body
+sidebar_label: Body
+---
+
+To interact with [Cannon Body API](https://pmndrs.github.io/cannon-es/docs/classes/Body.html), we use `NgtPhysicBody` service from `@angular-three/cannon`
+
+## Usage
+
+```ts
+@Component({
+    providers: [NgtPhysicBody],
+})
+export class FloorComponent {
+    // 👇 now we can use this ref on the template
+    planeRef = this.physicBody.usePlane(/* ... */);
+
+    constructor(private physicBody: NgtPhysicBody) {}
+}
+```
+
+## Body Creators
+
+| name                | props                   | description                                  |
+| ------------------- | ----------------------- | -------------------------------------------- |
+| usePlane            | `PlaneProps`            | Add a `Plane` to the Physic World            |
+| useBox              | `BoxProps`              | Add a `Box` to the Physic World              |
+| useCylinder         | `CylinderProps`         | Add a `Cylinder` to the Physic World         |
+| useHeightfield      | `HeightfieldProps`      | Add a `Heightfield` to the Physic World      |
+| useParticle         | `ParticleProps`         | Add a `Particle` to the Physic World         |
+| useSphere           | `SphereProps`           | Add a `Sphere` to the Physic World           |
+| useTrimesh          | `TrimeshProps`          | Add a `Trimesh` to the Physic World          |
+| useConvexPolyhedron | `ConvexPolyhedronProps` | Add a `ConvexPolyhedron` to the Physic World |
+| useCompoundBody     | `CompoundBodyProps`     | Add a `CompoundBody` to the Physic World     |
+
+All Body Creators return `NgtPhysicBodyReturn`
+
+```ts
+export interface NgtPhysicBodyReturn {
+    ref: Ref<THREE.Object3D>;
+    api: NgtPhysicsBodyPublicApi;
+}
+```
+
+-   `ref` is used to pass in an `NgtInstance` `[ref]` Input
+-   `api` is to interact with the Physic World like updating `position`, applying forces etc...
+
+```ts
+@Component({
+    selector: 'sandbox-box',
+    template: `
+        <ngt-mesh
+            [ref]="boxRef.ref"
+            [castShadow]="true"
+            [receiveShadow]="true"
+            (beforeRender)="onBoxBeforeRender($event.state)"
+        >
+            <ngt-box-geometry [args]="boxSize"></ngt-box-geometry>
+            <ngt-mesh-lambert-material></ngt-mesh-lambert-material>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgtPhysicBody],
+})
+export class BoxComponent {
+    boxSize: NgtTriple = [4, 4, 4];
+
+    boxRef = this.physicBody.useBox(() => ({
+        mass: 1,
+        type: 'Kinematic',
+        args: this.boxSize,
+    }));
+
+    constructor(private physicBody: NgtPhysicBody) {}
+
+    onBoxBeforeRender({ clock }: NgtRenderState) {
+        const t = clock.getElapsedTime();
+        // highlight-start
+        this.boxRef.api.position.set(
+            Math.sin(t * 2) * 5,
+            Math.cos(t * 2) * 5,
+            3
+        );
+        this.boxRef.api.rotation.set(Math.sin(t * 6), Math.cos(t * 6), 0);
+        // highlight-end
+    }
+}
+```
+
+## `useOnTemplate`
+
+All body creators accept an optional second argument `useOnTemplate`. This flag is defaulted to `true` which means that `NgtPhysicBody` expects us to pass the returned `Ref` into some `NgtObject`
+
+However, there are cases where we would want to still constraint some object in the physic world without giving it a representation in the 3D scene. Setting `useOnTemplate = false` allows us to do that as `NgtPhysicBody` will create a blank `THREE.Object3D` to give it physic constraints.
+
+## `ref`
+
+All body creators accept an optional 3rd argument `ref`. This argument allows us to pass in an existed `Ref`. By default, `NgtPhysicBody` creates a new `Ref` then expects us to pass this `Ref` into a `NgtObject`.
+
+However, there are cases where we have a `Ref` that is intracting with many different objects on the 3D scene. One such case is a `Sphere` representing our mouse on the scene so we can apply physic to our "Mouse".
+
+```ts
+// highlight-start
+const cursor = new Ref<THREE.Object3D>();
+// highlight-end
+
+@Component({
+    providers: [NgtPhysicBody],
+})
+export class CursorComponent {
+    sphereRef = this.physicBody.useSphere(
+        () => ({
+            /*...*/
+        }),
+        true,
+        // highlight-start
+        cursor
+        // highlight-end
+    );
+
+    constructor(private physicBody: NgtPhysicBody) {}
+}
+```
+
+## Types
+
+-   A dynamic body is fully simulated. Can be moved manually by the user, but normally they move according to forces. A dynamic body can collide with all body types. A dynamic body always has finite, non-zero mass.
+-   A static body does not move during simulation and behaves as if it has infinite mass. Static bodies can be moved manually by setting the position of the body. The velocity of a static body is always zero. Static bodies do not collide with other static or kinematic bodies.
+-   A kinematic body moves under simulation according to its velocity. They do not respond to forces. They can be moved manually, but normally a kinematic body is moved by setting its velocity. A kinematic body behaves as if it has infinite mass. Kinematic bodies do not collide with other static or kinematic bodies.

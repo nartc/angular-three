@@ -1,0 +1,23 @@
+---
+id: spring
+title: Spring
+sidebar_label: Spring
+---
+
+To interact with [Cannon Spring API](https://pmndrs.github.io/cannon-es/docs/classes/Spring.html), we use `NgtPhysicSpring` from `@angular-three/core`
+
+## Spring Creator
+
+| name      | description                      |
+| --------- | -------------------------------- |
+| useSpring | A spring, connecting two bodies. |
+
+`useSpring` returns a `NgtPhysicSpringReturn`
+
+```ts
+export interface NgtPhysicSpringReturn {
+    bodyA: Ref<THREE.Object3D>;
+    bodyB: Ref<THREE.Object3D>;
+    api: NgtPhysicSpringApi;
+}
+```

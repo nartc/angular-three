@@ -1,0 +1,49 @@
+---
+id: constraint
+title: Constraint
+sidebar_label: Constraint
+---
+
+To interact with [Cannon Constraint API](https://pmndrs.github.io/cannon-es/docs/classes/Constraint.html), we use `NgtPhysicConstraint` service from `@angular-three/cannon`
+
+## Usage
+
+```ts
+@Component({
+    providers: [NgtPhysicConstraint],
+})
+export class BoxComponent implements OnInit {
+    constructor(private physicConstraint: NgtPhysicConstraint) {}
+
+    ngOnInit() {
+        // 👇 creating a Constraint between the two bodies
+        this.physicConstraint.usePointToPointConstraint(
+            refA,
+            refB,
+            someOptions
+        );
+    }
+}
+```
+
+## Constraint Creators
+
+| name                      | type             | options                      | description                                                                                                                     |
+| ------------------------- | ---------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| usePointToPointConstraint | `'PointToPoint'` | `PointToPointConstraintOpts` | Connects two bodies at given offset points.                                                                                     |
+| useConeTwistConstraint    | `'ConeTwist'`    | `ConeTwistConstraintOpts`    | A Cone Twist constraint, useful for ragdolls.                                                                                   |
+| useDistanceConstraint     | `'Distance'`     | `DistanceConstraintOpts`     | Constrains two bodies to be at a constant distance from each others center of mass.                                             |
+| useHingeConstraint        | `'Hinge'`        | `HingeConstraintOpts`        | Hinge constraint. Think of it as a door hinge. It tries to keep the door in the correct place and with the correct orientation. |
+| useLockConstraint         | `'Lock'`         | `LockConstraintOpts`         | Lock constraint. Will remove all degrees of freedom between the bodies.                                                         |
+
+All Constraint Creators return `NgtPhysicConstraintReturn`
+
+```ts
+export interface NgtPhysicConstraintReturn<
+    T extends 'Hinge' | ConstraintTypes
+> {
+    bodyA: Ref<THREE.Object3D>;
+    bodyB: Ref<THREE.Object3D>;
+    api: NgtConstraintORHingeApi<T>;
+}
+```

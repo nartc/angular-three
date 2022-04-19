@@ -46,6 +46,20 @@ const sidebars = {
                 'core/additional-exports',
             ],
         },
+        {
+            type: 'category',
+            label: 'Cannon API',
+            items: [
+                'cannon/overview',
+                'cannon/first-physics-scene',
+                'cannon/physics',
+                'cannon/body',
+                'cannon/constraint',
+                'cannon/spring',
+                'cannon/ray',
+                'cannon/raycast-vehicle',
+            ],
+        },
     ],
 
     // But you can create a sidebar manually
