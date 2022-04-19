@@ -1,5 +1,12 @@
 
 
+## [5.0.0-beta.11](https://github.com/nartc/angular-three/compare/5.0.0-beta.10...5.0.0-beta.11) (2022-04-19)
+
+
+### Features
+
+* **cannon:** consolidate api into cannon entry point; add raycast, spring, and raycastvehicle ([974a243](https://github.com/nartc/angular-three/commit/974a243b3dc544d8a23ca1cc8fb1edad3143b77a))
+
 ## [5.0.0-beta.10](https://github.com/nartc/angular-three/compare/5.0.0-beta.9...5.0.0-beta.10) (2022-04-19)
 
 
