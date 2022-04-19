@@ -1,3 +1,35 @@
+
+
+## [5.0.0-beta.9](https://github.com/nartc/angular-three/compare/5.0.0-beta.8...5.0.0-beta.9) (2022-04-19)
+
+
+### Features
+
+* **core:** add global callbacks ([307b2e3](https://github.com/nartc/angular-three/commit/307b2e3f29cad53d5a58859079be8c32a8723c9a))
+
+
+### Bug Fixes
+
+* **cannon:** body makes the blank object an instance ([7d3dfa8](https://github.com/nartc/angular-three/commit/7d3dfa83c6636f44d1931bee8c187ee2f2b06325))
+* **core:** consolidate check update logic for both instance and parentInstance ([6d081a1](https://github.com/nartc/angular-three/commit/6d081a170ebc7b0d9f96cec2824b408c73aae79c))
+* **core:** have material and geometry set their own default attach instead of checking in instance ([7e27691](https://github.com/nartc/angular-three/commit/7e27691f2cccbf7cb50b86708d2c05ef0c06a09f))
+* **core:** make appendTo accept THREE.Object3D as well ([1949685](https://github.com/nartc/angular-three/commit/1949685e5029fbf3505fd850d50061a96219e88e))
+* **core:** make obj in BeforeRenderRecord accept a ref instead of a factory ([a18bec1](https://github.com/nartc/angular-three/commit/a18bec1481af53fda2c9c07f23b8e68635c0ee05))
+* **core:** make stats independent of canvas ([8128e60](https://github.com/nartc/angular-three/commit/8128e601f582f47d511979edb9260279901de488))
+* **core:** primitive should have isPrimitive set to true ([6393536](https://github.com/nartc/angular-three/commit/6393536231b785ff9829705af2d467fbe72d680c))
+* **core:** remove parent-object di ([efafe7e](https://github.com/nartc/angular-three/commit/efafe7e432b145cd5b8265d3268bafde091dc025))
+* **core:** use skipParent getter instead ([956f225](https://github.com/nartc/angular-three/commit/956f225ce2859758beb33ba9d6082005810f026f))
+* **repo:** set default attach properly ([0a88928](https://github.com/nartc/angular-three/commit/0a88928843ea6c764ca87685dc3a53f437685ddf))
+* **repo:** use preInit correctly to set default state ([23e695e](https://github.com/nartc/angular-three/commit/23e695eaae3172aaa1c0c5428adc426bc88aceae))
+
+
+### Documentations
+
+* clean up example ([992d86f](https://github.com/nartc/angular-three/commit/992d86f8bf8095b08ad6f4081a6deb21abf99160))
+* clean up example ([a90933f](https://github.com/nartc/angular-three/commit/a90933fceaf1d20da4c0781ccc365a1862d9836a))
+* finish core API docs ([56c4665](https://github.com/nartc/angular-three/commit/56c4665b7d6872976844348004b433f134859430))
+* more docs ([9e7f177](https://github.com/nartc/angular-three/commit/9e7f1771518f9bfa9ad315964ce25119b976e6a6))
+
 ## [5.0.0-beta.8](https://github.com/nartc/angular-three/compare/5.0.0-beta.7...5.0.0-beta.8) (2022-04-18)
 
 ### Bug Fixes
