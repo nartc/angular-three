@@ -1,4 +1,11 @@
-import { NgtComponentStore, NgtStore } from '@angular-three/core';
+import {
+    addAfterCallback,
+    addCallback,
+    coerceNumberProperty,
+    NgtComponentStore,
+    NumberInput,
+    tapEffect,
+} from '@angular-three/core';
 import { DOCUMENT } from '@angular/common';
 import {
     ChangeDetectionStrategy,
@@ -18,43 +25,52 @@ import Stats from 'three/examples/jsm/libs/stats.module';
 })
 export class NgtStats extends NgtComponentStore implements OnInit {
     @Input() parent?: HTMLElement;
+    @Input() set showPanel(showPanel: NumberInput) {
+        this._showPanel = coerceNumberProperty(showPanel);
+    }
 
     private node: HTMLElement;
-    private stats?: Stats;
+    private _stats?: Stats;
+    private _showPanel = 0;
 
-    constructor(
-        private zone: NgZone,
-        private store: NgtStore,
-        @Inject(DOCUMENT) { body }: Document
-    ) {
+    constructor(private zone: NgZone, @Inject(DOCUMENT) { body }: Document) {
         super();
         this.node = body;
     }
 
+    get stats() {
+        return this._stats;
+    }
+
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            this.onCanvasReady(
-                this.store.ready$,
-                () => {
+            this.effect<void>(
+                tapEffect(() => {
                     if (this.parent) {
                         this.node = this.parent;
                     }
 
-                    this.stats = Stats();
-                    this.node.appendChild(this.stats.dom);
-                    const unregister = this.store.registerBeforeRender({
-                        callback: this.stats.update.bind(this.stats),
-                    });
+                    this._stats = Stats();
+                    this._stats.showPanel(this._showPanel);
+                    this.node.appendChild(this._stats.dom);
+
+                    const beginCallbackCleanup = addCallback(() =>
+                        this._stats!.begin()
+                    );
+
+                    const endCallbackCleanup = addAfterCallback(() =>
+                        this._stats!.end()
+                    );
+
                     return () => {
-                        if (this.stats) {
-                            unregister();
-                            this.stats.end();
-                            this.node.removeChild(this.stats.dom);
+                        if (this._stats) {
+                            this.node.removeChild(this._stats.dom);
+                            beginCallbackCleanup();
+                            endCallbackCleanup();
                         }
                     };
-                },
-                true
-            );
+                })
+            )();
         });
     }
 }
