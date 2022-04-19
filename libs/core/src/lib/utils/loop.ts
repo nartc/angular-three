@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import type { NgtRenderState, NgtState } from '../types';
+import { is } from './is';
 
 export function render(
     timestamp: number,
@@ -19,10 +20,9 @@ export function render(
 
     // call animation subscribers
     for (const subscriber of rootState.internal.subscribers) {
-        const object =
-            typeof subscriber.obj === 'function'
-                ? subscriber.obj()
-                : subscriber.obj;
+        const object = is.ref(subscriber.obj)
+            ? subscriber.obj.value
+            : subscriber.obj;
         subscriber.callback(
             { ...rootState, delta, frame } as NgtRenderState,
             object

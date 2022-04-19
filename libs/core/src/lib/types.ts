@@ -308,7 +308,7 @@ export type NgtBeforeRenderCallback<TObject> = (
 ) => void;
 
 export interface NgtBeforeRenderRecord {
-    obj?: THREE.Object3D | (() => THREE.Object3D);
+    obj?: THREE.Object3D | Ref;
     callback: NgtBeforeRenderCallback<THREE.Object3D | undefined>;
     priority?: number;
 }

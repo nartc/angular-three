@@ -59,7 +59,7 @@ export abstract class NgtCommonObjectHelper<
                             ).update();
                         }
                     },
-                    obj: objectHelper,
+                    obj: this.instance,
                 });
                 return () => {
                     if (objectHelper && scene) {

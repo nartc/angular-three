@@ -35,12 +35,6 @@ import { NgtComponentStore, tapEffect } from './component-store';
 
 type NgtAnimationRecordWithUuid = NgtBeforeRenderRecord & { uuid: string };
 
-function isOrthographicCamera(
-    def: THREE.Camera
-): def is THREE.OrthographicCamera {
-    return def && (def as THREE.OrthographicCamera).isOrthographicCamera;
-}
-
 const DOM_EVENTS = {
     click: false,
     contextmenu: false,
@@ -179,7 +173,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                     const distance = camera
                         .getWorldPosition(this.position)
                         .distanceTo(this.tempTarget);
-                    if (isOrthographicCamera(camera)) {
+                    if (is.orthographic(camera)) {
                         return {
                             width: width / camera.zoom,
                             height: height / camera.zoom,
@@ -266,12 +260,11 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     }
 
     registerBeforeRender(record: NgtBeforeRenderRecord) {
-        const uuid =
-            record.obj instanceof THREE.Object3D
-                ? record.obj.uuid
-                : typeof record.obj === 'function'
-                ? record.obj().uuid
-                : makeId();
+        const uuid = is.object3d(record.obj)
+            ? record.obj.uuid
+            : is.ref(record.obj)
+            ? record.obj.value.uuid
+            : makeId();
         this.registerBeforeRenderEffect({ ...record, uuid });
         return () => {
             this.unregisterBeforeRender(uuid);
@@ -367,7 +360,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             // Create default camera (one time only!)
             let camera = state.camera;
             if (!state.camera) {
-                const isCamera = state.cameraOptions instanceof THREE.Camera;
+                const isCamera = is.camera(state.cameraOptions);
                 camera = isCamera
                     ? (state.cameraOptions as NgtCamera)
                     : state.orthographic
@@ -496,7 +489,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             if (
                 typeof state.glOptions === 'object' &&
                 typeof state.glOptions !== 'function' &&
-                !(state.glOptions instanceof THREE.WebGLRenderer)
+                !is.glRenderer(state.glOptions)
             ) {
                 applyProps(gl as any, state.glOptions as UnknownRecord);
             }
@@ -548,8 +541,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             const { camera, gl, ready, cameraOptions } = this.get();
             if (ready) {
                 // leave the userland camera alone
-                if (!(cameraOptions instanceof THREE.Camera || camera.manual)) {
-                    if (isOrthographicCamera(camera)) {
+                if (!(is.camera(cameraOptions) || camera.manual)) {
+                    if (is.orthographic(camera)) {
                         camera.left = size.width / -2;
                         camera.right = size.width / 2;
                         camera.top = size.height / 2;
