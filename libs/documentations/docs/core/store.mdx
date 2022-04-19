@@ -6,13 +6,13 @@ sidebar_label: Store
 
 NGT state is tracked by a single `NgtStore`. Each `NgtCanvas` instance contains its own instance of `NgtStore` so each scene graph has its independent state.
 
-All `NgtInstance` injects `NgtStore` so all NGT objects essentially have access to the Canvas state object.
+All `NgtInstance` injects `NgtStore` so all NGT objects essentially have access to the Canvas state object. Any custom components inside of `<ngt-canvas>` can also inject `NgtStore` and use its state.
 
 ## Accessing states
 
 `NgtStore` is a [`NgtComponentStore`](./component-store) so there are both Reactive and Imperative approaches to access the state.
 
-### Reactively
+### Reactive
 
 ```ts
 this.store.select(); // reacts to the whole state object
