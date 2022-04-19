@@ -1,5 +1,18 @@
 
 
+## [5.0.0-beta.10](https://github.com/nartc/angular-three/compare/5.0.0-beta.9...5.0.0-beta.10) (2022-04-19)
+
+
+### Bug Fixes
+
+* **postprocessing:** remove uneccessary empty projector fn ([224d765](https://github.com/nartc/angular-three/commit/224d765ab5ba34df23b116d0e1ce500da164fa82))
+
+
+### Documentations
+
+* fix broken link ([b47d4fd](https://github.com/nartc/angular-three/commit/b47d4fd23d698d0c183c089fffa20ddc789cbd2f))
+* more docs on ComponentStore and Store usages ([d80d152](https://github.com/nartc/angular-three/commit/d80d152bcf69df3a2a3b0c26d9d9e71d1a0957d9))
+
 ## [5.0.0-beta.9](https://github.com/nartc/angular-three/compare/5.0.0-beta.8...5.0.0-beta.9) (2022-04-19)
 
 
