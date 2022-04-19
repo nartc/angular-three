@@ -52,8 +52,7 @@ export class NgtDepthOfField extends NgtCommonEffect<DepthOfFieldEffect> {
     private readonly targetParams$ = this.select(
         this.select((s) => s.instance.value),
         this.select((s) => s['target']),
-        this.select((s) => s['depthTexture']),
-        () => ({})
+        this.select((s) => s['depthTexture'])
     );
 
     protected override adjustCtorParams(instanceArgs: unknown[]): unknown[] {
@@ -65,8 +64,7 @@ export class NgtDepthOfField extends NgtCommonEffect<DepthOfFieldEffect> {
     protected override get ctorParams$() {
         return this.select(
             this.effectComposer.select((s) => s.camera),
-            this.instanceArgs$,
-            () => ({})
+            this.instanceArgs$
         );
     }
 

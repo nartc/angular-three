@@ -64,8 +64,7 @@ export class NgtSSAO extends NgtCommonEffect<SSAOEffect> {
         return this.select(
             this.effectComposer.select((s) => s.camera),
             this.effectComposer.select((s) => s.normalPass),
-            this.instanceArgs$,
-            () => ({})
+            this.instanceArgs$
         );
     }
 }

@@ -80,8 +80,7 @@ export abstract class NgtCommonEffect<
         this.select((s) => s.opacity).pipe(startWithUndefined()),
         this.select((s) => s.blendFunction),
         this.select((s) => s.instance.value),
-        this.select((s) => s.instance.value.blendMode),
-        () => ({})
+        this.select((s) => s.instance.value.blendMode)
     );
 
     constructor(

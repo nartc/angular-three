@@ -119,22 +119,19 @@ export class NgtEffectComposer extends NgtInstance<
         this.select((s) => s.multisampling),
         this.select((s) => s.frameBufferType),
         this.select((s) => s.disableNormalPass).pipe(startWithUndefined()),
-        this.select((s) => s.resolutionScale).pipe(startWithUndefined()),
-        () => ({})
+        this.select((s) => s.resolutionScale).pipe(startWithUndefined())
     );
 
     private readonly sizeParams$ = this.select(
         this.select((s) => s.instance.value),
-        this.store.select((s) => s.size),
-        () => ({})
+        this.store.select((s) => s.size)
     );
 
     private readonly beforeRenderParams$ = this.select(
         this.select((s) => s.instance.value),
         this.select((s) => s.autoClear),
         this.select((s) => s.enabled),
-        this.select((s) => s.renderPriority),
-        () => ({})
+        this.select((s) => s.renderPriority)
     );
 
     private readonly effectPassesParams$ = this.select(
@@ -142,8 +139,7 @@ export class NgtEffectComposer extends NgtInstance<
         this.select((s) => s.normalPass),
         this.select((s) => s.depthDownSamplingPass),
         this.select((s) => s.instance.value),
-        this.select((s) => s.instance.value.__ngt__.objects),
-        () => ({})
+        this.select((s) => s.instance.value.__ngt__.objects)
     );
 
     constructor(
