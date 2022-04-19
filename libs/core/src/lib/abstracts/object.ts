@@ -204,8 +204,16 @@ export abstract class NgtObjectInputs<
     get appendTo() {
         return this.get((s) => s.appendTo);
     }
-    @Input() set appendTo(appendTo: Ref<THREE.Object3D> | undefined) {
-        this.set({ appendTo } as Partial<TObjectInputsState>);
+    @Input() set appendTo(
+        appendTo: Ref<THREE.Object3D> | THREE.Object3D | undefined
+    ) {
+        this.set({
+            appendTo: appendTo
+                ? is.ref(appendTo)
+                    ? appendTo
+                    : new Ref(appendTo)
+                : undefined,
+        } as Partial<TObjectInputsState>);
     }
 
     // events
@@ -357,10 +365,7 @@ export abstract class NgtObject<
             }
 
             // append to parent
-            if (
-                is.object3d(this.instance.value) &&
-                this.get((s) => s.appendMode) !== 'none'
-            ) {
+            if (is.object3d(this.instance.value)) {
                 // appendToParent is late a frame due to appendTo
                 // only emit the object is ready after it's been added to the scene
                 this.appendToParent();
@@ -369,7 +374,7 @@ export abstract class NgtObject<
             // setup beforeRender
             if (this.beforeRender.observed) {
                 this.store.registerBeforeRender({
-                    obj: () => this.instance.value,
+                    obj: this.instance,
                     callback: (state) => {
                         this.beforeRender.emit({
                             state,
@@ -407,6 +412,8 @@ export abstract class NgtObject<
             }
 
             const appendMode = this.get((s) => s.appendMode);
+
+            if (appendMode === 'none') return;
 
             if (appendMode === 'root') {
                 this.addToScene();
