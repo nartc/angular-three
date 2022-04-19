@@ -16,11 +16,6 @@
         "baseUrl": ".",
         "paths": {
             "@angular-three/cannon": ["libs/cannon/src/index.ts"],
-            "@angular-three/cannon/bodies": ["libs/cannon/bodies/src/index.ts"],
-            "@angular-three/cannon/constraints": [
-                "libs/cannon/constraints/src/index.ts"
-            ],
-            "@angular-three/cannon/debug": ["libs/cannon/debug/src/index.ts"],
             "@angular-three/core": ["libs/core/src/index.ts"],
             "@angular-three/core/attributes": [
                 "libs/core/attributes/src/index.ts"

@@ -1,11 +1,5 @@
-import { NgtPhysicsModule } from '@angular-three/cannon';
-import { NgtPhysicBody } from '@angular-three/cannon/bodies';
-import { NgtCannonDebugModule } from '@angular-three/cannon/debug';
-import {
-    NgtCanvasModule,
-    NgtColorPipeModule,
-    NgtTriple,
-} from '@angular-three/core';
+import { NgtPhysicBody, NgtPhysicsModule } from '@angular-three/cannon';
+import { NgtCanvasModule, NgtTriple } from '@angular-three/core';
 import {
     NgtColorAttributeModule,
     NgtVector2AttributeModule,
@@ -23,6 +17,7 @@ import {
     NgtShadowMaterialModule,
 } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtStatsModule } from '@angular-three/core/stats';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -56,6 +51,7 @@ import {
                 <sandbox-cube [position]="[0, 20, -2]"></sandbox-cube>
             </ngt-physics>
         </ngt-canvas>
+        <ngt-stats></ngt-stats>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -145,8 +141,7 @@ export class SandboxCubeComponent {
         NgtShadowMaterialModule,
         NgtBoxGeometryModule,
         NgtMeshLambertMaterialModule,
-        NgtCannonDebugModule,
-        NgtColorPipeModule,
+        NgtStatsModule,
     ],
 })
 export class SandboxPhysicCubesModule {}

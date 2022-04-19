@@ -56,12 +56,8 @@ We can take a peak at the code for the [Simple Cubes example](https://codesandbo
 
 ```html
 <ngt-canvas>
-    <ngt-ambient-light [intensity]="0.5"></ngt-ambient-light>
-    <ngt-spot-light
-        [position]="10"
-        [angle]="0.15"
-        [penumbra]="1"
-    ></ngt-spot-light>
+    <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+    <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
     <ngt-point-light [position]="-10"></ngt-point-light>
 
     <!-- power of a component framework, declarative express the scenegraph that has life-cycle hooks -->

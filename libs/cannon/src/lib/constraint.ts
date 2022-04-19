@@ -1,4 +1,3 @@
-import { NgtPhysicsStore } from '@angular-three/cannon';
 import {
     makeId,
     NgtComponentStore,
@@ -19,6 +18,7 @@ import {
 } from '@pmndrs/cannon-worker-api';
 import { combineLatest, filter } from 'rxjs';
 import * as THREE from 'three';
+import { NgtPhysicsStore } from './physics.store';
 
 type ConstraintApi = {
     disable: () => void;
@@ -37,7 +37,9 @@ type HingeConstraintApi = {
 type NgtConstraintORHingeApi<T extends 'Hinge' | ConstraintTypes> =
     T extends ConstraintTypes ? ConstraintApi : HingeConstraintApi;
 
-export interface NgtConstraintReturn<T extends 'Hinge' | ConstraintTypes> {
+export interface NgtPhysicConstraintReturn<
+    T extends 'Hinge' | ConstraintTypes
+> {
     bodyA: Ref<THREE.Object3D>;
     bodyB: Ref<THREE.Object3D>;
     api: NgtConstraintORHingeApi<T>;
@@ -103,7 +105,7 @@ export class NgtPhysicConstraint extends NgtComponentStore {
         bodyA: Ref<THREE.Object3D>,
         bodyB: Ref<THREE.Object3D>,
         opts: ConstraintOptns | HingeConstraintOpts = {}
-    ): NgtConstraintReturn<TConstraintType> {
+    ): NgtPhysicConstraintReturn<TConstraintType> {
         return this.zone.runOutsideAngular(() => {
             const physicsStore = this.physicsStore;
             const uuid = makeId();

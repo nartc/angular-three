@@ -34,13 +34,7 @@
             "options": {
                 "lintFilePatterns": [
                     "libs/cannon/src/**/*.ts",
-                    "libs/cannon/src/**/*.html",
-                    "libs/cannon/debug/**/*.ts",
-                    "libs/cannon/debug/**/*.html",
-                    "libs/cannon/bodies/**/*.ts",
-                    "libs/cannon/bodies/**/*.html",
-                    "libs/cannon/constraints/**/*.ts",
-                    "libs/cannon/constraints/**/*.html"
+                    "libs/cannon/src/**/*.html"
                 ]
             }
         },

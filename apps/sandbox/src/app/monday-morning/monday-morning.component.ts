@@ -1,15 +1,11 @@
 import {
     ConeTwistConstraintOpts,
+    NgtPhysicBody,
+    NgtPhysicConstraint,
+    NgtPhysicConstraintReturn,
+    NgtPhysicsBodyPublicApi,
     NgtPhysicsModule,
 } from '@angular-three/cannon';
-import {
-    NgtPhysicBody,
-    NgtPhysicsBodyPublicApi,
-} from '@angular-three/cannon/bodies';
-import {
-    NgtConstraintReturn,
-    NgtPhysicConstraint,
-} from '@angular-three/cannon/constraints';
 import {
     NgtCanvasModule,
     NgtLoader,
@@ -156,7 +152,7 @@ export class SandboxCursorComponent {
     providers: [NgtPhysicConstraint],
 })
 export class SandboxDragConstraintDirective implements OnInit {
-    private constraint!: NgtConstraintReturn<'PointToPoint'>;
+    private constraint!: NgtPhysicConstraintReturn<'PointToPoint'>;
 
     constructor(
         private physicConstraint: NgtPhysicConstraint,

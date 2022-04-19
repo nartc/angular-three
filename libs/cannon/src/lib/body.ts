@@ -1,6 +1,3 @@
-import type { CannonEvents } from '@angular-three/cannon';
-import { NgtPhysicsStore } from '@angular-three/cannon';
-import { NgtCannonDebug } from '@angular-three/cannon/debug';
 import {
     applyProps,
     is,
@@ -34,15 +31,16 @@ import type {
     SetOpName,
     SphereArgs,
     SphereProps,
-    SubscriptionName,
-    Subscriptions,
-    SubscriptionTarget,
     TrimeshProps,
     VectorName,
 } from '@pmndrs/cannon-worker-api';
 import { CannonWorkerAPI } from '@pmndrs/cannon-worker-api';
 import { combineLatest, filter } from 'rxjs';
 import * as THREE from 'three';
+import { NgtCannonDebug } from './debug';
+import type { CannonEvents } from './physics.store';
+import { NgtPhysicsStore } from './physics.store';
+import { NgtCannonUtils } from './utils';
 
 export type AtomicApi<K extends AtomicName> = {
     set: (value: AtomicProps[K]) => void;
@@ -118,12 +116,6 @@ function capitalize<T extends string>(str: T): Capitalize<T> {
     return (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>;
 }
 
-function getUUID(ref: Ref<THREE.Object3D>, index?: number): string | null {
-    const suffix = index === undefined ? '' : `/${index}`;
-    if (typeof ref === 'function') return null;
-    return ref && ref.value && `${ref.value.uuid}${suffix}`;
-}
-
 const e = new THREE.Euler();
 const q = new THREE.Quaternion();
 
@@ -131,28 +123,6 @@ const quaternionToRotation = (callback: (v: NgtTriple) => void) => {
     return (v: NgtQuadruple) =>
         callback(e.setFromQuaternion(q.fromArray(v)).toArray() as NgtTriple);
 };
-
-let incrementingId = 0;
-
-function subscribe<T extends SubscriptionName>(
-    ref: Ref<THREE.Object3D>,
-    worker: CannonWorkerAPI,
-    subscriptions: Subscriptions,
-    type: T,
-    index?: number,
-    target: SubscriptionTarget = 'bodies'
-) {
-    return (callback: (value: PropValue<T>) => void) => {
-        const id = incrementingId++;
-        subscriptions[id] = { [type]: callback };
-        const uuid = getUUID(ref, index);
-        uuid && worker.subscribe({ props: { id, target, type }, uuid });
-        return () => {
-            delete subscriptions[id];
-            worker.unsubscribe({ props: id });
-        };
-    };
-}
 
 function prepare(
     object: THREE.Object3D,
@@ -457,14 +427,14 @@ export class NgtPhysicBody extends NgtComponentStore {
 
                         return {
                             set: (value: PropValue<T>) => {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker[op]({
                                         props: value,
                                         uuid,
                                     } as never);
                             },
-                            subscribe: subscribe(
+                            subscribe: NgtCannonUtils.subscribe(
                                 ref,
                                 worker,
                                 subscriptions,
@@ -478,7 +448,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                         const type = 'quaternion';
                         return {
                             copy: ({ w, x, y, z }: THREE.Quaternion) => {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker.setQuaternion({
                                         props: [x, y, z, w],
@@ -491,14 +461,14 @@ export class NgtPhysicBody extends NgtComponentStore {
                                 z: number,
                                 w: number
                             ) => {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker.setQuaternion({
                                         props: [x, y, z, w],
                                         uuid,
                                     });
                             },
-                            subscribe: subscribe(
+                            subscribe: NgtCannonUtils.subscribe(
                                 ref,
                                 worker,
                                 subscriptions,
@@ -515,7 +485,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                                 y,
                                 z,
                             }: THREE.Vector3 | THREE.Euler) => {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker.setRotation({
                                         props: [x, y, z],
@@ -523,7 +493,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                                     });
                             },
                             set: (x: number, y: number, z: number) => {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker.setRotation({
                                         props: [x, y, z],
@@ -533,10 +503,10 @@ export class NgtPhysicBody extends NgtComponentStore {
                             subscribe: (
                                 callback: (value: NgtTriple) => void
                             ) => {
-                                const id = incrementingId++;
+                                const id = NgtCannonUtils.incrementingId++;
                                 const target = 'bodies';
                                 const type = 'quaternion';
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
 
                                 subscriptions[id] = {
                                     [type]: quaternionToRotation(callback),
@@ -564,14 +534,14 @@ export class NgtPhysicBody extends NgtComponentStore {
                                 y,
                                 z,
                             }: THREE.Vector3 | THREE.Euler) => {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid && worker[op]({ props: [x, y, z], uuid });
                             },
                             set: (x: number, y: number, z: number) => {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid && worker[op]({ props: [x, y, z], uuid });
                             },
-                            subscribe: subscribe(
+                            subscribe: NgtCannonUtils.subscribe(
                                 ref,
                                 worker,
                                 subscriptions,
@@ -591,7 +561,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                                 force: NgtTriple,
                                 worldPoint: NgtTriple
                             ) {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker.applyForce({
                                         props: [force, worldPoint],
@@ -602,7 +572,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                                 impulse: NgtTriple,
                                 worldPoint: NgtTriple
                             ) {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker.applyImpulse({
                                         props: [impulse, worldPoint],
@@ -613,7 +583,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                                 force: NgtTriple,
                                 localPoint: NgtTriple
                             ) {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker.applyLocalForce({
                                         props: [force, localPoint],
@@ -624,7 +594,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                                 impulse: NgtTriple,
                                 localPoint: NgtTriple
                             ) {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker.applyLocalImpulse({
                                         props: [impulse, localPoint],
@@ -632,7 +602,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                                     });
                             },
                             applyTorque(torque: NgtTriple) {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid &&
                                     worker.applyTorque({
                                         props: [torque],
@@ -661,14 +631,14 @@ export class NgtPhysicBody extends NgtComponentStore {
                             quaternion: makeQuaternion(index),
                             rotation: makeRotation(index),
                             scaleOverride(scale) {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 if (uuid)
                                     scaleOverrides[uuid] = new THREE.Vector3(
                                         ...scale
                                     );
                             },
                             sleep() {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid && worker.sleep({ uuid });
                             },
                             sleepSpeedLimit: makeAtomic(
@@ -679,7 +649,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                             userData: makeAtomic('userData', index),
                             velocity: makeVec('velocity', index),
                             wakeUp() {
-                                const uuid = getUUID(ref, index);
+                                const uuid = NgtCannonUtils.getUUID(ref, index);
                                 uuid && worker.wakeUp({ uuid });
                             },
                         };

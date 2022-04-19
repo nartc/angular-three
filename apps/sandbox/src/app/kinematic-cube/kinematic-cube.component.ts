@@ -1,5 +1,4 @@
-import { NgtPhysicsModule } from '@angular-three/cannon';
-import { NgtPhysicBody } from '@angular-three/cannon/bodies';
+import { NgtPhysicBody, NgtPhysicsModule } from '@angular-three/cannon';
 import {
     NgtCanvasModule,
     NgtEuler,

@@ -1,4 +1,3 @@
-import { NgtPhysicsStore } from '@angular-three/cannon';
 import {
     BooleanInput,
     coerceBooleanProperty,
@@ -26,6 +25,7 @@ import {
 import { Body, Quaternion, Vec3, World } from 'cannon-es';
 import CannonDebugger from 'cannon-es-debugger';
 import * as THREE from 'three';
+import { NgtPhysicsStore } from './physics.store';
 
 const q = new THREE.Quaternion();
 const s = new THREE.Vector3(1, 1, 1);

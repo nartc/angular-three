@@ -1,5 +1,12 @@
 export * from './lib/physics';
 export * from './lib/physics.store';
+export * from './lib/utils';
+export * from './lib/constraint';
+export * from './lib/body';
+export * from './lib/debug';
+export * from './lib/spring';
+export * from './lib/ray';
+export * from './lib/raycast-vehicle';
 
 export type {
     AtomicName,
