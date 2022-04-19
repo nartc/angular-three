@@ -1,0 +1,88 @@
+---
+id: services
+title: Services
+sidebar_label: Services
+---
+
+| name      | scope            |
+| --------- | ---------------- |
+| NgtResize | Any component    |
+| NgtLoader | Root (singleton) |
+
+## NgtResize
+
+This service is a utility service that can be used on any component that wants to watch for resize events.
+
+```ts
+@Component({
+    /* ... */
+    providers: [NgtResize],
+})
+export class SomeComponent {
+    constructor(
+        @Inject(NgtResize)
+        private resizeResult$: Observable<NgtResizeResult>
+    ) {
+        this.resizeResult$.subscribe(); // emits everytime the window/host is resized
+    }
+}
+```
+
+The `NgtResizeResult` has the following interface:
+
+```ts
+export interface NgtResizeResult {
+    readonly entries: ReadonlyArray<ResizeObserverEntry>;
+    readonly x: number;
+    readonly y: number;
+    readonly width: number;
+    readonly height: number;
+    readonly top: number;
+    readonly right: number;
+    readonly bottom: number;
+    readonly left: number;
+    readonly dpr: number;
+}
+```
+
+The default options are:
+
+```ts
+{
+  box: 'content-box',
+  scroll: false,
+  offsetSize: false,
+  debounce: 200,
+}
+```
+
+We can provide our own options via `provideResizeOptions` on the component that uses `NgtResize`
+
+```ts
+@Component({
+    /* ... */
+    providers: [NgtResize, provideResizeOptions({ debounce: 500 })],
+})
+export class SomeComponent {
+    constructor(
+        @Inject(NgtResize)
+        private resizeResult$: Observable<NgtResizeResult>
+    ) {
+        this.resizeResult$.subscribe(); // emits everytime the window/host is resized
+    }
+}
+```
+
+## NgtLoader
+
+This service is used to load external resources. This is recommended as it is type-safe as well as it has an internal caching mechanism.
+
+`NgtLoader` is a singleton and can be injected into any component regardless of `ngt-canvas` or not.
+
+```ts
+export class SomeComponent {
+    model$ = this.loader.use(GTLFLoader, 'path/to/model.gltf'); // Observable<GLTF>
+
+    constructor(private loader: NgtLoader) {}
+}
+```

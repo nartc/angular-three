@@ -1,0 +1,42 @@
+---
+id: additional-exports
+title: Additional Exports
+sidebar_label: Additional Exports
+---
+
+## `make`
+
+A collection of utility functions used to construct THREE objects like `THREE.Vector*`, `THREE.Color` etc... from different arguments
+
+```ts
+makeVector2(10); // new THREE.Vector2().setScalar(10);
+makeVector2([10, 20]); // new THREE.Vector2(10, 20);
+make(THREE.Quaternion, [10, 10, 10, 10]); // new THREE.Quaternion(10, 10, 10, 10);
+```
+
+## `is`
+
+A collection of utility functions used to assert object type
+
+```ts
+is.ref(a); // checks if an object is a Ref
+is.object3d(a); // checks if an object is a THREE.Object3D
+
+is.camera(a); // checks if an object is a THREE.Camera
+is.perspective(a); // checks if an object is a THREE.PerspectiveCamera
+is.orthographic(a); // checks if an object is a THREE.OrthographicCamera
+
+// and more
+```
+
+## `addCallback`
+
+Add a `GlobalRenderCallback` to be called **before** a render
+
+## `addAfterCallback`
+
+Add a `GlobalRenderCallback` to be called **after** a render
+
+## `addTailCallback`
+
+Add a `GlobalRenderCallback` to be called **after** rendering stops
