@@ -4,6 +4,7 @@ import {
     coerceNumberProperty,
     NgtColor,
     NgtObjectInputs,
+    NgtObjectPassThroughModule,
     NgtRef,
     NgtRenderState,
     NumberInput,
@@ -48,40 +49,9 @@ export class NgtSobaTextContent {
         <ngt-primitive
             *ngIf="textMesh"
             [object]="$any(textMesh)"
-            (ready)="ready.emit($event)"
             (beforeRender)="beforeRender.emit($event)"
-            [ref]="instance"
-            [attach]="attach"
-            [skipParent]="skipParent"
-            [noAttach]="noAttach"
-            [name]="name"
-            [position]="position"
-            [rotation]="rotation"
-            [quaternion]="quaternion"
-            [scale]="scale"
-            [color]="color"
-            [userData]="userData"
-            [castShadow]="castShadow"
-            [receiveShadow]="receiveShadow"
-            [visible]="visible"
-            [matrixAutoUpdate]="matrixAutoUpdate"
-            [dispose]="dispose"
-            [raycast]="raycast"
-            [appendMode]="appendMode"
-            [appendTo]="appendTo"
-            (click)="click.emit($event)"
-            (contextmenu)="contextmenu.emit($event)"
-            (dblclick)="dblclick.emit($event)"
-            (pointerup)="pointerup.emit($event)"
-            (pointerdown)="pointerdown.emit($event)"
-            (pointerover)="pointerover.emit($event)"
-            (pointerout)="pointerout.emit($event)"
-            (pointerenter)="pointerenter.emit($event)"
-            (pointerleave)="pointerleave.emit($event)"
-            (pointermove)="pointermove.emit($event)"
-            (pointermissed)="pointermissed.emit($event)"
-            (pointercancel)="pointercancel.emit($event)"
-            (wheel)="wheel.emit($event)"
+            [ngtObjectInputs]="this"
+            [ngtObjectOutputs]="this"
         >
             <ng-container
                 *ngIf="content"
@@ -171,19 +141,33 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
     }
 
     @Input() set outlineWidth(outlineWidth: number | string) {
-        this.set({ outlineWidth });
+        this.set({
+            outlineWidth: coerceNumberProperty(outlineWidth, outlineWidth),
+        });
     }
 
     @Input() set outlineOffsetX(outlineOffsetX: number | string) {
-        this.set({ outlineOffsetX });
+        this.set({
+            outlineOffsetX: coerceNumberProperty(
+                outlineOffsetX,
+                outlineOffsetX
+            ),
+        });
     }
 
     @Input() set outlineOffsetY(outlineOffsetY: number | string) {
-        this.set({ outlineOffsetY });
+        this.set({
+            outlineOffsetY: coerceNumberProperty(
+                outlineOffsetY,
+                outlineOffsetY
+            ),
+        });
     }
 
     @Input() set outlineBlur(outlineBlur: number | string) {
-        this.set({ outlineBlur });
+        this.set({
+            outlineBlur: coerceNumberProperty(outlineBlur, outlineBlur),
+        });
     }
 
     @Input() set outlineColor(outlineColor: NgtColor) {
@@ -195,7 +179,9 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
     }
 
     @Input() set strokeWidth(strokeWidth: number | string) {
-        this.set({ strokeWidth });
+        this.set({
+            strokeWidth: coerceNumberProperty(strokeWidth, strokeWidth),
+        });
     }
 
     @Input() set strokeColor(strokeColor: NgtColor) {
@@ -313,6 +299,6 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
 @NgModule({
     declarations: [NgtSobaText, NgtSobaTextContent],
     exports: [NgtSobaText, NgtSobaTextContent],
-    imports: [NgtPrimitiveModule, CommonModule],
+    imports: [NgtPrimitiveModule, CommonModule, NgtObjectPassThroughModule],
 })
 export class NgtSobaTextModule {}

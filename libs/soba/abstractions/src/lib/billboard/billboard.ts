@@ -2,6 +2,7 @@ import {
     BooleanInput,
     coerceBooleanProperty,
     NgtObjectInputs,
+    NgtObjectPassThroughModule,
     NgtRef,
     NgtRenderState,
     provideObjectHosRef,
@@ -41,40 +42,9 @@ export class NgtSobaBillboardContent {
     selector: 'ngt-soba-billboard',
     template: `
         <ngt-group
-            (ready)="ready.emit($event)"
-            (beforeRender)="onBeforeRender($event)"
-            [ref]="instance"
-            [attach]="attach"
-            [skipParent]="skipParent"
-            [noAttach]="noAttach"
-            [name]="name"
-            [position]="position"
-            [rotation]="rotation"
-            [quaternion]="quaternion"
-            [scale]="scale"
-            [color]="color"
-            [userData]="userData"
-            [castShadow]="castShadow"
-            [receiveShadow]="receiveShadow"
-            [visible]="visible"
-            [matrixAutoUpdate]="matrixAutoUpdate"
-            [dispose]="dispose"
-            [raycast]="raycast"
-            [appendMode]="appendMode"
-            [appendTo]="appendTo"
-            (click)="click.emit($event)"
-            (contextmenu)="contextmenu.emit($event)"
-            (dblclick)="dblclick.emit($event)"
-            (pointerup)="pointerup.emit($event)"
-            (pointerdown)="pointerdown.emit($event)"
-            (pointerover)="pointerover.emit($event)"
-            (pointerout)="pointerout.emit($event)"
-            (pointerenter)="pointerenter.emit($event)"
-            (pointerleave)="pointerleave.emit($event)"
-            (pointermove)="pointermove.emit($event)"
-            (pointermissed)="pointermissed.emit($event)"
-            (pointercancel)="pointercancel.emit($event)"
-            (wheel)="wheel.emit($event)"
+            (beforeRender)="onBeforeRender($event); beforeRender.emit($event)"
+            [ngtObjectInputs]="this"
+            [ngtObjectOutputs]="this"
         >
             <ng-container
                 *ngIf="content"
@@ -154,6 +124,6 @@ export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
 @NgModule({
     declarations: [NgtSobaBillboard, NgtSobaBillboardContent],
     exports: [NgtSobaBillboard, NgtSobaBillboardContent],
-    imports: [NgtGroupModule, CommonModule],
+    imports: [NgtGroupModule, CommonModule, NgtObjectPassThroughModule],
 })
 export class NgtSobaBillboardModule {}
