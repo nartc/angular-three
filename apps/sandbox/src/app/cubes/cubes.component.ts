@@ -29,10 +29,9 @@ import { Mesh } from 'three';
             <sandbox-cube [position]="[-1.2, 0, 0]"></sandbox-cube>
             <sandbox-cube [position]="[1.2, 0, 0]"></sandbox-cube>
 
-            <ngt-stats></ngt-stats>
-
             <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
         </ngt-canvas>
+        <ngt-stats></ngt-stats>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
