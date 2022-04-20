@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Ref } from '../ref';
 import type {
     NgtInstanceInternal,
     NgtRef,
@@ -41,7 +42,7 @@ export function prepare<TInstance extends object = UnknownRecord>(
                 : isPrimitive,
             eventCount: previousInstance?.value?.__ngt__?.eventCount ?? 0,
             handlers: previousInstance?.value?.__ngt__?.handlers ?? {},
-            objects: previousInstance?.value?.__ngt__?.objects ?? [],
+            objects: previousInstance?.value?.__ngt__?.objects ?? new Ref([]),
             parent: parent ? (parent === instance ? null : parent) : null,
         },
     });

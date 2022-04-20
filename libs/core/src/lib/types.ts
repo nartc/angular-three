@@ -412,8 +412,8 @@ export type NgtRef<TValue = any> = Ref<NgtUnknownInstance<TValue>>;
 export interface NgtInstanceInternal {
     root: () => NgtState;
     // objects and parent are used when children are added with `attach` instead of being added to the Object3D scene graph
-    objects: NgtRef[];
-    parent: NgtRef | null;
+    objects: Ref<NgtRef[]>;
+    parent: NgtRef<NgtUnknownInstance> | null;
     primitive?: boolean;
     eventCount: number;
     handlers: Partial<NgtEventHandlers>;
