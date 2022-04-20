@@ -93,37 +93,21 @@ export class NgtSobaBillboardContent {
     ],
 })
 export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
-    get follow(): boolean {
-        return this._follow;
-    }
     @Input() set follow(value: BooleanInput) {
-        this._follow = coerceBooleanProperty(value);
+        this.set({ follow: coerceBooleanProperty(value) });
     }
-    private _follow = true;
 
-    get lockX(): boolean {
-        return this._lockX;
-    }
     @Input() set lockX(value: BooleanInput) {
-        this._lockX = coerceBooleanProperty(value);
+        this.set({ lockX: coerceBooleanProperty(value) });
     }
-    private _lockX = false;
 
-    get lockY(): boolean {
-        return this._lockY;
-    }
     @Input() set lockY(value: BooleanInput) {
-        this._lockY = coerceBooleanProperty(value);
+        this.set({ lockY: coerceBooleanProperty(value) });
     }
-    private _lockY = false;
 
-    get lockZ(): boolean {
-        return this._lockZ;
-    }
     @Input() set lockZ(value: BooleanInput) {
-        this._lockZ = coerceBooleanProperty(value);
+        this.set({ lockZ: coerceBooleanProperty(value) });
     }
-    private _lockZ = false;
 
     @ContentChild(NgtSobaBillboardContent) content?: NgtSobaBillboardContent;
 
@@ -132,6 +116,15 @@ export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
         object: THREE.Group;
     }>();
 
+    protected override preInit() {
+        this.set((state) => ({
+            follow: state['follow'] || true,
+            lockX: state['lockX'] || false,
+            lockY: state['lockY'] || false,
+            lockZ: state['lockZ'] || false,
+        }));
+    }
+
     onBeforeRender({
         state: { camera },
         object,
@@ -139,7 +132,9 @@ export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
         state: NgtRenderState;
         object: THREE.Group;
     }) {
-        if (!this._follow) return;
+        const { follow, lockX, lockY, lockZ } = this.get();
+
+        if (!follow) return;
 
         // save previous rotation in case we're locking an axis
         const prevRotation = object.rotation.clone();
@@ -148,9 +143,9 @@ export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
         object.quaternion.copy(camera.quaternion);
 
         // readjust any axis that is locked
-        if (this._lockX) object.rotation.x = prevRotation.x;
-        if (this._lockY) object.rotation.y = prevRotation.y;
-        if (this._lockZ) object.rotation.z = prevRotation.z;
+        if (lockX) object.rotation.x = prevRotation.x;
+        if (lockY) object.rotation.y = prevRotation.y;
+        if (lockZ) object.rotation.z = prevRotation.z;
     }
 }
 
