@@ -18,7 +18,7 @@ import {
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
-    title: 'Soba/Abstractions/Billboard',
+    title: 'Abstractions/Billboard',
     decorators: [
         componentWrapperDecorator(
             setupCanvas({ controls: false, cameraPosition: [0, 0, 10] })
@@ -97,7 +97,7 @@ export const Text = () => ({
         </ngt-mesh>
 
         <ngt-group [position]="[-2.5, -3, -1]">
-            <ngt-soba-billboard  [position]="[0, 1.05, 0]">
+            <ngt-soba-billboard [position]="[0, 1.05, 0]">
                 <ngt-soba-text
                     text="cone"
                     fontSize="1"

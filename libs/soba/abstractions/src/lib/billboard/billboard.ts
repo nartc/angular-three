@@ -116,6 +116,8 @@ export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
         object: THREE.Group;
     }>();
 
+    override isWrapper = true;
+
     protected override preInit() {
         this.set((state) => ({
             follow: state['follow'] || true,

@@ -196,6 +196,7 @@ export abstract class NgtInstance<
     }
 
     protected isPrimitive = false;
+    protected isWrapper = false;
 
     prepareInstance(
         instance: TInstance,
