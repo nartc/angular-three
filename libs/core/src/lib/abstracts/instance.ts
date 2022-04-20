@@ -217,7 +217,7 @@ export abstract class NgtInstance<
         this.instance.set(prepInstance);
         this.emitReady();
 
-        if (!is.object3d(prepInstance)) {
+        if (!is.object3d(prepInstance) && !this.noAttach && !this.skipParent) {
             prepInstance.__ngt__.parent?.value?.__ngt__.objects.push(
                 this.instance
             );

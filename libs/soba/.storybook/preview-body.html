@@ -1,0 +1,46 @@
+<style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+    }
+
+    #root {
+        width: 100%;
+        height: 100%;
+    }
+
+    .html-story-block {
+        color: white;
+        width: 120px;
+        position: relative;
+        margin-left: 100px;
+    }
+
+    .html-story-block.margin300 {
+        margin-left: 300px;
+    }
+
+    .html-story-block:before {
+        content: '';
+        display: block;
+        position: absolute;
+
+        top: 50%;
+        left: -60px;
+
+        width: 60px;
+        height: 1px;
+        background-color: white;
+    }
+
+    .html-story-label {
+        background-color: white;
+        color: black;
+        width: 100px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
