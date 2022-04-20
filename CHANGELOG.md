@@ -1,5 +1,19 @@
 
 
+## [5.0.0-beta.13](https://github.com/nartc/angular-three/compare/5.0.0-beta.12...5.0.0-beta.13) (2022-04-20)
+
+
+### Bug Fixes
+
+* **core:** adjust __ngt__.objects to be a Ref of array for observability ([8c68283](https://github.com/nartc/angular-three/commit/8c6828375293c1a41eda6364f5ee9bbd252f24bc))
+* **core:** initialize stats once in constructor ([2358035](https://github.com/nartc/angular-three/commit/2358035a8fb620b963c0de71198806267ee8316f))
+* **postprocessing:** update effectPassParams$ ([ac2cdff](https://github.com/nartc/angular-three/commit/ac2cdff43120f901cec1aafc2a3189274c8c09c2))
+
+
+### Documentations
+
+* add keenbloom ([ba01877](https://github.com/nartc/angular-three/commit/ba01877420cc6d7ed3ef9eab8527169f924cff0e))
+
 ## [5.0.0-beta.12](https://github.com/nartc/angular-three/compare/5.0.0-beta.11...5.0.0-beta.12) (2022-04-20)
 
 
