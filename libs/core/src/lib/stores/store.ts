@@ -366,25 +366,24 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                 const isCamera = is.camera(state.cameraOptions);
                 camera = isCamera
                     ? (state.cameraOptions as NgtCamera)
-                    : state.orthographic
-                    ? new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000)
-                    : new THREE.PerspectiveCamera(
-                          75,
-                          state.size.width / state.size.height,
-                          0.1,
-                          1000
-                      );
+                    : this.createDefaultCamera(state);
                 if (!isCamera) {
-                    camera.position.z = 5;
                     if (state.cameraOptions) {
                         applyProps(camera as any, state.cameraOptions as any);
-                        // Update projection matrix after applying props
-                        camera.updateProjectionMatrix();
                     }
+
+                    // Set position.z if position not passed in
+                    if (!state.cameraOptions?.position) {
+                        camera.position.z = 5;
+                    }
+
                     // Always look at center by default
                     if (!state.cameraOptions?.rotation) {
                         camera.lookAt(0, 0, 0);
                     }
+
+                    // Update projection matrix after applying props
+                    camera.updateProjectionMatrix();
                 }
 
                 if (!is.instance(camera)) {
@@ -500,21 +499,44 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             this.set({ gl, camera, scene, raycaster });
 
             return () => {
-                const { gl, cameraRef, sceneRef } = this.get();
+                const { gl, xr, cameraRef, sceneRef, events } = this.get();
                 if (gl) {
+                    if (events.disconnect) {
+                        events.disconnect();
+                    }
+
                     gl.renderLists.dispose();
                     gl.forceContextLoss();
 
                     if (gl.xr && gl.xr.enabled) {
                         gl.xr.setAnimationLoop(null);
+                        xr.disconnect();
                     }
 
                     cameraRef.complete();
                     sceneRef.complete();
+
+                    this.set((state) => ({
+                        ...state,
+                        internal: { ...state.internal, active: false },
+                    }));
                 }
             };
         })
     );
+
+    private createDefaultCamera(state: NgtState) {
+        if (state.orthographic) {
+            return new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000);
+        }
+
+        return new THREE.PerspectiveCamera(
+            75,
+            state.size.width / state.size.height,
+            0.1,
+            1000
+        );
+    }
 
     private readonly resize = this.effect<NgtResizeResult>(
         tap(({ width, height, dpr }) => {
