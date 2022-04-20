@@ -165,6 +165,7 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
                 this.store.get()
             );
             const { invalidate, advance } = createLoop(this.rootStateMap);
+
             // init canvas
             this.store.init(
                 this.rendererCanvas.nativeElement,
@@ -183,6 +184,13 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
                 this.store.startLoop(this.store.select());
             });
         });
+    }
+
+    override ngOnDestroy() {
+        this.zone.runOutsideAngular(() => {
+            this.rootStateMap.delete(this.rendererCanvas.nativeElement);
+        });
+        super.ngOnDestroy();
     }
 }
 
