@@ -1,5 +1,27 @@
 
 
+## [5.0.0-beta.12](https://github.com/nartc/angular-three/compare/5.0.0-beta.11...5.0.0-beta.12) (2022-04-20)
+
+
+### Bug Fixes
+
+* **core:** adjust camera initialization; clean up logic ([18353a1](https://github.com/nartc/angular-three/commit/18353a1107220fd24900236344cf700b34d6ee7f))
+* **core:** clean up rootStateMap on destroy ([19056b6](https://github.com/nartc/angular-three/commit/19056b60a1d3bf31add88b21c5c7dbd114a0ea5c))
+* **core:** ensure to only add the instance to parent objects if it's attachable ([4fd6099](https://github.com/nartc/angular-three/commit/4fd6099f450974939b772d23bdc43dc28e651f19))
+* **core:** ensure to use ref.value if a prop is a ref in applProps ([7e83c4c](https://github.com/nartc/angular-three/commit/7e83c4c7e07ed357c9aef706bdc11639b643d30b))
+* **core:** handle parent and parent host automatically ([2e8f0a1](https://github.com/nartc/angular-three/commit/2e8f0a145bc5756478d540580bb9730d3e44d558))
+* **soba:** adjust billboard ([4525441](https://github.com/nartc/angular-three/commit/452544144a17562de863e758cb75aca5d2fd56a4))
+* **soba:** fix text; add storybook ([261c48d](https://github.com/nartc/angular-three/commit/261c48dead41e3e463404028b1e7f665928efad7))
+* **soba:** make sure to set the camera one last time before creating orbit controls ([cca6a72](https://github.com/nartc/angular-three/commit/cca6a72443a9554977457a046988aaaa82e403d7))
+* **soba:** use outputEncoding for texture ([0a2c54b](https://github.com/nartc/angular-three/commit/0a2c54bb4e44e5331323318a26d40de3f1f82ad8))
+
+
+### Documentations
+
+* add clearer example of useOntemplate ([888e623](https://github.com/nartc/angular-three/commit/888e6239c859aeca42555dfd1412f271c1bf5742))
+* more documentations on core and cannon ([61215ab](https://github.com/nartc/angular-three/commit/61215ab7817c5b5cadc04d5167a648ec1c00281b))
+* use tomato for physic cube color to match docs ([d172b41](https://github.com/nartc/angular-three/commit/d172b41234ce060d501935e1eba8cc7242ee6015))
+
 ## [5.0.0-beta.11](https://github.com/nartc/angular-three/compare/5.0.0-beta.10...5.0.0-beta.11) (2022-04-19)
 
 
