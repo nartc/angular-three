@@ -228,11 +228,11 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
     }
 
     override ngOnInit() {
-        this.set({
-            anchorX: 'center',
-            anchorY: 'middle',
-            text: '',
-        });
+        this.set((state) => ({
+            anchorX: state['anchorX'] || 'center',
+            anchorY: state['anchorY'] || 'middle',
+            text: state['text'] || '',
+        }));
         this.zone.runOutsideAngular(() => {
             this.preloadFont(
                 this.select(

@@ -58,6 +58,39 @@
                 "command": "npm publish",
                 "cwd": "dist/libs/soba"
             }
+        },
+        "storybook": {
+            "executor": "@nrwl/storybook:storybook",
+            "options": {
+                "uiFramework": "@storybook/angular",
+                "port": 4400,
+                "config": {
+                    "configFolder": "libs/soba/.storybook"
+                },
+                "projectBuildConfig": "soba:build-storybook"
+            },
+            "configurations": {
+                "ci": {
+                    "quiet": true
+                }
+            }
+        },
+        "build-storybook": {
+            "executor": "@nrwl/storybook:build",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "uiFramework": "@storybook/angular",
+                "outputPath": "dist/storybook/soba",
+                "config": {
+                    "configFolder": "libs/soba/.storybook"
+                },
+                "projectBuildConfig": "soba:build-storybook"
+            },
+            "configurations": {
+                "ci": {
+                    "quiet": true
+                }
+            }
         }
     },
     "tags": ["scope:soba"]
