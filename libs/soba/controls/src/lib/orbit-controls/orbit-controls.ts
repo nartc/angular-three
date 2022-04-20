@@ -203,9 +203,13 @@ export class NgtSobaOrbitControls extends NgtInstance<
 
     private readonly init = this.effect<{}>(
         tap(() => {
-            const camera =
-                this.get((s) => s.camera) || this.store.get((s) => s.camera);
-            this.prepareInstance(new OrbitControls(camera));
+            this.set((state) => ({
+                camera: state.camera || this.store.get((s) => s.camera),
+            }));
+            const camera = this.get((s) => s.camera);
+            if (camera) {
+                this.prepareInstance(new OrbitControls(camera));
+            }
         })
     );
 
