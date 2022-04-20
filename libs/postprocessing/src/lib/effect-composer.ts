@@ -33,7 +33,7 @@ import {
     NormalPass,
     RenderPass,
 } from 'postprocessing';
-import { map, tap } from 'rxjs';
+import { defer, EMPTY, map, of, tap } from 'rxjs';
 import * as THREE from 'three';
 
 export interface NgtEffectComposerState
@@ -138,8 +138,13 @@ export class NgtEffectComposer extends NgtInstance<
         this.select((s) => s.camera),
         this.select((s) => s.normalPass),
         this.select((s) => s.depthDownSamplingPass),
-        this.select((s) => s.instance.value),
-        this.select((s) => s.instance.value.__ngt__.objects)
+        this.instance.ref$,
+        defer(() => {
+            if (this.instance.value) {
+                return this.instance.value.__ngt__.objects.ref$;
+            }
+            return of(null);
+        })
     );
 
     constructor(
@@ -265,14 +270,14 @@ export class NgtEffectComposer extends NgtInstance<
     private readonly setBeforeRender = this.effect<{}>(
         tapEffect(() => {
             const { renderPriority, enabled } = this.get();
+            const gl = this.store.get((s) => s.gl);
             const unregister = this.store.registerBeforeRender({
                 callback: ({ delta }) => {
-                    const gl = this.store.get((s) => s.gl);
-                    const { instance, autoClear } = this.get();
+                    const { instance: composer, autoClear } = this.get();
 
-                    if (enabled && instance.value) {
+                    if (enabled && composer.value) {
                         gl.autoClear = autoClear;
-                        instance.value.render(delta);
+                        composer.value.render(delta);
                     }
                 },
                 priority: enabled ? renderPriority : 0,
@@ -295,12 +300,14 @@ export class NgtEffectComposer extends NgtInstance<
             } = this.get();
             if (
                 composer.value &&
-                composer.value.__ngt__.objects.length &&
+                composer.value.__ngt__.objects.value.length &&
                 camera
             ) {
                 effectPass = new EffectPass(
                     camera,
-                    ...(composer.value.__ngt__.objects as unknown as Effect[])
+                    ...composer.value.__ngt__.objects.value.map(
+                        (ref) => ref.value
+                    )
                 );
                 effectPass.renderToScreen = true;
                 composer.value.addPass(effectPass);
