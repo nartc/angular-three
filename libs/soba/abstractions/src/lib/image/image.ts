@@ -193,11 +193,6 @@ export class NgtSobaImage extends NgtObjectInputs<
         private textureLoader: NgtTextureLoader
     ) {
         super(zone, store, parentRef, parentHostRef);
-        this.set({
-            segments: 1,
-            zoom: 1,
-            grayscale: 0,
-        });
     }
 
     readonly imageViewModel$ = this.select(
@@ -220,13 +215,21 @@ export class NgtSobaImage extends NgtObjectInputs<
         })
     );
 
+    protected override preInit() {
+        this.set((state) => ({
+            segments: state.segments ?? 1,
+            zoom: state.zoom ?? 1,
+            grayscale: state.grayscale ?? 0,
+        }));
+    }
+
     override ngOnInit() {
+        super.ngOnInit();
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
                 this.setTexture(this.select((s) => s.url));
             });
         });
-        super.ngOnInit();
     }
 
     private readonly setTexture = this.effect<string>(
