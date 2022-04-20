@@ -30,12 +30,13 @@ export class NgtStats extends NgtComponentStore implements OnInit {
     }
 
     private node: HTMLElement;
-    private _stats?: Stats;
+    private readonly _stats: Stats;
     private _showPanel = 0;
 
     constructor(private zone: NgZone, @Inject(DOCUMENT) { body }: Document) {
         super();
         this.node = body;
+        this._stats = Stats();
     }
 
     get stats() {
@@ -50,16 +51,15 @@ export class NgtStats extends NgtComponentStore implements OnInit {
                         this.node = this.parent;
                     }
 
-                    this._stats = Stats();
                     this._stats.showPanel(this._showPanel);
                     this.node.appendChild(this._stats.dom);
 
                     const beginCallbackCleanup = addCallback(() =>
-                        this._stats!.begin()
+                        this._stats.begin()
                     );
 
                     const endCallbackCleanup = addAfterCallback(() =>
-                        this._stats!.end()
+                        this._stats.end()
                     );
 
                     return () => {
