@@ -37,9 +37,16 @@ export function applyProps<TInstance extends object = UnknownRecord>(
         }
     }
 
-    for (const [key, prop] of Object.entries(props)) {
+    for (const entry of Object.entries(props)) {
+        const key = entry[0];
+        let prop = entry[1];
+
         // raycast is null or undefined. we'll skip
         if (key === 'raycast' && prop == undefined) continue;
+
+        if (is.ref(prop)) {
+            prop = prop.value;
+        }
 
         const currentInstance = instance;
         const target = (currentInstance as UnknownRecord)[key] as UnknownRecord;
