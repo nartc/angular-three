@@ -233,6 +233,8 @@ export class NgtSobaImage extends NgtObjectInputs<
         switchMap((url) =>
             this.textureLoader.load(url).pipe(
                 tap((texture) => {
+                    const gl = this.store.get((s) => s.gl);
+                    texture.encoding = gl.outputEncoding;
                     this.set({ texture });
                 }),
                 catchError(() => EMPTY)
