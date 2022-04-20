@@ -248,24 +248,6 @@ export abstract class NgtObjectInputs<
             raycast: true,
         };
     }
-}
-
-@Directive()
-export abstract class NgtObject<
-    TObject extends THREE.Object3D = THREE.Object3D,
-    TObjectState extends NgtObjectInputsState<TObject> = NgtObjectInputsState<TObject>
-> extends NgtObjectInputs<TObject, TObjectState> {
-    @Output() appended = new EventEmitter<TObject>();
-    @Output() beforeRender = new EventEmitter<{
-        state: NgtRenderState;
-        object: TObject;
-    }>();
-    /**
-     * @deprecated Use {@link beforeRender} instead
-     */
-    @Output() animateReady = this.beforeRender;
-
-    protected abstract objectInitFn(): TObject;
 
     constructor(
         zone: NgZone,
@@ -294,8 +276,26 @@ export abstract class NgtObject<
             matrixAutoUpdate: true,
             appendMode: 'immediate' as const,
             userData: {},
-        } as Partial<TObjectState>);
+        } as Partial<TObjectInputsState>);
     }
+}
+
+@Directive()
+export abstract class NgtObject<
+    TObject extends THREE.Object3D = THREE.Object3D,
+    TObjectState extends NgtObjectInputsState<TObject> = NgtObjectInputsState<TObject>
+> extends NgtObjectInputs<TObject, TObjectState> {
+    @Output() appended = new EventEmitter<TObject>();
+    @Output() beforeRender = new EventEmitter<{
+        state: NgtRenderState;
+        object: TObject;
+    }>();
+    /**
+     * @deprecated Use {@link beforeRender} instead
+     */
+    @Output() animateReady = this.beforeRender;
+
+    protected abstract objectInitFn(): TObject;
 
     override ngOnInit() {
         super.ngOnInit();
@@ -436,15 +436,27 @@ export abstract class NgtObject<
     }
 
     private addToParent() {
-        if (
-            this.parent &&
-            this.parent.value &&
-            this.parent.value.uuid !== this.instance.value.uuid
-        ) {
-            this.parent.value.add(this.instance.value);
-        } else {
-            this.addToScene();
+        let parent = this.parent;
+        if (this.shouldUseParent(parent)) {
+            parent.value.add(this.instance.value);
+            return;
         }
+
+        parent = this.parentHostRef?.();
+        if (this.shouldUseParent(parent)) {
+            parent.value.add(this.instance.value);
+            return;
+        }
+
+        this.addToScene();
+    }
+
+    private shouldUseParent(parent: Ref<NgtUnknownInstance<THREE.Object3D>>) {
+        return (
+            parent &&
+            parent.value &&
+            parent.value.uuid !== this.instance.value.uuid
+        );
     }
 
     private remove() {
@@ -452,9 +464,7 @@ export abstract class NgtObject<
         if (appendTo && appendTo.value) {
             appendTo.value.remove(this.instance.value);
         } else if (
-            this.parent &&
-            this.parent.value &&
-            this.parent.value.uuid !== this.instance.value.uuid &&
+            this.shouldUseParent(this.parent) &&
             appendMode === 'immediate'
         ) {
             this.parent.value.remove(this.instance.value);
