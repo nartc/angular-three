@@ -7,14 +7,10 @@ import {
     Story,
 } from '@storybook/angular';
 import * as THREE from 'three';
-import {
-    setupCanvas,
-    setupCanvasModules,
-    turnAnimate,
-} from '../../setup-canvas';
+import { setupCanvas, setupCanvasModules, turnAnimate } from '../setup-canvas';
 
 export default {
-    title: 'Soba/Abstractions/Text',
+    title: 'Abstractions/Text',
     decorators: [
         componentWrapperDecorator(setupCanvas({ cameraPosition: [0, 0, 200] })),
         moduleMetadata({
@@ -30,20 +26,20 @@ export default {
 export const Default: Story = (args) => ({
     props: { ...args, onTextAnimate: turnAnimate },
     template: `
-    <ngt-soba-text
-      [text]="text"
-      [color]="'#EC2D2D'"
-      [fontSize]="12"
-      [maxWidth]="200"
-      [lineHeight]="1"
-      [letterSpacing]="0.02"
-      [textAlign]="'left'"
-      font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
-      anchorX="center"
-      anchorY="middle"
-      (beforeRender)="onTextAnimate($event.entity)"
-    >
-    </ngt-soba-text>
+        <ngt-soba-text
+          [text]="text"
+          color="#EC2D2D"
+          fontSize="12"
+          maxWidth="200"
+          lineHeight="1"
+          letterSpacing="0.02"
+          textAlign="left"
+          font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
+          anchorX="center"
+          anchorY="middle"
+          (beforeRender)="onTextAnimate($event.object)"
+        >
+        </ngt-soba-text>
   `,
 });
 
@@ -57,20 +53,20 @@ Default.args = {
 export const Garfield: Story = (args) => ({
     props: { ...args, onTextAnimate: turnAnimate },
     template: `
-    <ngt-soba-text
-      [text]="text"
-      [color]="'#EC2D2D'"
-      [fontSize]="12"
-      [maxWidth]="200"
-      [lineHeight]="1"
-      [letterSpacing]="0.02"
-      [textAlign]="'left'"
-      font="https://fonts.cdnfonts.com/s/1761/Garfield.woff"
-      anchorX="center"
-      anchorY="middle"
-      (beforeRender)="onTextAnimate($event.entity)"
-    >
-    </ngt-soba-text>
+        <ngt-soba-text
+          [text]="text"
+          color="#EC2D2D"
+          fontSize="12"
+          maxWidth="200"
+          lineHeight="1"
+          letterSpacing="0.02"
+          textAlign="left"
+          font="https://fonts.cdnfonts.com/s/1761/Garfield.woff"
+          anchorX="center"
+          anchorY="middle"
+          (beforeRender)="onTextAnimate($event.object)"
+        >
+        </ngt-soba-text>
   `,
 });
 
@@ -84,22 +80,22 @@ Garfield.args = {
 export const Outline: Story = (args) => ({
     props: { ...args, onTextAnimate: turnAnimate },
     template: `
-    <ngt-soba-text
-      [text]="text"
-      [color]="'#EC2D2D'"
-      [fontSize]="12"
-      [maxWidth]="200"
-      [lineHeight]="1"
-      [letterSpacing]="0.02"
-      [textAlign]="'left'"
-      font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
-      anchorX="center"
-      anchorY="middle"
-      [outlineWidth]="2"
-      outlineColor="#ffffff"
-      (beforeRender)="onTextAnimate($event.entity)"
-    >
-    </ngt-soba-text>
+        <ngt-soba-text
+          [text]="text"
+          color="#EC2D2D"
+          fontSize="12"
+          maxWidth="200"
+          lineHeight="1"
+          letterSpacing="0.02"
+          textAlign="left"
+          font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth="2"
+          outlineColor="#ffffff"
+          (beforeRender)="onTextAnimate($event.object)"
+        >
+        </ngt-soba-text>
   `,
 });
 
@@ -113,22 +109,22 @@ Outline.args = {
 export const TransparentWithStroke: Story = (args) => ({
     props: { ...args, onTextAnimate: turnAnimate },
     template: `
-    <ngt-soba-text
-      [text]="text"
-      [fontSize]="12"
-      [maxWidth]="200"
-      [lineHeight]="1"
-      [letterSpacing]="0.02"
-      [textAlign]="'left'"
-      font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
-      anchorX="center"
-      anchorY="middle"
-      [fillOpacity]="0"
-      [strokeWidth]="'2.5%'"
-      strokeColor="#ffffff"
-      (beforeRender)="onTextAnimate($event.entity)"
-    >
-    </ngt-soba-text>
+        <ngt-soba-text
+          [text]="text"
+          fontSize="12"
+          maxWidth="200"
+          lineHeight="1"
+          letterSpacing="0.02"
+          textAlign="left"
+          font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
+          anchorX="center"
+          anchorY="middle"
+          fillOpacity="0"
+          strokeWidth="2.5%"
+          strokeColor="#ffffff"
+          (beforeRender)="onTextAnimate($event.object)"
+        >
+        </ngt-soba-text>
   `,
 });
 
@@ -142,25 +138,25 @@ TransparentWithStroke.args = {
 export const Shadow: Story = (args) => ({
     props: { ...args, onTextAnimate: turnAnimate },
     template: `
-    <ngt-soba-text
-      [text]="text"
-      [color]="'#EC2D2D'"
-      [fontSize]="12"
-      [maxWidth]="200"
-      [lineHeight]="1"
-      [letterSpacing]="0.02"
-      [textAlign]="'left'"
-      font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
-      anchorX="center"
-      anchorY="middle"
-      [outlineOffsetX]="'10%'"
-      [outlineOffsetY]="'10%'"
-      [outlineBlur]="'30%'"
-      [outlineOpacity]="0.3"
-      outlineColor="#EC2D2D"
-      (beforeRender)="onTextAnimate($event.entity)"
-    >
-    </ngt-soba-text>
+        <ngt-soba-text
+          [text]="text"
+          color="#EC2D2D"
+          fontSize="12"
+          maxWidth="200"
+          lineHeight="1"
+          letterSpacing="0.02"
+          textAlign="left"
+          font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
+          anchorX="center"
+          anchorY="middle"
+          outlineOffsetX="10%"
+          outlineOffsetY="10%"
+          outlineBlur="30%"
+          outlineOpacity="0.3"
+          outlineColor="#EC2D2D"
+          (beforeRender)="onTextAnimate($event.object)"
+        >
+        </ngt-soba-text>
   `,
 });
 
@@ -174,23 +170,23 @@ Shadow.args = {
 export const LTR: Story = (args) => ({
     props: { ...args, onTextAnimate: turnAnimate },
     template: `
-    <ngt-soba-text
-      [text]="text"
-      [color]="'#EC2D2D'"
-      [fontSize]="12"
-      [maxWidth]="200"
-      [lineHeight]="1"
-      [letterSpacing]="0.02"
-      textAlign="right"
-      direction="auto"
-      font="https://fonts.gstatic.com/s/scheherazade/v20/YA9Ur0yF4ETZN60keViq1kQgtA.woff"
-      anchorX="center"
-      anchorY="middle"
-      (beforeRender)="onTextAnimate($event.entity)"
-    >
-      ان عدة الشهور عند الله اثنا عشر شهرا في كتاب الله يوم خلق السماوات والارض SOME LATIN TEXT HERE منها اربعة حرم ذلك
-      الدين القيم فلاتظلموا فيهن انفسكم وقاتلوا المشركين كافة كما يقاتلونكم كافة واعلموا ان الله مع المتقين
-    </ngt-soba-text>
+        <ngt-soba-text
+          [text]="text"
+          color="#EC2D2D"
+          fontSize="12"
+          maxWidth="200"
+          lineHeight="1"
+          letterSpacing="0.02"
+          textAlign="right"
+          direction="auto"
+          font="https://fonts.gstatic.com/s/scheherazade/v20/YA9Ur0yF4ETZN60keViq1kQgtA.woff"
+          anchorX="center"
+          anchorY="middle"
+          (beforeRender)="onTextAnimate($event.object)"
+        >
+          ان عدة الشهور عند الله اثنا عشر شهرا في كتاب الله يوم خلق السماوات والارض SOME LATIN TEXT HERE منها اربعة حرم ذلك
+          الدين القيم فلاتظلموا فيهن انفسكم وقاتلوا المشركين كافة كما يقاتلونكم كافة واعلموا ان الله مع المتقين
+        </ngt-soba-text>
   `,
 });
 
@@ -199,35 +195,40 @@ LTR.args = {
       الدين القيم فلاتظلموا فيهن انفسكم وقاتلوا المشركين كافة كما يقاتلونكم كافة واعلموا ان الله مع المتقين`,
 };
 
-export const CustomMaterial: Story = (args) => ({
-    props: {
-        ...args,
-        onTextAnimate: turnAnimate,
-        DoubleSide: THREE.DoubleSide,
-    },
-    template: `
-    <ngt-soba-text
-      [text]="text"
-      [fontSize]="12"
-      [maxWidth]="200"
-      [lineHeight]="1"
-      [letterSpacing]="0.02"
-      [textAlign]="'left'"
-      font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
-      anchorX="center"
-      anchorY="middle"
-      (beforeRender)="onTextAnimate($event.entity)"
-    >
-      <ngt-mesh-basic-material
-        [parameters]='{side: DoubleSide, color: "turquoise", transparent: true }'
-      ></ngt-mesh-basic-material>
-    </ngt-soba-text>
-  `,
-});
-
-CustomMaterial.args = {
-    text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
-      MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
-      CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
-      EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.`,
-};
+// TODO: broken at the moment
+// export const CustomMaterial: Story = (args) => ({
+//     props: {
+//         ...args,
+//         onTextAnimate: turnAnimate,
+//         DoubleSide: THREE.DoubleSide,
+//     },
+//     template: `
+//         <ngt-soba-text
+//           [text]="text"
+//           fontSize="12"
+//           maxWidth="200"
+//           lineHeight="1"
+//           letterSpacing="0.02"
+//           textAlign="left"
+//           font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
+//           anchorX="center"
+//           anchorY="middle"
+//           (beforeRender)="onTextAnimate($event.object)"
+//         >
+//           <ng-template ngt-soba-text-content>
+//               <ngt-mesh-basic-material
+//                   [side]="DoubleSide"
+//                   color="orange"
+//                   transparent
+//               ></ngt-mesh-basic-material>
+//           </ng-template>
+//         </ngt-soba-text>
+//   `,
+// });
+//
+// CustomMaterial.args = {
+//     text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+//       MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
+//       CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
+//       EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.`,
+// };
