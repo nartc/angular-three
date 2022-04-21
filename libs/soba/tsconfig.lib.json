@@ -5,6 +5,7 @@
         "declaration": true,
         "declarationMap": true,
         "inlineSources": true,
+        "lib": ["ESNext", "dom"],
         "types": []
     },
     "exclude": [

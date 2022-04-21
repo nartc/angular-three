@@ -38,16 +38,18 @@ export abstract class NgtCommonGeometry<
         super.ngOnInit();
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
-                this.init(this.instanceArgs$);
+                this.init(this.ctorParams$);
                 this.postInit();
             });
         });
     }
 
-    private readonly init = this.effect<unknown[]>(
-        tapEffect((instanceArgs) => {
+    private readonly init = this.effect<{}>(
+        tapEffect(() => {
+            const instanceArgs = this.get((s) => s.instanceArgs);
+            const geometryArgs = this.adjustCtorParams(instanceArgs);
             const geometry = this.prepareInstance(
-                new this.geometryType(...instanceArgs)
+                new this.geometryType(...geometryArgs)
             );
 
             return () => {
