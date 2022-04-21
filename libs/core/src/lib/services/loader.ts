@@ -24,7 +24,7 @@ import { is } from '../utils/is';
 
 @Injectable({ providedIn: 'root' })
 export class NgtLoader implements OnDestroy {
-    private readonly cached = new Map<string, BranchingReturn>();
+    private readonly cached = new Map();
 
     use<TReturnType, TUrl extends string | string[]>(
         loaderConstructor: new () => NgtLoaderResult<TReturnType>,

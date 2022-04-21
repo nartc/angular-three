@@ -29,6 +29,8 @@ import {
 import { coerceBooleanProperty } from './utils/coercion';
 import { createLoop } from './utils/loop';
 
+const rootStateMap = new Map<Element, () => NgtState>();
+
 @Component({
     selector: 'ngt-canvas',
     template: `
@@ -143,8 +145,6 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
     @ViewChild('rendererCanvas', { static: true })
     rendererCanvas!: ElementRef<HTMLCanvasElement>;
 
-    private readonly rootStateMap = new Map<Element, () => NgtState>();
-
     constructor(private zone: NgZone, private store: NgtStore) {
         super();
     }
@@ -161,14 +161,15 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
                     },
                 });
             }
-            this.rootStateMap.set(this.rendererCanvas.nativeElement, () =>
+            rootStateMap.set(this.rendererCanvas.nativeElement, () =>
                 this.store.get()
             );
-            const { invalidate, advance } = createLoop(this.rootStateMap);
+            const { invalidate, advance } = createLoop(rootStateMap);
 
             // init canvas
             this.store.init(
                 this.rendererCanvas.nativeElement,
+                rootStateMap,
                 invalidate,
                 advance
             );
@@ -184,13 +185,6 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
                 this.store.startLoop(this.store.select());
             });
         });
-    }
-
-    override ngOnDestroy() {
-        this.zone.runOutsideAngular(() => {
-            this.rootStateMap.delete(this.rendererCanvas.nativeElement);
-        });
-        super.ngOnDestroy();
     }
 }
 

@@ -233,6 +233,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
 
     init(
         canvasElement: HTMLCanvasElement,
+        rootStateMap: Map<Element, () => NgtState>,
         invalidate: (state?: () => NgtState) => void,
         advance: (
             timestamp: number,
@@ -244,7 +245,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         this.initEvents(canvasElement);
         this.resize(this.resizeResult$);
         this.updateDimensions(this.dimensions$);
-        this.initRenderer({ canvasElement, advance });
+        this.initRenderer({ canvasElement, rootStateMap, advance });
         this.updateSubscribers(
             this.select(
                 this.select((s) => s.internal.animations),
@@ -321,6 +322,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
 
     private readonly initRenderer = this.effect<{
         canvasElement: HTMLCanvasElement;
+        rootStateMap: Map<Element, () => NgtState>;
         advance: (
             timestamp: number,
             runGlobalCallbacks?: boolean,
@@ -328,7 +330,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             frame?: THREE.XRFrame
         ) => void;
     }>(
-        tapEffect(({ canvasElement, advance }) => {
+        tapEffect(({ canvasElement, rootStateMap, advance }) => {
             const state = this.get();
 
             // Scene
@@ -520,6 +522,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                         ...state,
                         internal: { ...state.internal, active: false },
                     }));
+
+                    rootStateMap.delete(canvasElement);
                 }
             };
         })
@@ -596,9 +600,10 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                     this.set((state) => ({
                         internal: {
                             ...state.internal,
-                            animations: new Map<string, NgtBeforeRenderRecord>(
-                                state.internal.animations
-                            ).set(uuid, record),
+                            animations: new Map(state.internal.animations).set(
+                                uuid,
+                                record
+                            ),
                             priority:
                                 state.internal.priority +
                                 ((record.priority || 0) > 0 ? 1 : 0),
