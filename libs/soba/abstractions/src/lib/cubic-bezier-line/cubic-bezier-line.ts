@@ -1,186 +1,130 @@
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import * as THREE from 'three';
+import {
+    coerceNumberProperty,
+    is,
+    makeVector3,
+    NgtObjectPassThroughModule,
+    NgtTriple,
+    NumberInput,
+    provideObjectHosRef,
+} from '@angular-three/core';
+import { CommonModule } from '@angular/common';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    NgModule,
+} from '@angular/core';
+import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
 
 @Component({
-    selector: 'ngt-soba-cubic-bezier-line',
-    template: ``,
+    selector: 'ngt-soba-cubic-bezier-line[start][end][midA][midB]',
+    template: `
+        <ngt-soba-line
+            *ngIf="cubicLineViewModel$ | async as cubicLineViewModel"
+            (beforeRender)="beforeRender.emit($event)"
+            [points]="cubicLineViewModel.points"
+            [vertexColors]="cubicLineViewModel.vertexColors"
+            [resolution]="cubicLineViewModel.resolution"
+            [dashed]="cubicLineViewModel.dashed"
+            [color]="cubicLineViewModel.color"
+            [lineWidth]="cubicLineViewModel.lineWidth"
+            [ngtObjectOutputs]="this"
+            [ngtObjectInputs]="this"
+        >
+            <ng-container *ngIf="content">
+                <ng-template ngt-soba-line-content let-line="line">
+                    <ng-container
+                        [ngTemplateOutlet]="content.templateRef"
+                        [ngTemplateOutletContext]="{line}"
+                    ></ng-container>
+                </ng-template>
+            </ng-container>
+        </ngt-soba-line>
+    `,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideObjectHosRef(
+            NgtSobaCubicBezierLine,
+            (line) => line.instance,
+            (line) => line.parentRef
+        ),
+    ],
 })
-export class NgtSobaCubicBezierLine {
-    constructor() {
-        console.warn(`<ngt-soba-cubic-bezier-line> is being reworked!`);
+export class NgtSobaCubicBezierLine extends NgtSobaLine {
+    static ngAcceptInputType_points: never;
+
+    @Input() set start(start: THREE.Vector3 | NgtTriple) {
+        this.set({ start });
+    }
+
+    @Input() set end(end: THREE.Vector3 | NgtTriple) {
+        this.set({ end });
+    }
+
+    @Input() set midA(midA: THREE.Vector3 | NgtTriple) {
+        this.set({ midA });
+    }
+
+    @Input() set midB(midB: THREE.Vector3 | NgtTriple) {
+        this.set({ midB });
+    }
+
+    @Input() set segments(segments: NumberInput) {
+        this.set({ segments: coerceNumberProperty(segments) });
+    }
+
+    override shouldPassThroughRef = false;
+
+    readonly cubicBezierPoints$ = this.select(
+        this.select((s) => s['start']),
+        this.select((s) => s['end']),
+        this.select((s) => s['midA']),
+        this.select((s) => s['midB']),
+        this.select((s) => s['segments']),
+        (start, end, midA, midB, segments) => {
+            const startV = is.vector3(start) ? start : makeVector3(start);
+            const endV = is.vector3(end) ? end : makeVector3(end);
+            const midAV = is.vector3(midA) ? midA : makeVector3(midA);
+            const midBV = is.vector3(midB) ? midB : makeVector3(midB);
+
+            return new THREE.CubicBezierCurve3(
+                startV,
+                midAV,
+                midBV,
+                endV
+            ).getPoints(segments);
+        }
+    );
+
+    readonly cubicLineViewModel$ = this.select(
+        this.cubicBezierPoints$,
+        this.select((s) => s.vertexColors),
+        this.select((s) => s.resolution),
+        this.select((s) => s.dashed),
+        this.select((s) => s.color),
+        this.select((s) => s.lineWidth),
+        (points, vertexColors, resolution, dashed, color, lineWidth) => ({
+            points,
+            vertexColors,
+            resolution,
+            dashed,
+            color,
+            lineWidth,
+        })
+    );
+
+    protected override preInit() {
+        super.preInit();
+        this.set((state) => ({
+            segments: state['segments'] ?? 20,
+        }));
     }
 }
 
 @NgModule({
     declarations: [NgtSobaCubicBezierLine],
     exports: [NgtSobaCubicBezierLine],
+    imports: [NgtSobaLineModule, NgtObjectPassThroughModule, CommonModule],
 })
 export class NgtSobaCubicBezierLineModule {}
-
-// import {
-//     createExtenderProvider,
-//     createParentObjectProvider,
-//     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-//     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-//     NgtExtender,
-//     NgtObjectInputsController,
-//     NgtObjectInputsControllerModule,
-//     NgtVector3,
-// } from '@angular-three/core';
-// import {
-//     ChangeDetectionStrategy,
-//     Component,
-//     Inject,
-//     Input,
-//     NgModule,
-//     NgZone,
-//     OnChanges,
-//     OnInit,
-//     SimpleChanges,
-// } from '@angular/core';
-// import * as THREE from 'three';
-// import { Line2 } from 'three-stdlib';
-// import {
-//     NGT_SOBA_LINE_INPUTS_CONTROLLER_PROVIDER,
-//     NGT_SOBA_LINE_INPUTS_WATCHED_CONTROLLER,
-//     NgtSobaLineInputsController,
-//     NgtSobaLineModule,
-// } from '../line/line';
-//
-// @Component({
-//     selector: 'ngt-soba-cubic-bezier-line',
-//     template: `
-//         <ngt-soba-line
-//             (ready)="object = $event"
-//             (animateReady)="
-//                 animateReady.emit({
-//                     entity: $event.object,
-//                     state: $event.state
-//                 })
-//             "
-//             [points]="points"
-//             [parameters]="sobaLineInputsController.parameters"
-//             [dashed]="sobaLineInputsController.dashed"
-//             [lineWidth]="sobaLineInputsController.lineWidth"
-//             [vertexColors]="sobaLineInputsController.vertexColors"
-//             [name]="objectInputsController.name"
-//             [position]="objectInputsController.position"
-//             [rotation]="objectInputsController.rotation"
-//             [quaternion]="objectInputsController.quaternion"
-//             [scale]="objectInputsController.scale"
-//             [color]="objectInputsController.color!"
-//             [userData]="objectInputsController.userData"
-//             [castShadow]="objectInputsController.castShadow"
-//             [receiveShadow]="objectInputsController.receiveShadow"
-//             [visible]="objectInputsController.visible"
-//             [matrixAutoUpdate]="objectInputsController.matrixAutoUpdate"
-//             [dispose]="objectInputsController.dispose"
-//             [raycast]="objectInputsController.raycast"
-//             [appendMode]="objectInputsController.appendMode"
-//             [appendTo]="objectInputsController.appendTo"
-//             (click)="objectInputsController.click.emit($event)"
-//             (contextmenu)="objectInputsController.contextmenu.emit($event)"
-//             (dblclick)="objectInputsController.dblclick.emit($event)"
-//             (pointerup)="objectInputsController.pointerup.emit($event)"
-//             (pointerdown)="objectInputsController.pointerdown.emit($event)"
-//             (pointerover)="objectInputsController.pointerover.emit($event)"
-//             (pointerout)="objectInputsController.pointerout.emit($event)"
-//             (pointerenter)="objectInputsController.pointerenter.emit($event)"
-//             (pointerleave)="objectInputsController.pointerleave.emit($event)"
-//             (pointermove)="objectInputsController.pointermove.emit($event)"
-//             (pointermissed)="objectInputsController.pointermissed.emit($event)"
-//             (pointercancel)="objectInputsController.pointercancel.emit($event)"
-//             (wheel)="objectInputsController.wheel.emit($event)"
-//         ></ngt-soba-line>
-//     `,
-//     changeDetection: ChangeDetectionStrategy.OnPush,
-//     providers: [
-//         NGT_SOBA_LINE_INPUTS_CONTROLLER_PROVIDER,
-//         NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-//         createExtenderProvider(NgtSobaCubicBezierLine),
-//         createParentObjectProvider(
-//             NgtSobaCubicBezierLine,
-//             (line) => line.object
-//         ),
-//     ],
-// })
-// export class NgtSobaCubicBezierLine
-//     extends NgtExtender<Line2>
-//     implements OnInit, OnChanges
-// {
-//     @Input() start!: NgtVector3;
-//     @Input() end!: NgtVector3;
-//     @Input() midA!: NgtVector3;
-//     @Input() midB!: NgtVector3;
-//     @Input() segments?: number = 20;
-//
-//     points!: Array<NgtVector3>;
-//
-//     constructor(
-//         @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-//         public objectInputsController: NgtObjectInputsController,
-//         @Inject(NGT_SOBA_LINE_INPUTS_WATCHED_CONTROLLER)
-//         public sobaLineInputsController: NgtSobaLineInputsController,
-//         private zone: NgZone
-//     ) {
-//         super();
-//     }
-//
-//     ngOnChanges(changes: SimpleChanges) {
-//         if (
-//             changes['start'] ||
-//             changes['end'] ||
-//             changes['midA'] ||
-//             changes['midB'] ||
-//             changes['segments']
-//         ) {
-//             this.buildPoints();
-//         }
-//     }
-//
-//     ngOnInit() {
-//         if (!this.points) {
-//             this.buildPoints();
-//         }
-//     }
-//
-//     private buildPoints() {
-//         this.zone.runOutsideAngular(() => {
-//             const startV =
-//                 this.start instanceof THREE.Vector3
-//                     ? this.start
-//                     : new THREE.Vector3(...(this.start as number[]));
-//             const endV =
-//                 this.end instanceof THREE.Vector3
-//                     ? this.end
-//                     : new THREE.Vector3(...(this.end as number[]));
-//             const midAV =
-//                 this.midA instanceof THREE.Vector3
-//                     ? this.midA
-//                     : new THREE.Vector3(...(this.midA as number[]));
-//             const midBV =
-//                 this.midB instanceof THREE.Vector3
-//                     ? this.midB
-//                     : new THREE.Vector3(...(this.midB as number[]));
-//             this.zone.run(() => {
-//                 this.points = new THREE.CubicBezierCurve3(
-//                     startV,
-//                     midAV,
-//                     midBV,
-//                     endV
-//                 ).getPoints(this.segments);
-//             });
-//         });
-//     }
-// }
-//
-// @NgModule({
-//     declarations: [NgtSobaCubicBezierLine],
-//     exports: [
-//         NgtSobaCubicBezierLine,
-//         NgtSobaLineModule,
-//         NgtObjectInputsControllerModule,
-//     ],
-//     imports: [NgtSobaLineModule],
-// })
-// export class NgtSobaCubicBezierLineModule {}
