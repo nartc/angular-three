@@ -18,6 +18,7 @@ import {
     pairwise,
     pipe,
     startWith,
+    switchMap,
     tap,
     withLatestFrom,
 } from 'rxjs';
@@ -104,8 +105,12 @@ export abstract class NgtInstance<
         return this.get((s) => s.attach);
     }
 
-    readonly instance$ = this.instance.pipe(
-        filter((instance): instance is TInstance => instance != null)
+    readonly instance$ = this.select((s) => s.instance).pipe(
+        switchMap((instance) =>
+            instance.pipe(
+                filter((instance): instance is TInstance => instance != null)
+            )
+        )
     );
 
     get instance(): Ref<TInstance> {
