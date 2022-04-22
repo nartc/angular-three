@@ -30,6 +30,7 @@ import { coerceBooleanProperty } from './utils/coercion';
 import { createLoop } from './utils/loop';
 
 const rootStateMap = new Map<Element, () => NgtState>();
+const { invalidate, advance } = createLoop(rootStateMap);
 
 @Component({
     selector: 'ngt-canvas',
@@ -164,7 +165,6 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
             rootStateMap.set(this.rendererCanvas.nativeElement, () =>
                 this.store.get()
             );
-            const { invalidate, advance } = createLoop(rootStateMap);
 
             // init canvas
             this.store.init(
