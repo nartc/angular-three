@@ -34,7 +34,7 @@ export class NgtSobaLineGeometry extends NgtCommonGeometry<LineGeometry> {
         this.set({ points });
     }
 
-    @Input() set vertexColors(vertexColors: Array<THREE.Vector3 | NgtTriple>) {
+    @Input() set vertexColors(vertexColors: Array<THREE.Color | NgtTriple>) {
         this.set({ vertexColors });
     }
 
