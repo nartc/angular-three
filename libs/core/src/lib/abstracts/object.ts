@@ -231,6 +231,8 @@ export abstract class NgtObjectInputs<
     @Output() pointercancel = new EventEmitter<NgtEvent<PointerEvent>>();
     @Output() wheel = new EventEmitter<NgtEvent<WheelEvent>>();
 
+    shouldPassThroughRef = true;
+
     protected override get optionFields(): Record<string, boolean> {
         return {
             name: false,
