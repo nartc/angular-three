@@ -1,4 +1,8 @@
-import { NgtSobaLineModule } from '@angular-three/soba/abstractions';
+import {
+    NgtSobaCubicBezierLineModule,
+    NgtSobaLineModule,
+    NgtSobaQuadraticBezierLineModule,
+} from '@angular-three/soba/abstractions';
 import {
     componentWrapperDecorator,
     Meta,
@@ -11,7 +15,7 @@ import { hilbert3D } from 'three-stdlib';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
-    title: 'Soba/Abstractions/Line',
+    title: 'Abstractions/Line',
     decorators: [
         componentWrapperDecorator(
             setupCanvas({
@@ -20,7 +24,12 @@ export default {
             })
         ),
         moduleMetadata({
-            imports: [...setupCanvasModules, NgtSobaLineModule],
+            imports: [
+                ...setupCanvasModules,
+                NgtSobaLineModule,
+                NgtSobaCubicBezierLineModule,
+                NgtSobaQuadraticBezierLineModule,
+            ],
         }),
     ],
     argTypes: {
@@ -52,7 +61,7 @@ export const Default: Story = (args) => ({
     props: { ...args, points },
     template: `
     <ngt-soba-line [points]="points" [lineWidth]="lineWidth" [dashed]="dashed" [color]="color"></ngt-soba-line>
-    <ngt-soba-orbit-controls (ready)="$event.zoomSpeed = 0.5"></ngt-soba-orbit-controls>
+    <ngt-soba-orbit-controls zoomSpeed="0.5"></ngt-soba-orbit-controls>
   `,
 });
 
@@ -62,57 +71,57 @@ Default.args = {
     lineWidth: 3,
 };
 
-// export const QuadraticBezierLine: Story = (args) => ({
-//     props: args,
-//     template: `
-//     <ngt-soba-quadratic-bezier-line
-//       [start]="start"
-//       [end]="end"
-//       [segments]="segments"
-//       [lineWidth]="lineWidth"
-//       [dashed]="dashed"
-//       [color]="color"
-//     ></ngt-soba-quadratic-bezier-line>
-//     <ngt-soba-orbit-controls (ready)="$event.zoomSpeed = 0.5"></ngt-soba-orbit-controls>
-//   `,
-// });
-//
-// QuadraticBezierLine.args = {
-//     start: [0, 0, 0],
-//     end: [4, 7, 5],
-//     segments: 10,
-//     color: 'red',
-//     dashed: true,
-//     lineWidth: 2,
-// };
-//
-// export const CubicBezierLine: Story = (args) => ({
-//     props: args,
-//     template: `
-//     <ngt-soba-cubic-bezier-line
-//       [start]="start"
-//       [end]="end"
-//       [midA]="midA"
-//       [midB]="midB"
-//       [segments]="segments"
-//       [color]="color"
-//       [lineWidth]="lineWidth"
-//       [dashed]="dashed"
-//     ></ngt-soba-cubic-bezier-line>
-//     <ngt-soba-orbit-controls (ready)="$event.zoomSpeed = 0.5"></ngt-soba-orbit-controls>
-//   `,
-// });
-//
-// CubicBezierLine.args = {
-//     start: [0, 0, 0],
-//     end: [10, 0, 10],
-//     midA: [5, 4, 0],
-//     midB: [0, 0, 5],
-//     segments: 10,
-//     color: 'red',
-//     lineWidth: 2,
-//     dashed: true,
-// };
+export const QuadraticBezierLine: Story = (args) => ({
+    props: args,
+    template: `
+    <ngt-soba-quadratic-bezier-line
+      [start]="start"
+      [end]="end"
+      [segments]="segments"
+      [lineWidth]="lineWidth"
+      [dashed]="dashed"
+      [color]="color"
+    ></ngt-soba-quadratic-bezier-line>
+    <ngt-soba-orbit-controls zoomSpeed="0.5"></ngt-soba-orbit-controls>
+  `,
+});
+
+QuadraticBezierLine.args = {
+    start: [0, 0, 0],
+    end: [4, 7, 5],
+    segments: 10,
+    color: 'red',
+    dashed: true,
+    lineWidth: 2,
+};
+
+export const CubicBezierLine: Story = (args) => ({
+    props: args,
+    template: `
+    <ngt-soba-cubic-bezier-line
+      [start]="start"
+      [end]="end"
+      [midA]="midA"
+      [midB]="midB"
+      [segments]="segments"
+      [color]="color"
+      [lineWidth]="lineWidth"
+      [dashed]="dashed"
+    ></ngt-soba-cubic-bezier-line>
+    <ngt-soba-orbit-controls zoomSpeed="0.5"></ngt-soba-orbit-controls>
+  `,
+});
+
+CubicBezierLine.args = {
+    start: [0, 0, 0],
+    end: [10, 0, 10],
+    midA: [5, 4, 0],
+    midB: [0, 0, 5],
+    segments: 10,
+    color: 'red',
+    lineWidth: 2,
+    dashed: true,
+};
 
 const colors = new Array(points.length)
     .fill(0)
@@ -132,7 +141,7 @@ export const VertexColors: Story = (args) => ({
       [dashed]="dashed"
       [color]="color"
     ></ngt-soba-line>
-    <ngt-soba-orbit-controls (ready)="$event.zoomSpeed = 0.5"></ngt-soba-orbit-controls>
+    <ngt-soba-orbit-controls zoomSpeed="0.5"></ngt-soba-orbit-controls>
   `,
 });
 
