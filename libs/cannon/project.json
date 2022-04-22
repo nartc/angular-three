@@ -25,7 +25,7 @@
             "executor": "@nrwl/jest:jest",
             "outputs": ["coverage/libs/cannon"],
             "options": {
-                "jestConfig": "libs/cannon/jest.config.js",
+                "jestConfig": "libs/cannon/jest.config.ts",
                 "passWithNoTests": true
             }
         },

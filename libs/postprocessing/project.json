@@ -25,7 +25,7 @@
             "executor": "@nrwl/jest:jest",
             "outputs": ["coverage/libs/postprocessing"],
             "options": {
-                "jestConfig": "libs/postprocessing/jest.config.js",
+                "jestConfig": "libs/postprocessing/jest.config.ts",
                 "passWithNoTests": true
             }
         },

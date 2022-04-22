@@ -14,7 +14,7 @@
             "executor": "@nrwl/jest:jest",
             "outputs": ["coverage/libs/schematics"],
             "options": {
-                "jestConfig": "libs/schematics/jest.config.js",
+                "jestConfig": "libs/schematics/jest.config.ts",
                 "passWithNoTests": true
             }
         },
