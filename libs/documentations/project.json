@@ -3,17 +3,19 @@
     "sourceRoot": "libs/documentations",
     "projectType": "library",
     "targets": {
-        "build-all": {
+        "build-docs": {
             "executor": "@nrwl/workspace:run-commands",
             "options": {
                 "commands": [
-                    "cd libs/documentations",
+                    "echo 'Installing Docusaurus dependencies...'",
                     "npm install",
+                    "echo 'Building documentations...'",
                     "npm run build",
-                    "cd ../../",
-                    "STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba"
+                    "echo 'Building Storybook for Soba...'",
+                    "cd ../../ && STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba"
                 ],
-                "parallel": false
+                "parallel": false,
+                "cwd": "libs/documentations"
             }
         }
     },

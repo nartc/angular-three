@@ -4,6 +4,6 @@
     environment = { NODE_VERSION = "14.15.3" }
 
 [context.branch-deploy]
-    command = "npx nx build-all documentations"
+    command = "npx nx build-docs documentations"
     publish = "libs/documentations/build/"
 
