@@ -10,3 +10,8 @@
     command = "npx pnpm run docs"
     publish = "libs/documentations/build/"
 
+[[redirects]]
+    from = "/soba"
+    to = "/soba/"
+    force = true
+    status = 301
