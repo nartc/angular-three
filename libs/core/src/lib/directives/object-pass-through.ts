@@ -106,7 +106,9 @@ export class NgtObjectPassThrough {
     @Input() set ngtObjectInputs(wrapper: unknown) {
         this.assertWrapper(wrapper);
 
-        this.host.ref = wrapper.instance;
+        if (wrapper.shouldPassThroughRef) {
+            this.host.ref = wrapper.instance;
+        }
         this.host.attach = wrapper.attach;
         this.host.skipParent = wrapper.skipParent;
         this.host.noAttach = wrapper.noAttach;
