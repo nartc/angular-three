@@ -10,6 +10,17 @@
  */
 
 // @ts-check
+const isProduction = process.env.CONTEXT === 'production';
+const isBranchDeploy = process.env.CONTEXT === 'branch-deploy';
+
+const netlifyUrl = `${process.env.URL}/soba`;
+const netlifyPrimeUrl = `${process.env.DEPLOY_PRIME_URL}/soba`;
+
+const sobaUrl = isProduction
+    ? netlifyUrl
+    : isBranchDeploy
+    ? netlifyPrimeUrl
+    : 'http://localhost:4400';
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -59,6 +70,11 @@ const sidebars = {
                 'cannon/ray',
                 'cannon/raycast-vehicle',
             ],
+        },
+        {
+            type: 'link',
+            label: 'Soba API',
+            href: sobaUrl,
         },
     ],
 

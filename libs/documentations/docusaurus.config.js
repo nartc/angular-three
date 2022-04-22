@@ -56,11 +56,6 @@ const config = {
                         position: 'left',
                         label: 'Documentations',
                     },
-                    {
-                        to: '/soba/index.html',
-                        label: 'Soba API',
-                        position: 'left',
-                    },
                     { to: '/blog', label: 'Blog', position: 'left' },
                     {
                         href: 'https://github.com/nartc/angular-three',
