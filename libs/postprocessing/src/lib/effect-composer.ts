@@ -123,12 +123,12 @@ export class NgtEffectComposer extends NgtInstance<
     );
 
     private readonly sizeParams$ = this.select(
-        this.select((s) => s.instance.value),
+        this.instance.ref$,
         this.store.select((s) => s.size)
     );
 
     private readonly beforeRenderParams$ = this.select(
-        this.select((s) => s.instance.value),
+        this.instance.ref$,
         this.select((s) => s.autoClear),
         this.select((s) => s.enabled),
         this.select((s) => s.renderPriority)
