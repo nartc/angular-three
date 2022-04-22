@@ -7,15 +7,12 @@
             "executor": "@nrwl/workspace:run-commands",
             "options": {
                 "commands": [
-                    "echo 'Installing Docusaurus dependencies...'",
-                    "npm install",
                     "echo 'Building documentations...'",
-                    "npm run build",
+                    "npx nx build documentations",
                     "echo 'Building Storybook for Soba...'",
-                    "cd ../../ && STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba"
+                    "STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba"
                 ],
-                "parallel": false,
-                "cwd": "libs/documentations"
+                "parallel": false
             }
         }
     },

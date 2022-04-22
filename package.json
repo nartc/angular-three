@@ -12,7 +12,7 @@
         "build": "nx run-many --target=build --projects=core,cannon,postprocessing,soba,schematics",
         "publish": "nx run-many --target=publish --all --parallel",
         "predocs": "test \"$CI\" = true && npx pnpm install --no-frozen-lockfile -r --store=node_modules/.pnpm-store || echo skiping pnpm install",
-        "docs": "npx pnpm run predocs && nx report"
+        "docs": "npx pnpm run predocs && nx build-docs documentations"
     },
     "private": true,
     "dependencies": {
