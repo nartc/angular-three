@@ -72,9 +72,9 @@ const sidebars = {
             ],
         },
         {
-            type: 'link',
-            label: 'Soba API',
-            href: sobaUrl,
+            type: 'html',
+            value: `<a href=${sobaUrl}>Soba API</a>`,
+            defaultStyle: true,
         },
     ],
 
