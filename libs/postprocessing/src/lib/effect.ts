@@ -6,12 +6,12 @@ import {
     NGT_INSTANCE_REF,
     NgtInstance,
     NgtInstanceState,
-    NgtRef,
     NgtStore,
     NumberInput,
     provideInstanceRef,
     startWithUndefined,
     tapEffect,
+    Ref,
 } from '@angular-three/core';
 import {
     Directive,
@@ -31,7 +31,7 @@ export const NGT_COMMON_EFFECT_REF = new InjectionToken('NgtCommonEffect ref');
 
 export function provideCommonEffectRef<TType extends AnyConstructor<any>>(
     subEffect: TType,
-    factory?: (instance: InstanceType<TType>) => NgtRef
+    factory?: (instance: InstanceType<TType>) => Ref
 ): Provider {
     return [
         provideInstanceRef(subEffect, factory),
@@ -89,11 +89,11 @@ export abstract class NgtCommonEffect<
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_REF)
-        parentRef: AnyFunction<NgtRef>,
+        parentRef: AnyFunction<Ref>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_HOST_REF)
-        parentHostRef: AnyFunction<NgtRef>,
+        parentHostRef: AnyFunction<Ref>,
         @Optional()
         protected effectComposer: NgtEffectComposer
     ) {

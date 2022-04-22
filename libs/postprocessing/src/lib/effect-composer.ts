@@ -8,10 +8,11 @@ import {
     NGT_IS_WEBGL_AVAILABLE,
     NgtInstance,
     NgtInstanceState,
-    NgtRef,
     NgtStore,
+    NgtUnknownInstance,
     NumberInput,
     provideInstanceRef,
+    Ref,
     startWithUndefined,
     tapEffect,
 } from '@angular-three/core';
@@ -27,13 +28,12 @@ import {
 } from '@angular/core';
 import {
     DepthDownsamplingPass,
-    Effect,
     EffectComposer,
     EffectPass,
     NormalPass,
     RenderPass,
 } from 'postprocessing';
-import { defer, EMPTY, map, of, tap } from 'rxjs';
+import { defer, map, of, tap } from 'rxjs';
 import * as THREE from 'three';
 
 export interface NgtEffectComposerState
@@ -123,12 +123,12 @@ export class NgtEffectComposer extends NgtInstance<
     );
 
     private readonly sizeParams$ = this.select(
-        this.instance.ref$,
+        this.instance,
         this.store.select((s) => s.size)
     );
 
     private readonly beforeRenderParams$ = this.select(
-        this.instance.ref$,
+        this.instance,
         this.select((s) => s.autoClear),
         this.select((s) => s.enabled),
         this.select((s) => s.renderPriority)
@@ -138,10 +138,11 @@ export class NgtEffectComposer extends NgtInstance<
         this.select((s) => s.camera),
         this.select((s) => s.normalPass),
         this.select((s) => s.depthDownSamplingPass),
-        this.instance.ref$,
+        this.instance,
         defer(() => {
             if (this.instance.value) {
-                return this.instance.value.__ngt__.objects.ref$;
+                return (this.instance.value as unknown as NgtUnknownInstance)
+                    .__ngt__.objects;
             }
             return of(null);
         })
@@ -153,11 +154,11 @@ export class NgtEffectComposer extends NgtInstance<
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_REF)
-        parentRef: AnyFunction<NgtRef>,
+        parentRef: AnyFunction<Ref>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_HOST_REF)
-        parentHostRef: AnyFunction<NgtRef>,
+        parentHostRef: AnyFunction<Ref>,
         @Inject(NGT_IS_WEBGL_AVAILABLE)
         private isWebGLAvailable: boolean
     ) {
@@ -300,14 +301,15 @@ export class NgtEffectComposer extends NgtInstance<
             } = this.get();
             if (
                 composer.value &&
-                composer.value.__ngt__.objects.value.length &&
+                (composer.value as unknown as NgtUnknownInstance).__ngt__
+                    .objects.value.length &&
                 camera
             ) {
                 effectPass = new EffectPass(
                     camera,
-                    ...composer.value.__ngt__.objects.value.map(
-                        (ref) => ref.value
-                    )
+                    ...(
+                        composer.value as unknown as NgtUnknownInstance
+                    ).__ngt__.objects.value.map((ref) => ref.value)
                 );
                 effectPass.renderToScreen = true;
                 composer.value.addPass(effectPass);
