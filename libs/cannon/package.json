@@ -1,6 +1,6 @@
 {
     "name": "@angular-three/cannon",
-    "version": "5.0.0-beta.14",
+    "version": "5.0.0-beta.15",
     "publishConfig": {
         "access": "public"
     },

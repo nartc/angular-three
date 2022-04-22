@@ -1,5 +1,42 @@
 
 
+## [5.0.0-beta.15](https://github.com/nartc/angular-three/compare/5.0.0-beta.14...5.0.0-beta.15) (2022-04-22)
+
+
+### Features
+
+* **cannon:** update ref for cannon ([3c52b78](https://github.com/nartc/angular-three/commit/3c52b78ffe898c694d437a1edc96eef47ec02ff2))
+* **core:** change Ref to extends BehaviorSubject ([29b14ef](https://github.com/nartc/angular-three/commit/29b14ef280d6bdd627f02eeecb54bc2086c6cb94))
+* **postprocessing:** update ref for postprocessing ([c1b1346](https://github.com/nartc/angular-three/commit/c1b1346c39df98e7fdad89b55e560fc525b1202a))
+* **soba:** update ref for soba ([0cb05ac](https://github.com/nartc/angular-three/commit/0cb05acff05dbcf8a3e30bff01e34c9e6767f4c8))
+
+
+### Bug Fixes
+
+* **core:** make sure instance is set before trying to select it ([b01b037](https://github.com/nartc/angular-three/commit/b01b037e5922db6db6beced03a8d08e53f78c2a0))
+* **postprocessing:** use instance.ref$ instead of instanc.value selector ([c57e885](https://github.com/nartc/angular-three/commit/c57e8851654898da4dc5ea2874d517a8cfe60e5d))
+
+
+### Documentations
+
+* add redirect for soba ([1ad13e8](https://github.com/nartc/angular-three/commit/1ad13e85decd13f9ada1b1b7651203096ef659b2))
+* adjust build command ([6dfd715](https://github.com/nartc/angular-three/commit/6dfd715706b49d6bbc86b905b8e0aab9bb48d8f7))
+* bring build command to packageJson script ([7d51931](https://github.com/nartc/angular-three/commit/7d51931083a71d68c47015c3496b5f4b58433d53))
+* fix build command ([21ffd68](https://github.com/nartc/angular-three/commit/21ffd68b6b0d03c383007e1003df7bd4c87c3996))
+* ignore broken links ([255874a](https://github.com/nartc/angular-three/commit/255874aca7177108099df4b324522b0023255e53))
+* move soba from navbar to sidebars ([26bfa94](https://github.com/nartc/angular-three/commit/26bfa94bfef7852b175e14634e0cfcfee2141b50))
+* move soba from sidebar to nav ([c2b51b2](https://github.com/nartc/angular-three/commit/c2b51b29c755342af524e8a458811829e07bf9a6))
+* no frozen lockfile ([78ab7fd](https://github.com/nartc/angular-three/commit/78ab7fdf965788abd5e325f300136bb3db8cd1b3))
+* put back real build docs command ([714a7be](https://github.com/nartc/angular-three/commit/714a7be647e989c496102af1aaa3ee43e50ebca5))
+* remove useless redirect ([1d2210e](https://github.com/nartc/angular-three/commit/1d2210e18999df458f25e05103348523fd475f50))
+* run pre script manually ([f4a379e](https://github.com/nartc/angular-three/commit/f4a379eb8c33f038e114e48c254bf1f66c016484))
+* try different way to test CI flag ([e641958](https://github.com/nartc/angular-three/commit/e641958f349d7012eb1a2b266eadbd1e211d3413))
+* try nx report ([4b3f067](https://github.com/nartc/angular-three/commit/4b3f0672884e674067e70d97203f3fa5db19a303))
+* try pnpm ([7b66ccc](https://github.com/nartc/angular-three/commit/7b66ccc0585e095fada3690f196a1dc561186e9b))
+* try using nx command instead ([719aa53](https://github.com/nartc/angular-three/commit/719aa531868473f998144c57744cf6712fb1f737))
+* use html for external link ([0704069](https://github.com/nartc/angular-three/commit/07040699236d61e46b5f0738913481748a848949))
+* use monday morning ([4f5f641](https://github.com/nartc/angular-three/commit/4f5f64103131a124032d972cdd631ac10efc3e2d))
+
 ## [5.0.0-beta.14](https://github.com/nartc/angular-three/compare/5.0.0-beta.13...5.0.0-beta.14) (2022-04-22)
 
 
