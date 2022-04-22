@@ -44,7 +44,7 @@
         "@nrwl/jest": "14.0.1",
         "@nrwl/js": "14.0.1",
         "@nrwl/linter": "14.0.1",
-        "@nrwl/nx-cloud": "13.3.1",
+        "@nrwl/nx-cloud": "latest",
         "@nrwl/nx-plugin": "14.0.1",
         "@nrwl/storybook": "14.0.1",
         "@nrwl/workspace": "14.0.1",
