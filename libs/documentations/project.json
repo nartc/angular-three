@@ -2,5 +2,20 @@
     "root": "libs/documentations",
     "sourceRoot": "libs/documentations",
     "projectType": "library",
+    "targets": {
+        "build-all": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "commands": [
+                    "cd libs/documentations",
+                    "npm install",
+                    "npm run build",
+                    "cd ../../",
+                    "STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba"
+                ],
+                "parallel": false
+            }
+        }
+    },
     "tags": ["documentations"]
 }
