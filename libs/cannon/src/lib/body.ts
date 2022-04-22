@@ -406,9 +406,7 @@ export class NgtPhysicBody extends NgtComponentStore {
                 )(
                     combineLatest([
                         physicsStore.select((s) => s.worker),
-                        ref.ref$.pipe(
-                            filter((obj): obj is THREE.Object3D => !!obj)
-                        ),
+                        ref.pipe(filter((obj): obj is THREE.Object3D => !!obj)),
                     ])
                 );
             });

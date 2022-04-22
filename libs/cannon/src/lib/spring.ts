@@ -63,8 +63,8 @@ export class NgtPhysicSpring extends NgtComponentStore {
                 )(
                     combineLatest([
                         physicsStore.select((s) => s.worker),
-                        bodyA.ref$.pipe(filter((ref) => ref != undefined)),
-                        bodyB.ref$.pipe(filter((ref) => ref != undefined)),
+                        bodyA.pipe(filter((ref) => ref != undefined)),
+                        bodyB.pipe(filter((ref) => ref != undefined)),
                     ])
                 );
             });
