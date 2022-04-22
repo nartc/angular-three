@@ -57,7 +57,7 @@ const config = {
                         label: 'Documentations',
                     },
                     {
-                        to: '/soba',
+                        to: '/soba/index.html',
                         label: 'Soba API',
                         position: 'left',
                     },
