@@ -244,45 +244,47 @@ export abstract class NgtInstance<
     }
 
     protected destroy() {
-        if (is.object3d(this.instance.value)) {
-            const parentInstance = this.parent;
-            if (parentInstance && is.object3d(parentInstance.value)) {
-                removeInteractivity(
-                    this.__ngt__.root.bind(this.__ngt__),
-                    this.instance.value
-                );
-            }
+        if (this.instance.value) {
+            if (is.object3d(this.instance.value)) {
+                const parentInstance = this.parent;
+                if (parentInstance && is.object3d(parentInstance.value)) {
+                    removeInteractivity(
+                        this.__ngt__.root.bind(this.__ngt__),
+                        this.instance.value
+                    );
+                }
 
-            if (this.instance.value.clear != null) {
-                this.instance.value.clear();
-            }
-        } else {
-            // non-scene objects
-            const previousAttach = this.__ngt__.previousAttach;
-            if (previousAttach != null) {
-                if (typeof previousAttach === 'function') {
-                    previousAttach();
-                    if (this.__ngt__.parent && this.__ngt__.parent.value) {
-                        checkNeedsUpdate(this.__ngt__.parent.value);
-                    }
-                } else {
-                    const previousAttachValue =
-                        this.__ngt__.previousAttachValue;
-                    if (this.__ngt__.parent && this.__ngt__.parent.value) {
-                        mutate(
-                            this.__ngt__.parent.value,
-                            previousAttach,
-                            previousAttachValue
-                        );
-                        checkNeedsUpdate(this.__ngt__.parent.value);
+                if (this.instance.value.clear != null) {
+                    this.instance.value.clear();
+                }
+            } else {
+                // non-scene objects
+                const previousAttach = this.__ngt__.previousAttach;
+                if (previousAttach != null) {
+                    if (typeof previousAttach === 'function') {
+                        previousAttach();
+                        if (this.__ngt__.parent && this.__ngt__.parent.value) {
+                            checkNeedsUpdate(this.__ngt__.parent.value);
+                        }
+                    } else {
+                        const previousAttachValue =
+                            this.__ngt__.previousAttachValue;
+                        if (this.__ngt__.parent && this.__ngt__.parent.value) {
+                            mutate(
+                                this.__ngt__.parent.value,
+                                previousAttach,
+                                previousAttachValue
+                            );
+                            checkNeedsUpdate(this.__ngt__.parent.value);
+                        }
                     }
                 }
             }
-        }
 
-        const dispose = (this.instance.value as UnknownRecord)['dispose'];
-        if (dispose && typeof dispose === 'function') {
-            dispose.apply(this.instance.value as any);
+            const dispose = (this.instance.value as UnknownRecord)['dispose'];
+            if (dispose && typeof dispose === 'function') {
+                dispose.apply(this.instance.value as any);
+            }
         }
 
         this.set({ attach: [] } as unknown as Partial<TInstanceState>);
