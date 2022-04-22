@@ -60,11 +60,6 @@ const sidebars = {
                 'cannon/raycast-vehicle',
             ],
         },
-        {
-            type: 'link',
-            label: 'Soba API',
-            href: '/soba',
-        },
     ],
 
     // But you can create a sidebar manually
