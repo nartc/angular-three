@@ -10,7 +10,7 @@ const config = {
     tagline: 'Declarative THREE.js in Angular',
     url: 'https://angular-three.netlify.app',
     baseUrl: '/',
-    onBrokenLinks: 'throw',
+    onBrokenLinks: 'ignore',
     onBrokenMarkdownLinks: 'warn',
     favicon: 'img/ngt-logo.png',
     organizationName: 'nartc', // Usually your GitHub org/user name.
