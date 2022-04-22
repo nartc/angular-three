@@ -1,9 +1,12 @@
 [build]
     publish = "dist/storybook/storybook/"
     command = "yarn nx run storybook:build-storybook"
-    environment = { NODE_VERSION = "14.15.3" }
+
+[build.environment]
+    NPM_FLAGS="--prefix=/"
+    NODE_VERSION = "14.15.3"
 
 [context.branch-deploy]
-    command = "npm run docs"
+    command = "npx pnpm run docs"
     publish = "libs/documentations/build/"
 

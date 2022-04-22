@@ -11,6 +11,7 @@
         "storybook": "nx storybook soba",
         "build": "nx run-many --target=build --projects=core,cannon,postprocessing,soba,schematics",
         "publish": "nx run-many --target=publish --all --parallel",
+        "predocs": "[[ $CI = true ]] && npx pnpm install -r --store=node_modules/.pnpm-store || echo skiping pnpm install",
         "docs": "nx report"
     },
     "private": true,
