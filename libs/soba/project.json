@@ -80,7 +80,7 @@
             "outputs": ["{options.outputPath}"],
             "options": {
                 "uiFramework": "@storybook/angular",
-                "outputPath": "dist/storybook/soba",
+                "outputPath": "libs/documentations/build/soba",
                 "config": {
                     "configFolder": "libs/soba/.storybook"
                 },

@@ -8,8 +8,7 @@
         "contributors:init": "all-contributors init",
         "contributors:add": "all-contributors add",
         "release": "dotenv release-it --",
-        "storybook": "nx storybook storybook",
-        "storybook:build": "nx run storybook:build-storybook",
+        "storybook": "nx storybook soba",
         "build": "nx run-many --target=build --projects=core,cannon,postprocessing,soba,schematics",
         "publish": "nx run-many --target=publish --all --parallel"
     },
