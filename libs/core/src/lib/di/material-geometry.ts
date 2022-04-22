@@ -1,14 +1,15 @@
 import { Provider } from '@angular/core';
 import { NgtMaterialGeometry } from '../abstracts/material-geometry';
+import { Ref } from '../ref';
 import { NGT_MATERIAL_GEOMETRY_OBJECT_FACTORY } from '../tokens';
-import type { AnyConstructor, NgtRef } from '../types';
+import type { AnyConstructor } from '../types';
 import { provideObjectRef } from './object';
 
 export function provideMaterialGeometryObjectRef<
     TType extends AnyConstructor<any>
 >(
     subMaterialGeometryType: TType,
-    factory?: (instance: InstanceType<TType>) => NgtRef
+    factory?: (instance: InstanceType<TType>) => Ref
 ): Provider {
     return [
         provideObjectRef(subMaterialGeometryType, factory),

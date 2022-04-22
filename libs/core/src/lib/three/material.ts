@@ -11,6 +11,7 @@ import * as THREE from 'three';
 import { Plane } from 'three/src/math/Plane';
 import type { NgtInstanceState } from '../abstracts/instance';
 import { NgtInstance } from '../abstracts/instance';
+import { Ref } from '../ref';
 import { startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
@@ -21,7 +22,6 @@ import type {
     NumberInput,
     UnknownRecord,
 } from '../types';
-import { NgtRef } from '../types';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
 
 export interface NgtCommonMaterialState<
@@ -278,11 +278,11 @@ export abstract class NgtCommonMaterial<
         @Optional()
         @SkipSelf()
         @Inject(NGT_OBJECT_REF)
-        parentRef: AnyFunction<NgtRef<THREE.Object3D>>,
+        parentRef: AnyFunction<Ref<THREE.Object3D>>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_OBJECT_HOST_REF)
-        parentHostRef: AnyFunction<NgtRef<THREE.Object3D>>
+        parentHostRef: AnyFunction<Ref<THREE.Object3D>>
     ) {
         super(zone, store, parentRef, parentHostRef);
     }

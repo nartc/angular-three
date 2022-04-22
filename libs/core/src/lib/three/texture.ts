@@ -9,11 +9,12 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
+import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF } from '../tokens';
 import type { AnyConstructor, NumberInput } from '../types';
-import { AnyFunction, NgtRef } from '../types';
+import { AnyFunction } from '../types';
 import { coerceNumberProperty } from '../utils/coercion';
 
 @Directive()
@@ -72,11 +73,11 @@ export abstract class NgtCommonTexture<
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_REF)
-        parentRef: AnyFunction<NgtRef>,
+        parentRef: AnyFunction<Ref>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_HOST_REF)
-        parentHostRef: AnyFunction<NgtRef>,
+        parentHostRef: AnyFunction<Ref>,
         @Inject(DOCUMENT) protected document: Document
     ) {
         super(zone, store, parentRef, parentHostRef);

@@ -9,18 +9,20 @@ import { checkNeedsUpdate } from './check-needs-update';
 import { is } from './is';
 
 export function applyProps<TInstance extends object = UnknownRecord>(
-    instance: NgtUnknownInstance<TInstance>,
+    instance: TInstance,
     props: UnknownRecord
 ): void {
     // props is empty
     if (!Object.keys(props).length) return;
 
-    const instanceInternal: NgtInstanceInternal = instance.__ngt__ || {};
+    const instanceInternal: NgtInstanceInternal =
+        (instance as NgtUnknownInstance).__ngt__ || {};
     const root = instanceInternal.root;
     const rootState = root?.() ?? {};
 
     if ('__ngt__' in props) {
-        instance.__ngt__ = (props as any).__ngt__ as NgtInstanceInternal;
+        (instance as NgtUnknownInstance).__ngt__ = (props as any)
+            .__ngt__ as NgtInstanceInternal;
     }
 
     if (

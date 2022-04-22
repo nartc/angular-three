@@ -1,6 +1,7 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import type { AnyConstructor, NgtRef, UnknownRecord } from '../types';
+import { Ref } from '../ref';
+import type { AnyConstructor, UnknownRecord } from '../types';
 import { is } from '../utils/is';
 import { NgtObject, NgtObjectInputsState } from './object';
 
@@ -10,9 +11,9 @@ export interface NgtMaterialGeometryState<
     material:
         | THREE.Material
         | THREE.Material[]
-        | NgtRef<THREE.Material>
-        | NgtRef<THREE.Material>[];
-    geometry: THREE.BufferGeometry | NgtRef<THREE.BufferGeometry>;
+        | Ref<THREE.Material>
+        | Ref<THREE.Material>[];
+    geometry: THREE.BufferGeometry | Ref<THREE.BufferGeometry>;
     morphTargetInfluences?: number[];
     morphTargetDictionary?: Record<string, number>;
 }
@@ -28,14 +29,14 @@ export abstract class NgtMaterialGeometry<
         material:
             | THREE.Material
             | THREE.Material[]
-            | NgtRef<THREE.Material>
-            | NgtRef<THREE.Material>[]
+            | Ref<THREE.Material>
+            | Ref<THREE.Material>[]
     ) {
         this.set({ material });
     }
 
     @Input() set geometry(
-        geometry: THREE.BufferGeometry | NgtRef<THREE.BufferGeometry>
+        geometry: THREE.BufferGeometry | Ref<THREE.BufferGeometry>
     ) {
         this.set({ geometry });
     }

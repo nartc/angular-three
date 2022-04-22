@@ -1,25 +1,15 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-export class Ref<TValue = any> {
-    private readonly _ref: BehaviorSubject<TValue>;
-
-    constructor(value: TValue | null = null) {
-        this._ref = new BehaviorSubject<TValue>(value!);
+export class Ref<TValue = any> extends BehaviorSubject<TValue> {
+    constructor(value?: TValue | null) {
+        super((value ? value : null) as TValue);
     }
 
-    get ref$(): Observable<TValue> {
-        return this._ref.asObservable();
-    }
-
-    get value(): TValue {
-        return this._ref.getValue();
-    }
-
-    set(value: TValue) {
-        this._ref.next(value);
-    }
-
-    complete() {
-        this._ref.complete();
+    set(value: ((prev: TValue) => TValue) | TValue) {
+        if (typeof value === 'function') {
+            this.next((value as (prev: TValue) => TValue)(this.value));
+        } else {
+            this.next(value);
+        }
     }
 }

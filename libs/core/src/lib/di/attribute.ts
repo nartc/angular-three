@@ -1,15 +1,16 @@
 import { Provider } from '@angular/core';
 import * as THREE from 'three';
+import { Ref } from '../ref';
 import { NgtCommonAttribute } from '../three/attribute';
 import { NGT_COMMON_ATTRIBUTE_REF } from '../tokens';
-import type { AnyConstructor, NgtRef } from '../types';
+import type { AnyConstructor } from '../types';
 import { provideInstanceRef } from './instance';
 
 export function provideCommonAttributeRef<TType extends AnyConstructor<any>>(
     subAttributeType: TType,
     factory?: (
         instance: InstanceType<TType>
-    ) => NgtRef<THREE.BufferAttribute | THREE.InterleavedBufferAttribute>
+    ) => Ref<THREE.BufferAttribute | THREE.InterleavedBufferAttribute>
 ): Provider {
     return [
         provideInstanceRef(subAttributeType, factory),

@@ -22,7 +22,7 @@ export const is = {
         !!a && (a as THREE.Object3D).isObject3D,
     instance: (a: unknown): a is NgtUnknownInstance =>
         !!a && !!(a as UnknownRecord)['__ngt__'],
-    ref: (a: unknown): a is Ref => !!a && !!(a as Ref).ref$,
+    ref: (a: unknown): a is Ref => !!a && a instanceof Ref,
     vector3: (a: unknown): a is THREE.Vector3 =>
         !!a && (a as THREE.Vector3).isVector3,
     color: (a: unknown): a is THREE.Color => !!a && (a as THREE.Color).isColor,

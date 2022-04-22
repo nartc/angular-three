@@ -18,7 +18,6 @@ import {
     pairwise,
     pipe,
     startWith,
-    switchMap,
     tap,
     withLatestFrom,
 } from 'rxjs';
@@ -35,7 +34,6 @@ import type {
     AttachFunction,
     BooleanInput,
     NgtInstanceInternal,
-    NgtRef,
     NgtUnknownInstance,
     UnknownRecord,
 } from '../types';
@@ -48,7 +46,7 @@ import { is } from '../utils/is';
 import { mutate } from '../utils/mutate';
 
 export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
-    instance: NgtRef<TInstance>;
+    instance: Ref<TInstance>;
     instanceArgs: unknown[];
     attach: string[] | AttachFunction;
     noAttach: boolean;
@@ -106,26 +104,19 @@ export abstract class NgtInstance<
         return this.get((s) => s.attach);
     }
 
-    readonly instance$ = this.select((s) => s.instance).pipe(
-        switchMap((ref) =>
-            ref.ref$.pipe(
-                filter(
-                    (instance): instance is NgtUnknownInstance<TInstance> =>
-                        instance != null
-                )
-            )
-        )
+    readonly instance$ = this.instance.pipe(
+        filter((instance): instance is TInstance => instance != null)
     );
 
-    get instance(): NgtRef<TInstance> {
+    get instance(): Ref<TInstance> {
         return this.get((s) => s.instance);
     }
 
     get __ngt__(): NgtInstanceInternal {
-        return this.instance.value.__ngt__;
+        return (this.instance.value as NgtUnknownInstance).__ngt__;
     }
 
-    get parent(): NgtRef {
+    get parent(): Ref {
         if (!this.skipParent) return this.parentRef?.();
         return this.parentHostRef?.() || this.parentRef?.();
     }
@@ -147,11 +138,11 @@ export abstract class NgtInstance<
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_REF)
-        protected parentRef: AnyFunction<NgtRef>,
+        protected parentRef: AnyFunction<Ref>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_HOST_REF)
-        protected parentHostRef: AnyFunction<NgtRef>
+        protected parentHostRef: AnyFunction<Ref>
     ) {
         super();
         this.set({
@@ -479,7 +470,7 @@ export abstract class NgtInstance<
         )
     );
 
-    private checkUpdate(value: NgtUnknownInstance): void {
+    private checkUpdate(value: unknown): void {
         if (is.object3d(value)) {
             value.updateMatrix();
         } else if (is.camera(value)) {

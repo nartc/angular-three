@@ -17,13 +17,12 @@ import { provideCanvasInstanceRef } from './di/object';
 import { NgtResize } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore } from './stores/store';
-import {
+import type {
     BooleanInput,
     NgtCameraOptions,
     NgtDpr,
     NgtGLOptions,
     NgtSceneOptions,
-    NgtSize,
     NgtState,
 } from './types';
 import { coerceBooleanProperty } from './utils/coercion';

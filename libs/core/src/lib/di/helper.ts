@@ -1,12 +1,13 @@
 import { Provider } from '@angular/core';
+import { Ref } from '../ref';
 import { NgtCommonHelper } from '../three/helper';
 import { NGT_COMMON_HELPER_REF } from '../tokens';
-import type { AnyConstructor, NgtRef } from '../types';
+import type { AnyConstructor } from '../types';
 import { provideObjectRef } from './object';
 
 export function provideCommonHelperRef<TType extends AnyConstructor<any>>(
     subHelperType: TType,
-    factory?: (instance: InstanceType<TType>) => NgtRef
+    factory?: (instance: InstanceType<TType>) => Ref
 ): Provider {
     return [
         provideObjectRef(subHelperType, factory),

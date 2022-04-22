@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { Ref } from '../ref';
 import type {
     NgtInstanceInternal,
-    NgtRef,
     NgtState,
     NgtUnknownInstance,
     UnknownRecord,
@@ -18,8 +17,8 @@ export const getInstanceRootState = (
 export function prepare<TInstance extends object = UnknownRecord>(
     instance: TInstance,
     root: () => NgtState,
-    parentInstance?: NgtRef,
-    previousInstance?: NgtRef,
+    parentInstance?: Ref,
+    previousInstance?: Ref,
     isPrimitive = false
 ): NgtUnknownInstance<TInstance> {
     const parent = parentInstance

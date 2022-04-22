@@ -10,7 +10,6 @@ import {
     NgtInstanceState,
     NgtMatrix4,
     NgtObject,
-    NgtRef,
     NgtStore,
     NGT_HOST_BONE_REF,
     NGT_HOST_SKELETON_REF,
@@ -19,6 +18,7 @@ import {
     provideCommonMeshRef,
     provideInstanceRef,
     provideObjectRef,
+    Ref,
     tapEffect,
 } from '@angular-three/core';
 import {
@@ -143,7 +143,7 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
         @Optional()
         @SkipSelf()
         @Inject(NGT_HOST_SKINNED_MESH_REF)
-        parentHostRef: AnyFunction<NgtRef<THREE.SkinnedMesh>>,
+        parentHostRef: AnyFunction<Ref<THREE.SkinnedMesh>>,
         @Optional() private skinnedMesh: NgtSkinnedMesh
     ) {
         if (parentHostRef && !parentHostRef().value.isSkinnedMesh) {
@@ -245,21 +245,20 @@ export class NgtBone extends NgtObject<THREE.Bone> {
         @Optional()
         @SkipSelf()
         @Inject(NGT_HOST_BONE_REF)
-        private hostBoneRef: AnyFunction<NgtRef<THREE.Bone>>,
+        private hostBoneRef: AnyFunction<Ref>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_HOST_SKELETON_REF)
-        private hostSkeletonRef: AnyFunction<NgtRef<THREE.Skeleton>>,
+        private hostSkeletonRef: AnyFunction<Ref>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_HOST_SKINNED_MESH_REF)
-        private hostSkinnedMeshRef: AnyFunction<NgtRef<THREE.SkinnedMesh>>
+        private hostSkinnedMeshRef: AnyFunction<Ref>
     ) {
         super(
             zone,
             store,
-            () =>
-                (parentBone?.instance || parentSkinnedMesh?.instance) as NgtRef,
+            () => (parentBone?.instance || parentSkinnedMesh?.instance) as Ref,
             (hostBoneRef || hostSkinnedMeshRef) as AnyFunction
         );
     }

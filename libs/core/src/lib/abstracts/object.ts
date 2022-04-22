@@ -20,7 +20,6 @@ import type {
     NgtEvent,
     NgtEventHandlers,
     NgtQuaternion,
-    NgtRef,
     NgtRenderState,
     NgtTriple,
     NgtUnknownInstance,
@@ -257,11 +256,11 @@ export abstract class NgtObjectInputs<
         @Optional()
         @SkipSelf()
         @Inject(NGT_OBJECT_REF)
-        protected parentObjectRef: AnyFunction<NgtRef<THREE.Object3D>>,
+        protected parentObjectRef: AnyFunction<Ref<THREE.Object3D>>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_OBJECT_HOST_REF)
-        protected parentObjectHostRef: AnyFunction<NgtRef<THREE.Object3D>>
+        protected parentObjectHostRef: AnyFunction<Ref<THREE.Object3D>>
     ) {
         super(zone, store, parentObjectRef, parentObjectHostRef);
         this.set({

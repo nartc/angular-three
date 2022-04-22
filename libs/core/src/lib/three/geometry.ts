@@ -2,10 +2,11 @@ import { Directive, Inject, NgZone, Optional, SkipSelf } from '@angular/core';
 import * as THREE from 'three';
 import type { NgtInstanceState } from '../abstracts/instance';
 import { NgtInstance } from '../abstracts/instance';
+import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
-import type { AnyConstructor, AnyFunction, NgtRef } from '../types';
+import type { AnyConstructor, AnyFunction } from '../types';
 
 @Directive()
 export abstract class NgtCommonGeometry<
@@ -19,11 +20,11 @@ export abstract class NgtCommonGeometry<
         @Optional()
         @SkipSelf()
         @Inject(NGT_OBJECT_REF)
-        parentRef: AnyFunction<NgtRef<THREE.Object3D>>,
+        parentRef: AnyFunction<Ref<THREE.Object3D>>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_OBJECT_HOST_REF)
-        parentHostRef: AnyFunction<NgtRef<THREE.Object3D>>
+        parentHostRef: AnyFunction<Ref<THREE.Object3D>>
     ) {
         super(zone, store, parentRef, parentHostRef);
     }
