@@ -1,5 +1,35 @@
 
 
+## [5.0.0-beta.14](https://github.com/nartc/angular-three/compare/5.0.0-beta.13...5.0.0-beta.14) (2022-04-22)
+
+
+### Features
+
+* **core:** add object pass through directive ([edce727](https://github.com/nartc/angular-three/commit/edce7275bcea1de87063b5ed2fead1537695ce13))
+* **soba:** implement all Lines ([38a22b4](https://github.com/nartc/angular-three/commit/38a22b48e3787fca85bb8c11e232d8c5c95739bd))
+
+
+### Bug Fixes
+
+* **billboard:** ensure billboard is a wrapper to Angular Three ([4a39e1b](https://github.com/nartc/angular-three/commit/4a39e1b6cbecb818c612e252352d68e0c6c1e5f4))
+* **core:** add shouldPassThroughRef state to object inputs ([f096280](https://github.com/nartc/angular-three/commit/f096280f4952509f14d604334949b80b237f0be5))
+* **core:** also provide ngtObject when provide object host ref ([66dda10](https://github.com/nartc/angular-three/commit/66dda102406df8a1511b7a0a5257119e1fc5668d))
+* **core:** check for instance.value before destroy. if it's null, no need to destroy anything ([9686e5a](https://github.com/nartc/angular-three/commit/9686e5a284a5d8767acc9214361ccdf91b2ad0f8))
+* **core:** clean up rootStateMap ([0e08255](https://github.com/nartc/angular-three/commit/0e0825517e8786ffd15c0b55874b86ae6417da28))
+* **core:** move createLoop outside of Canvas component so that it only creates once ([cbd98ea](https://github.com/nartc/angular-three/commit/cbd98ea2179c7290be6601775659e3e047d22b53))
+* **core:** only pass ref if shouldPassThroughRef is true (which is the default) ([7d50750](https://github.com/nartc/angular-three/commit/7d5075030f471ad5824367abfd4eafc0b1f33ae7))
+* **soba:** adjust image ([a119f8d](https://github.com/nartc/angular-three/commit/a119f8d0884183aad047ca4b8ea577bc7712e2f6))
+* **soba:** fix text ([de1d47d](https://github.com/nartc/angular-three/commit/de1d47dcc934801f9aaab2abfceeee5cfac0e124))
+* **soba:** fix type of line geometry ([0e9f836](https://github.com/nartc/angular-three/commit/0e9f8368c5627990958e6221738cf02bb9540e99))
+* **soba:** use object pass through ([ad86ebc](https://github.com/nartc/angular-three/commit/ad86ebc3b285da04bb65659c91d51903fd8e7912))
+
+
+### Documentations
+
+* add text story (remove custom material example) ([b822d54](https://github.com/nartc/angular-three/commit/b822d54d44cffd46ddb3bf47d71a88aadd3a6532))
+* setup build storybook ([c90930f](https://github.com/nartc/angular-three/commit/c90930f70df53a7255de261b70e73f87f061e2b1))
+* update line stories ([a07d7fe](https://github.com/nartc/angular-three/commit/a07d7fe81c13e31b57306f9ad16a519b9ac718e5))
+
 ## [5.0.0-beta.13](https://github.com/nartc/angular-three/compare/5.0.0-beta.12...5.0.0-beta.13) (2022-04-20)
 
 
