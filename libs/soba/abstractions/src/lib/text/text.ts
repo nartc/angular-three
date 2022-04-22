@@ -5,10 +5,10 @@ import {
     NgtColor,
     NgtObjectInputs,
     NgtObjectPassThroughModule,
-    NgtRef,
     NgtRenderState,
     NumberInput,
     provideObjectHosRef,
+    Ref,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
 import { CommonModule } from '@angular/common';
@@ -31,14 +31,12 @@ import { preloadFont, Text as TextMeshImpl } from 'troika-three-text';
     selector: 'ng-template[ngt-soba-text-content]',
 })
 export class NgtSobaTextContent {
-    constructor(
-        public templateRef: TemplateRef<{ text: NgtRef<TextMeshImpl> }>
-    ) {}
+    constructor(public templateRef: TemplateRef<{ text: Ref<TextMeshImpl> }>) {}
 
     static ngTemplateContextGuard(
         dir: NgtSobaTextContent,
         ctx: any
-    ): ctx is { text: NgtRef<TextMeshImpl> } {
+    ): ctx is { text: Ref<TextMeshImpl> } {
         return true;
     }
 }

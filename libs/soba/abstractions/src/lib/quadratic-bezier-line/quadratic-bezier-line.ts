@@ -1,22 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { tap } from 'rxjs';
-import * as THREE from 'three';
 import {
     coerceNumberProperty,
     is,
-    makeVector3,
     NgtObjectPassThroughModule,
     NgtTriple,
     NumberInput,
     provideObjectHosRef,
     startWithUndefined,
 } from '@angular-three/core';
+import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
     Input,
     NgModule,
 } from '@angular/core';
+import { tap } from 'rxjs';
+import * as THREE from 'three';
 import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
 
 const v = new THREE.Vector3();
@@ -112,7 +111,7 @@ export class NgtSobaQuadraticBezierLine extends NgtSobaLine {
 
     protected override postInit() {
         super.postInit();
-        this.setLineSetPoints(this.instance.ref$);
+        this.setLineSetPoints(this.instance);
     }
 
     private readonly setLineSetPoints = this.effect<{}>(

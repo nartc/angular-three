@@ -1,22 +1,18 @@
-import * as THREE from 'three';
 import {
     BooleanInput,
     coerceBooleanProperty,
     coerceNumberProperty,
-    is,
     makeColor,
     makeVector2,
-    NgtColor,
     NgtObjectInputs,
     NgtObjectInputsState,
     NgtObjectPassThroughModule,
-    NgtRef,
     NgtRenderState,
     NgtTriple,
     NgtVector2,
-    NgtVector3,
     NumberInput,
     provideObjectHosRef,
+    Ref,
     tapEffect,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
@@ -32,10 +28,11 @@ import {
     Output,
     TemplateRef,
 } from '@angular/core';
-import { Line2, LineGeometry } from 'three-stdlib';
+import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
+import * as THREE from 'three';
+import { Line2 } from 'three-stdlib';
 import { NgtSobaLineGeometryModule } from './line-geometry';
 import { NgtSobaLineMaterialModule } from './line-material';
-import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
 
 export interface NgtSobaCommonLineState extends NgtObjectInputsState<Line2> {
     points: Array<THREE.Vector3 | NgtTriple>;
@@ -86,12 +83,12 @@ export abstract class NgtSobaCommonLine extends NgtObjectInputs<
     selector: 'ng-template[ngt-soba-line-content]',
 })
 export class NgtSobaLineContent {
-    constructor(public templateRef: TemplateRef<{ line: NgtRef<Line2> }>) {}
+    constructor(public templateRef: TemplateRef<{ line: Ref<Line2> }>) {}
 
     static ngTemplateContextGuard(
         dir: NgtSobaLineContent,
         ctx: any
-    ): ctx is { line: NgtRef<Line2> } {
+    ): ctx is { line: Ref<Line2> } {
         return true;
     }
 }
@@ -142,7 +139,7 @@ export class NgtSobaLine extends NgtSobaCommonLine {
     @ContentChild(NgtSobaLineContent) content?: NgtSobaLineContent;
 
     readonly lineViewModel$ = this.select(
-        this.instance.ref$,
+        this.instance,
         this.select((s) => s.points),
         this.select((s) => s.vertexColors),
         this.select((s) => s.resolution),
@@ -183,7 +180,7 @@ export class NgtSobaLine extends NgtSobaCommonLine {
     );
 
     private readonly computeLineDistancesParams$ = this.select(
-        this.instance.ref$,
+        this.instance,
         this.select((s) => s.points)
     );
     private readonly computeLineDistances = this.effect<{}>(

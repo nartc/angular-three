@@ -3,9 +3,9 @@ import {
     coerceBooleanProperty,
     NgtObjectInputs,
     NgtObjectPassThroughModule,
-    NgtRef,
     NgtRenderState,
     provideObjectHosRef,
+    Ref,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
 import { CommonModule } from '@angular/common';
@@ -27,13 +27,13 @@ import * as THREE from 'three';
 })
 export class NgtSobaBillboardContent {
     constructor(
-        public templateRef: TemplateRef<{ billboard: NgtRef<THREE.Group> }>
+        public templateRef: TemplateRef<{ billboard: Ref<THREE.Group> }>
     ) {}
 
     static ngTemplateContextGuard(
         dir: NgtSobaBillboardContent,
         ctx: any
-    ): ctx is { billboard: NgtRef<THREE.Group> } {
+    ): ctx is { billboard: Ref<THREE.Group> } {
         return true;
     }
 }

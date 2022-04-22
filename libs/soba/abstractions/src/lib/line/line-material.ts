@@ -63,7 +63,7 @@ export class NgtSobaLineMaterial extends NgtShaderMaterial {
     }
 
     private readonly setDashedParams$ = this.select(
-        this.instance.ref$,
+        this.instance,
         this.select((s) => s['dashed'])
     );
 

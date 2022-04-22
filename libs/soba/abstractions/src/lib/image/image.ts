@@ -8,12 +8,12 @@ import {
     NgtObjectInputs,
     NgtObjectInputsState,
     NgtObjectPassThroughModule,
-    NgtRef,
     NgtRenderState,
     NgtStore,
     NumberInput,
     provideObjectHosRef,
     startWithUndefined,
+    Ref,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
@@ -42,14 +42,12 @@ import { NgtSobaImageShaderMaterialModule } from './image-shader-material';
     selector: 'ng-template[ngt-soba-image-content]',
 })
 export class NgtSobaImageContent {
-    constructor(
-        public templateRef: TemplateRef<{ image: NgtRef<THREE.Mesh> }>
-    ) {}
+    constructor(public templateRef: TemplateRef<{ image: Ref<THREE.Mesh> }>) {}
 
     static ngTemplateContextGuard(
         dir: NgtSobaImageContent,
         ctx: any
-    ): ctx is { image: NgtRef<THREE.Mesh> } {
+    ): ctx is { image: Ref<THREE.Mesh> } {
         return true;
     }
 }
@@ -91,8 +89,8 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
 
             <ngt-mesh
                 (beforeRender)="beforeRender.emit($event)"
-                [material]="ngtMaterial.instance"
-                [geometry]="ngtPlane.instance"
+                [material]="$any(ngtMaterial.instance)"
+                [geometry]="$any(ngtPlane.instance)"
                 [ngtObjectInputs]="this"
                 [ngtObjectOutputs]="this"
             >
@@ -155,11 +153,11 @@ export class NgtSobaImage extends NgtObjectInputs<
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_REF)
-        parentRef: AnyFunction<NgtRef>,
+        parentRef: AnyFunction<Ref>,
         @Optional()
         @SkipSelf()
         @Inject(NGT_INSTANCE_HOST_REF)
-        parentHostRef: AnyFunction<NgtRef>,
+        parentHostRef: AnyFunction<Ref>,
         private textureLoader: NgtTextureLoader
     ) {
         super(zone, store, parentRef, parentHostRef);

@@ -1,9 +1,8 @@
 import {
     BooleanInput,
     coerceBooleanProperty,
-    NgtCamera,
-    NgtRef,
     provideObjectHosRef,
+    Ref,
     tapEffect,
 } from '@angular-three/core';
 import {
@@ -28,14 +27,14 @@ import * as THREE from 'three';
 export class NgtSobaOrthographicCameraContent {
     constructor(
         public templateRef: TemplateRef<{
-            camera: NgtRef<THREE.OrthographicCamera>;
+            camera: Ref<THREE.OrthographicCamera>;
         }>
     ) {}
 
     static ngTemplateContextGuard(
         dir: NgtSobaOrthographicCameraContent,
         ctx: any
-    ): ctx is { camera: NgtRef<THREE.OrthographicCamera> } {
+    ): ctx is { camera: Ref<THREE.OrthographicCamera> } {
         return true;
     }
 }
@@ -146,8 +145,7 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
                         this.select((s) => s.instance),
                         this.select((s) => s.instance.value),
                         this.select((s) => s['makeDefault']),
-                        this.store.select((s) => s.camera),
-                        this.store.select((s) => s.cameraRef)
+                        this.store.select((s) => s.camera)
                     )
                 );
             });
@@ -162,17 +160,12 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
 
             if (this.instance.value && makeDefault) {
                 const oldCamera = camera;
-                const oldCameraRef = cameraRef;
-                this.store.set({
-                    camera: this.instance.value,
-                    cameraRef: this.instance as NgtRef<NgtCamera>,
-                });
+                this.store.set({ camera: this.instance.value });
+                cameraRef.set(this.instance.value);
 
                 return () => {
-                    this.store.set({
-                        camera: oldCamera,
-                        cameraRef: oldCameraRef,
-                    });
+                    this.store.set({ camera: oldCamera });
+                    cameraRef.set(oldCamera);
                 };
             }
 
