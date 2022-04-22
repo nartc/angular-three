@@ -1,6 +1,6 @@
 import { Provider } from '@angular/core';
 import * as THREE from 'three';
-import { NgtObject } from '../abstracts/object';
+import { NgtObject, NgtObjectInputs } from '../abstracts/object';
 import {
     NGT_CAMERA_REF,
     NGT_INSTANCE_HOST_REF,
@@ -35,6 +35,7 @@ export function provideObjectHosRef<TType extends AnyConstructor<any>>(
     hostFactory?: (instance: InstanceType<TType>) => AnyFunction<NgtRef>
 ): Provider {
     return [
+        { provide: NgtObject, useExisting: subType },
         {
             provide: NGT_INSTANCE_REF,
             useFactory: (instance: InstanceType<TType>) => {
