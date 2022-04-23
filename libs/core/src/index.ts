@@ -4,6 +4,8 @@ export * from './lib/abstracts/material-geometry';
 export * from './lib/abstracts/object';
 /* main canvas */
 export * from './lib/canvas';
+/* portal */
+export * from './lib/portal';
 /* dependency injection tokens */
 export * from './lib/di/attribute';
 export * from './lib/di/audio';
@@ -70,3 +72,4 @@ export * from './lib/utils/is';
 export * from './lib/utils/loop';
 export * from './lib/utils/make';
 export * from './lib/utils/shader-material';
+export * from './lib/utils/camera';
