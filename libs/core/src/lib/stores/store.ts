@@ -26,6 +26,7 @@ import type {
     UnknownRecord,
 } from '../types';
 import { applyProps } from '../utils/apply-props';
+import { createDefaultCamera, updateCamera } from '../utils/camera';
 import { createEvents } from '../utils/events';
 import { prepare } from '../utils/instance';
 import { is } from '../utils/is';
@@ -366,7 +367,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                 const isCamera = is.camera(state.cameraOptions);
                 camera = isCamera
                     ? (state.cameraOptions as NgtCamera)
-                    : this.createDefaultCamera(state);
+                    : createDefaultCamera(state);
                 if (!isCamera) {
                     if (state.cameraOptions) {
                         applyProps(camera as any, state.cameraOptions as any);
@@ -527,19 +528,6 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         })
     );
 
-    private createDefaultCamera(state: NgtState) {
-        if (state.orthographic) {
-            return new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000);
-        }
-
-        return new THREE.PerspectiveCamera(
-            75,
-            state.size.width / state.size.height,
-            0.1,
-            1000
-        );
-    }
-
     private readonly resize = this.effect<NgtResizeResult>(
         tap(({ width, height, dpr }) => {
             this.set(({ viewport, camera }) => {
@@ -567,22 +555,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         tap(({ size, viewport }) => {
             const { camera, gl, ready, cameraOptions } = this.get();
             if (ready) {
-                // leave the userland camera alone
-                if (!(is.camera(cameraOptions) || camera.manual)) {
-                    if (is.orthographic(camera)) {
-                        camera.left = size.width / -2;
-                        camera.right = size.width / 2;
-                        camera.top = size.height / 2;
-                        camera.bottom = size.height / -2;
-                    } else {
-                        camera.aspect = size.width / size.height;
-                    }
-
-                    camera.updateProjectionMatrix();
-                    // https://github.com/pmndrs/react-three-fiber/issues/178
-                    // Update matrix world since the renderer is a frame late
-                    camera.updateMatrixWorld();
-                }
+                updateCamera(cameraOptions, camera, size);
 
                 // update renderer
                 gl.setPixelRatio(viewport.dpr);

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import type {
     AnyConstructor,
     NgtColor,
+    NgtDpr,
     NgtIntersection,
     NgtVector2,
     NgtVector3,
@@ -80,7 +81,7 @@ export function makeColor(color?: NgtColor): THREE.Color {
     return new THREE.Color(color);
 }
 
-export function makeDpr(dpr: number) {
+export function makeDpr(dpr: NgtDpr) {
     return is.arr(dpr)
         ? Math.min(Math.max(dpr[0], window.devicePixelRatio), dpr[1])
         : dpr;
