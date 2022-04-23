@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import {
     ElementRef,
     Inject,
@@ -90,8 +89,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         }: ElementRef<HTMLElement>,
         @Inject(NGT_PERFORMANCE_OPTIONS)
         performanceOptions: NgtPerformanceOptions,
-        @Inject(DOCUMENT) document: Document,
-        @Inject(WINDOW) window: Window,
+        @Inject(WINDOW) { devicePixelRatio }: Window,
         @Optional() @SkipSelf() private parentStore: NgtStore,
         @Inject(NgtResize) private resizeResult$: Observable<NgtResizeResult>,
         private zone: NgZone
@@ -151,8 +149,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                 height: clientHeight,
             },
             viewport: {
-                initialDpr: window.devicePixelRatio || 1,
-                dpr: window.devicePixelRatio || 1,
+                initialDpr: devicePixelRatio || 1,
+                dpr: devicePixelRatio || 1,
                 width: clientWidth,
                 height: clientHeight,
                 aspect: clientWidth / clientHeight,
@@ -392,7 +390,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                     camera = prepare(
                         camera,
                         () => this.get(),
-                        this.parentStore?.get((s) => s.cameraRef)
+                        this.parentStore?.get((s) => s.cameraRef) || null
                     );
                 }
                 this.get((s) => s.cameraRef).set(
