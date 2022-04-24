@@ -91,7 +91,7 @@ export class NgtComponentStore<TState extends object = any>
                 ? partialStateOrUpdaterFn(this.get())
                 : partialStateOrUpdaterFn;
 
-        this.update((state, partialState: Partial<TState>) => ({
+        this.updateState((state, partialState: Partial<TState>) => ({
             ...state,
             ...partialState,
         }))(patchedState);
@@ -244,7 +244,7 @@ export class NgtComponentStore<TState extends object = any>
         return this.effect<TValue>(($) => $)(obs) as Subscription;
     }
 
-    private update<
+    private updateState<
         // Allow to force-provide the type
         TProvidedType = void,
         // This type is derived from the `value` property, defaulting to void if it's missing
