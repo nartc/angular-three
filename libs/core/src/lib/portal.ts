@@ -140,6 +140,7 @@ export class NgtPortal extends NgtInstance<THREE.Scene, NgtPortalState> {
 
     constructor(
         zone: NgZone,
+        @SkipSelf()
         store: NgtStore,
         @Optional()
         @SkipSelf()
@@ -156,6 +157,7 @@ export class NgtPortal extends NgtInstance<THREE.Scene, NgtPortalState> {
 
     override ngOnInit() {
         super.ngOnInit();
+
         this.zone.runOutsideAngular(() => {
             // portal initialization does not need to wait for canvas ready
             this.init();
@@ -204,6 +206,8 @@ export class NgtPortal extends NgtInstance<THREE.Scene, NgtPortalState> {
                 this.zone
             );
 
+            const sceneRef = this.instance;
+
             let scene = this.instance.value;
 
             if (!scene) {
@@ -213,13 +217,12 @@ export class NgtPortal extends NgtInstance<THREE.Scene, NgtPortalState> {
                     this.parentRef?.()
                 );
                 this.instance.set(scene);
-                portalStore.get((s) => s.sceneRef).set(scene);
             }
 
             portalStore.set({
                 ...previousState,
                 scene,
-                sceneRef: portalStore.get((s) => s.sceneRef),
+                sceneRef,
                 raycaster: portalState.raycaster,
                 pointer: portalState.pointer,
                 mouse: portalState.pointer,
