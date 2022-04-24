@@ -1,6 +1,6 @@
+import { Directive, Input, NgModule, Optional, Self } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { NgtObject, NgtObjectInputs } from '../abstracts/object';
-import { Directive, Input, NgModule, Optional, Self } from '@angular/core';
 
 @Directive({
     selector:
@@ -109,6 +109,7 @@ export class NgtObjectPassThrough {
         if (wrapper.shouldPassThroughRef) {
             this.host.ref = wrapper.instance;
         }
+
         this.host.attach = wrapper.attach;
         this.host.skipParent = wrapper.skipParent;
         this.host.noAttach = wrapper.noAttach;
