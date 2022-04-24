@@ -44,6 +44,7 @@ import { coerceBooleanProperty } from '../utils/coercion';
 import { removeInteractivity } from '../utils/events';
 import { prepare } from '../utils/instance';
 import { is } from '../utils/is';
+import { makeVector3 } from '../utils/make';
 import { mutate } from '../utils/mutate';
 
 export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
@@ -440,6 +441,26 @@ export abstract class NgtInstance<
 
                     // if propertyToAttach is empty
                     if (propertyToAttach.length === 0) return;
+
+                    // array material handling
+                    if (
+                        propertyToAttach[0] === 'material' &&
+                        propertyToAttach[1] &&
+                        is.num(Number(propertyToAttach[1])) &&
+                        is.material(this.instance.value)
+                    ) {
+                        if (
+                            !is.arr(
+                                (
+                                    parentInstanceRef.value as unknown as THREE.Mesh
+                                ).material
+                            )
+                        ) {
+                            (
+                                parentInstanceRef.value as unknown as THREE.Mesh
+                            ).material = [];
+                        }
+                    }
 
                     // retrieve the current value on the parentInstance so we can reset it later
                     this.__ngt__.previousAttachValue = propertyToAttach.reduce(
