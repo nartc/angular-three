@@ -15,6 +15,7 @@ export interface NgtPhysicSpringApi {
     setDamping: (value: number) => void;
     setRestLength: (value: number) => void;
     setStiffness: (value: number) => void;
+    remove: () => void;
 }
 
 export interface NgtPhysicSpringReturn {
@@ -83,6 +84,9 @@ export class NgtPhysicSpring extends NgtComponentStore {
                         },
                         setStiffness: (value: number) => {
                             worker.setSpringStiffness({ props: value, uuid });
+                        },
+                        remove: () => {
+                            worker.removeSpring({ uuid });
                         },
                     };
                 },

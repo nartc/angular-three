@@ -32,6 +32,7 @@ export interface NgtPhysicRaycastVehiclePublicApi {
     sliding: {
         subscribe: (callback: (sliding: boolean) => void) => void;
     };
+    remove: () => void;
 }
 
 export interface NgtPhysicRaycastVehicleReturn {
@@ -158,6 +159,10 @@ export class NgtPhysicRaycastVehicle extends NgtComponentStore {
                                 undefined,
                                 'vehicles'
                             ),
+                        },
+                        remove() {
+                            const uuid = NgtCannonUtils.getUUID(ref);
+                            uuid && worker.removeRaycastVehicle({ uuid });
                         },
                     };
                 },

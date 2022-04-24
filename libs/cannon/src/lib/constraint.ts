@@ -23,6 +23,7 @@ import { NgtPhysicsStore } from './physics.store';
 type ConstraintApi = {
     disable: () => void;
     enable: () => void;
+    remove: () => void;
 };
 
 type HingeConstraintApi = {
@@ -135,18 +136,21 @@ export class NgtPhysicConstraint extends NgtComponentStore {
                 get api() {
                     const worker = physicsStore.get((s) => s.worker);
 
-                    const enableDisable = {
+                    const commonApi = {
                         disable: () => {
                             worker.disableConstraint({ uuid });
                         },
                         enable: () => {
                             worker.enableConstraint({ uuid });
                         },
+                        remove: () => {
+                            worker.removeConstraint({ uuid });
+                        },
                     } as NgtConstraintORHingeApi<TConstraintType>;
 
                     if (type === 'Hinge') {
                         return {
-                            ...enableDisable,
+                            ...commonApi,
                             disableMotor: () => {
                                 worker.disableConstraintMotor({ uuid });
                             },
@@ -168,7 +172,7 @@ export class NgtPhysicConstraint extends NgtComponentStore {
                         };
                     }
 
-                    return enableDisable;
+                    return commonApi;
                 },
             };
         });
