@@ -9,6 +9,7 @@ import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
+import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -26,8 +27,10 @@ import { Mesh } from 'three';
             <ngt-ambient-light></ngt-ambient-light>
             <ngt-point-light [position]="10"></ngt-point-light>
 
-            <sandbox-cube [position]="[-1.2, 0, 0]"></sandbox-cube>
-            <sandbox-cube [position]="[1.2, 0, 0]"></sandbox-cube>
+            <sandbox-cube [position]="[-1.5, 0, 0]"></sandbox-cube>
+            <sandbox-cube [position]="[1.5, 0, 0]"></sandbox-cube>
+
+            <sandbox-cube-with-materials></sandbox-cube-with-materials>
 
             <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
         </ngt-canvas>
@@ -67,10 +70,38 @@ export class CubeComponent {
     }
 }
 
+@Component({
+    selector: 'sandbox-cube-with-materials',
+    template: `
+        <ngt-mesh (beforeRender)="onBeforeRender($event.object)">
+            <ngt-box-geometry></ngt-box-geometry>
+
+            <ngt-mesh-standard-material
+                *ngFor="let color of colors; index as i"
+                [attach]="['material', '' + i]"
+                [color]="color"
+            ></ngt-mesh-standard-material>
+        </ngt-mesh>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CubeWithMaterialsComponent {
+    colors = ['red', 'green', 'blue', 'hotpink', 'orange', 'teal'];
+
+    onBeforeRender(cube: Mesh) {
+        cube.rotation.x = cube.rotation.y += 0.01;
+    }
+}
+
 @NgModule({
-    declarations: [SandboxCubesComponent, CubeComponent],
+    declarations: [
+        SandboxCubesComponent,
+        CubeComponent,
+        CubeWithMaterialsComponent,
+    ],
     exports: [SandboxCubesComponent],
     imports: [
+        CommonModule,
         NgtCanvasModule,
         NgtColorAttributeModule,
         NgtAmbientLightModule,
