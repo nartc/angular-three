@@ -7,6 +7,5 @@ export * from './lib/gradient-texture/gradient-texture';
 export * from './lib/image/image';
 export * from './lib/image/image-shader-material';
 export * from './lib/gizmo-helper/gizmo-helper';
-export * from './lib/gizmo-helper/gizmo-helper.store';
 export * from './lib/gizmo-helper/gizmo-viewcube';
 export * from './lib/gizmo-helper/gizmo-viewport';

@@ -1,199 +1,334 @@
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    BooleanInput,
+    coerceBooleanProperty,
+    make,
+    makeVector3,
+    NgtObjectInputs,
+    NgtObjectInputsState,
+    NgtObjectPassThroughModule,
+    NgtPortalModule,
+    NgtRenderState,
+    NgtVector3,
+    prepare,
+    provideObjectHosRef,
+    Ref,
+    tapEffect,
+} from '@angular-three/core';
+import { NgtGroupModule } from '@angular-three/core/group';
+import { NgtSobaOrthographicCameraModule } from '@angular-three/soba/cameras';
+import { CommonModule } from '@angular/common';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ContentChild,
+    Directive,
+    EventEmitter,
+    Input,
+    NgModule,
+    Output,
+    TemplateRef,
+} from '@angular/core';
+import { Observable, tap } from 'rxjs';
+import * as THREE from 'three';
 
-@Component({
-    selector: 'ngt-soba-gizmo-helper',
-    template: ``,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+export interface NgtSobaGizmoHelperState
+    extends NgtObjectInputsState<THREE.Group> {
+    virtualCamera: THREE.OrthographicCamera;
+    virtualScene: Ref<THREE.Scene>;
+    raycast: THREE.Object3D['raycast'];
+
+    alignment: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left';
+    margin: [number, number];
+    renderPriority: number;
+    autoClear: boolean;
+}
+
+@Directive({
+    selector: 'ng-template[ngt-soba-gizmo-helper-content]',
 })
-export class NgtSobaGizmoHelper {
-    constructor() {
-        console.warn(`<ngt-soba-gizmo-helper> is being reworked`);
+export class NgtSobaGizmoHelperContent {
+    constructor(public templateRef: TemplateRef<{ gizmo: THREE.Group }>) {}
+
+    static ngTemplateContextGuard(
+        dir: NgtSobaGizmoHelperContent,
+        ctx: any
+    ): ctx is { gizmo: THREE.Group } {
+        return true;
     }
 }
 
+type ControlsProto = { update(): void; target: THREE.Vector3 };
+
+const turnRate = 2 * Math.PI; // turn rate in angles per second
+const dummy = new THREE.Object3D();
+const matrix = make(THREE.Matrix4);
+const [q1, q2] = [make(THREE.Quaternion), make(THREE.Quaternion)];
+const target = makeVector3();
+const targetPosition = makeVector3();
+
+@Component({
+    selector: 'ngt-soba-gizmo-helper',
+    template: `
+        <ngt-portal [ref]="virtualScene">
+            <ng-template ngt-portal-content>
+                <ngt-group
+                    (beforeRender)="beforeRender.emit($event)"
+                    [ngtObjectInputs]="this"
+                    [ngtObjectOutputs]="this"
+                    [position]="position$ | async"
+                >
+                    <ng-container
+                        *ngIf="content"
+                        [ngTemplateOutlet]="content.templateRef"
+                        [ngTemplateOutletContext]="{ gizmo: instance }"
+                    ></ng-container>
+                </ngt-group>
+
+                <ngt-soba-orthographic-camera
+                    (ready)="set({ virtualCamera: $event })"
+                    [position]="[0, 0, 200]"
+                ></ngt-soba-orthographic-camera>
+            </ng-template>
+        </ngt-portal>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideObjectHosRef(
+            NgtSobaGizmoHelper,
+            (gizmo) => gizmo.instance,
+            (gizmo) => gizmo.parentRef
+        ),
+    ],
+})
+export class NgtSobaGizmoHelper extends NgtObjectInputs<
+    THREE.Group,
+    NgtSobaGizmoHelperState
+> {
+    @Input() set alignment(
+        alignment: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left'
+    ) {
+        this.set({ alignment });
+    }
+
+    @Input() set margin(margin: [number, number]) {
+        this.set({ margin });
+    }
+
+    @Input() set renderPriority(renderPriority: number) {
+        this.set({ renderPriority });
+    }
+
+    @Input() set autoClear(autoClear: BooleanInput) {
+        this.set({ autoClear: coerceBooleanProperty(autoClear) });
+    }
+
+    @Output() beforeRender = new EventEmitter<{
+        state: NgtRenderState;
+        object: THREE.Group;
+    }>();
+
+    @Output() update = new EventEmitter();
+
+    @ContentChild(NgtSobaGizmoHelperContent)
+    content?: NgtSobaGizmoHelperContent;
+
+    get virtualScene() {
+        return this.get((s) => s.virtualScene);
+    }
+
+    readonly position$ = this.select(
+        this.select((s) => s.margin),
+        this.select((s) => s.alignment),
+        this.store.select((s) => s.size),
+        ([marginX, marginY], alignment, size) => {
+            const x = alignment.endsWith('-left')
+                ? -size.width / 2 + marginX
+                : size.width / 2 - marginX;
+            const y = alignment.startsWith('top-')
+                ? size.height / 2 - marginY
+                : -size.height / 2 + marginY;
+
+            return makeVector3([x, y, 0]);
+        }
+    );
+
+    private animating = false;
+    private focusPoint = makeVector3([0, 0, 0]);
+    private radius = 0;
+
+    protected override preInit() {
+        super.preInit();
+
+        this.set((state) => ({
+            virtualScene: new Ref(
+                prepare(new THREE.Scene(), () => this.store.get())
+            ),
+            alignment: state.alignment ?? 'bottom-right',
+            margin: state.margin ?? [80, 80],
+            renderPriority: state.renderPriority ?? 0,
+            autoClear: state.autoClear ?? true,
+        }));
+    }
+
+    override ngOnInit(): void {
+        super.ngOnInit();
+        this.zone.runOutsideAngular(() => {
+            this.onCanvasReady(this.store.ready$, () => {
+                this.switchSceneBackground();
+                this.setBeforeRender();
+                this.setRaycast(this.select((s) => s.virtualCamera));
+            });
+        });
+    }
+
+    private readonly switchSceneBackground = this.effect<void>(
+        tapEffect(() => {
+            let mainSceneBackground: THREE.Scene['background'];
+            const scene = this.store.get((s) => s.scene);
+            const virtualScene = this.get((s) => s.virtualScene);
+
+            if (scene.background) {
+                mainSceneBackground = scene.background;
+                scene.background = null;
+                virtualScene.value.background = mainSceneBackground;
+            }
+
+            return () => {
+                if (mainSceneBackground) {
+                    scene.background = mainSceneBackground;
+                }
+            };
+        })
+    );
+
+    private readonly setBeforeRender = this.effect<void>(
+        tapEffect(() => {
+            const renderPriority = this.get((s) => s.renderPriority);
+            const gl = this.store.get((s) => s.gl);
+
+            const unregister = this.store.registerBeforeRender({
+                callback: ({ delta }) => {
+                    const gizmo = this.instance;
+                    const {
+                        camera: mainCamera,
+                        controls: defaultControls,
+                        invalidate,
+                    } = this.store.get();
+                    const { virtualScene, virtualCamera, autoClear } =
+                        this.get();
+
+                    if (gizmo.value && virtualScene.value && virtualCamera) {
+                        if (this.animating) {
+                            if (q1.angleTo(q2) < 0.01) {
+                                this.animating = false;
+                            } else {
+                                const step = delta * turnRate;
+                                // animate position by doing a slerp and then scaling the position on the unit sphere
+                                q1.rotateTowards(q2, step);
+                                // animate orientation
+                                mainCamera.position
+                                    .set(0, 0, 1)
+                                    .applyQuaternion(q1)
+                                    .multiplyScalar(this.radius)
+                                    .add(this.focusPoint);
+                                mainCamera.up
+                                    .set(0, 1, 0)
+                                    .applyQuaternion(q1)
+                                    .normalize();
+                                mainCamera.quaternion.copy(q1);
+                                if (this.update.observed) {
+                                    this.update.emit();
+                                } else if (defaultControls) {
+                                    (
+                                        defaultControls as unknown as ControlsProto
+                                    ).update();
+                                }
+
+                                invalidate();
+                            }
+                        }
+
+                        // Sync Gizmo with main camera orientation
+                        matrix.copy(mainCamera.matrix).invert();
+                        gizmo.value?.quaternion.setFromRotationMatrix(matrix);
+
+                        // Render virtual camera
+                        if (autoClear) {
+                            gl.autoClear = false;
+                        }
+                        gl.clearDepth();
+                        gl.render(virtualScene.value, virtualCamera);
+                    }
+                },
+                priority: renderPriority,
+            });
+
+            return () => {
+                unregister();
+            };
+        })
+    );
+
+    private readonly setRaycast = this.effect<THREE.Camera>(
+        tap((virtualCamera) => {
+            const pointer = this.store.get((s) => s.pointer);
+            const raycaster = new THREE.Raycaster();
+
+            this.set({
+                raycast: function (this: THREE.Object3D, _, intersects) {
+                    raycaster.setFromCamera(pointer, virtualCamera);
+                    const rc = this.constructor.prototype.raycast.bind(this);
+                    if (rc) {
+                        rc(raycaster, intersects);
+                    }
+                },
+            });
+        })
+    );
+
+    readonly tweenCamera = this.effect<THREE.Vector3>(
+        tap((direction) => {
+            this.animating = true;
+
+            const {
+                controls: defaultControls,
+                camera: mainCamera,
+                invalidate,
+            } = this.store.get();
+
+            if (defaultControls) {
+                this.focusPoint = (
+                    defaultControls as unknown as ControlsProto
+                ).target;
+            }
+
+            this.radius = mainCamera.position.distanceTo(target);
+
+            // Rotate from current camera orientation
+            q1.copy(mainCamera.quaternion);
+
+            // To new current camera orientation
+            targetPosition
+                .copy(direction)
+                .multiplyScalar(this.radius)
+                .add(target);
+            dummy.lookAt(targetPosition);
+            q2.copy(dummy.quaternion);
+
+            invalidate();
+        })
+    );
+}
+
 @NgModule({
-    declarations: [NgtSobaGizmoHelper],
-    exports: [NgtSobaGizmoHelper],
+    declarations: [NgtSobaGizmoHelper, NgtSobaGizmoHelperContent],
+    exports: [NgtSobaGizmoHelper, NgtSobaGizmoHelperContent],
+    imports: [
+        NgtPortalModule,
+        NgtGroupModule,
+        NgtObjectPassThroughModule,
+        CommonModule,
+        NgtSobaOrthographicCameraModule,
+    ],
 })
 export class NgtSobaGizmoHelperModule {}
-
-// import {
-//     AnyFunction,
-//     createExtenderProvider,
-//     createHostParentObjectProvider,
-//     createParentObjectProvider,
-//     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-//     NGT_PARENT_OBJECT,
-//     NgtCoreModule,
-//     NgtExtender,
-//     NgtObjectInputsControllerModule,
-// } from '@angular-three/core';
-// import { NgtGroupModule } from '@angular-three/core/group';
-// import { NgtSobaOrthographicCameraModule } from '@angular-three/soba/cameras';
-// import { CommonModule } from '@angular/common';
-// import {
-//     ChangeDetectionStrategy,
-//     Component,
-//     Inject,
-//     Input,
-//     NgModule,
-//     OnInit,
-//     Optional,
-//     SkipSelf,
-// } from '@angular/core';
-// import * as THREE from 'three';
-// import { NgtSobaGizmoHelperStore } from './gizmo-helper.store';
-//
-// @Component({
-//     selector: 'ngt-soba-gizmo-helper',
-//     template: `
-//         <ng-container *ngIf="virtualScene$ | async as virtualScene">
-//             <ngt-group
-//                 *ngIf="gizmoProps$ | async as gizmoProps"
-//                 (ready)="onGizmoReady($event)"
-//                 (animateReady)="
-//                     animateReady.emit({ entity: object, state: $event.state })
-//                 "
-//                 [appendTo]="virtualScene"
-//                 [position]="[gizmoProps.x, gizmoProps.y, 0]"
-//                 [name]="gizmoProps.objectInputsController!.name"
-//                 [rotation]="gizmoProps.objectInputsController!.rotation"
-//                 [quaternion]="gizmoProps.objectInputsController!.quaternion"
-//                 [scale]="gizmoProps.objectInputsController!.scale"
-//                 [color]="gizmoProps.objectInputsController!.color"
-//                 [userData]="gizmoProps.objectInputsController!.userData"
-//                 [castShadow]="gizmoProps.objectInputsController!.castShadow"
-//                 [receiveShadow]="
-//                     gizmoProps.objectInputsController!.receiveShadow
-//                 "
-//                 [visible]="gizmoProps.objectInputsController!.visible"
-//                 [matrixAutoUpdate]="
-//                     gizmoProps.objectInputsController!.matrixAutoUpdate
-//                 "
-//                 [dispose]="gizmoProps.objectInputsController!.dispose"
-//                 [raycast]="gizmoProps.objectInputsController!.raycast"
-//                 [appendMode]="gizmoProps.objectInputsController!.appendMode"
-//                 (click)="gizmoProps.objectInputsController!.click.emit($event)"
-//                 (contextmenu)="
-//                     gizmoProps.objectInputsController!.contextmenu.emit($event)
-//                 "
-//                 (dblclick)="
-//                     gizmoProps.objectInputsController!.dblclick.emit($event)
-//                 "
-//                 (pointerup)="
-//                     gizmoProps.objectInputsController!.pointerup.emit($event)
-//                 "
-//                 (pointerdown)="
-//                     gizmoProps.objectInputsController!.pointerdown.emit($event)
-//                 "
-//                 (pointerover)="
-//                     gizmoProps.objectInputsController!.pointerover.emit($event)
-//                 "
-//                 (pointerout)="
-//                     gizmoProps.objectInputsController!.pointerout.emit($event)
-//                 "
-//                 (pointerenter)="
-//                     gizmoProps.objectInputsController!.pointerenter.emit($event)
-//                 "
-//                 (pointerleave)="
-//                     gizmoProps.objectInputsController!.pointerleave.emit($event)
-//                 "
-//                 (pointermove)="
-//                     gizmoProps.objectInputsController!.pointermove.emit($event)
-//                 "
-//                 (pointermissed)="
-//                     gizmoProps.objectInputsController!.pointermissed.emit(
-//                         $event
-//                     )
-//                 "
-//                 (pointercancel)="
-//                     gizmoProps.objectInputsController!.pointercancel.emit(
-//                         $event
-//                     )
-//                 "
-//                 (wheel)="gizmoProps.objectInputsController!.wheel.emit($event)"
-//             >
-//                 <ng-container
-//                     *ngIf="object"
-//                     [ngTemplateOutlet]="contentTemplate"
-//                 ></ng-container>
-//             </ngt-group>
-//             <ngt-soba-orthographic-camera
-//                 [appendTo]="virtualScene"
-//                 [makeDefault]="false"
-//                 [position]="[0, 0, 200]"
-//                 (ready)="onCameraReady($event)"
-//             ></ngt-soba-orthographic-camera>
-//             <ng-template #contentTemplate>
-//                 <ng-content></ng-content>
-//             </ng-template>
-//         </ng-container>
-//     `,
-//     changeDetection: ChangeDetectionStrategy.OnPush,
-//     providers: [
-//         NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-//         NgtSobaGizmoHelperStore,
-//         createExtenderProvider(NgtSobaGizmoHelper),
-//         createParentObjectProvider(
-//             NgtSobaGizmoHelper,
-//             (helper) => helper.object
-//         ),
-//         createHostParentObjectProvider(NgtSobaGizmoHelper),
-//     ],
-// })
-// export class NgtSobaGizmoHelper
-//     extends NgtExtender<THREE.Group>
-//     implements OnInit
-// {
-//     @Input() set alignment(
-//         alignment: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left'
-//     ) {
-//         this.sobaGizmoHelperStore.set({ alignment });
-//     }
-//
-//     @Input() set margin(margin: [number, number]) {
-//         this.sobaGizmoHelperStore.set({ margin });
-//     }
-//
-//     @Input() set renderPriority(renderPriority: number) {
-//         this.sobaGizmoHelperStore.set({ renderPriority });
-//     }
-//
-//     readonly gizmoProps$ = this.sobaGizmoHelperStore.gizmoProps$;
-//     readonly virtualScene$ = this.sobaGizmoHelperStore.virtualScene$;
-//
-//     constructor(
-//         private sobaGizmoHelperStore: NgtSobaGizmoHelperStore,
-//         @Optional()
-//         @SkipSelf()
-//         @Inject(NGT_PARENT_OBJECT)
-//         public parentObjectFn: AnyFunction
-//     ) {
-//         super();
-//     }
-//
-//     ngOnInit() {
-//         this.sobaGizmoHelperStore.init();
-//     }
-//
-//     onCameraReady(camera: THREE.OrthographicCamera) {
-//         this.sobaGizmoHelperStore.set({ virtualCamera: camera });
-//     }
-//
-//     onGizmoReady(gizmo: THREE.Group) {
-//         this.sobaGizmoHelperStore.set({ gizmo });
-//         this.object = gizmo;
-//     }
-// }
-//
-// @NgModule({
-//     declarations: [NgtSobaGizmoHelper],
-//     exports: [NgtSobaGizmoHelper, NgtObjectInputsControllerModule],
-//     imports: [
-//         NgtCoreModule,
-//         NgtGroupModule,
-//         NgtSobaOrthographicCameraModule,
-//         CommonModule,
-//     ],
-// })
-// export class NgtSobaGizmoHelperModule {}
