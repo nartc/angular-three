@@ -1,8 +1,10 @@
 import {
     BooleanInput,
     coerceBooleanProperty,
+    NgtObjectPassThroughModule,
     provideObjectHosRef,
     Ref,
+    startWithUndefined,
     tapEffect,
 } from '@angular-three/core';
 import {
@@ -43,47 +45,10 @@ export class NgtSobaOrthographicCameraContent {
     selector: 'ngt-soba-orthographic-camera',
     template: `
         <ngt-orthographic-camera
-            [args]="$any(instanceArgs)"
-            [left]="size.width / -2"
-            [right]="size.width / 2"
-            [top]="size.height / 2"
-            [bottom]="size.height / -2"
-            [near]="near"
-            [far]="far"
-            [ref]="instance"
-            [attach]="attach"
-            [skipParent]="skipParent"
-            [noAttach]="noAttach"
-            [name]="name"
-            (ready)="ready.emit($event)"
-            (beforeRender)="beforeRender.emit($event)"
-            [position]="position"
-            [rotation]="rotation"
-            [quaternion]="quaternion"
-            [scale]="scale"
-            [color]="color"
-            [userData]="userData"
-            [castShadow]="castShadow"
-            [receiveShadow]="receiveShadow"
-            [visible]="visible"
-            [matrixAutoUpdate]="matrixAutoUpdate"
-            [dispose]="dispose"
-            [raycast]="raycast"
-            [appendMode]="appendMode"
-            [appendTo]="appendTo"
-            (click)="click.emit($event)"
-            (contextmenu)="contextmenu.emit($event)"
-            (dblclick)="dblclick.emit($event)"
-            (pointerup)="pointerup.emit($event)"
-            (pointerdown)="pointerdown.emit($event)"
-            (pointerover)="pointerover.emit($event)"
-            (pointerout)="pointerout.emit($event)"
-            (pointerenter)="pointerenter.emit($event)"
-            (pointerleave)="pointerleave.emit($event)"
-            (pointermove)="pointermove.emit($event)"
-            (pointermissed)="pointermissed.emit($event)"
-            (pointercancel)="pointercancel.emit($event)"
-            (wheel)="wheel.emit($event)"
+            *ngIf="cameraOptions$ | async as cameraOptions"
+            [args]="cameraOptions"
+            [ngtObjectInputs]="this"
+            [ngtObjectOutputs]="this"
         >
             <ng-container
                 *ngIf="content"
@@ -113,17 +78,26 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
     @ContentChild(NgtSobaOrthographicCameraContent)
     content?: NgtSobaOrthographicCameraContent;
 
-    get size() {
-        return this.store.get((s) => s.size);
-    }
+    override shouldPassThroughRef = false;
 
-    override get near() {
-        return this.get((s) => s['near']);
-    }
+    readonly cameraOptions$ = this.select(
+        this.store.select((s) => s.size),
+        this.select((s) => s['near']).pipe(startWithUndefined()),
+        this.select((s) => s['far']).pipe(startWithUndefined()),
+        () => {
+            const size = this.store.get((s) => s.size);
+            const { near, far } = this.get();
 
-    override get far() {
-        return this.get((s) => s['far']);
-    }
+            return [
+                size.width / -2,
+                size.width / 2,
+                size.height / 2,
+                size.height / -2,
+                near,
+                far,
+            ];
+        }
+    );
 
     protected override get setOptionsTrigger$() {
         return this.select((s) => s['manual']);
@@ -142,8 +116,7 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
             this.onCanvasReady(this.store.ready$, () => {
                 this.setDefaultCamera(
                     this.select(
-                        this.select((s) => s.instance),
-                        this.select((s) => s.instance.value),
+                        this.instance$,
                         this.select((s) => s['makeDefault']),
                         this.store.select((s) => s.camera)
                     )
@@ -177,6 +150,10 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
 @NgModule({
     declarations: [NgtSobaOrthographicCamera, NgtSobaOrthographicCameraContent],
     exports: [NgtSobaOrthographicCamera, NgtSobaOrthographicCameraContent],
-    imports: [NgtOrthographicCameraModule, CommonModule],
+    imports: [
+        NgtOrthographicCameraModule,
+        CommonModule,
+        NgtObjectPassThroughModule,
+    ],
 })
 export class NgtSobaOrthographicCameraModule {}
