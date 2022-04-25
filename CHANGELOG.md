@@ -1,5 +1,26 @@
 
 
+## [5.0.0-beta.17](https://github.com/nartc/angular-three/compare/5.0.0-beta.16...5.0.0-beta.17) (2022-04-25)
+
+
+### Features
+
+* **soba:** add first person controls ([bab2431](https://github.com/nartc/angular-three/commit/bab2431263e8119c0cce37351d03157ce615439b))
+* **soba:** add fly controls ([7157617](https://github.com/nartc/angular-three/commit/71576178776dfa440f76a9b7495b0ea1b3cc4dce))
+* **soba:** add transform controls ([407f1e7](https://github.com/nartc/angular-three/commit/407f1e7762262e3843cd01ba1b5241a967b9071c))
+
+
+### Bug Fixes
+
+* **core:** add visible input to object helper abstract ([4d594d1](https://github.com/nartc/angular-three/commit/4d594d1f98d68edd3e76b9ed628b7a8badd03e98))
+* **soba:** adjust orbit controls ([efde280](https://github.com/nartc/angular-three/commit/efde28047443456d2a69ac7adeaa3d3bfec3206d))
+* **soba:** adjust provider for orthographic camera ([69a7499](https://github.com/nartc/angular-three/commit/69a7499632422ff3f2dbc0650ecec18d599510d1))
+
+
+### Documentations
+
+* move assets to soba ([0e6b842](https://github.com/nartc/angular-three/commit/0e6b842146edfb8e2bbb5b5a6efdbece528afc96))
+
 ## [5.0.0-beta.16](https://github.com/nartc/angular-three/compare/5.0.0-beta.15...5.0.0-beta.16) (2022-04-25)
 
 
