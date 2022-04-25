@@ -41,6 +41,10 @@ export class NgtSobaOrbitControls extends NgtInstance<
     OrbitControls,
     NgtSobaOrbitControlsState
 > {
+    @Input() set enabled(enabled: BooleanInput) {
+        this.set({ enabled: coerceBooleanProperty(enabled) });
+    }
+
     @Input() set camera(camera: THREE.Camera) {
         this.set({ camera });
     }
@@ -174,11 +178,12 @@ export class NgtSobaOrbitControls extends NgtInstance<
 
     protected override preInit() {
         this.set((state) => ({
-            enableDamping: state.enableDamping || true,
-            camera: state.camera || this.store.get((s) => s.camera),
+            enabled: state['enabled'] ?? true,
+            enableDamping: state.enableDamping ?? true,
+            camera: state.camera ?? this.store.get((s) => s.camera),
             domElement:
-                state.domElement ||
-                this.store.get((s) => s.events.connected) ||
+                state.domElement ??
+                this.store.get((s) => s.events.connected) ??
                 this.store.get((s) => s.gl.domElement),
         }));
     }
@@ -312,6 +317,7 @@ export class NgtSobaOrbitControls extends NgtInstance<
     protected override get optionFields(): Record<string, boolean> {
         return {
             ...super.optionFields,
+            enabled: false,
             target: true,
             enableDamping: false,
             minDistance: true,
