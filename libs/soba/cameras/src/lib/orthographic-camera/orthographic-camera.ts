@@ -2,6 +2,7 @@ import {
     BooleanInput,
     coerceBooleanProperty,
     NgtPreObjectInit,
+    provideCommonCameraRef,
     provideObjectHosRef,
     startWithUndefined,
     tapEffect,
@@ -19,13 +20,7 @@ import * as THREE from 'three';
     selector: 'ngt-soba-orthographic-camera',
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHosRef(
-            NgtSobaOrthographicCamera,
-            (camera) => camera.instance,
-            (camera) => camera.parentRef
-        ),
-    ],
+    providers: [provideCommonCameraRef(NgtSobaOrthographicCamera)],
 })
 export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
     @Input() set makeDefault(makeDefault: BooleanInput) {
