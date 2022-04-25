@@ -1,17 +1,22 @@
-import { Directive, Inject, NgZone, Optional } from '@angular/core';
+import { Directive, Inject, Input, NgZone, Optional } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
-import { AnyConstructor, AnyFunction } from '../types';
+import { AnyConstructor, AnyFunction, BooleanInput } from '../types';
+import { coerceBooleanProperty } from '../utils/coercion';
 
 @Directive()
 export abstract class NgtCommonObjectHelper<
     TObjectHelper extends THREE.Object3D
 > extends NgtInstance<TObjectHelper, NgtInstanceState<TObjectHelper>> {
     abstract get objectHelperType(): AnyConstructor<TObjectHelper>;
+
+    @Input() set visible(visible: BooleanInput) {
+        this.set({ visible: coerceBooleanProperty(visible) });
+    }
 
     constructor(
         zone: NgZone,
@@ -24,6 +29,13 @@ export abstract class NgtCommonObjectHelper<
         parentHostRef: AnyFunction<Ref<THREE.Object3D>>
     ) {
         super(zone, store, parentRef, parentHostRef);
+    }
+
+    protected override preInit() {
+        super.preInit();
+        this.set((state) => ({
+            visible: state['visible'] ?? true,
+        }));
     }
 
     override ngOnInit() {
@@ -72,4 +84,8 @@ export abstract class NgtCommonObjectHelper<
             return;
         })
     );
+
+    protected override get optionFields(): Record<string, boolean> {
+        return { ...super.optionFields, visible: false };
+    }
 }
