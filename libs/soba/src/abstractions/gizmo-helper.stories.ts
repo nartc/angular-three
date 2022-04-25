@@ -62,7 +62,7 @@ import { setupCanvas, setupCanvasModules } from '../setup-canvas';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class DefaultGizmo {
-    node$ = this.gltfLoader.load('/assets/LittlestTokyo.glb');
+    node$ = this.gltfLoader.load('/soba/assets/LittlestTokyo.glb');
 
     @Input() mode: 'viewport' | 'viewcube' = 'viewcube';
     @Input() alignment:
