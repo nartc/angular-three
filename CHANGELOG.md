@@ -1,5 +1,12 @@
 
 
+## [5.0.0-beta.18](https://github.com/nartc/angular-three/compare/5.0.0-beta.17...5.0.0-beta.18) (2022-04-25)
+
+
+### Bug Fixes
+
+* **core:** rename visible in object helper to helperVisible so it does not conflict with object ([2501f82](https://github.com/nartc/angular-three/commit/2501f8207f5404d03bb4c05617292d1f91cb4c58))
+
 ## [5.0.0-beta.17](https://github.com/nartc/angular-three/compare/5.0.0-beta.16...5.0.0-beta.17) (2022-04-25)
 
 
