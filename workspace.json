@@ -3,7 +3,6 @@
     "projects": {
         "cannon": "libs/cannon",
         "core": "libs/core",
-        "demo": "apps/demo",
         "documentations": "libs/documentations",
         "postprocessing": "libs/postprocessing",
         "sandbox": "apps/sandbox",
