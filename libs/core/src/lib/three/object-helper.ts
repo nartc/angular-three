@@ -14,8 +14,8 @@ export abstract class NgtCommonObjectHelper<
 > extends NgtInstance<TObjectHelper, NgtInstanceState<TObjectHelper>> {
     abstract get objectHelperType(): AnyConstructor<TObjectHelper>;
 
-    @Input() set visible(visible: BooleanInput) {
-        this.set({ visible: coerceBooleanProperty(visible) });
+    @Input() set helperVisible(helperVisible: BooleanInput) {
+        this.set({ visible: coerceBooleanProperty(helperVisible) });
     }
 
     constructor(
