@@ -1,5 +1,31 @@
 
 
+## [5.0.0-beta.16](https://github.com/nartc/angular-three/compare/5.0.0-beta.15...5.0.0-beta.16) (2022-04-25)
+
+
+### Features
+
+* **cannon:** add remove to API ([b9db190](https://github.com/nartc/angular-three/commit/b9db19040ac81626dc56921585c1ff5dbc180df8))
+* **core:** initial work on portal ([8378bca](https://github.com/nartc/angular-three/commit/8378bca36e3e60e5087ae5fcfbe825e62ba8319d))
+* **soba:** add gizmo viewport; finish gizmo helper story ([2b1b62f](https://github.com/nartc/angular-three/commit/2b1b62fd697e75fe9d80fe834cd99fc356310748))
+* **soba:** initial work on portal and gizmo ([5ba8115](https://github.com/nartc/angular-three/commit/5ba8115a1045095792e48902d291c08928091afb))
+
+
+### Bug Fixes
+
+* **core:** add camera utils ([5ba363f](https://github.com/nartc/angular-three/commit/5ba363f1ad3e19c0a80b85642be0685577155806))
+* **core:** adjust portal ([1a9dd10](https://github.com/nartc/angular-three/commit/1a9dd10908dc7daf096efaa08974f82f62987d0d))
+* **core:** handle material array ([8f504c8](https://github.com/nartc/angular-three/commit/8f504c88e97b825ae1770efe7d76efc2d4eb2f7f))
+* **soba:** adjust orthographic camera ([2af6704](https://github.com/nartc/angular-three/commit/2af6704153d42be458539acc0b9c73b9ea1dd184))
+* **soba:** adjust orthographic camera to pass in args instead ([532f14c](https://github.com/nartc/angular-three/commit/532f14c98906eccf7ccfc8b60e5b817b88f3bfdd))
+
+
+### Documentations
+
+* add assets ([4f466e4](https://github.com/nartc/angular-three/commit/4f466e4b8962ea9f86b492e9fb41aa90ac725397))
+* add gizmo helper stories ([9a90a89](https://github.com/nartc/angular-three/commit/9a90a897a251995856c287524963e96716109feb))
+* experiment with multiple materials ([b434925](https://github.com/nartc/angular-three/commit/b43492543a340ce697561ead8fd2c97d677d9b8d))
+
 ## [5.0.0-beta.15](https://github.com/nartc/angular-three/compare/5.0.0-beta.14...5.0.0-beta.15) (2022-04-22)
 
 
