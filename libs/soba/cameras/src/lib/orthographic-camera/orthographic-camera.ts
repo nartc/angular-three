@@ -1,62 +1,23 @@
 import {
     BooleanInput,
     coerceBooleanProperty,
-    NgtObjectPassThroughModule,
+    NgtPreObjectInit,
     provideObjectHosRef,
-    Ref,
     startWithUndefined,
     tapEffect,
 } from '@angular-three/core';
-import {
-    NgtOrthographicCamera,
-    NgtOrthographicCameraModule,
-} from '@angular-three/core/cameras';
-import { CommonModule } from '@angular/common';
+import { NgtOrthographicCamera } from '@angular-three/core/cameras';
 import {
     ChangeDetectionStrategy,
     Component,
-    ContentChild,
-    Directive,
     Input,
     NgModule,
-    TemplateRef,
 } from '@angular/core';
 import * as THREE from 'three';
 
-@Directive({
-    selector: 'ng-template[ngt-soba-orthographic-camera-content]',
-})
-export class NgtSobaOrthographicCameraContent {
-    constructor(
-        public templateRef: TemplateRef<{
-            camera: Ref<THREE.OrthographicCamera>;
-        }>
-    ) {}
-
-    static ngTemplateContextGuard(
-        dir: NgtSobaOrthographicCameraContent,
-        ctx: any
-    ): ctx is { camera: Ref<THREE.OrthographicCamera> } {
-        return true;
-    }
-}
-
 @Component({
     selector: 'ngt-soba-orthographic-camera',
-    template: `
-        <ngt-orthographic-camera
-            *ngIf="cameraOptions$ | async as cameraOptions"
-            [args]="cameraOptions"
-            [ngtObjectInputs]="this"
-            [ngtObjectOutputs]="this"
-        >
-            <ng-container
-                *ngIf="content"
-                [ngTemplateOutlet]="content.templateRef"
-                [ngTemplateOutletContext]="{ camera: instance }"
-            ></ng-container>
-        </ngt-orthographic-camera>
-    `,
+    template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         provideObjectHosRef(
@@ -75,32 +36,24 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
         this.set({ manual: coerceBooleanProperty(manual) });
     }
 
-    @ContentChild(NgtSobaOrthographicCameraContent)
-    content?: NgtSobaOrthographicCameraContent;
-
-    override shouldPassThroughRef = false;
-
-    readonly cameraOptions$ = this.select(
-        this.store.select((s) => s.size),
-        this.select((s) => s['near']).pipe(startWithUndefined()),
-        this.select((s) => s['far']).pipe(startWithUndefined()),
-        () => {
+    protected override get preObjectInit(): NgtPreObjectInit {
+        return (initFn) => {
             const size = this.store.get((s) => s.size);
-            const { near, far } = this.get();
+            this.set((state) => ({
+                left: size.width / -2,
+                right: size.width / 2,
+                top: size.height / 2,
+                bottom: size.height / -2,
+                near: state['near'],
+                far: state['far'],
+            }));
 
-            return [
-                size.width / -2,
-                size.width / 2,
-                size.height / 2,
-                size.height / -2,
-                near,
-                far,
-            ];
-        }
-    );
+            initFn();
+        };
+    }
 
     protected override get setOptionsTrigger$() {
-        return this.select((s) => s['manual']);
+        return this.select((s) => s['manual']).pipe(startWithUndefined());
     }
 
     protected override postSetOptions(camera: THREE.OrthographicCamera) {
@@ -148,12 +101,7 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
 }
 
 @NgModule({
-    declarations: [NgtSobaOrthographicCamera, NgtSobaOrthographicCameraContent],
-    exports: [NgtSobaOrthographicCamera, NgtSobaOrthographicCameraContent],
-    imports: [
-        NgtOrthographicCameraModule,
-        CommonModule,
-        NgtObjectPassThroughModule,
-    ],
+    declarations: [NgtSobaOrthographicCamera],
+    exports: [NgtSobaOrthographicCamera],
 })
 export class NgtSobaOrthographicCameraModule {}
