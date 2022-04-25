@@ -1,13 +1,121 @@
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    BooleanInput,
+    coerceBooleanProperty,
+    coerceNumberProperty,
+    NgtInstance,
+    NgtInstanceState,
+    NumberInput,
+    provideInstanceRef,
+    tapEffect,
+} from '@angular-three/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    NgModule,
+    Output,
+} from '@angular/core';
+import { tap } from 'rxjs';
+import { FlyControls } from 'three-stdlib';
+
+export interface NgtSobaFlyControlsState extends NgtInstanceState<FlyControls> {
+    domElement?: HTMLElement;
+}
 
 @Component({
     selector: 'ngt-soba-fly-controls',
-    template: ``,
+    template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideInstanceRef(NgtSobaFlyControls)],
 })
-export class NgtSobaFlyControls {
-    constructor() {
-        console.warn(`<ngt-soba-fly-controls> is being reworked`);
+export class NgtSobaFlyControls extends NgtInstance<
+    FlyControls,
+    NgtSobaFlyControlsState
+> {
+    @Input() set domElement(domElement: HTMLElement) {
+        this.set({ domElement });
+    }
+
+    @Input() set movementSpeed(movementSpeed: NumberInput) {
+        this.set({ movementSpeed: coerceNumberProperty(movementSpeed) });
+    }
+
+    @Input() set rollSpeed(rollSpeed: NumberInput) {
+        this.set({ rollSpeed: coerceNumberProperty(rollSpeed) });
+    }
+
+    @Input() set dragToLook(dragToLook: BooleanInput) {
+        this.set({ dragToLook: coerceBooleanProperty(dragToLook) });
+    }
+
+    @Input() set autoForward(autoForward: BooleanInput) {
+        this.set({ autoForward: coerceBooleanProperty(autoForward) });
+    }
+
+    @Output() change = new EventEmitter<THREE.Event>();
+
+    protected override preInit() {
+        super.preInit();
+        this.set((state) => ({
+            domElement:
+                state.domElement ??
+                this.store.get((s) => s.events.connected) ??
+                this.store.get((s) => s.gl.domElement),
+        }));
+    }
+
+    override ngOnInit() {
+        super.ngOnInit();
+        this.zone.runOutsideAngular(() => {
+            this.onCanvasReady(this.store.ready$, () => {
+                this.init(this.store.select((s) => s.camera));
+                this.setup(this.instance$);
+            });
+        });
+    }
+
+    private readonly init = this.effect<{}>(
+        tap(() => {
+            const camera = this.store.get((s) => s.camera);
+            const domElement = this.get((s) => s.domElement) as HTMLElement;
+            this.prepareInstance(new FlyControls(camera, domElement));
+        })
+    );
+
+    private readonly setup = this.effect<{}>(
+        tapEffect(() => {
+            const unregister = this.store.registerBeforeRender({
+                callback: ({ delta }) => {
+                    this.instance.value?.update(delta);
+                },
+            });
+
+            const callback = (event: THREE.Event) => {
+                const invalidate = this.store.get((s) => s.invalidate);
+                invalidate();
+                if (this.change.observed) {
+                    this.change.emit(event);
+                }
+            };
+
+            this.instance.value?.addEventListener('change', callback);
+
+            return () => {
+                unregister();
+                this.instance.value?.removeEventListener('change', callback);
+            };
+        })
+    );
+
+    protected override get optionFields(): Record<string, boolean> {
+        return {
+            ...super.optionFields,
+            movementSpeed: true,
+            rollSpeed: true,
+            dragToLook: true,
+            autoForward: true,
+        };
     }
 }
 
@@ -16,109 +124,3 @@ export class NgtSobaFlyControls {
     exports: [NgtSobaFlyControls],
 })
 export class NgtSobaFlyControlsModule {}
-
-// import {
-//     NgtAnimationFrameStore,
-//     NgtCanvasState,
-//     NgtCanvasStore,
-//     NgtLoop,
-//     NgtStore,
-//     tapEffect,
-// } from '@angular-three/core';
-// import {
-//     Directive,
-//     EventEmitter,
-//     NgModule,
-//     NgZone,
-//     OnInit,
-//     Output,
-// } from '@angular/core';
-// import { tap } from 'rxjs';
-// import * as THREE from 'three';
-// import { FlyControls } from 'three-stdlib';
-//
-// interface NgtSobaFlyControlsState {
-//     controls: FlyControls;
-// }
-//
-// @Directive({
-//     selector: 'ngt-soba-fly-controls',
-//     exportAs: 'ngtSobaFlyControls',
-// })
-// export class NgtSobaFlyControls
-//     extends NgtStore<NgtSobaFlyControlsState>
-//     implements OnInit
-// {
-//     @Output() ready = this.select((s) => s.controls);
-//     @Output() change = new EventEmitter<THREE.Event>();
-//
-//     constructor(
-//         private zone: NgZone,
-//         private canvasStore: NgtCanvasStore,
-//         private loop: NgtLoop,
-//         private animationFrameStore: NgtAnimationFrameStore
-//     ) {
-//         super();
-//     }
-//
-//     ngOnInit() {
-//         this.zone.runOutsideAngular(() => {
-//             this.onCanvasReady(this.canvasStore.ready$, () => {
-//                 this.init(
-//                     this.select(
-//                         this.canvasStore.camera$,
-//                         this.canvasStore.renderer$,
-//                         (camera, renderer) => ({ camera, renderer })
-//                     )
-//                 );
-//                 this.registerAnimation(this.select((s) => s.controls));
-//             });
-//         });
-//     }
-//
-//     private readonly init = this.effect<
-//         Pick<NgtCanvasState, 'camera' | 'renderer'>
-//     >(
-//         tap(({ renderer, camera }) => {
-//             if (camera && renderer) {
-//                 this.set({
-//                     controls: new FlyControls(camera, renderer.domElement),
-//                 });
-//             }
-//         })
-//     );
-//
-//     private readonly registerAnimation = this.effect<FlyControls>(
-//         tapEffect((controls) => {
-//             const animationUuid = this.animationFrameStore.register({
-//                 callback: ({ delta }) => {
-//                     controls.update(delta);
-//                 },
-//             });
-//
-//             const callback = (e: THREE.Event) => {
-//                 this.loop.invalidate();
-//                 if (this.change.observed) {
-//                     this.change.emit(e);
-//                 }
-//             };
-//
-//             controls.addEventListener('change', callback);
-//
-//             return () => {
-//                 controls.removeEventListener('change', callback);
-//                 this.animationFrameStore.unregister(animationUuid);
-//             };
-//         })
-//     );
-//
-//     get controls() {
-//         return this.get((s) => s.controls) as FlyControls;
-//     }
-// }
-//
-// @NgModule({
-//     declarations: [NgtSobaFlyControls],
-//     exports: [NgtSobaFlyControls],
-// })
-// export class NgtSobaFlyControlsModule {}
