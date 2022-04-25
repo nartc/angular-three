@@ -44,7 +44,6 @@ import { coerceBooleanProperty } from '../utils/coercion';
 import { removeInteractivity } from '../utils/events';
 import { prepare } from '../utils/instance';
 import { is } from '../utils/is';
-import { makeVector3 } from '../utils/make';
 import { mutate } from '../utils/mutate';
 
 export interface NgtInstanceState<TInstance extends object = UnknownRecord> {

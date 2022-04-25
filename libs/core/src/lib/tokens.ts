@@ -3,13 +3,6 @@ import { InjectionToken } from '@angular/core';
 export const NGT_INSTANCE_FACTORY = new InjectionToken('NgtInstance Factory');
 export const NGT_INSTANCE_REF = new InjectionToken('NgtInstance ref');
 
-/**
- * <ngt-mesh-basic-material> is an Instance
- *
- * <ngt-mesh-basic-material> // host of wrapper
- *  <my-custom-material-wrapper></my-custom-material-wrapper>
- * <ngt-mesh-basic-material>
- */
 export const NGT_INSTANCE_HOST_REF = new InjectionToken(
     'NgtInstance ref of the host of the wrapper'
 );
