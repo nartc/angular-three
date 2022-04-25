@@ -1,5 +1,28 @@
 
 
+## [5.0.0-beta.19](https://github.com/nartc/angular-three/compare/5.0.0-beta.18...5.0.0-beta.19) (2022-04-25)
+
+
+### Features
+
+* **soba:** add HTML ([0a54966](https://github.com/nartc/angular-three/commit/0a54966e82a5d386c18e367f4e63ca484b3b9ca6))
+* **soba:** add Perspective Camera ([23bed47](https://github.com/nartc/angular-three/commit/23bed474e54f8e7ac80addea39b2d957480cf37d))
+
+
+### Bug Fixes
+
+* **core:** adjust attributes import list ([f011544](https://github.com/nartc/angular-three/commit/f0115449ee8b1447fe8927d6f8391f20a47f4ad5))
+* **core:** setOptionsTriggers should be an Observable of {} ([a6d8368](https://github.com/nartc/angular-three/commit/a6d83686ab85868b0ffb9d1ecbedb866d34a7812))
+* **soba:** orthographic camera clean up ([9099d6b](https://github.com/nartc/angular-three/commit/9099d6b86b6b61ff66cec0e0c058708fe9a1d0fb))
+* **soba:** rework FBO and DepthBuffer to use Ref instead of returning Observable ([5b41119](https://github.com/nartc/angular-three/commit/5b411192d9795e65f05ec553a1d9d2c91c30a7a3))
+
+
+### Documentations
+
+* add first person controls story ([1bee9a2](https://github.com/nartc/angular-three/commit/1bee9a247aea9d9001755e4deda348635ae3d74c))
+* add HTML stories ([68bed08](https://github.com/nartc/angular-three/commit/68bed0859edec028917726e6a9ddad214efdb52f))
+* add orbit controls stories ([acc4c99](https://github.com/nartc/angular-three/commit/acc4c99a567012fe1625bcbb0587f85c2954a68b))
+
 ## [5.0.0-beta.18](https://github.com/nartc/angular-three/compare/5.0.0-beta.17...5.0.0-beta.18) (2022-04-25)
 
 
