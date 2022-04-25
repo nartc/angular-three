@@ -372,8 +372,8 @@ export abstract class NgtInstance<
      * Sub-classes can customize this to run setOptions on custom trigger
      * @protected
      */
-    protected get setOptionsTrigger$() {
-        return of(null);
+    protected get setOptionsTrigger$(): Observable<{}> {
+        return of({});
     }
 
     private readonly setOptions = this.effect<UnknownRecord>(
