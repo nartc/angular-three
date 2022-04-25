@@ -1,25 +1,18 @@
 // GENERATED
 import {
-    AnyFunction,
     make,
-    NGT_INSTANCE_FACTORY,
     NgtInstance,
-    NgtStore,
     provideInstanceRef,
     NgtFogExp2,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
     Component,
-    Inject,
     Input,
     NgModule,
-    NgZone,
-    Optional,
-    SkipSelf,
 } from '@angular/core';
-import * as THREE from 'three';
 import type { Subscription } from 'rxjs';
+import * as THREE from 'three';
 
 @Component({
     selector: 'ngt-fog-exp2[fogExp2]',

@@ -1,25 +1,18 @@
 // GENERATED
 import {
-    AnyFunction,
     makeVector4,
-    NGT_INSTANCE_FACTORY,
     NgtInstance,
-    NgtStore,
     provideInstanceRef,
     NgtVector4,
 } from '@angular-three/core';
 import {
     ChangeDetectionStrategy,
     Component,
-    Inject,
     Input,
     NgModule,
-    NgZone,
-    Optional,
-    SkipSelf,
 } from '@angular/core';
-import * as THREE from 'three';
 import type { Subscription } from 'rxjs';
+import * as THREE from 'three';
 
 @Component({
     selector: 'ngt-vector4[vector4]',
