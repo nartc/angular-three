@@ -3,7 +3,6 @@ import {
     coerceBooleanProperty,
     NgtPreObjectInit,
     provideCommonCameraRef,
-    provideObjectHosRef,
     startWithUndefined,
     tapEffect,
 } from '@angular-three/core';
@@ -65,8 +64,7 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
                 this.setDefaultCamera(
                     this.select(
                         this.instance$,
-                        this.select((s) => s['makeDefault']),
-                        this.store.select((s) => s.camera)
+                        this.select((s) => s['makeDefault'])
                     )
                 );
             });
