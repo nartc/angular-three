@@ -4,17 +4,17 @@ import {
     coerceBooleanProperty,
     coerceNumberProperty,
     makeVector3,
+    NGT_OBJECT_HOST_REF,
+    NGT_OBJECT_REF,
     NgtEvent,
     NgtInstance,
     NgtInstanceState,
+    NgtRepeatModule,
     NgtStore,
     NgtTriple,
     NgtVector3,
-    NGT_OBJECT_HOST_REF,
-    NGT_OBJECT_REF,
     NumberInput,
     Ref,
-    NgtRepeatModule,
 } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtGroupModule } from '@angular-three/core/group';

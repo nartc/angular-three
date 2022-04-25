@@ -75,7 +75,7 @@ const targetPosition = makeVector3();
                     (beforeRender)="beforeRender.emit($event)"
                     [ngtObjectInputs]="this"
                     [ngtObjectOutputs]="this"
-                    [position]="position$ | async"
+                    [position]="(position$ | async)!"
                 >
                     <ng-container
                         *ngIf="content"
