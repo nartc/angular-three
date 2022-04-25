@@ -1,301 +1,368 @@
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { NgtPrimitiveModule } from '@angular-three/core/primitive';
+import { CommonModule } from '@angular/common';
+import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
+import * as THREE from 'three';
+import {
+    BooleanInput,
+    coerceBooleanProperty,
+    coerceNumberProperty,
+    is,
+    NgtObjectInputs,
+    NgtObjectInputsState,
+    NgtObjectPassThroughModule,
+    NumberInput,
+    provideObjectHosRef,
+    Ref,
+    startWithUndefined,
+    tapEffect,
+} from '@angular-three/core';
+import { NgtGroupModule } from '@angular-three/core/group';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ContentChild,
+    Directive,
+    EventEmitter,
+    Input,
+    NgModule,
+    Output,
+    TemplateRef,
+} from '@angular/core';
+import { TransformControls } from 'three-stdlib';
+
+type ControlsProto = {
+    enabled: boolean;
+};
+
+@Directive({
+    selector: 'ng-template[ngt-soba-transform-controls-content]',
+})
+export class NgtSobaTransformControlsContent {
+    constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group> }>) {}
+
+    static ngTemplateContextGuard(
+        dir: NgtSobaTransformControlsContent,
+        ctx: any
+    ): ctx is { group: Ref<THREE.Group> } {
+        return true;
+    }
+}
+
+export interface NgtSobaTransformControlsState
+    extends NgtObjectInputsState<TransformControls> {
+    groupRef: Ref<THREE.Group>;
+
+    object?: THREE.Object3D | Ref<THREE.Object3D>;
+    camera?: THREE.Camera;
+
+    enabled?: boolean;
+    domElement?: HTMLElement;
+    axis?: string | null;
+    mode?: string;
+    translationSnap?: number | null;
+    rotationSnap?: number | null;
+    scaleSnap?: number | null;
+    space?: string;
+    size?: number;
+    showX?: boolean;
+    showY?: boolean;
+    showZ?: boolean;
+}
 
 @Component({
     selector: 'ngt-soba-transform-controls',
-    template: ``,
+    template: `
+        <ngt-group
+            [ngtObjectOutputs]="this"
+            [ngtObjectInputs]="this"
+            [ref]="groupRef"
+        >
+            <ng-container
+                *ngIf="content"
+                [ngTemplateOutlet]="content.templateRef"
+                [ngTemplateOutletContext]="{ group: groupRef }"
+            ></ng-container>
+        </ngt-group>
+        <ng-content></ng-content>
+    `,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideObjectHosRef(
+            NgtSobaTransformControls,
+            (controls) => controls.groupRef,
+            (controls) => controls.parentRef
+        ),
+    ],
 })
-export class NgtSobaTransformControls {
-    constructor() {
-        console.warn(`<ngt-soba-transform-controls> is being reworked`);
+export class NgtSobaTransformControls extends NgtObjectInputs<
+    TransformControls,
+    NgtSobaTransformControlsState
+> {
+    @Input() set object(object: THREE.Object3D | Ref<THREE.Object3D>) {
+        this.set({ object });
+    }
+
+    @Input() set camera(camera: THREE.Camera) {
+        this.set({ camera });
+    }
+
+    @Input() set enabled(enabled: boolean) {
+        this.set({ enabled });
+    }
+
+    @Input() set domElement(domElement: HTMLElement) {
+        this.set({ domElement });
+    }
+
+    @Input() set axis(axis: string | null) {
+        this.set({ axis });
+    }
+
+    @Input() set mode(mode: string) {
+        this.set({ mode });
+    }
+
+    @Input() set translationSnap(translationSnap: NumberInput | null) {
+        this.set({ translationSnap: coerceNumberProperty(translationSnap) });
+    }
+
+    @Input() set rotationSnap(rotationSnap: NumberInput | null) {
+        this.set({ rotationSnap: coerceNumberProperty(rotationSnap) });
+    }
+
+    @Input() set scaleSnap(scaleSnap: NumberInput | null) {
+        this.set({ scaleSnap: coerceNumberProperty(scaleSnap) });
+    }
+
+    @Input() set space(space: string) {
+        this.set({ space });
+    }
+
+    @Input() set size(size: NumberInput) {
+        this.set({ size: coerceNumberProperty(size) });
+    }
+
+    @Input() set showX(showX: BooleanInput) {
+        this.set({ showX: coerceBooleanProperty(showX) });
+    }
+
+    @Input() set showY(showY: BooleanInput) {
+        this.set({ showY: coerceBooleanProperty(showY) });
+    }
+
+    @Input() set showZ(showZ: BooleanInput) {
+        this.set({ showZ: coerceBooleanProperty(showZ) });
+    }
+
+    @Output() change = new EventEmitter<THREE.Event>();
+    @Output() mousedown = new EventEmitter<THREE.Event>();
+    @Output() mouseup = new EventEmitter<THREE.Event>();
+    @Output() objectChange = new EventEmitter<THREE.Event>();
+
+    @ContentChild(NgtSobaTransformControlsContent)
+    content?: NgtSobaTransformControlsContent;
+
+    override shouldPassThroughRef = false;
+
+    protected override preInit() {
+        super.preInit();
+        this.set((state) => ({
+            groupRef: new Ref(),
+            enabled: state.enabled ?? true,
+            camera: state.camera ?? this.store.get((s) => s.camera),
+            domElement:
+                state.domElement ??
+                this.store.get((s) => s.events.connected) ??
+                this.store.get((s) => s.gl.domElement),
+        }));
+    }
+
+    override ngOnInit() {
+        super.ngOnInit();
+        this.zone.runOutsideAngular(() => {
+            this.onCanvasReady(this.store.ready$, () => {
+                this.init(
+                    this.select(
+                        this.select((s) => s.camera),
+                        this.select((s) => s.domElement)
+                    )
+                );
+                this.attachObject(
+                    this.select(
+                        this.instance$,
+                        this.select((s) => s.object).pipe(startWithUndefined()),
+                        this.groupRef
+                    )
+                );
+                this.setDraggingEvent(
+                    this.select(
+                        this.instance$,
+                        this.store.select((s) => s.controls)
+                    )
+                );
+                this.setEvents(this.instance$);
+            });
+        });
+    }
+
+    private readonly init = this.effect<{}>(
+        tap(() => {
+            this.set((state) => ({
+                camera: state.camera ?? this.store.get((s) => s.camera),
+                domElement:
+                    state.domElement ??
+                    this.store.get((s) => s.events.connected) ??
+                    this.store.get((s) => s.gl.domElement),
+            }));
+
+            const { camera, domElement } = this.get();
+            this.prepareInstance(
+                new TransformControls(camera as THREE.Camera, domElement)
+            );
+        })
+    );
+
+    private readonly attachObject = this.effect<{}>(
+        pipe(
+            observeOn(animationFrameScheduler),
+            tapEffect(() => {
+                const scene = this.store.get((s) => s.scene);
+                const { groupRef, object } = this.get();
+                if (object) {
+                    this.instance.value.attach(
+                        is.ref(object) ? object.value : object
+                    );
+                } else if (groupRef.value) {
+                    this.instance.value.attach(groupRef.value);
+                }
+
+                if (
+                    !scene.children.some(
+                        (child) => child.uuid === this.instance.value.uuid
+                    )
+                ) {
+                    scene.add(this.instance.value);
+                }
+
+                return ({ complete }) => {
+                    this.instance.value.detach();
+                    if (complete) {
+                        scene.remove(this.instance.value);
+                    }
+                };
+            })
+        )
+    );
+
+    private readonly setDraggingEvent = this.effect<{}>(
+        tapEffect(() => {
+            const defaultControls = this.store.get(
+                (s) => s.controls
+            ) as unknown as ControlsProto;
+            if (defaultControls) {
+                const callback = (event: THREE.Event) =>
+                    (defaultControls.enabled = !event['value']);
+                this.instance.value.addEventListener(
+                    'dragging-changed',
+                    callback
+                );
+                return () =>
+                    this.instance.value.removeEventListener(
+                        'dragging-changed',
+                        callback
+                    );
+            }
+            return;
+        })
+    );
+
+    private readonly setEvents = this.effect<{}>(
+        tapEffect(() => {
+            const invalidate = this.store.get((s) => s.invalidate);
+            const callback = (event: THREE.Event) => {
+                invalidate();
+                if (this.change.observed) {
+                    this.change.emit(event);
+                }
+            };
+
+            this.instance.value?.addEventListener('change', callback);
+
+            const boundMouseDown = this.mousedown.emit.bind(this.mousedown);
+            const boundMouseUp = this.mouseup.emit.bind(this.mouseup);
+            const boundObjectChange = this.objectChange.emit.bind(
+                this.objectChange
+            );
+
+            if (this.mousedown.observed) {
+                this.instance.value?.addEventListener(
+                    'mouseDown',
+                    boundMouseDown
+                );
+            }
+
+            if (this.mouseup.observed) {
+                this.instance.value?.addEventListener('mouseUp', boundMouseUp);
+            }
+
+            if (this.objectChange.observed) {
+                this.instance.value?.addEventListener(
+                    'objectChange',
+                    boundObjectChange
+                );
+            }
+
+            return () => {
+                this.instance.value?.removeEventListener('change', callback);
+                if (this.mousedown.observed) {
+                    this.instance.value?.removeEventListener(
+                        'mouseDown',
+                        boundMouseDown
+                    );
+                }
+
+                if (this.mouseup.observed) {
+                    this.instance.value?.removeEventListener(
+                        'mouseUp',
+                        boundMouseUp
+                    );
+                }
+
+                if (this.objectChange.observed) {
+                    this.instance.value?.removeEventListener(
+                        'objectChange',
+                        boundObjectChange
+                    );
+                }
+            };
+        })
+    );
+
+    protected override get optionFields(): Record<string, boolean> {
+        return {
+            ...super.optionFields,
+            enabled: false,
+            axis: true,
+            mode: true,
+            translationSnap: true,
+            rotationSnap: true,
+            scaleSnap: true,
+            space: true,
+            size: true,
+            showX: true,
+            showY: true,
+            showZ: true,
+        };
+    }
+
+    get groupRef() {
+        return this.get((s) => s.groupRef);
     }
 }
 
 @NgModule({
-    declarations: [NgtSobaTransformControls],
-    exports: [NgtSobaTransformControls],
+    declarations: [NgtSobaTransformControls, NgtSobaTransformControlsContent],
+    exports: [NgtSobaTransformControls, NgtSobaTransformControlsContent],
+    imports: [NgtGroupModule, NgtObjectPassThroughModule, CommonModule],
 })
 export class NgtSobaTransformControlsModule {}
-
-// import {
-//     AnyFunction,
-//     createHostParentObjectProvider,
-//     createParentObjectProvider,
-//     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-//     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-//     NGT_PARENT_OBJECT,
-//     NgtCanvasStore,
-//     NgtLoop,
-//     NgtObjectInputsController,
-//     NgtObjectInputsControllerModule,
-//     NgtStore,
-//     tapEffect,
-// } from '@angular-three/core';
-// import { NgtGroupModule } from '@angular-three/core/group';
-// import { NgtPrimitiveModule } from '@angular-three/core/primitive';
-// import { CommonModule } from '@angular/common';
-// import {
-//     ChangeDetectionStrategy,
-//     Component,
-//     EventEmitter,
-//     Inject,
-//     Input,
-//     NgModule,
-//     NgZone,
-//     OnInit,
-//     Optional,
-//     Output,
-//     SkipSelf,
-// } from '@angular/core';
-// import { merge, tap } from 'rxjs';
-// import * as THREE from 'three';
-// import { TransformControls } from 'three-stdlib';
-//
-// type ControlsProto = {
-//     enabled: boolean;
-// };
-//
-// interface NgtSobaTransformControlsState {
-//     controls: TransformControls;
-//     enabled: boolean;
-//     object: THREE.Object3D;
-//     group: THREE.Group;
-//     camera: THREE.Camera | null;
-// }
-//
-// @Component({
-//     selector: 'ngt-soba-transform-controls',
-//     template: `
-//         <ngt-primitive
-//             *ngIf="controls"
-//             appendMode="root"
-//             [object]="controls"
-//         ></ngt-primitive>
-//         <ngt-group
-//             *ngIf="!object"
-//             (ready)="set({ group: $event })"
-//             [name]="objectInputsController.name"
-//             [position]="objectInputsController.position"
-//             [rotation]="objectInputsController.rotation"
-//             [quaternion]="objectInputsController.quaternion"
-//             [scale]="objectInputsController.scale"
-//             [color]="objectInputsController.color"
-//             [userData]="objectInputsController.userData"
-//             [castShadow]="objectInputsController.castShadow"
-//             [receiveShadow]="objectInputsController.receiveShadow"
-//             [visible]="objectInputsController.visible"
-//             [matrixAutoUpdate]="objectInputsController.matrixAutoUpdate"
-//             [dispose]="objectInputsController.dispose"
-//             [raycast]="objectInputsController.raycast"
-//             [appendMode]="objectInputsController.appendMode"
-//             [appendTo]="objectInputsController.appendTo"
-//             (click)="objectInputsController.click.emit($event)"
-//             (contextmenu)="objectInputsController.contextmenu.emit($event)"
-//             (dblclick)="objectInputsController.dblclick.emit($event)"
-//             (pointerup)="objectInputsController.pointerup.emit($event)"
-//             (pointerdown)="objectInputsController.pointerdown.emit($event)"
-//             (pointerover)="objectInputsController.pointerover.emit($event)"
-//             (pointerout)="objectInputsController.pointerout.emit($event)"
-//             (pointerenter)="objectInputsController.pointerenter.emit($event)"
-//             (pointerleave)="objectInputsController.pointerleave.emit($event)"
-//             (pointermove)="objectInputsController.pointermove.emit($event)"
-//             (pointermissed)="objectInputsController.pointermissed.emit($event)"
-//             (pointercancel)="objectInputsController.pointercancel.emit($event)"
-//             (wheel)="objectInputsController.wheel.emit($event)"
-//         >
-//             <ng-container
-//                 *ngIf="group"
-//                 [ngTemplateOutlet]="contentTemplate"
-//             ></ng-container>
-//         </ngt-group>
-//         <ng-template #contentTemplate>
-//             <ng-content></ng-content>
-//         </ng-template>
-//     `,
-//     changeDetection: ChangeDetectionStrategy.OnPush,
-//     providers: [
-//         NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-//         createParentObjectProvider(
-//             NgtSobaTransformControls,
-//             (controls) =>
-//                 controls.get((s) => s.object) || controls.get((s) => s.group)
-//         ),
-//         createHostParentObjectProvider(NgtSobaTransformControls),
-//     ],
-// })
-// export class NgtSobaTransformControls
-//     extends NgtStore<NgtSobaTransformControlsState>
-//     implements OnInit
-// {
-//     @Input() set enabled(enabled: boolean) {
-//         this.set({ enabled });
-//     }
-//
-//     @Input() set object(object: THREE.Object3D) {
-//         this.set({ object });
-//     }
-//
-//     get object() {
-//         return this.get((s) => s.object);
-//     }
-//
-//     @Input() set camera(camera: THREE.Camera) {
-//         this.set({ camera });
-//     }
-//
-//     private attachObjectParams$ = this.select(
-//         this.select((s) => s.controls),
-//         merge(
-//             this.select((s) => s.object),
-//             this.select((s) => s.group)
-//         ),
-//         (controls, object3d) => ({ controls, object3d })
-//     );
-//
-//     @Output() ready = this.attachObjectParams$;
-//     @Output() change = new EventEmitter<THREE.Event>();
-//     @Output() mousedown = new EventEmitter<THREE.Event>();
-//     @Output() mouseup = new EventEmitter<THREE.Event>();
-//     @Output() objectChange = new EventEmitter<THREE.Event>();
-//
-//     private initControls$ = this.select(
-//         this.canvasStore.ready$,
-//         this.select((s) => s.camera),
-//         (_, camera) => camera
-//     );
-//
-//     private draggingParams$ = this.select(
-//         this.canvasStore.select((s) => s.controls),
-//         this.select((s) => s.controls),
-//         (defaultControls, controls) => ({
-//             defaultControls: defaultControls as unknown as ControlsProto,
-//             controls,
-//         })
-//     );
-//
-//     constructor(
-//         private zone: NgZone,
-//         private canvasStore: NgtCanvasStore,
-//         private loop: NgtLoop,
-//         @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-//         public objectInputsController: NgtObjectInputsController,
-//         @Optional()
-//         @SkipSelf()
-//         @Inject(NGT_PARENT_OBJECT)
-//         public parentObjectFn: AnyFunction
-//     ) {
-//         super();
-//         this.set({ enabled: true, camera: null });
-//     }
-//
-//     get group() {
-//         return this.get((s) => s.group);
-//     }
-//
-//     get controls() {
-//         return this.get((s) => s.controls);
-//     }
-//
-//     ngOnInit() {
-//         this.zone.runOutsideAngular(() => {
-//             this.onCanvasReady(this.canvasStore.ready$, () => {
-//                 this.attachObject(this.attachObjectParams$);
-//                 this.init(this.initControls$);
-//                 this.dragging(this.draggingParams$);
-//                 this.setControlsEvent(this.select((s) => s.controls));
-//             });
-//         });
-//     }
-//
-//     private readonly attachObject = this.effect<{
-//         controls: TransformControls;
-//         object3d: THREE.Object3D;
-//     }>(
-//         tapEffect(({ controls, object3d }) => {
-//             controls.attach(object3d);
-//             return () => {
-//                 controls.detach();
-//             };
-//         })
-//     );
-//
-//     private readonly init = this.effect<THREE.Camera | null>(
-//         tap((camera) => {
-//             const { camera: defaultCamera, renderer } = this.canvasStore.get();
-//             const controlsCamera: THREE.Camera = camera || defaultCamera;
-//             this.set({
-//                 controls: new TransformControls(
-//                     controlsCamera,
-//                     renderer.domElement
-//                 ),
-//             });
-//         })
-//     );
-//
-//     private readonly dragging = this.effect<{
-//         defaultControls: ControlsProto;
-//         controls: TransformControls;
-//     }>(
-//         tapEffect(({ controls, defaultControls }) => {
-//             if (defaultControls) {
-//                 const callback = (event: THREE.Event) =>
-//                     (defaultControls.enabled = !event['value']);
-//                 controls.addEventListener('dragging-changed', callback);
-//                 return () => {
-//                     controls.removeEventListener('dragging-changed', callback);
-//                 };
-//             }
-//             return;
-//         })
-//     );
-//
-//     private readonly setControlsEvent = this.effect<TransformControls>(
-//         tapEffect((controls) => {
-//             const callback = (e: THREE.Event) => {
-//                 this.loop.invalidate();
-//                 if (this.change.observed) this.change.emit(e);
-//             };
-//
-//             controls.addEventListener('change', callback);
-//
-//             const onMouseDown: ((event: THREE.Event) => void) | undefined = this
-//                 .mousedown.observed
-//                 ? this.mousedown.emit.bind(this.mousedown)
-//                 : undefined;
-//             const onMouseUp: ((event: THREE.Event) => void) | undefined = this
-//                 .mouseup.observed
-//                 ? this.mouseup.emit.bind(this.mouseup)
-//                 : undefined;
-//             const onObjectChange: ((event: THREE.Event) => void) | undefined =
-//                 this.objectChange.observed
-//                     ? this.objectChange.emit.bind(this.objectChange)
-//                     : undefined;
-//
-//             if (onMouseDown)
-//                 controls.addEventListener('mouseDown', onMouseDown);
-//             if (onMouseUp) controls.addEventListener('mouseUp', onMouseUp);
-//             if (onObjectChange)
-//                 controls.addEventListener('objectChange', onObjectChange);
-//
-//             return () => {
-//                 controls.removeEventListener('change', callback);
-//                 if (onMouseDown)
-//                     controls.removeEventListener('mouseDown', onMouseDown);
-//                 if (onMouseUp)
-//                     controls.removeEventListener('mouseUp', onMouseUp);
-//                 if (onObjectChange)
-//                     controls.removeEventListener(
-//                         'objectChange',
-//                         onObjectChange
-//                     );
-//             };
-//         })
-//     );
-// }
-//
-// @NgModule({
-//     declarations: [NgtSobaTransformControls],
-//     exports: [NgtSobaTransformControls, NgtObjectInputsControllerModule],
-//     imports: [NgtGroupModule, NgtPrimitiveModule, CommonModule],
-// })
-// export class NgtSobaTransformControlsModule {}
