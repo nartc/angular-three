@@ -1,122 +1,116 @@
 import {
     NgtComponentStore,
-    NgtSize,
     NgtStore,
-    NgtViewport,
+    Ref,
     tapEffect,
 } from '@angular-three/core';
-import { Injectable } from '@angular/core';
-import { map, Observable, pipe, switchMap, tap } from 'rxjs';
+import { Injectable, Provider } from '@angular/core';
+import { filter, map } from 'rxjs';
 import * as THREE from 'three';
-import { FBOReturn, NgtSobaFBO } from '../fbo/fbo';
+import { NgtSobaFBO } from '../fbo/fbo';
 
-interface NgtSobaDepthBufferState {
-    size: number;
+export interface NgtSobaDepthBufferState {
+    depthTexture: Ref<THREE.WebGLRenderTarget['depthTexture']>;
+    depthFBO: THREE.WebGLRenderTarget;
+    depthConfig: { depthTexture: THREE.WebGLRenderTarget['depthTexture'] };
     frames: number;
     width: number;
     height: number;
-    fbo: FBOReturn;
-    depthConfig: { depthTexture: THREE.DepthTexture };
 }
 
 @Injectable()
 export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferState> {
-    private dimensionsParams$ = this.select(
-        this.store.select((s) => s.size),
-        this.store.select((s) => s.viewport),
-        this.store.ready$,
-        (size, viewport) => ({ size, viewport })
-    );
-
-    private depthConfig$ = this.select(
-        this.select((s) => s.width),
-        this.select((s) => s.height),
-        (width, height) => {
-            const depthTexture = new THREE.DepthTexture(width, height);
-            depthTexture.format = THREE.DepthFormat;
-            depthTexture.type = THREE.UnsignedShortType;
-
-            if (this.store.get((s) => s.linear)) {
-                depthTexture.encoding = THREE.LinearEncoding;
-            } else {
-                depthTexture.encoding = THREE.sRGBEncoding;
-            }
-
-            return { depthConfig: { depthTexture } };
-        }
-    );
-
-    private depthFBOParams$ = this.select(
-        this.select((s) => s.width),
-        this.select((s) => s.height),
-        this.select((s) => s.depthConfig),
-        (width, height, depthConfig) => ({ width, height, depthConfig })
-    );
-
-    constructor(private sobaFbo: NgtSobaFBO, private store: NgtStore) {
+    constructor(private store: NgtStore, private fbo: NgtSobaFBO) {
         super();
-        this.set({ size: 256, frames: Infinity });
+        this.set({ depthTexture: new Ref() });
     }
 
-    use(
-        options: { size?: number; frames?: number } = {}
-    ): Observable<FBOReturn['depthTexture']> {
-        if (options.size) {
-            this.set({ size: options.size });
-        }
+    private count = 0;
 
-        if (options.frames) {
-            this.set({ frames: options.frames });
-        }
+    use({
+        size = 256,
+        frames = Infinity,
+    }: { size?: number; frames?: number } = {}): Ref<
+        THREE.WebGLRenderTarget['depthTexture']
+    > {
+        this.set({ frames });
 
-        this.setDimensions(this.dimensionsParams$);
-        this.set(this.depthConfig$);
-        this.registerBeforeRender(this.depthFBOParams$);
+        const depthTextureRef = this.get((s) => s.depthTexture);
 
-        return this.select((s) => s.fbo).pipe(map((fbo) => fbo.depthTexture));
+        this.store.onCanvasReady(this.store.ready$, () => {
+            const dpr = this.store.get((s) => s.viewport.dpr);
+            const { width, height } = this.store.get((s) => s.size);
+            const w = size || width * dpr;
+            const h = size || height * dpr;
+
+            this.set({ width: w, height: h });
+            this.set(
+                this.select(
+                    this.select((s) => s.width),
+                    this.select((s) => s.height)
+                ).pipe(
+                    map(() => {
+                        const { width, height } = this.get();
+                        const depthTexture = new THREE.DepthTexture(
+                            width,
+                            height
+                        );
+                        depthTexture.format = THREE.DepthFormat;
+                        depthTexture.type = THREE.UnsignedShortType;
+                        return { depthConfig: { depthTexture } };
+                    })
+                )
+            );
+
+            this.setDepthFBO(this.select((s) => s.depthConfig));
+        });
+
+        return depthTextureRef;
     }
 
-    private readonly setDimensions = this.effect<{
-        size: NgtSize;
-        viewport: NgtViewport;
-    }>(
-        tap(({ size: { width, height }, viewport: { dpr } }) => {
-            const size = this.get((s) => s.size);
-            this.set({
-                width: size || width * dpr,
-                height: size || height * dpr,
-            });
+    private readonly setDepthFBO = this.effect<{}>(
+        tapEffect(() => {
+            const { depthConfig, width, height } = this.get();
+            const sub = this.fbo
+                .use(width, height, depthConfig)
+                .pipe(filter((fbo) => !!fbo))
+                .subscribe((depthFBO) => {
+                    this.set({ depthFBO });
+                });
+
+            sub.add(this.setFboBeforeRender(this.select((s) => s.depthFBO)));
+
+            return () => {
+                sub.unsubscribe();
+            };
         })
     );
 
-    private readonly registerBeforeRender = this.effect<
-        Pick<NgtSobaDepthBufferState, 'width' | 'height' | 'depthConfig'>
-    >(
-        pipe(
-            switchMap(({ width, height, depthConfig }) =>
-                this.sobaFbo.use(width, height, depthConfig)
-            ),
-            tapEffect((depthFBO) => {
-                this.set({ fbo: depthFBO });
-                let count = 0;
-                const unregister = this.store.registerBeforeRender({
-                    callback: ({ gl, scene, camera }) => {
-                        const frames = this.get((s) => s.frames);
-                        if (frames === Infinity || count < frames) {
-                            gl.setRenderTarget(depthFBO);
-                            gl.render(scene, camera);
-                            gl.setRenderTarget(null);
-                            count++;
-                        }
-                    },
-                });
+    private readonly setFboBeforeRender = this.effect<{}>(
+        tapEffect(() => {
+            const { depthFBO, frames } = this.get();
 
-                return () => {
-                    unregister();
-                };
-            })
-        )
+            const unregister = this.store.registerBeforeRender({
+                callback: ({ gl, scene, camera }) => {
+                    if (
+                        depthFBO &&
+                        (frames === Infinity || this.count < frames)
+                    ) {
+                        gl.setRenderTarget(depthFBO);
+                        gl.render(scene, camera);
+                        gl.setRenderTarget(null);
+                        this.count++;
+                    }
+                },
+            });
+
+            return () => {
+                unregister();
+            };
+        })
     );
 }
 
-export const NGT_SOBA_DEPTH_BUFFER_PROVIDER = [NgtSobaFBO, NgtSobaDepthBuffer];
+export function provideSobaDepthBuffer(): Provider {
+    return [NgtSobaFBO, NgtSobaDepthBuffer];
+}
