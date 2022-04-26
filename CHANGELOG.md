@@ -1,5 +1,18 @@
 
 
+## [5.0.0-beta.20](https://github.com/nartc/angular-three/compare/5.0.0-beta.19...5.0.0-beta.20) (2022-04-26)
+
+
+### Features
+
+* **soba:** add Detailed ([43c5d13](https://github.com/nartc/angular-three/commit/43c5d13fde1158d58914a4f2a3d97b49f0d3f58d))
+* **soba:** add Stars ([f961145](https://github.com/nartc/angular-three/commit/f961145455d60dc934d83e80c4c060a916121a0e))
+
+
+### Bug Fixes
+
+* **core:** material geometry object should ref instead of factory token ([3b8ff7d](https://github.com/nartc/angular-three/commit/3b8ff7d7a4b553d88a6622611b51f93fdb66f0d1))
+
 ## [5.0.0-beta.19](https://github.com/nartc/angular-three/compare/5.0.0-beta.18...5.0.0-beta.19) (2022-04-25)
 
 
