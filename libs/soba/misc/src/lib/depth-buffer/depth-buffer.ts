@@ -5,7 +5,15 @@ import {
     tapEffect,
 } from '@angular-three/core';
 import { Injectable, Provider } from '@angular/core';
-import { filter, map } from 'rxjs';
+import {
+    filter,
+    isObservable,
+    map,
+    Observable,
+    of,
+    Subscription,
+    tap,
+} from 'rxjs';
 import * as THREE from 'three';
 import { NgtSobaFBO } from '../fbo/fbo';
 
@@ -14,8 +22,14 @@ export interface NgtSobaDepthBufferState {
     depthFBO: THREE.WebGLRenderTarget;
     depthConfig: { depthTexture: THREE.WebGLRenderTarget['depthTexture'] };
     frames: number;
+    size: number;
     width: number;
     height: number;
+}
+
+export interface NgtSobaDepthBufferParams {
+    size?: number;
+    frames?: number;
 }
 
 @Injectable()
@@ -26,18 +40,45 @@ export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferStat
     }
 
     private count = 0;
+    private useSubscription?: Subscription;
 
-    use({
-        size = 256,
-        frames = Infinity,
-    }: { size?: number; frames?: number } = {}): Ref<
-        THREE.WebGLRenderTarget['depthTexture']
-    > {
-        this.set({ frames });
+    use(
+        paramsFactory: (
+            defaultParams: Partial<NgtSobaDepthBufferParams>
+        ) => NgtSobaDepthBufferParams | Observable<NgtSobaDepthBufferParams>
+    ): Ref<THREE.WebGLRenderTarget['depthTexture']> {
+        if (this.useSubscription) {
+            this.useSubscription.unsubscribe();
+        }
+        const params = paramsFactory({ size: 256, frames: Infinity });
+
+        const params$ = isObservable(params) ? params : of(params);
+
+        this.set(params$);
 
         const depthTextureRef = this.get((s) => s.depthTexture);
 
-        this.store.onCanvasReady(this.store.ready$, () => {
+        this.useSubscription = this.onCanvasReady(
+            this.store.ready$,
+            () => {
+                this.setDepthConfig(this.select((s) => s.size));
+                this.setDepthFBO(this.select((s) => s.depthConfig));
+
+                return () => {
+                    if (this.useSubscription) {
+                        this.useSubscription.unsubscribe();
+                    }
+                };
+            },
+            true
+        );
+
+        return depthTextureRef;
+    }
+
+    private readonly setDepthConfig = this.effect<{}>(
+        tap(() => {
+            const size = this.get((s) => s.size);
             const dpr = this.store.get((s) => s.viewport.dpr);
             const { width, height } = this.store.get((s) => s.size);
             const w = size || width * dpr;
@@ -61,18 +102,24 @@ export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferStat
                     })
                 )
             );
-
-            this.setDepthFBO(this.select((s) => s.depthConfig));
-        });
-
-        return depthTextureRef;
-    }
+        })
+    );
 
     private readonly setDepthFBO = this.effect<{}>(
         tapEffect(() => {
-            const { depthConfig, width, height } = this.get();
             const sub = this.fbo
-                .use(width, height, depthConfig)
+                .use(
+                    this.select(
+                        this.select((s) => s.depthConfig),
+                        this.select((s) => s.width),
+                        this.select((s) => s.height),
+                        (depthConfig, width, height) => ({
+                            width,
+                            height,
+                            settings: depthConfig,
+                        })
+                    )
+                )
                 .pipe(filter((fbo) => !!fbo))
                 .subscribe((depthFBO) => {
                     this.set({ depthFBO });

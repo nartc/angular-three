@@ -5,7 +5,7 @@ import {
     tapEffect,
 } from '@angular-three/core';
 import { Injectable } from '@angular/core';
-import { filter } from 'rxjs';
+import { filter, isObservable, Observable, of, tap } from 'rxjs';
 import * as THREE from 'three';
 
 interface FBOSettings<T extends boolean = false>
@@ -21,6 +21,12 @@ interface NgtSobaFBOState {
     settings: FBOSettings<boolean>;
 }
 
+export interface NgtSobaFBOParams<T extends boolean = false> {
+    width?: number | FBOSettings<T>;
+    height?: number;
+    settings?: FBOSettings<T>;
+}
+
 @Injectable()
 export class NgtSobaFBO extends NgtComponentStore<NgtSobaFBOState> {
     constructor(private store: NgtStore) {
@@ -29,21 +35,36 @@ export class NgtSobaFBO extends NgtComponentStore<NgtSobaFBOState> {
     }
 
     use<T extends boolean = false>(
-        settings?: FBOSettings<T>
-    ): Ref<THREE.WebGLRenderTarget>;
-    use<T extends boolean = false>(
-        width?: number,
-        height?: number,
-        settings?: FBOSettings<T>
-    ): Ref<THREE.WebGLRenderTarget>;
-    use<T extends boolean = false>(
-        width?: number | FBOSettings<T>,
-        height?: number,
-        settings?: FBOSettings<T>
+        paramsFactory: (
+            defaultParams: Partial<NgtSobaFBOParams>
+        ) => NgtSobaFBOParams | Observable<NgtSobaFBOParams>
     ): Ref<THREE.WebGLRenderTarget> {
         const targetRef = this.get((s) => s.target);
+        const params = paramsFactory({});
+        const params$ = isObservable(params) ? params : of(params);
 
         this.onCanvasReady(this.store.ready$, () => {
+            this.setTarget(params$);
+            this.setup(
+                this.select(
+                    targetRef.pipe(filter((target) => !!target)),
+                    this.select((s) => s.width),
+                    this.select((s) => s.height),
+                    this.select((s) => s.settings)
+                )
+            );
+        });
+
+        return targetRef;
+    }
+
+    private readonly setTarget = this.effect<{
+        width?: number | FBOSettings<any>;
+        height?: number;
+        settings?: FBOSettings<any>;
+    }>(
+        tap(({ width, height, settings }) => {
+            const targetRef = this.get((s) => s.target);
             const { gl, size, viewport } = this.store.get();
 
             const _width =
@@ -78,19 +99,8 @@ export class NgtSobaFBO extends NgtComponentStore<NgtSobaFBOState> {
                 height: _height,
                 settings: _settings,
             });
-
-            this.setup(
-                this.select(
-                    targetRef.pipe(filter((target) => !!target)),
-                    this.select((s) => s.width),
-                    this.select((s) => s.height),
-                    this.select((s) => s.settings)
-                )
-            );
-        });
-
-        return targetRef;
-    }
+        })
+    );
 
     private readonly setup = this.effect<{}>(
         tapEffect(() => {

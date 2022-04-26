@@ -69,7 +69,7 @@ import { setupCanvas, setupCanvasModules } from '../setup-canvas';
     providers: [NgtSobaFBO],
 })
 class CustomCameraStory extends NgtComponentStore implements OnInit {
-    fboRef = this.fbo.use(400, 400);
+    fboRef = this.fbo.use(() => ({ width: 400, height: 400 }));
 
     virtualScene = new Ref(prepare(new THREE.Scene(), () => this.store.get()));
     virtualCamera = new Ref<THREE.PerspectiveCamera>();
