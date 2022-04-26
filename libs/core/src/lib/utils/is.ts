@@ -3,7 +3,7 @@ import { Ref } from '../ref';
 import type { EquConfig, NgtUnknownInstance, UnknownRecord } from '../types';
 
 export const is = {
-    obj: (a: unknown) =>
+    obj: (a: unknown): a is object =>
         a === Object(a) && !is.arr(a) && typeof a !== 'function',
     material: (a: unknown): a is THREE.Material =>
         !!a && (a as THREE.Material)['isMaterial'],
