@@ -108,7 +108,7 @@ export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferStat
     private readonly setDepthFBO = this.effect<{}>(
         tapEffect(() => {
             const sub = this.fbo
-                .use(
+                .use(() =>
                     this.select(
                         this.select((s) => s.depthConfig),
                         this.select((s) => s.width),
