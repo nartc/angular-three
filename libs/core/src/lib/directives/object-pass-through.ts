@@ -1,6 +1,7 @@
 import { Directive, Input, NgModule, Optional, Self } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { NgtObject, NgtObjectInputs } from '../abstracts/object';
+import { startWithUndefined } from '../stores/component-store';
 
 @Directive({
     selector:
@@ -110,24 +111,52 @@ export class NgtObjectPassThrough {
             this.host.ref = wrapper.instance;
         }
 
-        this.host.attach = wrapper.attach;
-        this.host.skipParent = wrapper.skipParent;
-        this.host.noAttach = wrapper.noAttach;
-        this.host.name = wrapper.name;
-        this.host.position = wrapper.position;
-        this.host.rotation = wrapper.rotation;
-        this.host.quaternion = wrapper.quaternion;
-        this.host.scale = wrapper.scale;
-        this.host.color = wrapper.color;
-        this.host.userData = wrapper.userData;
-        this.host.castShadow = wrapper.castShadow;
-        this.host.receiveShadow = wrapper.receiveShadow;
-        this.host.visible = wrapper.visible;
-        this.host.matrixAutoUpdate = wrapper.matrixAutoUpdate;
-        this.host.dispose = wrapper.dispose;
-        this.host.raycast = wrapper.raycast;
-        this.host.appendMode = wrapper.appendMode;
-        this.host.appendTo = wrapper.appendTo;
+        wrapper
+            .select(
+                wrapper.select((s) => s.attach).pipe(startWithUndefined()),
+                wrapper.select((s) => s.skipParent).pipe(startWithUndefined()),
+                wrapper.select((s) => s.noAttach).pipe(startWithUndefined()),
+                wrapper.select((s) => s.name).pipe(startWithUndefined()),
+                wrapper.select((s) => s.position).pipe(startWithUndefined()),
+                wrapper.select((s) => s.rotation).pipe(startWithUndefined()),
+                wrapper.select((s) => s.quaternion).pipe(startWithUndefined()),
+                wrapper.select((s) => s.scale).pipe(startWithUndefined()),
+                wrapper.select((s) => s.color).pipe(startWithUndefined()),
+                wrapper.select((s) => s.userData).pipe(startWithUndefined()),
+                wrapper.select((s) => s.castShadow).pipe(startWithUndefined()),
+                wrapper
+                    .select((s) => s.receiveShadow)
+                    .pipe(startWithUndefined()),
+                wrapper.select((s) => s.visible).pipe(startWithUndefined()),
+                wrapper
+                    .select((s) => s.matrixAutoUpdate)
+                    .pipe(startWithUndefined()),
+                wrapper.select((s) => s.dispose).pipe(startWithUndefined()),
+                wrapper.select((s) => s.raycast).pipe(startWithUndefined()),
+                wrapper.select((s) => s.appendMode).pipe(startWithUndefined()),
+                wrapper.select((s) => s.appendTo).pipe(startWithUndefined())
+            )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.attach = wrapper.attach;
+                this.host.skipParent = wrapper.skipParent;
+                this.host.noAttach = wrapper.noAttach;
+                this.host.name = wrapper.name;
+                this.host.position = wrapper.position;
+                this.host.rotation = wrapper.rotation;
+                this.host.quaternion = wrapper.quaternion;
+                this.host.scale = wrapper.scale;
+                this.host.color = wrapper.color;
+                this.host.userData = wrapper.userData;
+                this.host.castShadow = wrapper.castShadow;
+                this.host.receiveShadow = wrapper.receiveShadow;
+                this.host.visible = wrapper.visible;
+                this.host.matrixAutoUpdate = wrapper.matrixAutoUpdate;
+                this.host.dispose = wrapper.dispose;
+                this.host.raycast = wrapper.raycast;
+                this.host.appendMode = wrapper.appendMode;
+                this.host.appendTo = wrapper.appendTo;
+            });
     }
 
     constructor(@Optional() @Self() private host: NgtObject) {
