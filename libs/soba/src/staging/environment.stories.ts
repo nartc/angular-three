@@ -6,6 +6,7 @@ import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaPerspectiveCameraModule } from '@angular-three/soba/cameras';
 import {
+    NgtSobaContactShadowsModule,
     NgtSobaEnvironmentModule,
     presetsObj,
 } from '@angular-three/soba/staging';
@@ -32,6 +33,7 @@ export default {
                 NgtBoxGeometryModule,
                 NgtMeshStandardMaterialModule,
                 NgtSobaPerspectiveCameraModule,
+                NgtSobaContactShadowsModule,
             ],
         }),
     ],
@@ -89,6 +91,7 @@ export const Ground: Story = (args) => ({
             <ngt-box-geometry [args]="[10, 10, 10]"></ngt-box-geometry>
             <ngt-mesh-standard-material metalness="1" roughness="0"></ngt-mesh-standard-material>
         </ngt-mesh>
+        <ngt-soba-contact-shadows resolution="1024" [position]="[0, 0, 0]" [scale]="100" blur="2" opacity="1" far="10"></ngt-soba-contact-shadows>
         <ngt-soba-orbit-controls autoRotate></ngt-soba-orbit-controls>
         <ngt-soba-perspective-camera [position]="[40, 40, 40]" makeDefault></ngt-soba-perspective-camera>
     `,
