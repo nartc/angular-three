@@ -571,7 +571,7 @@ export class NgtSobaEnvironmentContent {
                 *ngIf="fbo$ | async as fbo"
                 (ready)="set({ camera: $event })"
                 (beforeRender)="onBeforeRender()"
-                [args]="[near, far, fbo]"
+                [args]="[$any(near), $any(far), fbo]"
             ></ngt-cube-camera>
 
             <ngt-soba-environment-cube
