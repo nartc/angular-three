@@ -1,5 +1,5 @@
 import { Directive, Input, NgModule, Optional, Self } from '@angular/core';
-import { takeUntil } from 'rxjs';
+import { merge, takeUntil } from 'rxjs';
 import { NgtObject, NgtObjectInputs } from '../abstracts/object';
 import { startWithUndefined } from '../stores/component-store';
 
@@ -111,51 +111,214 @@ export class NgtObjectPassThrough {
             this.host.ref = wrapper.instance;
         }
 
-        wrapper
-            .select(
-                wrapper.select((s) => s.attach).pipe(startWithUndefined()),
-                wrapper.select((s) => s.skipParent).pipe(startWithUndefined()),
-                wrapper.select((s) => s.noAttach).pipe(startWithUndefined()),
-                wrapper.select((s) => s.name).pipe(startWithUndefined()),
-                wrapper.select((s) => s.position).pipe(startWithUndefined()),
-                wrapper.select((s) => s.rotation).pipe(startWithUndefined()),
-                wrapper.select((s) => s.quaternion).pipe(startWithUndefined()),
-                wrapper.select((s) => s.scale).pipe(startWithUndefined()),
-                wrapper.select((s) => s.color).pipe(startWithUndefined()),
-                wrapper.select((s) => s.userData).pipe(startWithUndefined()),
-                wrapper.select((s) => s.castShadow).pipe(startWithUndefined()),
-                wrapper
-                    .select((s) => s.receiveShadow)
-                    .pipe(startWithUndefined()),
-                wrapper.select((s) => s.visible).pipe(startWithUndefined()),
-                wrapper
-                    .select((s) => s.matrixAutoUpdate)
-                    .pipe(startWithUndefined()),
-                wrapper.select((s) => s.dispose).pipe(startWithUndefined()),
-                wrapper.select((s) => s.raycast).pipe(startWithUndefined()),
-                wrapper.select((s) => s.appendMode).pipe(startWithUndefined()),
-                wrapper.select((s) => s.appendTo).pipe(startWithUndefined())
-            )
+        merge(
+            wrapper.select((s) => s.attach),
+            this.host.select((s) => s.attach)
+        )
             .pipe(takeUntil(wrapper.destroy$))
             .subscribe(() => {
-                this.host.attach = wrapper.attach;
-                this.host.skipParent = wrapper.skipParent;
-                this.host.noAttach = wrapper.noAttach;
-                this.host.name = wrapper.name;
-                this.host.position = wrapper.position;
-                this.host.rotation = wrapper.rotation;
-                this.host.quaternion = wrapper.quaternion;
-                this.host.scale = wrapper.scale;
-                this.host.color = wrapper.color;
-                this.host.userData = wrapper.userData;
-                this.host.castShadow = wrapper.castShadow;
-                this.host.receiveShadow = wrapper.receiveShadow;
-                this.host.visible = wrapper.visible;
-                this.host.matrixAutoUpdate = wrapper.matrixAutoUpdate;
-                this.host.dispose = wrapper.dispose;
-                this.host.raycast = wrapper.raycast;
-                this.host.appendMode = wrapper.appendMode;
-                this.host.appendTo = wrapper.appendTo;
+                this.host.attach = this.host.get((s) => s.attachExplicit)
+                    ? this.host.attach
+                    : wrapper.attach;
+            });
+
+        merge(
+            wrapper.select((s) => s.skipParent),
+            this.host.select((s) => s.skipParent)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.skipParent = this.host.get(
+                    (s) => s.skipParentExplicit
+                )
+                    ? this.host.skipParent
+                    : wrapper.skipParent;
+            });
+
+        merge(
+            wrapper.select((s) => s.noAttach),
+            this.host.select((s) => s.noAttach)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.noAttach = this.host.get((s) => s.noAttachExplicit)
+                    ? this.host.noAttach
+                    : wrapper.noAttach;
+            });
+
+        merge(
+            wrapper.select((s) => s.name),
+            this.host.select((s) => s.name)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.name = this.host.get((s) => s.nameExplicit)
+                    ? this.host.name
+                    : wrapper.name;
+            });
+
+        merge(
+            wrapper.select((s) => s.position),
+            this.host.select((s) => s.position)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.position = this.host.get((s) => s.positionExplicit)
+                    ? this.host.position
+                    : wrapper.position;
+            });
+
+        merge(
+            wrapper.select((s) => s.rotation),
+            this.host.select((s) => s.rotation)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.rotation = this.host.get((s) => s.rotationExplicit)
+                    ? this.host.rotation
+                    : wrapper.rotation;
+            });
+
+        merge(
+            wrapper.select((s) => s.quaternion),
+            this.host.select((s) => s.quaternion)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.quaternion = this.host.get(
+                    (s) => s.quaternionExplicit
+                )
+                    ? this.host.quaternion
+                    : wrapper.quaternion;
+            });
+
+        merge(
+            wrapper.select((s) => s.scale),
+            this.host.select((s) => s.scale)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.scale = this.host.get((s) => s.scaleExplicit)
+                    ? this.host.scale
+                    : wrapper.scale;
+            });
+
+        merge(
+            wrapper.select((s) => s.color),
+            this.host.select((s) => s.color)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.color = this.host.get((s) => s.colorExplicit)
+                    ? this.host.color
+                    : wrapper.color;
+            });
+
+        merge(
+            wrapper.select((s) => s.userData),
+            this.host.select((s) => s.userData)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.userData = this.host.get((s) => s.userDataExplicit)
+                    ? this.host.userData
+                    : wrapper.userData;
+            });
+
+        merge(
+            wrapper.select((s) => s.castShadow).pipe(startWithUndefined()),
+            this.host.select((s) => s.castShadow).pipe(startWithUndefined())
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.castShadow = this.host.get(
+                    (s) => s.castShadowExplicit
+                )
+                    ? this.host.castShadow
+                    : wrapper.castShadow;
+            });
+
+        merge(
+            wrapper.select((s) => s.receiveShadow).pipe(startWithUndefined()),
+            this.host.select((s) => s.receiveShadow).pipe(startWithUndefined())
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.receiveShadow = this.host.get(
+                    (s) => s.receiveShadowExplicit
+                )
+                    ? this.host.receiveShadow
+                    : wrapper.receiveShadow;
+            });
+
+        merge(
+            wrapper.select((s) => s.visible),
+            this.host.select((s) => s.visible)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.visible = this.host.get((s) => s.visibleExplicit)
+                    ? this.host.visible
+                    : wrapper.visible;
+            });
+
+        merge(
+            wrapper.select((s) => s.matrixAutoUpdate),
+            this.host.select((s) => s.matrixAutoUpdate)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.matrixAutoUpdate = this.host.get(
+                    (s) => s.matrixAutoUpdateExplicit
+                )
+                    ? this.host.matrixAutoUpdate
+                    : wrapper.matrixAutoUpdate;
+            });
+
+        merge(
+            wrapper.select((s) => s.dispose).pipe(startWithUndefined()),
+            this.host.select((s) => s.dispose).pipe(startWithUndefined())
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.dispose = this.host.get((s) => s.disposeExplicit)
+                    ? this.host.dispose
+                    : wrapper.dispose;
+            });
+
+        merge(
+            wrapper.select((s) => s.raycast).pipe(startWithUndefined()),
+            this.host.select((s) => s.raycast).pipe(startWithUndefined())
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.raycast = this.host.get((s) => s.raycastExplicit)
+                    ? this.host.raycast
+                    : wrapper.raycast;
+            });
+
+        merge(
+            wrapper.select((s) => s.appendMode),
+            this.host.select((s) => s.appendMode)
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.appendMode = this.host.get(
+                    (s) => s.appendModeExplicit
+                )
+                    ? this.host.appendMode
+                    : wrapper.appendMode;
+            });
+
+        merge(
+            wrapper.select((s) => s.appendTo).pipe(startWithUndefined()),
+            this.host.select((s) => s.appendTo).pipe(startWithUndefined())
+        )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.appendTo = this.host.get((s) => s.appendToExplicit)
+                    ? this.host.appendTo
+                    : wrapper.appendTo;
             });
     }
 
