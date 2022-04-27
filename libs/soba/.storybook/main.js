@@ -1,4 +1,5 @@
 const rootMain = require('../../../.storybook/main');
+const { resolve } = require('path');
 
 module.exports = {
     ...rootMain,
@@ -18,6 +19,12 @@ module.exports = {
         }
 
         // add your own webpack tweaks if needed
+        config.module.rules.push({
+            test: /\.(glsl|vs|fs|vert|frag)$/,
+            exclude: /node_modules/,
+            use: ['raw-loader'],
+            include: resolve(__dirname, '../'),
+        });
 
         return config;
     },
