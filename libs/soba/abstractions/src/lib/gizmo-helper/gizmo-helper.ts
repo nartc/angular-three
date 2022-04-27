@@ -8,7 +8,6 @@ import {
     NgtObjectPassThroughModule,
     NgtPortalModule,
     NgtRenderState,
-    NgtVector3,
     prepare,
     provideObjectHosRef,
     Ref,
@@ -28,7 +27,7 @@ import {
     Output,
     TemplateRef,
 } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import * as THREE from 'three';
 
 export interface NgtSobaGizmoHelperState
