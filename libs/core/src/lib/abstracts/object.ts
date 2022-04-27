@@ -56,21 +56,37 @@ export interface NgtObjectInputsState<
     TObject extends THREE.Object3D = THREE.Object3D
 > extends NgtInstanceState<TObject> {
     name: string;
+    nameExplicit?: boolean;
     position: THREE.Vector3;
+    positionExplicit?: boolean;
     rotation: THREE.Euler;
+    rotationExplicit?: boolean;
     quaternion: THREE.Quaternion;
+    quaternionExplicit?: boolean;
     scale: THREE.Vector3;
+    scaleExplicit?: boolean;
     color: THREE.Color;
+    colorExplicit?: boolean;
     castShadow: boolean;
+    castShadowExplicit?: boolean;
     receiveShadow: boolean;
+    receiveShadowExplicit?: boolean;
     priority: number;
+    priorityExplicit?: boolean;
     visible: boolean;
+    visibleExplicit?: boolean;
     matrixAutoUpdate: boolean;
+    matrixAutoUpdateExplicit?: boolean;
     appendMode: 'immediate' | 'root' | 'none';
+    appendModeExplicit?: boolean;
     userData?: UnknownRecord;
+    userDataExplicit?: boolean;
     dispose?: (() => void) | null;
+    disposeExplicit?: boolean;
     raycast?: THREE.Object3D['raycast'] | null;
+    raycastExplicit?: boolean;
     appendTo?: Ref<THREE.Object3D>;
+    appendToExplicit?: boolean;
 }
 
 @Directive()
@@ -79,7 +95,10 @@ export abstract class NgtObjectInputs<
     TObjectInputsState extends NgtObjectInputsState<TObject> = NgtObjectInputsState<TObject>
 > extends NgtInstance<TObject, TObjectInputsState> {
     @Input() set name(name: string) {
-        this.set({ name } as Partial<TObjectInputsState>);
+        this.set({
+            nameExplicit: true,
+            name,
+        } as Partial<TObjectInputsState>);
     }
     get name(): string {
         return this.get((s) => s.name);
@@ -87,6 +106,8 @@ export abstract class NgtObjectInputs<
 
     @Input() set position(position: NgtVector3 | undefined) {
         this.set({
+            positionExplicit: true,
+
             position: makeVector3(position),
         } as Partial<TObjectInputsState>);
     }
@@ -99,6 +120,8 @@ export abstract class NgtObjectInputs<
     }
     @Input() set rotation(rotation: NgtEuler | NgtTriple | undefined) {
         this.set({
+            rotationExplicit: true,
+
             rotation: make(THREE.Euler, rotation),
         } as Partial<TObjectInputsState>);
     }
@@ -108,6 +131,8 @@ export abstract class NgtObjectInputs<
     }
     @Input() set quaternion(quaternion: NgtQuaternion | undefined) {
         this.set({
+            quaternionExplicit: true,
+
             quaternion: make(THREE.Quaternion, quaternion),
         } as Partial<TObjectInputsState>);
     }
@@ -116,14 +141,20 @@ export abstract class NgtObjectInputs<
         return this.get((s) => s.scale);
     }
     @Input() set scale(scale: NgtVector3 | undefined) {
-        this.set({ scale: makeVector3(scale) } as Partial<TObjectInputsState>);
+        this.set({
+            scaleExplicit: true,
+            scale: makeVector3(scale),
+        } as Partial<TObjectInputsState>);
     }
 
     get color() {
         return this.get((s) => s.color);
     }
     @Input() set color(color: NgtColor | undefined) {
-        this.set({ color: makeColor(color) } as Partial<TObjectInputsState>);
+        this.set({
+            colorExplicit: true,
+            color: makeColor(color),
+        } as Partial<TObjectInputsState>);
     }
 
     get castShadow() {
@@ -131,6 +162,8 @@ export abstract class NgtObjectInputs<
     }
     @Input() set castShadow(value: BooleanInput) {
         this.set({
+            castShadowExplicit: true,
+
             castShadow: coerceBooleanProperty(value),
         } as Partial<TObjectInputsState>);
     }
@@ -140,6 +173,8 @@ export abstract class NgtObjectInputs<
     }
     @Input() set receiveShadow(value: BooleanInput) {
         this.set({
+            receiveShadowExplicit: true,
+
             receiveShadow: coerceBooleanProperty(value),
         } as Partial<TObjectInputsState>);
     }
@@ -149,6 +184,8 @@ export abstract class NgtObjectInputs<
     }
     @Input() set priority(priority: NumberInput) {
         this.set({
+            priorityExplicit: true,
+
             priority: coerceNumberProperty(priority),
         } as Partial<TObjectInputsState>);
     }
@@ -158,6 +195,8 @@ export abstract class NgtObjectInputs<
     }
     @Input() set visible(visible: BooleanInput) {
         this.set({
+            visibleExplicit: true,
+
             visible: coerceBooleanProperty(visible),
         } as Partial<TObjectInputsState>);
     }
@@ -166,6 +205,8 @@ export abstract class NgtObjectInputs<
     }
     @Input() set matrixAutoUpdate(matrixAutoUpdate: BooleanInput) {
         this.set({
+            matrixAutoUpdateExplicit: true,
+
             matrixAutoUpdate: coerceBooleanProperty(matrixAutoUpdate),
         } as Partial<TObjectInputsState>);
     }
@@ -174,14 +215,20 @@ export abstract class NgtObjectInputs<
         return this.get((s) => s.userData);
     }
     @Input() set userData(userData: UnknownRecord | undefined) {
-        this.set({ userData } as Partial<TObjectInputsState>);
+        this.set({
+            userDataExplicit: true,
+            userData,
+        } as Partial<TObjectInputsState>);
     }
 
     get dispose() {
         return this.get((s) => s.dispose);
     }
     @Input() set dispose(dispose: (() => void) | null | undefined) {
-        this.set({ dispose } as Partial<TObjectInputsState>);
+        this.set({
+            disposeExplicit: true,
+            dispose,
+        } as Partial<TObjectInputsState>);
     }
 
     get raycast() {
@@ -190,14 +237,20 @@ export abstract class NgtObjectInputs<
     @Input() set raycast(
         raycast: THREE.Object3D['raycast'] | null | undefined
     ) {
-        this.set({ raycast } as Partial<TObjectInputsState>);
+        this.set({
+            raycastExplicit: true,
+            raycast,
+        } as Partial<TObjectInputsState>);
     }
 
     get appendMode() {
         return this.get((s) => s.appendMode);
     }
     @Input() set appendMode(appendMode: 'immediate' | 'root' | 'none') {
-        this.set({ appendMode } as Partial<TObjectInputsState>);
+        this.set({
+            appendModeExplicit: true,
+            appendMode,
+        } as Partial<TObjectInputsState>);
     }
 
     get appendTo() {
@@ -207,6 +260,8 @@ export abstract class NgtObjectInputs<
         appendTo: Ref<THREE.Object3D> | THREE.Object3D | undefined
     ) {
         this.set({
+            appendToExplicit: true,
+
             appendTo: appendTo
                 ? is.ref(appendTo)
                     ? appendTo

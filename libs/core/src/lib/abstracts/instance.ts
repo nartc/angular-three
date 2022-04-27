@@ -50,8 +50,11 @@ export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
     instance: Ref<TInstance>;
     instanceArgs: unknown[];
     attach: string[] | AttachFunction;
+    attachExplicit?: boolean;
     noAttach: boolean;
+    noAttachExplicit?: boolean;
     skipParent: boolean;
+    skipParentExplicit?: boolean;
     [option: string]: any;
 }
 
@@ -69,6 +72,7 @@ export abstract class NgtInstance<
 
     @Input() set skipParent(skipParent: BooleanInput) {
         this.set({
+            attachExplicit: true,
             skipParent: coerceBooleanProperty(skipParent),
         } as Partial<TInstanceState>);
     }
@@ -81,6 +85,7 @@ export abstract class NgtInstance<
 
     @Input() set noAttach(noAttach: BooleanInput) {
         this.set({
+            noAttachExplicit: true,
             noAttach: coerceBooleanProperty(noAttach),
         } as Partial<TInstanceState>);
     }
@@ -92,6 +97,7 @@ export abstract class NgtInstance<
     set attach(value: string | string[] | AttachFunction | undefined) {
         if (value) {
             this.set({
+                skipParentExplicit: true,
                 attach:
                     typeof value === 'function'
                         ? value
