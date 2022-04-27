@@ -17,7 +17,7 @@ import {
     NgModule,
     Output,
 } from '@angular/core';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import * as THREE from 'three';
 import { OrbitControls } from 'three-stdlib';
 
@@ -180,7 +180,6 @@ export class NgtSobaOrbitControls extends NgtInstance<
         this.set((state) => ({
             enabled: state['enabled'] ?? true,
             enableDamping: state.enableDamping ?? true,
-            camera: state.camera ?? this.store.get((s) => s.camera),
             domElement:
                 state.domElement ??
                 this.store.get((s) => s.events.connected) ??
@@ -192,9 +191,22 @@ export class NgtSobaOrbitControls extends NgtInstance<
         super.ngOnInit();
         this.zone.runOutsideAngular(() => {
             this.onCanvasReady(this.store.ready$, () => {
+                if (!this.get((s) => s.camera)) {
+                    this.set(
+                        this.store
+                            .select((s) => s.camera)
+                            .pipe(map((camera) => ({ camera })))
+                    );
+                }
+
                 this.init(this.select((s) => s.camera));
-                this.setBeforeRender(this.instance$);
-                this.connectDomElement(this.select((s) => s.domElement));
+                this.setBeforeRender();
+                this.connectDomElement(
+                    this.select(
+                        this.instance$,
+                        this.select((s) => s.domElement)
+                    )
+                );
                 this.setEvents(this.instance$);
                 this.setDefaultControls(
                     this.select(
@@ -208,9 +220,6 @@ export class NgtSobaOrbitControls extends NgtInstance<
 
     private readonly init = this.effect<{}>(
         tap(() => {
-            this.set((state) => ({
-                camera: state.camera || this.store.get((s) => s.camera),
-            }));
             const camera = this.get((s) => s.camera);
             if (camera) {
                 this.prepareInstance(new OrbitControls(camera));
@@ -218,7 +227,7 @@ export class NgtSobaOrbitControls extends NgtInstance<
         })
     );
 
-    private readonly setBeforeRender = this.effect<{}>(
+    private readonly setBeforeRender = this.effect<void>(
         tapEffect(() => {
             const unregister = this.store.registerBeforeRender({
                 priority: -1,
