@@ -1,5 +1,18 @@
 
 
+## [5.0.0-beta.22](https://github.com/nartc/angular-three/compare/5.0.0-beta.21...5.0.0-beta.22) (2022-04-27)
+
+
+### Bug Fixes
+
+* **soba:** use different syntax for rawloader ([36e86a4](https://github.com/nartc/angular-three/commit/36e86a40c443c9981ce1df6f345d5a95ee41c8c2))
+* **soba:** use inline glsl for now ([ca2d6ec](https://github.com/nartc/angular-three/commit/ca2d6ec6294beee5b3608f913bd29177c5b679d2))
+
+
+### Documentations
+
+* adjust storybook config to include raw-loader ([b244b4d](https://github.com/nartc/angular-three/commit/b244b4d2b51be2043b19617a986fef70b04047bf))
+
 ## [5.0.0-beta.21](https://github.com/nartc/angular-three/compare/5.0.0-beta.20...5.0.0-beta.21) (2022-04-27)
 
 
