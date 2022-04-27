@@ -1,7 +1,7 @@
 // @ts-ignore
-import * as fragmentShader from '!raw-loader!./GroundProjection.frag.glsl';
+import * as fragmentShader from '!!raw-loader!./GroundProjection.frag.glsl';
 // @ts-ignore
-import * as vertexShader from '!raw-loader!./GroundProjection.vert.glsl';
+import * as vertexShader from '!!raw-loader!./GroundProjection.vert.glsl';
 import {
     AnyFunction,
     BooleanInput,
