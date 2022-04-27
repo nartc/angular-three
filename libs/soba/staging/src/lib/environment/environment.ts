@@ -514,17 +514,17 @@ export class NgtSobaEnvironmentCube extends NgtSobaEnvironmentGeneric {
                         this.select((s) => s.background),
                         this.select((s) => s.scene).pipe(startWithUndefined()),
                         this.store.select((s) => s.scene),
-                        (texture) => texture
+                        (texture) => ({ texture })
                     )
                 );
             });
         });
     }
 
-    private readonly setEnvironment = this.effect<
-        THREE.Texture | THREE.CubeTexture
-    >(
-        tapEffect((texture) => {
+    private readonly setEnvironment = this.effect<{
+        texture: THREE.Texture | THREE.CubeTexture;
+    }>(
+        tapEffect(({ texture }) => {
             const defaultScene = this.store.get((s) => s.scene);
             const { background, scene } = this.get();
 
@@ -903,10 +903,6 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
             })
         )
     );
-
-    onReady($event: THREE.ShaderMaterial) {
-        console.log('ready', $event);
-    }
 }
 
 @Component({
