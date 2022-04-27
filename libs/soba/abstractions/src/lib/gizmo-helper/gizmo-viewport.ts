@@ -12,7 +12,6 @@ import {
     NgtRadianPipeModule,
     NgtStore,
     NgtTriple,
-    NgtVector3,
     NumberInput,
     provideObjectHosRef,
     Ref,
@@ -416,10 +415,24 @@ export class NgtSobaGizmoViewportAxisHeadPassThrough {
     @Input() set ngtSobaGizmoViewportAxisHead(wrapper: unknown) {
         this.assertWrapper(wrapper);
 
-        this.axisHead.labelColor = wrapper.labelColor;
-        this.axisHead.font = wrapper.font;
-        this.axisHead.disabled = wrapper.disabled;
-        this.axisHead.axisHeadScale = wrapper.axisHeadScale;
+        wrapper
+            .select(
+                wrapper
+                    .select((s) => s['labelColor'])
+                    .pipe(startWithUndefined()),
+                wrapper.select((s) => s['font']).pipe(startWithUndefined()),
+                wrapper.select((s) => s['disabled']).pipe(startWithUndefined()),
+                wrapper
+                    .select((s) => s['axisHeadScale'])
+                    .pipe(startWithUndefined())
+            )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.axisHead.labelColor = wrapper.labelColor;
+                this.axisHead.font = wrapper.font;
+                this.axisHead.disabled = wrapper.disabled;
+                this.axisHead.axisHeadScale = wrapper.axisHeadScale;
+            });
 
         if (wrapper.click.observed) {
             this.axisHead.click

@@ -15,6 +15,7 @@ import {
     NgtVector3,
     NumberInput,
     Ref,
+    startWithUndefined,
 } from '@angular-three/core';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtGroupModule } from '@angular-three/core/group';
@@ -201,13 +202,26 @@ export class NgtSobaGizmoViewCubePassThrough {
     @Input() set ngtSobaGizmoViewCubeGenericPassThrough(wrapper: unknown) {
         this.assertWrapper(wrapper);
 
-        this.host.font = wrapper.font;
-        this.host.opacity = wrapper.opacity;
-        this.host.color = wrapper.color;
-        this.host.hoverColor = wrapper.hoverColor;
-        this.host.textColor = wrapper.textColor;
-        this.host.strokeColor = wrapper.strokeColor;
-        this.host.faces = wrapper.faces;
+        wrapper
+            .select(
+                wrapper.select((s) => s.font).pipe(startWithUndefined()),
+                wrapper.select((s) => s.opacity).pipe(startWithUndefined()),
+                wrapper.select((s) => s.color).pipe(startWithUndefined()),
+                wrapper.select((s) => s.hoverColor).pipe(startWithUndefined()),
+                wrapper.select((s) => s.textColor).pipe(startWithUndefined()),
+                wrapper.select((s) => s.strokeColor).pipe(startWithUndefined()),
+                wrapper.select((s) => s.faces).pipe(startWithUndefined())
+            )
+            .pipe(takeUntil(wrapper.destroy$))
+            .subscribe(() => {
+                this.host.font = wrapper.font;
+                this.host.opacity = wrapper.opacity;
+                this.host.color = wrapper.color;
+                this.host.hoverColor = wrapper.hoverColor;
+                this.host.textColor = wrapper.textColor;
+                this.host.strokeColor = wrapper.strokeColor;
+                this.host.faces = wrapper.faces;
+            });
 
         if (wrapper.click.observed) {
             this.host.click
@@ -257,17 +271,15 @@ export class NgtSobaGizmoFaceMaterial extends NgtSobaGizmoViewCubeGeneric<THREE.
     @Input() set hover(hover: BooleanInput) {
         this.set({ hover: coerceBooleanProperty(hover) });
     }
+    get hover() {
+        return this.get((s) => s['hover']);
+    }
 
     @Input() set index(index: NumberInput) {
         this.set({ index: coerceNumberProperty(index) });
     }
-
     get index() {
         return this.get((s) => s['index']);
-    }
-
-    get hover() {
-        return this.get((s) => s['hover']);
     }
 
     readonly texture$ = this.select(
