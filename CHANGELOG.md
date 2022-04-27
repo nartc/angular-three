@@ -1,5 +1,12 @@
 
 
+## [5.0.0-beta.23](https://github.com/nartc/angular-three/compare/5.0.0-beta.22...5.0.0-beta.23) (2022-04-27)
+
+
+### Features
+
+* **soba:** add Contact Shadows ([e6f795a](https://github.com/nartc/angular-three/commit/e6f795a2e8a6c72c96746d7ed4b10ea379bea0a3))
+
 ## [5.0.0-beta.22](https://github.com/nartc/angular-three/compare/5.0.0-beta.21...5.0.0-beta.22) (2022-04-27)
 
 
