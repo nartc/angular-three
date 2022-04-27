@@ -1,5 +1,25 @@
 
 
+## [5.0.0-beta.21](https://github.com/nartc/angular-three/compare/5.0.0-beta.20...5.0.0-beta.21) (2022-04-27)
+
+
+### Features
+
+* **soba:** add Environment ([87b771c](https://github.com/nartc/angular-three/commit/87b771cd65a9117d145e4718b3b73e23fc52a968))
+
+
+### Bug Fixes
+
+* **core:** add explicit states to have knowledge if an input is explicitly set on the host element ([b2aa965](https://github.com/nartc/angular-three/commit/b2aa965ac779e16c2b58d5dd0cd16e34cd553a8e))
+* **core:** add type guard to is.obj ([c93ae5c](https://github.com/nartc/angular-three/commit/c93ae5cd0a2edbad45f30e0f5de8b82024da1231))
+* **core:** adjust object passthrough to respect host Inputs if they're set explicitly ([38f2eea](https://github.com/nartc/angular-three/commit/38f2eeaf74f46fded584cc48a49bbd7ee2e5132d))
+* **core:** make sure object pass through react to changes ([65fad4b](https://github.com/nartc/angular-three/commit/65fad4bd7582854c7119ee66c5d260f0b0597c1c))
+* **environment:** fix environment background not changing ([0a59c68](https://github.com/nartc/angular-three/commit/0a59c68192cde518b3f64cf0d69ed66f1ae75bed))
+* **soba:** adjust OrbitControls ([11f6059](https://github.com/nartc/angular-three/commit/11f6059af0fbd24a2032ba4940049bfd12705c57))
+* **soba:** adjust the "use" API to be more reactive ([7afb377](https://github.com/nartc/angular-three/commit/7afb3778f170a7841fed1c98f9c02ade068fc3b3))
+* **soba:** adjust typings in environment ([4724b32](https://github.com/nartc/angular-three/commit/4724b32bb7c9f98407e2a4e87d3a141534fa9c97))
+* **soba:** make sure gizmo passthroughs react to changes ([aa59906](https://github.com/nartc/angular-three/commit/aa59906c6ebf6ca42898e08526efb2f6bbf873d5))
+
 ## [5.0.0-beta.20](https://github.com/nartc/angular-three/compare/5.0.0-beta.19...5.0.0-beta.20) (2022-04-26)
 
 
