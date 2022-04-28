@@ -3,10 +3,10 @@ import {
     BooleanInput,
     coerceBooleanProperty,
     coerceNumberProperty,
-    NGT_OBJECT_REF,
     NgtObjectInputs,
     NgtObjectInputsState,
     NgtObjectPassThroughModule,
+    NGT_OBJECT_REF,
     NumberInput,
     provideObjectHostRef,
     Ref,
@@ -292,29 +292,33 @@ export class NgtSobaStage extends NgtObjectInputs<
 
     override ngOnInit() {
         super.ngOnInit();
-        this.setDimensions(
-            this.select(
-                this.innerGroup.pipe(filter((group) => !!group)),
-                this.outerGroup.pipe(filter((group) => !!group)),
-                defer(() => {
-                    return (
-                        this.content?.children.changes.pipe(
-                            startWith(this.content?.children)
-                        ) || of(null)
-                    );
-                })
-            )
-        );
+        this.zone.runOutsideAngular(() => {
+            this.onCanvasReady(this.store.ready$, () => {
+                this.setDimensions(
+                    this.select(
+                        this.innerGroup.pipe(filter((group) => !!group)),
+                        this.outerGroup.pipe(filter((group) => !!group)),
+                        defer(() => {
+                            return (
+                                this.content?.children.changes.pipe(
+                                    startWith(this.content?.children)
+                                ) || of(null)
+                            );
+                        })
+                    )
+                );
 
-        this.updateControls(
-            this.select(
-                this.store.select((s) => s.controls),
-                this.select((s) => s.radius).pipe(skip(1)),
-                this.select((s) => s.height).pipe(skip(1)),
-                this.select((s) => s.width).pipe(skip(1)),
-                this.select((s) => s.adjustCamera)
-            )
-        );
+                this.updateControls(
+                    this.select(
+                        this.store.select((s) => s.controls),
+                        this.select((s) => s.radius).pipe(skip(1)),
+                        this.select((s) => s.height).pipe(skip(1)),
+                        this.select((s) => s.width).pipe(skip(1)),
+                        this.select((s) => s.adjustCamera)
+                    )
+                );
+            });
+        });
     }
 
     private readonly setDimensions = this.effect<{}>(

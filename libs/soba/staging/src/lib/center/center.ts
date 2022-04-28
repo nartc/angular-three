@@ -115,20 +115,24 @@ export class NgtSobaCenter extends NgtObjectInputs<
 
     override ngOnInit(): void {
         super.ngOnInit();
-        this.setPosition(
-            this.select(
-                this.innerGroup.pipe(filter((group) => !!group)),
-                this.outerGroup.pipe(filter((group) => !!group)),
-                this.select((s) => s.alignTop),
-                defer(() => {
-                    return (
-                        this.content?.children.changes.pipe(
-                            startWith(this.content?.children)
-                        ) || of(null)
-                    );
-                })
-            )
-        );
+        this.zone.runOutsideAngular(() => {
+            this.onCanvasReady(this.store.ready$, () => {
+                this.setPosition(
+                    this.select(
+                        this.innerGroup.pipe(filter((group) => !!group)),
+                        this.outerGroup.pipe(filter((group) => !!group)),
+                        this.select((s) => s.alignTop),
+                        defer(() => {
+                            return (
+                                this.content?.children.changes.pipe(
+                                    startWith(this.content?.children)
+                                ) || of(null)
+                            );
+                        })
+                    )
+                );
+            });
+        });
     }
 
     private readonly setPosition = this.effect<{}>(

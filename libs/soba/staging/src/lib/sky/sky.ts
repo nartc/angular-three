@@ -116,15 +116,6 @@ export class NgtSobaSky extends NgtCommonMesh<Sky> {
         });
     }
 
-    override ngOnInit(): void {
-        super.ngOnInit();
-    }
-
-    get skyScale() {
-        const distance = this.get((s) => s['distance']);
-        return new THREE.Vector3().setScalar(distance);
-    }
-
     protected override postInit(): void {
         super.postInit();
         this.setScale(this.select((s) => s['distance']));
