@@ -1,5 +1,12 @@
 
 
+## [5.0.0-beta.24](https://github.com/nartc/angular-three/compare/5.0.0-beta.23...5.0.0-beta.24) (2022-04-28)
+
+
+### Features
+
+* **soba:** add Backdrop; add Spotlight ([be9937c](https://github.com/nartc/angular-three/commit/be9937c415173e75b58084ceed153278961116e8))
+
 ## [5.0.0-beta.23](https://github.com/nartc/angular-three/compare/5.0.0-beta.22...5.0.0-beta.23) (2022-04-27)
 
 
