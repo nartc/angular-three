@@ -1,170 +1,181 @@
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    AnyConstructor,
+    coerceNumberProperty,
+    NgtCommonMesh,
+    NgtVector3,
+    NumberInput,
+    Ref,
+} from '@angular-three/core';
+import { CommonModule } from '@angular/common';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ContentChild,
+    Directive,
+    Input,
+    NgModule,
+    TemplateRef,
+} from '@angular/core';
+import { tap } from 'rxjs';
+import * as THREE from 'three';
+import { Sky } from 'three-stdlib';
+
+export function calcPosFromAngles(
+    inclination: number,
+    azimuth: number,
+    vector: THREE.Vector3 = new THREE.Vector3()
+) {
+    const theta = Math.PI * (inclination - 0.5);
+    const phi = 2 * Math.PI * (azimuth - 0.5);
+
+    vector.x = Math.cos(phi);
+    vector.y = Math.sin(theta);
+    vector.z = Math.sin(phi);
+
+    return vector;
+}
+
+@Directive({
+    selector: 'ng-template[ngt-soba-sky-content]',
+})
+export class NgtSobaSkyContent {
+    constructor(public templateRef: TemplateRef<{ sky: Ref<Sky> }>) {}
+
+    static ngTemplateContextGuard(
+        dir: NgtSobaSkyContent,
+        ctx: any
+    ): ctx is { sky: Ref<Sky> } {
+        return true;
+    }
+}
 
 @Component({
     selector: 'ngt-soba-sky',
-    template: ``,
+    template: `
+        <ng-container
+            *ngIf="content"
+            [ngTemplateOutlet]="content.templateRef"
+            [ngTemplateOutletContext]="{ sky: instance }"
+        ></ng-container>
+        <ng-content></ng-content>
+    `,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NgtSobaSky {
-    constructor() {
-        console.warn(`<ngt-soba-sky> is being reworked`);
+export class NgtSobaSky extends NgtCommonMesh<Sky> {
+    @Input() set distance(distance: NumberInput) {
+        this.set({ distance: coerceNumberProperty(distance) });
+    }
+
+    @Input() set sunPosition(sunPosition: NgtVector3) {
+        this.set({ sunPosition });
+    }
+
+    @Input() set inclination(inclination: NumberInput) {
+        this.set({ inclination: coerceNumberProperty(inclination) });
+    }
+
+    @Input() set azimuth(azimuth: NumberInput) {
+        this.set({ azimuth: coerceNumberProperty(azimuth) });
+    }
+
+    @Input() set mieCoefficient(mieCoefficient: NumberInput) {
+        this.set({ mieCoefficient: coerceNumberProperty(mieCoefficient) });
+    }
+
+    @Input() set mieDirectionalG(mieDirectionalG: NumberInput) {
+        this.set({ mieDirectionalG: coerceNumberProperty(mieDirectionalG) });
+    }
+
+    @Input() set rayleigh(rayleigh: NumberInput) {
+        this.set({ rayleigh: coerceNumberProperty(rayleigh) });
+    }
+
+    @Input() set turbidity(turbidity: NumberInput) {
+        this.set({ turbidity: coerceNumberProperty(turbidity) });
+    }
+
+    @ContentChild(NgtSobaSkyContent) content?: NgtSobaSkyContent;
+
+    protected override preInit(): void {
+        super.preInit();
+        this.set((state) => {
+            const inclination = state['inclination'] ?? 0.6;
+            const azimuth = state['azimuth'] ?? 0.1;
+            return {
+                inclination,
+                azimuth,
+                distance: state['distance'] ?? 1000,
+                mieCoefficient: state['mieCoefficient'] ?? 0.005,
+                mieDirectionalG: state['mieDirectionalG'] ?? 0.8,
+                rayleigh: state['rayleigh'] ?? 0.5,
+                turbidity: state['turbidity'] ?? 10,
+                sunPosition:
+                    state['sunPosition'] ??
+                    calcPosFromAngles(inclination, azimuth),
+            };
+        });
+    }
+
+    override ngOnInit(): void {
+        super.ngOnInit();
+    }
+
+    get skyScale() {
+        const distance = this.get((s) => s['distance']);
+        return new THREE.Vector3().setScalar(distance);
+    }
+
+    protected override postInit(): void {
+        super.postInit();
+        this.setScale(this.select((s) => s['distance']));
+        this.updateMaterialUniforms(
+            this.select(
+                this.select((s) => s['mieCoefficient']),
+                this.select((s) => s['mieDirectionalG']),
+                this.select((s) => s['rayleigh']),
+                this.select((s) => s['sunPosition']),
+                this.select((s) => s['turbidity'])
+            )
+        );
+    }
+
+    private readonly setScale = this.effect<{}>(
+        tap(() => {
+            const distance = this.get((s) => s['distance']);
+            this.instance.value.scale.copy(
+                new THREE.Vector3().setScalar(distance)
+            );
+        })
+    );
+
+    private readonly updateMaterialUniforms = this.effect<{}>(
+        tap(() => {
+            const {
+                mieCoefficient,
+                mieDirectionalG,
+                rayleigh,
+                sunPosition,
+                turbidity,
+            } = this.get();
+
+            const material = this.instance.value
+                .material as THREE.ShaderMaterial;
+            material.uniforms['mieCoefficient'].value = mieCoefficient;
+            material.uniforms['mieDirectionalG'].value = mieDirectionalG;
+            material.uniforms['rayleigh'].value = rayleigh;
+            material.uniforms['sunPosition'].value = sunPosition;
+            material.uniforms['turbidity'].value = turbidity;
+        })
+    );
+
+    get meshType(): AnyConstructor<Sky> {
+        return Sky;
     }
 }
 
 @NgModule({
-    declarations: [NgtSobaSky],
-    exports: [NgtSobaSky],
+    declarations: [NgtSobaSky, NgtSobaSkyContent],
+    exports: [NgtSobaSky, NgtSobaSkyContent],
+    imports: [CommonModule],
 })
 export class NgtSobaSkyModule {}
-
-// import {
-//     debounceSync,
-//     NgtCanvasStore,
-//     NgtStore,
-//     NgtVector3,
-// } from '@angular-three/core';
-// import { NgtPrimitiveModule } from '@angular-three/core/primitive';
-// import {
-//     ChangeDetectionStrategy,
-//     Component,
-//     Input,
-//     NgModule,
-//     NgZone,
-//     OnInit,
-// } from '@angular/core';
-// import { tap } from 'rxjs';
-// import * as THREE from 'three';
-// import { Sky } from 'three-stdlib';
-//
-// export function calcPosFromAngles(
-//     inclination: number,
-//     azimuth: number,
-//     vector: THREE.Vector3 = new THREE.Vector3()
-// ) {
-//     const theta = Math.PI * (inclination - 0.5);
-//     const phi = 2 * Math.PI * (azimuth - 0.5);
-//
-//     vector.x = Math.cos(phi);
-//     vector.y = Math.sin(theta);
-//     vector.z = Math.sin(phi);
-//
-//     return vector;
-// }
-//
-// export interface NgtSobaSkyState {
-//     distance: number;
-//     sunPosition: NgtVector3;
-//     inclination: number;
-//     azimuth: number;
-//     mieCoefficient: number;
-//     mieDirectionalG: number;
-//     rayleigh: number;
-//     turbidity: number;
-//     scale: THREE.Vector3;
-//     sky: Sky;
-// }
-//
-// @Component({
-//     selector: 'ngt-soba-sky',
-//     template: ` <ngt-primitive [object]="sky"></ngt-primitive> `,
-//     changeDetection: ChangeDetectionStrategy.OnPush,
-// })
-// export class NgtSobaSky extends NgtStore<NgtSobaSkyState> implements OnInit {
-//     @Input() set distance(distance: number) {
-//         this.set({ distance });
-//     }
-//
-//     @Input() set sunPosition(sunPosition: NgtVector3) {
-//         this.set({ sunPosition });
-//     }
-//
-//     @Input() set inclination(inclination: number) {
-//         this.set({ inclination });
-//     }
-//
-//     @Input() set azimuth(azimuth: number) {
-//         this.set({ azimuth });
-//     }
-//
-//     @Input() set mieCoefficient(mieCoefficient: number) {
-//         this.set({ mieCoefficient });
-//     }
-//
-//     @Input() set mieDirectionalG(mieDirectionalG: number) {
-//         this.set({ mieDirectionalG });
-//     }
-//
-//     @Input() set rayleigh(rayleigh: number) {
-//         this.set({ rayleigh });
-//     }
-//
-//     @Input() set turbidity(turbidity: number) {
-//         this.set({ turbidity });
-//     }
-//
-//     constructor(private canvasStore: NgtCanvasStore, private zone: NgZone) {
-//         super();
-//         const inclination = 0.6;
-//         const azimuth = 0.1;
-//         const distance = 1000;
-//         this.set({
-//             inclination,
-//             azimuth,
-//             distance,
-//             mieCoefficient: 0.005,
-//             mieDirectionalG: 0.8,
-//             rayleigh: 0.5,
-//             turbidity: 10,
-//             sunPosition: calcPosFromAngles(inclination, azimuth),
-//             scale: new THREE.Vector3().setScalar(distance),
-//         });
-//     }
-//
-//     ngOnInit() {
-//         this.zone.runOutsideAngular(() => {
-//             this.onCanvasReady(this.canvasStore.ready$, () => {
-//                 this.set({ sky: new Sky() });
-//                 this.setScale(this.select((s) => s.distance));
-//                 this.updateSky(this.select().pipe(debounceSync()));
-//             });
-//         });
-//     }
-//
-//     get sky() {
-//         return this.get((s) => s.sky);
-//     }
-//
-//     private readonly updateSky = this.effect<NgtSobaSkyState>(
-//         tap(
-//             ({
-//                 mieCoefficient,
-//                 scale,
-//                 mieDirectionalG,
-//                 rayleigh,
-//                 sunPosition,
-//                 turbidity,
-//             }) => {
-//                 this.sky.scale.copy(scale);
-//                 const skyMaterial = this.sky.material as THREE.ShaderMaterial;
-//                 skyMaterial.uniforms['mieCoefficient'].value = mieCoefficient;
-//                 skyMaterial.uniforms['mieDirectionalG'].value = mieDirectionalG;
-//                 skyMaterial.uniforms['rayleigh'].value = rayleigh;
-//                 skyMaterial.uniforms['sunPosition'].value = sunPosition;
-//                 skyMaterial.uniforms['turbidity'].value = turbidity;
-//             }
-//         )
-//     );
-//
-//     private readonly setScale = this.effect<number>(
-//         tap((distance) => {
-//             this.set({ scale: new THREE.Vector3().setScalar(distance) });
-//         })
-//     );
-// }
-//
-// @NgModule({
-//     declarations: [NgtSobaSky],
-//     exports: [NgtSobaSky],
-//     imports: [NgtPrimitiveModule],
-// })
-// export class NgtSobaSkyModule {}
