@@ -390,6 +390,10 @@ export abstract class NgtObject<
         }
 
         if (this.instance.value) {
+            if (this.postInit) {
+                this.postInit();
+            }
+
             const observedEvents = supportedEvents.reduce(
                 (result, event) => {
                     const controllerEvent = this[event].observed

@@ -25,19 +25,20 @@ export function applyProps<TInstance extends object = UnknownRecord>(
             .__ngt__ as NgtInstanceInternal;
     }
 
-    if (
-        (instance as UnknownRecord)['set'] != null &&
-        typeof (instance as UnknownRecord)['set'] === 'function' &&
-        !(instance instanceof THREE.Raycaster)
-    ) {
-        try {
-            ((instance as UnknownRecord)['set'] as Function)(props);
-        } catch (e) {
-            console.info(
-                `Swallowing erroneous "set" invoked on ${instance.constructor.name} as non fatal: ${e}`
-            );
-        }
-    }
+    /** TODO: check if this is still needed */
+    // if (
+    //     (instance as UnknownRecord)['set'] != null &&
+    //     typeof (instance as UnknownRecord)['set'] === 'function' &&
+    //     !(instance instanceof THREE.Raycaster)
+    // ) {
+    //     try {
+    //         ((instance as UnknownRecord)['set'] as Function)(props);
+    //     } catch (e) {
+    //         console.info(
+    //             `Swallowing erroneous "set" invoked on ${instance.constructor.name} as non fatal: ${e}`
+    //         );
+    //     }
+    // }
 
     for (const entry of Object.entries(props)) {
         const key = entry[0];

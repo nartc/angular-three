@@ -123,6 +123,12 @@ export abstract class NgtInstance<
         return this.get((s) => s.instance);
     }
 
+    get instanceValue(): TInstance {
+        return this.isRaw
+            ? (this.instance.value.valueOf() as TInstance)
+            : this.instance.value;
+    }
+
     get __ngt__(): NgtInstanceInternal {
         return (this.instance.value as NgtUnknownInstance).__ngt__;
     }
@@ -192,13 +198,14 @@ export abstract class NgtInstance<
     protected emitReady() {
         // only emit ready once to prevent reconstruct
         if (!this.hasEmittedAlready) {
-            this.ready.emit(this.instance.value);
+            this.ready.emit(this.instanceValue);
             this.hasEmittedAlready = true;
         }
     }
 
     protected isPrimitive = false;
     protected isWrapper = false;
+    protected isRaw = false;
 
     prepareInstance(
         instance: TInstance,
@@ -246,18 +253,18 @@ export abstract class NgtInstance<
     }
 
     protected destroy() {
-        if (this.instance.value) {
-            if (is.object3d(this.instance.value)) {
+        if (this.instanceValue) {
+            if (is.object3d(this.instanceValue)) {
                 const parentInstance = this.parent;
                 if (parentInstance && is.object3d(parentInstance.value)) {
                     removeInteractivity(
                         this.__ngt__.root.bind(this.__ngt__),
-                        this.instance.value
+                        this.instanceValue
                     );
                 }
 
-                if (this.instance.value.clear != null) {
-                    this.instance.value.clear();
+                if (this.instanceValue.clear != null) {
+                    this.instanceValue.clear();
                 }
             } else {
                 // non-scene objects
@@ -283,9 +290,9 @@ export abstract class NgtInstance<
                 }
             }
 
-            const dispose = (this.instance.value as UnknownRecord)['dispose'];
+            const dispose = (this.instanceValue as UnknownRecord)['dispose'];
             if (dispose && typeof dispose === 'function') {
-                dispose.apply(this.instance.value as any);
+                dispose.apply(this.instanceValue);
             }
         }
 
@@ -387,9 +394,9 @@ export abstract class NgtInstance<
             // no options; return early
             if (Object.keys(options).length === 0) return;
 
-            if (this.instance.value) {
+            if (this.instanceValue) {
                 // TODO: Material is handling this on their own. To be changed when [parameters] is removed
-                if (is.material(this.instance.value)) return;
+                if (is.material(this.instanceValue)) return;
 
                 const state = this.get();
                 const customOptions = {} as UnknownRecord;
@@ -408,11 +415,11 @@ export abstract class NgtInstance<
                     }
                 }
 
-                applyProps(this.instance.value, customOptions);
+                applyProps(this.instanceValue, customOptions);
 
-                this.postSetOptions(this.instance.value);
+                this.postSetOptions(this.instanceValue);
 
-                this.checkUpdate(this.instance.value);
+                this.checkUpdate(this.instanceValue);
             }
         })
     );
@@ -452,7 +459,7 @@ export abstract class NgtInstance<
                         propertyToAttach[0] === 'material' &&
                         propertyToAttach[1] &&
                         is.num(Number(propertyToAttach[1])) &&
-                        is.material(this.instance.value)
+                        is.material(this.instanceValue)
                     ) {
                         if (
                             !is.arr(
@@ -477,7 +484,7 @@ export abstract class NgtInstance<
                     mutate(
                         parentInstanceRef.value,
                         propertyToAttach,
-                        this.instance.value
+                        this.instanceValue
                     );
 
                     // validate on the instance
@@ -496,7 +503,7 @@ export abstract class NgtInstance<
                     } as Partial<TInstanceState>);
                 }
                 this.checkUpdate(parentInstanceRef.value);
-                this.checkUpdate(this.instance.value);
+                this.checkUpdate(this.instanceValue);
             })
         )
     );

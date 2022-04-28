@@ -33,6 +33,7 @@ export class NgtValueAttribute extends NgtInstance<any> {
         });
     }
 
+    override isRaw = true;
     private initSubscription?: Subscription;
 }
 
