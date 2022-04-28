@@ -10,7 +10,7 @@ import {
     NgtObjectPassThroughModule,
     NgtRadianPipeModule,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
 } from '@angular-three/core';
 import { NgtOrthographicCameraModule } from '@angular-three/core/cameras';
 import { NgtGroupModule } from '@angular-three/core/group';
@@ -80,7 +80,7 @@ export interface NgtSobaContactShadowsState
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaContactShadows,
             (shadows) => shadows.instance,
             (shadows) => shadows.parentRef

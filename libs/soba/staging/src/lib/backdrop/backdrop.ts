@@ -5,7 +5,7 @@ import {
     NgtObjectPassThroughModule,
     NgtRadianPipeModule,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
@@ -75,7 +75,7 @@ export class NgtSobaBackdropContent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaBackdrop,
             (backdrop) => backdrop.instance,
             (backdrop) => backdrop.parentRef

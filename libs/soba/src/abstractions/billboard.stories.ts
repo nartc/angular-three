@@ -46,33 +46,43 @@ export const Planes = () => ({
         <ngt-plane-geometry #planeGeometry noAttach [args]="[3, 2]"></ngt-plane-geometry>
 
         <ngt-soba-billboard [position]="[-4, -2, 0]">
-            <ngt-mesh [geometry]="planeGeometry.instance">
-                <ngt-mesh-standard-material color="red"></ngt-mesh-standard-material>
-            </ngt-mesh>
+            <ng-template ngt-soba-billboard-content>
+                <ngt-mesh [geometry]="planeGeometry.instance">
+                    <ngt-mesh-standard-material color="red"></ngt-mesh-standard-material>
+                </ngt-mesh>
+            </ng-template>
         </ngt-soba-billboard>
 
         <ngt-soba-billboard [position]="[-4, 2, 0]">
-            <ngt-mesh [geometry]="planeGeometry.instance">
-                <ngt-mesh-standard-material color="orange"></ngt-mesh-standard-material>
-            </ngt-mesh>
+            <ng-template ngt-soba-billboard-content>
+                <ngt-mesh [geometry]="planeGeometry.instance">
+                    <ngt-mesh-standard-material color="orange"></ngt-mesh-standard-material>
+                </ngt-mesh>
+            </ng-template>
         </ngt-soba-billboard>
 
         <ngt-soba-billboard [position]="[0, 0, 0]">
-            <ngt-mesh [geometry]="planeGeometry.instance">
-                <ngt-mesh-standard-material color="green"></ngt-mesh-standard-material>
-            </ngt-mesh>
+            <ng-template ngt-soba-billboard-content>
+                <ngt-mesh [geometry]="planeGeometry.instance">
+                    <ngt-mesh-standard-material color="green"></ngt-mesh-standard-material>
+                </ngt-mesh>
+            </ng-template>
         </ngt-soba-billboard>
 
         <ngt-soba-billboard [position]="[4, -2, 0]">
-            <ngt-mesh [geometry]="planeGeometry.instance">
-                <ngt-mesh-standard-material color="blue"></ngt-mesh-standard-material>
-            </ngt-mesh>
+            <ng-template ngt-soba-billboard-content>
+                <ngt-mesh [geometry]="planeGeometry.instance">
+                    <ngt-mesh-standard-material color="blue"></ngt-mesh-standard-material>
+                </ngt-mesh>
+            </ng-template>
         </ngt-soba-billboard>
 
         <ngt-soba-billboard [position]="[4, 2, 0]">
-            <ngt-mesh [geometry]="planeGeometry.instance">
-                <ngt-mesh-standard-material color="yellow"></ngt-mesh-standard-material>
-            </ngt-mesh>
+            <ng-template ngt-soba-billboard-content>
+                <ngt-mesh [geometry]="planeGeometry.instance">
+                    <ngt-mesh-standard-material color="yellow"></ngt-mesh-standard-material>
+                </ngt-mesh>
+            </ng-template>
         </ngt-soba-billboard>
     `,
 });
@@ -82,13 +92,15 @@ export const Text = () => ({
         <ngt-soba-orbit-controls zoomSpeed="0.5" enablePan></ngt-soba-orbit-controls>
 
         <ngt-soba-billboard [position]="[0.5, 2.05, 0.5]">
-            <ngt-soba-text
-                text="box"
-                fontSize="1"
-                outlineWidth="5%"
-                outlineColor="#000000"
-                outlineOpacity="1"
-            ></ngt-soba-text>
+            <ng-template ngt-soba-billboard-content>
+                <ngt-soba-text
+                    text="box"
+                    fontSize="1"
+                    outlineWidth="5%"
+                    outlineColor="#000000"
+                    outlineOpacity="1"
+                ></ngt-soba-text>
+            </ng-template>
         </ngt-soba-billboard>
 
         <ngt-mesh [position]="[0.5, 1, 0.5]">
@@ -98,13 +110,15 @@ export const Text = () => ({
 
         <ngt-group [position]="[-2.5, -3, -1]">
             <ngt-soba-billboard [position]="[0, 1.05, 0]">
-                <ngt-soba-text
-                    text="cone"
-                    fontSize="1"
-                    outlineWidth="5%"
-                    outlineColor="#000000"
-                    outlineOpacity="1"
-                ></ngt-soba-text>
+                <ng-template ngt-soba-billboard-content>
+                    <ngt-soba-text
+                        text="cone"
+                        fontSize="1"
+                        outlineWidth="5%"
+                        outlineColor="#000000"
+                        outlineOpacity="1"
+                    ></ngt-soba-text>
+                </ng-template>
             </ngt-soba-billboard>
 
             <ngt-mesh>
@@ -114,10 +128,12 @@ export const Text = () => ({
         </ngt-group>
 
         <ngt-soba-billboard [position]="[0, 0, -5]">
-            <ngt-mesh>
-                <ngt-plane-geometry [args]="[2, 2]"></ngt-plane-geometry>
-                <ngt-mesh-standard-material color="#000066"></ngt-mesh-standard-material>
-            </ngt-mesh>
+            <ng-template ngt-soba-billboard-content>
+                <ngt-mesh>
+                    <ngt-plane-geometry [args]="[2, 2]"></ngt-plane-geometry>
+                    <ngt-mesh-standard-material color="#000066"></ngt-mesh-standard-material>
+                </ngt-mesh>
+            </ng-template>
         </ngt-soba-billboard>
     `,
 });

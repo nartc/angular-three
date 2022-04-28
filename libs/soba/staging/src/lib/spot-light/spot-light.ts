@@ -3,7 +3,7 @@ import {
     makeColor,
     NgtObjectPassThroughModule,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
     tapEffect,
 } from '@angular-three/core';
 import {
@@ -62,7 +62,7 @@ const vec = new THREE.Vector3();
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaSpotLight,
             (spotLight) => spotLight.instance,
             (spotLight) => spotLight.parentRef

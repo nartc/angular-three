@@ -1,428 +1,386 @@
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    AnyFunction,
+    BooleanInput,
+    coerceBooleanProperty,
+    coerceNumberProperty,
+    NGT_OBJECT_REF,
+    NgtObjectInputs,
+    NgtObjectInputsState,
+    NgtObjectPassThroughModule,
+    NumberInput,
+    provideObjectHostRef,
+    Ref,
+} from '@angular-three/core';
+import { NgtValueAttributeModule } from '@angular-three/core/attributes';
+import { NgtGroupModule } from '@angular-three/core/group';
+import {
+    NgtAmbientLightModule,
+    NgtPointLightModule,
+    NgtSpotLightModule,
+} from '@angular-three/core/lights';
+import { CommonModule } from '@angular/common';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ContentChild,
+    ContentChildren,
+    Directive,
+    Input,
+    NgModule,
+    QueryList,
+    TemplateRef,
+} from '@angular/core';
+import {
+    asyncScheduler,
+    defer,
+    filter,
+    observeOn,
+    of,
+    pipe,
+    skip,
+    startWith,
+    tap,
+} from 'rxjs';
+import * as THREE from 'three';
+import { NgtSobaContactShadowsModule } from '../contact-shadows/contact-shadows';
+import { NgtSobaEnvironmentModule } from '../environment/environment';
+import { PresetsType } from '../environment/presets';
 
-@Component({
-    selector: 'ngt-soba-stage',
-    template: ``,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+const presets = {
+    rembrandt: {
+        main: [1, 2, 1],
+        fill: [-2, -0.5, -2],
+    },
+    portrait: {
+        main: [-1, 2, 0.5],
+        fill: [-1, 0.5, -1.5],
+    },
+    upfront: {
+        main: [0, 2, 1],
+        fill: [-1, 0.5, -1.5],
+    },
+    soft: {
+        main: [-2, 4, 4],
+        fill: [-1, 0.5, -1.5],
+    },
+};
+
+type ControlsProto = { update(): void; target: THREE.Vector3 };
+
+export interface NgtSobaStageState extends NgtObjectInputsState<THREE.Group> {
+    outerGroup: Ref<THREE.Group>;
+    innerGroup: Ref<THREE.Group>;
+    radius: number;
+    width: number;
+    height: number;
+
+    shadows: boolean;
+    adjustCamera: boolean;
+    environment: PresetsType | null;
+    intensity: number;
+    preset: keyof typeof presets;
+    shadowBias: number;
+    contactShadow:
+        | {
+              blur: number;
+              opacity?: number;
+              position?: [x: number, y: number, z: number];
+          }
+        | false;
+    ambience?: number;
+}
+
+@Directive({
+    selector: 'ng-template[ngt-soba-stage-content]',
 })
-export class NgtSobaStage {
-    constructor() {
-        console.warn(`<ngt-soba-stage> is being reworked`);
+export class NgtSobaStageContent {
+    @ContentChildren(NGT_OBJECT_REF) children!: QueryList<AnyFunction>;
+
+    constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group> }>) {}
+
+    static ngTemplateContextGuard(
+        dir: NgtSobaStageContent,
+        ctx: any
+    ): ctx is { group: Ref<THREE.Group> } {
+        return true;
     }
 }
 
+@Component({
+    selector: 'ngt-soba-stage',
+    template: `
+        <ngt-group
+            [ngtObjectOutputs]="this"
+            [ngtObjectInputs]="this"
+            skipParent
+        >
+            <ngt-group [ref]="outerGroup">
+                <ngt-group [ref]="innerGroup">
+                    <ng-container
+                        *ngIf="content"
+                        [ngTemplateOutlet]="content.templateRef"
+                        [ngTemplateOutletContext]="{ group: innerGroup }"
+                    ></ng-container>
+                </ngt-group>
+            </ngt-group>
+
+            <ngt-soba-contact-shadows
+                *ngIf="contactShadow"
+                [scale]="radius * 2"
+                [far]="radius / 2"
+                [blur]="contactShadow.blur"
+                [opacity]="contactShadow.opacity"
+                [position]="contactShadow.position"
+            ></ngt-soba-contact-shadows>
+
+            <ngt-soba-environment
+                *ngIf="environment"
+                [preset]="environment"
+            ></ngt-soba-environment>
+
+            <ngt-ambient-light [intensity]="intensity / 3"></ngt-ambient-light>
+            <ngt-spot-light
+                penumbra="1"
+                [position]="[
+                    config.main[0] * radius,
+                    config.main[1] * radius,
+                    config.main[2] * radius
+                ]"
+                [intensity]="intensity * 2"
+                [castShadow]="shadows"
+            >
+                <ngt-value-attribute
+                    [attach]="['shadow', 'bias']"
+                    [value]="shadowBias"
+                ></ngt-value-attribute>
+            </ngt-spot-light>
+            <ngt-point-light
+                [position]="[
+                    config.fill[0] * radius,
+                    config.fill[1] * radius,
+                    config.fill[2] * radius
+                ]"
+                [intensity]="intensity"
+            ></ngt-point-light>
+        </ngt-group>
+        <ng-content></ng-content>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideObjectHostRef(
+            NgtSobaStage,
+            (stage) => stage.innerGroup,
+            (stage) => stage.parentRef
+        ),
+    ],
+})
+export class NgtSobaStage extends NgtObjectInputs<
+    THREE.Group,
+    NgtSobaStageState
+> {
+    get shadows() {
+        return this.get((s) => s.shadows);
+    }
+    @Input() set shadows(shadows: BooleanInput) {
+        this.set({ shadows: coerceBooleanProperty(shadows) });
+    }
+
+    get adjustCamera() {
+        return this.get((s) => s.adjustCamera);
+    }
+    @Input() set adjustCamera(adjustCamera: BooleanInput) {
+        this.set({ adjustCamera: coerceBooleanProperty(adjustCamera) });
+    }
+
+    get environment() {
+        return this.get((s) => s.environment);
+    }
+    @Input() set environment(environment: PresetsType | null) {
+        this.set({ environment });
+    }
+
+    get intensity(): number {
+        return this.get((s) => s.intensity);
+    }
+    @Input() set intensity(intensity: NumberInput) {
+        this.set({ intensity: coerceNumberProperty(intensity) });
+    }
+
+    get ambience() {
+        return this.get((s) => s.ambience);
+    }
+    @Input() set ambience(ambience: NumberInput) {
+        this.set({ ambience: coerceNumberProperty(ambience) });
+    }
+
+    get preset() {
+        return this.get((s) => s.preset);
+    }
+    @Input() set preset(preset: keyof typeof presets) {
+        this.set({ preset });
+    }
+
+    get shadowBias() {
+        return this.get((s) => s.shadowBias);
+    }
+    @Input() set shadowBias(shadowBias: NumberInput) {
+        this.set({ shadowBias: coerceNumberProperty(shadowBias) });
+    }
+
+    get contactShadow() {
+        return this.get((s) => s.contactShadow);
+    }
+    @Input() set contactShadow(
+        contactShadow:
+            | {
+                  blur: number;
+                  opacity?: number;
+                  position?: [x: number, y: number, z: number];
+              }
+            | false
+    ) {
+        this.set({ contactShadow });
+    }
+
+    @ContentChild(NgtSobaStageContent) content?: NgtSobaStageContent;
+
+    get innerGroup() {
+        return this.get((s) => s.innerGroup);
+    }
+
+    get outerGroup() {
+        return this.get((s) => s.outerGroup);
+    }
+
+    get radius() {
+        return this.get((s) => s.radius);
+    }
+
+    get width() {
+        return this.get((s) => s.width);
+    }
+
+    get height() {
+        return this.get((s) => s.height);
+    }
+
+    get config() {
+        return presets[this.get((s) => s.preset)];
+    }
+
+    protected override preInit() {
+        super.preInit();
+        this.set((state) => ({
+            innerGroup: new Ref(),
+            outerGroup: new Ref(),
+            radius: 0,
+            width: 0,
+            height: 0,
+            shadows: state.shadows ?? true,
+            adjustCamera: state.adjustCamera ?? true,
+            environment: state.environment ?? 'city',
+            intensity: state.intensity ?? 1,
+            preset: state.preset ?? 'rembrandt',
+            shadowBias: state.shadowBias ?? 0,
+            contactShadow: state.contactShadow ?? {
+                blur: 2,
+                opacity: 0.5,
+                position: [0, 0, 0],
+            },
+        }));
+    }
+
+    override ngOnInit() {
+        super.ngOnInit();
+        this.setDimensions(
+            this.select(
+                this.innerGroup.pipe(filter((group) => !!group)),
+                this.outerGroup.pipe(filter((group) => !!group)),
+                defer(() => {
+                    return (
+                        this.content?.children.changes.pipe(
+                            startWith(this.content?.children)
+                        ) || of(null)
+                    );
+                })
+            )
+        );
+
+        this.updateControls(
+            this.select(
+                this.store.select((s) => s.controls),
+                this.select((s) => s.radius).pipe(skip(1)),
+                this.select((s) => s.height).pipe(skip(1)),
+                this.select((s) => s.width).pipe(skip(1)),
+                this.select((s) => s.adjustCamera)
+            )
+        );
+    }
+
+    private readonly setDimensions = this.effect<{}>(
+        pipe(
+            observeOn(asyncScheduler),
+            tap(() => {
+                const { innerGroup, outerGroup } = this.get();
+                if (innerGroup.value && outerGroup.value) {
+                    outerGroup.value.position.set(0, 0, 0);
+                    outerGroup.value.updateWorldMatrix(true, true);
+                    const box3 = new THREE.Box3().setFromObject(
+                        innerGroup.value
+                    );
+                    const center = new THREE.Vector3();
+                    const sphere = new THREE.Sphere();
+                    const height = box3.max.y - box3.min.y;
+                    const width = box3.max.x - box3.min.x;
+                    box3.getCenter(center);
+                    box3.getBoundingSphere(sphere);
+
+                    this.zone.run(() => {
+                        this.set({ radius: sphere.radius, width, height });
+                    });
+
+                    outerGroup.value.position.set(
+                        -center.x,
+                        -center.y + height / 2,
+                        -center.z
+                    );
+                }
+            })
+        )
+    );
+
+    private readonly updateControls = this.effect<{}>(
+        tap(() => {
+            const { adjustCamera, width, height, radius } = this.get();
+            const { camera, controls } = this.store.get();
+            if (adjustCamera) {
+                const y = radius / (height > width ? 1.5 : 2.5);
+                camera.position.set(0, radius * 0.5, radius * 2.5);
+                camera.near = 0.1;
+                camera.far = Math.max(5000, radius * 4);
+                camera.lookAt(0, y, 0);
+                if (controls) {
+                    (controls as unknown as ControlsProto).target.set(0, y, 0);
+                    (controls as unknown as ControlsProto).update();
+                }
+            }
+        })
+    );
+}
+
 @NgModule({
-    declarations: [NgtSobaStage],
-    exports: [NgtSobaStage],
+    declarations: [NgtSobaStage, NgtSobaStageContent],
+    exports: [NgtSobaStage, NgtSobaStageContent],
+    imports: [
+        NgtGroupModule,
+        NgtObjectPassThroughModule,
+        CommonModule,
+        NgtSobaContactShadowsModule,
+        NgtSobaEnvironmentModule,
+        NgtAmbientLightModule,
+        NgtSpotLightModule,
+        NgtValueAttributeModule,
+        NgtPointLightModule,
+    ],
 })
 export class NgtSobaStageModule {}
-
-// import {
-//     AnyFunction,
-//     createHostParentObjectProvider,
-//     createParentObjectProvider,
-//     NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-//     NGT_OBJECT_INPUTS_WATCHED_CONTROLLER,
-//     NGT_PARENT_OBJECT,
-//     NgtCanvasStore,
-//     NgtObjectInputsController,
-//     NgtObjectInputsControllerModule,
-//     NgtStore,
-//     tapEffect,
-// } from '@angular-three/core';
-// import { NgtGroupModule } from '@angular-three/core/group';
-// import {
-//     NgtAmbientLightModule,
-//     NgtPointLightModule,
-//     NgtSpotLightModule,
-// } from '@angular-three/core/lights';
-// import { CommonModule } from '@angular/common';
-// import {
-//     AfterContentInit,
-//     ChangeDetectionStrategy,
-//     ChangeDetectorRef,
-//     Component,
-//     ContentChildren,
-//     Inject,
-//     Input,
-//     NgModule,
-//     NgZone,
-//     Optional,
-//     QueryList,
-//     SkipSelf,
-// } from '@angular/core';
-// import { Observable, startWith, tap } from 'rxjs';
-// import * as THREE from 'three';
-// import { NgtSobaContactShadowsModule } from '../contact-shadows/contact-shadows';
-// import { NgtSobaEnvironmentModule } from '../environment/environment';
-// import { PresetsType } from '../environment/presets';
-//
-// const presets = {
-//     rembrandt: {
-//         main: [1, 2, 1],
-//         fill: [-2, -0.5, -2],
-//     },
-//     portrait: {
-//         main: [-1, 2, 0.5],
-//         fill: [-1, 0.5, -1.5],
-//     },
-//     upfront: {
-//         main: [0, 2, 1],
-//         fill: [-1, 0.5, -1.5],
-//     },
-//     soft: {
-//         main: [-2, 4, 4],
-//         fill: [-1, 0.5, -1.5],
-//     },
-// };
-//
-// type ControlsProto = { update(): void; target: THREE.Vector3 };
-//
-// interface NgtSobaStageState {
-//     innerGroup: THREE.Group;
-//     outerGroup: THREE.Group;
-//     radius: number;
-//     width: number;
-//     height: number;
-//     shadows: boolean;
-//     adjustCamera: boolean;
-//     environment: PresetsType;
-//     intensity: number;
-//     ambience: number;
-//     // TODO: in a new major state.controls should be the only means of consuming controls, the
-//     // controls prop can then be removed!
-//     controls: ControlsProto | null;
-//     preset: keyof typeof presets;
-//     shadowBias: number;
-//     contactShadow:
-//         | {
-//               blur: number;
-//               opacity?: number;
-//               position?: [x: number, y: number, z: number];
-//           }
-//         | false;
-// }
-//
-// @Component({
-//     selector: 'ngt-soba-stage',
-//     template: `
-//         <ngt-group
-//             [useHostParent]="true"
-//             [name]="objectInputsController.name"
-//             [position]="objectInputsController.position"
-//             [rotation]="objectInputsController.rotation"
-//             [quaternion]="objectInputsController.quaternion"
-//             [scale]="objectInputsController.scale"
-//             [color]="objectInputsController.color"
-//             [userData]="objectInputsController.userData"
-//             [castShadow]="objectInputsController.castShadow"
-//             [receiveShadow]="objectInputsController.receiveShadow"
-//             [visible]="objectInputsController.visible"
-//             [matrixAutoUpdate]="objectInputsController.matrixAutoUpdate"
-//             [dispose]="objectInputsController.dispose"
-//             [raycast]="objectInputsController.raycast"
-//             [appendMode]="objectInputsController.appendMode"
-//             [appendTo]="objectInputsController.appendTo"
-//             (click)="objectInputsController.click.emit($event)"
-//             (contextmenu)="objectInputsController.contextmenu.emit($event)"
-//             (dblclick)="objectInputsController.dblclick.emit($event)"
-//             (pointerup)="objectInputsController.pointerup.emit($event)"
-//             (pointerdown)="objectInputsController.pointerdown.emit($event)"
-//             (pointerover)="objectInputsController.pointerover.emit($event)"
-//             (pointerout)="objectInputsController.pointerout.emit($event)"
-//             (pointerenter)="objectInputsController.pointerenter.emit($event)"
-//             (pointerleave)="objectInputsController.pointerleave.emit($event)"
-//             (pointermove)="objectInputsController.pointermove.emit($event)"
-//             (pointermissed)="objectInputsController.pointermissed.emit($event)"
-//             (pointercancel)="objectInputsController.pointercancel.emit($event)"
-//             (wheel)="objectInputsController.wheel.emit($event)"
-//         >
-//             <ngt-group (ready)="set({ outerGroup: $event })">
-//                 <ngt-group (ready)="set({ innerGroup: $event })">
-//                     <ng-container
-//                         *ngIf="innerGroup"
-//                         [ngTemplateOutlet]="contentTemplate"
-//                     ></ng-container>
-//                 </ngt-group>
-//             </ngt-group>
-//
-//             <ng-template #contentTemplate>
-//                 <ng-content></ng-content>
-//             </ng-template>
-//
-//             <ng-container *ngIf="vm$ | async as vm">
-//                 <ngt-soba-contact-shadows
-//                     *ngIf="vm.contactShadow"
-//                     [width]="vm.radius * 2"
-//                     [height]="vm.radius * 2"
-//                     [far]="vm.radius / 2"
-//                     [blur]="$any(vm.contactShadow?.blur)"
-//                     [opacity]="$any(vm.contactShadow?.opacity)"
-//                     [position]="$any(vm.contactShadow?.position)"
-//                 ></ngt-soba-contact-shadows>
-//                 <ngt-soba-environment
-//                     [preset]="vm.environment"
-//                 ></ngt-soba-environment>
-//                 <ngt-ambient-light
-//                     [intensity]="vm.intensity / 3"
-//                 ></ngt-ambient-light>
-//                 <ngt-spot-light
-//                     [position]="[
-//                         presets[vm.preset].main[0] * vm.radius,
-//                         presets[vm.preset].main[1] * vm.radius,
-//                         presets[vm.preset].main[2] * vm.radius
-//                     ]"
-//                     [args]="[
-//                         undefined,
-//                         vm.intensity * 2,
-//                         undefined,
-//                         undefined,
-//                         1
-//                     ]"
-//                     [castShadow]="vm.shadows"
-//                     [shadow]="{ bias: vm.shadowBias }"
-//                 ></ngt-spot-light>
-//                 <ngt-point-light
-//                     [intensity]="vm.intensity"
-//                     [position]="[
-//                         presets[vm.preset].fill[0] * vm.radius,
-//                         presets[vm.preset].fill[1] * vm.radius,
-//                         presets[vm.preset].fill[2] * vm.radius
-//                     ]"
-//                 ></ngt-point-light>
-//             </ng-container>
-//         </ngt-group>
-//     `,
-//     changeDetection: ChangeDetectionStrategy.OnPush,
-//     providers: [
-//         NGT_OBJECT_INPUTS_CONTROLLER_PROVIDER,
-//         createParentObjectProvider(NgtSobaStage, (stage) => stage.innerGroup),
-//         createHostParentObjectProvider(NgtSobaStage),
-//     ],
-// })
-// export class NgtSobaStage
-//     extends NgtStore<NgtSobaStageState>
-//     implements AfterContentInit
-// {
-//     @Input() set shadows(shadows: boolean) {
-//         this.set({ shadows });
-//     }
-//
-//     @Input() set adjustCamera(adjustCamera: boolean) {
-//         this.set({ adjustCamera });
-//     }
-//
-//     @Input() set environment(environment: PresetsType) {
-//         this.set({ environment });
-//     }
-//
-//     @Input() set intensity(intensity: number) {
-//         this.set({ intensity });
-//     }
-//
-//     @Input() set ambience(ambience: number) {
-//         this.set({ ambience });
-//     }
-//
-//     @Input() set controls(controls: ControlsProto | null) {
-//         this.set({ controls });
-//     }
-//
-//     @Input() set preset(preset: keyof typeof presets) {
-//         this.set({ preset });
-//     }
-//
-//     @Input() set shadowBias(shadowBias: number) {
-//         this.set({ shadowBias });
-//     }
-//
-//     @Input() set contactShadow(
-//         contactShadow:
-//             | {
-//                   blur: number;
-//                   opacity?: number;
-//                   position?: [x: number, y: number, z: number];
-//               }
-//             | false
-//     ) {
-//         this.set({ contactShadow });
-//     }
-//
-//     @ContentChildren(NgtObjectInputsController)
-//     children!: QueryList<NgtObjectInputsController>;
-//
-//     private adjustCameraParams$ = this.select(
-//         this.canvasStore.select(
-//             (s) => s.controls
-//         ) as unknown as Observable<ControlsProto>,
-//         this.select((s) => s.radius),
-//         this.select((s) => s.width),
-//         this.select((s) => s.height),
-//         this.select((s) => s.adjustCamera),
-//         (controls, radius, width, height, adjustCamera) => ({
-//             controls,
-//             radius,
-//             width,
-//             height,
-//             adjustCamera,
-//         })
-//     );
-//
-//     presets = presets;
-//     vm$ = this.select(
-//         this.select((s) => s.preset),
-//         this.select((s) => s.environment),
-//         this.select((s) => s.contactShadow),
-//         this.select((s) => s.radius),
-//         this.select((s) => s.intensity),
-//         this.select((s) => s.shadows),
-//         this.select((s) => s.shadowBias),
-//         (
-//             preset,
-//             environment,
-//             contactShadow,
-//             radius,
-//             intensity,
-//             shadows,
-//             shadowBias
-//         ) => ({
-//             preset,
-//             environment,
-//             contactShadow,
-//             radius,
-//             intensity,
-//             shadows,
-//             shadowBias,
-//         })
-//     );
-//
-//     get innerGroup() {
-//         return this.get((s) => s.innerGroup);
-//     }
-//
-//     constructor(
-//         @Inject(NGT_OBJECT_INPUTS_WATCHED_CONTROLLER)
-//         public objectInputsController: NgtObjectInputsController,
-//         private canvasStore: NgtCanvasStore,
-//         private zone: NgZone,
-//         private cdr: ChangeDetectorRef,
-//         @Optional()
-//         @SkipSelf()
-//         @Inject(NGT_PARENT_OBJECT)
-//         public parentObjectFn: AnyFunction
-//     ) {
-//         super();
-//         this.set({
-//             radius: 0,
-//             width: 0,
-//             height: 0,
-//             shadows: true,
-//             adjustCamera: true,
-//             environment: 'city',
-//             intensity: 1,
-//             preset: 'rembrandt',
-//             shadowBias: 0,
-//             contactShadow: {
-//                 blur: 2,
-//                 opacity: 0.5,
-//                 position: [0, 0, 0],
-//             },
-//         });
-//     }
-//
-//     ngAfterContentInit() {
-//         this.zone.runOutsideAngular(() => {
-//             this.onCanvasReady(this.canvasStore.ready$, () => {
-//                 this.calculateDimensions(
-//                     this.select(
-//                         this.select((s) => s.outerGroup),
-//                         this.select((s) => s.innerGroup),
-//                         this.children.changes.pipe(startWith(this.children)),
-//                         (outerGroup, innerGroup) => ({
-//                             outerGroup,
-//                             innerGroup,
-//                         })
-//                     )
-//                 );
-//                 this.adjustCameraPosition(this.adjustCameraParams$);
-//             });
-//         });
-//     }
-//
-//     private readonly adjustCameraPosition = this.effect<
-//         Pick<
-//             NgtSobaStageState,
-//             'radius' | 'width' | 'height' | 'adjustCamera'
-//         > & { controls: ControlsProto }
-//     >(
-//         tap(
-//             ({
-//                 radius,
-//                 width,
-//                 height,
-//                 adjustCamera,
-//                 controls: defaultControls,
-//             }) => {
-//                 const camera = this.canvasStore.get((s) => s.camera);
-//                 if (adjustCamera) {
-//                     const y = radius / (height > width ? 1.5 : 2.5);
-//                     camera.position.set(0, radius * 0.5, radius * 2.5);
-//                     camera.near = 0.1;
-//                     camera.far = Math.max(5000, radius * 4);
-//                     camera.lookAt(0, y, 0);
-//
-//                     const currentControls =
-//                         defaultControls || this.get((s) => s.controls);
-//                     if (currentControls) {
-//                         currentControls.target.set(0, y, 0);
-//                         currentControls.update();
-//                     }
-//                 }
-//             }
-//         )
-//     );
-//
-//     private readonly calculateDimensions = this.effect<
-//         Pick<NgtSobaStageState, 'outerGroup' | 'innerGroup'>
-//     >(
-//         tapEffect(({ outerGroup, innerGroup }) => {
-//             const id = requestAnimationFrame(() => {
-//                 outerGroup.position.set(0, 0, 0);
-//                 outerGroup.updateWorldMatrix(true, true);
-//                 const box3 = new THREE.Box3().setFromObject(innerGroup);
-//                 const center = new THREE.Vector3();
-//                 const sphere = new THREE.Sphere();
-//                 const height = box3.max.y - box3.min.y;
-//                 const width = box3.max.x - box3.min.x;
-//                 box3.getCenter(center);
-//                 box3.getBoundingSphere(sphere);
-//                 this.set({ radius: sphere.radius, width, height });
-//                 outerGroup.position.set(
-//                     -center.x,
-//                     -center.y + height / 2,
-//                     -center.z
-//                 );
-//                 this.cdr.detectChanges();
-//             });
-//
-//             return () => {
-//                 cancelAnimationFrame(id);
-//             };
-//         })
-//     );
-// }
-//
-// @NgModule({
-//     declarations: [NgtSobaStage],
-//     exports: [NgtSobaStage, NgtObjectInputsControllerModule],
-//     imports: [
-//         NgtGroupModule,
-//         NgtSobaEnvironmentModule,
-//         NgtAmbientLightModule,
-//         NgtSpotLightModule,
-//         NgtPointLightModule,
-//         NgtSobaContactShadowsModule,
-//         CommonModule,
-//     ],
-// })
-// export class NgtSobaStageModule {}

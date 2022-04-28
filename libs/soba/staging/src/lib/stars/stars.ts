@@ -7,7 +7,7 @@ import {
     NgtObjectPassThroughModule,
     NgtRenderState,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
 } from '@angular-three/core';
 import { NgtBufferAttributeModule } from '@angular-three/core/attributes';
@@ -83,7 +83,7 @@ export interface NgtSobaStarsState extends NgtObjectInputsState<THREE.Points> {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaStars,
             (stars) => stars.instance,
             (stars) => stars.parentRef
