@@ -130,7 +130,7 @@ export default async function attributesGenerator(tree: Tree) {
         join(__dirname, 'files/index'),
         join(attributeDir, 'src'),
         {
-            items: generatedAttributes,
+            items: [...generatedAttributes, 'value-attribute'],
             tmpl: '',
         }
     );
