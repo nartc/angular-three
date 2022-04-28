@@ -20,3 +20,4 @@ export * from './lib/vector3-attribute/vector3-attribute';
 export * from './lib/vector4-attribute/vector4-attribute';
 export * from './lib/matrix3-attribute/matrix3-attribute';
 export * from './lib/matrix4-attribute/matrix4-attribute';
+export * from './lib/value-attribute/value-attribute';
