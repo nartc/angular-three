@@ -160,7 +160,7 @@ export default async function lightsGenerator(tree: Tree): Promise<string[]> {
     }
 
     generateFiles(tree, join(__dirname, 'files/index'), join(lightDir, 'src'), {
-        items: generatedLights,
+        items: [...generatedLights, 'spot-light-pass-through'],
         tmpl: '',
     });
 

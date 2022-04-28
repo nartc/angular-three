@@ -8,3 +8,4 @@ export * from './lib/directional-light/directional-light';
 export * from './lib/point-light/point-light';
 export * from './lib/spot-light/spot-light';
 export * from './lib/rect-area-light/rect-area-light';
+export * from './lib/spot-light-pass-through/spot-light-pass-through';
