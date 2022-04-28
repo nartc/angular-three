@@ -4,7 +4,7 @@ import {
     NgtObjectPassThroughModule,
     NgtTriple,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
     startWithUndefined,
 } from '@angular-three/core';
 import { CommonModule } from '@angular/common';
@@ -47,7 +47,7 @@ const v = new THREE.Vector3();
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaQuadraticBezierLine,
             (line) => line.instance,
             (line) => line.parentRef

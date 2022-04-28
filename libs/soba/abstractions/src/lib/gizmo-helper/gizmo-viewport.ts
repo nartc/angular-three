@@ -13,7 +13,7 @@ import {
     NgtStore,
     NgtTriple,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
     startWithUndefined,
 } from '@angular-three/core';
@@ -114,7 +114,7 @@ export class NgtSobaGizmoViewportAxis extends NgtInstance<THREE.Group> {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaGizmoViewportAxisHead,
             (axisHead) => axisHead.instance,
             (axisHead) => axisHead.parentRef
@@ -321,7 +321,7 @@ export class NgtSobaGizmoViewportAxisHead extends NgtObjectInputs<THREE.Sprite> 
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaGizmoViewport,
             (viewport) => viewport.instance,
             (viewport) => viewport.parentRef

@@ -11,7 +11,7 @@ import {
     NgtTriple,
     NgtVector2,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
     tapEffect,
 } from '@angular-three/core';
@@ -123,7 +123,7 @@ export class NgtSobaLineContent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaLine,
             (line) => line.instance,
             (line) => line.parentRef

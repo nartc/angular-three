@@ -4,7 +4,7 @@ import {
     NgtObjectInputs,
     NgtObjectPassThroughModule,
     NgtRenderState,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
 } from '@angular-three/core';
 import { NgtLodModule } from '@angular-three/core/lod';
@@ -65,7 +65,7 @@ export class NgtSobaDetailedContent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaDetailed,
             (detailed) => detailed.instance,
             (detailed) => detailed.parentRef

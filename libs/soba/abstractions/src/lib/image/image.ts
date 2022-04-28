@@ -11,9 +11,9 @@ import {
     NgtRenderState,
     NgtStore,
     NumberInput,
-    provideObjectHosRef,
-    startWithUndefined,
+    provideObjectHostRef,
     Ref,
+    startWithUndefined,
 } from '@angular-three/core';
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
@@ -105,7 +105,7 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         NgtTextureLoader,
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaImage,
             (image) => image.instance,
             (image) => image.parentRef

@@ -7,7 +7,7 @@ import {
     NgtObjectInputsState,
     NgtObjectPassThroughModule,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
     startWithUndefined,
     tapEffect,
@@ -240,7 +240,7 @@ export class NgtSobaHtmlContent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaHtml,
             (html) => html.instance,
             (html) => html.parentRef

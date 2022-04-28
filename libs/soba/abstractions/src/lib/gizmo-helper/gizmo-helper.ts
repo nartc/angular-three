@@ -9,7 +9,7 @@ import {
     NgtPortalModule,
     NgtRenderState,
     prepare,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
     tapEffect,
 } from '@angular-three/core';
@@ -92,7 +92,7 @@ const targetPosition = makeVector3();
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaGizmoHelper,
             (gizmo) => gizmo.instance,
             (gizmo) => gizmo.parentRef

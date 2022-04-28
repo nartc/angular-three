@@ -4,7 +4,7 @@ import {
     NgtObjectInputs,
     NgtObjectPassThroughModule,
     NgtRenderState,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
@@ -55,7 +55,7 @@ export class NgtSobaBillboardContent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaBillboard,
             (billboard) => billboard.instance,
             (billboard) => billboard.parentRef

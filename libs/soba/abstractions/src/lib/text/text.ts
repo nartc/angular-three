@@ -7,7 +7,7 @@ import {
     NgtObjectPassThroughModule,
     NgtRenderState,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
@@ -60,7 +60,7 @@ export class NgtSobaTextContent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaText,
             (text) => text.instance,
             (text) => text.parentRef

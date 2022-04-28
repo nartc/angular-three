@@ -1,7 +1,3 @@
-import { NgtPrimitiveModule } from '@angular-three/core/primitive';
-import { CommonModule } from '@angular/common';
-import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
-import * as THREE from 'three';
 import {
     BooleanInput,
     coerceBooleanProperty,
@@ -11,12 +7,13 @@ import {
     NgtObjectInputsState,
     NgtObjectPassThroughModule,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
     Ref,
     startWithUndefined,
     tapEffect,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
+import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -28,6 +25,8 @@ import {
     Output,
     TemplateRef,
 } from '@angular/core';
+import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
+import * as THREE from 'three';
 import { TransformControls } from 'three-stdlib';
 
 type ControlsProto = {
@@ -87,7 +86,7 @@ export interface NgtSobaTransformControlsState
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaTransformControls,
             (controls) => controls.groupRef,
             (controls) => controls.parentRef

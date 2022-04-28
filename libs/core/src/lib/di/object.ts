@@ -30,7 +30,7 @@ export function provideObjectRef<TType extends AnyConstructor<any>>(
     ];
 }
 
-export function provideObjectHosRef<TType extends AnyConstructor<any>>(
+export function provideObjectHostRef<TType extends AnyConstructor<any>>(
     subType: TType,
     factory: (instance: InstanceType<TType>) => Ref,
     hostFactory?: (instance: InstanceType<TType>) => AnyFunction<Ref>

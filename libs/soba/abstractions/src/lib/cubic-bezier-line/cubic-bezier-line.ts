@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import {
     coerceNumberProperty,
     is,
@@ -6,7 +5,7 @@ import {
     NgtObjectPassThroughModule,
     NgtTriple,
     NumberInput,
-    provideObjectHosRef,
+    provideObjectHostRef,
 } from '@angular-three/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -15,6 +14,7 @@ import {
     Input,
     NgModule,
 } from '@angular/core';
+import * as THREE from 'three';
 import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
 
 @Component({
@@ -44,7 +44,7 @@ import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHosRef(
+        provideObjectHostRef(
             NgtSobaCubicBezierLine,
             (line) => line.instance,
             (line) => line.parentRef
