@@ -1,11 +1,41 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Directive,
+    ElementRef,
+    HostListener,
+    NgModule,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
+
+@Directive({
+    selector: 'video[sandboxAutoplay]',
+})
+export class AutoplayVideoDirective {
+    constructor(private videoElementRef: ElementRef<HTMLVideoElement>) {}
+
+    @HostListener('mouseover')
+    onMouseOver() {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        this.videoElementRef.nativeElement.play().catch(() => {});
+    }
+
+    @HostListener('mouseout')
+    onMouseOut() {
+        this.videoElementRef.nativeElement.pause();
+        this.videoElementRef.nativeElement.currentTime = 0;
+    }
+}
 
 @Component({
     selector: 'sandbox-home',
     template: `
         <div class="container">
+            <small class="container__hint">
+                *Interact (click anywhere) on the page to start seeing the
+                examples on hover
+            </small>
             <h1>Angular Three Examples</h1>
             <div class="container__examples">
                 <a
@@ -13,7 +43,7 @@ import { RouterModule } from '@angular/router';
                     *ngFor="let example of examples"
                     [routerLink]="example.link"
                 >
-                    <video autoplay muted loop>
+                    <video sandboxAutoplay muted loop playsinline>
                         <source
                             *ngFor="let source of ['webm', 'mp4']"
                             [src]="example.asset + '.' + source"
@@ -33,10 +63,17 @@ import { RouterModule } from '@angular/router';
                 margin: auto;
             }
 
+            .container__hint {
+                position: absolute;
+                right: 1rem;
+                font-size: x-small;
+                font-style: italic;
+            }
+
             .container__examples {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
-                gap: 1rem;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 2rem;
             }
 
             .container__example {
@@ -84,7 +121,7 @@ export class HomeComponent {
 }
 
 @NgModule({
-    declarations: [HomeComponent],
+    declarations: [HomeComponent, AutoplayVideoDirective],
     imports: [
         CommonModule,
         RouterModule.forChild([{ path: '', component: HomeComponent }]),
