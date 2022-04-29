@@ -2,6 +2,7 @@ import {
     BooleanInput,
     coerceBooleanProperty,
     coerceNumberProperty,
+    is,
     NgtColor,
     NgtObjectInputs,
     NgtObjectPassThroughModule,
@@ -9,6 +10,7 @@ import {
     NumberInput,
     provideObjectHostRef,
     Ref,
+    tapEffect,
 } from '@angular-three/core';
 import { NgtPrimitiveModule } from '@angular-three/core/primitive';
 import { CommonModule } from '@angular/common';
@@ -23,7 +25,7 @@ import {
     Output,
     TemplateRef,
 } from '@angular/core';
-import { tap } from 'rxjs';
+import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
 // @ts-ignore
 import { preloadFont, Text as TextMeshImpl } from 'troika-three-text';
 
@@ -45,8 +47,7 @@ export class NgtSobaTextContent {
     selector: 'ngt-soba-text[text]',
     template: `
         <ngt-primitive
-            *ngIf="textMesh"
-            [object]="$any(textMesh)"
+            [object]="textMesh"
             (beforeRender)="beforeRender.emit($event)"
             [ngtObjectInputs]="this"
             [ngtObjectOutputs]="this"
@@ -198,6 +199,10 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
         this.set({ debugSDF: coerceBooleanProperty(debugSDF) });
     }
 
+    @Input() set material(material: THREE.Material | Ref<THREE.Material>) {
+        this.set({ material });
+    }
+
     @Output() beforeRender = new EventEmitter<{
         state: NgtRenderState;
         object: TextMeshImpl;
@@ -206,13 +211,13 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
 
     @ContentChild(NgtSobaTextContent) content?: NgtSobaTextContent;
 
-    private _textMesh!: TextMeshImpl;
     get textMesh() {
-        return this._textMesh;
+        return this.get((s) => s['textMesh']);
     }
 
     protected override preInit() {
         this.set((state) => ({
+            textMesh: new Ref(new TextMeshImpl()),
             anchorX: state['anchorX'] || 'center',
             anchorY: state['anchorY'] || 'middle',
             text: state['text'] || '',
@@ -228,19 +233,33 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
                     this.select((s) => s['characters'])
                 )
             );
-            this.onCanvasReady(
-                this.store.ready$,
-                () => {
-                    this._textMesh = new TextMeshImpl();
-
-                    return () => {
-                        this._textMesh.dispose();
-                    };
-                },
-                true
-            );
+        });
+        this.onCanvasReady(this.store.ready$, () => {
+            this.init();
         });
     }
+
+    private readonly init = this.effect<void>(
+        pipe(
+            observeOn(animationFrameScheduler),
+            tapEffect(() => {
+                const material = this.get((s) => s['material']);
+
+                if (material) {
+                    // if there's a custom material, we delete the color on the textMesh which is the default
+                    delete this.textMesh.value.color;
+                    this.textMesh.value.material = is.ref(material)
+                        ? material.value
+                        : material;
+                    this.textMesh.value.sync();
+                }
+
+                return () => {
+                    this.textMesh.value.dispose();
+                };
+            })
+        )
+    );
 
     private readonly preloadFont = this.effect<{}>(
         tap(() => {
