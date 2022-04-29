@@ -12,7 +12,13 @@ import { THREE_TYPES_VERSION, THREE_VERSION } from './versions';
 export default async function (tree: Tree) {
     logger.info('Initializing Angular Three...');
 
-    let version = readJson(tree, 'package.json').version;
+    const packageJson = readJson(tree, 'package.json');
+
+    let version =
+        packageJson['dependencies']?.['@angular-three/schematics'] ||
+        packageJson['devDependencies']?.['@angular-three/schematics'] ||
+        packageJson.version;
+
     const isBeta = version.includes('beta');
 
     if (!isBeta) {

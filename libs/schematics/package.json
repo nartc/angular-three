@@ -9,6 +9,6 @@
     "schematics": "./generators.json",
     "executors": "./executors.json",
     "dependencies": {
-        "@nrwl/devkit": "~14.0.0"
+        "nx": "~14.0.0"
     }
 }
