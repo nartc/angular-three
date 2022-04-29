@@ -17,9 +17,6 @@ function buildUrl(path, defaultPath) {
     return defaultPath;
 }
 
-const sobaUrl = buildUrl('soba', 'http://localhost:4400');
-const examplesUrl = buildUrl('examples', 'http://localhost:4200');
-
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
     docs: [
@@ -71,12 +68,12 @@ const sidebars = {
         {
             type: 'link',
             label: 'Soba API',
-            href: sobaUrl,
+            href: buildUrl('soba', 'http://localhost:4400'),
         },
         {
             type: 'link',
             label: 'Examples',
-            href: examplesUrl,
+            href: buildUrl('examples', 'http://localhost:4200'),
         },
     ],
 };
