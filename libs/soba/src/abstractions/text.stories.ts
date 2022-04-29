@@ -193,7 +193,6 @@ LTR.args = {
       الدين القيم فلاتظلموا فيهن انفسكم وقاتلوا المشركين كافة كما يقاتلونكم كافة واعلموا ان الله مع المتقين`,
 };
 
-// TODO: broken at the moment
 export const CustomMaterial: Story = (args) => ({
     props: {
         ...args,
@@ -201,16 +200,9 @@ export const CustomMaterial: Story = (args) => ({
         DoubleSide: THREE.DoubleSide,
     },
     template: `
-        <ngt-mesh-basic-material
-            #ngtMaterial
-            [side]="DoubleSide"
-            color="orange"
-            transparent
-            noAttach
-        ></ngt-mesh-basic-material>
+
         <ngt-soba-text
           [text]="text"
-          [material]="ngtMaterial.instance"
           fontSize="12"
           maxWidth="200"
           lineHeight="1"
@@ -221,6 +213,11 @@ export const CustomMaterial: Story = (args) => ({
           anchorY="middle"
           (beforeRender)="onTextAnimate($event.object)"
         >
+            <ngt-mesh-basic-material
+                [side]="DoubleSide"
+                color="orange"
+                transparent
+            ></ngt-mesh-basic-material>
         </ngt-soba-text>
   `,
 });

@@ -4,6 +4,7 @@ import {
     coerceNumberProperty,
     is,
     NgtColor,
+    NgtCommonMaterial,
     NgtObjectInputs,
     NgtObjectPassThroughModule,
     NgtRenderState,
@@ -63,7 +64,7 @@ export class NgtSobaTextContent {
     providers: [
         provideObjectHostRef(
             NgtSobaText,
-            (text) => text.instance,
+            (text) => text.textMesh,
             (text) => text.parentRef
         ),
     ],
@@ -210,6 +211,7 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
     @Output() sync = new EventEmitter<TextMeshImpl>();
 
     @ContentChild(NgtSobaTextContent) content?: NgtSobaTextContent;
+    @ContentChild(NgtCommonMaterial) commonMaterial?: NgtCommonMaterial;
 
     get textMesh() {
         return this.get((s) => s['textMesh']);
@@ -246,12 +248,15 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
                 const material = this.get((s) => s['material']);
 
                 if (material) {
-                    // if there's a custom material, we delete the color on the textMesh which is the default
-                    delete this.textMesh.value.color;
                     this.textMesh.value.material = is.ref(material)
                         ? material.value
                         : material;
                     this.textMesh.value.sync();
+                }
+
+                if (material || this.commonMaterial) {
+                    // if there's a custom material, we delete the color on the textMesh which is the default
+                    delete this.textMesh.value.color;
                 }
 
                 return () => {
