@@ -40,7 +40,12 @@ function decomposePath(path: string[]): {
 }
 
 function assignEmpty(obj: Record<string, unknown>, base: string) {
-    if (!Object.prototype.hasOwnProperty.call(obj, base)) {
+    if (
+        !Object.prototype.hasOwnProperty.call(obj, base) &&
+        Reflect &&
+        !!Reflect.has &&
+        !Reflect.has(obj, base)
+    ) {
         obj[base] = {};
     }
 }
