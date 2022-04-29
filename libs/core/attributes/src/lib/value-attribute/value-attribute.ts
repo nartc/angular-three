@@ -8,7 +8,7 @@ import {
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'ngt-value-attribute[value]',
+    selector: 'ngt-value[value]',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [provideInstanceRef(NgtValueAttribute)],
