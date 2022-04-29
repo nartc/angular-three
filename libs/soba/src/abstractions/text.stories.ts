@@ -6,7 +6,6 @@ import {
     moduleMetadata,
     Story,
 } from '@storybook/angular';
-import * as THREE from 'three';
 import { setupCanvas, setupCanvasModules, turnAnimate } from '../setup-canvas';
 
 export default {
@@ -184,8 +183,6 @@ export const LTR: Story = (args) => ({
           anchorY="middle"
           (beforeRender)="onTextAnimate($event.object)"
         >
-          ان عدة الشهور عند الله اثنا عشر شهرا في كتاب الله يوم خلق السماوات والارض SOME LATIN TEXT HERE منها اربعة حرم ذلك
-          الدين القيم فلاتظلموا فيهن انفسكم وقاتلوا المشركين كافة كما يقاتلونكم كافة واعلموا ان الله مع المتقين
         </ngt-soba-text>
   `,
 });
