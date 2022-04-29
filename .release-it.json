@@ -39,6 +39,7 @@
         "releaseName": "Release ${version}"
     },
     "hooks": {
-        "after:bump": ["npm run build", "node tools/scripts/update-version.mjs"]
+        "before:bump": "npm run build",
+        "after:bump": "node tools/scripts/update-version.mjs"
     }
 }

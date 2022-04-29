@@ -1,5 +1,12 @@
 
 
+## [5.0.0-beta.29](https://github.com/nartc/angular-three/compare/5.0.0-beta.28...5.0.0-beta.29) (2022-04-29)
+
+
+### Bug Fixes
+
+* **schematics:** include nrwl/devkit as dependencies for schematicsn ([0f973a1](https://github.com/nartc/angular-three/commit/0f973a1504134b16f8f1fe27e87833c279d334f5))
+
 ## [5.0.0-beta.28](https://github.com/nartc/angular-three/compare/5.0.0-beta.27...5.0.0-beta.28) (2022-04-29)
 
 
