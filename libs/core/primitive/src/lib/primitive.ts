@@ -1,8 +1,10 @@
 import {
+    is,
     NgtObject,
     NgtObjectInputsState,
     NgtPreObjectInit,
     provideObjectRef,
+    Ref,
     tapEffect,
 } from '@angular-three/core';
 import {
@@ -25,8 +27,13 @@ export interface NgtPrimitiveState extends NgtObjectInputsState {
     providers: [provideObjectRef(NgtPrimitive)],
 })
 export class NgtPrimitive extends NgtObject<THREE.Object3D, NgtPrimitiveState> {
-    @Input() set object(object: THREE.Object3D) {
-        this.set({ object });
+    @Input() set object(object: THREE.Object3D | Ref<THREE.Object3D>) {
+        if (is.ref(object)) {
+            this.ref = object;
+            this.set({ object: object.value });
+        } else {
+            this.set({ object: object as THREE.Object3D });
+        }
     }
 
     get object() {
@@ -38,7 +45,7 @@ export class NgtPrimitive extends NgtObject<THREE.Object3D, NgtPrimitiveState> {
     );
 
     protected override objectInitFn(): THREE.Object3D {
-        return this.object;
+        return this.object as THREE.Object3D;
     }
 
     protected override get preObjectInit(): NgtPreObjectInit {
