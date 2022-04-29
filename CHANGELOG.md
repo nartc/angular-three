@@ -1,5 +1,19 @@
 
 
+## [5.0.0-beta.27](https://github.com/nartc/angular-three/compare/5.0.0-beta.26...5.0.0-beta.27) (2022-04-29)
+
+
+### Bug Fixes
+
+* **schematics:** update schematics to support v5 ([6638339](https://github.com/nartc/angular-three/commit/6638339fe4e9d1c9543b5417a6425a77f563994a))
+
+
+### Documentations
+
+* add examples to docs ([eb5485d](https://github.com/nartc/angular-three/commit/eb5485d7a6c5cb61de45a2cad7300047564d2f40))
+* adjust how to compute netlify urls ([681b762](https://github.com/nartc/angular-three/commit/681b762b5c7b961d6ea559629e5bee050e3af793))
+* remove uneccessary const ([0a93137](https://github.com/nartc/angular-three/commit/0a93137b2aaca122c6710a141aafb228cef56b03))
+
 ## [5.0.0-beta.26](https://github.com/nartc/angular-three/compare/5.0.0-beta.25...5.0.0-beta.26) (2022-04-29)
 
 
