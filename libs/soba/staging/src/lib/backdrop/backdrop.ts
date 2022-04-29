@@ -28,6 +28,7 @@ const easeInExpo = (x: number) => (x === 0 ? 0 : Math.pow(2, 10 * x - 10));
 
 export interface NgtSobaBackdropState
     extends NgtObjectInputsState<THREE.Group> {
+    backdrop: Ref<THREE.Mesh>;
     floor: number;
     segments: number;
 }
@@ -55,9 +56,10 @@ export class NgtSobaBackdropContent {
             [ngtObjectOutputs]="this"
             [ngtObjectInputs]="this"
             receiveShadow="false"
+            skipParent
         >
             <ngt-mesh
-                #ngtMesh
+                [ref]="backdropMesh"
                 [receiveShadow]="receiveShadow"
                 [rotation]="[-90 | radian, 0, 90 | radian]"
             >
@@ -68,7 +70,7 @@ export class NgtSobaBackdropContent {
                 <ng-container
                     *ngIf="content"
                     [ngTemplateOutlet]="content.templateRef"
-                    [ngTemplateOutletContext]="{ backdrop: ngtMesh.instance }"
+                    [ngTemplateOutletContext]="{ backdrop: backdropMesh }"
                 ></ng-container>
             </ngt-mesh>
         </ngt-group>
@@ -77,7 +79,7 @@ export class NgtSobaBackdropContent {
     providers: [
         provideObjectHostRef(
             NgtSobaBackdrop,
-            (backdrop) => backdrop.instance,
+            (backdrop) => backdrop.backdropMesh,
             (backdrop) => backdrop.parentRef
         ),
     ],
@@ -99,9 +101,14 @@ export class NgtSobaBackdrop extends NgtObjectInputs<
 
     @ContentChild(NgtSobaBackdropContent) content?: NgtSobaBackdropContent;
 
+    get backdropMesh() {
+        return this.get((s) => s.backdrop);
+    }
+
     protected override preInit() {
         super.preInit();
         this.set((state) => ({
+            backdrop: new Ref(),
             floor: state.floor ?? 0.25,
             segments: state.segments ?? 20,
         }));
