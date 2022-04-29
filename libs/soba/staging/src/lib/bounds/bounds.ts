@@ -199,7 +199,8 @@ export class NgtSobaBounds extends NgtObjectInputs<
                         this.store.select((s) => s.controls),
                         this.select((s) => s.clip),
                         this.select((s) => s.fit),
-                        this.select((s) => s.observe)
+                        this.select((s) => s.observe),
+                        this.instance$
                     )
                 );
                 this.setBeforeRender();
