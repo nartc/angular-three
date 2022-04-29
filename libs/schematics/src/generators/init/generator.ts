@@ -2,6 +2,7 @@ import {
     addDependenciesToPackageJson,
     installPackagesTask,
     logger,
+    readJson,
     Tree,
     updateJson,
 } from '@nrwl/devkit';
@@ -10,10 +11,18 @@ import { THREE_TYPES_VERSION, THREE_VERSION } from './versions';
 
 export default async function (tree: Tree) {
     logger.info('Initializing Angular Three...');
+
+    let version = readJson(tree, 'package.json').version;
+    const isBeta = version.includes('beta');
+
+    if (!isBeta) {
+        version = ANGULAR_THREE_VERSION;
+    }
+
     addDependenciesToPackageJson(
         tree,
         {
-            '@angular-three/core': ANGULAR_THREE_VERSION,
+            '@angular-three/core': version,
             three: THREE_VERSION,
         },
         {

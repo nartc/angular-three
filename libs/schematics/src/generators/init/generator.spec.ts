@@ -22,8 +22,10 @@ describe('init generator', () => {
         await generator(appTree);
 
         const packageJson = readJson(appTree, 'package.json');
+        const isBeta = packageJson.version.includes('beta');
+
         expect(packageJson.dependencies['@angular-three/core']).toEqual(
-            ANGULAR_THREE_VERSION
+            isBeta ? packageJson.version : ANGULAR_THREE_VERSION
         );
         expect(packageJson.dependencies.three).toEqual(THREE_VERSION);
         expect(packageJson.devDependencies['@types/three']).toEqual(
