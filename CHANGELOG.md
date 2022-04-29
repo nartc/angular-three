@@ -1,5 +1,27 @@
 
 
+## [5.0.0-beta.25](https://github.com/nartc/angular-three/compare/5.0.0-beta.24...5.0.0-beta.25) (2022-04-29)
+
+
+### Features
+
+* **core:** add value attribute to add arbitrary value to parent instance ([a135b19](https://github.com/nartc/angular-three/commit/a135b1929e97166c31ad4a461e6e14b81a86f1f7))
+* **soba:** add Bounds ([cc7db0c](https://github.com/nartc/angular-three/commit/cc7db0c95f3df515121f1ff0599678ee5e6e2ce1))
+* **soba:** add CameraShake ([10bb6dd](https://github.com/nartc/angular-three/commit/10bb6dd7d60b7b50d162ad4fea9a483f53fdbbf6))
+* **soba:** add Center ([c3288eb](https://github.com/nartc/angular-three/commit/c3288eb731865db123e491d4b5998ffc2c3b5cf4))
+* **soba:** add Float ([b604ed5](https://github.com/nartc/angular-three/commit/b604ed5b5afeca7f0ef2e81327f35f296881562c))
+* **soba:** add Sky ([1a07a52](https://github.com/nartc/angular-three/commit/1a07a52b09296ddd9e714fbdd1233ddaf9ad628a))
+* **soba:** add Stage ([7ed8257](https://github.com/nartc/angular-three/commit/7ed82578ef09846ec68c8ff1490dcc6ce2335c87))
+
+
+### Bug Fixes
+
+* **core:** adjust how raw value is attached to the parent ([838a53c](https://github.com/nartc/angular-three/commit/838a53c0fbc9571917ad378684ffa67c2d216c5b))
+* **core:** rename value attribute selector ([dd0aafc](https://github.com/nartc/angular-three/commit/dd0aafc7d455b52cc16efa15ca6dd6d16cb72d99))
+* **core:** typo on objectHostRef ([29c8f20](https://github.com/nartc/angular-three/commit/29c8f20ea1b30884138f98eb94fc2879900b9793))
+* **repo:** adjust value attribute selector ([2673039](https://github.com/nartc/angular-three/commit/2673039ade643124692a33e35eade16425c75ab1))
+* **soba:** ensure instance is ready before effect for Bounds ([e65593c](https://github.com/nartc/angular-three/commit/e65593c358af287b8a6fd8fe0711aedd5cbb8054))
+
 ## [5.0.0-beta.24](https://github.com/nartc/angular-three/compare/5.0.0-beta.23...5.0.0-beta.24) (2022-04-28)
 
 
