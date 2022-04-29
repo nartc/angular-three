@@ -229,7 +229,7 @@ export abstract class NgtInstance<
 
         if (!is.object3d(prepInstance) && !this.noAttach && !this.skipParent) {
             const parentObjects =
-                prepInstance.__ngt__.parent?.value?.__ngt__.objects;
+                prepInstance.__ngt__.parent?.value?.__ngt__?.objects;
             parentObjects &&
                 parentObjects.set([...parentObjects.value, this.instance]);
         }
