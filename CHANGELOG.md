@@ -1,5 +1,12 @@
 
 
+## [5.0.0-beta.28](https://github.com/nartc/angular-three/compare/5.0.0-beta.27...5.0.0-beta.28) (2022-04-29)
+
+
+### Bug Fixes
+
+* **schematics:** adjust how version is determined ([f7f5e5f](https://github.com/nartc/angular-three/commit/f7f5e5f9325caa3cf4247ae02307e5586b5e90c2))
+
 ## [5.0.0-beta.27](https://github.com/nartc/angular-three/compare/5.0.0-beta.26...5.0.0-beta.27) (2022-04-29)
 
 
