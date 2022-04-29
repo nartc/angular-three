@@ -2,20 +2,23 @@
 const isProduction = process.env.CONTEXT === 'production';
 const isBranchDeploy = process.env.CONTEXT === 'branch-deploy';
 
-const netlifyUrl = `${process.env.URL}`;
-const netlifyPrimeUrl = `${process.env.DEPLOY_PRIME_URL}`;
+const netlifyUrl = process.env.URL;
+const netlifyPrimeUrl = process.env.DEPLOY_PRIME_URL;
 
-function buildUrl(path) {
-    return isBranchDeploy
-        ? `${netlifyPrimeUrl}/${path}`
-        : `${netlifyUrl}/${path}`;
+function buildUrl(path, defaultPath) {
+    if (isProduction) {
+        return `${netlifyUrl}/${path}`;
+    }
+
+    if (isBranchDeploy) {
+        return `${netlifyPrimeUrl}/${path}`;
+    }
+
+    return defaultPath;
 }
 
-const sobaUrl = isProduction ? buildUrl('soba') : 'http://localhost:4400';
-
-const examplesUrl = isProduction
-    ? buildUrl('examples')
-    : 'http://localhost:4200';
+const sobaUrl = buildUrl('soba', 'http://localhost:4400');
+const examplesUrl = buildUrl('examples', 'http://localhost:4200');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
