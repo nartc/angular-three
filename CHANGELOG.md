@@ -1,5 +1,25 @@
 
 
+## [5.0.0-beta.26](https://github.com/nartc/angular-three/compare/5.0.0-beta.25...5.0.0-beta.26) (2022-04-29)
+
+
+### Features
+
+* **core:** allow to pass in Ref for primitive as well ([a855e1f](https://github.com/nartc/angular-three/commit/a855e1f7b383538bd3380d17e7407d4150019ab8))
+* **soba:** support material for text ([7f4eb1a](https://github.com/nartc/angular-three/commit/7f4eb1ad44976ef9a9ca2bbcc7fa86f57fae7ea0))
+
+
+### Bug Fixes
+
+* **core:** check for null before accessing objects ([16ed4d1](https://github.com/nartc/angular-three/commit/16ed4d150736730cf5ab3210d4bf02ad41175e75))
+* **core:** check on Reflect before assign empty object in mutate ([22a057d](https://github.com/nartc/angular-three/commit/22a057d2d68d844a2adaccfca244414b29853f65))
+* **soba:** adjust textMesh instance ([853be0e](https://github.com/nartc/angular-three/commit/853be0e23cdb7f240480f39e90dec1f373b2987a))
+
+
+### Documentations
+
+* clean up text story ([5d6b784](https://github.com/nartc/angular-three/commit/5d6b784a1d096c27d4511917f89d8b7b700ec703))
+
 ## [5.0.0-beta.25](https://github.com/nartc/angular-three/compare/5.0.0-beta.24...5.0.0-beta.25) (2022-04-29)
 
 
