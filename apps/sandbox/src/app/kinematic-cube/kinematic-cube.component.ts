@@ -37,6 +37,7 @@ import {
     NgModule,
     OnInit,
 } from '@angular/core';
+import { RouterModule } from '@angular/router';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
 import * as THREE from 'three';
@@ -226,8 +227,10 @@ export class InstancedSpheresComponent implements OnInit {
         BoxComponent,
         InstancedSpheresComponent,
     ],
-    exports: [KinematicCubeComponent],
     imports: [
+        RouterModule.forChild([
+            { path: '', component: KinematicCubeComponent },
+        ]),
         NgtCanvasModule,
         NgtStatsModule,
         NgtHemisphereLightModule,

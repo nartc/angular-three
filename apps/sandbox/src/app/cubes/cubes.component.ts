@@ -16,6 +16,7 @@ import {
     Input,
     NgModule,
 } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { Mesh } from 'three';
 
 @Component({
@@ -99,9 +100,9 @@ export class CubeWithMaterialsComponent {
         CubeComponent,
         CubeWithMaterialsComponent,
     ],
-    exports: [SandboxCubesComponent],
     imports: [
         CommonModule,
+        RouterModule.forChild([{ path: '', component: SandboxCubesComponent }]),
         NgtCanvasModule,
         NgtColorAttributeModule,
         NgtAmbientLightModule,

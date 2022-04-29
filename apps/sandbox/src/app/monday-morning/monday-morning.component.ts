@@ -51,6 +51,7 @@ import {
     SkipSelf,
     TemplateRef,
 } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { Observable, takeUntil } from 'rxjs';
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three-stdlib';
@@ -729,10 +730,7 @@ interface CupGLTF extends GLTF {
     providers: [NgtPhysicBody],
 })
 export class SandboxMugComponent {
-    cup$ = this.loader.use(
-        GLTFLoader,
-        '/assets/cup.glb'
-    ) as Observable<CupGLTF>;
+    cup$ = this.loader.use(GLTFLoader, 'assets/cup.glb') as Observable<CupGLTF>;
 
     mugRef = this.physicBody.useCylinder(() => ({
         args: [0.6, 0.6, 1, 16],
@@ -757,8 +755,10 @@ export class SandboxMugComponent {
         SandboxTableComponent,
         SandboxMugComponent,
     ],
-    exports: [SandboxMondayMorningComponent, SandboxBoxComponent],
     imports: [
+        RouterModule.forChild([
+            { path: '', component: SandboxMondayMorningComponent },
+        ]),
         NgtMeshModule,
         NgtBoxGeometryModule,
         NgtMeshStandardMaterialModule,

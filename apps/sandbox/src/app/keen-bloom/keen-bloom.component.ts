@@ -1,8 +1,4 @@
-import {
-    NgtCanvasModule,
-    NgtColorPipeModule,
-    NgtCoreModule,
-} from '@angular-three/core';
+import { NgtCanvasModule } from '@angular-three/core';
 import { NgtColorAttributeModule } from '@angular-three/core/attributes';
 import { NgtGroupModule } from '@angular-three/core/group';
 import {
@@ -24,6 +20,7 @@ import {
 } from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import * as THREE from 'three';
 
 @Component({
@@ -91,9 +88,9 @@ export class KeenComponent {
 
 @NgModule({
     declarations: [KeenBloomComponent, KeenComponent],
-    exports: [KeenBloomComponent],
     imports: [
         CommonModule,
+        RouterModule.forChild([{ path: '', component: KeenBloomComponent }]),
         NgtCanvasModule,
         NgtGroupModule,
         NgtMeshModule,

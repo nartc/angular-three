@@ -24,6 +24,7 @@ import {
     Input,
     NgModule,
 } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'sandbox-physic-cubes',
@@ -128,8 +129,10 @@ export class SandboxCubeComponent {
         SandboxPlaneComponent,
         SandboxCubeComponent,
     ],
-    exports: [SandboxPhysicCubesComponent, SandboxPlaneComponent],
     imports: [
+        RouterModule.forChild([
+            { path: '', component: SandboxPhysicCubesComponent },
+        ]),
         NgtCanvasModule,
         NgtColorAttributeModule,
         NgtAmbientLightModule,

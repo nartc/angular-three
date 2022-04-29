@@ -8,7 +8,7 @@
             "executor": "@angular-devkit/build-angular:browser",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/apps/sandbox",
+                "outputPath": "libs/documentations/build/examples",
                 "index": "apps/sandbox/src/index.html",
                 "main": "apps/sandbox/src/main.ts",
                 "polyfills": "apps/sandbox/src/polyfills.ts",
@@ -40,7 +40,8 @@
                             "with": "apps/sandbox/src/environments/environment.prod.ts"
                         }
                     ],
-                    "outputHashing": "all"
+                    "outputHashing": "all",
+                    "baseHref": "/examples/"
                 },
                 "development": {
                     "buildOptimizer": false,

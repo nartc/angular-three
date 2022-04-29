@@ -13,8 +13,8 @@ const config = {
     onBrokenLinks: 'ignore',
     onBrokenMarkdownLinks: 'warn',
     favicon: 'img/ngt-logo.png',
-    organizationName: 'nartc', // Usually your GitHub org/user name.
-    projectName: 'angular-three', // Usually your repo name.
+    organizationName: 'nartc',
+    projectName: 'angular-three',
 
     presets: [
         [
