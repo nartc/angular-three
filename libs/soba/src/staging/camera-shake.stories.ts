@@ -29,10 +29,10 @@ import { setupCanvas, setupCanvasModules } from '../setup-canvas';
             <ngt-mesh-standard-material wireframe></ngt-mesh-standard-material>
         </ngt-mesh>
         <ngt-mesh [position]="[0, -6, 0]" [rotation]="[-90 | radian, 0, 0]">
-            <ngt-value-attribute
+            <ngt-value
                 [attach]="['rotation', 'x']"
                 [value]="-90 | radian"
-            ></ngt-value-attribute>
+            ></ngt-value>
 
             <ngt-plane-geometry
                 [args]="[200, 200, 75, 75]"

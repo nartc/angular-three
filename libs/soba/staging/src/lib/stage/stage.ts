@@ -149,10 +149,10 @@ export class NgtSobaStageContent {
                 [intensity]="intensity * 2"
                 [castShadow]="shadows"
             >
-                <ngt-value-attribute
+                <ngt-value
                     [attach]="['shadow', 'bias']"
                     [value]="shadowBias"
-                ></ngt-value-attribute>
+                ></ngt-value>
             </ngt-spot-light>
             <ngt-point-light
                 [position]="[

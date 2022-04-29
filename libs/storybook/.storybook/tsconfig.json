@@ -5,5 +5,9 @@
     },
 
     "exclude": ["../**/*.spec.ts"],
-    "include": ["../src/**/*", "*.js"]
+    "include": [
+        "../src/**/*",
+        "*.js",
+        "../../soba/src/staging/bounds.stories.ts"
+    ]
 }

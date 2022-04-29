@@ -36,7 +36,7 @@ export const Default: Story = () => ({
     template: `
         <ngt-soba-sky></ngt-soba-sky>
         <ngt-mesh>
-            <ngt-value-attribute [attach]="['rotation', 'x']" [value]="90 | radian"></ngt-value-attribute>
+            <ngt-value [attach]="['rotation', 'x']" [value]="90 | radian"></ngt-value>
             <ngt-plane-geometry [args]="[100, 100, 4, 4]"></ngt-plane-geometry>
             <ngt-mesh-basic-material color="black" wireframe></ngt-mesh-basic-material>
         </ngt-mesh>
