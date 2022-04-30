@@ -21,3 +21,4 @@ export * from './lib/torus-knot-geometry/torus-knot-geometry';
 export * from './lib/tube-geometry/tube-geometry';
 export * from './lib/wireframe-geometry/wireframe-geometry';
 export * from './lib/edges-geometry/edges-geometry';
+export * from './lib/capsule-geometry/capsule-geometry';
