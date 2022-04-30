@@ -380,7 +380,17 @@ export class NgtStore extends NgtComponentStore<NgtState> {
 
                     // Always look at center by default
                     if (!state.cameraOptions?.rotation) {
-                        camera.lookAt(0, 0, 0);
+                        if (state.cameraOptions.lookAt) {
+                            const lookAt = state.cameraOptions.lookAt;
+
+                            if (is.arr(lookAt)) {
+                                camera.lookAt(lookAt[0], lookAt[1], lookAt[2]);
+                            } else {
+                                camera.lookAt(lookAt);
+                            }
+                        } else {
+                            camera.lookAt(0, 0, 0);
+                        }
                     }
 
                     // Update projection matrix after applying props

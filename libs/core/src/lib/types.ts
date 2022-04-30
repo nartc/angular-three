@@ -248,7 +248,7 @@ export type NgtCameraOptions = (
                   typeof THREE.OrthographicCamera
               >
       >
-) & { manual?: boolean };
+) & { manual?: boolean; lookAt?: NgtVector3 };
 
 export type NgtSceneOptions = Overwrite<
     Partial<
