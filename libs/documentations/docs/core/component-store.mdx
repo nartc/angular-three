@@ -35,6 +35,27 @@ export class CubeComponent extends SomeBaseClass {
 
 ### Handling side-effects
 
+#### What are side-effects?
+
+In NGT, side-effects can be various things:
+
+-   Fetching an assets (models, textures etc...)
+-   Watching for changes (can be Inputs changes, size changes etc...)
+-   Registering a callback to the Animation Loop
+
+Usually in Angular, these effects come in forms of [RxJS Observable](https://rxjs.dev/api/index/class/Observable) and to "handle" the effects, we would need to call `.subscribe()` on the Observable. This is not a wrong thing to do but more than often in NGT, we would also need to "reset", "dispose", or "clean up" the effects that we handle. For example:
+
+-   Registering a callback to the animation loop: we would need to **unregister** the callback when the component's destroyed
+-   Watching for changes of Inputs: setting options on some Object3D then we might need to reset the options on changes/destroyed
+-   Setting up event listeners: we would need to remove the listeners etc...
+
+Using `.subscribe()` and `Subscription` would yield more boilerplate code that needed. This is where `NgtComponentStore#effect` and `tapEffect`come into play
+
+-   `effect()`: accepts a raw value or a stream (`Observable`) and subscribe to the stream automatically. `effect()` will also unsubscribe from the `Observable` on component's destroyed
+-   `tapEffect()`: is a custom Operator that would **act** on new data emission AND **clean up** before new data emission comes in.
+
+#### Usage
+
 By just using `NgtComponentStore` without providing any type (`NgtComponentStore<SomeInterface>`), our `NgtComponentStore` does not hold any state. However, that does not mean that it cannot serve any purpose.
 
 If we just want to handle side-effects without manual subscription (eg: `.subscribe()`), then `NgtComponentStore` is enough.
