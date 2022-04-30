@@ -15,23 +15,6 @@ const config = {
     favicon: 'img/ngt-logo.png',
     organizationName: 'nartc',
     projectName: 'angular-three',
-    plugins: [
-        [
-            '@docusaurus/plugin-client-redirects',
-            /** @type {import('@docusaurus/plugin-client-redirects').PluginOptions} */
-            {
-                createRedirects(path) {
-                    if (path.includes('/examples/')) {
-                        return path
-                            .split('/examples/')[0]
-                            .concat('/examples')
-                            .join('');
-                    }
-                    return undefined;
-                },
-            },
-        ],
-    ],
     presets: [
         [
             'classic',
@@ -39,16 +22,16 @@ const config = {
             ({
                 docs: {
                     sidebarPath: require.resolve('./sidebars.js'),
-                    // Please change this to your repo.
                     editUrl:
                         'https://github.com/nartc/angular-three/tree/main/libs/documentations/docs',
                 },
-                blog: {
-                    showReadingTime: true,
-                    // Please change this to your repo.
-                    editUrl:
-                        'https://github.com/nartc/angular-three/tree/main/libs/documentations/blog',
-                },
+                // TODO: add blog later?
+                // blog: {
+                //     showReadingTime: true,
+                //     // Please change this to your repo.
+                //     editUrl:
+                //         'https://github.com/nartc/angular-three/tree/main/libs/documentations/blog',
+                // },
                 theme: {
                     customCss: require.resolve('./src/css/custom.css'),
                 },
@@ -72,7 +55,8 @@ const config = {
                         position: 'left',
                         label: 'Documentations',
                     },
-                    { to: '/blog', label: 'Blog', position: 'left' },
+                    // TODO: add blog later
+                    // { to: '/blog', label: 'Blog', position: 'left' },
                     {
                         href: 'https://github.com/nartc/angular-three',
                         label: 'GitHub',
