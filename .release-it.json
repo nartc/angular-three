@@ -25,7 +25,8 @@
             "infile": "CHANGELOG.md"
         },
         "@release-it/bumper": {
-            "in": "package.json"
+            "in": "package.json",
+            "out": "version.json"
         }
     },
     "git": {
@@ -40,6 +41,9 @@
     },
     "hooks": {
         "before:bump": "npm run build",
-        "after:bump": "node tools/scripts/update-version.mjs"
+        "after:bump": [
+            "git checkout -- package.json",
+            "node tools/scripts/update-version.mjs"
+        ]
     }
 }
