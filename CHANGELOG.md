@@ -1,5 +1,23 @@
 
 
+## [5.0.0-beta.31](https://github.com/nartc/angular-three/compare/5.0.0-beta.30...5.0.0-beta.31) (2022-04-30)
+
+
+### Features
+
+* **core:** add lookAt to cameraOptions ([ee59039](https://github.com/nartc/angular-three/commit/ee59039c59016f2d08f5128538712db2f306a95c))
+
+
+### Documentations
+
+* add docs page for Sky ([0ec14c2](https://github.com/nartc/angular-three/commit/0ec14c2332fb36b4b80cd943beed2d5d2760ddd9))
+* add more info about effects ([d4f1d81](https://github.com/nartc/angular-three/commit/d4f1d8106b1e162de4528889d1d7ca13e25eb9dc))
+* adjust redirect ([c2eebe0](https://github.com/nartc/angular-three/commit/c2eebe04b72e11b9e9eaece04c3d593516a5febb))
+* adjust redirect again ([f48eb21](https://github.com/nartc/angular-three/commit/f48eb21b7b231c34e2f87705be948d06a6b157bf))
+* adjust redirect again and again ([6d4334b](https://github.com/nartc/angular-three/commit/6d4334b47ddfc82215baa2e671c67d19e357751e))
+* clean up docs and remove plugin client redirects ([3398a05](https://github.com/nartc/angular-three/commit/3398a053baeddeccb095d78db374659df4ee6753))
+* test plugin client redirects ([0b76eed](https://github.com/nartc/angular-three/commit/0b76eed7a353e53ed5680f4d5425978338135814))
+
 ## [5.0.0-beta.30](https://github.com/nartc/angular-three/compare/5.0.0-beta.29...5.0.0-beta.30) (2022-04-30)
 
 
