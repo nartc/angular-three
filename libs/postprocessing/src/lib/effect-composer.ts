@@ -33,7 +33,7 @@ import {
     NormalPass,
     RenderPass,
 } from 'postprocessing';
-import { defer, map, of, tap } from 'rxjs';
+import { debounceTime, defer, map, of, pipe, tap } from 'rxjs';
 import * as THREE from 'three';
 
 export interface NgtEffectComposerState
@@ -291,51 +291,54 @@ export class NgtEffectComposer extends NgtInstance<
     );
 
     private readonly effectPasses = this.effect<{}>(
-        tapEffect(() => {
-            let effectPass: EffectPass;
-            const {
-                instance: composer,
-                camera,
-                normalPass,
-                depthDownSamplingPass,
-            } = this.get();
-            if (
-                composer.value &&
-                (composer.value as unknown as NgtUnknownInstance).__ngt__
-                    .objects.value.length &&
-                camera
-            ) {
-                effectPass = new EffectPass(
+        pipe(
+            debounceTime(150),
+            tapEffect(() => {
+                let effectPass: EffectPass;
+                const {
+                    instance: composer,
                     camera,
-                    ...(
-                        composer.value as unknown as NgtUnknownInstance
-                    ).__ngt__.objects.value.map((ref) => ref.value)
-                );
-                effectPass.renderToScreen = true;
-                composer.value.addPass(effectPass);
-                if (normalPass) {
-                    normalPass.enabled = true;
+                    normalPass,
+                    depthDownSamplingPass,
+                } = this.get();
+                if (
+                    composer.value &&
+                    (composer.value as unknown as NgtUnknownInstance).__ngt__
+                        .objects.value.length &&
+                    camera
+                ) {
+                    effectPass = new EffectPass(
+                        camera,
+                        ...(
+                            composer.value as unknown as NgtUnknownInstance
+                        ).__ngt__.objects.value.map((ref) => ref.value)
+                    );
+                    effectPass.renderToScreen = true;
+                    composer.value.addPass(effectPass);
+                    if (normalPass) {
+                        normalPass.enabled = true;
+                    }
+
+                    if (depthDownSamplingPass) {
+                        depthDownSamplingPass.enabled = true;
+                    }
                 }
 
-                if (depthDownSamplingPass) {
-                    depthDownSamplingPass.enabled = true;
-                }
-            }
+                return () => {
+                    if (effectPass) {
+                        composer.value?.removePass(effectPass);
+                    }
 
-            return () => {
-                if (effectPass) {
-                    composer.value?.removePass(effectPass);
-                }
+                    if (normalPass) {
+                        normalPass.enabled = false;
+                    }
 
-                if (normalPass) {
-                    normalPass.enabled = false;
-                }
-
-                if (depthDownSamplingPass) {
-                    depthDownSamplingPass.enabled = false;
-                }
-            };
-        })
+                    if (depthDownSamplingPass) {
+                        depthDownSamplingPass.enabled = false;
+                    }
+                };
+            })
+        )
     );
 }
 
