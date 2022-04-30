@@ -41,7 +41,7 @@ export abstract class NgtCommonLight<
 
     protected override get preObjectInit(): NgtPreObjectInit {
         return (initFn) => {
-            this.set({ intensity: 1 });
+            this.set((state) => ({ intensity: state.intensity ?? 1 }));
             initFn();
         };
     }
