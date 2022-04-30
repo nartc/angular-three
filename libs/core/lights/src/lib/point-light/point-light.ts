@@ -25,10 +25,6 @@ export class NgtPointLight extends NgtCommonLight<THREE.PointLight> {
         | ConstructorParameters<typeof THREE.PointLight>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.PointLight>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set distance(distance: NumberInput) {
         this.set({ distance: coerceNumberProperty(distance) });
     }

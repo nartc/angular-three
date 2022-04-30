@@ -23,6 +23,10 @@ export abstract class NgtCommonTexture<
 > extends NgtInstance<TTexture, NgtInstanceState<TTexture>> {
     abstract get textureType(): AnyConstructor<TTexture>;
 
+    @Input() set args(v: ConstructorParameters<AnyConstructor<TTexture>>) {
+        this.instanceArgs = v;
+    }
+
     @Input() set image(
         image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement
     ) {

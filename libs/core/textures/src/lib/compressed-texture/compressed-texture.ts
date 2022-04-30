@@ -29,12 +29,6 @@ export class NgtCompressedTexture extends NgtCommonTexture<THREE.CompressedTextu
         | ConstructorParameters<typeof THREE.CompressedTexture>
         | undefined;
 
-    @Input() set args(
-        v: ConstructorParameters<typeof THREE.CompressedTexture>
-    ) {
-        this.instanceArgs = v;
-    }
-
     @Input() set mipmaps(mipmaps: ImageData[]) {
         this.set({ mipmaps });
     }

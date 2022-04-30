@@ -23,10 +23,6 @@ export class NgtArrayCamera extends NgtCommonCamera<THREE.ArrayCamera> {
         | ConstructorParameters<typeof THREE.ArrayCamera>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.ArrayCamera>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set cameras(cameras: THREE.PerspectiveCamera[]) {
         this.set({ cameras });
     }

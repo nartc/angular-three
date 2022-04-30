@@ -17,6 +17,10 @@ export abstract class NgtCommonCurve<
 > extends NgtInstance<TCurve, NgtCommonCurveState<TCurve>> {
     abstract get curveType(): AnyConstructor<TCurve>;
 
+    @Input() set args(v: ConstructorParameters<AnyConstructor<TCurve>>) {
+        this.instanceArgs = v;
+    }
+
     @Input() set arcLengthDivisions(arcLengthDivisions: NumberInput) {
         this.set({
             arcLengthDivisions: coerceNumberProperty(arcLengthDivisions),

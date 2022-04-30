@@ -29,10 +29,6 @@ export class NgtCubeTexture extends NgtCommonTexture<THREE.CubeTexture> {
         | ConstructorParameters<typeof THREE.CubeTexture>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.CubeTexture>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set images(images: any[]) {
         this.set({ images });
     }

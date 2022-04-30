@@ -25,12 +25,6 @@ export class NgtOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCam
         | ConstructorParameters<typeof THREE.OrthographicCamera>
         | undefined;
 
-    @Input() set args(
-        v: ConstructorParameters<typeof THREE.OrthographicCamera>
-    ) {
-        this.instanceArgs = v;
-    }
-
     @Input() set left(left: NumberInput) {
         this.set({ left: coerceNumberProperty(left) });
     }

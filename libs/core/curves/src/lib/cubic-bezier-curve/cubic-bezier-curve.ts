@@ -4,12 +4,7 @@ import {
     NgtCommonCurve,
     provideCommonCurveRef,
 } from '@angular-three/core';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    Input,
-    NgModule,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -22,10 +17,6 @@ export class NgtCubicBezierCurve extends NgtCommonCurve<THREE.CubicBezierCurve> 
     static ngAcceptInputType_args:
         | ConstructorParameters<typeof THREE.CubicBezierCurve>
         | undefined;
-
-    @Input() set args(v: ConstructorParameters<typeof THREE.CubicBezierCurve>) {
-        this.instanceArgs = v;
-    }
 
     override get curveType(): AnyConstructor<THREE.CubicBezierCurve> {
         return THREE.CubicBezierCurve;

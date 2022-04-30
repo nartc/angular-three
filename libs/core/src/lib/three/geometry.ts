@@ -1,4 +1,11 @@
-import { Directive, Inject, NgZone, Optional, SkipSelf } from '@angular/core';
+import {
+    Directive,
+    Inject,
+    Input,
+    NgZone,
+    Optional,
+    SkipSelf,
+} from '@angular/core';
 import * as THREE from 'three';
 import type { NgtInstanceState } from '../abstracts/instance';
 import { NgtInstance } from '../abstracts/instance';
@@ -13,6 +20,10 @@ export abstract class NgtCommonGeometry<
     TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
 > extends NgtInstance<TGeometry, NgtInstanceState<TGeometry>> {
     abstract get geometryType(): AnyConstructor<TGeometry>;
+
+    @Input() set args(v: ConstructorParameters<AnyConstructor<TGeometry>>) {
+        this.instanceArgs = v;
+    }
 
     constructor(
         zone: NgZone,

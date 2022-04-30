@@ -25,10 +25,6 @@ export class NgtGridHelper extends NgtCommonHelper<THREE.GridHelper> {
         | ConstructorParameters<typeof THREE.GridHelper>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.GridHelper>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set size(size: NumberInput) {
         this.set({ size: coerceNumberProperty(size) });
     }

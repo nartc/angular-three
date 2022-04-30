@@ -25,10 +25,6 @@ export class NgtArrowHelper extends NgtCommonHelper<THREE.ArrowHelper> {
         | ConstructorParameters<typeof THREE.ArrowHelper>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.ArrowHelper>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set dir(dir: THREE.Vector3) {
         this.set({ dir });
     }

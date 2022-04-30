@@ -4,12 +4,7 @@ import {
     NgtCommonCurve,
     provideCommonCurveRef,
 } from '@angular-three/core';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    Input,
-    NgModule,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -22,10 +17,6 @@ export class NgtLineCurve3 extends NgtCommonCurve<THREE.LineCurve3> {
     static ngAcceptInputType_args:
         | ConstructorParameters<typeof THREE.LineCurve3>
         | undefined;
-
-    @Input() set args(v: ConstructorParameters<typeof THREE.LineCurve3>) {
-        this.instanceArgs = v;
-    }
 
     override get curveType(): AnyConstructor<THREE.LineCurve3> {
         return THREE.LineCurve3;

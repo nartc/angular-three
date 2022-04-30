@@ -23,10 +23,6 @@ export class NgtLightProbe extends NgtCommonLight<THREE.LightProbe> {
         | ConstructorParameters<typeof THREE.LightProbe>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.LightProbe>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set sh(sh: THREE.SphericalHarmonics3) {
         this.set({ sh });
     }

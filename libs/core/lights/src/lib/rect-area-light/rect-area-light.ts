@@ -25,10 +25,6 @@ export class NgtRectAreaLight extends NgtCommonLight<THREE.RectAreaLight> {
         | ConstructorParameters<typeof THREE.RectAreaLight>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.RectAreaLight>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set width(width: NumberInput) {
         this.set({ width: coerceNumberProperty(width) });
     }

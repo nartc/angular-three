@@ -25,10 +25,6 @@ export class NgtPolarGridHelper extends NgtCommonHelper<THREE.PolarGridHelper> {
         | ConstructorParameters<typeof THREE.PolarGridHelper>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.PolarGridHelper>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set radius(radius: NumberInput) {
         this.set({ radius: coerceNumberProperty(radius) });
     }

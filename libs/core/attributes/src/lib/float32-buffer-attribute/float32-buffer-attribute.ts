@@ -4,7 +4,7 @@ import {
     NgtCommonAttribute,
     provideCommonAttributeRef,
 } from '@angular-three/core';
-import { NgModule, Component, Input } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -16,12 +16,6 @@ export class NgtFloat32BufferAttribute extends NgtCommonAttribute<THREE.Float32B
     static ngAcceptInputType_args:
         | ConstructorParameters<typeof THREE.Float32BufferAttribute>
         | undefined;
-
-    @Input() set args(
-        v: ConstructorParameters<typeof THREE.Float32BufferAttribute>
-    ) {
-        this.instanceArgs = v;
-    }
 
     override get attributeType(): AnyConstructor<THREE.Float32BufferAttribute> {
         return THREE.Float32BufferAttribute;

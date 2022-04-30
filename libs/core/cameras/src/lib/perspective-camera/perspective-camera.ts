@@ -25,12 +25,6 @@ export class NgtPerspectiveCamera extends NgtCommonCamera<THREE.PerspectiveCamer
         | ConstructorParameters<typeof THREE.PerspectiveCamera>
         | undefined;
 
-    @Input() set args(
-        v: ConstructorParameters<typeof THREE.PerspectiveCamera>
-    ) {
-        this.instanceArgs = v;
-    }
-
     @Input() set fov(fov: NumberInput) {
         this.set({ fov: coerceNumberProperty(fov) });
     }

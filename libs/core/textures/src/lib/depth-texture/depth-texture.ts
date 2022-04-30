@@ -29,10 +29,6 @@ export class NgtDepthTexture extends NgtCommonTexture<THREE.DepthTexture> {
         | ConstructorParameters<typeof THREE.DepthTexture>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.DepthTexture>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set width(width: NumberInput) {
         this.set({ width: coerceNumberProperty(width) });
     }

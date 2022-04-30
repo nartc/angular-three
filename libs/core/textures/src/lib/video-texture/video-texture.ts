@@ -29,10 +29,6 @@ export class NgtVideoTexture extends NgtCommonTexture<THREE.VideoTexture> {
         | ConstructorParameters<typeof THREE.VideoTexture>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.VideoTexture>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set video(video: HTMLVideoElement) {
         this.set({ video });
     }

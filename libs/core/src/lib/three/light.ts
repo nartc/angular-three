@@ -19,6 +19,10 @@ export abstract class NgtCommonLight<
 > extends NgtObject<TLight, NgtCommonLightState<TLight>> {
     abstract get lightType(): AnyConstructor<TLight>;
 
+    @Input() set args(v: ConstructorParameters<AnyConstructor<TLight>>) {
+        this.instanceArgs = v;
+    }
+
     @Input() set intensity(intensity: NumberInput) {
         this.set({ intensity: coerceNumberProperty(intensity) });
     }

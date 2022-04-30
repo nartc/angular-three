@@ -23,10 +23,6 @@ export class NgtHemisphereLight extends NgtCommonLight<THREE.HemisphereLight> {
         | ConstructorParameters<typeof THREE.HemisphereLight>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.HemisphereLight>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set skyColor(skyColor: THREE.ColorRepresentation) {
         this.set({ skyColor });
     }

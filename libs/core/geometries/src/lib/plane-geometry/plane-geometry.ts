@@ -4,12 +4,7 @@ import {
     NgtCommonGeometry,
     provideCommonGeometryRef,
 } from '@angular-three/core';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    Input,
-    NgModule,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -22,10 +17,6 @@ export class NgtPlaneGeometry extends NgtCommonGeometry<THREE.PlaneGeometry> {
     static ngAcceptInputType_args:
         | ConstructorParameters<typeof THREE.PlaneGeometry>
         | undefined;
-
-    @Input() set args(v: ConstructorParameters<typeof THREE.PlaneGeometry>) {
-        this.instanceArgs = v;
-    }
 
     get geometryType(): AnyConstructor<THREE.PlaneGeometry> {
         return THREE.PlaneGeometry;

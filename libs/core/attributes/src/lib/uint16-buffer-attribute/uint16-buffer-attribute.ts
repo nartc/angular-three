@@ -4,7 +4,7 @@ import {
     NgtCommonAttribute,
     provideCommonAttributeRef,
 } from '@angular-three/core';
-import { NgModule, Component, Input } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -16,12 +16,6 @@ export class NgtUint16BufferAttribute extends NgtCommonAttribute<THREE.Uint16Buf
     static ngAcceptInputType_args:
         | ConstructorParameters<typeof THREE.Uint16BufferAttribute>
         | undefined;
-
-    @Input() set args(
-        v: ConstructorParameters<typeof THREE.Uint16BufferAttribute>
-    ) {
-        this.instanceArgs = v;
-    }
 
     override get attributeType(): AnyConstructor<THREE.Uint16BufferAttribute> {
         return THREE.Uint16BufferAttribute;

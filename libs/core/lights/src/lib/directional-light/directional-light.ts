@@ -23,10 +23,6 @@ export class NgtDirectionalLight extends NgtCommonLight<THREE.DirectionalLight> 
         | ConstructorParameters<typeof THREE.DirectionalLight>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.DirectionalLight>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set target(target: THREE.Object3D) {
         this.set({ target });
     }

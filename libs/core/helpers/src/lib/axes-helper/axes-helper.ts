@@ -25,10 +25,6 @@ export class NgtAxesHelper extends NgtCommonHelper<THREE.AxesHelper> {
         | ConstructorParameters<typeof THREE.AxesHelper>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.AxesHelper>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set size(size: NumberInput) {
         this.set({ size: coerceNumberProperty(size) });
     }

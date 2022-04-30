@@ -4,7 +4,7 @@ import {
     NgtCommonAttribute,
     provideCommonAttributeRef,
 } from '@angular-three/core';
-import { NgModule, Component, Input } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -15,10 +15,6 @@ import * as THREE from 'three';
 export class Ngt<%= name %> extends NgtCommonAttribute<THREE.<%= name %>> {
 
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.<%= name %>> | undefined;
-
-  @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
-    this.instanceArgs = v;
-  }
 
   override get attributeType(): AnyConstructor<THREE.<%= name %>> {
       return THREE.<%= name %>;

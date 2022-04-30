@@ -23,10 +23,6 @@ export class NgtSprite extends NgtCommonSprite<THREE.Sprite> {
         | ConstructorParameters<typeof THREE.Sprite>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.Sprite>) {
-        this.instanceArgs = v;
-    }
-
     override get spriteType(): AnyConstructor<THREE.Sprite> {
         return THREE.Sprite;
     }

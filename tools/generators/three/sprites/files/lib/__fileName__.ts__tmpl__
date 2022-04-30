@@ -18,11 +18,6 @@ export class Ngt<%= name %> extends NgtCommon<%= name %><THREE.<%= name %>> {
         | ConstructorParameters<typeof THREE.<%= name %>>
         | undefined;
 
-    @Input() set args(
-        v: ConstructorParameters<typeof THREE.<%= name %>>
-    ) {
-        this.instanceArgs = v;
-    }
     <% for (const input of inputs) { %>
     @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <%= input.type %>) {
         this.set({ <%= input.name %> });

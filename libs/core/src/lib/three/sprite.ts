@@ -14,6 +14,10 @@ export interface NgtCommonSpriteState<
 export abstract class NgtCommonSprite<
     TSprite extends THREE.Sprite = THREE.Sprite
 > extends NgtObject<TSprite, NgtCommonSpriteState<TSprite>> {
+    @Input() set args(v: ConstructorParameters<AnyConstructor<TSprite>>) {
+        this.instanceArgs = v;
+    }
+
     @Input() set material(material: THREE.SpriteMaterial) {
         this.set({ material });
     }

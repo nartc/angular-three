@@ -29,10 +29,6 @@ export class NgtCanvasTexture extends NgtCommonTexture<THREE.CanvasTexture> {
         | ConstructorParameters<typeof THREE.CanvasTexture>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.CanvasTexture>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set canvas(
         canvas:
             | HTMLImageElement

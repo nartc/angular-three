@@ -57,10 +57,6 @@ export class Ngt<%= name %> extends NgtCommonHelper<THREE.<%= name %>> {
         | ConstructorParameters<typeof THREE.<%= name %>>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.<%= name %>>) {
-        this.instanceArgs = v;
-    }
-
     <% for (const input of inputs) { %>
     @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <% if (input.isBooleanInput) { %>BooleanInput<% } else if (input.isNumberInput) { %>NumberInput<% } else { %><%= input.type %><% } %>) {
         this.set({ <% if (input.isBooleanInput || input.isNumberInput) { %><%= input.name %>: <% if (input.isNumberInput) { %>coerceNumberProperty<% } else { %>coerceBooleanProperty<% } %>(<%= input.name %>)<% } else { %><%= input.name %><% } %> });

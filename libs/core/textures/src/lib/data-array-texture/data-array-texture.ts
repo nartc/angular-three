@@ -29,10 +29,6 @@ export class NgtDataArrayTexture extends NgtCommonTexture<THREE.DataArrayTexture
         | ConstructorParameters<typeof THREE.DataArrayTexture>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.DataArrayTexture>) {
-        this.instanceArgs = v;
-    }
-
     @Input() set data(data: BufferSource) {
         this.set({ data });
     }

@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
@@ -11,6 +11,10 @@ export abstract class NgtCommonAttribute<
         | THREE.InterleavedBufferAttribute = THREE.BufferAttribute
 > extends NgtInstance<TAttribute, NgtInstanceState<TAttribute>> {
     abstract get attributeType(): AnyConstructor<TAttribute>;
+
+    @Input() set args(v: ConstructorParameters<AnyConstructor<TAttribute>>) {
+        this.instanceArgs = v;
+    }
 
     override ngOnInit() {
         super.ngOnInit();

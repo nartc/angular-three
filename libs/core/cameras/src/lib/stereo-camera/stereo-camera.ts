@@ -23,10 +23,6 @@ export class NgtStereoCamera extends NgtCommonCamera<THREE.StereoCamera> {
         | ConstructorParameters<typeof THREE.StereoCamera>
         | undefined;
 
-    @Input() set args(v: ConstructorParameters<typeof THREE.StereoCamera>) {
-        this.instanceArgs = v;
-    }
-
     override get cameraType(): AnyConstructor<THREE.StereoCamera> {
         return THREE.StereoCamera;
     }
