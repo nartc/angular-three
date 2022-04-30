@@ -4,8 +4,8 @@ import { updateJsonFile } from "@nrwl/workspace";
 import { existsSync } from "fs";
 import { logger } from "@nrwl/devkit";
 
-const packageJson = readJsonFile('package.json');
-const version = packageJson.version;
+const versionJson = readJsonFile('version.json');
+const version = versionJson.version;
 
 const workspaceJson = readJsonFile('workspace.json');
 const projects = Object.keys(workspaceJson.projects).filter(projectKey => !projectKey.includes('e2e'))
