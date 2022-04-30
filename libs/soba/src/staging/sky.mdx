@@ -1,0 +1,44 @@
+Adds a [Sky](https://threejs.org/examples/#webgl_shaders_sky) to the Scene
+
+### Inputs
+
+| name            | type          | default                                   |
+| --------------- | ------------- | ----------------------------------------- |
+| distance        | `NumberInput` | `1000`                                    |
+| sunPosition     | `NgtVector3`  | `calcPosFromAngles(inclination, azimuth)` |
+| inclination     | `NumberInput` | `0.6`                                     |
+| azimuth         | `NumberInput` | `0.1`                                     |
+| mieCoefficient  | `NumberInput` | `0.005`                                   |
+| mieDirectionalG | `NumberInput` | `0.8`                                     |
+| rayleigh        | `NumberInput` | `0.5`                                     |
+| turbidity       | `NumberInput` | `10`                                      |
+
+```ts
+export function calcPosFromAngles(
+    inclination: number,
+    azimuth: number,
+    vector: THREE.Vector3 = new THREE.Vector3()
+) {
+    const theta = Math.PI * (inclination - 0.5);
+    const phi = 2 * Math.PI * (azimuth - 0.5);
+
+    vector.x = Math.cos(phi);
+    vector.y = Math.sin(theta);
+    vector.z = Math.sin(phi);
+
+    return vector;
+}
+```
+
+### Usage
+
+It is as easy as adding `<ngt-soba-sky></ngt-soba-sky>` onto the Scene
+
+```html
+<ngt-soba-sky></ngt-soba-sky>
+<ngt-mesh>
+    <ngt-value [attach]="['rotation', 'x']" [value]="90 | radian"></ngt-value>
+    <ngt-plane-geometry [args]="[100, 100, 4, 4]"></ngt-plane-geometry>
+    <ngt-mesh-basic-material color="black" wireframe></ngt-mesh-basic-material>
+</ngt-mesh>
+```

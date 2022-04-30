@@ -12,6 +12,10 @@ import {
     Story,
 } from '@storybook/angular';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
+// @ts-ignore
+import skyDocs from './sky.mdx';
+
+console.log({ skyDocs });
 
 export default {
     title: 'Staging/Sky',
@@ -30,6 +34,10 @@ export default {
             ],
         }),
     ],
+    parameters: {
+        docs: { page: skyDocs },
+        viewMode: 'story',
+    },
 } as Meta;
 
 export const Default: Story = () => ({
