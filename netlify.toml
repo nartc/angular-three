@@ -9,3 +9,9 @@
 [context.branch-deploy]
     command = "npx pnpm run docs"
     publish = "libs/documentations/build/"
+
+[[redirects]]
+    from = "/examples/*"
+    to = "/examples"
+    status = 301
+    force = true
