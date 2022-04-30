@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import {
     AnyConstructor,
     is,
@@ -12,8 +11,9 @@ import {
     Input,
     NgModule,
 } from '@angular/core';
-import { LineGeometry } from 'three-stdlib';
 import { Observable } from 'rxjs';
+import * as THREE from 'three';
+import { LineGeometry } from 'three-stdlib';
 
 @Component({
     selector: 'ngt-soba-line-geometry',
@@ -25,10 +25,6 @@ export class NgtSobaLineGeometry extends NgtCommonGeometry<LineGeometry> {
     static ngAcceptInputType_args:
         | ConstructorParameters<typeof LineGeometry>
         | undefined;
-
-    @Input() set args(v: ConstructorParameters<typeof LineGeometry>) {
-        this.instanceArgs = v;
-    }
 
     @Input() set points(points: Array<THREE.Vector3 | NgtTriple>) {
         this.set({ points });
