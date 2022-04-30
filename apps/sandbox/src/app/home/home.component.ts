@@ -8,6 +8,7 @@ import {
     NgModule,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { routes } from '../routes';
 
 @Directive({
     selector: 'video[sandboxAutoplay]',
@@ -26,6 +27,13 @@ export class AutoplayVideoDirective {
         this.videoElementRef.nativeElement.pause();
         this.videoElementRef.nativeElement.currentTime = 0;
     }
+}
+
+export interface Example {
+    title: string;
+    description: string;
+    asset: string;
+    link: string;
 }
 
 @Component({
@@ -113,39 +121,9 @@ export class AutoplayVideoDirective {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-    readonly examples = [
-        {
-            title: 'Simple Cubes',
-            description:
-                'Two spinning cubes along with a cube with different materials',
-            link: '/cubes',
-            asset: 'assets/examples/cubes',
-        },
-        {
-            title: 'Physic Cubes',
-            description: 'Simple example to show @angular-three/cannon',
-            link: '/physic-cubes',
-            asset: 'assets/examples/physic-cubes',
-        },
-        {
-            title: 'Keen Bloom',
-            description: 'Simple example to show @angular-three/postprocessing',
-            link: '/keen-bloom',
-            asset: 'assets/examples/keen',
-        },
-        {
-            title: 'Kinematic Cube',
-            description: '@angular-three/cannon example with InstancedMesh',
-            link: '/kinematic-cube',
-            asset: 'assets/examples/kinematic',
-        },
-        {
-            title: 'Monday Morning',
-            description: '@angular-three/cannon example with Constraints',
-            link: '/monday-morning',
-            asset: 'assets/examples/monday-morning',
-        },
-    ] as const;
+    readonly examples = routes
+        .filter((route) => !!route.data)
+        .map((route) => route.data) as Example[];
 }
 
 @NgModule({
