@@ -1,5 +1,23 @@
 
 
+## [5.0.0-beta.30](https://github.com/nartc/angular-three/compare/5.0.0-beta.29...5.0.0-beta.30) (2022-04-30)
+
+
+### Bug Fixes
+
+* **core:** intensity should accept data from input instead of hard code 1 ([8bcdf20](https://github.com/nartc/angular-three/commit/8bcdf207d35569b5f7d04e012d98a1316623ae43))
+* **core:** move args input to abstract classes ([ad7947d](https://github.com/nartc/angular-three/commit/ad7947d1895af1c59a7e8f4a67e8bf154f520808))
+* **postprocessing:** debounce effectPasses so that multiple effect triggers should be debounced ([c54f9e7](https://github.com/nartc/angular-three/commit/c54f9e77d621d9638cc426a546e820373725f2bd))
+* **soba:** remove args input on line geometry ([8a0fbe8](https://github.com/nartc/angular-three/commit/8a0fbe8c73656301ca8145d902bc550706307f27))
+
+
+### Documentations
+
+* add clump ([ffc73a7](https://github.com/nartc/angular-three/commit/ffc73a76360ad90364deabf5dbb2390ac8a5de89))
+* adjust home ([70df11b](https://github.com/nartc/angular-three/commit/70df11b4051ff6e992feba4fd9d3bbd5e4b68a54))
+* handle redirect ([10d3e03](https://github.com/nartc/angular-three/commit/10d3e03992cc0a257e1b92455a6e9f72cf410c5f))
+* video play on hover ([d7fc972](https://github.com/nartc/angular-three/commit/d7fc972d7f48cd64cd9358f2739291a57df7f83c))
+
 ## [5.0.0-beta.29](https://github.com/nartc/angular-three/compare/5.0.0-beta.28...5.0.0-beta.29) (2022-04-29)
 
 
