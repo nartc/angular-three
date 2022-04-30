@@ -15,7 +15,23 @@ const config = {
     favicon: 'img/ngt-logo.png',
     organizationName: 'nartc',
     projectName: 'angular-three',
-
+    plugins: [
+        [
+            '@docusaurus/plugin-client-redirects',
+            /** @type {import('@docusaurus/plugin-client-redirects').PluginOptions} */
+            {
+                createRedirects(path) {
+                    if (path.includes('/examples/')) {
+                        return path
+                            .split('/examples/')[0]
+                            .concat('/examples')
+                            .join('');
+                    }
+                    return undefined;
+                },
+            },
+        ],
+    ],
     presets: [
         [
             'classic',
