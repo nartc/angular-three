@@ -1,5 +1,12 @@
 
 
+### [5.0.1](https://github.com/nartc/angular-three/compare/5.0.0...5.0.1) (2022-05-01)
+
+
+### Bug Fixes
+
+* **core:** object host ref should return the parentRef as it is already a factorye ([33a3df9](https://github.com/nartc/angular-three/commit/33a3df9466bb4583fa9154d64b620b034298ee3f))
+
 ## [5.0.0](https://github.com/nartc/angular-three/compare/5.0.0-beta.32...5.0.0) (2022-05-01)
 
 
