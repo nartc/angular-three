@@ -77,6 +77,11 @@ export interface Example {
                                         [src]="example.asset + '.' + source"
                                         [type]="'video/' + source"
                                     />
+                                    <img
+                                        class="w-full h-full max-h-48 object-cover"
+                                        [src]="example.asset + '.gif'"
+                                        [alt]="example.description"
+                                    />
                                 </video>
                                 <div
                                     class="p-6 pt-0 space-y-2 xl:flex xl:items-center xl:justify-between"
