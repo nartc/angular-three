@@ -1,5 +1,20 @@
 
 
+## [5.0.0](https://github.com/nartc/angular-three/compare/5.0.0-beta.32...5.0.0) (2022-05-01)
+
+
+### Bug Fixes
+
+* **postprocessing:** adjust effect param changes; handle effect dispos ([af76d7e](https://github.com/nartc/angular-three/commit/af76d7e6353a46968014184cc367748c50ed30db))
+* **postprocessing:** ssao blendFunction options should get from the input ([32aba1c](https://github.com/nartc/angular-three/commit/32aba1c37981b114e81d2fab2e8897dc73949a0d))
+* **repo:** adjust provideObjectHostRef to be less boilerplate ([5f77dcb](https://github.com/nartc/angular-three/commit/5f77dcbdae244caa7c1b44aeb48bc324ecb479a1))
+
+
+### Documentations
+
+* add postprocessing-ssao example ([a7cd4b2](https://github.com/nartc/angular-three/commit/a7cd4b2a36a73ead3f8f3df66646392dc8d51156))
+* add vertex colors with instancing ([ed1a46e](https://github.com/nartc/angular-three/commit/ed1a46e928860bad70a40fdcbd2045fae57616e4))
+
 ## [5.0.0-beta.32](https://github.com/nartc/angular-three/compare/5.0.0-beta.31...5.0.0-beta.32) (2022-05-01)
 
 
