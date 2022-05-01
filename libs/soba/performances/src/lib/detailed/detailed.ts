@@ -64,13 +64,7 @@ export class NgtSobaDetailedContent {
         <ng-content></ng-content>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaDetailed,
-            (detailed) => detailed.instance,
-            (detailed) => detailed.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaDetailed)],
 })
 export class NgtSobaDetailed extends NgtObjectInputs<THREE.LOD> {
     @ContentChild(NgtSobaDetailedContent) content?: NgtSobaDetailedContent;

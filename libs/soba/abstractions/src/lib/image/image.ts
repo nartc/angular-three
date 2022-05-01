@@ -103,14 +103,7 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
         </ng-container>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        NgtTextureLoader,
-        provideObjectHostRef(
-            NgtSobaImage,
-            (image) => image.instance,
-            (image) => image.parentRef
-        ),
-    ],
+    providers: [NgtTextureLoader, provideObjectHostRef(NgtSobaImage)],
 })
 export class NgtSobaImage extends NgtObjectInputs<
     THREE.Mesh,

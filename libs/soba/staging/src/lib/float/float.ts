@@ -1,10 +1,10 @@
 import {
     AnyFunction,
     coerceNumberProperty,
+    NGT_OBJECT_REF,
     NgtObjectInputs,
     NgtObjectInputsState,
     NgtObjectPassThroughModule,
-    NGT_OBJECT_REF,
     NumberInput,
     provideObjectHostRef,
     Ref,
@@ -67,11 +67,7 @@ export interface NgtSobaFloatState extends NgtObjectInputsState<THREE.Group> {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHostRef(
-            NgtSobaFloat,
-            (float) => float.innerGroup,
-            (float) => float.parentRef
-        ),
+        provideObjectHostRef(NgtSobaFloat, (float) => float.innerGroup),
     ],
 })
 export class NgtSobaFloat extends NgtObjectInputs<

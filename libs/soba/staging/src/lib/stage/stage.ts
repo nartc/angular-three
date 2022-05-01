@@ -3,10 +3,10 @@ import {
     BooleanInput,
     coerceBooleanProperty,
     coerceNumberProperty,
+    NGT_OBJECT_REF,
     NgtObjectInputs,
     NgtObjectInputsState,
     NgtObjectPassThroughModule,
-    NGT_OBJECT_REF,
     NumberInput,
     provideObjectHostRef,
     Ref,
@@ -167,11 +167,7 @@ export class NgtSobaStageContent {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHostRef(
-            NgtSobaStage,
-            (stage) => stage.innerGroup,
-            (stage) => stage.parentRef
-        ),
+        provideObjectHostRef(NgtSobaStage, (stage) => stage.innerGroup),
     ],
 })
 export class NgtSobaStage extends NgtObjectInputs<

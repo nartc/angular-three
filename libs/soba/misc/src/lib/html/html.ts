@@ -239,13 +239,7 @@ export class NgtSobaHtmlContent {
         <ng-content></ng-content>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaHtml,
-            (html) => html.instance,
-            (html) => html.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaHtml)],
 })
 export class NgtSobaHtml extends NgtObjectInputs<
     THREE.Group,

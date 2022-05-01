@@ -113,13 +113,7 @@ export class NgtSobaGizmoViewportAxis extends NgtInstance<THREE.Group> {
         </ngt-sprite>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaGizmoViewportAxisHead,
-            (axisHead) => axisHead.instance,
-            (axisHead) => axisHead.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaGizmoViewportAxisHead)],
 })
 export class NgtSobaGizmoViewportAxisHead extends NgtObjectInputs<THREE.Sprite> {
     @Input() set arcStyle(arcStyle: string) {
@@ -320,13 +314,7 @@ export class NgtSobaGizmoViewportAxisHead extends NgtObjectInputs<THREE.Sprite> 
         </ngt-group>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaGizmoViewport,
-            (viewport) => viewport.instance,
-            (viewport) => viewport.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaGizmoViewport)],
 })
 export class NgtSobaGizmoViewport extends NgtObjectInputs<THREE.Group> {
     @Input() set axisColors(axisColors: [string, string, string]) {

@@ -79,8 +79,7 @@ export class NgtSobaBackdropContent {
     providers: [
         provideObjectHostRef(
             NgtSobaBackdrop,
-            (backdrop) => backdrop.backdropMesh,
-            (backdrop) => backdrop.parentRef
+            (backdrop) => backdrop.backdropMesh
         ),
     ],
 })

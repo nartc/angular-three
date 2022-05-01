@@ -82,13 +82,7 @@ export interface NgtSobaStarsState extends NgtObjectInputsState<THREE.Points> {
         </ngt-points>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaStars,
-            (stars) => stars.instance,
-            (stars) => stars.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaStars)],
 })
 export class NgtSobaStars extends NgtObjectInputs<
     THREE.Points,

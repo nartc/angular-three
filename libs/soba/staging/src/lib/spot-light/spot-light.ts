@@ -61,13 +61,7 @@ const vec = new THREE.Vector3();
         </ngt-spot-light>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaSpotLight,
-            (spotLight) => spotLight.instance,
-            (spotLight) => spotLight.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaSpotLight)],
 })
 export class NgtSobaSpotLight extends NgtSpotLight {
     @Input() set depthBuffer(depthBuffer: THREE.DepthTexture) {

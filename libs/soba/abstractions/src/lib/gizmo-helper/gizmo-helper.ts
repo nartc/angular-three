@@ -91,13 +91,7 @@ const targetPosition = makeVector3();
         </ngt-portal>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaGizmoHelper,
-            (gizmo) => gizmo.instance,
-            (gizmo) => gizmo.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaGizmoHelper)],
 })
 export class NgtSobaGizmoHelper extends NgtObjectInputs<
     THREE.Group,

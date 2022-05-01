@@ -54,13 +54,7 @@ export class NgtSobaBillboardContent {
         </ngt-group>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaBillboard,
-            (billboard) => billboard.instance,
-            (billboard) => billboard.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaBillboard)],
 })
 export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
     @Input() set follow(value: BooleanInput) {

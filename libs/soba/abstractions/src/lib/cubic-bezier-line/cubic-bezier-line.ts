@@ -43,13 +43,7 @@ import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
         </ngt-soba-line>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaCubicBezierLine,
-            (line) => line.instance,
-            (line) => line.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaCubicBezierLine)],
 })
 export class NgtSobaCubicBezierLine extends NgtSobaLine {
     static ngAcceptInputType_points: never;

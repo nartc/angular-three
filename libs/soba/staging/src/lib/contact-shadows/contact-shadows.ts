@@ -79,13 +79,7 @@ export interface NgtSobaContactShadowsState
         </ngt-group>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaContactShadows,
-            (shadows) => shadows.instance,
-            (shadows) => shadows.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaContactShadows)],
 })
 export class NgtSobaContactShadows extends NgtObjectInputs<
     THREE.Group,

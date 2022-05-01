@@ -2,10 +2,10 @@ import {
     AnyFunction,
     BooleanInput,
     coerceBooleanProperty,
+    NGT_OBJECT_REF,
     NgtObjectInputs,
     NgtObjectInputsState,
     NgtObjectPassThroughModule,
-    NGT_OBJECT_REF,
     provideObjectHostRef,
     Ref,
 } from '@angular-three/core';
@@ -79,11 +79,7 @@ export interface NgtSobaCenterState extends NgtObjectInputsState<THREE.Group> {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        provideObjectHostRef(
-            NgtSobaCenter,
-            (center) => center.innerGroup,
-            (center) => center.parentRef
-        ),
+        provideObjectHostRef(NgtSobaCenter, (center) => center.innerGroup),
     ],
 })
 export class NgtSobaCenter extends NgtObjectInputs<

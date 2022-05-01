@@ -88,8 +88,7 @@ export interface NgtSobaTransformControlsState
     providers: [
         provideObjectHostRef(
             NgtSobaTransformControls,
-            (controls) => controls.groupRef,
-            (controls) => controls.parentRef
+            (controls) => controls.groupRef
         ),
     ],
 })

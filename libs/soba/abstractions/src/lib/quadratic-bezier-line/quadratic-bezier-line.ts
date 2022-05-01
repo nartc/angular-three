@@ -46,13 +46,7 @@ const v = new THREE.Vector3();
         </ngt-soba-line>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaQuadraticBezierLine,
-            (line) => line.instance,
-            (line) => line.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaQuadraticBezierLine)],
 })
 export class NgtSobaQuadraticBezierLine extends NgtSobaLine {
     @Input() set start(start: THREE.Vector3 | NgtTriple) {

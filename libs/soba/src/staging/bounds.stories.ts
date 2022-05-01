@@ -1,13 +1,13 @@
 import {
     AnyFunction,
+    NGT_OBJECT_HOST_REF,
+    NGT_OBJECT_REF,
     NgtEvent,
     NgtObjectInputs,
     NgtObjectPassThroughModule,
     NgtPiPipeModule,
     NgtRadianPipeModule,
     NgtStore,
-    NGT_OBJECT_HOST_REF,
-    NGT_OBJECT_REF,
     provideObjectHostRef,
     Ref,
     UnknownRecord,
@@ -183,13 +183,7 @@ class BoundsStory {
         </ng-container>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            Model,
-            (model) => model.instance,
-            (model) => model.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(Model)],
 })
 class Model extends NgtObjectInputs<THREE.Mesh> {
     modelRef = new Ref<THREE.Mesh>();

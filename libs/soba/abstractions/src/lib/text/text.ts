@@ -61,13 +61,7 @@ export class NgtSobaTextContent {
         </ngt-primitive>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaText,
-            (text) => text.textMesh,
-            (text) => text.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaText, (text) => text.textMesh)],
 })
 export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
     @Input() set text(text: string) {

@@ -25,7 +25,6 @@ const config = {
                     editUrl:
                         'https://github.com/nartc/angular-three/tree/main/libs/documentations/docs',
                 },
-                // TODO: add blog later?
                 // blog: {
                 //     showReadingTime: true,
                 //     // Please change this to your repo.
@@ -55,7 +54,6 @@ const config = {
                         position: 'left',
                         label: 'Documentations',
                     },
-                    // TODO: add blog later
                     // { to: '/blog', label: 'Blog', position: 'left' },
                     {
                         href: 'https://github.com/nartc/angular-three',

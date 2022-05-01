@@ -32,7 +32,7 @@ export function provideObjectRef<TType extends AnyConstructor<any>>(
 
 export function provideObjectHostRef<TType extends AnyConstructor<any>>(
     subType: TType,
-    factory: (instance: InstanceType<TType>) => Ref,
+    factory?: (instance: InstanceType<TType>) => Ref,
     hostFactory?: (instance: InstanceType<TType>) => AnyFunction<Ref>
 ): Provider {
     return [
@@ -40,7 +40,8 @@ export function provideObjectHostRef<TType extends AnyConstructor<any>>(
         {
             provide: NGT_INSTANCE_REF,
             useFactory: (instance: InstanceType<TType>) => {
-                return () => factory(instance);
+                return () =>
+                    factory ? factory(instance) : instance['instance'];
             },
             deps: [subType],
         },
@@ -49,14 +50,15 @@ export function provideObjectHostRef<TType extends AnyConstructor<any>>(
             useFactory: (instance: InstanceType<TType>) => {
                 return hostFactory
                     ? hostFactory(instance)
-                    : () => instance.parent;
+                    : () => instance.parentRef;
             },
             deps: [subType],
         },
         {
             provide: NGT_OBJECT_REF,
             useFactory: (instance: InstanceType<TType>) => {
-                return () => factory(instance);
+                return () =>
+                    factory ? factory(instance) : instance['instance'];
             },
             deps: [subType],
         },
@@ -65,7 +67,7 @@ export function provideObjectHostRef<TType extends AnyConstructor<any>>(
             useFactory: (instance: InstanceType<TType>) => {
                 return hostFactory
                     ? hostFactory(instance)
-                    : () => instance.parent;
+                    : () => instance.parentRef;
             },
             deps: [subType],
         },

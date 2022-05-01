@@ -122,13 +122,7 @@ export class NgtSobaLineContent {
         </ngt-primitive>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaLine,
-            (line) => line.instance,
-            (line) => line.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaLine)],
 })
 export class NgtSobaLine extends NgtSobaCommonLine {
     @Output() beforeRender = new EventEmitter<{

@@ -118,13 +118,7 @@ export class NgtSobaBoundsContent {
         <ng-content></ng-content>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        provideObjectHostRef(
-            NgtSobaBounds,
-            (bounds) => bounds.instance,
-            (bounds) => bounds.parentRef
-        ),
-    ],
+    providers: [provideObjectHostRef(NgtSobaBounds)],
 })
 export class NgtSobaBounds extends NgtObjectInputs<
     THREE.Group,
