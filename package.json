@@ -11,7 +11,7 @@
         "storybook": "nx storybook soba",
         "build": "nx run-many --target=build --projects=core,cannon,postprocessing,soba,schematics",
         "publish": "nx run-many --target=publish --all --parallel",
-        "predocs": "test \"$CI\" = true && npx pnpm install --no-frozen-lockfile -Dr --store=node_modules/.pnpm-store || echo skiping pnpm install",
+        "predocs": "test \"$CI\" = true && NODE_ENV=development npx pnpm install --no-frozen-lockfile -Dr --store=node_modules/.pnpm-store && NODE_ENV=production || echo skiping pnpm install",
         "docs": "npx pnpm run predocs && nx build-docs documentations"
     },
     "private": true,
@@ -34,9 +34,6 @@
         "@angular/platform-browser": "13.3.4",
         "@angular/platform-browser-dynamic": "13.3.4",
         "@angular/router": "13.3.4",
-        "@fortawesome/angular-fontawesome": "0.10.2",
-        "@fortawesome/fontawesome-svg-core": "6.1.1",
-        "@fortawesome/free-solid-svg-icons": "6.1.1",
         "@nrwl/angular": "14.0.3",
         "@nrwl/cli": "14.0.3",
         "@nrwl/devkit": "14.0.3",
