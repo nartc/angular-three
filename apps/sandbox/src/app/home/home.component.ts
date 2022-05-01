@@ -34,6 +34,7 @@ export interface Example {
     description: string;
     asset: string;
     link: string;
+    source: string;
 }
 
 @Component({
@@ -100,10 +101,12 @@ export interface Example {
                                             {{ example.description }}
                                         </p>
                                         <a
-                                            href="#"
+                                            [href]="example.source"
+                                            target="_blank"
+                                            rel="noreferrer noopener"
                                             class="block text-blue-400 hover:text-blue-500"
                                         >
-                                            Source (coming)
+                                            Source
                                         </a>
                                     </div>
                                 </div>

@@ -17,6 +17,7 @@ export const routes: Routes = [
                 'Two spinning cubes along with a cube with different materials',
             link: '/cubes',
             asset: 'assets/examples/cubes',
+            source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/cubes',
         },
     },
     {
@@ -30,6 +31,7 @@ export const routes: Routes = [
             description: 'Simple example to show @angular-three/postprocessing',
             link: '/keen-bloom',
             asset: 'assets/examples/keen',
+            source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/keen-bloom',
         },
     },
     {
@@ -43,6 +45,7 @@ export const routes: Routes = [
             description: 'Simple example to show @angular-three/cannon',
             link: '/physic-cubes',
             asset: 'assets/examples/physic-cubes',
+            source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/physic-cubes',
         },
     },
     {
@@ -56,6 +59,7 @@ export const routes: Routes = [
             description: '@angular-three/cannon example with InstancedMesh',
             link: '/kinematic-cube',
             asset: 'assets/examples/kinematic',
+            source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/kinematic-cube',
         },
     },
     {
@@ -69,6 +73,7 @@ export const routes: Routes = [
             description: '@angular-three/cannon example with Constraints',
             link: '/monday-morning',
             asset: 'assets/examples/monday-morning',
+            source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/monday-morning',
         },
     },
     {
@@ -83,6 +88,7 @@ export const routes: Routes = [
                 '@angular-three/cannon example with Constraints and Force',
             link: '/object-clump',
             asset: 'assets/examples/clump',
+            source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/object-clump',
         },
     },
     {
@@ -96,6 +102,21 @@ export const routes: Routes = [
             description: '@angular-three/postprocessing example with SSAO',
             link: '/postprocessing-ssao',
             asset: 'assets/examples/postprocessing-ssao',
+            source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/postprocessing-ssao',
+        },
+    },
+    {
+        path: 'vertex-colors-instances',
+        loadChildren: () =>
+            import(
+                './vertex-colors-instances/vertex-colors-instances.component'
+            ).then((m) => m.VertexColorsInstancesComponentModule),
+        data: {
+            title: 'Vertex Colors Instances',
+            description: 'THREE.InstancedMesh with Vertex Colors',
+            link: '/vertex-colors-instances',
+            asset: 'assets/examples/vertex-colors-instances',
+            source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/vertex-colors-instances',
         },
     },
 ];
