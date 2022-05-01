@@ -1,9 +1,8 @@
 [build]
-    command = "npx pnpm run docs"
+    command = "npm run docs"
     publish = "libs/documentations/build/"
 
 [build.environment]
-    NPM_FLAGS="--prefix=/"
     NODE_VERSION = "14.19"
 
 [[redirects]]
