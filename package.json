@@ -11,12 +11,11 @@
         "storybook": "nx storybook soba",
         "build": "nx run-many --target=build --projects=core,cannon,postprocessing,soba,schematics",
         "publish": "nx run-many --target=publish --all --parallel",
-        "predocs": "test \"$CI\" = true && npx pnpm install --no-frozen-lockfile -PDr --store=node_modules/.pnpm-store || echo skiping pnpm install",
+        "predocs": "test \"$CI\" = true && npx pnpm install --no-frozen-lockfile -Dr --store=node_modules/.pnpm-store || echo skiping pnpm install",
         "docs": "npx pnpm run predocs && nx build-docs documentations"
     },
     "private": true,
     "dependencies": {
-        "@storybook/core-server": "6.4.22",
         "tslib": "^2.3.1"
     },
     "devDependencies": {
@@ -56,6 +55,7 @@
         "@storybook/addons": "~6.4.22",
         "@storybook/angular": "~6.4.22",
         "@storybook/builder-webpack5": "~6.4.22",
+        "@storybook/core-server": "6.4.22",
         "@storybook/manager-webpack5": "~6.4.22",
         "@storybook/theming": "~6.4.22",
         "@types/jest": "27.4.1",
