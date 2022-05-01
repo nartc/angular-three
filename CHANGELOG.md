@@ -1,5 +1,17 @@
 
 
+## [5.0.0-beta.32](https://github.com/nartc/angular-three/compare/5.0.0-beta.31...5.0.0-beta.32) (2022-05-01)
+
+
+### Features
+
+* **core:** add capsule geometry ([ae67458](https://github.com/nartc/angular-three/commit/ae6745844644c78a7e71ee133dce42c2ab37c731))
+
+
+### Documentations
+
+* add gif as fallback for browsers that do not support video ([c561010](https://github.com/nartc/angular-three/commit/c561010fc442b380582ad47f8cc7390294d10d0e))
+
 ## [5.0.0-beta.31](https://github.com/nartc/angular-three/compare/5.0.0-beta.30...5.0.0-beta.31) (2022-04-30)
 
 
