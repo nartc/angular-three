@@ -1,6 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { Observable, tap } from 'rxjs';
-import * as THREE from 'three';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -14,6 +12,8 @@ import {
     SkipSelf,
     TemplateRef,
 } from '@angular/core';
+import { Observable, tap } from 'rxjs';
+import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from './abstracts/instance';
 import { Ref } from './ref';
 import { NgtResize, NgtResizeResult } from './services/resize';
@@ -26,10 +26,10 @@ import {
     NGT_OBJECT_REF,
     NGT_SCENE_REF,
 } from './tokens';
-import { AnyFunction, NgtEventManager, NgtSize, NgtState } from './types';
+import type { AnyFunction, NgtEventManager, NgtSize, NgtState } from './types';
+import { updateCamera } from './utils/camera';
 import { prepare } from './utils/instance';
 import { makeDpr } from './utils/make';
-import { updateCamera } from './utils/camera';
 
 export const privateKeys = [
     'events',

@@ -374,7 +374,6 @@ export abstract class NgtObject<
      * This function is also called outside of Angular Zone
      * @protected
      */
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     protected get preObjectInit(): NgtPreObjectInit {
         return undefined;
     }
@@ -426,8 +425,6 @@ export abstract class NgtObject<
 
             // append to parent
             if (is.object3d(this.instance.value)) {
-                // appendToParent is late a frame due to appendTo
-                // only emit the object is ready after it's been added to the scene
                 this.appendToParent();
             }
 
@@ -463,6 +460,8 @@ export abstract class NgtObject<
     }
 
     private appendToParent(): void {
+        // appendToParent is late a frame due to appendTo
+        // only emit the object is ready after it's been added to the scene
         requestAnimationFrame(() => {
             const appendToRef = this.get((s) => s.appendTo);
             if (appendToRef && appendToRef.value) {
@@ -571,6 +570,7 @@ export abstract class NgtObject<
                 >
             >[0]
         ) => {
+            // go back into Angular Zone so that state updates on these events trigger CD
             this.zone.run(() => {
                 controllerEvent.emit(event as NgtEvent<any>);
             });

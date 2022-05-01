@@ -165,14 +165,13 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
                 this.store.get()
             );
 
-            // init canvas
             this.store.init(
                 this.rendererCanvas.nativeElement,
                 rootStateMap,
                 invalidate,
                 advance
             );
-            // onCanvasReady -> init loop
+
             this.onCanvasReady(this.store.ready$, () => {
                 const canvasState = this.store.get();
                 this.created.emit(canvasState);
