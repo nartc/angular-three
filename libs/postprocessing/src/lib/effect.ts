@@ -7,11 +7,12 @@ import {
     NgtInstance,
     NgtInstanceState,
     NgtStore,
+    NgtUnknownInstance,
     NumberInput,
     provideInstanceRef,
+    Ref,
     startWithUndefined,
     tapEffect,
-    Ref,
 } from '@angular-three/core';
 import {
     Directive,
@@ -23,7 +24,7 @@ import {
     Provider,
     SkipSelf,
 } from '@angular/core';
-import { BlendFunction, Effect } from 'postprocessing';
+import { BlendFunction, Effect, EffectComposer } from 'postprocessing';
 import { tap } from 'rxjs';
 import { NgtEffectComposer } from './effect-composer';
 
@@ -79,8 +80,7 @@ export abstract class NgtCommonEffect<
     protected readonly effectOptions$ = this.select(
         this.select((s) => s.opacity).pipe(startWithUndefined()),
         this.select((s) => s.blendFunction),
-        this.select((s) => s.instance.value),
-        this.select((s) => s.instance.value.blendMode)
+        this.instance$
     );
 
     constructor(
@@ -136,7 +136,20 @@ export abstract class NgtCommonEffect<
         tapEffect(() => {
             const instanceArgs = this.get((s) => s.instanceArgs);
             const effectCtorParams = this.adjustCtorParams(instanceArgs);
-            this.prepareInstance(new this.effectType(...effectCtorParams));
+            const effect = this.prepareInstance(
+                new this.effectType(...effectCtorParams)
+            );
+
+            return () => {
+                const parent = effect.__ngt__.parent?.value;
+                // remove effect ref from parent effect composer
+                if (parent && parent instanceof EffectComposer) {
+                    (parent as NgtUnknownInstance).__ngt__.objects.set((refs) =>
+                        refs.filter((ref) => ref.value !== effect)
+                    );
+                }
+                effect.dispose();
+            };
         })
     );
 
