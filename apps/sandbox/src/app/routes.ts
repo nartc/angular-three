@@ -85,4 +85,17 @@ export const routes: Routes = [
             asset: 'assets/examples/clump',
         },
     },
+    {
+        path: 'postprocessing-ssao',
+        loadChildren: () =>
+            import('./postprocessing-ssao/postprocessing-ssao.component').then(
+                (m) => m.PostProcessingSSAOComponentModule
+            ),
+        data: {
+            title: 'Postprocessing SSAO',
+            description: '@angular-three/postprocessing example with SSAO',
+            link: '/postprocessing-ssao',
+            asset: 'assets/examples/postprocessing-ssao',
+        },
+    },
 ];

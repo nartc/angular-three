@@ -40,7 +40,6 @@ import * as THREE from 'three';
 
             <ngt-effect-composer>
                 <ngt-bloom></ngt-bloom>
-                <ngt-noise [options]="{ premultiply: true }"></ngt-noise>
             </ngt-effect-composer>
         </ngt-canvas>
         <ngt-soba-loader></ngt-soba-loader>
