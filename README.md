@@ -20,9 +20,9 @@ This package, while stable, is still in active development.
 
 ### Peer Dependencies
 
-- `three@0.137`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js**
-  is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.137`
-    - Make sure to also have `@types/three` installed as well
+-   `three@0.137`: This is a wrapper of **THREE.js** so `three` is a required `peerDependency`. Keep in mind, **THREE.js**
+    is moving quite frequently and quickly. Hence, to ensure compatibility, this wrapper currently supports `0.137`
+    -   Make sure to also have `@types/three` installed as well
 
 ```bash
 npm install -E three@0.137
@@ -47,6 +47,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://www.joshmorony.com/"><img src="https://avatars.githubusercontent.com/u/2578009?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joshua Morony</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=joshuamorony" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/BenLune"><img src="https://avatars.githubusercontent.com/u/5662714?v=4?s=100" width="100px;" alt=""/><br /><sub><b>BenLune</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=BenLune" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/IKatsuba"><img src="https://avatars.githubusercontent.com/u/10637135?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Igor Katsuba</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=IKatsuba" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/IRobot1"><img src="https://avatars.githubusercontent.com/u/25032599?v=4?s=100" width="100px;" alt=""/><br /><sub><b>andivr</b></sub></a><br /><a href="https://github.com/nartc/angular-three/commits?author=IRobot1" title="Documentation">📖</a></td>
   </tr>
 </table>
 

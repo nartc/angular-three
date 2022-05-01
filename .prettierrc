@@ -1,4 +1,10 @@
 {
-  "singleQuote": true,
-  "tabWidth": 4
+    "singleQuote": true,
+    "tabWidth": 4,
+    "overrides": [
+        {
+            "files": [".prettierrc", ".all-contributorsrc"],
+            "options": { "parser": "json" }
+        }
+    ]
 }
