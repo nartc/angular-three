@@ -4,7 +4,7 @@ import {
     provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-import { BlendFunction, SSAOEffect } from 'postprocessing';
+import { SSAOEffect } from 'postprocessing';
 
 @Component({
     selector: 'ngt-ssao',
@@ -37,7 +37,7 @@ export class NgtSSAO extends NgtCommonEffect<SSAOEffect> {
             camera,
             normalPass && !depthDownSamplingPass ? normalPass.texture : null,
             {
-                blendFunction: BlendFunction.MULTIPLY,
+                blendFunction: this.get((s) => s.blendFunction),
                 samples: 30,
                 rings: 4,
                 distanceThreshold: 1.0,
