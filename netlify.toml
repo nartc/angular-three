@@ -6,6 +6,9 @@
     NPM_FLAGS="--prefix=/"
     NODE_VERSION = "14.19"
 
+[context.production.environment]
+    NODE_ENV="development"
+
 [[redirects]]
     from = "/examples/*"
     to = "/examples/"
