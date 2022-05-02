@@ -1,3 +1,22 @@
+
+
+### [5.0.2](https://github.com/nartc/angular-three/compare/5.0.1...5.0.2) (2022-05-02)
+
+
+### Bug Fixes
+
+* **core:** expose checkNeedsUpdate and call checkNeedsUpdate where needsUpdate = true was ([0514798](https://github.com/nartc/angular-three/commit/0514798b2fdf397e0a591c10bf38f49a9f174d85))
+* **soba:** ensure to update material and material uniforms for Sky ([5e683da](https://github.com/nartc/angular-three/commit/5e683dad28d7b2355cb4c732beeece3460650f9c))
+
+
+### Documentations
+
+* adjust netlify for main branch now ([263430a](https://github.com/nartc/angular-three/commit/263430abe7a613b366d623efd6916773e3e272f1))
+* adjust predocs command to run install workspace root ([a7542b0](https://github.com/nartc/angular-three/commit/a7542b0e6256f45ff23cb07daccbfbf13271edba))
+* adjust storybook ([c01ed8b](https://github.com/nartc/angular-three/commit/c01ed8b07d161b9e48be861fe9315ac300b8c60e))
+* force install devDependencies ([7013bad](https://github.com/nartc/angular-three/commit/7013bad96f6fe4407958b7c247c8bbe72eff84ab))
+* revert change to predocs ([09b1d89](https://github.com/nartc/angular-three/commit/09b1d89d746e8ca252374bf4159fa2a04d2475bf))
+
 ### [5.0.1](https://github.com/nartc/angular-three/compare/5.0.0...5.0.1) (2022-05-01)
 
 ### Bug Fixes
