@@ -5,8 +5,7 @@ import {
 } from '@angular-three/soba/abstractions';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import * as THREE from 'three';
-// @ts-ignore
-import { hilbert3D } from 'three-stdlib';
+import { GeometryUtils } from 'three-stdlib/utils/GeometryUtils';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
@@ -46,7 +45,11 @@ export default {
   },
 } as Meta;
 
-const points = hilbert3D(new THREE.Vector3(0), 5).map((p: any) => [p.x, p.y, p.z]) as [number, number, number][];
+const points = GeometryUtils.hilbert3D(new THREE.Vector3(0), 5).map((p) => [p.x, p.y, p.z]) as [
+  number,
+  number,
+  number
+][];
 
 export const Default: Story = (args) => ({
   props: { ...args, points },
