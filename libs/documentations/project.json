@@ -7,8 +7,8 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba",
-          "npx nx build sandbox",
+          "NX_CLOUD=true STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba",
+          "NX_CLOUD=true npx nx build sandbox",
           "cp libs/documentations/_redirects libs/documentations/build/"
         ],
         "parallel": true
