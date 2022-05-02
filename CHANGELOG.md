@@ -1,5 +1,18 @@
 
 
+### [5.0.3](https://github.com/nartc/angular-three/compare/5.0.2...5.0.3) (2022-05-02)
+
+
+### Bug Fixes
+
+* **postprocessing:** use a group for child effectx ([6a52a39](https://github.com/nartc/angular-three/commit/6a52a39d91d6496a384f79b9f6ce655dccdad5db))
+
+
+### Documentations
+
+* adjust keen bloom to use ngt-effect-composer-content ([a1a2cd2](https://github.com/nartc/angular-three/commit/a1a2cd214754238e7a69195906337e53b30ecf92))
+* adjust object clump to use ngt-effect-composer-content ([1c472dc](https://github.com/nartc/angular-three/commit/1c472dc3b60d0cb0078aef18889403dd0f9efa08))
+
 ### [5.0.2](https://github.com/nartc/angular-three/compare/5.0.1...5.0.2) (2022-05-02)
 
 
