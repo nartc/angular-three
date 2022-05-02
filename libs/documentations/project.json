@@ -5,6 +5,7 @@
   "targets": {
     "build-external-docs": {
       "executor": "@nrwl/workspace:run-commands",
+      "outputs": ["libs/documentations/build"],
       "options": {
         "commands": [
           "NX_CLOUD=true STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba",
