@@ -6,7 +6,11 @@
     "build-external-docs": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba", "npx nx build sandbox"],
+        "commands": [
+          "STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba",
+          "npx nx build sandbox",
+          "cp libs/documentations/_redirects libs/documentations/build/"
+        ],
         "parallel": true
       },
       "dependsOn": [
