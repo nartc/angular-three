@@ -8,20 +8,21 @@
 
 ```
 .
-├── packages/
+├── apps/
+│   ├── sandbox
+├── libs/
 │   ├── core
+│   ├── documentations
 │   ├── schematics
 │   ├── cannon
 │   ├── soba
 │   ├── postprocessing
-│   ├── demo
-│   └── storybook
 └── tools/
     └── generators/
         └── three
 ```
 
-- `packages/` contains the core libraries and their dependencies
+- `libs/` contains the core libraries and their dependencies
   - `core`: contains the core library. This library holds almost all core entities from THREE.js (anything you can
     import from `THREE` with `import * as THREE from 'three'`)
     - `core-plugin-e2e`: contains the e2e test for Generators
@@ -31,9 +32,7 @@
     from [React Three Drei](https://github.com/pmndrs/react-three-drei)
   - `postprocessing`: contains `EffectComposer` and other effects
     from `[postprocessing](https://github.com/vanruesc/postprocessing)`
-  - `demo`: an Angular application to quickly test out things. This application also serves as Examples section for
-    our Storybook documentations
-  - `storybook`: Angular Three documentations
+  - `documentations`: A Docusaurus app
 - `tools/` contains all generators to generate what can be generated from core `THREE` at the moment. They are very
   similar to each other, browse around, and ask questions if you need help.
 
