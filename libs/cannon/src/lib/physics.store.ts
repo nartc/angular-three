@@ -1,4 +1,4 @@
-import { NgtComponentStore, NgtStore, tapEffect } from '@angular-three/core';
+import { checkNeedsUpdate, NgtComponentStore, NgtStore, tapEffect } from '@angular-three/core';
 import { Injectable, NgZone } from '@angular/core';
 import {
   Buffers,
@@ -336,7 +336,7 @@ export class NgtPhysicsStore extends NgtComponentStore<NgtPhysicsState> {
               const index = bodies[uuid];
               if (index !== undefined) {
                 ref.setMatrixAt(i, apply(index, positions, quaternions, scaleOverrides[uuid]));
-                ref.instanceMatrix.needsUpdate = true;
+                checkNeedsUpdate(ref.instanceMatrix);
               }
             }
           } else {

@@ -9,6 +9,7 @@ import { startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
 import type { AnyConstructor, AnyFunction, BooleanInput, NumberInput, UnknownRecord } from '../types';
+import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
 
 export interface NgtCommonMaterialState<
@@ -332,7 +333,7 @@ export abstract class NgtCommonMaterial<
             : {}
         )
       );
-      material.needsUpdate = true;
+      checkNeedsUpdate(material);
     })
   );
 

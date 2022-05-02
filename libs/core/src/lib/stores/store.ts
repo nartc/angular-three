@@ -20,6 +20,7 @@ import type {
 } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { createDefaultCamera, updateCamera } from '../utils/camera';
+import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { createEvents } from '../utils/events';
 import { prepare } from '../utils/instance';
 import { is } from '../utils/is';
@@ -400,7 +401,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
           } else {
             gl.shadowMap.type = THREE.PCFSoftShadowMap;
           }
-          gl.shadowMap.needsUpdate = true;
+          checkNeedsUpdate(gl.shadowMap);
         }
       }
 

@@ -1,4 +1,5 @@
 import {
+  checkNeedsUpdate,
   coerceNumberProperty,
   NgtObjectInputs,
   NgtObjectInputsState,
@@ -121,7 +122,7 @@ export class NgtSobaBackdrop extends NgtObjectInputs<THREE.Group, NgtSobaBackdro
           );
         }
       }
-      position.needsUpdate = true;
+      checkNeedsUpdate(position);
       planeGeometry.computeVertexNormals();
     })
   );

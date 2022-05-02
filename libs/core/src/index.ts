@@ -4,8 +4,6 @@ export * from './lib/abstracts/material-geometry';
 export * from './lib/abstracts/object';
 /* main canvas */
 export * from './lib/canvas';
-/* portal */
-export * from './lib/portal';
 /* dependency injection tokens */
 export * from './lib/di/attribute';
 export * from './lib/di/audio';
@@ -30,8 +28,8 @@ export * from './lib/di/texture';
 export * from './lib/di/window';
 /* directives */
 export * from './lib/directives/cursor';
-export * from './lib/directives/repeat';
 export * from './lib/directives/object-pass-through';
+export * from './lib/directives/repeat';
 /* pipes */
 export * from './lib/pipes/color';
 export * from './lib/pipes/fog';
@@ -40,6 +38,8 @@ export * from './lib/pipes/pi';
 export * from './lib/pipes/radian';
 export * from './lib/pipes/side';
 export * from './lib/pipes/vector';
+/* portal */
+export * from './lib/portal';
 export * from './lib/ref';
 /* services */
 export * from './lib/services/loader';
@@ -66,10 +66,11 @@ export * from './lib/types';
 /* utils */
 export * from './lib/utils/apply-props';
 export * from './lib/utils/build-graph';
+export * from './lib/utils/camera';
+export * from './lib/utils/check-needs-update';
 export * from './lib/utils/coercion';
 export * from './lib/utils/instance';
 export * from './lib/utils/is';
 export * from './lib/utils/loop';
 export * from './lib/utils/make';
 export * from './lib/utils/shader-material';
-export * from './lib/utils/camera';

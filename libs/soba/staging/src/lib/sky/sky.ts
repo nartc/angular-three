@@ -1,4 +1,12 @@
-import { AnyConstructor, coerceNumberProperty, NgtCommonMesh, NgtVector3, NumberInput, Ref } from '@angular-three/core';
+import {
+  AnyConstructor,
+  checkNeedsUpdate,
+  coerceNumberProperty,
+  NgtCommonMesh,
+  NgtVector3,
+  NumberInput,
+  Ref,
+} from '@angular-three/core';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -132,8 +140,7 @@ export class NgtSobaSky extends NgtCommonMesh<Sky> {
       material.uniforms['sunPosition'].value = sunPosition;
       material.uniforms['turbidity'].value = turbidity;
 
-      material.needsUpdate = true;
-      material.uniformsNeedUpdate = true;
+      checkNeedsUpdate(material);
     })
   );
 

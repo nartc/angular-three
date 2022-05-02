@@ -8,6 +8,7 @@ import { NgtStore } from '../stores/store';
 import { NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF } from '../tokens';
 import type { AnyConstructor, NumberInput } from '../types';
 import { AnyFunction } from '../types';
+import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { coerceNumberProperty } from '../utils/coercion';
 
 @Directive()
@@ -95,7 +96,7 @@ export abstract class NgtCommonTexture<TTexture extends THREE.Texture = THREE.Te
       const texture = this.prepareInstance(new this.textureType(...textureInstanceArgs));
 
       texture.encoding = gl.outputEncoding;
-      texture.needsUpdate = true;
+      checkNeedsUpdate(texture);
 
       return () => {
         texture.dispose();

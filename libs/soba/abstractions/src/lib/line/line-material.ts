@@ -1,6 +1,7 @@
 import {
   AnyConstructor,
   BooleanInput,
+  checkNeedsUpdate,
   coerceBooleanProperty,
   coerceNumberProperty,
   makeVector2,
@@ -71,7 +72,7 @@ export class NgtSobaLineMaterial extends NgtShaderMaterial {
         // Setting lineMaterial.defines.USE_DASH to undefined is apparently not sufficient.
         delete material.value.defines['USE_DASH'];
       }
-      material.value.needsUpdate = true;
+      checkNeedsUpdate(material.value);
     })
   );
 

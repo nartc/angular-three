@@ -1,4 +1,4 @@
-import { NgtCanvasModule } from '@angular-three/core';
+import { checkNeedsUpdate, NgtCanvasModule } from '@angular-three/core';
 import { NgtInstancedBufferAttributeModule } from '@angular-three/core/attributes';
 import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtAmbientLightModule, NgtDirectionalLightModule } from '@angular-three/core/lights';
@@ -68,7 +68,7 @@ export class InstancesComponent {
         }
       }
     }
-    $event.instanceMatrix.needsUpdate = true;
+    checkNeedsUpdate($event.instanceMatrix);
   }
 }
 

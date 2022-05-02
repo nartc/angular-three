@@ -1,5 +1,6 @@
 import {
   applyProps,
+  checkNeedsUpdate,
   is,
   make,
   makeVector3,
@@ -259,7 +260,7 @@ export class NgtPhysicBody extends NgtComponentStore {
               prepare(temp, props);
               if (object instanceof THREE.InstancedMesh) {
                 object.setMatrixAt(i, temp.matrix);
-                object.instanceMatrix.needsUpdate = true;
+                checkNeedsUpdate(object.instanceMatrix);
               }
 
               refs[id] = object;
