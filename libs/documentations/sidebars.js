@@ -1,22 +1,4 @@
 // @ts-check
-const isProduction = process.env.CONTEXT === 'production';
-const isBranchDeploy = process.env.CONTEXT === 'branch-deploy';
-
-const netlifyUrl = process.env.URL;
-const netlifyPrimeUrl = process.env.DEPLOY_PRIME_URL;
-
-function buildUrl(path, defaultPath) {
-  if (isProduction) {
-    return `${netlifyUrl}/${path}`;
-  }
-
-  if (isBranchDeploy) {
-    return `${netlifyPrimeUrl}/${path}`;
-  }
-
-  return defaultPath;
-}
-
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   docs: [
@@ -64,12 +46,12 @@ const sidebars = {
     {
       type: 'link',
       label: 'Soba API',
-      href: buildUrl('soba', 'http://localhost:4400'),
+      href: 'https://angular-three.netlify.app/soba',
     },
     {
       type: 'link',
       label: 'Examples',
-      href: buildUrl('examples', 'http://localhost:4200'),
+      href: 'https://angular-three.netlify.app/examples',
     },
   ],
 };
