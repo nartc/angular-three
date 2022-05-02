@@ -26,7 +26,7 @@
     },
     "@release-it/bumper": {
       "in": "version.json",
-      "out": "version.json"
+      "out": ["version.json", "dist/libs/**/package.json"]
     }
   },
   "git": {
@@ -41,10 +41,6 @@
   },
   "hooks": {
     "before:bump": "npm run build",
-    "after:bump": [
-      "git checkout -- package.json",
-      "git checkout -- package-lock.json",
-      "node tools/scripts/update-version.mjs"
-    ]
+    "after:bump": ["git checkout -- package.json", "git checkout -- package-lock.json"]
   }
 }
