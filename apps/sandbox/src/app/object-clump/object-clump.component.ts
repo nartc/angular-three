@@ -83,7 +83,9 @@ export class PointerComponent extends NgtComponentStore implements OnInit {
   selector: 'sandbox-effects',
   template: `
     <ngt-effect-composer>
-      <ngt-bloom></ngt-bloom>
+      <ng-template ngt-effect-composer-content>
+        <ngt-bloom></ngt-bloom>
+      </ng-template>
     </ngt-effect-composer>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
