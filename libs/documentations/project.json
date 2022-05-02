@@ -3,24 +3,18 @@
   "sourceRoot": "libs/documentations",
   "projectType": "library",
   "targets": {
-    "build-docs": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "commands": [
-          "echo 'Building documentations...'",
-          "npx nx build documentations",
-          "echo 'Building external Soba storybook and Examples ...'",
-          "npx nx build-external-docs documentations"
-        ],
-        "parallel": false
-      }
-    },
     "build-external-docs": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": ["STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba", "npx nx build sandbox"],
         "parallel": true
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
     }
   },
   "tags": ["documentations"]

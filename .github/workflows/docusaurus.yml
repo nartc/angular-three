@@ -6,13 +6,50 @@ jobs:
     build-docs:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-              with:
-                  persist-credentials: false
-                  fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
-            - uses: actions/setup-node@v2
-              with:
-                  node-version: '14'
-            - name: Create local changes and commit
-              run: |
-                pnpm install
+            -   uses: actions/checkout@v2
+                with:
+                    persist-credentials: false
+                    fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+
+            -   uses: actions/setup-node@v2
+                with:
+                    node-version: '14'
+
+            -   name: Cache pnpm modules
+                uses: actions/cache@v2
+                id: cached-deps
+                env:
+                    cache-name: cache-node-modules
+                with:
+                    path: ~/.pnpm-store
+                    key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+                    restore-keys: |
+                        ${{ runner.os }}-build-${{ env.cache-name }}-
+                        ${{ runner.os }}-build-
+                        ${{ runner.os }}-
+
+            -   name: Install dependencies
+                if: ${{ steps.cached-deps.outputs.cache-hit != 'true' }}
+                run: pnpm --filter "./" --filter "./libs/documentations" install
+
+            -   name: Create local build artifacts
+                run: |
+                    echo 'Building documentations...'
+                    npx nx build-external-docs documentations
+`
+            -   name: Init git and commit local artifacts
+                run: |
+                    cd libs/documentations/build
+                    git init
+                    git add .
+                    git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                    git config --local user.name "github-actions[bot]"
+                    git commit -m "docs: build docs" -a
+
+            -   name: Push
+                uses: ad-m/github-push-action@master
+                with:
+                    github_token: ${{ secrets.GITHUB_TOKEN }}
+                    branch: docs
+                    force: true
+                    directory: libs/documentations/build
