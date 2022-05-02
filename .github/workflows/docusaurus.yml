@@ -35,7 +35,9 @@ jobs:
 
             -   name: Install dependencies
                 if: ${{ steps.cached-deps.outputs.cache-hit != 'true' }}
-                run: pnpm --filter "./" --filter "./libs/documentations" install
+                run: |
+                    pnpm install
+                    pnpm --filter "./libs/documentations" install
 
             -   name: Create local build artifacts
                 run: |
