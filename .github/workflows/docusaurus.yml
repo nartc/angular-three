@@ -34,7 +34,6 @@ jobs:
                     run_install: false
 
             -   name: Install dependencies
-                if: ${{ steps.cached-deps.outputs.cache-hit != 'true' }}
                 run: |
                     pnpm install
                     pnpm --filter "./libs/documentations" install
