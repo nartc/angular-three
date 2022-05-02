@@ -1,112 +1,89 @@
 import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
-import {
-    formatFiles,
-    generateFiles,
-    getWorkspaceLayout,
-    logger,
-    names,
-    Tree,
-} from '@nrwl/devkit';
+import { formatFiles, generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/devkit';
 import { join } from 'path';
 import * as THREE from 'three';
-import {
-    isClassDeclaration,
-    isConstructorDeclaration,
-} from 'typescript/lib/tsserverlibrary';
+import { isClassDeclaration, isConstructorDeclaration } from 'typescript/lib/tsserverlibrary';
 import { astFromPath } from '../ast-utils';
 
 export const cameras = [
-    {
-        name: THREE.PerspectiveCamera.name,
-        defPath: 'node_modules/@types/three/src/cameras/PerspectiveCamera.d.ts',
-    },
-    {
-        name: THREE.OrthographicCamera.name,
-        defPath:
-            'node_modules/@types/three/src/cameras/OrthographicCamera.d.ts',
-    },
-    {
-        name: THREE.ArrayCamera.name,
-        defPath: 'node_modules/@types/three/src/cameras/ArrayCamera.d.ts',
-    },
-    {
-        name: THREE.StereoCamera.name,
-        defPath: 'node_modules/@types/three/src/cameras/StereoCamera.d.ts',
-    },
+  {
+    name: THREE.PerspectiveCamera.name,
+    defPath: 'node_modules/@types/three/src/cameras/PerspectiveCamera.d.ts',
+  },
+  {
+    name: THREE.OrthographicCamera.name,
+    defPath: 'node_modules/@types/three/src/cameras/OrthographicCamera.d.ts',
+  },
+  {
+    name: THREE.ArrayCamera.name,
+    defPath: 'node_modules/@types/three/src/cameras/ArrayCamera.d.ts',
+  },
+  {
+    name: THREE.StereoCamera.name,
+    defPath: 'node_modules/@types/three/src/cameras/StereoCamera.d.ts',
+  },
 ];
 
 export default async function camerasGenerator(tree: Tree): Promise<string[]> {
-    const { libsDir } = getWorkspaceLayout(tree);
-    const cameraDir = join(libsDir, 'core', 'cameras');
+  const { libsDir } = getWorkspaceLayout(tree);
+  const cameraDir = join(libsDir, 'core', 'cameras');
 
-    logger.log('Generating cameras...');
+  logger.log('Generating cameras...');
 
-    if (!tree.exists(cameraDir)) {
-        await librarySecondaryEntryPointGenerator(tree, {
-            name: 'cameras',
-            library: 'core',
-            skipModule: true,
-        });
-    }
+  if (!tree.exists(cameraDir)) {
+    await librarySecondaryEntryPointGenerator(tree, {
+      name: 'cameras',
+      library: 'core',
+      skipModule: true,
+    });
+  }
 
-    const generatedCameras = [];
-    for (const camera of cameras) {
-        const normalizedNames = names(camera.name);
+  const generatedCameras = [];
+  for (const camera of cameras) {
+    const normalizedNames = names(camera.name);
 
-        const inputRecord = astFromPath(tree, camera.defPath, (sourceFile) => {
-            const mainParameters = [];
-            sourceFile.forEachChild((node) => {
-                if (isClassDeclaration(node)) {
-                    node.members.forEach((member) => {
-                        if (isConstructorDeclaration(member)) {
-                            member.parameters.forEach((parameter) => {
-                                mainParameters.push(parameter);
-                            });
-                        }
-                    });
-                }
-            });
-
-            return { mainProperties: mainParameters };
-        });
-
-        const inputs = Object.entries(inputRecord).map(
-            ([inputName, inputInfo]) => ({
-                name: inputName,
-                ...inputInfo,
-                isNumberInput: inputInfo.type.includes('number'),
-                isBooleanInput: inputInfo.type.includes('boolean'),
-            })
-        );
-
-        generateFiles(
-            tree,
-            join(__dirname, 'files/lib'),
-            join(cameraDir, 'src', 'lib', normalizedNames.fileName),
-            {
-                ...normalizedNames,
-                tmpl: '',
-                inputs,
-                hasInput: inputs.length > 0,
-                hasBooleanInput: inputs.some((input) => input.isBooleanInput),
-                hasNumberInput: inputs.some((input) => input.isNumberInput),
+    const inputRecord = astFromPath(tree, camera.defPath, (sourceFile) => {
+      const mainParameters = [];
+      sourceFile.forEachChild((node) => {
+        if (isClassDeclaration(node)) {
+          node.members.forEach((member) => {
+            if (isConstructorDeclaration(member)) {
+              member.parameters.forEach((parameter) => {
+                mainParameters.push(parameter);
+              });
             }
-        );
-
-        generatedCameras.push(normalizedNames.fileName);
-    }
-
-    generateFiles(
-        tree,
-        join(__dirname, 'files/index'),
-        join(cameraDir, 'src'),
-        {
-            items: [...generatedCameras, 'cube-camera'],
-            tmpl: '',
+          });
         }
-    );
+      });
 
-    await formatFiles(tree);
+      return { mainProperties: mainParameters };
+    });
 
-    return [...generatedCameras, 'cube-camera'];
+    const inputs = Object.entries(inputRecord).map(([inputName, inputInfo]) => ({
+      name: inputName,
+      ...inputInfo,
+      isNumberInput: inputInfo.type.includes('number'),
+      isBooleanInput: inputInfo.type.includes('boolean'),
+    }));
+
+    generateFiles(tree, join(__dirname, 'files/lib'), join(cameraDir, 'src', 'lib', normalizedNames.fileName), {
+      ...normalizedNames,
+      tmpl: '',
+      inputs,
+      hasInput: inputs.length > 0,
+      hasBooleanInput: inputs.some((input) => input.isBooleanInput),
+      hasNumberInput: inputs.some((input) => input.isNumberInput),
+    });
+
+    generatedCameras.push(normalizedNames.fileName);
+  }
+
+  generateFiles(tree, join(__dirname, 'files/index'), join(cameraDir, 'src'), {
+    items: [...generatedCameras, 'cube-camera'],
+    tmpl: '',
+  });
+
+  await formatFiles(tree);
+
+  return [...generatedCameras, 'cube-camera'];
 }

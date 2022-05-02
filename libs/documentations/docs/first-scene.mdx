@@ -19,11 +19,11 @@ This tutorial assumes basic knowledge of [Angular](https://angular.io) and [THRE
 
 The tutorial is a bit long so here's the TLDR; version for folks that want to get straight to the code.
 
--   We set up a Canvas with `<ngt-canvas>` which is the entry point to our NGT scene graph
--   We use `<ngt-mesh>` along with `<ngt-box-geometry>` and `<ngt-mesh-standard-material>` to construct a cube then animate it
--   We separate our `<ngt-mesh>`, along with its internal states, into a reusable Angular component so we can have more than one cube
--   We set up some lighting to make our cubes more dynamic
--   We introduce `@angular-three/soba` library and add the `<ngt-soba-orbit-controls>` to take controls of the Camera
+- We set up a Canvas with `<ngt-canvas>` which is the entry point to our NGT scene graph
+- We use `<ngt-mesh>` along with `<ngt-box-geometry>` and `<ngt-mesh-standard-material>` to construct a cube then animate it
+- We separate our `<ngt-mesh>`, along with its internal states, into a reusable Angular component so we can have more than one cube
+- We set up some lighting to make our cubes more dynamic
+- We introduce `@angular-three/soba` library and add the `<ngt-soba-orbit-controls>` to take controls of the Camera
 
 <Tabs>
 
@@ -31,14 +31,14 @@ The tutorial is a bit long so here's the TLDR; version for folks that want to ge
 
 ```html
 <ngt-canvas>
-    <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
-    <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
-    <ngt-point-light [position]="-10"></ngt-point-light>
+  <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+  <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
+  <ngt-point-light [position]="-10"></ngt-point-light>
 
-    <app-cube [position]="[1.2, 0, 0]"></app-cube>
-    <app-cube [position]="[-1.2, 0, 0]"></app-cube>
+  <app-cube [position]="[1.2, 0, 0]"></app-cube>
+  <app-cube [position]="[-1.2, 0, 0]"></app-cube>
 
-    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+  <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
 </ngt-canvas>
 ```
 
@@ -48,9 +48,9 @@ The tutorial is a bit long so here's the TLDR; version for folks that want to ge
 
 ```ts
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {}
 ```
@@ -61,17 +61,15 @@ export class AppComponent {}
 
 ```html
 <ngt-mesh
-    (beforeRender)="onCubeBeforeRender($event)"
-    (click)="active = !active"
-    (pointerover)="hovered = true"
-    (pointerout)="hovered = false"
-    [scale]="active ? 1.5 : 1"
-    [position]="position"
+  (beforeRender)="onCubeBeforeRender($event)"
+  (click)="active = !active"
+  (pointerover)="hovered = true"
+  (pointerout)="hovered = false"
+  [scale]="active ? 1.5 : 1"
+  [position]="position"
 >
-    <ngt-box-geometry></ngt-box-geometry>
-    <ngt-mesh-standard-material
-        [color]="hovered ? 'turquoise' : 'tomato'"
-    ></ngt-mesh-standard-material>
+  <ngt-box-geometry></ngt-box-geometry>
+  <ngt-mesh-standard-material [color]="hovered ? 'turquoise' : 'tomato'"></ngt-mesh-standard-material>
 </ngt-mesh>
 ```
 
@@ -81,20 +79,20 @@ export class AppComponent {}
 
 ```ts
 @Component({
-    selector: 'app-cube',
-    templateUrl: 'cube.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-cube',
+  templateUrl: 'cube.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
-    @Input() position?: NgtVector3;
+  @Input() position?: NgtVector3;
 
-    hovered = false;
-    active = false;
+  hovered = false;
+  active = false;
 
-    onCubeBeforeRender($event: { state: NgtRenderState; object: Mesh }) {
-        const cube = $event.object;
-        cube.rotation.x += 0.01;
-    }
+  onCubeBeforeRender($event: { state: NgtRenderState; object: Mesh }) {
+    const cube = $event.object;
+    cube.rotation.x += 0.01;
+  }
 }
 ```
 
@@ -107,10 +105,10 @@ export class CubeComponent {
 
 html,
 body {
-    font-family: sans-serif;
-    height: 100%;
-    width: 100%;
-    margin: 0;
+  font-family: sans-serif;
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 ```
 
@@ -120,20 +118,20 @@ body {
 
 ```ts
 @NgModule({
-    declarations: [AppComponent, CubeComponent],
-    imports: [
-        BrowserModule,
-        NgtCanvasModule,
-        NgtMeshModule,
-        NgtBoxGeometryModule,
-        NgtMeshStandardMaterialModule,
-        NgtAmbientLightModule,
-        NgtSpotLightModule,
-        NgtPointLightModule,
-        NgtSobaOrbitControlsModule,
-    ],
-    providers: [],
-    bootstrap: [AppComponent],
+  declarations: [AppComponent, CubeComponent],
+  imports: [
+    BrowserModule,
+    NgtCanvasModule,
+    NgtMeshModule,
+    NgtBoxGeometryModule,
+    NgtMeshStandardMaterialModule,
+    NgtAmbientLightModule,
+    NgtSpotLightModule,
+    NgtPointLightModule,
+    NgtSobaOrbitControlsModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
@@ -167,14 +165,14 @@ import { NgtCanvasModule } from '@angular-three/core';
 // highlight-end
 
 @NgModule({
+  /* ... */
+  imports: [
     /* ... */
-    imports: [
-        /* ... */
-        // highlight-start
-        NgtCanvasModule,
-        // highlight-end
-    ],
-    /* ... */
+    // highlight-start
+    NgtCanvasModule,
+    // highlight-end
+  ],
+  /* ... */
 })
 export class AppModule {}
 ```
@@ -185,9 +183,9 @@ export class AppModule {}
 
 `ngt-canvas` sets up the following:
 
--   A `WebGLRenderer`, a default `Scene`, and a default `Camera` which are the basic building blocks for any THREE scene graph.
--   A render loop that renders our scene every frame
--   A `window:resize` listener that updates our Renderer and Camera when the viewport is resized. The listener will automatically get cleaned up when the `<ngt-canvas>` component is destroyed
+- A `WebGLRenderer`, a default `Scene`, and a default `Camera` which are the basic building blocks for any THREE scene graph.
+- A render loop that renders our scene every frame
+- A `window:resize` listener that updates our Renderer and Camera when the viewport is resized. The listener will automatically get cleaned up when the `<ngt-canvas>` component is destroyed
 
 :::tip
 
@@ -196,7 +194,7 @@ export class AppModule {}
 ```html
 <!--        👇 we can CSS this class to control the size as well as the position of our Scene -->
 <div class="canvas-container">
-    <ngt-canvas></ngt-canvas>
+  <ngt-canvas></ngt-canvas>
 </div>
 ```
 
@@ -211,9 +209,9 @@ Next, let's adjust our global `styles.css` a bit to make the viewport 100% width
 ```css
 html,
 body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 ```
 
@@ -231,10 +229,10 @@ Our scene is empty at the moment. Let's fill it with our first THREE Object3D by
 
 ```html
 <ngt-canvas>
-    // highlight-start
-    <!-- 👇 renders the Mesh -->
-    <ngt-mesh></ngt-mesh>
-    // highlight-end
+  // highlight-start
+  <!-- 👇 renders the Mesh -->
+  <ngt-mesh></ngt-mesh>
+  // highlight-end
 </ngt-canvas>
 ```
 
@@ -250,15 +248,15 @@ import { NgtMeshModule } from '@angular-three/core/meshes';
 // highlight-end
 
 @NgModule({
+  /* ... */
+  imports: [
     /* ... */
-    imports: [
-        /* ... */
-        NgtCanvasModule,
-        // highlight-start
-        NgtMeshModule,
-        // highlight-end
-    ],
-    /* ... */
+    NgtCanvasModule,
+    // highlight-start
+    NgtMeshModule,
+    // highlight-end
+  ],
+  /* ... */
 })
 export class AppModule {}
 ```
@@ -275,12 +273,12 @@ export class AppModule {}
 
 ```html
 <ngt-canvas>
-    <ngt-mesh>
-        // highlight-start
-        <ngt-box-geometry></ngt-box-geometry>
-        <ngt-mesh-basic-material></ngt-mesh-basic-material>
-        // highlight-end
-    </ngt-mesh>
+  <ngt-mesh>
+    // highlight-start
+    <ngt-box-geometry></ngt-box-geometry>
+    <ngt-mesh-basic-material></ngt-mesh-basic-material>
+    // highlight-end
+  </ngt-mesh>
 </ngt-canvas>
 ```
 
@@ -297,17 +295,17 @@ import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 // highlight-end
 
 @NgModule({
+  /* ... */
+  imports: [
     /* ... */
-    imports: [
-        /* ... */
-        NgtCanvasModule,
-        NgtMeshModule,
-        // highlight-start
-        NgtBoxGeometryModule,
-        NgtMeshBasicMaterialModule,
-        // highlight-end
-    ],
-    /* ... */
+    NgtCanvasModule,
+    NgtMeshModule,
+    // highlight-start
+    NgtBoxGeometryModule,
+    NgtMeshBasicMaterialModule,
+    // highlight-end
+  ],
+  /* ... */
 })
 export class AppModule {}
 ```
@@ -319,11 +317,11 @@ export class AppModule {}
 At this point, we have something on the scene that we can check out
 
 <iframe
-    class="code-demo"
-    src="https://codesandbox.io/embed/distracted-cherry-3zxs6n?fontsize=14&hidenavigation=1&module=%2Fsrc%2Fapp%2Fapp.component.html&theme=dark&view=preview"
-    title="first-scene-first-cube"
-    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+  class="code-demo"
+  src="https://codesandbox.io/embed/distracted-cherry-3zxs6n?fontsize=14&hidenavigation=1&module=%2Fsrc%2Fapp%2Fapp.component.html&theme=dark&view=preview"
+  title="first-scene-first-cube"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
 ## Animate the cube
@@ -336,11 +334,11 @@ At this point, we have something on the scene that we can check out
 
 ```html
 <ngt-canvas>
-    <!--                        👇 we are handling this in our component class -->
-    <ngt-mesh (beforeRender)="onCubeBeforeRender($event)">
-        <ngt-box-geometry></ngt-box-geometry>
-        <ngt-mesh-basic-material></ngt-mesh-basic-material>
-    </ngt-mesh>
+  <!--                        👇 we are handling this in our component class -->
+  <ngt-mesh (beforeRender)="onCubeBeforeRender($event)">
+    <ngt-box-geometry></ngt-box-geometry>
+    <ngt-mesh-basic-material></ngt-mesh-basic-material>
+  </ngt-mesh>
 </ngt-canvas>
 ```
 
@@ -353,16 +351,16 @@ import { NgtRenderState } from '@angular-three/core';
 import { Mesh } from 'three';
 
 @Component({
-    /* ... */
-    template: 'app.component.html',
-    /* ... */
+  /* ... */
+  template: 'app.component.html',
+  /* ... */
 })
 export class AppComponent {
-    onCubeBeforeRender($event: { state: NgtRenderState; object: Mesh }) {
-        const cube = $event.object;
-        // we are rotating our cube little by little before it gets rendered
-        cube.rotation.x += 0.01;
-    }
+  onCubeBeforeRender($event: { state: NgtRenderState; object: Mesh }) {
+    const cube = $event.object;
+    // we are rotating our cube little by little before it gets rendered
+    cube.rotation.x += 0.01;
+  }
 }
 ```
 
@@ -371,18 +369,18 @@ export class AppComponent {
 </Tabs>
 
 <iframe
-    class="code-demo"
-    src="https://codesandbox.io/embed/first-scene-first-cube-animated-2tegkl?fontsize=14&hidenavigation=1&module=%2Fsrc%2Fapp%2Fapp.component.html&theme=dark&view=preview"
-    title="first-scene-first-cube-animated"
-    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+  class="code-demo"
+  src="https://codesandbox.io/embed/first-scene-first-cube-animated-2tegkl?fontsize=14&hidenavigation=1&module=%2Fsrc%2Fapp%2Fapp.component.html&theme=dark&view=preview"
+  title="first-scene-first-cube-animated"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
 :::info
 
--   `(beforeRender)` is invoked outside of Angular Zone to maintain the performance. Please try **NOT** to update any component state in `beforeRender` handler
--   `$event.state` is the object that holds the current information about the Canvas: viewport, mouse position, clock, delta etc...
--   `$event.object` is the Object3D that is being handled in this particular `beforeRender` callback.
+- `(beforeRender)` is invoked outside of Angular Zone to maintain the performance. Please try **NOT** to update any component state in `beforeRender` handler
+- `$event.state` is the object that holds the current information about the Canvas: viewport, mouse position, clock, delta etc...
+- `$event.object` is the Object3D that is being handled in this particular `beforeRender` callback.
 
 :::
 
@@ -392,12 +390,7 @@ Minus all the module imports, our scene is about 6 lines of code + 3 lines of `o
 
 ```ts
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-    75,
-    document.clientWidth / document.clientHeight,
-    0.1,
-    1000
-);
+const camera = new THREE.PerspectiveCamera(75, document.clientWidth / document.clientHeight, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(document.clientWidth, document.clientHeight);
@@ -414,9 +407,9 @@ cube.material = new THREE.MeshBasicMaterial();
 scene.add(cube);
 
 function animate() {
-    requestAnimationFrame(animate);
-    cube.rotation.x += 0.01;
-    renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+  cube.rotation.x += 0.01;
+  renderer.render(scene, camera);
 }
 
 animate();
@@ -436,8 +429,8 @@ What is better than one cube? TWO cubes! Let's start by making our cube an Angul
 
 ```html
 <ngt-mesh (beforeRender)="onCubeBeforeRender($event)">
-    <ngt-box-geometry></ngt-box-geometry>
-    <ngt-mesh-basic-material></ngt-mesh-basic-material>
+  <ngt-box-geometry></ngt-box-geometry>
+  <ngt-mesh-basic-material></ngt-mesh-basic-material>
 </ngt-mesh>
 ```
 
@@ -447,16 +440,16 @@ What is better than one cube? TWO cubes! Let's start by making our cube an Angul
 
 ```ts
 @Component({
-    selector: 'app-cube',
-    templateUrl: 'cube.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-cube',
+  templateUrl: 'cube.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
-    // 👇 copy from AppComponent
-    onCubeBeforeRender($event: { state: NgtRenderState; object: Mesh }) {
-        const cube = $event.object;
-        cube.rotation.x += 0.01;
-    }
+  // 👇 copy from AppComponent
+  onCubeBeforeRender($event: { state: NgtRenderState; object: Mesh }) {
+    const cube = $event.object;
+    cube.rotation.x += 0.01;
+  }
 }
 ```
 
@@ -466,7 +459,7 @@ export class CubeComponent {
 
 ```html
 <ngt-canvas>
-    <app-cube></app-cube>
+  <app-cube></app-cube>
 </ngt-canvas>
 ```
 
@@ -476,9 +469,9 @@ export class CubeComponent {
 
 ```ts
 @Component({
-    /* ... */
-    template: 'app.component.html',
-    /* ... */
+  /* ... */
+  template: 'app.component.html',
+  /* ... */
 })
 export class AppComponent {}
 ```
@@ -489,14 +482,14 @@ export class AppComponent {}
 
 ```ts
 @NgModule({
-    declarations: [
-        AppComponent,
-        /* ... */
-        // highlight-start
-        CubeComponent,
-        // highlight-end
-        /* ... */
-    ],
+  declarations: [
+    AppComponent,
+    /* ... */
+    // highlight-start
+    CubeComponent,
+    // highlight-end
+    /* ... */
+  ],
 })
 export class AppModule {}
 ```
@@ -511,10 +504,10 @@ Everything works the same as before but now we have a `CubeComponent` that we ca
 
 We will add two states: `hovered` and `active` to our `CubeComponent`
 
--   When we hover over our cube, we set `hovered` to `true` and vice versa
--   When we click on our cube, we toggle the `active` state
--   When `active`, the cube is 1.5 times bigger using `[scale]`
--   When `hovered`, the cube has turquoise color and tomato color when not `hovered`.
+- When we hover over our cube, we set `hovered` to `true` and vice versa
+- When we click on our cube, we toggle the `active` state
+- When `active`, the cube is 1.5 times bigger using `[scale]`
+- When `hovered`, the cube has turquoise color and tomato color when not `hovered`.
 
 <Tabs>
 
@@ -545,20 +538,20 @@ We will add two states: `hovered` and `active` to our `CubeComponent`
 
 ```ts
 @Component({
-    selector: 'app-cube',
-    templateUrl: 'cube.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-cube',
+  templateUrl: 'cube.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
-    // highlight-start
-    hovered = false;
-    active = false;
-    // highlight-end
+  // highlight-start
+  hovered = false;
+  active = false;
+  // highlight-end
 
-    onCubeBeforeRender($event: { state: NgtRenderState; object: Mesh }) {
-        const cube = $event.object;
-        cube.rotation.x += 0.01;
-    }
+  onCubeBeforeRender($event: { state: NgtRenderState; object: Mesh }) {
+    const cube = $event.object;
+    cube.rotation.x += 0.01;
+  }
 }
 ```
 
@@ -569,15 +562,15 @@ export class CubeComponent {
 Interact with the cube and see the magic 🤯
 
 <iframe
-    class="code-demo"
-    src="https://codesandbox.io/embed/first-scene-first-cube-component-nsfx98?fontsize=14&hidenavigation=1&module=%2Fsrc%2Fapp%2Fcube.component.html&theme=dark&view=preview"
-    title="first-scene-first-cube-component"
-    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+  class="code-demo"
+  src="https://codesandbox.io/embed/first-scene-first-cube-component-nsfx98?fontsize=14&hidenavigation=1&module=%2Fsrc%2Fapp%2Fcube.component.html&theme=dark&view=preview"
+  title="first-scene-first-cube-component"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
--   `(click)`, `(pointerover)`, and `(pointerout)` look like DOM events but they are not. They are named as such to give a sense of familiarity to improve Developer Experience (DX).
--   These events get back into Angular Zone so that triggering these events can update Component's state (eg: `hovered` and `active`) and trigger Change Detection cycles. Normally, NGT bails out of Angular Zone to maintain the framerate.
+- `(click)`, `(pointerover)`, and `(pointerout)` look like DOM events but they are not. They are named as such to give a sense of familiarity to improve Developer Experience (DX).
+- These events get back into Angular Zone so that triggering these events can update Component's state (eg: `hovered` and `active`) and trigger Change Detection cycles. Normally, NGT bails out of Angular Zone to maintain the framerate.
 
 Now that our cube is interactive and fun, we can render another cube so we can double the fun. But first, we need to add a `position` Input to our `CubeComponent`. This allows us to position our `CubeComponent` in different positions so we can see them all on the scene.
 
@@ -589,10 +582,10 @@ Good. Now we can update our `app.component.html` to render another cube
 
 ```html
 <ngt-canvas>
-    <!--                    👇 move this cube 1.2 unit to the right -->
-    <app-cube [position]="[1.2, 0, 0]"></app-cube>
-    <!--                    👇 move this cube 1.2 unit to the left -->
-    <app-cube [position]="[-1.2, 0, 0]"></app-cube>
+  <!--                    👇 move this cube 1.2 unit to the right -->
+  <app-cube [position]="[1.2, 0, 0]"></app-cube>
+  <!--                    👇 move this cube 1.2 unit to the left -->
+  <app-cube [position]="[-1.2, 0, 0]"></app-cube>
 </ngt-canvas>
 ```
 
@@ -603,11 +596,11 @@ Good. Now we can update our `app.component.html` to render another cube
 and voila!
 
 <iframe
-    class="code-demo"
-    src="https://codesandbox.io/embed/first-scene-first-cube-two-cubes-ytbh3o?fontsize=14&hidenavigation=1&theme=dark&view=preview"
-    title="first-scene-first-cube-two-cubes"
-    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+  class="code-demo"
+  src="https://codesandbox.io/embed/first-scene-first-cube-two-cubes-ytbh3o?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+  title="first-scene-first-cube-two-cubes"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
 ## Adding lights
@@ -669,14 +662,14 @@ Next, let's start adding lights. We'll use `<ngt-ambient-light>`, `<ngt-spot-lig
 
 ```html
 <ngt-canvas>
-    // highlight-start
-    <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
-    <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
-    <ngt-point-light [position]="-10"></ngt-point-light>
-    // highlight-end
+  // highlight-start
+  <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+  <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
+  <ngt-point-light [position]="-10"></ngt-point-light>
+  // highlight-end
 
-    <app-cube [position]="[1.2, 0, 0]"></app-cube>
-    <app-cube [position]="[-1.2, 0, 0]"></app-cube>
+  <app-cube [position]="[1.2, 0, 0]"></app-cube>
+  <app-cube [position]="[-1.2, 0, 0]"></app-cube>
 </ngt-canvas>
 ```
 
@@ -686,28 +679,24 @@ Next, let's start adding lights. We'll use `<ngt-ambient-light>`, `<ngt-spot-lig
 
 ```ts
 // highlight-start
-import {
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-    NgtPointLightModule,
-} from '@angular-three/core/lights';
+import { NgtAmbientLightModule, NgtSpotLightModule, NgtPointLightModule } from '@angular-three/core/lights';
 // highlight-end
 
 @NgModule({
+  /* ... */
+  imports: [
     /* ... */
-    imports: [
-        /* ... */
-        NgtCanvasModule,
-        NgtMeshModule,
-        NgtBoxGeometryModule,
-        NgtMeshStandardMaterialModule,
-        // highlight-start
-        NgtAmbientLightModule,
-        NgtSpotLightModule,
-        NgtPointLightModule,
-        // highlight-end
-    ],
-    /* ... */
+    NgtCanvasModule,
+    NgtMeshModule,
+    NgtBoxGeometryModule,
+    NgtMeshStandardMaterialModule,
+    // highlight-start
+    NgtAmbientLightModule,
+    NgtSpotLightModule,
+    NgtPointLightModule,
+    // highlight-end
+  ],
+  /* ... */
 })
 export class AppModule {}
 ```
@@ -719,11 +708,11 @@ export class AppModule {}
 Our cubes look so much better now, with dimensionality, showing that they are real 3D objects.
 
 <iframe
-    class="code-demo"
-    src="https://codesandbox.io/embed/first-scene-first-cube-lights-ntifzu?fontsize=14&hidenavigation=1&theme=dark&view=preview"
-    title="first-scene-first-cube-lights"
-    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+  class="code-demo"
+  src="https://codesandbox.io/embed/first-scene-first-cube-lights-ntifzu?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+  title="first-scene-first-cube-lights"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
 ## Taking control of the camera
@@ -754,16 +743,16 @@ All utilities exported from `@angular-three/soba` are prefixed with `ngt-soba`
 
 ```html
 <ngt-canvas>
-    <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
-    <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
-    <ngt-point-light [position]="-10"></ngt-point-light>
+  <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+  <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
+  <ngt-point-light [position]="-10"></ngt-point-light>
 
-    <app-cube [position]="[1.2, 0, 0]"></app-cube>
-    <app-cube [position]="[-1.2, 0, 0]"></app-cube>
+  <app-cube [position]="[1.2, 0, 0]"></app-cube>
+  <app-cube [position]="[-1.2, 0, 0]"></app-cube>
 
-    // highlight-start
-    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
-    // highlight-end
+  // highlight-start
+  <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+  // highlight-end
 </ngt-canvas>
 ```
 
@@ -772,29 +761,25 @@ All utilities exported from `@angular-three/soba` are prefixed with `ngt-soba`
 <TabItem value="module" label="app.module.ts">
 
 ```ts
-import {
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-    NgtPointLightModule,
-} from '@angular-three/core/lights';
+import { NgtAmbientLightModule, NgtSpotLightModule, NgtPointLightModule } from '@angular-three/core/lights';
 // highlight-end
 
 @NgModule({
+  /* ... */
+  imports: [
     /* ... */
-    imports: [
-        /* ... */
-        NgtCanvasModule,
-        NgtMeshModule,
-        NgtBoxGeometryModule,
-        NgtMeshStandardMaterialModule,
-        NgtAmbientLightModule,
-        NgtSpotLightModule,
-        NgtPointLightModule,
-        // highlight-start
-        NgtSobaOrbitControlsModule,
-        // highlight-end
-    ],
-    /* ... */
+    NgtCanvasModule,
+    NgtMeshModule,
+    NgtBoxGeometryModule,
+    NgtMeshStandardMaterialModule,
+    NgtAmbientLightModule,
+    NgtSpotLightModule,
+    NgtPointLightModule,
+    // highlight-start
+    NgtSobaOrbitControlsModule,
+    // highlight-end
+  ],
+  /* ... */
 })
 export class AppModule {}
 ```
@@ -804,18 +789,18 @@ export class AppModule {}
 </Tabs>
 
 <iframe
-    class="code-demo"
-    src="https://codesandbox.io/embed/first-scene-first-cube-controls-kz16d9?fontsize=14&hidenavigation=1&theme=dark&view=preview"
-    title="first-scene-first-cube-controls"
-    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+  class="code-demo"
+  src="https://codesandbox.io/embed/first-scene-first-cube-controls-kz16d9?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+  title="first-scene-first-cube-controls"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
 and that concludes our first tutorial. That was fun!
 
 ## Exercise
 
--   Try playing with the colors
--   Try using a different Geometry to display something other than a cube
--   Try placing more objects using different positions
--   Try different lights
+- Try playing with the colors
+- Try using a different Geometry to display something other than a cube
+- Try placing more objects using different positions
+- Try different lights

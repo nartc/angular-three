@@ -10,19 +10,15 @@ To interact with [Cannon Constraint API](https://pmndrs.github.io/cannon-es/docs
 
 ```ts
 @Component({
-    providers: [NgtPhysicConstraint],
+  providers: [NgtPhysicConstraint],
 })
 export class BoxComponent implements OnInit {
-    constructor(private physicConstraint: NgtPhysicConstraint) {}
+  constructor(private physicConstraint: NgtPhysicConstraint) {}
 
-    ngOnInit() {
-        // 👇 creating a Constraint between the two bodies
-        this.physicConstraint.usePointToPointConstraint(
-            refA,
-            refB,
-            someOptions
-        );
-    }
+  ngOnInit() {
+    // 👇 creating a Constraint between the two bodies
+    this.physicConstraint.usePointToPointConstraint(refA, refB, someOptions);
+  }
 }
 ```
 
@@ -39,11 +35,9 @@ export class BoxComponent implements OnInit {
 All Constraint Creators return `NgtPhysicConstraintReturn`
 
 ```ts
-export interface NgtPhysicConstraintReturn<
-    T extends 'Hinge' | ConstraintTypes
-> {
-    bodyA: Ref<THREE.Object3D>;
-    bodyB: Ref<THREE.Object3D>;
-    api: NgtConstraintORHingeApi<T>;
+export interface NgtPhysicConstraintReturn<T extends 'Hinge' | ConstraintTypes> {
+  bodyA: Ref<THREE.Object3D>;
+  bodyB: Ref<THREE.Object3D>;
+  api: NgtConstraintORHingeApi<T>;
 }
 ```

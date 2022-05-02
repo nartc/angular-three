@@ -4,38 +4,38 @@
  */
 
 .heroBanner {
-    padding: 4rem 0;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .logo {
-    width: 30rem;
-    height: 30rem;
+  width: 30rem;
+  height: 30rem;
 }
 
 .quote {
-    display: block;
-    font-size: 1.5rem;
-    margin: 2rem 0;
+  display: block;
+  font-size: 1.5rem;
+  margin: 2rem 0;
 }
 
 .features {
-    display: flex;
-    align-items: center;
-    padding: 2rem 0;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
 }
 
 @media screen and (max-width: 996px) {
-    .heroBanner {
-        padding: 2rem;
-    }
+  .heroBanner {
+    padding: 2rem;
+  }
 }
 
 .buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

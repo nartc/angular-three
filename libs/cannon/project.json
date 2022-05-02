@@ -1,50 +1,47 @@
 {
-    "projectType": "library",
-    "root": "libs/cannon",
-    "sourceRoot": "libs/cannon/src",
-    "prefix": "ngt",
-    "targets": {
-        "build": {
-            "executor": "@nrwl/angular:package",
-            "outputs": ["dist/libs/cannon"],
-            "options": {
-                "project": "libs/cannon/ng-package.json",
-                "updateBuildableProjectDepsInPackageJson": false
-            },
-            "configurations": {
-                "production": {
-                    "tsConfig": "libs/cannon/tsconfig.lib.prod.json"
-                },
-                "development": {
-                    "tsConfig": "libs/cannon/tsconfig.lib.json"
-                }
-            },
-            "defaultConfiguration": "production"
+  "projectType": "library",
+  "root": "libs/cannon",
+  "sourceRoot": "libs/cannon/src",
+  "prefix": "ngt",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "outputs": ["dist/libs/cannon"],
+      "options": {
+        "project": "libs/cannon/ng-package.json",
+        "updateBuildableProjectDepsInPackageJson": false
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/cannon/tsconfig.lib.prod.json"
         },
-        "test": {
-            "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/libs/cannon"],
-            "options": {
-                "jestConfig": "libs/cannon/jest.config.ts",
-                "passWithNoTests": true
-            }
-        },
-        "lint": {
-            "executor": "@nrwl/linter:eslint",
-            "options": {
-                "lintFilePatterns": [
-                    "libs/cannon/src/**/*.ts",
-                    "libs/cannon/src/**/*.html"
-                ]
-            }
-        },
-        "publish": {
-            "executor": "@nrwl/workspace:run-commands",
-            "options": {
-                "command": "npm publish",
-                "cwd": "dist/libs/cannon"
-            }
+        "development": {
+          "tsConfig": "libs/cannon/tsconfig.lib.json"
         }
+      },
+      "defaultConfiguration": "production"
     },
-    "tags": ["scope:cannon"]
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/cannon"],
+      "options": {
+        "jestConfig": "libs/cannon/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/cannon/src/**/*.ts", "libs/cannon/src/**/*.html"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm publish",
+        "cwd": "dist/libs/cannon"
+      }
+    }
+  },
+  "tags": ["scope:cannon"]
 }

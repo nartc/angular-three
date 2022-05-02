@@ -4,103 +4,65 @@ import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaHtmlModule } from '@angular-three/soba/misc';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-import {
-    componentWrapperDecorator,
-    Meta,
-    moduleMetadata,
-    Story,
-} from '@storybook/angular';
+import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { setupCanvas, setupCanvasModules, turnAnimate } from '../setup-canvas';
 
 @Component({
-    selector: 'html-occlude-story',
-    template: `
-        <ngt-group #ngtGroup (beforeRender)="turnAnimate($event.object)">
-            <ngt-icosahedron-geometry
-                #ngtIcosahedronGeometry
-                [args]="[5, 5]"
-            ></ngt-icosahedron-geometry>
-            <ngt-mesh
-                name="pink"
-                [position]="[0, 0, 0]"
-                [geometry]="ngtIcosahedronGeometry.instance"
-            >
-                <ngt-mesh-basic-material
-                    color="hotpink"
-                    wireframe
-                ></ngt-mesh-basic-material>
+  selector: 'html-occlude-story',
+  template: `
+    <ngt-group #ngtGroup (beforeRender)="turnAnimate($event.object)">
+      <ngt-icosahedron-geometry #ngtIcosahedronGeometry [args]="[5, 5]"></ngt-icosahedron-geometry>
+      <ngt-mesh name="pink" [position]="[0, 0, 0]" [geometry]="ngtIcosahedronGeometry.instance">
+        <ngt-mesh-basic-material color="hotpink" wireframe></ngt-mesh-basic-material>
 
-                <ngt-soba-html
-                    [position]="[0, 0, -6]"
-                    htmlClass="html-story-label"
-                    [occlude]="[ngtGroup.instance]"
-                >
-                    <ng-template ngt-soba-html-content> A </ng-template>
-                </ngt-soba-html>
-            </ngt-mesh>
+        <ngt-soba-html [position]="[0, 0, -6]" htmlClass="html-story-label" [occlude]="[ngtGroup.instance]">
+          <ng-template ngt-soba-html-content> A </ng-template>
+        </ngt-soba-html>
+      </ngt-mesh>
 
-            <ngt-mesh
-                name="yellow"
-                [position]="[16, 0, 0]"
-                [geometry]="ngtIcosahedronGeometry.instance"
-            >
-                <ngt-mesh-basic-material
-                    color="yellow"
-                    wireframe
-                ></ngt-mesh-basic-material>
+      <ngt-mesh name="yellow" [position]="[16, 0, 0]" [geometry]="ngtIcosahedronGeometry.instance">
+        <ngt-mesh-basic-material color="yellow" wireframe></ngt-mesh-basic-material>
 
-                <ngt-soba-html
-                    [position]="[0, 0, -6]"
-                    htmlClass="html-story-label"
-                    [occlude]="[ngtGroup.instance]"
-                >
-                    <ng-template ngt-soba-html-content> B </ng-template>
-                </ngt-soba-html>
-            </ngt-mesh>
-        </ngt-group>
-    `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+        <ngt-soba-html [position]="[0, 0, -6]" htmlClass="html-story-label" [occlude]="[ngtGroup.instance]">
+          <ng-template ngt-soba-html-content> B </ng-template>
+        </ngt-soba-html>
+      </ngt-mesh>
+    </ngt-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class HtmlOccludeStory {
-    readonly turnAnimate = turnAnimate;
+  readonly turnAnimate = turnAnimate;
 }
 
 @NgModule({
-    declarations: [HtmlOccludeStory],
-    exports: [HtmlOccludeStory],
-    imports: [
-        NgtGroupModule,
-        NgtMeshModule,
-        NgtIcosahedronGeometryModule,
-        NgtMeshBasicMaterialModule,
-        NgtSobaHtmlModule,
-    ],
+  declarations: [HtmlOccludeStory],
+  exports: [HtmlOccludeStory],
+  imports: [NgtGroupModule, NgtMeshModule, NgtIcosahedronGeometryModule, NgtMeshBasicMaterialModule, NgtSobaHtmlModule],
 })
 class HtmlOccludeStoryModule {}
 
 export default {
-    title: 'Misc/HTML',
-    decorators: [
-        componentWrapperDecorator(
-            setupCanvas({ cameraPosition: [-20, 20, -20] })
-        ),
-        moduleMetadata({
-            imports: [
-                ...setupCanvasModules,
-                NgtSobaHtmlModule,
-                NgtGroupModule,
-                NgtMeshModule,
-                NgtMeshBasicMaterialModule,
-                NgtIcosahedronGeometryModule,
-                HtmlOccludeStoryModule,
-            ],
-        }),
-    ],
+  title: 'Misc/HTML',
+  decorators: [
+    componentWrapperDecorator(setupCanvas({ cameraPosition: [-20, 20, -20] })),
+    moduleMetadata({
+      imports: [
+        ...setupCanvasModules,
+        NgtSobaHtmlModule,
+        NgtGroupModule,
+        NgtMeshModule,
+        NgtMeshBasicMaterialModule,
+        NgtIcosahedronGeometryModule,
+        HtmlOccludeStoryModule,
+      ],
+    }),
+  ],
 } as Meta;
 
 export const Default: Story = (args) => ({
-    props: { onBeforeRender: turnAnimate, ...args },
-    template: `
+  props: { onBeforeRender: turnAnimate, ...args },
+  template: `
         <ngt-group (beforeRender)="onBeforeRender($event.object)">
             <ngt-icosahedron-geometry #ngtGeometry [args]="[2, 2]"></ngt-icosahedron-geometry>
             <ngt-mesh-basic-material
@@ -146,13 +108,13 @@ export const Default: Story = (args) => ({
 });
 
 Default.args = {
-    distanceFactor: 30,
-    htmlClass: 'html-story-block',
+  distanceFactor: 30,
+  htmlClass: 'html-story-block',
 };
 
 export const Transform: Story = (args) => ({
-    props: { onBeforeRender: turnAnimate, ...args },
-    template: `
+  props: { onBeforeRender: turnAnimate, ...args },
+  template: `
         <ngt-group (beforeRender)="onBeforeRender($event.object)">
             <ngt-icosahedron-geometry #ngtGeometry [args]="[2, 2]"></ngt-icosahedron-geometry>
             <ngt-mesh-basic-material
@@ -209,12 +171,12 @@ export const Transform: Story = (args) => ({
 });
 
 Transform.args = {
-    color: 'palegreen',
-    transform: true,
-    htmlClass: 'html-story-block margin300',
-    distanceFactor: 30,
+  color: 'palegreen',
+  transform: true,
+  htmlClass: 'html-story-block margin300',
+  distanceFactor: 30,
 };
 
 export const RaycastOccluder: Story = () => ({
-    template: `<html-occlude-story></html-occlude-story>`,
+  template: `<html-occlude-story></html-occlude-story>`,
 });

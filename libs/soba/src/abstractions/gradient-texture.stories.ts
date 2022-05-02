@@ -3,32 +3,28 @@ import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaGradientTextureModule } from '@angular-three/soba/abstractions';
-import {
-    componentWrapperDecorator,
-    Meta,
-    moduleMetadata,
-} from '@storybook/angular';
+import { componentWrapperDecorator, Meta, moduleMetadata } from '@storybook/angular';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
-    title: 'Abstractions/Gradient Texture',
-    decorators: [
-        componentWrapperDecorator(setupCanvas()),
-        moduleMetadata({
-            imports: [
-                ...setupCanvasModules,
-                NgtSobaGradientTextureModule,
-                NgtMeshModule,
-                NgtMeshBasicMaterialModule,
-                NgtPlaneGeometryModule,
-                NgtSidePipeModule,
-            ],
-        }),
-    ],
+  title: 'Abstractions/Gradient Texture',
+  decorators: [
+    componentWrapperDecorator(setupCanvas()),
+    moduleMetadata({
+      imports: [
+        ...setupCanvasModules,
+        NgtSobaGradientTextureModule,
+        NgtMeshModule,
+        NgtMeshBasicMaterialModule,
+        NgtPlaneGeometryModule,
+        NgtSidePipeModule,
+      ],
+    }),
+  ],
 } as Meta;
 
 export const Default = () => ({
-    template: `
+  template: `
         <ngt-mesh>
             <ngt-plane-geometry></ngt-plane-geometry>
             <ngt-mesh-basic-material [depthWrite]="false" [side]="'double' | side">

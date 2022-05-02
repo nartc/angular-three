@@ -1,31 +1,22 @@
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtSobaTextModule } from '@angular-three/soba/abstractions';
-import {
-    componentWrapperDecorator,
-    Meta,
-    moduleMetadata,
-    Story,
-} from '@storybook/angular';
+import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import * as THREE from 'three';
 import { setupCanvas, setupCanvasModules, turnAnimate } from '../setup-canvas';
 
 export default {
-    title: 'Abstractions/Text',
-    decorators: [
-        componentWrapperDecorator(setupCanvas({ cameraPosition: [0, 0, 200] })),
-        moduleMetadata({
-            imports: [
-                ...setupCanvasModules,
-                NgtSobaTextModule,
-                NgtMeshBasicMaterialModule,
-            ],
-        }),
-    ],
+  title: 'Abstractions/Text',
+  decorators: [
+    componentWrapperDecorator(setupCanvas({ cameraPosition: [0, 0, 200] })),
+    moduleMetadata({
+      imports: [...setupCanvasModules, NgtSobaTextModule, NgtMeshBasicMaterialModule],
+    }),
+  ],
 } as Meta;
 
 export const Default: Story = (args) => ({
-    props: { ...args, onTextAnimate: turnAnimate },
-    template: `
+  props: { ...args, onTextAnimate: turnAnimate },
+  template: `
         <ngt-soba-text
           [text]="text"
           color="#EC2D2D"
@@ -44,15 +35,15 @@ export const Default: Story = (args) => ({
 });
 
 Default.args = {
-    text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+  text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
       MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
       CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
       EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.`,
 };
 
 export const Garfield: Story = (args) => ({
-    props: { ...args, onTextAnimate: turnAnimate },
-    template: `
+  props: { ...args, onTextAnimate: turnAnimate },
+  template: `
         <ngt-soba-text
           [text]="text"
           color="#EC2D2D"
@@ -71,15 +62,15 @@ export const Garfield: Story = (args) => ({
 });
 
 Garfield.args = {
-    text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+  text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
       MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
       CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
       EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.`,
 };
 
 export const Outline: Story = (args) => ({
-    props: { ...args, onTextAnimate: turnAnimate },
-    template: `
+  props: { ...args, onTextAnimate: turnAnimate },
+  template: `
         <ngt-soba-text
           [text]="text"
           color="#EC2D2D"
@@ -100,15 +91,15 @@ export const Outline: Story = (args) => ({
 });
 
 Outline.args = {
-    text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+  text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
       MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
       CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
       EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.`,
 };
 
 export const TransparentWithStroke: Story = (args) => ({
-    props: { ...args, onTextAnimate: turnAnimate },
-    template: `
+  props: { ...args, onTextAnimate: turnAnimate },
+  template: `
         <ngt-soba-text
           [text]="text"
           fontSize="12"
@@ -129,15 +120,15 @@ export const TransparentWithStroke: Story = (args) => ({
 });
 
 TransparentWithStroke.args = {
-    text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+  text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
       MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
       CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
       EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.`,
 };
 
 export const Shadow: Story = (args) => ({
-    props: { ...args, onTextAnimate: turnAnimate },
-    template: `
+  props: { ...args, onTextAnimate: turnAnimate },
+  template: `
         <ngt-soba-text
           [text]="text"
           color="#EC2D2D"
@@ -161,15 +152,15 @@ export const Shadow: Story = (args) => ({
 });
 
 Shadow.args = {
-    text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+  text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
       MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
       CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
       EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.`,
 };
 
 export const LTR: Story = (args) => ({
-    props: { ...args, onTextAnimate: turnAnimate },
-    template: `
+  props: { ...args, onTextAnimate: turnAnimate },
+  template: `
         <ngt-soba-text
           [text]="text"
           color="#EC2D2D"
@@ -189,17 +180,17 @@ export const LTR: Story = (args) => ({
 });
 
 LTR.args = {
-    text: `ان عدة الشهور عند الله اثنا عشر شهرا في كتاب الله يوم خلق السماوات والارض SOME LATIN TEXT HERE منها اربعة حرم ذلك
+  text: `ان عدة الشهور عند الله اثنا عشر شهرا في كتاب الله يوم خلق السماوات والارض SOME LATIN TEXT HERE منها اربعة حرم ذلك
       الدين القيم فلاتظلموا فيهن انفسكم وقاتلوا المشركين كافة كما يقاتلونكم كافة واعلموا ان الله مع المتقين`,
 };
 
 export const CustomMaterial: Story = (args) => ({
-    props: {
-        ...args,
-        onTextAnimate: turnAnimate,
-        DoubleSide: THREE.DoubleSide,
-    },
-    template: `
+  props: {
+    ...args,
+    onTextAnimate: turnAnimate,
+    DoubleSide: THREE.DoubleSide,
+  },
+  template: `
 
         <ngt-soba-text
           [text]="text"
@@ -223,7 +214,7 @@ export const CustomMaterial: Story = (args) => ({
 });
 
 CustomMaterial.args = {
-    text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+  text: `LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
       MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
       CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
       EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.`,

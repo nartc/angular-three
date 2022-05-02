@@ -6,18 +6,18 @@ import type { AnyConstructor } from '../types';
 import { provideObjectRef } from './object';
 
 export function provideCommonLightRef<TType extends AnyConstructor<any>>(
-    subLightType: TType,
-    factory?: (instance: InstanceType<TType>) => Ref
+  subLightType: TType,
+  factory?: (instance: InstanceType<TType>) => Ref
 ): Provider {
-    return [
-        provideObjectRef(subLightType, factory),
-        { provide: NgtCommonLight, useExisting: subLightType },
-        {
-            provide: NGT_COMMON_LIGHT_REF,
-            useFactory: (instance: InstanceType<TType>) => {
-                return () => factory?.(instance) || instance.instance;
-            },
-            deps: [subLightType],
-        },
-    ];
+  return [
+    provideObjectRef(subLightType, factory),
+    { provide: NgtCommonLight, useExisting: subLightType },
+    {
+      provide: NGT_COMMON_LIGHT_REF,
+      useFactory: (instance: InstanceType<TType>) => {
+        return () => factory?.(instance) || instance.instance;
+      },
+      deps: [subLightType],
+    },
+  ];
 }

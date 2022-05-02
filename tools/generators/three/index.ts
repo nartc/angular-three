@@ -13,18 +13,18 @@ import spritesGenerator from './sprites/sprites';
 import texturesGenerator from './textures/textures';
 
 export default async function (tree: Tree) {
-    await Promise.all([
-        geometriesGenerator(tree),
-        materialsGenerator(tree),
-        attributesGenerator(tree),
-        audiosGenerator(tree),
-        camerasGenerator(tree),
-        curvesGenerator(tree),
-        helpersGenerator(tree),
-        lightsGenerator(tree),
-        spritesGenerator(tree),
-        texturesGenerator(tree),
-        linesGenerator(tree),
-        simpleEffectsGenerator(tree),
-    ]);
+  await Promise.all([
+    geometriesGenerator(tree),
+    materialsGenerator(tree),
+    attributesGenerator(tree),
+    audiosGenerator(tree),
+    camerasGenerator(tree),
+    curvesGenerator(tree),
+    helpersGenerator(tree),
+    lightsGenerator(tree),
+    spritesGenerator(tree),
+    texturesGenerator(tree),
+    linesGenerator(tree),
+    simpleEffectsGenerator(tree),
+  ]);
 }

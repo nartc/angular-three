@@ -70,11 +70,11 @@ In NGT, this happens automatically via **Content Projection** and **Hierarchical
 
 ```html
 <ngt-canvas>
+  <ngt-group>
     <ngt-group>
-        <ngt-group>
-            <ngt-mesh></ngt-mesh>
-        </ngt-group>
+      <ngt-mesh></ngt-mesh>
     </ngt-group>
+  </ngt-group>
 </ngt-canvas>
 ```
 
@@ -84,8 +84,8 @@ We can modify the default behavior by adjusting `appendMode` and `appendTo` Inpu
 
 By default, the `appendMode` is set to `'immediate'` which means that an Object should be appended to its immediate parent.
 
--   If `appendMode` is `'root'`, the Object will always be appended to the Scene object
--   If `appendMode` is `'none'`, the Object will **NOT** be appended automatically
+- If `appendMode` is `'root'`, the Object will always be appended to the Scene object
+- If `appendMode` is `'none'`, the Object will **NOT** be appended automatically
 
 ### `appendTo`
 
@@ -97,10 +97,10 @@ To register an object as participant in the animation loop, we can listen for th
 
 ```ts
 @Component({
-    template: ` <ngt-mesh (beforeRender)="onBeforeRender($event)"></ngt-mesh> `,
+  template: ` <ngt-mesh (beforeRender)="onBeforeRender($event)"></ngt-mesh> `,
 })
 export class CubeComponent {
-    onBeforeRender($event: { state: NgtRenderState; object: THREE.Mesh }) {}
+  onBeforeRender($event: { state: NgtRenderState; object: THREE.Mesh }) {}
 }
 ```
 
@@ -116,22 +116,22 @@ Referencing NGT objects is the same as referencing any Angular component.
 
 ```ts
 @Component({
-    template: `
-        <!-- 👇 plain NGT object -->
-        <ngt-mesh></ngt-mesh>
+  template: `
+    <!-- 👇 plain NGT object -->
+    <ngt-mesh></ngt-mesh>
 
-        <!--      👇 template variable (note that template variable allows us also use this on the template) -->
-        <ngt-mesh #ngtMesh></ngt-mesh>
+    <!--      👇 template variable (note that template variable allows us also use this on the template) -->
+    <ngt-mesh #ngtMesh></ngt-mesh>
 
-        <!--        👇 using (ready) event -->
-        <ngt-mesh (ready)="mesh = $event"></ngt-mesh>
-    `,
+    <!--        👇 using (ready) event -->
+    <ngt-mesh (ready)="mesh = $event"></ngt-mesh>
+  `,
 })
 export class CubeComponent {
-    mesh!: THREE.Mesh;
+  mesh!: THREE.Mesh;
 
-    @ViewChild(NgtMesh, { static: true }) firstMesh!: NgtMesh;
-    @ViewChild('ngtMesh', { static: true }) secondMesh!: NgtMesh;
+  @ViewChild(NgtMesh, { static: true }) firstMesh!: NgtMesh;
+  @ViewChild('ngtMesh', { static: true }) secondMesh!: NgtMesh;
 }
 ```
 
@@ -141,8 +141,8 @@ More often than not, we want load 3D models from an external source and put them
 
 ```ts
 @Component({
-    selector: 'some',
-    template: `
+  selector: 'some',
+  template: `
     <ng-container *ngIf="model$ | async as model">
                     <!-- 👇 NgtPrimitive exposes this object instead of itself like a NgtMesh -->
       <ngt-primitive [object]="model.scene"></ng-primitive>
@@ -150,14 +150,14 @@ More often than not, we want load 3D models from an external source and put them
   `,
 })
 export class SomeComponent {
-    model$ = this.loader.use(GLTFLoader, 'path/to/model.gltf');
+  model$ = this.loader.use(GLTFLoader, 'path/to/model.gltf');
 
-    constructor(private loader: NgtLoader) {}
+  constructor(private loader: NgtLoader) {}
 }
 
 @NgModule({
-    //        👇 import from @angular-three/core/primitive
-    imports: [NgtPrimitiveModule],
+  //        👇 import from @angular-three/core/primitive
+  imports: [NgtPrimitiveModule],
 })
 export class SomeComponentModule {}
 ```

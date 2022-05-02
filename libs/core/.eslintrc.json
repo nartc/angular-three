@@ -1,22 +1,20 @@
 {
-    "extends": ["../../.eslintrc.json"],
-    "ignorePatterns": ["!**/*"],
-    "overrides": [
-        {
-            "files": ["*.ts"],
-            "extends": [
-                "plugin:@angular-eslint/template/process-inline-templates"
-            ],
-            "rules": {
-                "@typescript-eslint/no-non-null-assertion": 0,
-                "@typescript-eslint/ban-ts-comment": 0,
-                "@typescript-eslint/no-unused-vars": 0
-            }
-        },
-        {
-            "files": ["*.html"],
-            "extends": ["plugin:@nrwl/nx/angular-template"],
-            "rules": {}
-        }
-    ]
+  "extends": ["../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": ["plugin:@angular-eslint/template/process-inline-templates"],
+      "rules": {
+        "@typescript-eslint/no-non-null-assertion": 0,
+        "@typescript-eslint/ban-ts-comment": 0,
+        "@typescript-eslint/no-unused-vars": 0
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@nrwl/nx/angular-template"],
+      "rules": {}
+    }
+  ]
 }

@@ -9,9 +9,9 @@ import TabItem from '@theme/TabItem';
 
 Everything in NGT is an `NgtInstance`
 
--   Objects that are participated in rendering
--   Non-scene objects like materials, geometries, etc...
--   Attributes like colors, fogs, attributes etc...
+- Objects that are participated in rendering
+- Non-scene objects like materials, geometries, etc...
+- Attributes like colors, fogs, attributes etc...
 
 :::info
 
@@ -66,12 +66,12 @@ the `Ref` (external).
 
 ```ts
 @Component({
-    template: 'cube.component.html',
-    providers: [NgtPhysicBody],
+  template: 'cube.component.html',
+  providers: [NgtPhysicBody],
 })
 export class CubeComponent {
-    physicBox = this.physicBody.useBox(/* ... */);
-    constructor(private physicBody: NgtPhysicBody) {}
+  physicBox = this.physicBody.useBox(/* ... */);
+  constructor(private physicBody: NgtPhysicBody) {}
 }
 ```
 
@@ -88,58 +88,55 @@ The idea of _"attaching"_ is that each NGT object put on the template with the p
 
 ```html
 <ngt-canvas>
-    <!-- attach to the parent Scene.background property -->
-    <ngt-color attach="background" color="blue"></ngt-color>
+  <!-- attach to the parent Scene.background property -->
+  <ngt-color attach="background" color="blue"></ngt-color>
 
-    <ngt-mesh>
-        <!-- attach to the parent Mesh.geometry -->
-        <ngt-box-geometry attach="geometry"></ngt-box-geometry>
-        <!-- attach to the parent Mesh.material -->
-        <ngt-mesh-basic-material attach="material"></ngt-mesh-basic-material>
-    </ngt-mesh>
+  <ngt-mesh>
+    <!-- attach to the parent Mesh.geometry -->
+    <ngt-box-geometry attach="geometry"></ngt-box-geometry>
+    <!-- attach to the parent Mesh.material -->
+    <ngt-mesh-basic-material attach="material"></ngt-mesh-basic-material>
+  </ngt-mesh>
 </ngt-canvas>
 ```
 
 :::tip
 
--   NGT geometries have `attach="geometry"` by default
--   NGT materials have `attach="material"` by default
+- NGT geometries have `attach="geometry"` by default
+- NGT materials have `attach="material"` by default
 
 ```html
 <ngt-mesh>
-    <!-- attach to the parent Mesh.geometry -->
-    <ngt-box-geometry></ngt-box-geometry>
-    <!-- attach to the parent Mesh.material -->
-    <ngt-mesh-basic-material></ngt-mesh-basic-material>
+  <!-- attach to the parent Mesh.geometry -->
+  <ngt-box-geometry></ngt-box-geometry>
+  <!-- attach to the parent Mesh.material -->
+  <ngt-mesh-basic-material></ngt-mesh-basic-material>
 </ngt-mesh>
 ```
 
 :::
 
--   `attach=string` attaches to `parent.string`
--   `[attach]="['nested', 'object']"` attaches to `parent.nested.object`
--   `[attach]="attachFn"`
+- `attach=string` attaches to `parent.string`
+- `[attach]="['nested', 'object']"` attaches to `parent.nested.object`
+- `[attach]="attachFn"`
 
 `attachFn` is called with `(parent: NgtRef, self: NgtRef)` so you can handle _attaching_ in more complex cases. `attachFn` should return a clean up function that would redo the _attaching_.
 
 ```ts
 @Component({
-    template: `
-        <ngt-effect-composer>
-            <ngt-bloom [attach]="attachEffect"></ngt-bloom>
-        </ngt-effect-composer>
-    `,
+  template: `
+    <ngt-effect-composer>
+      <ngt-bloom [attach]="attachEffect"></ngt-bloom>
+    </ngt-effect-composer>
+  `,
 })
 export class SomeComponent {
-    attachEffect = (
-        parent: NgtRef<EffectComposer>,
-        self: NgtRef<BloomEffect>
-    ) => {
-        parent.value.addPass(self.value);
-        return () => {
-            parent.value.removePass(self.value);
-        };
+  attachEffect = (parent: NgtRef<EffectComposer>, self: NgtRef<BloomEffect>) => {
+    parent.value.addPass(self.value);
+    return () => {
+      parent.value.removePass(self.value);
     };
+  };
 }
 ```
 
@@ -155,15 +152,15 @@ When an `NgtInstance` creates its own `Ref`, it will also add some internal stat
 
 ```ts
 export interface NgtInstanceInternal {
-    root: () => NgtState;
-    // objects and parent are used when children are added with `attach` instead of being added to the Object3D scene graph
-    objects: NgtRef[];
-    parent: NgtRef | null;
-    primitive?: boolean;
-    eventCount: number;
-    handlers: Partial<NgtEventHandlers>;
-    previousAttach?: string[] | (() => void);
-    previousAttachValue?: unknown;
+  root: () => NgtState;
+  // objects and parent are used when children are added with `attach` instead of being added to the Object3D scene graph
+  objects: NgtRef[];
+  parent: NgtRef | null;
+  primitive?: boolean;
+  eventCount: number;
+  handlers: Partial<NgtEventHandlers>;
+  previousAttach?: string[] | (() => void);
+  previousAttachValue?: unknown;
 }
 ```
 
@@ -171,12 +168,12 @@ export interface NgtInstanceInternal {
 
 Options that are not [**Constructor Arguments**](./inputs#constructor-arguments) are updated automatically on changes by `NgtInstance`. Things like:
 
--   `position`, `rotation`, `scale` etc... on Objects
--   `color`, `opacity` etc... on Materials
--   `intensity`, `angle` etc... on Lights
+- `position`, `rotation`, `scale` etc... on Objects
+- `color`, `opacity` etc... on Materials
+- `intensity`, `angle` etc... on Lights
 
 After applying the options, `NgtInstance` also calls the necessary method to update the changes to the scene:
 
--   `updateMatrix()` for Object3D
--   `updateProjectionMatrix()` and `updateMatrixWorld()` for Cameras
--   `needsUpdate = true` for various other objects
+- `updateMatrix()` for Object3D
+- `updateProjectionMatrix()` and `updateMatrixWorld()` for Cameras
+- `needsUpdate = true` for various other objects

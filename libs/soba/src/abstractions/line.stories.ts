@@ -1,79 +1,70 @@
 import {
-    NgtSobaCubicBezierLineModule,
-    NgtSobaLineModule,
-    NgtSobaQuadraticBezierLineModule,
+  NgtSobaCubicBezierLineModule,
+  NgtSobaLineModule,
+  NgtSobaQuadraticBezierLineModule,
 } from '@angular-three/soba/abstractions';
-import {
-    componentWrapperDecorator,
-    Meta,
-    moduleMetadata,
-    Story,
-} from '@storybook/angular';
+import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import * as THREE from 'three';
 // @ts-ignore
 import { hilbert3D } from 'three-stdlib';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
-    title: 'Abstractions/Line',
-    decorators: [
-        componentWrapperDecorator(
-            setupCanvas({
-                controls: false,
-                cameraPosition: [0, 0, 17],
-            })
-        ),
-        moduleMetadata({
-            imports: [
-                ...setupCanvasModules,
-                NgtSobaLineModule,
-                NgtSobaCubicBezierLineModule,
-                NgtSobaQuadraticBezierLineModule,
-            ],
-        }),
-    ],
-    argTypes: {
-        color: {
-            control: {
-                type: 'color',
-            },
-        },
-        dashed: {
-            control: {
-                type: 'boolean',
-            },
-        },
-        lineWidth: {
-            control: {
-                type: 'number',
-            },
-        },
+  title: 'Abstractions/Line',
+  decorators: [
+    componentWrapperDecorator(
+      setupCanvas({
+        controls: false,
+        cameraPosition: [0, 0, 17],
+      })
+    ),
+    moduleMetadata({
+      imports: [
+        ...setupCanvasModules,
+        NgtSobaLineModule,
+        NgtSobaCubicBezierLineModule,
+        NgtSobaQuadraticBezierLineModule,
+      ],
+    }),
+  ],
+  argTypes: {
+    color: {
+      control: {
+        type: 'color',
+      },
     },
+    dashed: {
+      control: {
+        type: 'boolean',
+      },
+    },
+    lineWidth: {
+      control: {
+        type: 'number',
+      },
+    },
+  },
 } as Meta;
 
-const points = hilbert3D(new THREE.Vector3(0), 5).map((p: any) => [
-    p.x,
-    p.y,
-    p.z,
-]) as [number, number, number][];
+const points = hilbert3D(new THREE.Vector3(0), 5).map((p: any) => [p.x, p.y, p.z]) as [number, number, number][];
 
 export const Default: Story = (args) => ({
-    props: { ...args, points },
-    template: `
+  props: { ...args, points },
+  template: `
     <ngt-soba-line [points]="points" [lineWidth]="lineWidth" [dashed]="dashed" [color]="color"></ngt-soba-line>
     <ngt-soba-orbit-controls zoomSpeed="0.5"></ngt-soba-orbit-controls>
   `,
 });
 
 Default.args = {
-    color: 'red',
-    dashed: false,
-    lineWidth: 3,
+  color: 'red',
+  dashed: false,
+  lineWidth: 3,
 };
 
 export const QuadraticBezierLine: Story = (args) => ({
-    props: args,
-    template: `
+  props: args,
+  template: `
     <ngt-soba-quadratic-bezier-line
       [start]="start"
       [end]="end"
@@ -87,17 +78,17 @@ export const QuadraticBezierLine: Story = (args) => ({
 });
 
 QuadraticBezierLine.args = {
-    start: [0, 0, 0],
-    end: [4, 7, 5],
-    segments: 10,
-    color: 'red',
-    dashed: true,
-    lineWidth: 2,
+  start: [0, 0, 0],
+  end: [4, 7, 5],
+  segments: 10,
+  color: 'red',
+  dashed: true,
+  lineWidth: 2,
 };
 
 export const CubicBezierLine: Story = (args) => ({
-    props: args,
-    template: `
+  props: args,
+  template: `
     <ngt-soba-cubic-bezier-line
       [start]="start"
       [end]="end"
@@ -113,27 +104,25 @@ export const CubicBezierLine: Story = (args) => ({
 });
 
 CubicBezierLine.args = {
-    start: [0, 0, 0],
-    end: [10, 0, 10],
-    midA: [5, 4, 0],
-    midB: [0, 0, 5],
-    segments: 10,
-    color: 'red',
-    lineWidth: 2,
-    dashed: true,
+  start: [0, 0, 0],
+  end: [10, 0, 10],
+  midA: [5, 4, 0],
+  midB: [0, 0, 5],
+  segments: 10,
+  color: 'red',
+  lineWidth: 2,
+  dashed: true,
 };
 
-const colors = new Array(points.length)
-    .fill(0)
-    .map(() => [Math.random(), Math.random(), Math.random()]) as [
-    number,
-    number,
-    number
+const colors = new Array(points.length).fill(0).map(() => [Math.random(), Math.random(), Math.random()]) as [
+  number,
+  number,
+  number
 ][];
 
 export const VertexColors: Story = (args) => ({
-    props: { ...args, points },
-    template: `
+  props: { ...args, points },
+  template: `
     <ngt-soba-line
       [points]="points"
       [vertexColors]="vertexColors"
@@ -146,8 +135,8 @@ export const VertexColors: Story = (args) => ({
 });
 
 VertexColors.args = {
-    color: 'white',
-    vertexColors: colors,
-    lineWidth: 3,
-    dashed: false,
+  color: 'white',
+  vertexColors: colors,
+  lineWidth: 3,
+  dashed: false,
 };

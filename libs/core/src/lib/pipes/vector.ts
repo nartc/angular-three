@@ -8,13 +8,13 @@ import { makeVector2, makeVector3, makeVector4 } from '../utils/make';
  */
 @Pipe({ name: 'vector2' })
 export class NgtVector2Pipe implements PipeTransform {
-    /**
-     * @deprecated
-     * @param value
-     */
-    transform(value: NgtVector2): THREE.Vector2 {
-        return makeVector2(value) as THREE.Vector2;
-    }
+  /**
+   * @deprecated
+   * @param value
+   */
+  transform(value: NgtVector2): THREE.Vector2 {
+    return makeVector2(value) as THREE.Vector2;
+  }
 }
 
 /**
@@ -22,13 +22,13 @@ export class NgtVector2Pipe implements PipeTransform {
  */
 @Pipe({ name: 'vector3' })
 export class NgtVector3Pipe implements PipeTransform {
-    /**
-     * @deprecated
-     * @param value
-     */
-    transform(value: NgtVector3): THREE.Vector3 {
-        return makeVector3(value) as THREE.Vector3;
-    }
+  /**
+   * @deprecated
+   * @param value
+   */
+  transform(value: NgtVector3): THREE.Vector3 {
+    return makeVector3(value) as THREE.Vector3;
+  }
 }
 
 /**
@@ -36,17 +36,17 @@ export class NgtVector3Pipe implements PipeTransform {
  */
 @Pipe({ name: 'vector4' })
 export class NgtVector4Pipe implements PipeTransform {
-    /**
-     * @deprecated
-     * @param value
-     */
-    transform(value: NgtVector4): THREE.Vector4 {
-        return makeVector4(value) as THREE.Vector4;
-    }
+  /**
+   * @deprecated
+   * @param value
+   */
+  transform(value: NgtVector4): THREE.Vector4 {
+    return makeVector4(value) as THREE.Vector4;
+  }
 }
 
 @NgModule({
-    declarations: [NgtVector2Pipe, NgtVector3Pipe, NgtVector4Pipe],
-    exports: [NgtVector2Pipe, NgtVector3Pipe, NgtVector4Pipe],
+  declarations: [NgtVector2Pipe, NgtVector3Pipe, NgtVector4Pipe],
+  exports: [NgtVector2Pipe, NgtVector3Pipe, NgtVector4Pipe],
 })
 export class NgtVectorPipeModule {}

@@ -1,73 +1,63 @@
 // GENERATED
 import {
-    AnyConstructor,
-    NgtCommonMaterial,
-    provideCommonMaterialRef,
-    coerceBooleanProperty,
-    BooleanInput,
-    coerceNumberProperty,
-    NumberInput,
+  AnyConstructor,
+  NgtCommonMaterial,
+  provideCommonMaterialRef,
+  coerceBooleanProperty,
+  BooleanInput,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    NgModule,
-    Input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-sprite-material',
-    template: '<ng-content></ng-content>',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonMaterialRef(NgtSpriteMaterial)],
+  selector: 'ngt-sprite-material',
+  template: '<ng-content></ng-content>',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideCommonMaterialRef(NgtSpriteMaterial)],
 })
-export class NgtSpriteMaterial extends NgtCommonMaterial<
-    THREE.SpriteMaterialParameters,
-    THREE.SpriteMaterial
-> {
-    static ngAcceptInputType_parameters:
-        | THREE.SpriteMaterialParameters
-        | undefined;
+export class NgtSpriteMaterial extends NgtCommonMaterial<THREE.SpriteMaterialParameters, THREE.SpriteMaterial> {
+  static ngAcceptInputType_parameters: THREE.SpriteMaterialParameters | undefined;
 
-    @Input() set color(color: THREE.ColorRepresentation) {
-        this.set({ color });
-    }
+  @Input() set color(color: THREE.ColorRepresentation) {
+    this.set({ color });
+  }
 
-    @Input() set map(map: THREE.Texture | null) {
-        this.set({ map });
-    }
+  @Input() set map(map: THREE.Texture | null) {
+    this.set({ map });
+  }
 
-    @Input() set alphaMap(alphaMap: THREE.Texture | null) {
-        this.set({ alphaMap });
-    }
+  @Input() set alphaMap(alphaMap: THREE.Texture | null) {
+    this.set({ alphaMap });
+  }
 
-    @Input() set rotation(rotation: NumberInput) {
-        this.set({ rotation: coerceNumberProperty(rotation) });
-    }
+  @Input() set rotation(rotation: NumberInput) {
+    this.set({ rotation: coerceNumberProperty(rotation) });
+  }
 
-    @Input() set sizeAttenuation(sizeAttenuation: BooleanInput) {
-        this.set({ sizeAttenuation: coerceBooleanProperty(sizeAttenuation) });
-    }
+  @Input() set sizeAttenuation(sizeAttenuation: BooleanInput) {
+    this.set({ sizeAttenuation: coerceBooleanProperty(sizeAttenuation) });
+  }
 
-    get materialType(): AnyConstructor<THREE.SpriteMaterial> {
-        return THREE.SpriteMaterial;
-    }
+  get materialType(): AnyConstructor<THREE.SpriteMaterial> {
+    return THREE.SpriteMaterial;
+  }
 
-    protected override get optionFields(): Record<string, boolean> {
-        return {
-            ...super.optionFields,
-            color: true,
-            map: true,
-            alphaMap: true,
-            rotation: true,
-            sizeAttenuation: true,
-        };
-    }
+  protected override get optionFields(): Record<string, boolean> {
+    return {
+      ...super.optionFields,
+      color: true,
+      map: true,
+      alphaMap: true,
+      rotation: true,
+      sizeAttenuation: true,
+    };
+  }
 }
 
 @NgModule({
-    declarations: [NgtSpriteMaterial],
-    exports: [NgtSpriteMaterial],
+  declarations: [NgtSpriteMaterial],
+  exports: [NgtSpriteMaterial],
 })
 export class NgtSpriteMaterialModule {}

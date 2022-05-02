@@ -1,47 +1,33 @@
-import {
-    NgtBoxGeometryModule,
-    NgtTorusKnotGeometryModule,
-} from '@angular-three/core/geometries';
+import { NgtBoxGeometryModule, NgtTorusKnotGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaPerspectiveCameraModule } from '@angular-three/soba/cameras';
-import {
-    NgtSobaContactShadowsModule,
-    NgtSobaEnvironmentModule,
-    presetsObj,
-} from '@angular-three/soba/staging';
-import {
-    componentWrapperDecorator,
-    Meta,
-    moduleMetadata,
-    Story,
-} from '@storybook/angular';
+import { NgtSobaContactShadowsModule, NgtSobaEnvironmentModule, presetsObj } from '@angular-three/soba/staging';
+import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
-    title: 'Staging/Environment',
-    decorators: [
-        componentWrapperDecorator(
-            setupCanvas({ controls: false, cameraPosition: [0, 0, 10] })
-        ),
-        moduleMetadata({
-            imports: [
-                ...setupCanvasModules,
-                NgtSobaEnvironmentModule,
-                NgtMeshModule,
-                NgtTorusKnotGeometryModule,
-                NgtBoxGeometryModule,
-                NgtMeshStandardMaterialModule,
-                NgtSobaPerspectiveCameraModule,
-                NgtSobaContactShadowsModule,
-            ],
-        }),
-    ],
+  title: 'Staging/Environment',
+  decorators: [
+    componentWrapperDecorator(setupCanvas({ controls: false, cameraPosition: [0, 0, 10] })),
+    moduleMetadata({
+      imports: [
+        ...setupCanvasModules,
+        NgtSobaEnvironmentModule,
+        NgtMeshModule,
+        NgtTorusKnotGeometryModule,
+        NgtBoxGeometryModule,
+        NgtMeshStandardMaterialModule,
+        NgtSobaPerspectiveCameraModule,
+        NgtSobaContactShadowsModule,
+      ],
+    }),
+  ],
 } as Meta;
 
 export const Default: Story = (args) => ({
-    props: args,
-    template: `
+  props: args,
+  template: `
         <ngt-soba-environment [preset]="preset" [background]="background"></ngt-soba-environment>
         <ngt-mesh>
             <ngt-torus-knot-geometry [args]="[1, 0.5, 128, 32]"></ngt-torus-knot-geometry>
@@ -54,22 +40,22 @@ export const Default: Story = (args) => ({
 const presets = Object.keys(presetsObj);
 
 Default.args = {
-    background: true,
-    preset: presets[0],
+  background: true,
+  preset: presets[0],
 };
 
 Default.argTypes = {
-    preset: {
-        options: presets,
-        control: {
-            type: 'select',
-        },
+  preset: {
+    options: presets,
+    control: {
+      type: 'select',
     },
+  },
 };
 
 export const Files: Story = (args) => ({
-    props: args,
-    template: `
+  props: args,
+  template: `
         <ngt-soba-environment path="soba/cube/" [files]="['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']" [background]="background"></ngt-soba-environment>
         <ngt-mesh>
             <ngt-torus-knot-geometry [args]="[1, 0.5, 128, 32]"></ngt-torus-knot-geometry>
@@ -80,12 +66,12 @@ export const Files: Story = (args) => ({
 });
 
 Files.args = {
-    background: true,
+  background: true,
 };
 
 export const Ground: Story = (args) => ({
-    props: args,
-    template: `
+  props: args,
+  template: `
         <ngt-soba-environment [ground]="{height: height, radius: radius}" [preset]="preset"></ngt-soba-environment>
         <ngt-mesh [position]="[0, 5, 0]">
             <ngt-box-geometry [args]="[10, 10, 10]"></ngt-box-geometry>
@@ -98,32 +84,32 @@ export const Ground: Story = (args) => ({
 });
 
 Ground.args = {
-    height: 15,
-    radius: 60,
-    preset: 'park',
+  height: 15,
+  radius: 60,
+  preset: 'park',
 };
 
 Ground.argTypes = {
-    preset: {
-        options: presets,
-        control: {
-            type: 'select',
-        },
+  preset: {
+    options: presets,
+    control: {
+      type: 'select',
     },
-    height: {
-        control: {
-            type: 'range',
-            min: 0,
-            max: 50,
-            step: 0.1,
-        },
+  },
+  height: {
+    control: {
+      type: 'range',
+      min: 0,
+      max: 50,
+      step: 0.1,
     },
-    radius: {
-        control: {
-            type: 'range',
-            min: 0,
-            max: 200,
-            step: 1,
-        },
+  },
+  radius: {
+    control: {
+      type: 'range',
+      min: 0,
+      max: 200,
+      step: 1,
     },
+  },
 };

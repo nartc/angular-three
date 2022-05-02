@@ -2,33 +2,27 @@ import { NgtIcosahedronGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaDetailedModule } from '@angular-three/soba/performances';
-import {
-    componentWrapperDecorator,
-    Meta,
-    moduleMetadata,
-} from '@storybook/angular';
+import { componentWrapperDecorator, Meta, moduleMetadata } from '@storybook/angular';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
-    title: 'Performances/Detailed',
-    decorators: [
-        componentWrapperDecorator(
-            setupCanvas({ controls: false, cameraPosition: [0, 0, 100] })
-        ),
-        moduleMetadata({
-            imports: [
-                ...setupCanvasModules,
-                NgtSobaDetailedModule,
-                NgtMeshModule,
-                NgtIcosahedronGeometryModule,
-                NgtMeshBasicMaterialModule,
-            ],
-        }),
-    ],
+  title: 'Performances/Detailed',
+  decorators: [
+    componentWrapperDecorator(setupCanvas({ controls: false, cameraPosition: [0, 0, 100] })),
+    moduleMetadata({
+      imports: [
+        ...setupCanvasModules,
+        NgtSobaDetailedModule,
+        NgtMeshModule,
+        NgtIcosahedronGeometryModule,
+        NgtMeshBasicMaterialModule,
+      ],
+    }),
+  ],
 } as Meta;
 
 export const Default = () => ({
-    template: `
+  template: `
         <ngt-soba-detailed [distances]="[50, 100, 150, 200, 250]">
             <ng-template ngt-soba-detailed-content>
                 <ngt-mesh [scale]="[5, 5, 5]">

@@ -1,12 +1,5 @@
 import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
-import {
-  formatFiles,
-  generateFiles,
-  getWorkspaceLayout,
-  logger,
-  names,
-  Tree,
-} from '@nrwl/devkit';
+import { formatFiles, generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/devkit';
 import { join } from 'path';
 import * as THREE from 'three';
 
@@ -33,16 +26,11 @@ export default async function audiosGenerator(tree: Tree): Promise<string[]> {
   for (const [audio, audioNode] of audios) {
     const normalizedNames = names(audio);
 
-    generateFiles(
-      tree,
-      join(__dirname, 'files/lib'),
-      join(audioDir, 'src', 'lib', normalizedNames.fileName),
-      {
-        ...normalizedNames,
-        audioNode,
-        tmpl: '',
-      }
-    );
+    generateFiles(tree, join(__dirname, 'files/lib'), join(audioDir, 'src', 'lib', normalizedNames.fileName), {
+      ...normalizedNames,
+      audioNode,
+      tmpl: '',
+    });
 
     generatedAudios.push(normalizedNames.fileName);
   }

@@ -1,30 +1,25 @@
 // GENERATED
 import { AnyConstructor } from '@angular-three/core';
-import {
-    NgtCommonEffect,
-    provideCommonEffectRef,
-} from '@angular-three/postprocessing';
+import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { BrightnessContrastEffect } from 'postprocessing';
 
 @Component({
-    selector: 'ngt-brightness-contrast',
-    template: `<ng-content></ng-content>`,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectRef(NgtBrightnessContrast)],
+  selector: 'ngt-brightness-contrast',
+  template: `<ng-content></ng-content>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideCommonEffectRef(NgtBrightnessContrast)],
 })
 export class NgtBrightnessContrast extends NgtCommonEffect<BrightnessContrastEffect> {
-    static ngAcceptInputType_options:
-        | ConstructorParameters<AnyConstructor<BrightnessContrastEffect>>[0]
-        | undefined;
+  static ngAcceptInputType_options: ConstructorParameters<AnyConstructor<BrightnessContrastEffect>>[0] | undefined;
 
-    override get effectType(): AnyConstructor<BrightnessContrastEffect> {
-        return BrightnessContrastEffect;
-    }
+  override get effectType(): AnyConstructor<BrightnessContrastEffect> {
+    return BrightnessContrastEffect;
+  }
 }
 
 @NgModule({
-    declarations: [NgtBrightnessContrast],
-    exports: [NgtBrightnessContrast],
+  declarations: [NgtBrightnessContrast],
+  exports: [NgtBrightnessContrast],
 })
 export class NgtBrightnessContrastModule {}

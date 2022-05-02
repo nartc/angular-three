@@ -7,18 +7,18 @@ import type { AnyConstructor } from '../types';
 import { provideObjectRef } from './object';
 
 export function provideCommonAudioRef<TType extends AnyConstructor<any>>(
-    subAudioType: TType,
-    factory?: (instance: InstanceType<TType>) => Ref<THREE.Object3D>
+  subAudioType: TType,
+  factory?: (instance: InstanceType<TType>) => Ref<THREE.Object3D>
 ): Provider {
-    return [
-        provideObjectRef(subAudioType, factory),
-        { provide: NgtCommonAudio, useExisting: subAudioType },
-        {
-            provide: NGT_COMMON_AUDIO_REF,
-            useFactory: (instance: InstanceType<TType>) => {
-                return () => factory?.(instance) || instance.instance;
-            },
-            deps: [subAudioType],
-        },
-    ];
+  return [
+    provideObjectRef(subAudioType, factory),
+    { provide: NgtCommonAudio, useExisting: subAudioType },
+    {
+      provide: NGT_COMMON_AUDIO_REF,
+      useFactory: (instance: InstanceType<TType>) => {
+        return () => factory?.(instance) || instance.instance;
+      },
+      deps: [subAudioType],
+    },
+  ];
 }

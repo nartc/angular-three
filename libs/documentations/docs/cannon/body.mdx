@@ -10,13 +10,13 @@ To interact with [Cannon Body API](https://pmndrs.github.io/cannon-es/docs/class
 
 ```ts
 @Component({
-    providers: [NgtPhysicBody],
+  providers: [NgtPhysicBody],
 })
 export class FloorComponent {
-    // 👇 now we can use this ref on the template
-    planeRef = this.physicBody.usePlane(/* ... */);
+  // 👇 now we can use this ref on the template
+  planeRef = this.physicBody.usePlane(/* ... */);
 
-    constructor(private physicBody: NgtPhysicBody) {}
+  constructor(private physicBody: NgtPhysicBody) {}
 }
 ```
 
@@ -38,53 +38,49 @@ All Body Creators return `NgtPhysicBodyReturn`
 
 ```ts
 export interface NgtPhysicBodyReturn {
-    ref: Ref<THREE.Object3D>;
-    api: NgtPhysicsBodyPublicApi;
+  ref: Ref<THREE.Object3D>;
+  api: NgtPhysicsBodyPublicApi;
 }
 ```
 
--   `ref` is used to pass in an `NgtInstance` `[ref]` Input
--   `api` is to interact with the Physic World like updating `position`, applying forces etc...
+- `ref` is used to pass in an `NgtInstance` `[ref]` Input
+- `api` is to interact with the Physic World like updating `position`, applying forces etc...
 
 ```ts
 @Component({
-    selector: 'sandbox-box',
-    template: `
-        <ngt-mesh
-            [ref]="boxRef.ref"
-            [castShadow]="true"
-            [receiveShadow]="true"
-            (beforeRender)="onBoxBeforeRender($event.state)"
-        >
-            <ngt-box-geometry [args]="boxSize"></ngt-box-geometry>
-            <ngt-mesh-lambert-material></ngt-mesh-lambert-material>
-        </ngt-mesh>
-    `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [NgtPhysicBody],
+  selector: 'sandbox-box',
+  template: `
+    <ngt-mesh
+      [ref]="boxRef.ref"
+      [castShadow]="true"
+      [receiveShadow]="true"
+      (beforeRender)="onBoxBeforeRender($event.state)"
+    >
+      <ngt-box-geometry [args]="boxSize"></ngt-box-geometry>
+      <ngt-mesh-lambert-material></ngt-mesh-lambert-material>
+    </ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [NgtPhysicBody],
 })
 export class BoxComponent {
-    boxSize: NgtTriple = [4, 4, 4];
+  boxSize: NgtTriple = [4, 4, 4];
 
-    boxRef = this.physicBody.useBox(() => ({
-        mass: 1,
-        type: 'Kinematic',
-        args: this.boxSize,
-    }));
+  boxRef = this.physicBody.useBox(() => ({
+    mass: 1,
+    type: 'Kinematic',
+    args: this.boxSize,
+  }));
 
-    constructor(private physicBody: NgtPhysicBody) {}
+  constructor(private physicBody: NgtPhysicBody) {}
 
-    onBoxBeforeRender({ clock }: NgtRenderState) {
-        const t = clock.getElapsedTime();
-        // highlight-start
-        this.boxRef.api.position.set(
-            Math.sin(t * 2) * 5,
-            Math.cos(t * 2) * 5,
-            3
-        );
-        this.boxRef.api.rotation.set(Math.sin(t * 6), Math.cos(t * 6), 0);
-        // highlight-end
-    }
+  onBoxBeforeRender({ clock }: NgtRenderState) {
+    const t = clock.getElapsedTime();
+    // highlight-start
+    this.boxRef.api.position.set(Math.sin(t * 2) * 5, Math.cos(t * 2) * 5, 3);
+    this.boxRef.api.rotation.set(Math.sin(t * 6), Math.cos(t * 6), 0);
+    // highlight-end
+  }
 }
 ```
 
@@ -96,61 +92,53 @@ However, there are cases where we would want to still constraint some object in 
 
 ```ts
 @Component({
-    selector: 'sandbox-lamp',
-    template: `
-        <ngt-mesh
-            sandboxDragConstraint
-            [ref]="lampRef.ref"
-            [position]="[0, 16, 0]"
-        >
-            <ngt-cone-geometry [args]="[2, 2.5, 32]"></ngt-cone-geometry>
-            <ngt-mesh-standard-material></ngt-mesh-standard-material>
-            <ngt-point-light [intensity]="10" [distance]="5"></ngt-point-light>
-            <ngt-spot-light
-                [position]="[0, 20, 0]"
-                [angle]="0.4"
-                [penumbra]="1"
-                [intensity]="0.6"
-                castShadow
-            ></ngt-spot-light>
-        </ngt-mesh>
-    `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [NgtPhysicBody, NgtPhysicConstraint],
+  selector: 'sandbox-lamp',
+  template: `
+    <ngt-mesh sandboxDragConstraint [ref]="lampRef.ref" [position]="[0, 16, 0]">
+      <ngt-cone-geometry [args]="[2, 2.5, 32]"></ngt-cone-geometry>
+      <ngt-mesh-standard-material></ngt-mesh-standard-material>
+      <ngt-point-light [intensity]="10" [distance]="5"></ngt-point-light>
+      <ngt-spot-light
+        [position]="[0, 20, 0]"
+        [angle]="0.4"
+        [penumbra]="1"
+        [intensity]="0.6"
+        castShadow
+      ></ngt-spot-light>
+    </ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [NgtPhysicBody, NgtPhysicConstraint],
 })
 export class SandboxLampComponent implements OnInit {
+  // highlight-start
+  fixtureRef = this.physicBody.useSphere(
+    () => ({
+      args: [1],
+      position: [0, 16, 0],
+      type: 'Static',
+    }),
+    false
+  );
+  // highlight-end
+  lampRef = this.physicBody.useBox(() => ({
+    angulardamping: 1.99,
+    args: [1, 0, 5],
+    linearDamping: 0.9,
+    mass: 1,
+    position: [0, 16, 0],
+  }));
+
+  constructor(private physicBody: NgtPhysicBody, private physicConstraint: NgtPhysicConstraint) {}
+
+  ngOnInit() {
     // highlight-start
-    fixtureRef = this.physicBody.useSphere(
-        () => ({
-            args: [1],
-            position: [0, 16, 0],
-            type: 'Static',
-        }),
-        false
-    );
+    this.physicConstraint.usePointToPointConstraint(this.fixtureRef.ref, this.lampRef.ref, {
+      pivotA: [0, 0, 0],
+      pivotB: [0, 2, 0],
+    });
     // highlight-end
-    lampRef = this.physicBody.useBox(() => ({
-        angulardamping: 1.99,
-        args: [1, 0, 5],
-        linearDamping: 0.9,
-        mass: 1,
-        position: [0, 16, 0],
-    }));
-
-    constructor(
-        private physicBody: NgtPhysicBody,
-        private physicConstraint: NgtPhysicConstraint
-    ) {}
-
-    ngOnInit() {
-        // highlight-start
-        this.physicConstraint.usePointToPointConstraint(
-            this.fixtureRef.ref,
-            this.lampRef.ref,
-            { pivotA: [0, 0, 0], pivotB: [0, 2, 0] }
-        );
-        // highlight-end
-    }
+  }
 }
 ```
 
@@ -172,25 +160,25 @@ const cursor = new Ref<THREE.Object3D>();
 // highlight-end
 
 @Component({
-    providers: [NgtPhysicBody],
+  providers: [NgtPhysicBody],
 })
 export class CursorComponent {
-    sphereRef = this.physicBody.useSphere(
-        () => ({
-            /*...*/
-        }),
-        true,
-        // highlight-start
-        cursor
-        // highlight-end
-    );
+  sphereRef = this.physicBody.useSphere(
+    () => ({
+      /*...*/
+    }),
+    true,
+    // highlight-start
+    cursor
+    // highlight-end
+  );
 
-    constructor(private physicBody: NgtPhysicBody) {}
+  constructor(private physicBody: NgtPhysicBody) {}
 }
 ```
 
 ## Types
 
--   A dynamic body is fully simulated. Can be moved manually by the user, but normally they move according to forces. A dynamic body can collide with all body types. A dynamic body always has finite, non-zero mass.
--   A static body does not move during simulation and behaves as if it has infinite mass. Static bodies can be moved manually by setting the position of the body. The velocity of a static body is always zero. Static bodies do not collide with other static or kinematic bodies.
--   A kinematic body moves under simulation according to its velocity. They do not respond to forces. They can be moved manually, but normally a kinematic body is moved by setting its velocity. A kinematic body behaves as if it has infinite mass. Kinematic bodies do not collide with other static or kinematic bodies.
+- A dynamic body is fully simulated. Can be moved manually by the user, but normally they move according to forces. A dynamic body can collide with all body types. A dynamic body always has finite, non-zero mass.
+- A static body does not move during simulation and behaves as if it has infinite mass. Static bodies can be moved manually by setting the position of the body. The velocity of a static body is always zero. Static bodies do not collide with other static or kinematic bodies.
+- A kinematic body moves under simulation according to its velocity. They do not respond to forces. They can be moved manually, but normally a kinematic body is moved by setting its velocity. A kinematic body behaves as if it has infinite mass. Kinematic bodies do not collide with other static or kinematic bodies.

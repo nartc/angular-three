@@ -4,22 +4,22 @@ import { Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 export class SpotLightMaterial extends THREE.ShaderMaterial {
-    constructor() {
-        super({
-            uniforms: {
-                depth: { value: null },
-                opacity: { value: 1 },
-                attenuation: { value: 2.5 },
-                anglePower: { value: 12 },
-                spotPosition: { value: new THREE.Vector3(0, 0, 0) },
-                lightColor: { value: new THREE.Color('white') },
-                cameraNear: { value: 0 },
-                cameraFar: { value: 1 },
-                resolution: { value: new THREE.Vector2(0, 0) },
-            },
-            transparent: true,
-            depthWrite: false,
-            vertexShader: /* glsl */ `
+  constructor() {
+    super({
+      uniforms: {
+        depth: { value: null },
+        opacity: { value: 1 },
+        attenuation: { value: 2.5 },
+        anglePower: { value: 12 },
+        spotPosition: { value: new THREE.Vector3(0, 0, 0) },
+        lightColor: { value: new THREE.Color('white') },
+        cameraNear: { value: 0 },
+        cameraFar: { value: 1 },
+        resolution: { value: new THREE.Vector2(0, 0) },
+      },
+      transparent: true,
+      depthWrite: false,
+      vertexShader: /* glsl */ `
       varying vec3 vNormal;
       varying vec3 vWorldPosition;
       varying float vViewZ;
@@ -41,7 +41,7 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
         gl_Position	= projectionMatrix * viewPosition;
 
       }`,
-            fragmentShader: /* glsl */ `
+      fragmentShader: /* glsl */ `
       #include <packing>
 
       varying vec3 vNormal;
@@ -84,23 +84,23 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
         #include <tonemapping_fragment>
 	      #include <encodings_fragment>
       }`,
-        });
-    }
+    });
+  }
 }
 
 @Component({
-    selector: 'ngt-soba-spot-light-material',
-    template: `<ng-content></ng-content>`,
-    providers: [provideCommonMaterialRef(NgtSobaSpotLightMaterial)],
+  selector: 'ngt-soba-spot-light-material',
+  template: `<ng-content></ng-content>`,
+  providers: [provideCommonMaterialRef(NgtSobaSpotLightMaterial)],
 })
 export class NgtSobaSpotLightMaterial extends NgtShaderMaterial {
-    override get materialType(): AnyConstructor<SpotLightMaterial> {
-        return SpotLightMaterial;
-    }
+  override get materialType(): AnyConstructor<SpotLightMaterial> {
+    return SpotLightMaterial;
+  }
 }
 
 @NgModule({
-    declarations: [NgtSobaSpotLightMaterial],
-    exports: [NgtSobaSpotLightMaterial],
+  declarations: [NgtSobaSpotLightMaterial],
+  exports: [NgtSobaSpotLightMaterial],
 })
 export class NgtSobaSpotLightMaterialModule {}

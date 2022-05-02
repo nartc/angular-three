@@ -1,49 +1,43 @@
 import {
-    AnyConstructor,
-    coerceNumberProperty,
-    NgtColor,
-    NumberInput,
-    provideCommonMaterialRef,
-    shaderMaterial,
+  AnyConstructor,
+  coerceNumberProperty,
+  NgtColor,
+  NumberInput,
+  provideCommonMaterialRef,
+  shaderMaterial,
 } from '@angular-three/core';
 import { NgtShaderMaterial } from '@angular-three/core/materials';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    Input,
-    NgModule,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
-export type NgtSobaImageShaderMaterialParameters =
-    THREE.ShaderMaterialParameters & {
-        map: THREE.Texture;
-        scale?: number[];
-        imageBounds?: number[];
-        color?: NgtColor;
-        zoom?: number;
-        grayscale?: number;
-    };
+export type NgtSobaImageShaderMaterialParameters = THREE.ShaderMaterialParameters & {
+  map: THREE.Texture;
+  scale?: number[];
+  imageBounds?: number[];
+  color?: NgtColor;
+  zoom?: number;
+  grayscale?: number;
+};
 
 export const ImageShaderMaterial = shaderMaterial(
-    {
-        color: new THREE.Color('white'),
-        scale: [1, 1],
-        imageBounds: [1, 1],
-        map: null,
-        zoom: 1,
-        grayscale: 0,
-    },
-    // language=glsl
-    `
+  {
+    color: new THREE.Color('white'),
+    scale: [1, 1],
+    imageBounds: [1, 1],
+    map: null,
+    zoom: 1,
+    grayscale: 0,
+  },
+  // language=glsl
+  `
   varying vec2 vUv;
   void main() {
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.);
     vUv = uv;
   }
 `,
-    // language=glsl
-    `
+  // language=glsl
+  `
   // mostly from https://gist.github.com/statico/df64c5d167362ecf7b34fca0b1459a44
   varying vec2 vUv;
   uniform vec2 scale;
@@ -74,61 +68,57 @@ export const ImageShaderMaterial = shaderMaterial(
 );
 
 @Component({
-    selector: 'ngt-soba-image-shader-material',
-    template: `<ng-content></ng-content>`,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonMaterialRef(NgtSobaImageShaderMaterial)],
+  selector: 'ngt-soba-image-shader-material',
+  template: `<ng-content></ng-content>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideCommonMaterialRef(NgtSobaImageShaderMaterial)],
 })
 export class NgtSobaImageShaderMaterial extends NgtShaderMaterial {
-    static override ngAcceptInputType_parameters:
-        | NgtSobaImageShaderMaterialParameters
-        | undefined;
+  static override ngAcceptInputType_parameters: NgtSobaImageShaderMaterialParameters | undefined;
 
-    @Input() set map(map: THREE.Texture) {
-        this.set({ map });
-    }
+  @Input() set map(map: THREE.Texture) {
+    this.set({ map });
+  }
 
-    @Input() set scale(scale: number[]) {
-        this.set({ scale });
-    }
+  @Input() set scale(scale: number[]) {
+    this.set({ scale });
+  }
 
-    @Input() set imageBounds(imageBounds: number[]) {
-        this.set({ imageBounds });
-    }
+  @Input() set imageBounds(imageBounds: number[]) {
+    this.set({ imageBounds });
+  }
 
-    @Input() set color(color: NgtColor) {
-        this.set({ color });
-    }
+  @Input() set color(color: NgtColor) {
+    this.set({ color });
+  }
 
-    @Input() set zoom(zoom: NumberInput) {
-        this.set({ zoom: coerceNumberProperty(zoom) });
-    }
+  @Input() set zoom(zoom: NumberInput) {
+    this.set({ zoom: coerceNumberProperty(zoom) });
+  }
 
-    @Input() set grayscale(grayscale: NumberInput) {
-        this.set({ grayscale: coerceNumberProperty(grayscale) });
-    }
+  @Input() set grayscale(grayscale: NumberInput) {
+    this.set({ grayscale: coerceNumberProperty(grayscale) });
+  }
 
-    override get materialType(): AnyConstructor<
-        typeof ImageShaderMaterial.prototype
-    > {
-        return ImageShaderMaterial;
-    }
+  override get materialType(): AnyConstructor<typeof ImageShaderMaterial.prototype> {
+    return ImageShaderMaterial;
+  }
 
-    protected override get optionFields(): Record<string, boolean> {
-        return {
-            ...super.optionFields,
-            map: false,
-            scale: true,
-            imageBounds: true,
-            color: true,
-            zoom: true,
-            grayscale: true,
-        };
-    }
+  protected override get optionFields(): Record<string, boolean> {
+    return {
+      ...super.optionFields,
+      map: false,
+      scale: true,
+      imageBounds: true,
+      color: true,
+      zoom: true,
+      grayscale: true,
+    };
+  }
 }
 
 @NgModule({
-    declarations: [NgtSobaImageShaderMaterial],
-    exports: [NgtSobaImageShaderMaterial],
+  declarations: [NgtSobaImageShaderMaterial],
+  exports: [NgtSobaImageShaderMaterial],
 })
 export class NgtSobaImageShaderMaterialModule {}

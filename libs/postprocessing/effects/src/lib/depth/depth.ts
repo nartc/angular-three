@@ -1,30 +1,25 @@
 // GENERATED
 import { AnyConstructor } from '@angular-three/core';
-import {
-    NgtCommonEffect,
-    provideCommonEffectRef,
-} from '@angular-three/postprocessing';
+import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { DepthEffect } from 'postprocessing';
 
 @Component({
-    selector: 'ngt-depth',
-    template: `<ng-content></ng-content>`,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectRef(NgtDepth)],
+  selector: 'ngt-depth',
+  template: `<ng-content></ng-content>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideCommonEffectRef(NgtDepth)],
 })
 export class NgtDepth extends NgtCommonEffect<DepthEffect> {
-    static ngAcceptInputType_options:
-        | ConstructorParameters<AnyConstructor<DepthEffect>>[0]
-        | undefined;
+  static ngAcceptInputType_options: ConstructorParameters<AnyConstructor<DepthEffect>>[0] | undefined;
 
-    override get effectType(): AnyConstructor<DepthEffect> {
-        return DepthEffect;
-    }
+  override get effectType(): AnyConstructor<DepthEffect> {
+    return DepthEffect;
+  }
 }
 
 @NgModule({
-    declarations: [NgtDepth],
-    exports: [NgtDepth],
+  declarations: [NgtDepth],
+  exports: [NgtDepth],
 })
 export class NgtDepthModule {}

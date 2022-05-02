@@ -10,7 +10,7 @@ This pipe multiples a value with `Math.PI`
 
 ```html
 <ngt-mesh [rotation]="[-0.5 | pi, 0, 0]">
-    <ngt-plane-geometry></ngt-plane-geometry>
+  <ngt-plane-geometry></ngt-plane-geometry>
 </ngt-mesh>
 ```
 
@@ -20,7 +20,7 @@ This pipe converts a value degree to radian
 
 ```html
 <ngt-mesh [rotation]="[-90 | radian, 0, 0]">
-    <ngt-plane-geometry></ngt-plane-geometry>
+  <ngt-plane-geometry></ngt-plane-geometry>
 </ngt-mesh>
 ```
 
@@ -30,10 +30,8 @@ This pipe applies `THREE.DoubleSide`, `THREE.FrontSide`, or `THREE.BackSide`
 
 ```html
 <ngt-mesh>
-    <ngt-plane-geometry></ngt-plane-geometry>
-    <ngt-mesh-basic-material
-        [side]="'double' | side "
-    ></ngt-mesh-basic-material>
+  <ngt-plane-geometry></ngt-plane-geometry>
+  <ngt-mesh-basic-material [side]="'double' | side "></ngt-mesh-basic-material>
 </ngt-mesh>
 ```
 
@@ -43,7 +41,7 @@ This pipe acts as a helper to use the `Math` object in the template. When workin
 
 ```html
 <ngt-mesh [rotation]="[1 | math:'sin', 0, 0]">
-    <ngt-plane-geometry></ngt-plane-geometry>
+  <ngt-plane-geometry></ngt-plane-geometry>
 </ngt-mesh>
 ```
 

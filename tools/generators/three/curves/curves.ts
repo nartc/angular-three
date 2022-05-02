@@ -1,12 +1,5 @@
 import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
-import {
-  formatFiles,
-  generateFiles,
-  getWorkspaceLayout,
-  logger,
-  names,
-  Tree,
-} from '@nrwl/devkit';
+import { formatFiles, generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/devkit';
 import { join } from 'path';
 import * as THREE from 'three';
 
@@ -40,15 +33,10 @@ export default async function curvesGenerator(tree: Tree) {
   for (const curve of curves) {
     const normalizedNames = names(curve);
 
-    generateFiles(
-      tree,
-      join(__dirname, 'files/lib'),
-      join(curveDir, 'src', 'lib', normalizedNames.fileName),
-      {
-        ...normalizedNames,
-        tmpl: '',
-      }
-    );
+    generateFiles(tree, join(__dirname, 'files/lib'), join(curveDir, 'src', 'lib', normalizedNames.fileName), {
+      ...normalizedNames,
+      tmpl: '',
+    });
 
     generatedCurves.push(normalizedNames.fileName);
   }

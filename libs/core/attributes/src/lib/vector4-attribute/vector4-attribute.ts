@@ -1,50 +1,40 @@
 // GENERATED
-import {
-    makeVector4,
-    NgtInstance,
-    provideInstanceRef,
-    NgtVector4,
-} from '@angular-three/core';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    Input,
-    NgModule,
-} from '@angular/core';
+import { makeVector4, NgtInstance, provideInstanceRef, NgtVector4 } from '@angular-three/core';
+import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-vector4[vector4]',
-    template: '<ng-content></ng-content>',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideInstanceRef(NgtVector4Attribute)],
+  selector: 'ngt-vector4[vector4]',
+  template: '<ng-content></ng-content>',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideInstanceRef(NgtVector4Attribute)],
 })
 export class NgtVector4Attribute extends NgtInstance<THREE.Vector4> {
-    @Input() set vector4(vector4: NgtVector4) {
-        this.zone.runOutsideAngular(() => {
-            if (this.initSubscription) {
-                this.initSubscription.unsubscribe();
-            }
+  @Input() set vector4(vector4: NgtVector4) {
+    this.zone.runOutsideAngular(() => {
+      if (this.initSubscription) {
+        this.initSubscription.unsubscribe();
+      }
 
-            this.initSubscription = this.onCanvasReady(
-                this.store.ready$,
-                () => {
-                    this.prepareInstance(makeVector4(vector4));
-                    return () => {
-                        this.initSubscription?.unsubscribe();
-                    };
-                },
-                true
-            );
-        });
-    }
+      this.initSubscription = this.onCanvasReady(
+        this.store.ready$,
+        () => {
+          this.prepareInstance(makeVector4(vector4));
+          return () => {
+            this.initSubscription?.unsubscribe();
+          };
+        },
+        true
+      );
+    });
+  }
 
-    private initSubscription?: Subscription;
+  private initSubscription?: Subscription;
 }
 
 @NgModule({
-    declarations: [NgtVector4Attribute],
-    exports: [NgtVector4Attribute],
+  declarations: [NgtVector4Attribute],
+  exports: [NgtVector4Attribute],
 })
 export class NgtVector4AttributeModule {}

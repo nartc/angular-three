@@ -1,115 +1,108 @@
 // GENERATED
 import {
-    AnyConstructor,
-    NgtCommonMaterial,
-    provideCommonMaterialRef,
-    coerceBooleanProperty,
-    BooleanInput,
-    coerceNumberProperty,
-    NumberInput,
+  AnyConstructor,
+  NgtCommonMaterial,
+  provideCommonMaterialRef,
+  coerceBooleanProperty,
+  BooleanInput,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    NgModule,
-    Input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-mesh-matcap-material',
-    template: '<ng-content></ng-content>',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonMaterialRef(NgtMeshMatcapMaterial)],
+  selector: 'ngt-mesh-matcap-material',
+  template: '<ng-content></ng-content>',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideCommonMaterialRef(NgtMeshMatcapMaterial)],
 })
 export class NgtMeshMatcapMaterial extends NgtCommonMaterial<
-    THREE.MeshMatcapMaterialParameters,
-    THREE.MeshMatcapMaterial
+  THREE.MeshMatcapMaterialParameters,
+  THREE.MeshMatcapMaterial
 > {
-    static ngAcceptInputType_parameters:
-        | THREE.MeshMatcapMaterialParameters
-        | undefined;
+  static ngAcceptInputType_parameters: THREE.MeshMatcapMaterialParameters | undefined;
 
-    @Input() set color(color: THREE.ColorRepresentation) {
-        this.set({ color });
-    }
+  @Input() set color(color: THREE.ColorRepresentation) {
+    this.set({ color });
+  }
 
-    @Input() set matcap(matcap: THREE.Texture | null) {
-        this.set({ matcap });
-    }
+  @Input() set matcap(matcap: THREE.Texture | null) {
+    this.set({ matcap });
+  }
 
-    @Input() set map(map: THREE.Texture | null) {
-        this.set({ map });
-    }
+  @Input() set map(map: THREE.Texture | null) {
+    this.set({ map });
+  }
 
-    @Input() set bumpMap(bumpMap: THREE.Texture | null) {
-        this.set({ bumpMap });
-    }
+  @Input() set bumpMap(bumpMap: THREE.Texture | null) {
+    this.set({ bumpMap });
+  }
 
-    @Input() set bumpScale(bumpScale: NumberInput) {
-        this.set({ bumpScale: coerceNumberProperty(bumpScale) });
-    }
+  @Input() set bumpScale(bumpScale: NumberInput) {
+    this.set({ bumpScale: coerceNumberProperty(bumpScale) });
+  }
 
-    @Input() set normalMap(normalMap: THREE.Texture | null) {
-        this.set({ normalMap });
-    }
+  @Input() set normalMap(normalMap: THREE.Texture | null) {
+    this.set({ normalMap });
+  }
 
-    @Input() set normalMapType(normalMapType: THREE.NormalMapTypes) {
-        this.set({ normalMapType });
-    }
+  @Input() set normalMapType(normalMapType: THREE.NormalMapTypes) {
+    this.set({ normalMapType });
+  }
 
-    @Input() set normalScale(normalScale: THREE.Vector2) {
-        this.set({ normalScale });
-    }
+  @Input() set normalScale(normalScale: THREE.Vector2) {
+    this.set({ normalScale });
+  }
 
-    @Input() set displacementMap(displacementMap: THREE.Texture | null) {
-        this.set({ displacementMap });
-    }
+  @Input() set displacementMap(displacementMap: THREE.Texture | null) {
+    this.set({ displacementMap });
+  }
 
-    @Input() set displacementScale(displacementScale: NumberInput) {
-        this.set({
-            displacementScale: coerceNumberProperty(displacementScale),
-        });
-    }
+  @Input() set displacementScale(displacementScale: NumberInput) {
+    this.set({
+      displacementScale: coerceNumberProperty(displacementScale),
+    });
+  }
 
-    @Input() set displacementBias(displacementBias: NumberInput) {
-        this.set({ displacementBias: coerceNumberProperty(displacementBias) });
-    }
+  @Input() set displacementBias(displacementBias: NumberInput) {
+    this.set({ displacementBias: coerceNumberProperty(displacementBias) });
+  }
 
-    @Input() set alphaMap(alphaMap: THREE.Texture | null) {
-        this.set({ alphaMap });
-    }
+  @Input() set alphaMap(alphaMap: THREE.Texture | null) {
+    this.set({ alphaMap });
+  }
 
-    @Input() set flatShading(flatShading: BooleanInput) {
-        this.set({ flatShading: coerceBooleanProperty(flatShading) });
-    }
+  @Input() set flatShading(flatShading: BooleanInput) {
+    this.set({ flatShading: coerceBooleanProperty(flatShading) });
+  }
 
-    get materialType(): AnyConstructor<THREE.MeshMatcapMaterial> {
-        return THREE.MeshMatcapMaterial;
-    }
+  get materialType(): AnyConstructor<THREE.MeshMatcapMaterial> {
+    return THREE.MeshMatcapMaterial;
+  }
 
-    protected override get optionFields(): Record<string, boolean> {
-        return {
-            ...super.optionFields,
-            color: true,
-            matcap: true,
-            map: true,
-            bumpMap: true,
-            bumpScale: true,
-            normalMap: true,
-            normalMapType: true,
-            normalScale: true,
-            displacementMap: true,
-            displacementScale: true,
-            displacementBias: true,
-            alphaMap: true,
-            flatShading: true,
-        };
-    }
+  protected override get optionFields(): Record<string, boolean> {
+    return {
+      ...super.optionFields,
+      color: true,
+      matcap: true,
+      map: true,
+      bumpMap: true,
+      bumpScale: true,
+      normalMap: true,
+      normalMapType: true,
+      normalScale: true,
+      displacementMap: true,
+      displacementScale: true,
+      displacementBias: true,
+      alphaMap: true,
+      flatShading: true,
+    };
+  }
 }
 
 @NgModule({
-    declarations: [NgtMeshMatcapMaterial],
-    exports: [NgtMeshMatcapMaterial],
+  declarations: [NgtMeshMatcapMaterial],
+  exports: [NgtMeshMatcapMaterial],
 })
 export class NgtMeshMatcapMaterialModule {}

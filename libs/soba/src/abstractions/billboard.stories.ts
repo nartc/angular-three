@@ -1,46 +1,33 @@
-import {
-    NgtBoxGeometryModule,
-    NgtConeGeometryModule,
-    NgtPlaneGeometryModule,
-} from '@angular-three/core/geometries';
+import { NgtBoxGeometryModule, NgtConeGeometryModule, NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtGroupModule } from '@angular-three/core/group';
 import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
-import {
-    NgtSobaBillboardModule,
-    NgtSobaTextModule,
-} from '@angular-three/soba/abstractions';
-import {
-    componentWrapperDecorator,
-    Meta,
-    moduleMetadata,
-} from '@storybook/angular';
+import { NgtSobaBillboardModule, NgtSobaTextModule } from '@angular-three/soba/abstractions';
+import { componentWrapperDecorator, Meta, moduleMetadata } from '@storybook/angular';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
-    title: 'Abstractions/Billboard',
-    decorators: [
-        componentWrapperDecorator(
-            setupCanvas({ controls: false, cameraPosition: [0, 0, 10] })
-        ),
-        moduleMetadata({
-            imports: [
-                ...setupCanvasModules,
-                NgtSobaBillboardModule,
-                NgtMeshStandardMaterialModule,
-                NgtMeshModule,
-                NgtPlaneGeometryModule,
-                NgtGroupModule,
-                NgtSobaTextModule,
-                NgtConeGeometryModule,
-                NgtBoxGeometryModule,
-            ],
-        }),
-    ],
+  title: 'Abstractions/Billboard',
+  decorators: [
+    componentWrapperDecorator(setupCanvas({ controls: false, cameraPosition: [0, 0, 10] })),
+    moduleMetadata({
+      imports: [
+        ...setupCanvasModules,
+        NgtSobaBillboardModule,
+        NgtMeshStandardMaterialModule,
+        NgtMeshModule,
+        NgtPlaneGeometryModule,
+        NgtGroupModule,
+        NgtSobaTextModule,
+        NgtConeGeometryModule,
+        NgtBoxGeometryModule,
+      ],
+    }),
+  ],
 } as Meta;
 
 export const Planes = () => ({
-    template: `
+  template: `
         <ngt-soba-orbit-controls zoomSpeed="0.5" enablePan></ngt-soba-orbit-controls>
 
         <ngt-plane-geometry #planeGeometry noAttach [args]="[3, 2]"></ngt-plane-geometry>
@@ -88,7 +75,7 @@ export const Planes = () => ({
 });
 
 export const Text = () => ({
-    template: `
+  template: `
         <ngt-soba-orbit-controls zoomSpeed="0.5" enablePan></ngt-soba-orbit-controls>
 
         <ngt-soba-billboard [position]="[0.5, 2.05, 0.5]">

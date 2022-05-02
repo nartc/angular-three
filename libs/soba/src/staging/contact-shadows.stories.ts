@@ -1,51 +1,37 @@
 import { NgtRadianPipeModule, NgtRenderState } from '@angular-three/core';
-import {
-    NgtIcosahedronGeometryModule,
-    NgtPlaneGeometryModule,
-} from '@angular-three/core/geometries';
+import { NgtIcosahedronGeometryModule, NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaContactShadowsModule } from '@angular-three/soba/staging';
-import {
-    componentWrapperDecorator,
-    Meta,
-    moduleMetadata,
-    Story,
-} from '@storybook/angular';
+import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import * as THREE from 'three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
-    title: 'Staging/Contact Shadows',
-    decorators: [
-        componentWrapperDecorator(setupCanvas()),
-        moduleMetadata({
-            imports: [
-                ...setupCanvasModules,
-                NgtMeshModule,
-                NgtIcosahedronGeometryModule,
-                NgtPlaneGeometryModule,
-                NgtMeshBasicMaterialModule,
-                NgtSobaContactShadowsModule,
-                NgtRadianPipeModule,
-            ],
-        }),
-    ],
+  title: 'Staging/Contact Shadows',
+  decorators: [
+    componentWrapperDecorator(setupCanvas()),
+    moduleMetadata({
+      imports: [
+        ...setupCanvasModules,
+        NgtMeshModule,
+        NgtIcosahedronGeometryModule,
+        NgtPlaneGeometryModule,
+        NgtMeshBasicMaterialModule,
+        NgtSobaContactShadowsModule,
+        NgtRadianPipeModule,
+      ],
+    }),
+  ],
 } as Meta;
 
-function animate({
-    object,
-    state: { clock },
-}: {
-    state: NgtRenderState;
-    object: THREE.Object3D;
-}) {
-    object.position.y = Math.sin(clock.getElapsedTime()) + 2.5;
+function animate({ object, state: { clock } }: { state: NgtRenderState; object: THREE.Object3D }) {
+  object.position.y = Math.sin(clock.getElapsedTime()) + 2.5;
 }
 
 export const Default: Story = () => ({
-    props: { animate },
-    template: `
+  props: { animate },
+  template: `
         <ngt-mesh [position]="[0, 2, 0]" (beforeRender)="animate($event)">
             <ngt-icosahedron-geometry [args]="[1, 2]"></ngt-icosahedron-geometry>
             <ngt-mesh-basic-material color="lightblue"></ngt-mesh-basic-material>

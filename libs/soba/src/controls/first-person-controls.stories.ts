@@ -2,33 +2,28 @@ import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaFirstPersonControlsModule } from '@angular-three/soba/controls';
-import {
-    componentWrapperDecorator,
-    Meta,
-    moduleMetadata,
-    Story,
-} from '@storybook/angular';
+import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
-    title: 'Controls/First Person Controls',
-    decorators: [
-        componentWrapperDecorator(setupCanvas({ controls: false })),
-        moduleMetadata({
-            imports: [
-                ...setupCanvasModules,
-                NgtSobaFirstPersonControlsModule,
-                NgtMeshModule,
-                NgtBoxGeometryModule,
-                NgtMeshBasicMaterialModule,
-            ],
-        }),
-    ],
+  title: 'Controls/First Person Controls',
+  decorators: [
+    componentWrapperDecorator(setupCanvas({ controls: false })),
+    moduleMetadata({
+      imports: [
+        ...setupCanvasModules,
+        NgtSobaFirstPersonControlsModule,
+        NgtMeshModule,
+        NgtBoxGeometryModule,
+        NgtMeshBasicMaterialModule,
+      ],
+    }),
+  ],
 } as Meta;
 
 export const Default: Story = (args) => ({
-    props: args,
-    template: `
+  props: args,
+  template: `
         <ngt-soba-first-person-controls
             [activeLook]="activeLook"
             [autoForward]="autoForward"
@@ -53,17 +48,17 @@ export const Default: Story = (args) => ({
 });
 
 Default.args = {
-    activeLook: true,
-    autoForward: false,
-    constrainVertical: false,
-    enabled: true,
-    heightCoef: 1,
-    heightMax: 1,
-    heightMin: 0,
-    heightSpeed: false,
-    lookVertical: true,
-    lookSpeed: 0.005,
-    movementSpeed: 1,
-    verticalMax: Math.PI,
-    verticalMin: 0,
+  activeLook: true,
+  autoForward: false,
+  constrainVertical: false,
+  enabled: true,
+  heightCoef: 1,
+  heightMax: 1,
+  heightMin: 0,
+  heightSpeed: false,
+  lookVertical: true,
+  lookSpeed: 0.005,
+  movementSpeed: 1,
+  verticalMax: Math.PI,
+  verticalMin: 0,
 };

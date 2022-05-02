@@ -56,13 +56,13 @@ We can take a peak at the code for the [Simple Cubes example](https://codesandbo
 
 ```html
 <ngt-canvas>
-    <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
-    <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
-    <ngt-point-light [position]="-10"></ngt-point-light>
+  <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+  <ngt-spot-light [position]="10" angle="0.15" penumbra="1"></ngt-spot-light>
+  <ngt-point-light [position]="-10"></ngt-point-light>
 
-    <!-- power of a component framework, declarative express the scenegraph that has life-cycle hooks -->
-    <app-cube [position]="[1.5, 0, 0]"></app-cube>
-    <app-cube [position]="[-1.5, 0, 0]"></app-cube>
+  <!-- power of a component framework, declarative express the scenegraph that has life-cycle hooks -->
+  <app-cube [position]="[1.5, 0, 0]"></app-cube>
+  <app-cube [position]="[-1.5, 0, 0]"></app-cube>
 </ngt-canvas>
 ```
 
@@ -72,8 +72,8 @@ We can take a peak at the code for the [Simple Cubes example](https://codesandbo
 
 ```ts
 @Component({
-    selector: 'app-root',
-    templateUrl: 'app.component.html',
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
 })
 export class AppComponent {}
 ```
@@ -84,17 +84,15 @@ export class AppComponent {}
 
 ```html
 <ngt-mesh
-    [position]="position"
-    (pointerover)="hovered = true"
-    (pointerout)="hovered = false"
-    (click)="active = !active"
-    [scale]="active ? 1.5 : 1"
-    (beforeRender)="onBeforeRender($event.object)"
+  [position]="position"
+  (pointerover)="hovered = true"
+  (pointerout)="hovered = false"
+  (click)="active = !active"
+  [scale]="active ? 1.5 : 1"
+  (beforeRender)="onBeforeRender($event.object)"
 >
-    <ngt-box-geometry></ngt-box-geometry>
-    <ngt-mesh-standard-material
-        [color]="hovered ? 'turquoise' : 'tomato'"
-    ></ngt-mesh-standard-material>
+  <ngt-box-geometry></ngt-box-geometry>
+  <ngt-mesh-standard-material [color]="hovered ? 'turquoise' : 'tomato'"></ngt-mesh-standard-material>
 </ngt-mesh>
 ```
 
@@ -104,22 +102,22 @@ export class AppComponent {}
 
 ```ts
 @Component({
-    selector: 'app-cube',
-    templateUrl: 'cube.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-cube',
+  templateUrl: 'cube.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
-    // component that can accept Inputs
-    @Input() position?: NgtVector3;
+  // component that can accept Inputs
+  @Input() position?: NgtVector3;
 
-    // has internal state
-    hovered = false;
-    active = false;
+  // has internal state
+  hovered = false;
+  active = false;
 
-    // registers the wrapped object in the animation loop that runs outside of Angular Zone
-    onBeforeRender(cube: Mesh) {
-        cube.rotation.x += 0.01;
-    }
+  // registers the wrapped object in the animation loop that runs outside of Angular Zone
+  onBeforeRender(cube: Mesh) {
+    cube.rotation.x += 0.01;
+  }
 }
 ```
 
@@ -129,18 +127,18 @@ export class CubeComponent {
 
 ```ts
 @NgModule({
-    declarations: [AppComponent, CubeComponent],
-    imports: [
-        /* ... */
-        // NGT is a highly modular library that follows Angular-library best practices
-        NgtCanvasModule,
-        NgtAmbientLightModule,
-        NgtSpotLightModule,
-        NgtPointLightModule,
-        NgtMeshModule,
-        NgtBoxGeometryModule,
-        NgtMeshStandardMaterialModule,
-    ],
+  declarations: [AppComponent, CubeComponent],
+  imports: [
+    /* ... */
+    // NGT is a highly modular library that follows Angular-library best practices
+    NgtCanvasModule,
+    NgtAmbientLightModule,
+    NgtSpotLightModule,
+    NgtPointLightModule,
+    NgtMeshModule,
+    NgtBoxGeometryModule,
+    NgtMeshStandardMaterialModule,
+  ],
 })
 export class AppModule {}
 ```

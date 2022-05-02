@@ -12,11 +12,11 @@ In this tutorial, we are going to build a simple scene with physics, specificall
 Let's take a peak at what we're going to create
 
 <iframe
-    class="code-demo"
-    src="https://codesandbox.io/embed/simple-physic-cubes-em5xnj?fontsize=14&hidenavigation=1&theme=dark&view=preview"
-    title="simple-physic-cubes"
-    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+  class="code-demo"
+  src="https://codesandbox.io/embed/simple-physic-cubes-em5xnj?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+  title="simple-physic-cubes"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
 ## Setup Canvas
@@ -28,23 +28,15 @@ We'll set up our `ngt-canvas` with some lighting configurations
 <TabItem value="physicsHtml" label="physic-boxes.component.html" default>
 
 ```html
-<ngt-canvas
-    shadows
-    [dpr]="[1, 2]"
-    [gl]="{ alpha: false }"
-    [camera]="{ position: [-1, 5, 5], fov: 45 }"
->
-    <!-- 👇 makes our Scene.background lightblue -->
-    <ngt-color attach="background" color="lightblue"></ngt-color>
+<ngt-canvas shadows [dpr]="[1, 2]" [gl]="{ alpha: false }" [camera]="{ position: [-1, 5, 5], fov: 45 }">
+  <!-- 👇 makes our Scene.background lightblue -->
+  <ngt-color attach="background" color="lightblue"></ngt-color>
 
-    <!-- 👇 add some lights -->
-    <ngt-ambient-light></ngt-ambient-light>
-    <ngt-directional-light [position]="10" castShadow>
-        <ngt-vector2
-            [attach]="['shadow', 'mapSize']"
-            [vector2]="2048"
-        ></ngt-vector2>
-    </ngt-directional-light>
+  <!-- 👇 add some lights -->
+  <ngt-ambient-light></ngt-ambient-light>
+  <ngt-directional-light [position]="10" castShadow>
+    <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="2048"></ngt-vector2>
+  </ngt-directional-light>
 </ngt-canvas>
 
 <!-- 👇 monitor the FPS -->
@@ -58,33 +50,27 @@ We'll set up our `ngt-canvas` with some lighting configurations
 ```ts
 import { NgtCanvasModule } from '@angular-three/core';
 import { NgtStatsModule } from '@angular-three/core/stats';
-import {
-    NgtAmbientLightModule,
-    NgtDirectionalLightModule,
-} from '@angular-three/core/lights';
-import {
-    NgtColorAttributeModule,
-    NgtVector2AttributeModule,
-} from '@angular-three/core/attributes';
+import { NgtAmbientLightModule, NgtDirectionalLightModule } from '@angular-three/core/lights';
+import { NgtColorAttributeModule, NgtVector2AttributeModule } from '@angular-three/core/attributes';
 
 @Component({
-    selector: 'physic-boxes',
-    templateUrl: 'physic-boxes.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'physic-boxes',
+  templateUrl: 'physic-boxes.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhysicBoxesComponent {}
 
 @NgModule({
-    imports: [
-        NgtCanvasModule,
-        NgtAmbientLightModule,
-        NgtDirectionalLightModule,
-        NgtStatsModule,
-        NgtColorAttributeModule,
-        NgtVector2AttributeModule,
-    ],
-    declarations: [PhysicBoxesComponent],
-    exports: [PhysicBoxesComponent],
+  imports: [
+    NgtCanvasModule,
+    NgtAmbientLightModule,
+    NgtDirectionalLightModule,
+    NgtStatsModule,
+    NgtColorAttributeModule,
+    NgtVector2AttributeModule,
+  ],
+  declarations: [PhysicBoxesComponent],
+  exports: [PhysicBoxesComponent],
 })
 export class PhysicsBoxesModule {}
 ```
@@ -102,27 +88,19 @@ All objects that are participating in the Physic World need to be rendered insid
 <TabItem value="physicsHtml" label="physic-boxes.component.html" default>
 
 ```html
-<ngt-canvas
-    shadows
-    [dpr]="[1, 2]"
-    [gl]="{ alpha: false }"
-    [camera]="{ position: [-1, 5, 5], fov: 45 }"
->
-    <ngt-color attach="background" color="lightblue"></ngt-color>
+<ngt-canvas shadows [dpr]="[1, 2]" [gl]="{ alpha: false }" [camera]="{ position: [-1, 5, 5], fov: 45 }">
+  <ngt-color attach="background" color="lightblue"></ngt-color>
 
-    <ngt-ambient-light></ngt-ambient-light>
-    <ngt-directional-light [position]="10" castShadow>
-        <ngt-vector2
-            [attach]="['shadow', 'mapSize']"
-            [vector2]="2048"
-        ></ngt-vector2>
-    </ngt-directional-light>
+  <ngt-ambient-light></ngt-ambient-light>
+  <ngt-directional-light [position]="10" castShadow>
+    <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="2048"></ngt-vector2>
+  </ngt-directional-light>
 
-    // highlight-start
-    <ngt-physics>
-        <!-- our objects will go in here -->
-    </ngt-physics>
-    // highlight-end
+  // highlight-start
+  <ngt-physics>
+    <!-- our objects will go in here -->
+  </ngt-physics>
+  // highlight-end
 </ngt-canvas>
 
 <ngt-stats></ngt-stats>
@@ -139,19 +117,19 @@ import { NgtPhysicsModule } from '@angular-three/cannon';
 // highlight-end
 
 @Component({
-    /* ... */
+  /* ... */
 })
 export class PhysicBoxesComponent {}
 
 @NgModule({
-    imports: [
-        /* ... */
-        // highlight-start
-        NgtPhysicsModule,
-        // highlight-end
-    ],
-    declarations: [PhysicBoxesComponent],
-    exports: [PhysicBoxesComponent],
+  imports: [
+    /* ... */
+    // highlight-start
+    NgtPhysicsModule,
+    // highlight-end
+  ],
+  declarations: [PhysicBoxesComponent],
+  exports: [PhysicBoxesComponent],
 })
 export class PhysicsBoxesModule {}
 ```
@@ -169,24 +147,15 @@ Next, we'll add our "floor". A floor is usually a `THREE.Mesh` with a `THREE.Pla
 <TabItem value="floorHtml" label="floor.component.html" default>
 
 ```html
-<ngt-mesh
-    receiveShadow
-    [ref]="planeRef.ref"
-    [position]="position"
-    [rotation]="rotation"
->
-    <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
-    <ngt-shadow-material
-        color="#171717"
-        transparent
-        opacity="0.4"
-    ></ngt-shadow-material>
+<ngt-mesh receiveShadow [ref]="planeRef.ref" [position]="position" [rotation]="rotation">
+  <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
+  <ngt-shadow-material color="#171717" transparent opacity="0.4"></ngt-shadow-material>
 </ngt-mesh>
 ```
 
--   We have a `ngt-mesh` that can receive shadow with `receiveShadow`
--   We attach a `ngt-plane-geometry` with 1000 width and height and a transparent `ngt-shadow-material` to this `ngt-mesh`
--   The `planeRef` is created externally by `NgtPhysicBody` and passed into the `ngt-mesh`. Remember how an [`NgtInstance`](../core/instance) works?
+- We have a `ngt-mesh` that can receive shadow with `receiveShadow`
+- We attach a `ngt-plane-geometry` with 1000 width and height and a transparent `ngt-shadow-material` to this `ngt-mesh`
+- The `planeRef` is created externally by `NgtPhysicBody` and passed into the `ngt-mesh`. Remember how an [`NgtInstance`](../core/instance) works?
 
 </TabItem>
 
@@ -194,28 +163,28 @@ Next, we'll add our "floor". A floor is usually a `THREE.Mesh` with a `THREE.Pla
 
 ```ts
 @Component({
-    selector: 'physic-floor',
-    templateUrl: 'floor.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    // 👇 we provide NgtPhysicBody for this Floor
-    providers: [NgtPhysicBody],
+  selector: 'physic-floor',
+  templateUrl: 'floor.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  // 👇 we provide NgtPhysicBody for this Floor
+  providers: [NgtPhysicBody],
 })
 export class PhysicFloorComponent {
-    @Input() position?: NgtTriple;
-    rotation = [-Math.PI / 2, 0, 0] as NgtTriple;
+  @Input() position?: NgtTriple;
+  rotation = [-Math.PI / 2, 0, 0] as NgtTriple;
 
-    // 👇 create a ref with the Body API
-    // 👇                        👇 we are working with a PlaneGeometry
-    planeRef = this.physicBody.usePlane(() => ({
-        //      👇 we provide the same args to usePlane as we do on the ngt-plane-geometry
-        args: [1000, 1000],
-        //      👇 same for the initial position and rotation
-        rotation: this.rotation,
-        position: this.position,
-    }));
+  // 👇 create a ref with the Body API
+  // 👇                        👇 we are working with a PlaneGeometry
+  planeRef = this.physicBody.usePlane(() => ({
+    //      👇 we provide the same args to usePlane as we do on the ngt-plane-geometry
+    args: [1000, 1000],
+    //      👇 same for the initial position and rotation
+    rotation: this.rotation,
+    position: this.position,
+  }));
 
-    //                      👇 inject the provided NgtPhysicBody to have access to the Body API
-    constructor(private physicBody: NgtPhysicBody) {}
+  //                      👇 inject the provided NgtPhysicBody to have access to the Body API
+  constructor(private physicBody: NgtPhysicBody) {}
 }
 ```
 
@@ -230,21 +199,21 @@ import { PhysicFloorComponent } from './floor.component';
 // highlight-end
 
 @Component({
-    /* ... */
+  /* ... */
 })
 export class PhysicBoxesComponent {}
 
 @NgModule({
-    imports: [
-        /* ... */
-    ],
-    declarations: [
-        PhysicBoxesComponent,
-        // highlight-start
-        PhysicFloorComponent,
-        // highlight-end
-    ],
-    exports: [PhysicBoxesComponent],
+  imports: [
+    /* ... */
+  ],
+  declarations: [
+    PhysicBoxesComponent,
+    // highlight-start
+    PhysicFloorComponent,
+    // highlight-end
+  ],
+  exports: [PhysicBoxesComponent],
 })
 export class PhysicsBoxesModule {}
 ```
@@ -254,27 +223,19 @@ export class PhysicsBoxesModule {}
 <TabItem value="physicsHtml" label="physic-boxes.component.html">
 
 ```html
-<ngt-canvas
-    shadows
-    [dpr]="[1, 2]"
-    [gl]="{ alpha: false }"
-    [camera]="{ position: [-1, 5, 5], fov: 45 }"
->
-    <ngt-color attach="background" color="lightblue"></ngt-color>
+<ngt-canvas shadows [dpr]="[1, 2]" [gl]="{ alpha: false }" [camera]="{ position: [-1, 5, 5], fov: 45 }">
+  <ngt-color attach="background" color="lightblue"></ngt-color>
 
-    <ngt-ambient-light></ngt-ambient-light>
-    <ngt-directional-light [position]="10" castShadow>
-        <ngt-vector2
-            [attach]="['shadow', 'mapSize']"
-            [vector2]="2048"
-        ></ngt-vector2>
-    </ngt-directional-light>
+  <ngt-ambient-light></ngt-ambient-light>
+  <ngt-directional-light [position]="10" castShadow>
+    <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="2048"></ngt-vector2>
+  </ngt-directional-light>
 
-    <ngt-physics>
-        // highlight-start
-        <physic-floor [position]="[0, -2.5, 0]"></physic-floor>
-        // highlight-end
-    </ngt-physics>
+  <ngt-physics>
+    // highlight-start
+    <physic-floor [position]="[0, -2.5, 0]"></physic-floor>
+    // highlight-end
+  </ngt-physics>
 </ngt-canvas>
 
 <ngt-stats></ngt-stats>
@@ -293,22 +254,16 @@ Now that we have a floor, we can _drop_ things on it. In this case, the thing is
 <TabItem value="boxHtml" label="box.component.html" default>
 
 ```html
-<ngt-mesh
-    receiveShadow
-    castShadow
-    [ref]="boxRef.ref"
-    [position]="position"
-    [rotation]="rotation"
->
-    <ngt-box-geometry></ngt-box-geometry>
-    <ngt-mesh-lambert-material color="tomato"></ngt-mesh-lambert-material>
+<ngt-mesh receiveShadow castShadow [ref]="boxRef.ref" [position]="position" [rotation]="rotation">
+  <ngt-box-geometry></ngt-box-geometry>
+  <ngt-mesh-lambert-material color="tomato"></ngt-mesh-lambert-material>
 </ngt-mesh>
 ```
 
--   Similar to the `Floor`, we create a `ngt-mesh` that can receive shadow (`receiveShadow`) AND can cast shadow (`castShadow`)
--   We're using `ngt-box-geometry` to represent a box
--   We're using a material (`ngt-mesh-lambert-material`) that can react to lights and create shadows
--   We use `boxRef` that is created by `NgtPhysicBody` the same way we used `planeRef`
+- Similar to the `Floor`, we create a `ngt-mesh` that can receive shadow (`receiveShadow`) AND can cast shadow (`castShadow`)
+- We're using `ngt-box-geometry` to represent a box
+- We're using a material (`ngt-mesh-lambert-material`) that can react to lights and create shadows
+- We use `boxRef` that is created by `NgtPhysicBody` the same way we used `planeRef`
 
 </TabItem>
 
@@ -316,26 +271,26 @@ Now that we have a floor, we can _drop_ things on it. In this case, the thing is
 
 ```ts
 @Component({
-    selector: 'physic-box',
-    templateUrl: 'box.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    // 👇 provide the Physic Body API
-    providers: [NgtPhysicBody],
+  selector: 'physic-box',
+  templateUrl: 'box.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  // 👇 provide the Physic Body API
+  providers: [NgtPhysicBody],
 })
 export class PhysicBoxComponent {
-    @Input() position?: NgtTriple;
-    rotation = [0.4, 0.2, 0.5] as NgtTriple;
+  @Input() position?: NgtTriple;
+  rotation = [0.4, 0.2, 0.5] as NgtTriple;
 
-    // 👇 create a Box ref by the Physic Body API
-    // 👇                        👇 we're working with ngt-box-geometry so we're utilizing useBox
-    boxRef = this.physicBody.useBox(() => ({
-        mass: 1,
-        position: this.position,
-        rotation: this.rotation,
-    }));
+  // 👇 create a Box ref by the Physic Body API
+  // 👇                        👇 we're working with ngt-box-geometry so we're utilizing useBox
+  boxRef = this.physicBody.useBox(() => ({
+    mass: 1,
+    position: this.position,
+    rotation: this.rotation,
+  }));
 
-    //                      👇 inject the Physic Body API
-    constructor(private physicBody: NgtPhysicBody) {}
+  //                      👇 inject the Physic Body API
+  constructor(private physicBody: NgtPhysicBody) {}
 }
 ```
 
@@ -350,22 +305,22 @@ import { PhysicBoxComponent } from './box.component';
 // highlight-end
 
 @Component({
-    /* ... */
+  /* ... */
 })
 export class PhysicBoxesComponent {}
 
 @NgModule({
-    imports: [
-        /* ... */
-    ],
-    declarations: [
-        PhysicBoxesComponent,
-        PhysicFloorComponent,
-        // highlight-start
-        PhysicBoxComponent,
-        // highlight-end
-    ],
-    exports: [PhysicBoxesComponent],
+  imports: [
+    /* ... */
+  ],
+  declarations: [
+    PhysicBoxesComponent,
+    PhysicFloorComponent,
+    // highlight-start
+    PhysicBoxComponent,
+    // highlight-end
+  ],
+  exports: [PhysicBoxesComponent],
 })
 export class PhysicsBoxesModule {}
 ```
@@ -375,28 +330,20 @@ export class PhysicsBoxesModule {}
 <TabItem value="physicsHtml" label="physic-boxes.component.html">
 
 ```html
-<ngt-canvas
-    shadows
-    [dpr]="[1, 2]"
-    [gl]="{ alpha: false }"
-    [camera]="{ position: [-1, 5, 5], fov: 45 }"
->
-    <ngt-color attach="background" color="lightblue"></ngt-color>
+<ngt-canvas shadows [dpr]="[1, 2]" [gl]="{ alpha: false }" [camera]="{ position: [-1, 5, 5], fov: 45 }">
+  <ngt-color attach="background" color="lightblue"></ngt-color>
 
-    <ngt-ambient-light></ngt-ambient-light>
-    <ngt-directional-light [position]="10" castShadow>
-        <ngt-vector2
-            [attach]="['shadow', 'mapSize']"
-            [vector2]="2048"
-        ></ngt-vector2>
-    </ngt-directional-light>
+  <ngt-ambient-light></ngt-ambient-light>
+  <ngt-directional-light [position]="10" castShadow>
+    <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="2048"></ngt-vector2>
+  </ngt-directional-light>
 
-    <ngt-physics>
-        <physic-floor [position]="[0, -2.5, 0]"></physic-floor>
-        // highlight-start
-        <physic-box [position]="[0.1, 5, 0]"></physic-box>
-        // highlight-end
-    </ngt-physics>
+  <ngt-physics>
+    <physic-floor [position]="[0, -2.5, 0]"></physic-floor>
+    // highlight-start
+    <physic-box [position]="[0.1, 5, 0]"></physic-box>
+    // highlight-end
+  </ngt-physics>
 </ngt-canvas>
 
 <ngt-stats></ngt-stats>
@@ -409,16 +356,16 @@ export class PhysicsBoxesModule {}
 Stop here and we'll have a single box dropping on the floor. Fun, right?!
 
 <iframe
-    class="code-demo"
-    src="https://codesandbox.io/embed/simple-physic-cubes-single-cube-v4jbrl?fontsize=14&hidenavigation=1&theme=dark&view=preview"
-    title="simple-physic-cubes-single-cube"
-    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+  class="code-demo"
+  src="https://codesandbox.io/embed/simple-physic-cubes-single-cube-v4jbrl?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+  title="simple-physic-cubes-single-cube"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
 All that's left to do is to render more `physic-box` 😄. Play with the `[position]` to your heart content
 
 ## Exercise
 
--   Try different colors and shapes
--   Try different physic parameters (eg: mass)
+- Try different colors and shapes
+- Try different physic parameters (eg: mass)

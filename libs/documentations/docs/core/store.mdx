@@ -30,8 +30,8 @@ this.store.get((s) => s.events.enabled); // gets the deep property at the time o
 
 :::tip
 
--   `select()` is mainly used as parameters to side-effects. When something changes, we want to re-run the side-effects
--   `get()` is usually used in animation loop callback where the state gets the latest value per frame
+- `select()` is mainly used as parameters to side-effects. When something changes, we want to re-run the side-effects
+- `get()` is usually used in animation loop callback where the state gets the latest value per frame
 
 :::
 
@@ -41,12 +41,11 @@ We can use `NgtStore` to register callbacks to be run before every renders (aka 
 
 ```ts
 export class CubeComponent extends NgtInstance {
-    ngOnInit() {
-        // 👇 this is available on all NgtInstance
-        const unregister =
-            this.store.registerBeforeRender(/* NgtBeforeRenderRecord */);
-        // this returns the clean up function. call unregister() to unsubscribe from the animation loop, preventing memory leak
-    }
+  ngOnInit() {
+    // 👇 this is available on all NgtInstance
+    const unregister = this.store.registerBeforeRender(/* NgtBeforeRenderRecord */);
+    // this returns the clean up function. call unregister() to unsubscribe from the animation loop, preventing memory leak
+  }
 }
 ```
 
@@ -54,9 +53,9 @@ export class CubeComponent extends NgtInstance {
 
 `registerBeforeRender()` accepts an object in the shape of `NgtBeforeRenderRecord`
 
--   `callback`: the only required property. This is the callback that would be called before every render, outside of Angular Zone. `callback` is called with the same arguments as [`(beforeRender)`](./objects#beforerender-output)
--   `obj`: optional `Ref<THREE.Object3D>` or `THREE.Object3D`.
--   `priority`: optional [Render Priority](#render-priority)
+- `callback`: the only required property. This is the callback that would be called before every render, outside of Angular Zone. `callback` is called with the same arguments as [`(beforeRender)`](./objects#beforerender-output)
+- `obj`: optional `Ref<THREE.Object3D>` or `THREE.Object3D`.
+- `priority`: optional [Render Priority](#render-priority)
 
 ### Render Priority
 
@@ -64,18 +63,18 @@ By default, NGT renders the scene automatically on every frame. If we need more 
 
 ```ts
 this.store.registerBeforeRender({
-    callback: ({ gl, scene, camera }) => {
-        gl.render(scene, camera);
-    },
-    priority: 1,
+  callback: ({ gl, scene, camera }) => {
+    gl.render(scene, camera);
+  },
+  priority: 1,
 });
 
 this.store.registerBeforeRender({
-    callback: ({ gl, scene, camera }) => {
-        // this executes AFTER the above callback
-        gl.render(/* ... */);
-    },
-    priority: 2,
+  callback: ({ gl, scene, camera }) => {
+    // this executes AFTER the above callback
+    gl.render(/* ... */);
+  },
+  priority: 2,
 });
 ```
 
@@ -91,16 +90,16 @@ We can also pass in negative numerical value to `priority`. Negative value will 
 
 ```ts
 this.store.registerBeforeRender({
-    callback: () => {
-        // this will be executed last
-    },
-    priority: -1,
+  callback: () => {
+    // this will be executed last
+  },
+  priority: -1,
 });
 
 this.store.registerBeforeRender({
-    callback: () => {
-        // this will be executed AFTER the above callback
-    },
-    priority: -2,
+  callback: () => {
+    // this will be executed AFTER the above callback
+  },
+  priority: -2,
 });
 ```

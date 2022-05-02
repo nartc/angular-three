@@ -50,15 +50,14 @@ Previously, most objects in NGT were `Directive` and `exportAs` was used to expo
 
 Previously, most NGT objects exposed a getter to get the instance for the corresponding type of object. For example:
 
--   `NgtCommonMesh` exposes `get mesh()`
--   `NgtCommonMaterial` exposes `get material()`
--   `NgtCommonGeometry` exposes `get geometry()`
+- `NgtCommonMesh` exposes `get mesh()`
+- `NgtCommonMaterial` exposes `get material()`
+- `NgtCommonGeometry` exposes `get geometry()`
 
 Now, we can grab the `get instance()` from **ALL** NGT objects instead. However, `instance` returns a `Ref`. To get the underlying instance, use `instance.value`
 
 ```html
-<ngt-plane-geometry #plane></ngt-plane-geometry>
-<ngt-mesh-standard-material #standard></ngt-mesh-standard-material>
+<ngt-plane-geometry #plane></ngt-plane-geometry> <ngt-mesh-standard-material #standard></ngt-mesh-standard-material>
 ```
 
 ```diff

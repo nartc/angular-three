@@ -8,17 +8,17 @@ import { makeColor } from '../utils/make';
  */
 @Pipe({ name: 'color' })
 export class NgtColorPipe implements PipeTransform {
-    /**
-     * ConstructorParameters<typeof THREE.Color> has a limitation on THREE.Color constructor overloads
-     * @deprecated
-     */
-    transform(args: NgtColor): THREE.Color {
-        return makeColor(args) as THREE.Color;
-    }
+  /**
+   * ConstructorParameters<typeof THREE.Color> has a limitation on THREE.Color constructor overloads
+   * @deprecated
+   */
+  transform(args: NgtColor): THREE.Color {
+    return makeColor(args) as THREE.Color;
+  }
 }
 
 @NgModule({
-    declarations: [NgtColorPipe],
-    exports: [NgtColorPipe],
+  declarations: [NgtColorPipe],
+  exports: [NgtColorPipe],
 })
 export class NgtColorPipeModule {}

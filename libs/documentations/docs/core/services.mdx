@@ -15,16 +15,16 @@ This service is a utility service that can be used on any component that wants t
 
 ```ts
 @Component({
-    /* ... */
-    providers: [NgtResize],
+  /* ... */
+  providers: [NgtResize],
 })
 export class SomeComponent {
-    constructor(
-        @Inject(NgtResize)
-        private resizeResult$: Observable<NgtResizeResult>
-    ) {
-        this.resizeResult$.subscribe(); // emits everytime the window/host is resized
-    }
+  constructor(
+    @Inject(NgtResize)
+    private resizeResult$: Observable<NgtResizeResult>
+  ) {
+    this.resizeResult$.subscribe(); // emits everytime the window/host is resized
+  }
 }
 ```
 
@@ -32,16 +32,16 @@ The `NgtResizeResult` has the following interface:
 
 ```ts
 export interface NgtResizeResult {
-    readonly entries: ReadonlyArray<ResizeObserverEntry>;
-    readonly x: number;
-    readonly y: number;
-    readonly width: number;
-    readonly height: number;
-    readonly top: number;
-    readonly right: number;
-    readonly bottom: number;
-    readonly left: number;
-    readonly dpr: number;
+  readonly entries: ReadonlyArray<ResizeObserverEntry>;
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+  readonly top: number;
+  readonly right: number;
+  readonly bottom: number;
+  readonly left: number;
+  readonly dpr: number;
 }
 ```
 
@@ -60,16 +60,16 @@ We can provide our own options via `provideResizeOptions` on the component that 
 
 ```ts
 @Component({
-    /* ... */
-    providers: [NgtResize, provideResizeOptions({ debounce: 500 })],
+  /* ... */
+  providers: [NgtResize, provideResizeOptions({ debounce: 500 })],
 })
 export class SomeComponent {
-    constructor(
-        @Inject(NgtResize)
-        private resizeResult$: Observable<NgtResizeResult>
-    ) {
-        this.resizeResult$.subscribe(); // emits everytime the window/host is resized
-    }
+  constructor(
+    @Inject(NgtResize)
+    private resizeResult$: Observable<NgtResizeResult>
+  ) {
+    this.resizeResult$.subscribe(); // emits everytime the window/host is resized
+  }
 }
 ```
 
@@ -81,8 +81,8 @@ This service is used to load external resources. This is recommended as it is ty
 
 ```ts
 export class SomeComponent {
-    model$ = this.loader.use(GTLFLoader, 'path/to/model.gltf'); // Observable<GLTF>
+  model$ = this.loader.use(GTLFLoader, 'path/to/model.gltf'); // Observable<GLTF>
 
-    constructor(private loader: NgtLoader) {}
+  constructor(private loader: NgtLoader) {}
 }
 ```

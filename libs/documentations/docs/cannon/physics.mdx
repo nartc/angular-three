@@ -26,16 +26,16 @@ To start interacting with the Physic World, we need `<ngt-physics>` component fr
 
 ```ts
 type ContactMaterialOptions = {
-    friction?: number;
-    restitution?: number;
-    contactEquationStiffness?: number;
-    contactEquationRelaxation?: number;
-    frictionEquationStiffness?: number;
-    frictionEquationRelaxation?: number;
+  friction?: number;
+  restitution?: number;
+  contactEquationStiffness?: number;
+  contactEquationRelaxation?: number;
+  frictionEquationStiffness?: number;
+  frictionEquationRelaxation?: number;
 };
 ```
 
 ### Broadphases
 
--   NaiveBroadphase is as simple as it gets. It considers every body to be a potential collider with every other body. This results in the maximum number of narrowphase checks.
--   SAPBroadphase sorts bodies along an axis and then moves down that list finding pairs by looking at body size and position of the next bodies. Control what axis to sort along by setting the axisIndex property.
+- NaiveBroadphase is as simple as it gets. It considers every body to be a potential collider with every other body. This results in the maximum number of narrowphase checks.
+- SAPBroadphase sorts bodies along an axis and then moves down that list finding pairs by looking at body size and position of the next bodies. Control what axis to sort along by setting the axisIndex property.

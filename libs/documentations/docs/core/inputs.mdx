@@ -81,17 +81,16 @@ In Angular, we would have to pass in a `number` to a `number` Input
 `NumberInput` allows us to pass in different variants for `number` Input
 
 ```html
-<ngt-ambient-light [intensity]="1"></ngt-ambient-light>
-<ngt-ambient-light intensity="1"></ngt-ambient-light>
+<ngt-ambient-light [intensity]="1"></ngt-ambient-light> <ngt-ambient-light intensity="1"></ngt-ambient-light>
 ```
 
 ### `Ngt***`
 
 Throughout the documentations, we will come across `NgtVector3`, `NgtEuler` etc... These are NGT versions of THREE.js counterparts:
 
--   `NgtVector3` -> `THREE.Vector3`
--   `NgtEuler` -> `THREE.Euler`
--   ...
+- `NgtVector3` -> `THREE.Vector3`
+- `NgtEuler` -> `THREE.Euler`
+- ...
 
 Because NGT automatically deals with [Shortcuts](#shortcuts), NGT provides more relaxed types for these Inputs
 
