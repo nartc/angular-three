@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "postinstall": "ngcc --properties es2015 browser module main && cd libs/documentations && npm install",
+    "postinstall": "ngcc --properties es2015 browser module main",
     "commit": "git-cz",
     "contributors:init": "all-contributors init",
     "contributors:add": "all-contributors add",
@@ -13,6 +13,7 @@
     "publish": "nx run-many --target=publish --all --parallel",
     "**-predocs-**": "test \"$CI\" = true && npx pnpm --filter \".\" --filter \"./libs/documentations\" install --no-frozen-lockfile --store=node_modules/.pnpm-store || echo skiping pnpm install",
     "**-docs-**": "npx pnpm run predocs && nx build-docs documentations",
+    "predocs": "cd libs/documentations && npm install",
     "docs": "nx build-docs documentations"
   },
   "private": true,
