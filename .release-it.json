@@ -41,6 +41,10 @@
   },
   "hooks": {
     "before:bump": "npm run build",
-    "after:bump": ["git checkout -- package.json", "node tools/scripts/update-version.mjs"]
+    "after:bump": [
+      "git checkout -- package.json",
+      "git checkout -- package-lock.json",
+      "node tools/scripts/update-version.mjs"
+    ]
   }
 }
