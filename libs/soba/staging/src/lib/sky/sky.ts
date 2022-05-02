@@ -131,6 +131,9 @@ export class NgtSobaSky extends NgtCommonMesh<Sky> {
       material.uniforms['rayleigh'].value = rayleigh;
       material.uniforms['sunPosition'].value = sunPosition;
       material.uniforms['turbidity'].value = turbidity;
+
+      material.needsUpdate = true;
+      material.uniformsNeedUpdate = true;
     })
   );
 
