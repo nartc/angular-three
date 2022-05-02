@@ -426,9 +426,7 @@ export abstract class NgtInstance<
           }
 
           this.__ngt__.previousAttach = propertyToAttach;
-          this.set({
-            attach: propertyToAttach,
-          } as Partial<TInstanceState>);
+          this.set({ attach: propertyToAttach } as Partial<TInstanceState>);
         }
         this.checkUpdate(parentInstanceRef.value);
         this.checkUpdate(this.instanceValue);
