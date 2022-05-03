@@ -101,7 +101,7 @@ export const routes: Routes = [
   {
     path: 'height-field',
     loadChildren: () =>
-      import('./height-field/height-field.component').then((m) => m.HeightFieldExampleComponentModule),
+      import('./height-field/height-field-example.component').then((m) => m.HeightFieldExampleComponentModule),
     data: {
       title: 'Height Field',
       description: 'Height field',

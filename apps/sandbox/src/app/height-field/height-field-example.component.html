@@ -1,0 +1,26 @@
+<ngt-canvas shadows [camera]="{ position: [0, -10, 10] }">
+    <ngt-color attach="background" color="#171720"></ngt-color>
+
+    <ngt-soba-orbit-controls
+        enableDamping
+        dampingFactor="0.2"
+        [minPolarAngle]="60 | radian"
+        [maxPolarAngle]="60 | radian"
+    ></ngt-soba-orbit-controls>
+
+    <ngt-physics>
+        <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+        <ngt-directional-light [position]="[0, 3, 0]" castShadow></ngt-directional-light>
+
+        <sandbox-height-field
+            [elementSize]="scale / 128"
+            [heights]="heights"
+            [position]="[-scale / 2, 0, scale / 2]"
+            [rotation]="[-90 | radian, 0, 0]"
+        ></sandbox-height-field>
+
+        <sandbox-spheres rows="3" columns="3" [spread]="4"></sandbox-spheres>
+    </ngt-physics>
+
+    <ngt-stats></ngt-stats>
+</ngt-canvas>
