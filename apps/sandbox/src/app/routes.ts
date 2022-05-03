@@ -98,4 +98,16 @@ export const routes: Routes = [
       source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/vertex-colors-instances',
     },
   },
+  {
+    path: 'height-field',
+    loadChildren: () =>
+      import('./height-field/height-field.component').then((m) => m.HeightFieldExampleComponentModule),
+    data: {
+      title: 'Height Field',
+      description: 'Height field',
+      link: '/height-field',
+      asset: 'assets/examples/height-field',
+      source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/height-field',
+    },
+  },
 ];

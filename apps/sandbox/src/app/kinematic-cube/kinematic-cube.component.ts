@@ -172,5 +172,6 @@ export class InstancedSpheresComponent implements OnInit {
     NgtPhysicsModule,
     NgtVector2AttributeModule,
   ],
+  exports: [InstancedSpheresComponent],
 })
 export class KinematicCubeComponentModule {}
