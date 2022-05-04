@@ -38,7 +38,7 @@ jobs:
                     git add .
                     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                     git config --local user.name "github-actions[bot]"
-                    git commit -m "docs: build docs" -a
+                    git commit -am "docs: build docs"
 
             -   name: Push
                 uses: ad-m/github-push-action@master
