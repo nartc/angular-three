@@ -450,8 +450,8 @@ export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> 
   );
 
   private readonly setBeforeRender = this.effect<{}>(
-    tapEffect(() => {
-      const unregister = this.store.registerBeforeRender({
+    tapEffect(() =>
+      this.store.registerBeforeRender({
         callback: () => {
           if (this.instance.value) {
             const { transform, calculatePosition, eps, occlude, zIndexRange, sprite, distanceFactor } = this.get();
@@ -536,12 +536,8 @@ export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> 
             }
           }
         },
-      });
-
-      return () => {
-        unregister();
-      };
-    })
+      })
+    )
   );
 }
 

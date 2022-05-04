@@ -99,8 +99,8 @@ export class NgtSobaFloat extends NgtObjectInputs<THREE.Group, NgtSobaFloatState
     this.zone.runOutsideAngular(() => {
       this.onCanvasReady(
         this.store.ready$,
-        () => {
-          const unregister = this.store.registerBeforeRender({
+        () =>
+          this.store.registerBeforeRender({
             callback: ({ clock }) => {
               const { speed, rotationIntensity, floatIntensity } = this.get();
               const t = this.offset + clock.getElapsedTime();
@@ -112,12 +112,7 @@ export class NgtSobaFloat extends NgtObjectInputs<THREE.Group, NgtSobaFloatState
                 this.instance.value.position.y = (Math.sin((t / 4) * speed) / 10) * floatIntensity;
               }
             },
-          });
-
-          return () => {
-            unregister();
-          };
-        },
+          }),
         true
       );
     });

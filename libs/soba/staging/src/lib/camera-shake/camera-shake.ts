@@ -127,8 +127,8 @@ export class NgtSobaCameraShake extends NgtInstance<{}, NgtSobaCameraShakeState>
   );
 
   private readonly setBeforeRender = this.effect<void>(
-    tapEffect(() => {
-      const unregister = this.store.registerBeforeRender({
+    tapEffect(() =>
+      this.store.registerBeforeRender({
         callback: ({ clock, delta }) => {
           const {
             intensityRef,
@@ -160,11 +160,8 @@ export class NgtSobaCameraShake extends NgtInstance<{}, NgtSobaCameraShakeState>
             this.constrainIntensity();
           }
         },
-      });
-      return () => {
-        unregister();
-      };
-    })
+      })
+    )
   );
 
   getIntensity() {

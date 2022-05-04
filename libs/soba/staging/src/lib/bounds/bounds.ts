@@ -212,8 +212,8 @@ export class NgtSobaBounds extends NgtObjectInputs<THREE.Group, NgtSobaBoundsSta
   );
 
   private readonly setBeforeRender = this.effect<void>(
-    tapEffect(() => {
-      const unregister = this.store.registerBeforeRender({
+    tapEffect(() =>
+      this.store.registerBeforeRender({
         callback: ({ delta }) => {
           if (this.current.animating) {
             const { damping, eps } = this.get();
@@ -245,11 +245,8 @@ export class NgtSobaBounds extends NgtObjectInputs<THREE.Group, NgtSobaBoundsSta
             this.current.animating = false;
           }
         },
-      });
-      return () => {
-        unregister();
-      };
-    })
+      })
+    )
   );
 
   get api(): NgtSobaBoundsApi {

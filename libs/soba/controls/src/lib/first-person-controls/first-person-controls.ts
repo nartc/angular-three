@@ -113,20 +113,16 @@ export class NgtSobaFirstPersonControls extends NgtInstance<FirstPersonControls,
   );
 
   private readonly setBeforeRender = this.effect<{}>(
-    tapEffect(() => {
-      const unregister = this.store.registerBeforeRender({
+    tapEffect(() =>
+      this.store.registerBeforeRender({
         priority: -1,
         callback: ({ delta }) => {
           if (this.instance.value.enabled) {
             this.instance.value.update(delta);
           }
         },
-      });
-
-      return () => {
-        unregister();
-      };
-    })
+      })
+    )
   );
 
   protected override get optionFields(): Record<string, boolean> {

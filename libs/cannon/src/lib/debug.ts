@@ -122,8 +122,8 @@ export class NgtCannonDebug extends NgtInstance<THREE.Scene, NgtCannonDebugState
   }
 
   private readonly registerBeforeRender = this.effect<void>(
-    tapEffect(() => {
-      const unregister = this.store.registerBeforeRender({
+    tapEffect(() =>
+      this.store.registerBeforeRender({
         callback: () => {
           const { bodyMap, cannonDebugger, disabled } = this.get();
           if (disabled) return;
@@ -137,12 +137,8 @@ export class NgtCannonDebug extends NgtInstance<THREE.Scene, NgtCannonDebugState
 
           cannonDebugger.update();
         },
-      });
-
-      return () => {
-        unregister();
-      };
-    })
+      })
+    )
   );
 }
 

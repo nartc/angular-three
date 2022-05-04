@@ -184,7 +184,7 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
       const renderPriority = this.get((s) => s.renderPriority);
       const gl = this.store.get((s) => s.gl);
 
-      const unregister = this.store.registerBeforeRender({
+      return this.store.registerBeforeRender({
         callback: ({ delta }) => {
           const gizmo = this.instance;
           const { camera: mainCamera, controls: defaultControls, invalidate } = this.store.get();
@@ -226,10 +226,6 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
         },
         priority: renderPriority,
       });
-
-      return () => {
-        unregister();
-      };
     })
   );
 

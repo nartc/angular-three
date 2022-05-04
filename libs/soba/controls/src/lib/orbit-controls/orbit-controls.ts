@@ -202,20 +202,16 @@ export class NgtSobaOrbitControls extends NgtInstance<OrbitControls, NgtSobaOrbi
   );
 
   private readonly setBeforeRender = this.effect<void>(
-    tapEffect(() => {
-      const unregister = this.store.registerBeforeRender({
+    tapEffect(() =>
+      this.store.registerBeforeRender({
         priority: -1,
         callback: () => {
           if (this.instance.value.enabled) {
             this.instance.value.update();
           }
         },
-      });
-
-      return () => {
-        unregister();
-      };
-    })
+      })
+    )
   );
 
   private readonly connectDomElement = this.effect<{}>(

@@ -3,13 +3,13 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
+  NGT_INSTANCE_HOST_REF,
+  NGT_INSTANCE_REF,
+  NGT_IS_WEBGL_AVAILABLE,
   NgtInstance,
   NgtInstanceState,
   NgtStore,
   NgtUnknownInstance,
-  NGT_INSTANCE_HOST_REF,
-  NGT_INSTANCE_REF,
-  NGT_IS_WEBGL_AVAILABLE,
   NumberInput,
   provideInstanceRef,
   provideObjectHostRef,
@@ -297,7 +297,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
         const { renderPriority, enabled, instance: composer, autoClear } = this.get();
         const gl = this.store.get((s) => s.gl);
 
-        const unregister = this.store.registerBeforeRender({
+        return this.store.registerBeforeRender({
           callback: ({ delta }) => {
             if (enabled) {
               gl.autoClear = autoClear;
@@ -306,10 +306,6 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
           },
           priority: enabled ? renderPriority : 0,
         });
-
-        return () => {
-          unregister();
-        };
       })
     )
   );

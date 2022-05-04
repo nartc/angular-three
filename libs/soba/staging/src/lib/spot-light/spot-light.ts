@@ -172,8 +172,8 @@ export class NgtSobaSpotLight extends NgtSpotLight {
   }
 
   private readonly setBeforeRender = this.effect<void>(
-    tapEffect(() => {
-      const unregister = this.store.registerBeforeRender({
+    tapEffect(() =>
+      this.store.registerBeforeRender({
         callback: () => {
           const { material, mesh } = this.get();
           if (material && mesh) {
@@ -183,12 +183,8 @@ export class NgtSobaSpotLight extends NgtSpotLight {
             }
           }
         },
-      });
-
-      return () => {
-        unregister();
-      };
-    })
+      })
+    )
   );
 }
 

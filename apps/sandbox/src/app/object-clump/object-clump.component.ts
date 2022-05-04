@@ -1,5 +1,5 @@
-import { NgtPhysicBody, NgtPhysicsModule } from '@angular-three/cannon';
-import { NgtCanvasModule, NgtComponentStore, NgtRenderState, NgtStore, NgtTriple } from '@angular-three/core';
+import { NgtCannonDebugModule, NgtPhysicBody, NgtPhysicsModule } from '@angular-three/cannon';
+import { NgtCanvasModule, NgtComponentStore, NgtRenderState, NgtStore } from '@angular-three/core';
 import { NgtValueAttributeModule, NgtVector2AttributeModule } from '@angular-three/core/attributes';
 import { NgtSphereGeometryModule } from '@angular-three/core/geometries';
 import { NgtAmbientLightModule, NgtDirectionalLightModule, NgtSpotLightModule } from '@angular-three/core/lights';
@@ -10,7 +10,7 @@ import { NgtBloomModule, NgtSSAOModule } from '@angular-three/postprocessing/eff
 import { NgtTextureLoader } from '@angular-three/soba/loaders';
 import { NgtSobaEnvironmentModule, NgtSobaSkyModule } from '@angular-three/soba/staging';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, NgModule, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, NgModule, NgZone, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import * as THREE from 'three';
 
@@ -30,7 +30,13 @@ import * as THREE from 'three';
       </ngt-physics>
 
       <ngt-soba-environment files="assets/adamsbridge.hdr"></ngt-soba-environment>
-      <sandbox-effects></sandbox-effects>
+
+      <ngt-effect-composer>
+        <ng-template ngt-effect-composer-content>
+          <ngt-bloom></ngt-bloom>
+        </ng-template>
+      </ngt-effect-composer>
+
       <ngt-soba-sky></ngt-soba-sky>
     </ngt-canvas>
   `,
@@ -38,14 +44,12 @@ import * as THREE from 'three';
 })
 export class ObjectClumpComponent {}
 
-@Component({
+@Directive({
   selector: 'sandbox-pointer',
-  template: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class PointerComponent extends NgtComponentStore implements OnInit {
-  pointerRef = this.physicBody.useSphere(
+export class PointerDirective extends NgtComponentStore implements OnInit {
+  readonly pointerRef = this.physicBody.useSphere(
     () => ({
       type: 'Kinematic',
       args: [3],
@@ -62,35 +66,17 @@ export class PointerComponent extends NgtComponentStore implements OnInit {
     this.zone.runOutsideAngular(() => {
       this.onCanvasReady(
         this.store.ready$,
-        () => {
-          const unregister = this.store.registerBeforeRender({
+        () =>
+          this.store.registerBeforeRender({
             callback: ({ pointer, viewport }) => {
               this.pointerRef.api.position.set((pointer.x * viewport.width) / 2, (pointer.y * viewport.height) / 2, 0);
             },
-          });
-
-          return () => {
-            unregister();
-          };
-        },
+          }),
         true
       );
     });
   }
 }
-
-@Component({
-  selector: 'sandbox-effects',
-  template: `
-    <ngt-effect-composer>
-      <ng-template ngt-effect-composer-content>
-        <ngt-bloom></ngt-bloom>
-      </ng-template>
-    </ngt-effect-composer>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class EffectsComponent {}
 
 const mat = new THREE.Matrix4();
 const vec = new THREE.Vector3();
@@ -122,7 +108,7 @@ export class ClumpComponent {
   readonly count = 40;
   readonly texture$ = this.textureLoader.load('assets/cross.jpg');
 
-  sphereRef = this.physicBody.useSphere(() => ({
+  readonly sphereRef = this.physicBody.useSphere(() => ({
     args: [1],
     mass: 1,
     angularDamping: 0.1,
@@ -131,7 +117,7 @@ export class ClumpComponent {
       THREE.MathUtils.randFloatSpread(20),
       THREE.MathUtils.randFloatSpread(20),
       THREE.MathUtils.randFloatSpread(20),
-    ] as NgtTriple,
+    ],
   }));
 
   constructor(private textureLoader: NgtTextureLoader, private physicBody: NgtPhysicBody) {}
@@ -150,7 +136,7 @@ export class ClumpComponent {
 }
 
 @NgModule({
-  declarations: [ObjectClumpComponent, PointerComponent, EffectsComponent, ClumpComponent],
+  declarations: [ObjectClumpComponent, PointerDirective, ClumpComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([{ path: '', component: ObjectClumpComponent }]),
@@ -169,6 +155,7 @@ export class ClumpComponent {
     NgtSobaSkyModule,
     NgtBloomModule,
     NgtValueAttributeModule,
+    NgtCannonDebugModule,
   ],
 })
 export class ObjectClumpComponentModule {}
