@@ -34,9 +34,7 @@ export class NgtMeshDistanceMaterial extends NgtCommonMaterial<
   }
 
   @Input() set displacementScale(displacementScale: NumberInput) {
-    this.set({
-      displacementScale: coerceNumberProperty(displacementScale),
-    });
+    this.set({ displacementScale: coerceNumberProperty(displacementScale) });
   }
 
   @Input() set displacementBias(displacementBias: NumberInput) {

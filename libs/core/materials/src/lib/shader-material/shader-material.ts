@@ -41,9 +41,7 @@ export class NgtShaderMaterial extends NgtCommonMaterial<THREE.ShaderMaterialPar
   }
 
   @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
-    this.set({
-      wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
-    });
+    this.set({ wireframeLinewidth: coerceNumberProperty(wireframeLinewidth) });
   }
 
   @Input() set lights(lights: BooleanInput) {

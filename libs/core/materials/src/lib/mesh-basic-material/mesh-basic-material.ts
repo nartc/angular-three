@@ -40,9 +40,7 @@ export class NgtMeshBasicMaterial extends NgtCommonMaterial<
   }
 
   @Input() set lightMapIntensity(lightMapIntensity: NumberInput) {
-    this.set({
-      lightMapIntensity: coerceNumberProperty(lightMapIntensity),
-    });
+    this.set({ lightMapIntensity: coerceNumberProperty(lightMapIntensity) });
   }
 
   @Input() set aoMap(aoMap: THREE.Texture | null) {
@@ -59,6 +57,10 @@ export class NgtMeshBasicMaterial extends NgtCommonMaterial<
 
   @Input() set alphaMap(alphaMap: THREE.Texture | null) {
     this.set({ alphaMap });
+  }
+
+  @Input() set fog(fog: BooleanInput) {
+    this.set({ fog: coerceBooleanProperty(fog) });
   }
 
   @Input() set envMap(envMap: THREE.Texture | null) {
@@ -82,9 +84,7 @@ export class NgtMeshBasicMaterial extends NgtCommonMaterial<
   }
 
   @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
-    this.set({
-      wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
-    });
+    this.set({ wireframeLinewidth: coerceNumberProperty(wireframeLinewidth) });
   }
 
   @Input() set wireframeLinecap(wireframeLinecap: string) {
@@ -111,6 +111,7 @@ export class NgtMeshBasicMaterial extends NgtCommonMaterial<
       aoMapIntensity: true,
       specularMap: true,
       alphaMap: true,
+      fog: true,
       envMap: true,
       combine: true,
       reflectivity: true,

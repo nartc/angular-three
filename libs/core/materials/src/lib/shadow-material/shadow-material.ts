@@ -1,5 +1,11 @@
 // GENERATED
-import { AnyConstructor, NgtCommonMaterial, provideCommonMaterialRef } from '@angular-three/core';
+import {
+  AnyConstructor,
+  NgtCommonMaterial,
+  provideCommonMaterialRef,
+  coerceBooleanProperty,
+  BooleanInput,
+} from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -16,6 +22,10 @@ export class NgtShadowMaterial extends NgtCommonMaterial<THREE.ShadowMaterialPar
     this.set({ color });
   }
 
+  @Input() set fog(fog: BooleanInput) {
+    this.set({ fog: coerceBooleanProperty(fog) });
+  }
+
   get materialType(): AnyConstructor<THREE.ShadowMaterial> {
     return THREE.ShadowMaterial;
   }
@@ -24,6 +34,7 @@ export class NgtShadowMaterial extends NgtCommonMaterial<THREE.ShadowMaterialPar
     return {
       ...super.optionFields,
       color: true,
+      fog: true,
     };
   }
 }

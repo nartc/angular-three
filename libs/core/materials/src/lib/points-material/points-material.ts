@@ -40,6 +40,10 @@ export class NgtPointsMaterial extends NgtCommonMaterial<THREE.PointsMaterialPar
     this.set({ sizeAttenuation: coerceBooleanProperty(sizeAttenuation) });
   }
 
+  @Input() set fog(fog: BooleanInput) {
+    this.set({ fog: coerceBooleanProperty(fog) });
+  }
+
   get materialType(): AnyConstructor<THREE.PointsMaterial> {
     return THREE.PointsMaterial;
   }
@@ -52,6 +56,7 @@ export class NgtPointsMaterial extends NgtCommonMaterial<THREE.PointsMaterialPar
       alphaMap: true,
       size: true,
       sizeAttenuation: true,
+      fog: true,
     };
   }
 }

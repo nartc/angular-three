@@ -60,9 +60,7 @@ export class NgtMeshMatcapMaterial extends NgtCommonMaterial<
   }
 
   @Input() set displacementScale(displacementScale: NumberInput) {
-    this.set({
-      displacementScale: coerceNumberProperty(displacementScale),
-    });
+    this.set({ displacementScale: coerceNumberProperty(displacementScale) });
   }
 
   @Input() set displacementBias(displacementBias: NumberInput) {
@@ -71,6 +69,10 @@ export class NgtMeshMatcapMaterial extends NgtCommonMaterial<
 
   @Input() set alphaMap(alphaMap: THREE.Texture | null) {
     this.set({ alphaMap });
+  }
+
+  @Input() set fog(fog: BooleanInput) {
+    this.set({ fog: coerceBooleanProperty(fog) });
   }
 
   @Input() set flatShading(flatShading: BooleanInput) {
@@ -96,6 +98,7 @@ export class NgtMeshMatcapMaterial extends NgtCommonMaterial<
       displacementScale: true,
       displacementBias: true,
       alphaMap: true,
+      fog: true,
       flatShading: true,
     };
   }

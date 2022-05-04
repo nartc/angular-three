@@ -41,9 +41,7 @@ export class NgtMeshToonMaterial extends NgtCommonMaterial<THREE.MeshToonMateria
   }
 
   @Input() set lightMapIntensity(lightMapIntensity: NumberInput) {
-    this.set({
-      lightMapIntensity: coerceNumberProperty(lightMapIntensity),
-    });
+    this.set({ lightMapIntensity: coerceNumberProperty(lightMapIntensity) });
   }
 
   @Input() set aoMap(aoMap: THREE.Texture | null) {
@@ -59,9 +57,7 @@ export class NgtMeshToonMaterial extends NgtCommonMaterial<THREE.MeshToonMateria
   }
 
   @Input() set emissiveIntensity(emissiveIntensity: NumberInput) {
-    this.set({
-      emissiveIntensity: coerceNumberProperty(emissiveIntensity),
-    });
+    this.set({ emissiveIntensity: coerceNumberProperty(emissiveIntensity) });
   }
 
   @Input() set emissiveMap(emissiveMap: THREE.Texture | null) {
@@ -93,9 +89,7 @@ export class NgtMeshToonMaterial extends NgtCommonMaterial<THREE.MeshToonMateria
   }
 
   @Input() set displacementScale(displacementScale: NumberInput) {
-    this.set({
-      displacementScale: coerceNumberProperty(displacementScale),
-    });
+    this.set({ displacementScale: coerceNumberProperty(displacementScale) });
   }
 
   @Input() set displacementBias(displacementBias: NumberInput) {
@@ -111,9 +105,7 @@ export class NgtMeshToonMaterial extends NgtCommonMaterial<THREE.MeshToonMateria
   }
 
   @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
-    this.set({
-      wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
-    });
+    this.set({ wireframeLinewidth: coerceNumberProperty(wireframeLinewidth) });
   }
 
   @Input() set wireframeLinecap(wireframeLinecap: string) {
@@ -122,6 +114,10 @@ export class NgtMeshToonMaterial extends NgtCommonMaterial<THREE.MeshToonMateria
 
   @Input() set wireframeLinejoin(wireframeLinejoin: string) {
     this.set({ wireframeLinejoin });
+  }
+
+  @Input() set fog(fog: BooleanInput) {
+    this.set({ fog: coerceBooleanProperty(fog) });
   }
 
   get materialType(): AnyConstructor<THREE.MeshToonMaterial> {
@@ -155,6 +151,7 @@ export class NgtMeshToonMaterial extends NgtCommonMaterial<THREE.MeshToonMateria
       wireframeLinewidth: true,
       wireframeLinecap: true,
       wireframeLinejoin: true,
+      fog: true,
     };
   }
 }

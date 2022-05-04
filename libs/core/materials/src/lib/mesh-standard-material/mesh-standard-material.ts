@@ -44,9 +44,7 @@ export class NgtMeshStandardMaterial<
   }
 
   @Input() set lightMapIntensity(lightMapIntensity: NumberInput) {
-    this.set({
-      lightMapIntensity: coerceNumberProperty(lightMapIntensity),
-    });
+    this.set({ lightMapIntensity: coerceNumberProperty(lightMapIntensity) });
   }
 
   @Input() set aoMap(aoMap: THREE.Texture | null) {
@@ -62,9 +60,7 @@ export class NgtMeshStandardMaterial<
   }
 
   @Input() set emissiveIntensity(emissiveIntensity: NumberInput) {
-    this.set({
-      emissiveIntensity: coerceNumberProperty(emissiveIntensity),
-    });
+    this.set({ emissiveIntensity: coerceNumberProperty(emissiveIntensity) });
   }
 
   @Input() set emissiveMap(emissiveMap: THREE.Texture | null) {
@@ -96,9 +92,7 @@ export class NgtMeshStandardMaterial<
   }
 
   @Input() set displacementScale(displacementScale: NumberInput) {
-    this.set({
-      displacementScale: coerceNumberProperty(displacementScale),
-    });
+    this.set({ displacementScale: coerceNumberProperty(displacementScale) });
   }
 
   @Input() set displacementBias(displacementBias: NumberInput) {
@@ -130,9 +124,11 @@ export class NgtMeshStandardMaterial<
   }
 
   @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
-    this.set({
-      wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
-    });
+    this.set({ wireframeLinewidth: coerceNumberProperty(wireframeLinewidth) });
+  }
+
+  @Input() set fog(fog: BooleanInput) {
+    this.set({ fog: coerceBooleanProperty(fog) });
   }
 
   @Input() set flatShading(flatShading: BooleanInput) {
@@ -172,6 +168,7 @@ export class NgtMeshStandardMaterial<
       envMapIntensity: true,
       wireframe: true,
       wireframeLinewidth: true,
+      fog: true,
       flatShading: true,
     };
   }

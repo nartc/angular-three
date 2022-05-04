@@ -40,9 +40,7 @@ export class NgtMeshDepthMaterial extends NgtCommonMaterial<
   }
 
   @Input() set displacementScale(displacementScale: NumberInput) {
-    this.set({
-      displacementScale: coerceNumberProperty(displacementScale),
-    });
+    this.set({ displacementScale: coerceNumberProperty(displacementScale) });
   }
 
   @Input() set displacementBias(displacementBias: NumberInput) {
@@ -54,9 +52,7 @@ export class NgtMeshDepthMaterial extends NgtCommonMaterial<
   }
 
   @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
-    this.set({
-      wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
-    });
+    this.set({ wireframeLinewidth: coerceNumberProperty(wireframeLinewidth) });
   }
 
   get materialType(): AnyConstructor<THREE.MeshDepthMaterial> {

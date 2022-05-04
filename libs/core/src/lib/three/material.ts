@@ -34,7 +34,6 @@ export interface NgtCommonMaterialState<
   depthFunc?: THREE.DepthModes;
   depthTest?: boolean;
   depthWrite?: boolean;
-  fog?: boolean;
   name?: string;
   opacity?: number;
   polygonOffset?: boolean;
@@ -134,10 +133,6 @@ export abstract class NgtCommonMaterial<
 
   @Input() set depthWrite(depthWrite: BooleanInput) {
     this.set({ depthWrite: coerceBooleanProperty(depthWrite) });
-  }
-
-  @Input() set fog(fog: BooleanInput) {
-    this.set({ fog: coerceBooleanProperty(fog) });
   }
 
   @Input() set name(name: string) {
@@ -422,7 +417,6 @@ export abstract class NgtCommonMaterial<
     this.select((s) => s.depthFunc).pipe(startWithUndefined()),
     this.select((s) => s.depthTest).pipe(startWithUndefined()),
     this.select((s) => s.depthWrite).pipe(startWithUndefined()),
-    this.select((s) => s.fog).pipe(startWithUndefined()),
     this.select((s) => s.name).pipe(startWithUndefined()),
     this.select((s) => s.opacity).pipe(startWithUndefined()),
     this.select((s) => s.polygonOffset).pipe(startWithUndefined()),
@@ -465,7 +459,6 @@ export abstract class NgtCommonMaterial<
       depthFunc,
       depthTest,
       depthWrite,
-      fog,
       name,
       opacity,
       polygonOffset,
@@ -508,7 +501,6 @@ export abstract class NgtCommonMaterial<
       depthFunc,
       depthTest,
       depthWrite,
-      fog,
       name,
       opacity,
       polygonOffset,

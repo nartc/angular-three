@@ -40,6 +40,10 @@ export class NgtSpriteMaterial extends NgtCommonMaterial<THREE.SpriteMaterialPar
     this.set({ sizeAttenuation: coerceBooleanProperty(sizeAttenuation) });
   }
 
+  @Input() set fog(fog: BooleanInput) {
+    this.set({ fog: coerceBooleanProperty(fog) });
+  }
+
   get materialType(): AnyConstructor<THREE.SpriteMaterial> {
     return THREE.SpriteMaterial;
   }
@@ -52,6 +56,7 @@ export class NgtSpriteMaterial extends NgtCommonMaterial<THREE.SpriteMaterialPar
       alphaMap: true,
       rotation: true,
       sizeAttenuation: true,
+      fog: true,
     };
   }
 }

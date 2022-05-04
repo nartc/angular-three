@@ -31,9 +31,7 @@ export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<
   }
 
   @Input() set clearcoatRoughness(clearcoatRoughness: NumberInput) {
-    this.set({
-      clearcoatRoughness: coerceNumberProperty(clearcoatRoughness),
-    });
+    this.set({ clearcoatRoughness: coerceNumberProperty(clearcoatRoughness) });
   }
 
   @Input() set clearcoatRoughnessMap(clearcoatRoughnessMap: THREE.Texture | null) {
@@ -77,9 +75,7 @@ export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<
   }
 
   @Input() set attenuationDistance(attenuationDistance: NumberInput) {
-    this.set({
-      attenuationDistance: coerceNumberProperty(attenuationDistance),
-    });
+    this.set({ attenuationDistance: coerceNumberProperty(attenuationDistance) });
   }
 
   @Input() set attenuationColor(attenuationColor: THREE.Color) {
@@ -87,9 +83,7 @@ export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<
   }
 
   @Input() set specularIntensity(specularIntensity: NumberInput) {
-    this.set({
-      specularIntensity: coerceNumberProperty(specularIntensity),
-    });
+    this.set({ specularIntensity: coerceNumberProperty(specularIntensity) });
   }
 
   @Input() set specularColor(specularColor: THREE.Color) {

@@ -48,9 +48,7 @@ export class NgtMeshPhongMaterial extends NgtCommonMaterial<
   }
 
   @Input() set lightMapIntensity(lightMapIntensity: NumberInput) {
-    this.set({
-      lightMapIntensity: coerceNumberProperty(lightMapIntensity),
-    });
+    this.set({ lightMapIntensity: coerceNumberProperty(lightMapIntensity) });
   }
 
   @Input() set aoMap(aoMap: THREE.Texture | null) {
@@ -66,9 +64,7 @@ export class NgtMeshPhongMaterial extends NgtCommonMaterial<
   }
 
   @Input() set emissiveIntensity(emissiveIntensity: NumberInput) {
-    this.set({
-      emissiveIntensity: coerceNumberProperty(emissiveIntensity),
-    });
+    this.set({ emissiveIntensity: coerceNumberProperty(emissiveIntensity) });
   }
 
   @Input() set emissiveMap(emissiveMap: THREE.Texture | null) {
@@ -100,9 +96,7 @@ export class NgtMeshPhongMaterial extends NgtCommonMaterial<
   }
 
   @Input() set displacementScale(displacementScale: NumberInput) {
-    this.set({
-      displacementScale: coerceNumberProperty(displacementScale),
-    });
+    this.set({ displacementScale: coerceNumberProperty(displacementScale) });
   }
 
   @Input() set displacementBias(displacementBias: NumberInput) {
@@ -138,9 +132,7 @@ export class NgtMeshPhongMaterial extends NgtCommonMaterial<
   }
 
   @Input() set wireframeLinewidth(wireframeLinewidth: NumberInput) {
-    this.set({
-      wireframeLinewidth: coerceNumberProperty(wireframeLinewidth),
-    });
+    this.set({ wireframeLinewidth: coerceNumberProperty(wireframeLinewidth) });
   }
 
   @Input() set wireframeLinecap(wireframeLinecap: string) {
@@ -149,6 +141,10 @@ export class NgtMeshPhongMaterial extends NgtCommonMaterial<
 
   @Input() set wireframeLinejoin(wireframeLinejoin: string) {
     this.set({ wireframeLinejoin });
+  }
+
+  @Input() set fog(fog: BooleanInput) {
+    this.set({ fog: coerceBooleanProperty(fog) });
   }
 
   @Input() set flatShading(flatShading: BooleanInput) {
@@ -192,6 +188,7 @@ export class NgtMeshPhongMaterial extends NgtCommonMaterial<
       wireframeLinewidth: true,
       wireframeLinecap: true,
       wireframeLinejoin: true,
+      fog: true,
       flatShading: true,
     };
   }
