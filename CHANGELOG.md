@@ -1,5 +1,18 @@
 
 
+### [5.1.1](https://github.com/nartc/angular-three/compare/5.1.0...5.1.1) (2022-05-04)
+
+
+### Bug Fixes
+
+* **repo:** simplify registerBeforeRender call ([8506248](https://github.com/nartc/angular-three/commit/850624848bd711715e5675292e2eaf59f82dffc1))
+
+
+### Documentations
+
+* typo ([0b13160](https://github.com/nartc/angular-three/commit/0b131607389bdf1d56ab149a28858f474988d31a))
+* update three version ([2de4468](https://github.com/nartc/angular-three/commit/2de44686d72ef61a106fbe2dfa374b7c113a8104))
+
 ## [5.1.0](https://github.com/nartc/angular-three/compare/5.0.3...5.1.0) (2022-05-04)
 
 
