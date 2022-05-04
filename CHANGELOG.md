@@ -1,5 +1,22 @@
 
 
+## [5.1.0](https://github.com/nartc/angular-three/compare/5.0.3...5.1.0) (2022-05-04)
+
+
+### Features
+
+* **core:** update three 0.140 ([25d6a51](https://github.com/nartc/angular-three/commit/25d6a51c4d0a2405f2b2924a03928c7741123a54))
+* **schematics:** bump three version ([7d037cc](https://github.com/nartc/angular-three/commit/7d037cc5c9aed299e3530779c02f21db9a8b4390))
+
+
+### Documentations
+
+* add height field example ([124a003](https://github.com/nartc/angular-three/commit/124a003dc4e542ba3e2bf5fa18414a97eb372cf3))
+* add outputs to build step ([3031d62](https://github.com/nartc/angular-three/commit/3031d622d9316e564ddbb4cb75b00f8fed4abb05))
+* add redirects ([9f9b8f8](https://github.com/nartc/angular-three/commit/9f9b8f8271cf53373ef032377370235d712ab025))
+* adjust height-field example ([aebcf41](https://github.com/nartc/angular-three/commit/aebcf41c727e7dc459907682fd64cac91c456aa7))
+* hardcode href ([5c269be](https://github.com/nartc/angular-three/commit/5c269bea43d8250aa322d6b4483558bf8cc6898a))
+
 ### [5.0.3](https://github.com/nartc/angular-three/compare/5.0.2...5.0.3) (2022-05-02)
 
 
