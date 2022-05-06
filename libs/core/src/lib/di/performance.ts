@@ -14,11 +14,11 @@ export function providePerformanceOptions(options: Partial<NgtPerformanceOptions
   return {
     provide: NGT_PERFORMANCE_OPTIONS,
     useValue: {
-      ...options,
       current: 1,
       min: 0.5,
       max: 1,
       debounce: 200,
+      ...options,
     },
   };
 }
