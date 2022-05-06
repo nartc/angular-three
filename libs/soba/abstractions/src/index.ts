@@ -9,3 +9,4 @@ export * from './lib/image/image-shader-material';
 export * from './lib/gizmo-helper/gizmo-helper';
 export * from './lib/gizmo-helper/gizmo-viewcube';
 export * from './lib/gizmo-helper/gizmo-viewport';
+export * from './lib/text3d/text3d';
