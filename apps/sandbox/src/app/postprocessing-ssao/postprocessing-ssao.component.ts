@@ -5,6 +5,7 @@ import { NgtMeshLambertMaterialModule, NgtMeshStandardMaterialModule } from '@an
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtEffectComposerModule } from '@angular-three/postprocessing';
+import { NgtSSAOEffectModule } from '@angular-three/postprocessing/effects';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -30,6 +31,12 @@ import { BlendFunction } from 'postprocessing';
         <!--          <ngt-ssao-effect [options]="{ blendFunction, intensity: 30, samples: 31, radius: 5 }"></ngt-ssao-effect>-->
         <!--        </ngt-effect-composer>-->
 
+        <ngt-effect-composer>
+          <ng-template ngt-effect-composer-content>
+            <ngt-ssao-effect [blendFunction]="blendFunction" intensity="30" samples="31" radius="5"></ngt-ssao-effect>
+          </ng-template>
+        </ngt-effect-composer>
+
         <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
         <ngt-stats></ngt-stats>
       </ngt-canvas>
@@ -51,7 +58,7 @@ import { BlendFunction } from 'postprocessing';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostProcessingSSAOComponent {
-  blendFunction = BlendFunction.MULTIPLY;
+  blendFunction = BlendFunction.NORMAL;
 
   get blendFunctionName() {
     return this.blendFunction === BlendFunction.NORMAL ? 'NORMAL' : 'MULTIPLY';
@@ -162,6 +169,7 @@ export class GroundComponent {}
     NgtEffectComposerModule,
     NgtSobaOrbitControlsModule,
     NgtStatsModule,
+    NgtSSAOEffectModule,
   ],
 })
 export class PostProcessingSSAOComponentModule {}

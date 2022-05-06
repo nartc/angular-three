@@ -266,7 +266,7 @@ export abstract class NgtInstance<
     return {};
   }
 
-  protected optionsFieldsToOptions(fields: Record<string, boolean>): Observable<UnknownRecord> {
+  protected optionsFieldsToOptions(fields: Record<string, boolean>, keepPrevious = false): Observable<UnknownRecord> {
     const optionEntries = Object.entries(fields);
     if (optionEntries.length === 0) return of({});
     return this.select(
@@ -285,7 +285,7 @@ export abstract class NgtInstance<
       pairwise(),
       map(([prev, curr]) => {
         return Object.entries(curr).reduce((options, [currKey, currValue]) => {
-          if (!is.equ(prev[currKey], currValue)) {
+          if (!is.equ(prev[currKey], currValue) || (keepPrevious && is.equ(prev[currKey], currValue))) {
             options[currKey] = currValue;
           }
           return options;

@@ -12,6 +12,7 @@ import { NgtSobaEnvironmentModule, NgtSobaSkyModule } from '@angular-three/soba/
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Directive, NgModule, NgZone, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { KernelSize } from 'postprocessing';
 import * as THREE from 'three';
 
 @Component({
@@ -42,7 +43,9 @@ import * as THREE from 'three';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ObjectClumpComponent {}
+export class ObjectClumpComponent {
+  readonly kernelSize = KernelSize.VERY_LARGE;
+}
 
 @Directive({
   selector: 'sandbox-pointer',

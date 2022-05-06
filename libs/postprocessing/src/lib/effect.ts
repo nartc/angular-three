@@ -15,8 +15,9 @@ import {
   UnknownRecord,
 } from '@angular-three/core';
 import { Directive, Inject, InjectionToken, Input, NgZone, Optional, Provider, SkipSelf } from '@angular/core';
-import { BlendFunction, Effect, EffectComposer } from 'postprocessing';
+import { BlendFunction, Effect } from 'postprocessing';
 import { tap } from 'rxjs';
+import * as THREE from 'three';
 import { NgtEffectComposer } from './effect-composer';
 
 export const NGT_COMMON_EFFECT_REF = new InjectionToken('NgtCommonEffect ref');
@@ -97,7 +98,7 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
       this.onCanvasReady(this.store.ready$, () => {
         this.init(
           this.select(
-            this.optionsFieldsToOptions(this.effectOptionsFields),
+            this.optionsFieldsToOptions(this.effectOptionsFields, true),
             this.ctorParams$,
             (effectOptions) => effectOptions
           )
@@ -147,7 +148,7 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
       return () => {
         const parent = effect.__ngt__.parent?.value;
         // remove effect ref from parent effect composer
-        if (parent && parent instanceof EffectComposer) {
+        if (parent && (parent as unknown as THREE.Group).isGroup) {
           (parent as NgtUnknownInstance).__ngt__.objects.set((refs) => refs.filter((ref) => ref.value !== effect));
         }
         effect.dispose();

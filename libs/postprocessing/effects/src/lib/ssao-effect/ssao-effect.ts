@@ -99,10 +99,6 @@ export class NgtSSAOEffect extends NgtCommonEffect<SSAOEffect> {
     this.set({ color });
   }
 
-  @Input() set resolutionScale(resolutionScale: NumberInput) {
-    this.set({ resolutionScale: coerceNumberProperty(resolutionScale) });
-  }
-
   @Input() set width(width: NumberInput) {
     this.set({ width: coerceNumberProperty(width) });
   }
@@ -142,7 +138,6 @@ export class NgtSSAOEffect extends NgtCommonEffect<SSAOEffect> {
       bias: true,
       fade: true,
       color: true,
-      resolutionScale: true,
       width: true,
       height: true,
     };
@@ -154,33 +149,44 @@ export class NgtSSAOEffect extends NgtCommonEffect<SSAOEffect> {
       throw new Error(`SSAO can only be used when normalPass is enabled`);
     }
 
-    const options = Object.entries(instanceArgs[0] as UnknownRecord).reduce((result, [key, value]) => {
-      if (value !== undefined) {
-        result[key] = value;
-      }
-      return result;
-    }, {} as UnknownRecord);
+    const {
+      samples,
+      rings,
+      distanceThreshold,
+      distanceFalloff,
+      rangeThreshold,
+      rangeFalloff,
+      luminanceInfluence,
+      radius,
+      scale,
+      bias,
+      intensity,
+      color,
+      normalDepthBuffer,
+      depthAwareUpsampling,
+      ...rest
+    } = instanceArgs[0] as UnknownRecord;
+
     return [
       camera,
       normalPass && !depthDownSamplingPass ? normalPass.texture : null,
       {
-        blendFunction: this.get((s) => s['blendFunction']),
-        samples: 30,
-        rings: 4,
-        distanceThreshold: 1.0,
-        distanceFalloff: 0.0,
-        rangeThreshold: 0.5,
-        rangeFalloff: 0.1,
-        luminanceInfluence: 0.9,
-        radius: 20,
-        scale: 0.5,
-        bias: 0.5,
-        intensity: 1.0,
-        color: null,
-        normalDepthBuffer: depthDownSamplingPass ? depthDownSamplingPass.texture : null,
+        samples: samples ?? 30,
+        rings: rings ?? 4,
+        distanceThreshold: distanceThreshold ?? 1.0,
+        distanceFalloff: distanceFalloff ?? 0.0,
+        rangeThreshold: rangeThreshold ?? 0.5,
+        rangeFalloff: rangeFalloff ?? 0.1,
+        luminanceInfluence: luminanceInfluence ?? 0.9,
+        radius: radius ?? 20,
+        scale: scale ?? 0.5,
+        bias: bias ?? 0.5,
+        intensity: intensity ?? 1.0,
+        color: color ?? null,
+        normalDepthBuffer: normalDepthBuffer ?? (depthDownSamplingPass ? depthDownSamplingPass.texture : null),
         resolutionScale: resolutionScale ?? 1,
-        depthAwareUpsampling: true,
-        ...options,
+        depthAwareUpsampling: depthAwareUpsampling ?? true,
+        ...rest,
       },
     ];
   }
