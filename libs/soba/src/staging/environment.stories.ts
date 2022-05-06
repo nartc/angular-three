@@ -4,6 +4,7 @@ import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaPerspectiveCameraModule } from '@angular-three/soba/cameras';
 import { NgtSobaContactShadowsModule, NgtSobaEnvironmentModule, presetsObj } from '@angular-three/soba/staging';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
+import { createRangeControl } from '../create-control';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
@@ -97,19 +98,9 @@ Ground.argTypes = {
     },
   },
   height: {
-    control: {
-      type: 'range',
-      min: 0,
-      max: 50,
-      step: 0.1,
-    },
+    control: createRangeControl(0, 50, 0.1),
   },
   radius: {
-    control: {
-      type: 'range',
-      min: 0,
-      max: 200,
-      step: 1,
-    },
+    control: createRangeControl(0, 200, 1),
   },
 };
