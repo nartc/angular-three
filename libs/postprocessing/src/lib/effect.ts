@@ -2,17 +2,17 @@ import {
   AnyConstructor,
   AnyFunction,
   coerceNumberProperty,
-  NgtInstance,
-  NgtInstanceState,
-  NgtStore,
-  NgtUnknownInstance,
   NGT_INSTANCE_HOST_REF,
   NGT_INSTANCE_REF,
+  NgtInstance,
+  NgtStore,
+  NgtUnknownInstance,
   NumberInput,
   provideInstanceRef,
   Ref,
   startWithUndefined,
   tapEffect,
+  UnknownRecord,
 } from '@angular-three/core';
 import { Directive, Inject, InjectionToken, Input, NgZone, Optional, Provider, SkipSelf } from '@angular/core';
 import { BlendFunction, Effect, EffectComposer } from 'postprocessing';
@@ -38,26 +38,14 @@ export function provideCommonEffectRef<TType extends AnyConstructor<any>>(
   ];
 }
 
-export interface NgtCommonEffectState<TEffect extends Effect = Effect> extends NgtInstanceState<TEffect> {
-  blendFunction: BlendFunction;
-  opacity?: number;
-}
-
 @Directive()
-export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends NgtInstance<
-  TEffect,
-  NgtCommonEffectState<TEffect>
-> {
+export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends NgtInstance<TEffect> {
   @Input() set opacity(opacity: NumberInput) {
     this.set({ opacity: coerceNumberProperty(opacity) });
   }
 
   @Input() set blendFunction(blendFunction: BlendFunction) {
     this.set({ blendFunction });
-  }
-
-  @Input() set options(options: ConstructorParameters<AnyConstructor<TEffect>>[0]) {
-    this.instanceArgs = options;
   }
 
   abstract get effectType(): AnyConstructor<TEffect>;
@@ -67,8 +55,8 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
   }
 
   protected readonly effectOptions$ = this.select(
-    this.select((s) => s.opacity).pipe(startWithUndefined()),
-    this.select((s) => s.blendFunction),
+    this.select((s) => s['opacity']).pipe(startWithUndefined()),
+    this.select((s) => s['blendFunction']),
     this.instance$
   );
 
@@ -95,17 +83,33 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
 
   protected override preInit() {
     this.set((state) => ({
-      blendFunction: state.blendFunction || this.defaultBlendMode,
+      blendFunction: state['blendFunction'] || this.defaultBlendMode,
     }));
+  }
+
+  protected get effectOptionsFields(): Record<string, boolean> {
+    return { blendFunction: false };
   }
 
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
       this.onCanvasReady(this.store.ready$, () => {
-        this.init(this.ctorParams$);
-        if (!this.skipSetEffectOptions) {
-          this.setEffectOptions(this.effectOptions$);
+        this.init(
+          this.select(
+            this.optionsFieldsToOptions(this.effectOptionsFields),
+            this.ctorParams$,
+            (effectOptions) => effectOptions
+          )
+        );
+        if (!this.skipConfigureBlendMode) {
+          this.configureBlendMode(
+            this.select(
+              this.select((s) => s['opacity']).pipe(startWithUndefined()),
+              this.select((s) => s['blendMode']),
+              this.instance$
+            )
+          );
         }
         this.postInit();
       });
@@ -115,28 +119,11 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
   /**
    * Sub-classes can choose to skip default effect options effect
    */
-  protected get skipSetEffectOptions() {
+  protected get skipConfigureBlendMode() {
     return false;
   }
 
-  private readonly init = this.effect<{}>(
-    tapEffect(() => {
-      const instanceArgs = this.get((s) => s.instanceArgs);
-      const effectCtorParams = this.adjustCtorParams(instanceArgs);
-      const effect = this.prepareInstance(new this.effectType(...effectCtorParams));
-
-      return () => {
-        const parent = effect.__ngt__.parent?.value;
-        // remove effect ref from parent effect composer
-        if (parent && parent instanceof EffectComposer) {
-          (parent as NgtUnknownInstance).__ngt__.objects.set((refs) => refs.filter((ref) => ref.value !== effect));
-        }
-        effect.dispose();
-      };
-    })
-  );
-
-  private readonly setEffectOptions = this.effect<{}>(
+  private readonly configureBlendMode = this.effect<{}>(
     tap(() => {
       const { instance: effect, blendFunction, opacity } = this.get();
       const invalidate = this.store.get((s) => s.invalidate);
@@ -149,6 +136,22 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
         }
       }
       invalidate();
+    })
+  );
+
+  private readonly init = this.effect<UnknownRecord>(
+    tapEffect((effectOptions) => {
+      const effectCtorParams = this.adjustCtorParams([effectOptions]);
+      const effect = this.prepareInstance(new this.effectType(...effectCtorParams));
+
+      return () => {
+        const parent = effect.__ngt__.parent?.value;
+        // remove effect ref from parent effect composer
+        if (parent && parent instanceof EffectComposer) {
+          (parent as NgtUnknownInstance).__ngt__.objects.set((refs) => refs.filter((ref) => ref.value !== effect));
+        }
+        effect.dispose();
+      };
     })
   );
 }

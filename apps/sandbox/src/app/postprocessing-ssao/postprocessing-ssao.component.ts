@@ -5,7 +5,6 @@ import { NgtMeshLambertMaterialModule, NgtMeshStandardMaterialModule } from '@an
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtEffectComposerModule } from '@angular-three/postprocessing';
-import { NgtSSAOModule } from '@angular-three/postprocessing/effects';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -27,9 +26,9 @@ import { BlendFunction } from 'postprocessing';
         <sandbox-wall></sandbox-wall>
         <sandbox-ground></sandbox-ground>
 
-        <ngt-effect-composer>
-          <ngt-ssao [options]="{ blendFunction, intensity: 30, samples: 31, radius: 5 }"></ngt-ssao>
-        </ngt-effect-composer>
+        <!--        <ngt-effect-composer>-->
+        <!--          <ngt-ssao-effect [options]="{ blendFunction, intensity: 30, samples: 31, radius: 5 }"></ngt-ssao-effect>-->
+        <!--        </ngt-effect-composer>-->
 
         <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
         <ngt-stats></ngt-stats>
@@ -161,7 +160,6 @@ export class GroundComponent {}
     NgtCanvasModule,
     NgtDirectionalLightModule,
     NgtEffectComposerModule,
-    NgtSSAOModule,
     NgtSobaOrbitControlsModule,
     NgtStatsModule,
   ],

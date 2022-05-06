@@ -126,7 +126,9 @@ The idea of _"attaching"_ is that each NGT object put on the template with the p
 @Component({
   template: `
     <ngt-effect-composer>
-      <ngt-bloom [attach]="attachEffect"></ngt-bloom>
+      <ng-template ngt-effect-composer-content>
+        <ngt-bloom-effect [attach]="attachEffect"></ngt-bloom-effect>
+      </ng-template>
     </ngt-effect-composer>
   `,
 })

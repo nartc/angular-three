@@ -20,11 +20,19 @@ import {
 } from 'typescript/lib/tsserverlibrary';
 
 const cached = new Map();
+const sourceFileCached = new Map();
 
 export function pathToSourceFile(tree: Tree, dtsPath: string): SourceFile {
-  const dtsContent = tree.read(dtsPath, 'utf-8');
+  if (!sourceFileCached.has(dtsPath)) {
+    const dtsContent = tree.read(dtsPath, 'utf-8');
 
-  return createSourceFile('sourceFile.d.ts', dtsContent, ScriptTarget.Latest, true, ScriptKind.TS);
+    sourceFileCached.set(
+      dtsPath,
+      createSourceFile('sourceFile.d.ts', dtsContent, ScriptTarget.Latest, true, ScriptKind.TS)
+    );
+  }
+
+  return sourceFileCached.get(dtsPath);
 }
 
 export function astFromPath(
@@ -35,16 +43,29 @@ export function astFromPath(
     overrideOptional?: Record<string, boolean>;
     base?: [string, SourceFile, (PropertySignature | ParameterDeclaration)[]];
   }
-): Record<
-  string,
-  {
+): {
+  inputs: {
+    name: string;
+    isNumberInput: boolean;
+    isBooleanInput: boolean;
     propertyName: string;
     type: string;
     isOptional: boolean;
     shouldOverride: boolean;
-  }
-> {
-  const record = {};
+  }[];
+  hasInput: boolean;
+  hasBooleanInput: boolean;
+  hasNumberInput: boolean;
+} {
+  const record: Record<
+    string,
+    {
+      propertyName: string;
+      type: string;
+      isOptional: boolean;
+      shouldOverride: boolean;
+    }
+  > = {};
   const sourceFile = pathToSourceFile(tree, dtsPath);
 
   const { mainProperties, base, overrideOptional = {} } = propertiesFactory(sourceFile);
@@ -83,7 +104,19 @@ export function astFromPath(
     };
   });
 
-  return record;
+  const inputs = Object.entries(record).map(([inputName, inputInfo]) => ({
+    name: inputName,
+    ...inputInfo,
+    isNumberInput: inputInfo.type.includes('number'),
+    isBooleanInput: inputInfo.type.includes('boolean'),
+  }));
+
+  return {
+    inputs,
+    hasInput: inputs.length > 0,
+    hasBooleanInput: inputs.some((input) => input.isBooleanInput),
+    hasNumberInput: inputs.some((input) => input.isNumberInput),
+  };
 }
 
 export function getType(sourceFile: SourceFile, type: TypeNode, isArray = false) {
@@ -138,6 +171,9 @@ export function getThreeType(type: string): string {
     'ImageBitmap',
     'ImageData',
     'BufferSource',
+    'KernelSize',
+    'ToneMappingMode',
+    'VignetteTechnique',
   ].includes(type)
     ? type
     : `THREE.${type}`;

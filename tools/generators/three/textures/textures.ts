@@ -102,20 +102,10 @@ export default async function texturesGenerator(tree: Tree) {
       return { mainProperties: mainParameters, base };
     });
 
-    const inputs = Object.entries(inputRecord).map(([inputName, inputInfo]) => ({
-      name: inputName,
-      ...inputInfo,
-      isNumberInput: inputInfo.type.includes('number'),
-      isBooleanInput: inputInfo.type.includes('boolean'),
-    }));
-
     generateFiles(tree, join(__dirname, 'files/lib'), join(textureDir, 'src', 'lib', normalizedNames.fileName), {
       ...normalizedNames,
       tmpl: '',
-      inputs,
-      hasInput: inputs.length > 0,
-      hasBooleanInput: inputs.some((input) => input.isBooleanInput),
-      hasNumberInput: inputs.some((input) => input.isNumberInput),
+      ...inputRecord,
     });
 
     generatedTextures.push(normalizedNames.fileName);

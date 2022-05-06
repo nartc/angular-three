@@ -174,13 +174,6 @@ export default async function materialsGenerator(tree: Tree) {
       return { mainProperties, base };
     });
 
-    const inputs = Object.entries(inputRecord).map(([inputName, inputInfo]) => ({
-      name: inputName,
-      ...inputInfo,
-      isNumberInput: inputInfo.type.includes('number'),
-      isBooleanInput: inputInfo.type.includes('boolean'),
-    }));
-
     generateFiles(tree, join(__dirname, 'files/lib'), join(materialDir, 'src', 'lib', normalizedNames.fileName), {
       ...normalizedNames,
       material: name,
@@ -188,10 +181,7 @@ export default async function materialsGenerator(tree: Tree) {
       tmpl: '',
       typeDef,
       extend,
-      inputs,
-      hasInput: inputs.length > 0,
-      hasBooleanInput: inputs.some((input) => input.isBooleanInput),
-      hasNumberInput: inputs.some((input) => input.isNumberInput),
+      ...inputRecord,
     });
 
     generatedMaterials.push(normalizedNames.fileName);

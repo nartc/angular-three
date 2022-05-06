@@ -1,4 +1,4 @@
-import { AnyConstructor, coerceNumberProperty, NgtVector3, NumberInput, UnknownRecord } from '@angular-three/core';
+import { AnyConstructor, coerceNumberProperty, NgtVector3, NumberInput } from '@angular-three/core';
 import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { DepthOfFieldEffect } from 'postprocessing';
@@ -6,16 +6,46 @@ import { tap } from 'rxjs';
 import * as THREE from 'three';
 
 @Component({
-  selector: 'ngt-depth-of-field',
+  selector: 'ngt-depth-of-field-effect',
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonEffectRef(NgtDepthOfField)],
+  providers: [provideCommonEffectRef(NgtDepthOfFieldEffect)],
 })
-export class NgtDepthOfField extends NgtCommonEffect<DepthOfFieldEffect> {
-  static ngAcceptInputType_options: ConstructorParameters<AnyConstructor<DepthOfFieldEffect>>[1] | undefined;
-
+export class NgtDepthOfFieldEffect extends NgtCommonEffect<DepthOfFieldEffect> {
   override get effectType(): AnyConstructor<DepthOfFieldEffect> {
     return DepthOfFieldEffect;
+  }
+
+  @Input() set worldFocusDistance(worldFocusDistance: NumberInput) {
+    this.set({ worldFocusDistance: coerceNumberProperty(worldFocusDistance) });
+  }
+
+  @Input() set worldFocusRange(worldFocusRange: NumberInput) {
+    this.set({ worldFocusRange: coerceNumberProperty(worldFocusRange) });
+  }
+
+  @Input() set focusDistance(focusDistance: NumberInput) {
+    this.set({ focusDistance: coerceNumberProperty(focusDistance) });
+  }
+
+  @Input() set focalLength(focalLength: NumberInput) {
+    this.set({ focalLength: coerceNumberProperty(focalLength) });
+  }
+
+  @Input() set focusRange(focusRange: NumberInput) {
+    this.set({ focusRange: coerceNumberProperty(focusRange) });
+  }
+
+  @Input() set bokehScale(bokehScale: NumberInput) {
+    this.set({ bokehScale: coerceNumberProperty(bokehScale) });
+  }
+
+  @Input() set width(width: NumberInput) {
+    this.set({ width: coerceNumberProperty(width) });
+  }
+
+  @Input() set height(height: NumberInput) {
+    this.set({ height: coerceNumberProperty(height) });
   }
 
   @Input() set target(target: NgtVector3) {
@@ -38,18 +68,28 @@ export class NgtDepthOfField extends NgtCommonEffect<DepthOfFieldEffect> {
 
   protected override adjustCtorParams(instanceArgs: unknown[]): unknown[] {
     const camera = this.effectComposer.get((s) => s.camera);
-    const blur = this.get((s) => s['blur']);
-    return [camera, { ...(instanceArgs[0] as UnknownRecord), blur }];
+    return [camera, instanceArgs[0]];
+  }
+
+  protected override get effectOptionsFields(): Record<string, boolean> {
+    return {
+      ...super.effectOptionsFields,
+      worldFocusDistance: true,
+      worldFocusRange: true,
+      focusDistance: true,
+      focalLength: true,
+      focusRange: true,
+      bokehScale: true,
+      width: true,
+      height: true,
+    };
   }
 
   protected override get ctorParams$() {
-    return this.select(
-      this.effectComposer.select((s) => s.camera),
-      this.instanceArgs$
-    );
+    return this.select(this.effectComposer.select((s) => s.camera));
   }
 
-  protected override get skipSetEffectOptions(): boolean {
+  protected override get skipConfigureBlendMode(): boolean {
     return true;
   }
 
@@ -82,7 +122,7 @@ export class NgtDepthOfField extends NgtCommonEffect<DepthOfFieldEffect> {
 }
 
 @NgModule({
-  declarations: [NgtDepthOfField],
-  exports: [NgtDepthOfField],
+  declarations: [NgtDepthOfFieldEffect],
+  exports: [NgtDepthOfFieldEffect],
 })
-export class NgtDepthOfFieldModule {}
+export class NgtDepthOfFieldEffectModule {}

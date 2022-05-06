@@ -266,8 +266,8 @@ export abstract class NgtInstance<
     return {};
   }
 
-  private get options$(): Observable<UnknownRecord> {
-    const optionEntries = Object.entries(this.optionFields);
+  protected optionsFieldsToOptions(fields: Record<string, boolean>): Observable<UnknownRecord> {
+    const optionEntries = Object.entries(fields);
     if (optionEntries.length === 0) return of({});
     return this.select(
       ...optionEntries.map(([inputKey, shouldStartWithUndefined]) => {
@@ -304,7 +304,9 @@ export abstract class NgtInstance<
   private readonly instanceReady = this.effect<TInstance>(
     tapEffect(() => {
       // assigning
-      const setOptionsSub = this.setOptions(this.select(this.options$, this.setOptionsTrigger$, (options) => options));
+      const setOptionsSub = this.setOptions(
+        this.select(this.optionsFieldsToOptions(this.optionFields), this.setOptionsTrigger$, (options) => options)
+      );
 
       // attaching
       if (!this.get((s) => s.noAttach)) {

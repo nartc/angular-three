@@ -6,7 +6,7 @@ import { NgtAmbientLightModule, NgtDirectionalLightModule, NgtSpotLightModule } 
 import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtInstancedMeshModule } from '@angular-three/core/meshes';
 import { NgtEffectComposerModule } from '@angular-three/postprocessing';
-import { NgtBloomModule, NgtSSAOModule } from '@angular-three/postprocessing/effects';
+import { NgtBloomEffectModule } from '@angular-three/postprocessing/effects';
 import { NgtTextureLoader } from '@angular-three/soba/loaders';
 import { NgtSobaEnvironmentModule, NgtSobaSkyModule } from '@angular-three/soba/staging';
 import { CommonModule } from '@angular/common';
@@ -33,7 +33,7 @@ import * as THREE from 'three';
 
       <ngt-effect-composer>
         <ng-template ngt-effect-composer-content>
-          <ngt-bloom></ngt-bloom>
+          <ngt-bloom-effect></ngt-bloom-effect>
         </ng-template>
       </ngt-effect-composer>
 
@@ -141,7 +141,6 @@ export class ClumpComponent {
     CommonModule,
     RouterModule.forChild([{ path: '', component: ObjectClumpComponent }]),
     NgtEffectComposerModule,
-    NgtSSAOModule,
     NgtInstancedMeshModule,
     NgtSphereGeometryModule,
     NgtMeshStandardMaterialModule,
@@ -153,7 +152,7 @@ export class ClumpComponent {
     NgtPhysicsModule,
     NgtSobaEnvironmentModule,
     NgtSobaSkyModule,
-    NgtBloomModule,
+    NgtBloomEffectModule,
     NgtValueAttributeModule,
     NgtCannonDebugModule,
   ],

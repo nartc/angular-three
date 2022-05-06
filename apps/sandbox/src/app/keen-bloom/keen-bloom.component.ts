@@ -5,7 +5,7 @@ import { NgtAmbientLightModule, NgtDirectionalLightModule } from '@angular-three
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtEffectComposerModule } from '@angular-three/postprocessing';
-import { NgtBloomModule, NgtNoiseModule, NgtSSAOModule } from '@angular-three/postprocessing/effects';
+import { NgtBloomEffectModule } from '@angular-three/postprocessing/effects';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { NgtGLTFLoader, NgtSobaLoaderModule } from '@angular-three/soba/loaders';
 import { CommonModule } from '@angular/common';
@@ -27,7 +27,7 @@ import * as THREE from 'three';
 
       <ngt-effect-composer>
         <ng-template ngt-effect-composer-content>
-          <ngt-bloom></ngt-bloom>
+          <ngt-bloom-effect></ngt-bloom-effect>
         </ng-template>
       </ngt-effect-composer>
     </ngt-canvas>
@@ -85,13 +85,11 @@ export class KeenComponent {
     NgtAmbientLightModule,
     NgtDirectionalLightModule,
     NgtEffectComposerModule,
-    NgtBloomModule,
     NgtStatsModule,
-    NgtNoiseModule,
     NgtSobaLoaderModule,
     NgtSobaOrbitControlsModule,
     NgtColorAttributeModule,
-    NgtSSAOModule,
+    NgtBloomEffectModule,
   ],
 })
 export class KeenComponentModule {}

@@ -1,11 +1,11 @@
 // GENERATED
-import { AnyConstructor } from '@angular-three/core';
+import { AnyConstructor,<% if (hasBooleanInput) { %>coerceBooleanProperty, BooleanInput,<% } %><% if (hasNumberInput) { %> coerceNumberProperty, NumberInput,<% } %> } from '@angular-three/core';
 import {
     NgtCommonEffect,
     provideCommonEffectRef,
 } from '@angular-three/postprocessing';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %>Effect } from 'postprocessing';
+import { ChangeDetectionStrategy, Component, NgModule<% if (hasInput) { %>, Input<% } %> } from '@angular/core';
+import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %><% for (const extraImport of extraImports) {%>,<%= extraImport %><% } %> } from 'postprocessing';
 
 @Component({
     selector: 'ngt-<%= fileName %>',
@@ -13,18 +13,27 @@ import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %>Effect } fro
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [provideCommonEffectRef(Ngt<%= name %>)],
 })
-export class Ngt<%= name %> extends NgtCommonEffect<<%= name %>Effect> {
-    static ngAcceptInputType_options:
-        | ConstructorParameters<AnyConstructor<<%= name %>Effect>>[0]
-        | undefined;
-
-    override get effectType(): AnyConstructor<<%= name %>Effect> {
-        return <%= name %>Effect;
+export class Ngt<%= name %> extends NgtCommonEffect<<%= name %>> {
+    override get effectType(): AnyConstructor<<%= name %>> {
+        return <%= name %>;
     }
+    <% for (const input of inputs) { %>
+    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <% if (input.isBooleanInput) { %>BooleanInput<% } else if (input.isNumberInput) { %>NumberInput<% } else { %><%= input.type %><% } %>) {
+        this.set({ <% if (input.isBooleanInput || input.isNumberInput) { %><%= input.name %>: <% if (input.isNumberInput) { %>coerceNumberProperty<% } else { %>coerceBooleanProperty<% } %>(<%= input.name %>)<% } else { %><%= input.name %><% } %> });
+    }
+    <% } %>
     <% if (blendFunction) { %>
     protected override get defaultBlendMode(): BlendFunction {
         return BlendFunction.<%= blendFunction %>;
     }<% } %>
+    <% if (hasInput) { %>
+    protected override get effectOptionsFields(): Record<string, boolean> {
+        return {
+            ...super.effectOptionsFields,<% for (const input of inputs) { %>
+            <%= input.name %>: <%= input.isOptional %>,<% } %>
+        };
+    }<% } %>
+
 }
 
 @NgModule({

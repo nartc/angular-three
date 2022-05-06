@@ -50,16 +50,10 @@ export default async function spritesGenerator(tree: Tree): Promise<string[]> {
       return { mainProperties: mainParameters };
     });
 
-    const inputs = Object.entries(inputRecord).map(([inputName, inputInfo]) => ({
-      name: inputName,
-      ...inputInfo,
-    }));
-
     generateFiles(tree, join(__dirname, 'files/lib'), join(spriteDir, 'src', 'lib', normalizedNames.fileName), {
       ...normalizedNames,
       tmpl: '',
-      inputs,
-      hasInput: inputs.length > 0,
+      ...inputRecord,
     });
 
     generatedSprites.push(normalizedNames.fileName);
