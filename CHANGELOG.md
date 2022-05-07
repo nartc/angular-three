@@ -1,5 +1,44 @@
 
 
+## [5.2.0](https://github.com/nartc/angular-three/compare/5.1.1...5.2.0) (2022-05-07)
+
+
+### Features
+
+* **core:** add update event emitter to instance which emits after setOptions ([f865c73](https://github.com/nartc/angular-three/commit/f865c7363c64311dd3b6ca31fe310fc01d29b283))
+* **postprocessing:** rename simple effects; use individual inputs ([0c871ad](https://github.com/nartc/angular-three/commit/0c871adccb92d53c762938a78d6ca856c07f7870))
+* **soba:** add AdaptiveDpr and AdaptiveEvents to react to performance regression on camera movements ([1dbbd62](https://github.com/nartc/angular-three/commit/1dbbd622c75a59f1ca07b7a8320afedfa3e711f2))
+* **soba:** add soba text3d ([8c68720](https://github.com/nartc/angular-three/commit/8c68720d2dfad76e1d3b92b03c5ba7cb801f921a))
+
+
+### Bug Fixes
+
+* **core:** re-int object on instanceArg$ changes ([9128e17](https://github.com/nartc/angular-three/commit/9128e170e05488b31d53251c6ee9b1ac871dfdec))
+* **core:** wrong merge logic for performance options ([e55f93e](https://github.com/nartc/angular-three/commit/e55f93e6fb13838b5ad4da8b59d76de83104edfc))
+* **postprocessing:** ssao effect ([2c871df](https://github.com/nartc/angular-three/commit/2c871dfa540a8e01ad37e9e0da7d5caf5392c143))
+* **soba:** avoid error when colors length less than stops length in gradient texture ([6cd6abf](https://github.com/nartc/angular-three/commit/6cd6abf50d16137d8682c57a6eb24e2e4ec55214))
+* **soba:** fix ContentChildren for Float ([f839b97](https://github.com/nartc/angular-three/commit/f839b97da4de5bcddf228e98e249bb45d9fdb583))
+* **soba:** fix ContentChildren for Stage ([250059c](https://github.com/nartc/angular-three/commit/250059cbbc15608383f51d2b33436d628b540223))
+* **soba:** fix ContentChildren; use ref for Center ([ea7cd19](https://github.com/nartc/angular-three/commit/ea7cd19266da4f499cf7dec80677e54a30108c6c))
+* **soba:** fix ContentChildren; use ref for Detailed ([fc150e3](https://github.com/nartc/angular-three/commit/fc150e34a7e93f19c9ee57180e666765446369c0))
+* **soba:** override update for gizmo helper since instance now has update event emitter ([b8111df](https://github.com/nartc/angular-three/commit/b8111df3d50c9959f24bf3d257c066ea0adf481a))
+* **soba:** use ref for Backdrop ([8d606fc](https://github.com/nartc/angular-three/commit/8d606fca8d570b54a70cc9c0680097b8a1a3386e))
+* **soba:** use ref for ContactShadows ([c428794](https://github.com/nartc/angular-three/commit/c428794bf5a72a5b97c21a4ab15ca2738d403834))
+* **soba:** use ref for Environment ([e479d2f](https://github.com/nartc/angular-three/commit/e479d2f1fc232cfc6af741fc873301b5a41ac3de))
+* **soba:** use ref for Gizmo ([5b35a25](https://github.com/nartc/angular-three/commit/5b35a25a33f6eabe7df00b27323cda5fb09b6dc1))
+* **soba:** use ref for Spotlight ([8cdfdb3](https://github.com/nartc/angular-three/commit/8cdfdb3efea88b662a0e6cea4d10f7a50e5454ed))
+
+
+### Documentations
+
+* add adaptive stories ([1117add](https://github.com/nartc/angular-three/commit/1117add387627be36f8c3720c026054e2c5900f9))
+* add args/props for gradient texture story ([0f33e0c](https://github.com/nartc/angular-three/commit/0f33e0ce9ecd38c5e83b701092b1cc5c3b83bfad))
+* add CDK to use platform for poster ([e56ea64](https://github.com/nartc/angular-three/commit/e56ea649f17fca1bac806b19af60b526bc94038a))
+* adjust workflow ([bf96d88](https://github.com/nartc/angular-three/commit/bf96d882675737b725a86b23d6e213ac231d7304))
+* match Drei's props on some stories ([f41eaf9](https://github.com/nartc/angular-three/commit/f41eaf9274787c57a681f795211c1bfdb6ad5835))
+* use createRangeControl ([2305d07](https://github.com/nartc/angular-three/commit/2305d0782c98950b036ea8fcf1101a2d89a1e8bc))
+* use white background for stage stories to see shadow better ([c6569ce](https://github.com/nartc/angular-three/commit/c6569ce954e744c32e44a9d4c3f46a7edb45eecb))
+
 ### [5.1.1](https://github.com/nartc/angular-three/compare/5.1.0...5.1.1) (2022-05-04)
 
 
