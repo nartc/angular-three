@@ -22,13 +22,14 @@ import {
   NgModule,
   TemplateRef,
 } from '@angular/core';
-import { tap } from 'rxjs';
+import { filter, tap } from 'rxjs';
 import * as THREE from 'three';
 
 const easeInExpo = (x: number) => (x === 0 ? 0 : Math.pow(2, 10 * x - 10));
 
 export interface NgtSobaBackdropState extends NgtObjectInputsState<THREE.Group> {
   backdrop: Ref<THREE.Mesh>;
+  planeGeometry: Ref<THREE.PlaneGeometry>;
   floor: number;
   segments: number;
 }
@@ -49,10 +50,7 @@ export class NgtSobaBackdropContent {
   template: `
     <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this" receiveShadow="false" skipParent>
       <ngt-mesh [ref]="backdropMesh" [receiveShadow]="receiveShadow" [rotation]="[-90 | radian, 0, 90 | radian]">
-        <ngt-plane-geometry
-          (ready)="set({ planeGeometry: $event })"
-          [args]="[1, 1, $any(segments), $any(segments)]"
-        ></ngt-plane-geometry>
+        <ngt-plane-geometry [ref]="planeGeometry" [args]="[1, 1, $any(segments), $any(segments)]"></ngt-plane-geometry>
         <ng-container
           *ngIf="content"
           [ngTemplateOutlet]="content.templateRef"
@@ -82,10 +80,15 @@ export class NgtSobaBackdrop extends NgtObjectInputs<THREE.Group, NgtSobaBackdro
     return this.get((s) => s.backdrop);
   }
 
+  get planeGeometry() {
+    return this.get((s) => s.planeGeometry);
+  }
+
   protected override preInit() {
     super.preInit();
     this.set((state) => ({
       backdrop: new Ref(),
+      planeGeometry: new Ref(),
       floor: state.floor ?? 0.25,
       segments: state.segments ?? 20,
     }));
@@ -99,7 +102,7 @@ export class NgtSobaBackdrop extends NgtObjectInputs<THREE.Group, NgtSobaBackdro
           this.select(
             this.select((s) => s.segments),
             this.select((s) => s.floor),
-            this.select((s) => s['planeGeometry'])
+            this.get((s) => s.planeGeometry).pipe(filter((geometry) => !!geometry))
           )
         );
       });
@@ -111,7 +114,7 @@ export class NgtSobaBackdrop extends NgtObjectInputs<THREE.Group, NgtSobaBackdro
       const { segments, floor, planeGeometry } = this.get();
       let i = 0;
       const offset = segments / segments / 2;
-      const position = planeGeometry.attributes.position;
+      const position = planeGeometry.value.attributes['position'];
       for (let x = 0; x < segments + 1; x++) {
         for (let y = 0; y < segments + 1; y++) {
           position.setXYZ(
@@ -123,7 +126,7 @@ export class NgtSobaBackdrop extends NgtObjectInputs<THREE.Group, NgtSobaBackdro
         }
       }
       checkNeedsUpdate(position);
-      planeGeometry.computeVertexNormals();
+      planeGeometry.value.computeVertexNormals();
     })
   );
 }
