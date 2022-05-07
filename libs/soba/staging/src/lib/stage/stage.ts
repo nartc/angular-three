@@ -23,10 +23,11 @@ import {
   Directive,
   Input,
   NgModule,
+  OnInit,
   QueryList,
   TemplateRef,
 } from '@angular/core';
-import { asyncScheduler, defer, filter, observeOn, of, pipe, skip, startWith, tap } from 'rxjs';
+import { asyncScheduler, combineLatest, filter, observeOn, pipe, skip, switchMap, tap } from 'rxjs';
 import * as THREE from 'three';
 import { NgtSobaContactShadowsModule } from '../contact-shadows/contact-shadows';
 import { NgtSobaEnvironmentModule } from '../environment/environment';
@@ -80,8 +81,6 @@ export interface NgtSobaStageState extends NgtObjectInputsState<THREE.Group> {
   selector: 'ng-template[ngt-soba-stage-content]',
 })
 export class NgtSobaStageContent {
-  @ContentChildren(NGT_OBJECT_REF) children!: QueryList<AnyFunction>;
-
   constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group> }>) {}
 
   static ngTemplateContextGuard(dir: NgtSobaStageContent, ctx: any): ctx is { group: Ref<THREE.Group> } {
@@ -128,12 +127,11 @@ export class NgtSobaStageContent {
         [intensity]="intensity"
       ></ngt-point-light>
     </ngt-group>
-    <ng-content></ng-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaStage, (stage) => stage.innerGroup)],
 })
-export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState> {
+export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState> implements OnInit {
   get shadows() {
     return this.get((s) => s.shadows);
   }
@@ -199,6 +197,7 @@ export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState
   }
 
   @ContentChild(NgtSobaStageContent) content?: NgtSobaStageContent;
+  @ContentChildren(NGT_OBJECT_REF) children!: QueryList<AnyFunction>;
 
   get innerGroup() {
     return this.get((s) => s.innerGroup);
@@ -246,17 +245,14 @@ export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState
     }));
   }
 
-  override ngOnInit() {
-    super.ngOnInit();
+  ngAfterContentInit() {
     this.zone.runOutsideAngular(() => {
       this.onCanvasReady(this.store.ready$, () => {
         this.setDimensions(
           this.select(
             this.innerGroup.pipe(filter((group) => !!group)),
             this.outerGroup.pipe(filter((group) => !!group)),
-            defer(() => {
-              return this.content?.children.changes.pipe(startWith(this.content?.children)) || of(null);
-            })
+            this.children.changes.pipe(switchMap(() => combineLatest(this.children.map((child) => child()))))
           )
         );
 

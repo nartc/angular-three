@@ -122,4 +122,15 @@ export const routes: Routes = [
       source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/movement-regression',
     },
   },
+  {
+    path: 'reuse-gltf',
+    loadChildren: () => import('./reuse-gltf/reuse-gltf.component').then((m) => m.ReuseGltfComponentModule),
+    data: {
+      title: 'Reusing GLTF',
+      description: 'Performance tip by reusing GLTF with NgtGLTFLoader',
+      link: '/reuse-gltf',
+      asset: 'assets/examples/reuse-gltf',
+      source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/reuse-gltf',
+    },
+  },
 ];
