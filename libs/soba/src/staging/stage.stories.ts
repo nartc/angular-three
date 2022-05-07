@@ -8,7 +8,7 @@ import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 export default {
   title: 'Staging/Stage',
   decorators: [
-    componentWrapperDecorator(setupCanvas({ cameraPosition: [0, 0, 3] })),
+    componentWrapperDecorator(setupCanvas({ cameraPosition: [0, 0, 3], black: false })),
     moduleMetadata({
       imports: [
         ...setupCanvasModules,
@@ -31,12 +31,12 @@ export const Default: Story = (args) => ({
       [environment]="environment"
       [preset]="preset"
     >
-          <ng-template ngt-soba-stage-content>
-              <ngt-mesh>
-                  <ngt-sphere-geometry [args]="[1, 24, 24]"></ngt-sphere-geometry>
-                  <ngt-mesh-phong-material color="royalblue"></ngt-mesh-phong-material>
-              </ngt-mesh>
-          </ng-template>
+      <ng-template ngt-soba-stage-content>
+        <ngt-mesh>
+            <ngt-sphere-geometry [args]="[1, 24, 24]"></ngt-sphere-geometry>
+            <ngt-mesh-phong-material color="royalblue"></ngt-mesh-phong-material>
+        </ngt-mesh>
+      </ng-template>
     </ngt-soba-stage>
   `,
 });
