@@ -22,13 +22,12 @@ import {
   QueryList,
   TemplateRef,
 } from '@angular/core';
+import * as THREE from 'three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-float-content]',
 })
 export class NgtSobaFloatContent {
-  @ContentChildren(NGT_OBJECT_REF) children!: QueryList<AnyFunction>;
-
   constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group> }>) {}
 
   static ngTemplateContextGuard(dir: NgtSobaFloatContent, ctx: any): ctx is { group: Ref<THREE.Group> } {
@@ -77,6 +76,7 @@ export class NgtSobaFloat extends NgtObjectInputs<THREE.Group, NgtSobaFloatState
   }
 
   @ContentChild(NgtSobaFloatContent) content?: NgtSobaFloatContent;
+  @ContentChildren(NGT_OBJECT_REF) children!: QueryList<AnyFunction>;
 
   private readonly offset = Math.random() * 10000;
 
