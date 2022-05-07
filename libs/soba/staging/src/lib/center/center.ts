@@ -12,6 +12,7 @@ import {
 import { NgtGroupModule } from '@angular-three/core/group';
 import { CommonModule } from '@angular/common';
 import {
+  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   ContentChild,
@@ -22,15 +23,13 @@ import {
   QueryList,
   TemplateRef,
 } from '@angular/core';
-import { asyncScheduler, defer, filter, observeOn, of, pipe, startWith, tap } from 'rxjs';
+import { asyncScheduler, combineLatest, filter, observeOn, pipe, switchMap, tap } from 'rxjs';
 import * as THREE from 'three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-center-content]',
 })
 export class NgtSobaCenterContent {
-  @ContentChildren(NGT_OBJECT_REF) children!: QueryList<AnyFunction>;
-
   constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group> }>) {}
 
   static ngTemplateContextGuard(dir: NgtSobaCenterContent, ctx: any): ctx is { group: Ref<THREE.Group> } {
@@ -64,12 +63,13 @@ export interface NgtSobaCenterState extends NgtObjectInputsState<THREE.Group> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaCenter, (center) => center.innerGroup)],
 })
-export class NgtSobaCenter extends NgtObjectInputs<THREE.Group, NgtSobaCenterState> {
+export class NgtSobaCenter extends NgtObjectInputs<THREE.Group, NgtSobaCenterState> implements AfterContentInit {
   @Input() set alignTop(alignTop: BooleanInput) {
     this.set({ alignTop: coerceBooleanProperty(alignTop) });
   }
 
   @ContentChild(NgtSobaCenterContent) content?: NgtSobaCenterContent;
+  @ContentChildren(NGT_OBJECT_REF) children!: QueryList<AnyFunction>;
 
   get innerGroup() {
     return this.get((s) => s.innerGroup);
@@ -88,8 +88,7 @@ export class NgtSobaCenter extends NgtObjectInputs<THREE.Group, NgtSobaCenterSta
     }));
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  ngAfterContentInit() {
     this.zone.runOutsideAngular(() => {
       this.onCanvasReady(this.store.ready$, () => {
         this.setPosition(
@@ -97,9 +96,7 @@ export class NgtSobaCenter extends NgtObjectInputs<THREE.Group, NgtSobaCenterSta
             this.innerGroup.pipe(filter((group) => !!group)),
             this.outerGroup.pipe(filter((group) => !!group)),
             this.select((s) => s.alignTop),
-            defer(() => {
-              return this.content?.children.changes.pipe(startWith(this.content?.children)) || of(null);
-            })
+            this.children.changes.pipe(switchMap(() => combineLatest(this.children.map((child) => child()))))
           )
         );
       });
