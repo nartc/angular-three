@@ -110,18 +110,35 @@ export default {
         CustomCameraStoryModule,
       ],
     }),
-  ],
+    ],
 } as Meta;
 
-export const Default: Story = () => ({
+export const Default: Story = (args) => ({
+  props: args,
   template: `
-        <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+        <ngt-soba-orbit-controls
+              [enabled]="enabled"
+              [enableDamping]="enableDamping"
+              [enablePan]="enablePan"
+              [enableRotate]="enableRotate"
+              [enableZoom]="enableZoom"
+              [reverseOrbit]="reverseOrbit">
+        </ngt-soba-orbit-controls>
         <ngt-mesh>
             <ngt-box-geometry></ngt-box-geometry>
             <ngt-mesh-basic-material wireframe></ngt-mesh-basic-material>
         </ngt-mesh>
     `,
 });
+
+Default.args = {
+    enabled: true,
+    enableDamping: true,
+    enablePan: true,
+    enableRotate: true,
+    enableZoom: true,
+    reverseOrbit: false,
+};
 
 export const CustomCamera: Story = () => ({
   template: `<custom-camera-story></custom-camera-story>`,

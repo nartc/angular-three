@@ -38,7 +38,7 @@ export class NgtSobaGradientTexture extends NgtCommonTexture {
     canvas.width = 16;
     canvas.height = size;
     const gradient = context.createLinearGradient(0, 0, 0, size);
-    let i = stops.length;
+    let i = Math.min(stops.length, colors.length);
     while (i--) {
       gradient.addColorStop(stops[i], colors[i]);
     }
