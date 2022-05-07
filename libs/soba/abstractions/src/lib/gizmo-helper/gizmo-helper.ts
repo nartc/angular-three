@@ -111,7 +111,7 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
     object: THREE.Group;
   }>();
 
-  @Output() update = new EventEmitter();
+  @Output() override update = new EventEmitter();
 
   @ContentChild(NgtSobaGizmoHelperContent)
   content?: NgtSobaGizmoHelperContent;

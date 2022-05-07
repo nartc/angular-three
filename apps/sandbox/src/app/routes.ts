@@ -104,10 +104,22 @@ export const routes: Routes = [
       import('./height-field/height-field-example.component').then((m) => m.HeightFieldExampleComponentModule),
     data: {
       title: 'Height Field',
-      description: 'Height field',
+      description: 'Example with Height Field physic body using custom Height Field Geometry',
       link: '/height-field',
       asset: 'assets/examples/height-field',
       source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/height-field',
+    },
+  },
+  {
+    path: 'movement-regression',
+    loadChildren: () =>
+      import('./movement-regression/movement-regression.component').then((m) => m.MovementRegressionComponentModule),
+    data: {
+      title: 'Movement Regression',
+      description: 'Performance tip by regressing camera controls using AdaptiveDpr',
+      link: '/movement-regression',
+      asset: 'assets/examples/movement-regression',
+      source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/movement-regression',
     },
   },
 ];
