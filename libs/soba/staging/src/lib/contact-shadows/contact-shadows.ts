@@ -11,6 +11,7 @@ import {
   NgtRadianPipeModule,
   NumberInput,
   provideObjectHostRef,
+  Ref,
 } from '@angular-three/core';
 import { NgtOrthographicCameraModule } from '@angular-three/core/cameras';
 import { NgtGroupModule } from '@angular-three/core/group';
@@ -38,38 +39,34 @@ export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.G
   selector: 'ngt-soba-contact-shadows',
   template: `
     <ngt-group
-      *ngIf="shadowViewModel$ | async as viewModel"
-      (beforeRender)="onBeforeRender()"
+      (beforeRender)="onBeforeRender($event.object)"
       [ngtObjectInputs]="this"
       [ngtObjectOutputs]="this"
       [rotation]="[90 | radian, 0, 0]"
-      [scale]="1"
+      name="soba-contact-shadows"
     >
-      <ngt-mesh
-        [priority]="viewModel.priority"
-        [geometry]="viewModel.planeGeometry"
-        [scale]="[1, -1, 1]"
-        [rotation]="[-90 | radian, 0, 0]"
-      >
-        <ngt-mesh-basic-material
-          [map]="viewModel.renderTarget.texture"
-          transparent
-          [opacity]="viewModel.opacity"
-          [depthWrite]="viewModel.depthWrite"
-        ></ngt-mesh-basic-material>
-      </ngt-mesh>
+      <ng-container *ngIf="shadowViewModel$ | async as viewModel">
+        <ngt-mesh [geometry]="viewModel.planeGeometry" [scale]="[1, -1, 1]" [rotation]="[-90 | radian, 0, 0]">
+          <ngt-mesh-basic-material
+            [map]="viewModel.renderTarget.texture"
+            transparent
+            [opacity]="viewModel.opacity"
+            [depthWrite]="viewModel.depthWrite"
+          ></ngt-mesh-basic-material>
+        </ngt-mesh>
 
-      <ngt-orthographic-camera
-        (ready)="set({ shadowCamera: $event })"
-        [args]="[
-          -viewModel.width / 2,
-          viewModel.width / 2,
-          viewModel.height / 2,
-          -viewModel.height / 2,
-          0,
-          viewModel.far
-        ]"
-      ></ngt-orthographic-camera>
+        <ngt-orthographic-camera
+          [ref]="shadowCameraRef"
+          [args]="[
+            -viewModel.width / 2,
+            viewModel.width / 2,
+            viewModel.height / 2,
+            -viewModel.height / 2,
+            0,
+            viewModel.far
+          ]"
+        ></ngt-orthographic-camera>
+      </ng-container>
     </ngt-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -123,24 +120,49 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
     this.select((s) => s['scaledWidth']),
     this.select((s) => s['scaledHeight']),
     this.select((s) => s.far),
-    (priority, planeGeometry, renderTarget, opacity, depthWrite, width, height, far) => {
-      return {
-        priority,
-        planeGeometry,
-        renderTarget,
-        opacity,
-        depthWrite,
-        width,
-        height,
-        far,
-      };
-    }
+    (priority, planeGeometry, renderTarget, opacity, depthWrite, width, height, far) => ({
+      priority,
+      planeGeometry,
+      renderTarget,
+      opacity,
+      depthWrite,
+      width,
+      height,
+      far,
+    })
   );
+
+  get planeGeometry() {
+    return this.get((s) => s['planeGeometry']);
+  }
+  get renderTarget() {
+    return this.get((s) => s['renderTarget']);
+  }
+  get opacity() {
+    return this.get((s) => s.opacity);
+  }
+  get depthWrite() {
+    return this.get((s) => s.depthWrite);
+  }
+  get width() {
+    return this.get((s) => s['scaledWidth']);
+  }
+  get height() {
+    return this.get((s) => s['scaledHeight']);
+  }
+  get far() {
+    return this.get((s) => s.far);
+  }
+
+  get shadowCameraRef() {
+    return this.get((s) => s['shadowCameraRef']);
+  }
 
   protected override preInit() {
     super.preInit();
     this.set((state) => {
       return {
+        shadowCameraRef: new Ref(),
         scale: is.equ(state.scale.toArray(), makeVector3(1).toArray()) ? makeVector3(10) : state.scale,
         frames: state.frames ?? Infinity,
         opacity: state.opacity ?? 1,
@@ -240,18 +262,19 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
     })
   );
 
-  onBeforeRender() {
-    const { shadowCamera, frames, depthMaterial, renderTarget, smooth, blur } = this.get();
+  onBeforeRender(group: THREE.Group) {
+    group.scale.setScalar(1);
+    const { shadowCameraRef, frames, depthMaterial, renderTarget, smooth, blur } = this.get();
     const gl = this.store.get((s) => s.gl);
     const scene = this.store.get((s) => s.scene);
 
-    if (shadowCamera && renderTarget && (frames === Infinity || this.count < frames)) {
+    if (shadowCameraRef.value && renderTarget && (frames === Infinity || this.count < frames)) {
       const initialBackground = scene.background;
       scene.background = null;
       const initialOverrideMaterial = scene.overrideMaterial;
       scene.overrideMaterial = depthMaterial;
       gl.setRenderTarget(renderTarget);
-      gl.render(scene, shadowCamera);
+      gl.render(scene, shadowCameraRef.value);
       scene.overrideMaterial = initialOverrideMaterial;
 
       this.blurShadows(blur);
@@ -264,7 +287,7 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
   }
 
   private blurShadows(blur: number) {
-    const { renderTarget, blurPlane, horizontalBlurMaterial, verticalBlurMaterial, renderTargetBlur, shadowCamera } =
+    const { renderTarget, blurPlane, horizontalBlurMaterial, verticalBlurMaterial, renderTargetBlur, shadowCameraRef } =
       this.get();
     const gl = this.store.get((s) => s.gl);
 
@@ -275,14 +298,14 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
     horizontalBlurMaterial.uniforms.h.value = blur / 256;
 
     gl.setRenderTarget(renderTargetBlur);
-    gl.render(blurPlane, shadowCamera);
+    gl.render(blurPlane, shadowCameraRef.value);
 
     blurPlane.material = verticalBlurMaterial;
     verticalBlurMaterial.uniforms.tDiffuse.value = renderTargetBlur.texture;
     verticalBlurMaterial.uniforms.v.value = blur / 256;
 
     gl.setRenderTarget(renderTarget);
-    gl.render(blurPlane, shadowCamera);
+    gl.render(blurPlane, shadowCameraRef.value);
 
     blurPlane.visible = false;
   }
