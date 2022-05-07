@@ -3,7 +3,7 @@ import { NgtGroupModule } from '@angular-three/core/group';
 import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaBillboardModule, NgtSobaTextModule } from '@angular-three/soba/abstractions';
-import { componentWrapperDecorator, Meta, moduleMetadata } from '@storybook/angular';
+import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {
@@ -26,13 +26,14 @@ export default {
   ],
 } as Meta;
 
-export const Planes = () => ({
+export const Planes: Story = (args) => ({
+  props: args,
   template: `
         <ngt-soba-orbit-controls zoomSpeed="0.5" enablePan></ngt-soba-orbit-controls>
 
         <ngt-plane-geometry #planeGeometry noAttach [args]="[3, 2]"></ngt-plane-geometry>
 
-        <ngt-soba-billboard [position]="[-4, -2, 0]">
+        <ngt-soba-billboard [position]="[-4, -2, 0]" [follow]="follow" [lockX]="lockX" [lockY]="lockY" [lockZ]="lockZ">
             <ng-template ngt-soba-billboard-content>
                 <ngt-mesh [geometry]="planeGeometry.instance">
                     <ngt-mesh-standard-material color="red"></ngt-mesh-standard-material>
@@ -40,7 +41,7 @@ export const Planes = () => ({
             </ng-template>
         </ngt-soba-billboard>
 
-        <ngt-soba-billboard [position]="[-4, 2, 0]">
+        <ngt-soba-billboard [position]="[-4, 2, 0]" [follow]="follow" [lockX]="lockX" [lockY]="lockY" [lockZ]="lockZ">
             <ng-template ngt-soba-billboard-content>
                 <ngt-mesh [geometry]="planeGeometry.instance">
                     <ngt-mesh-standard-material color="orange"></ngt-mesh-standard-material>
@@ -48,7 +49,7 @@ export const Planes = () => ({
             </ng-template>
         </ngt-soba-billboard>
 
-        <ngt-soba-billboard [position]="[0, 0, 0]">
+        <ngt-soba-billboard [position]="[0, 0, 0]" [follow]="follow" [lockX]="lockX" [lockY]="lockY" [lockZ]="lockZ">
             <ng-template ngt-soba-billboard-content>
                 <ngt-mesh [geometry]="planeGeometry.instance">
                     <ngt-mesh-standard-material color="green"></ngt-mesh-standard-material>
@@ -56,7 +57,7 @@ export const Planes = () => ({
             </ng-template>
         </ngt-soba-billboard>
 
-        <ngt-soba-billboard [position]="[4, -2, 0]">
+        <ngt-soba-billboard [position]="[4, -2, 0]" [follow]="follow" [lockX]="lockX" [lockY]="lockY" [lockZ]="lockZ">
             <ng-template ngt-soba-billboard-content>
                 <ngt-mesh [geometry]="planeGeometry.instance">
                     <ngt-mesh-standard-material color="blue"></ngt-mesh-standard-material>
@@ -64,7 +65,7 @@ export const Planes = () => ({
             </ng-template>
         </ngt-soba-billboard>
 
-        <ngt-soba-billboard [position]="[4, 2, 0]">
+        <ngt-soba-billboard [position]="[4, 2, 0]" [follow]="follow" [lockX]="lockX" [lockY]="lockY" [lockZ]="lockZ">
             <ng-template ngt-soba-billboard-content>
                 <ngt-mesh [geometry]="planeGeometry.instance">
                     <ngt-mesh-standard-material color="yellow"></ngt-mesh-standard-material>
@@ -74,11 +75,19 @@ export const Planes = () => ({
     `,
 });
 
-export const Text = () => ({
+Planes.args = {
+    follow: true,
+    lockX: false,
+    lockY: false,
+    lockZ: false,
+};
+
+export const Text: Story = (args) => ({
+  props: args,
   template: `
         <ngt-soba-orbit-controls zoomSpeed="0.5" enablePan></ngt-soba-orbit-controls>
 
-        <ngt-soba-billboard [position]="[0.5, 2.05, 0.5]">
+        <ngt-soba-billboard [position]="[0.5, 2.05, 0.5]" [follow]="follow" [lockX]="lockX" [lockY]="lockY" [lockZ]="lockZ">
             <ng-template ngt-soba-billboard-content>
                 <ngt-soba-text
                     text="box"
@@ -96,7 +105,7 @@ export const Text = () => ({
         </ngt-mesh>
 
         <ngt-group [position]="[-2.5, -3, -1]">
-            <ngt-soba-billboard [position]="[0, 1.05, 0]">
+            <ngt-soba-billboard [position]="[0, 1.05, 0]" [follow]="follow" [lockX]="lockX" [lockY]="lockY" [lockZ]="lockZ">
                 <ng-template ngt-soba-billboard-content>
                     <ngt-soba-text
                         text="cone"
@@ -114,7 +123,7 @@ export const Text = () => ({
             </ngt-mesh>
         </ngt-group>
 
-        <ngt-soba-billboard [position]="[0, 0, -5]">
+        <ngt-soba-billboard [position]="[0, 0, -5]" [follow]="follow" [lockX]="lockX" [lockY]="lockY" [lockZ]="lockZ">
             <ng-template ngt-soba-billboard-content>
                 <ngt-mesh>
                     <ngt-plane-geometry [args]="[2, 2]"></ngt-plane-geometry>
@@ -124,3 +133,11 @@ export const Text = () => ({
         </ngt-soba-billboard>
     `,
 });
+
+Text.args = {
+    follow: true,
+    lockX: false,
+    lockY: false,
+    lockZ: false,
+};
+
