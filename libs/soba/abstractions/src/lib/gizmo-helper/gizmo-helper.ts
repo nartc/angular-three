@@ -27,11 +27,11 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import { tap } from 'rxjs';
+import { filter, tap } from 'rxjs';
 import * as THREE from 'three';
 
 export interface NgtSobaGizmoHelperState extends NgtObjectInputsState<THREE.Group> {
-  virtualCamera: THREE.OrthographicCamera;
+  virtualCamera: Ref<THREE.OrthographicCamera>;
   virtualScene: Ref<THREE.Scene>;
   raycast: THREE.Object3D['raycast'];
 
@@ -79,10 +79,7 @@ const targetPosition = makeVector3();
           ></ng-container>
         </ngt-group>
 
-        <ngt-soba-orthographic-camera
-          (ready)="set({ virtualCamera: $event })"
-          [position]="[0, 0, 200]"
-        ></ngt-soba-orthographic-camera>
+        <ngt-soba-orthographic-camera [ref]="virtualCamera" [position]="[0, 0, 200]"></ngt-soba-orthographic-camera>
       </ng-template>
     </ngt-portal>
   `,
@@ -120,6 +117,10 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
     return this.get((s) => s.virtualScene);
   }
 
+  get virtualCamera() {
+    return this.get((s) => s.virtualCamera);
+  }
+
   readonly position$ = this.select(
     this.select((s) => s.margin),
     this.select((s) => s.alignment),
@@ -140,6 +141,7 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
     super.preInit();
 
     this.set((state) => ({
+      virtualCamera: new Ref(),
       virtualScene: new Ref(prepare(new THREE.Scene(), () => this.store.get())),
       alignment: state.alignment ?? 'bottom-right',
       margin: state.margin ?? [80, 80],
@@ -154,7 +156,7 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
       this.onCanvasReady(this.store.ready$, () => {
         this.switchSceneBackground();
         this.setBeforeRender();
-        this.setRaycast(this.select((s) => s.virtualCamera));
+        this.setRaycast(this.get((s) => s.virtualCamera).pipe(filter((camera) => !!camera)));
       });
     });
   }
@@ -190,7 +192,7 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
           const { camera: mainCamera, controls: defaultControls, invalidate } = this.store.get();
           const { virtualScene, virtualCamera, autoClear } = this.get();
 
-          if (gizmo.value && virtualScene.value && virtualCamera) {
+          if (gizmo.value && virtualScene.value && virtualCamera.value) {
             if (this.animating) {
               if (q1.angleTo(q2) < 0.01) {
                 this.animating = false;
@@ -221,7 +223,7 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
               gl.autoClear = false;
             }
             gl.clearDepth();
-            gl.render(virtualScene.value, virtualCamera);
+            gl.render(virtualScene.value, virtualCamera.value);
           }
         },
         priority: renderPriority,
