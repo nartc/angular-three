@@ -1,6 +1,7 @@
 import { Directive, EventEmitter, Inject, Input, NgZone, Optional, Output, SkipSelf } from '@angular/core';
 import * as THREE from 'three';
 import { Ref } from '../ref';
+import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
 import type {
@@ -340,9 +341,9 @@ export abstract class NgtObject<
     this.zone.runOutsideAngular(() => {
       this.onCanvasReady(this.store.ready$, () => {
         if (this.preObjectInit) {
-          this.preObjectInit(() => this.init());
+          this.preObjectInit(() => this.init(this.instanceArgs$));
         } else {
-          this.init();
+          this.init(this.instanceArgs$);
         }
       });
     });
@@ -360,64 +361,70 @@ export abstract class NgtObject<
     return undefined;
   }
 
-  private init() {
-    if (this.instance.value && this.__ngt__) {
-      this.switch();
-    } else {
-      this.prepareInstance(this.objectInitFn(), this.instance?.value?.uuid);
-    }
-
-    if (this.instance.value) {
-      if (this.postInit) {
-        this.postInit();
+  private readonly init = this.effect<{}>(
+    tapEffect(() => {
+      if (this.instance.value && this.__ngt__) {
+        this.switch();
+      } else {
+        this.prepareInstance(this.objectInitFn(), this.instance?.value?.uuid);
       }
 
-      const observedEvents = supportedEvents.reduce(
-        (result, event) => {
-          const controllerEvent = this[event].observed ? this[event] : null;
-          if (controllerEvent) {
-            result.handlers[event] = this.eventNameToHandler(controllerEvent as EventEmitter<NgtEvent<any>>);
-            result.eventCount += 1;
-          }
-          return result;
-        },
-        { handlers: {}, eventCount: 0 } as {
-          handlers: NgtEventHandlers;
-          eventCount: number;
+      if (this.instance.value) {
+        if (this.postInit) {
+          this.postInit();
         }
-      );
 
-      // patch __ngt__ with events
-      applyProps(this.__ngt__ as unknown as NgtUnknownInstance, {
-        handlers: observedEvents.handlers,
-        eventCount: observedEvents.eventCount,
-      });
-
-      // add as an interaction if there are events observed
-      if (observedEvents.eventCount > 0) {
-        this.store.addInteraction(this.instance.value);
-      }
-
-      // append to parent
-      if (is.object3d(this.instance.value)) {
-        this.appendToParent();
-      }
-
-      // setup beforeRender
-      if (this.beforeRender.observed) {
-        this.store.registerBeforeRender({
-          obj: this.instance,
-          callback: (state) => {
-            this.beforeRender.emit({
-              state,
-              object: this.instance.value,
-            });
+        const observedEvents = supportedEvents.reduce(
+          (result, event) => {
+            const controllerEvent = this[event].observed ? this[event] : null;
+            if (controllerEvent) {
+              result.handlers[event] = this.eventNameToHandler(controllerEvent as EventEmitter<NgtEvent<any>>);
+              result.eventCount += 1;
+            }
+            return result;
           },
-          priority: this.get((s) => s.priority),
+          { handlers: {}, eventCount: 0 } as {
+            handlers: NgtEventHandlers;
+            eventCount: number;
+          }
+        );
+
+        // patch __ngt__ with events
+        applyProps(this.__ngt__ as unknown as NgtUnknownInstance, {
+          handlers: observedEvents.handlers,
+          eventCount: observedEvents.eventCount,
         });
+
+        // add as an interaction if there are events observed
+        if (observedEvents.eventCount > 0) {
+          this.store.addInteraction(this.instance.value);
+        }
+
+        // append to parent
+        if (is.object3d(this.instance.value)) {
+          this.appendToParent();
+        }
+
+        // setup beforeRender
+        if (this.beforeRender.observed) {
+          this.store.registerBeforeRender({
+            obj: this.instance,
+            callback: (state) => {
+              this.beforeRender.emit({
+                state,
+                object: this.instance.value,
+              });
+            },
+            priority: this.get((s) => s.priority),
+          });
+        }
       }
-    }
-  }
+
+      return () => {
+        this.destroy();
+      };
+    })
+  );
 
   protected override destroy() {
     if (this.instance.value) {
