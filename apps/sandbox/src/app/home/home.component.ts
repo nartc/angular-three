@@ -1,3 +1,4 @@
+import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Directive, ElementRef, HostListener, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -50,8 +51,8 @@ export interface Example {
                   sandboxAutoplay
                   muted
                   playsinline
-                  class="w-full h-full max-h-48 object-cover"
-                  [poster]="example.asset + '.gif'"
+                  class="w-full h-full max-h-48 object-cover cursor-pointer"
+                  [poster]="platform.IOS ? example.asset + '.gif' : ''"
                 >
                   <source
                     *ngFor="let source of ['webm', 'mp4']"
@@ -59,7 +60,7 @@ export interface Example {
                     [type]="'video/' + source"
                   />
                   <img
-                    class="w-full h-full max-h-48 object-cover"
+                    class="w-full h-full max-h-48 object-cover cursor-pointer"
                     [src]="example.asset + '.gif'"
                     [alt]="example.description"
                   />
@@ -104,10 +105,12 @@ export interface Example {
 })
 export class HomeComponent {
   readonly examples = routes.filter((route) => !!route.data).map((route) => route.data) as Example[];
+
+  constructor(public platform: Platform) {}
 }
 
 @NgModule({
   declarations: [HomeComponent, AutoplayVideoDirective],
-  imports: [CommonModule, RouterModule.forChild([{ path: '', component: HomeComponent }])],
+  imports: [CommonModule, RouterModule.forChild([{ path: '', component: HomeComponent }]), PlatformModule],
 })
 export class HomeComponentModule {}
