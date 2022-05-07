@@ -604,7 +604,7 @@ export class NgtSobaEnvironmentContent {
 
       <ngt-cube-camera
         *ngIf="fbo$ | async as fbo"
-        (ready)="set({ camera: $event })"
+        [ref]="cubeCamera"
         (beforeRender)="onBeforeRender()"
         [args]="[$any(near), $any(far), fbo]"
       ></ngt-cube-camera>
@@ -629,6 +629,7 @@ export class NgtSobaEnvironmentContent {
 })
 export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
   readonly virtualScene = new Ref(prepare(new THREE.Scene(), () => this.store.get()));
+  readonly cubeCamera = new Ref<THREE.CubeCamera>();
 
   @ContentChild(NgtSobaEnvironmentContent, { static: true })
   content!: NgtSobaEnvironmentContent;
@@ -663,7 +664,7 @@ export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
           )
         );
 
-        this.setEnvironment(this.select());
+        this.setEnvironment(this.select(this.select(), this.cubeCamera.pipe(filter((camera) => !!camera))));
       });
     });
   }
@@ -671,10 +672,10 @@ export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
   private readonly setEnvironment = this.effect<{}>(
     tapEffect(() => {
       const { gl, scene: defaultScene } = this.store.get();
-      const { frames, scene, background, fbo, camera } = this.get();
+      const { frames, scene, background, fbo } = this.get();
 
       if (frames === 1) {
-        (camera as THREE.CubeCamera).update(gl, this.virtualScene.value);
+        (this.cubeCamera.value as THREE.CubeCamera).update(gl, this.virtualScene.value);
       }
       const target = resolveScene(scene || defaultScene);
       const oldBg = target.background;
@@ -721,7 +722,7 @@ export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
       <ngt-mesh [scale]="viewModel.scale">
         <ngt-icosahedron-geometry [args]="[1, 16]"></ngt-icosahedron-geometry>
         <ngt-shader-material
-          (ready)="set({ material: $event })"
+          [ref]="materialRef"
           [side]="'back' | side"
           [vertexShader]="vertexShader"
           [fragmentShader]="viewModel.fragment"
@@ -740,6 +741,8 @@ export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
   ],
 })
 export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
+  readonly materialRef = new Ref<THREE.ShaderMaterial>();
+
   constructor(
     zone: NgZone,
     store: NgtStore,
@@ -811,19 +814,19 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
 
       this.setHeightUniform(
         this.select(
-          this.select((s) => s['material']),
+          this.materialRef.pipe(filter((material) => !!material)),
           this.select((s) => s['height']).pipe(startWithUndefined())
         )
       );
       this.setRadiusUniform(
         this.select(
-          this.select((s) => s['material']),
+          this.materialRef.pipe(filter((material) => !!material)),
           this.select((s) => s['radius']).pipe(startWithUndefined())
         )
       );
       this.setCubeMapUniform(
         this.select(
-          this.select((s) => s['material']),
+          this.materialRef.pipe(filter((material) => !!material)),
           this.select((s) => s['texture'])
         )
       );
@@ -879,12 +882,11 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
     pipe(
       observeOn(animationFrameScheduler),
       tap(() => {
-        const { height, material } = this.get();
-        const shaderMaterial = material as THREE.ShaderMaterial;
+        const { height } = this.get();
 
-        if (shaderMaterial) {
+        if (this.materialRef.value) {
           if (height) {
-            shaderMaterial.uniforms['height'].value = height;
+            this.materialRef.value.uniforms['height'].value = height;
           }
         }
       })
@@ -895,12 +897,11 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
     pipe(
       observeOn(animationFrameScheduler),
       tap(() => {
-        const { radius, material } = this.get();
-        const shaderMaterial = material as THREE.ShaderMaterial;
+        const { radius } = this.get();
 
-        if (shaderMaterial) {
+        if (this.materialRef.value) {
           if (radius) {
-            shaderMaterial.uniforms['radius'].value = radius;
+            this.materialRef.value.uniforms['radius'].value = radius;
           }
         }
       })
@@ -911,11 +912,10 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
     pipe(
       observeOn(animationFrameScheduler),
       tap(() => {
-        const { texture, material } = this.get();
-        const shaderMaterial = material as THREE.ShaderMaterial;
+        const { texture } = this.get();
 
-        if (shaderMaterial) {
-          shaderMaterial.uniforms['cubemap'].value = texture;
+        if (this.materialRef.value) {
+          this.materialRef.value.uniforms['cubemap'].value = texture;
         }
       })
     )
