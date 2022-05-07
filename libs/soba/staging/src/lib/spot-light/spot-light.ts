@@ -4,6 +4,7 @@ import {
   NgtObjectPassThroughModule,
   NumberInput,
   provideObjectHostRef,
+  Ref,
   tapEffect,
 } from '@angular-three/core';
 import { NgtSpotLight, NgtSpotLightModule, NgtSpotLightPassThroughModule } from '@angular-three/core/lights';
@@ -11,7 +12,7 @@ import { NgtMeshModule } from '@angular-three/core/meshes';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
-import { NgtSobaSpotLightMaterialModule } from './spot-light-material';
+import { NgtSobaSpotLightMaterialModule, SpotLightMaterial } from './spot-light-material';
 
 const vec = new THREE.Vector3();
 
@@ -26,9 +27,9 @@ const vec = new THREE.Vector3();
       [color]="color"
       [distance]="lightDistance"
     >
-      <ngt-mesh (ready)="set({ mesh: $event })" [raycast]="meshRaycast" [geometry]="(geometry$ | async)!">
+      <ngt-mesh [ref]="meshRef" [raycast]="meshRaycast" [geometry]="(geometry$ | async)!">
         <ngt-soba-spot-light-material
-          (ready)="set({ material: $event })"
+          [ref]="materialRef"
           [uniforms]="{
             opacity: { value: opacity },
             lightColor: { value: color },
@@ -49,6 +50,9 @@ const vec = new THREE.Vector3();
   providers: [provideObjectHostRef(NgtSobaSpotLight)],
 })
 export class NgtSobaSpotLight extends NgtSpotLight {
+  readonly meshRef = new Ref<THREE.Mesh>();
+  readonly materialRef = new Ref<SpotLightMaterial>();
+
   @Input() set depthBuffer(depthBuffer: THREE.DepthTexture) {
     this.set({ depthBuffer });
   }
@@ -175,11 +179,10 @@ export class NgtSobaSpotLight extends NgtSpotLight {
     tapEffect(() =>
       this.store.registerBeforeRender({
         callback: () => {
-          const { material, mesh } = this.get();
-          if (material && mesh) {
-            material.uniforms.spotPosition.value.copy(mesh.getWorldPosition(vec));
-            if (mesh.parent) {
-              mesh.lookAt(mesh.parent.target.getWorldPosition(vec));
+          if (this.materialRef.value && this.meshRef.value) {
+            this.materialRef.value.uniforms['spotPosition'].value.copy(this.meshRef.value.getWorldPosition(vec));
+            if (this.meshRef.value.parent) {
+              this.meshRef.value.lookAt((this.meshRef.value.parent as THREE.SpotLight).target.getWorldPosition(vec));
             }
           }
         },
