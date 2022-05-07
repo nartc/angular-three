@@ -11,6 +11,7 @@ import {
   SkipSelf,
 } from '@angular/core';
 import { filter, map, Observable, of, pairwise, pipe, startWith, switchMap, tap, withLatestFrom } from 'rxjs';
+import * as THREE from 'three';
 import { Ref } from '../ref';
 import { NgtComponentStore, startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
@@ -67,6 +68,8 @@ export abstract class NgtInstance<
 
   @Output() ready = new EventEmitter<TInstance>();
   protected hasEmittedAlready = false;
+
+  @Output() update = new EventEmitter<TInstance>();
 
   @Input() set noAttach(noAttach: BooleanInput) {
     this.set({
@@ -365,6 +368,10 @@ export abstract class NgtInstance<
         this.postSetOptions(this.instanceValue);
 
         this.checkUpdate(this.instanceValue);
+
+        if (this.update.observed) {
+          this.update.emit(this.instanceValue);
+        }
       }
     })
   );
