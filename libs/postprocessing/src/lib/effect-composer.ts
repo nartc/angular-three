@@ -34,7 +34,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { DepthDownsamplingPass, EffectComposer, EffectPass, NormalPass, RenderPass } from 'postprocessing';
-import { asyncScheduler, debounceTime, filter, observeOn, pipe, startWith, switchMap, tap } from 'rxjs';
+import { filter, startWith, switchMap, tap } from 'rxjs';
 import * as THREE from 'three';
 
 export interface NgtEffectComposerState extends NgtInstanceState<EffectComposer> {
@@ -80,7 +80,6 @@ export class NgtEffectComposerContent {
         [ngTemplateOutletContext]="{ group: groupRef, effectComposer: instance }"
       ></ng-container>
     </ngt-group>
-    <ng-content></ng-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -183,6 +182,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
   }
 
   protected override preInit() {
+    super.preInit();
     this.set((state) => ({
       groupRef: new Ref(),
       enabled: state.enabled ?? true,
@@ -220,135 +220,122 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
   }
 
   private readonly init = this.effect<{}>(
-    pipe(
-      observeOn(asyncScheduler),
-      tap(() => {
-        const { gl, scene: defaultScene, camera: defaultCamera } = this.store.get();
-        const {
-          scene,
-          camera,
-          depthBuffer,
-          stencilBuffer,
-          multisampling,
-          frameBufferType,
-          disableNormalPass,
-          resolutionScale,
-        } = this.get();
+    tap(() => {
+      const { gl, scene: defaultScene, camera: defaultCamera } = this.store.get();
+      const {
+        scene,
+        camera,
+        depthBuffer,
+        stencilBuffer,
+        multisampling,
+        frameBufferType,
+        disableNormalPass,
+        resolutionScale,
+      } = this.get();
 
-        const initScene = scene || defaultScene;
-        const initCamera = camera || defaultCamera;
+      const initScene = scene || defaultScene;
+      const initCamera = camera || defaultCamera;
 
-        if (gl && initScene && initCamera) {
-          const effectComposer = this.prepareInstance(
-            new EffectComposer(gl, {
-              depthBuffer,
-              stencilBuffer,
-              multisampling: multisampling > 0 && this.isWebGLAvailable ? multisampling : 0,
-              frameBufferType,
-            })
-          );
+      if (gl && initScene && initCamera) {
+        const effectComposer = this.prepareInstance(
+          new EffectComposer(gl, {
+            depthBuffer,
+            stencilBuffer,
+            multisampling: multisampling > 0 && this.isWebGLAvailable ? multisampling : 0,
+            frameBufferType,
+          })
+        );
 
-          effectComposer.addPass(new RenderPass(initScene, initCamera));
+        effectComposer.addPass(new RenderPass(initScene, initCamera));
 
-          // Create normal pass
-          let downSamplingPass = null;
-          let normalPass = null;
+        // Create normal pass
+        let downSamplingPass = null;
+        let normalPass = null;
 
-          if (!disableNormalPass) {
-            normalPass = new NormalPass(initScene, initCamera);
-            normalPass.enabled = false;
-            effectComposer.addPass(normalPass);
-            if (resolutionScale !== undefined && this.isWebGLAvailable) {
-              downSamplingPass = new DepthDownsamplingPass({
-                normalBuffer: normalPass.texture,
-                resolutionScale,
-              });
-              downSamplingPass.enabled = false;
-              effectComposer.addPass(downSamplingPass);
-            }
+        if (!disableNormalPass) {
+          normalPass = new NormalPass(initScene, initCamera);
+          normalPass.enabled = false;
+          effectComposer.addPass(normalPass);
+          if (resolutionScale !== undefined && this.isWebGLAvailable) {
+            downSamplingPass = new DepthDownsamplingPass({
+              normalBuffer: normalPass.texture,
+              resolutionScale,
+            });
+            downSamplingPass.enabled = false;
+            effectComposer.addPass(downSamplingPass);
           }
-
-          this.set({
-            depthDownSamplingPass: downSamplingPass,
-            normalPass,
-          } as Partial<NgtEffectComposerState>);
         }
-      })
-    )
+
+        this.set({
+          depthDownSamplingPass: downSamplingPass,
+          normalPass,
+        } as Partial<NgtEffectComposerState>);
+      }
+    })
   );
 
   private readonly setSize = this.effect<{}>(
-    pipe(
-      observeOn(asyncScheduler),
-      tap(() => {
-        const composer = this.get((s) => s.instance);
-        if (composer.value) {
-          const size = this.store.get((s) => s.size);
-          composer.value.setSize(size.width, size.height);
-        }
-      })
-    )
+    tap(() => {
+      const composer = this.get((s) => s.instance);
+      if (composer.value) {
+        const size = this.store.get((s) => s.size);
+        composer.value.setSize(size.width, size.height);
+      }
+    })
   );
 
   private readonly setBeforeRender = this.effect<{}>(
-    pipe(
-      observeOn(asyncScheduler),
-      tapEffect(() => {
-        const { renderPriority, enabled, instance: composer, autoClear } = this.get();
-        const gl = this.store.get((s) => s.gl);
+    tapEffect(() => {
+      const { renderPriority, enabled, instance: composer, autoClear } = this.get();
+      const gl = this.store.get((s) => s.gl);
 
-        return this.store.registerBeforeRender({
-          callback: ({ delta }) => {
-            if (enabled) {
-              gl.autoClear = autoClear;
-              composer.value.render(delta);
-            }
-          },
-          priority: enabled ? renderPriority : 0,
-        });
-      })
-    )
+      return this.store.registerBeforeRender({
+        callback: ({ delta }) => {
+          if (enabled) {
+            gl.autoClear = autoClear;
+            composer.value.render(delta);
+          }
+        },
+        priority: enabled ? renderPriority : 0,
+      });
+    })
   );
 
   private readonly effectPasses = this.effect<{}>(
-    pipe(
-      observeOn(asyncScheduler),
-      debounceTime(250),
-      tapEffect(() => {
-        let effectPass: EffectPass;
-        const defaultCamera = this.store.get((s) => s.camera);
-        const { instance: composer, camera, normalPass, depthDownSamplingPass, groupRef } = this.get();
+    tapEffect(() => {
+      let effectPass: EffectPass;
+      const defaultCamera = this.store.get((s) => s.camera);
+      const { instance: composer, camera, normalPass, depthDownSamplingPass, groupRef } = this.get();
 
-        if (composer.value && groupRef.value && groupRef.value.__ngt__.objects.value.length) {
-          effectPass = new EffectPass(
-            camera || defaultCamera,
-            ...groupRef.value.__ngt__.objects.value.map((ref) => ref.value)
-          );
+      if (composer.value && groupRef.value && groupRef.value.__ngt__.objects.value.length) {
+        effectPass = new EffectPass(
+          camera || defaultCamera,
+          ...groupRef.value.__ngt__.objects.value.map((ref) => ref.value)
+        );
 
-          effectPass.renderToScreen = true;
-          composer.value.addPass(effectPass);
-          if (normalPass) {
-            normalPass.enabled = true;
-          }
-
-          if (depthDownSamplingPass) {
-            depthDownSamplingPass.enabled = true;
-          }
+        effectPass.renderToScreen = true;
+        composer.value.addPass(effectPass);
+        if (normalPass) {
+          normalPass.enabled = true;
         }
 
-        return () => {
-          if (effectPass) {
-            composer.value?.removePass(effectPass);
-          }
-          if (normalPass) {
-            normalPass.enabled = false;
-          }
-          if (depthDownSamplingPass) {
-            depthDownSamplingPass.enabled = false;
-          }
-        };
-      })
-    )
+        if (depthDownSamplingPass) {
+          depthDownSamplingPass.enabled = true;
+        }
+      }
+
+      return () => {
+        if (effectPass) {
+          composer.value?.removePass(effectPass);
+        }
+        if (normalPass) {
+          normalPass.enabled = false;
+        }
+        if (depthDownSamplingPass) {
+          depthDownSamplingPass.enabled = false;
+        }
+      };
+    })
   );
 }
 
