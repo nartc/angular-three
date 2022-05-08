@@ -133,4 +133,27 @@ export const routes: Routes = [
       source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/reuse-gltf',
     },
   },
+  {
+    path: 'color-grading',
+    loadChildren: () => import('./color-grading/color-grading.component').then((m) => m.ColorGradingComponentModule),
+    data: {
+      title: 'Color Grading',
+      description: 'Performance tip by color grading with LUTEffect',
+      link: '/color-grading',
+      asset: 'assets/examples/color-grading',
+      source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/color-grading',
+    },
+  },
+  {
+    path: 'level-of-detail',
+    loadChildren: () =>
+      import('./level-of-detail/level-of-detail.component').then((m) => m.LevelOfDetailComponentModule),
+    data: {
+      title: 'Level of Detail',
+      description: 'Performance tip by leveraging LOD and reusing Geometry',
+      link: '/level-of-detail',
+      asset: 'assets/examples/level-of-detail',
+      source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/level-of-detail',
+    },
+  },
 ];

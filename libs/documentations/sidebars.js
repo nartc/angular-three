@@ -31,6 +31,11 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Advanced',
+      items: ['advanced/performance'],
+    },
+    {
+      type: 'category',
       label: 'Cannon API',
       items: [
         'cannon/overview',
