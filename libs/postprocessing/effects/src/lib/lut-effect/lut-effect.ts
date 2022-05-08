@@ -8,6 +8,7 @@ import {
 import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { LUTEffect } from 'postprocessing';
+import { tap } from 'rxjs';
 import * as THREE from 'three';
 
 @Component({
@@ -29,17 +30,43 @@ export class NgtLUTEffect extends NgtCommonEffect<LUTEffect> {
     return LUTEffect;
   }
 
+  protected override get skipConfigureBlendMode(): boolean {
+    return true;
+  }
+
   protected override get effectOptionsFields(): Record<string, boolean> {
-    return { ...super.effectOptionsFields, tetrahedralInterpolation: true };
+    return { ...super.effectOptionsFields, lut: false, tetrahedralInterpolation: true };
   }
 
   protected override adjustCtorParams(instanceArgs: unknown[]): unknown[] {
-    return [this.get((s) => s['lut']), instanceArgs[0] as UnknownRecord];
+    const { lut, ...rest } = instanceArgs[0] as UnknownRecord;
+    return [lut, rest];
   }
 
-  protected override get ctorParams$() {
-    return this.select(this.select((s) => s['lut']).pipe(startWithUndefined()));
+  protected override postInit() {
+    super.postInit();
+    this.setLut(
+      this.select(
+        this.instance$,
+        this.select((s) => s['lut']),
+        this.select((s) => s['tetrahedralInterpolation']).pipe(startWithUndefined())
+      )
+    );
   }
+
+  private readonly setLut = this.effect<{}>(
+    tap(() => {
+      const invalidate = this.store.get((s) => s.invalidate);
+      const { lut, tetrahedralInterpolation } = this.get();
+      if (lut) {
+        this.instanceValue.lut = lut;
+      }
+      if (tetrahedralInterpolation) {
+        this.instanceValue.tetrahedralInterpolation = tetrahedralInterpolation;
+      }
+      invalidate();
+    })
+  );
 }
 
 @NgModule({
