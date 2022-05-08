@@ -61,7 +61,7 @@ export class NgtDepthOfFieldEffect extends NgtCommonEffect<DepthOfFieldEffect> {
   }
 
   private readonly targetParams$ = this.select(
-    this.select((s) => s.instance.value),
+    this.instance$,
     this.select((s) => s['target']),
     this.select((s) => s['depthTexture'])
   );
