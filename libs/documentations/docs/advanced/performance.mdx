@@ -1,0 +1,233 @@
+---
+id: performance
+title: Performance
+sidebar_label: Performance
+---
+
+The Scene Graph can get extremely complicated which demands more and more resources of the devices. This section outlines some tips and tricks to improve the performance of rendering the Scene Graph in case we need it.
+
+## NgZone
+
+Commonly, Angular reactivity is achieved by utilizing [Zone.js](https://github.com/angular/angular/tree/main/packages/zone.js) and Angular Core has a wrapper service around Zone.js called [NgZone](https://angular.io/api/core/NgZone).
+
+In Angular Three, or any THREE.js applications, most of the actions happen inside of the root `<canvas>`. Hence, Angular's automatic change detection via Zone.js is _mostly_ unnecessary. To opt-out of Zone.js in our custom components, we can inject `NgZone` and run our logic in `runOutsideAngular()`
+
+```ts
+@Component({
+  /*...*/
+})
+export class SceneComponent {
+  constructor(private zone: NgZone) {}
+
+  ngOnInit() {
+    this.zone.runOutsideAngular(() => {
+      /* do logic like setting up Physics */
+    });
+  }
+}
+```
+
+Most common use-cases are setting up Physics or updating Object3D's options.
+
+## Re-use Geometries and Materials
+
+Each Geometry and Material consumes the GPU's resources. If we know that certain Geometries and/or Materials will repeat, we can reuse them.
+
+### Imperative
+
+We can have static geometries and materials as Component's properties
+
+```ts
+@Component({
+  selector: 'app-scene',
+  template: `
+    <ngt-mesh [position]="[1, 1, 1]" [geometry]="sphere" [material]="redMaterial"></ngt-mesh>
+    <ngt-mesh [position]="[2, 2, 2]" [geometry]="sphere" [material]="redMaterial"></ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SceneComponent {
+  readonly sphere = new THREE.SphereGeometry(1, 32, 32);
+  readonly redMaterial = new THREE.MeshStandardMaterial({ color: 'red' });
+}
+```
+
+For static geometries/materials like these, we can also store them in a Singleton Service like
+
+```ts
+@Injectable({ providedIn: 'root' })
+export class StaticShapeService {
+  readonly redSphere = {
+    geometry: new THREE.SphereGeometry(1, 32, 32),
+    material: new THREE.MeshStandardMaterial({ color: 'red' }),
+  };
+}
+```
+
+Now we can reuse them anywhere by injecting `StaticShapeService`.
+
+### Declarative
+
+There are also cases where we want to render the Geometries and/or Materials on the template so they can react to input changes but still want to reuse them.
+
+```ts
+@Component({
+  selector: 'app-scene',
+  template: `
+    <ngt-sphere-geometry #sphereGeometry [args]="[1, 32, 32]" noAttach></ngt-sphere-geometry>
+    <ngt-mesh-standard-material #standardMaterial [color]="color" noAttach></ngt-mesh-standard-material>
+
+    <ngt-mesh
+      [position]="[1, 1, 1]"
+      [geometry]="sphereGeometry.instance"
+      [material]="standardMaterial.instance"
+    ></ngt-mesh>
+    <ngt-mesh
+      [position]="[2, 2, 2]"
+      [geometry]="sphereGeometry.instance"
+      [material]="standardMaterial.instance"
+    ></ngt-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SceneComponent {}
+```
+
+All components (in this case, geometries/materials) are derived from `NgtInstance`. Hence, we can grab the underlying `instance` by assigning the geometries/materials instances to Angular's Template Variables.
+
+:::caution
+
+All `NgtInstance` has [Automatic Attach](../core/instance#attaching). For Geometries/Materials that we want to reuse, we **DO NOT** want them to attach on any particular parent so we need to use `noAttach` on them.
+
+:::
+
+## On-demand Rendering
+
+> Credit: [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance#on-demand-rendering)
+
+The Scene Graph is _usually_ rendered at 60 times per second (60fps). This makes sense if the Scene Graph contains _constantly_ moving parts (like a game). Consequently, this is what drains the device's resources.
+
+If the Scene Graph has static entities, or entities that are allowed to come to a rest, constantly rendering 60 times per second would be wasteful. In those cases, we can opt into on-demand rendering, which will only render when necessary. All we have to do is to set `frameloop="demand"` on the `ngt-canvas`
+
+```html
+<ngt-canvas frameloop="demand"></ngt-canvas>
+```
+
+:::info
+
+Check out [Color Grading Example](https://angular-three.netlify.app/examples/color-grading) to see on-demand rendering in action. Notice the Stats stops ticking when the camera stops moving.
+
+:::
+
+## Instancing
+
+WebGL works by requesting "draw call" from the GPU. Each Mesh that we put on our Canvas is a single draw call requested in which case we need to be mindful of how many draw calls we're requesting.
+
+:::info
+
+From [R3F Instancing](https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance#instancing), "no more than 1000 as the very maximum, and optimally a few hundred or less"
+
+:::
+
+In THREE.js, there is a special Mesh called [InstancedMesh](https://threejs.org/docs/index.html?q=instanced#api/en/objects/InstancedMesh). With InstancedMesh, we can render hundreds of thousands of objects in a single draw call if those objects have the same Geometry and Material.
+
+Setting up InstancedMesh is not hard but it might be hard for people who are new to THREE. Please consult [THREE.js InstancedMesh](https://threejs.org/docs/index.html?q=instanced#api/en/objects/InstancedMesh). Additionally, check out [Vertex Colors Instances example](https://angular-three.netlify.app/examples/vertex-colors-instances)
+
+```ts
+@Component({
+  selector: 'sandbox-instances',
+  template: `
+    <ngt-instanced-mesh (ready)="onReady($event)" [count]="length">
+      <ngt-box-geometry [args]="[0.15, 0.15, 0.15]">
+        <ngt-instanced-buffer-attribute
+          [attach]="['attributes', 'color']"
+          [args]="[colorArray, 3]"
+        ></ngt-instanced-buffer-attribute>
+      </ngt-box-geometry>
+      <ngt-mesh-lambert-material vertexColors toneMapped="false"></ngt-mesh-lambert-material>
+    </ngt-instanced-mesh>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class InstancesComponent {
+  readonly length = 125000;
+  readonly o = new THREE.Object3D();
+  readonly c = new THREE.Color();
+  readonly colors = Array.from({ length: this.length }, () => niceColor[Math.floor(Math.random() * 5)]);
+
+  colorArray = Float32Array.from(
+    Array.from({ length: this.length }, (_, index) =>
+      this.c.set(this.colors[index]).convertSRGBToLinear().toArray()
+    ).flat()
+  );
+
+  onReady($event: THREE.InstancedMesh) {
+    let i = 0;
+    for (let x = 0; x < 50; x++) {
+      for (let y = 0; y < 50; y++) {
+        for (let z = 0; z < 50; z++) {
+          const id = i++;
+          this.o.position.set(25 - x, 25 - y, 25 - z);
+          this.o.updateMatrix();
+          $event.setMatrixAt(id, this.o.matrix);
+        }
+      }
+    }
+    checkNeedsUpdate($event.instanceMatrix);
+  }
+}
+```
+
+## Level of Detail
+
+Sometimes, it is beneficial to render a low-quality version of an object if it is far away from the camera. This makes sense because why we would want to display its full resolution if it is _barely_ visible. By rendering a low-quality object, we can reduce the load on the GPU which gains us back some performance.
+
+[THREE.js LOD](https://threejs.org/docs/index.html?q=lod#api/en/objects/LOD) can help with this use-case. Check out [Level of Detail example](https://angular-three.netlify.app/examples/level-of-detail) and scroll around.
+
+## Movement Regression
+
+When inspect [NgtStore](../core/store) object, we will see a `performance` object with the following shape
+
+```js
+{
+  "current": 1,
+  "min": 0.1,
+  "max": 1,
+  "debounce": 200,
+  "regress": () => {/*...*/}
+}
+```
+
+- current: Performance factor alternates between min and max
+- min: Performance lower bound (should be less than 1)
+- max: Performance upper bound (no higher than 1)
+- debounce: Debounce timeout until it goes to upper bound (1) again
+- regress(): Function that temporarily regresses performance
+
+The above object is the default `performance`. We can customize this by provide the `NGT_PERFORMANCE_OPTIONS` by calling `providePerformanceOptions()` in `providers` array
+
+```ts
+@Component({
+  template: ` <ngt-canvas></ngt-canvas> `,
+  providers: [providePerformanceOptions({ min: 0.5 })],
+})
+export class AppComponent {}
+```
+
+The crux here is we would want to call `regress()` when we want to perform a performance regression. Eg: when we move the mouse, or when Controls updates etc...
+
+```ts
+@Component({})
+export class OrbitControlsComponent {
+  constructor(private store: NgtStore) {}
+
+  ngOnInit() {
+    const performance = this.store.get((s) => s.performance);
+    this.controls.addEventListener('change', performance.regress);
+  }
+}
+```
+
+Note that calling `regress()` alone **DOES NOT** do anything. During `regress()`, `performance.current` is adjusted. In other words, to actually perform a regression, we need to use `performance.current` to calculate things like device pixel ratio, or turn off lights etc...
+
+Check out [Movement Regression example](https://angular-three.netlify.app/examples/movement-regression) for better ideas of how to achieve Performance Regression. Additionally, check out [AdaptiveDpr story](https://angular-three.netlify.app/soba?path=/story/performances-adaptive-dpr--default)
