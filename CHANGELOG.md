@@ -1,5 +1,21 @@
 
 
+### [5.2.1](https://github.com/nartc/angular-three/compare/5.2.0...5.2.1) (2022-05-08)
+
+
+### Bug Fixes
+
+* **postprocessing:** clean up effect composer ([7a19642](https://github.com/nartc/angular-three/commit/7a19642f958f875d1fa61bd8c8bf31e20e98d6c7))
+* **postprocessing:** fix LUTEffect to construct correctly ([6389da5](https://github.com/nartc/angular-three/commit/6389da5c9df14408a1200700d0d3daee5a4a5b1b))
+* **postprocessing:** use this.instance$ instead for DepthofField ([142d5ce](https://github.com/nartc/angular-three/commit/142d5ce40fd11ecb7db9d930dc050ab347cb0365))
+
+
+### Documentations
+
+* add link to andivr cannon examples; add performance page ([519704b](https://github.com/nartc/angular-three/commit/519704b97c617e4e7e6c39365e11544fae042c4d))
+* add missing code changes to render 2 cubes ([#115](https://github.com/nartc/angular-three/issues/115)) ([c094683](https://github.com/nartc/angular-three/commit/c094683dcd656853c29f26478256f1df4c818e21))
+* add more performance related examples ([dad2b35](https://github.com/nartc/angular-three/commit/dad2b3548005493f02388965d01b3a6498a91c67))
+
 ## [5.2.0](https://github.com/nartc/angular-three/compare/5.1.1...5.2.0) (2022-05-07)
 
 
