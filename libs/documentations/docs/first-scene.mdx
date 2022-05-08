@@ -590,12 +590,12 @@ Good. Now we can update our `app.component.html` to render another cube
 ```
 
 </TabItem>
-    
+
 <TabItem value="cubeTs" label="cube.component.ts">
-    
+
 ```diff
 export class CubeComponent implements OnInit {
-+ @Input('position') position? :NgtVector3;
++ @Input('position') position?: NgtVector3;
   hovered = false;
   active = false;
 
@@ -606,11 +606,11 @@ export class CubeComponent implements OnInit {
   }
 }
 ```
-    
+
 </TabItem>
-    
+
 <TabItem value="cubeHtml" value="cube.component.html">
-  
+
 ```diff
 <ngt-mesh
     (beforeRender)="onCubeBeforeRender($event)"
@@ -618,14 +618,15 @@ export class CubeComponent implements OnInit {
     (pointerover)="hovered = true"
     (pointerout)="hovered = false"
     [scale]="active ? 1.5 : 1"
-+   [position]="position">
++   [position]="position"
+>
     <ngt-box-geometry></ngt-box-geometry>
     <ngt-mesh-basic-material
         [color]="hovered ? 'turquoise' : 'tomato'">
     </ngt-mesh-basic-material>
 </ngt-mesh>
 ```
-    
+
 </TabItem>
 
 </Tabs>
