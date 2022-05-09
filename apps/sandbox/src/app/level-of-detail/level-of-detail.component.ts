@@ -59,7 +59,7 @@ interface BustGLTF extends GLTF {
 @Component({
   selector: 'sandbox-bust',
   template: `
-    <ngt-soba-detailed [distances]="[0, 15, 25, 35, 100]" [position]="position" [rotation]="rotation">
+    <ngt-soba-detailed [distances]="[15, 25, 35, 100]" [position]="position" [rotation]="rotation">
       <ng-template ngt-soba-detailed-content>
         <ngt-mesh
           *ngFor="let level of levels$ | async"
