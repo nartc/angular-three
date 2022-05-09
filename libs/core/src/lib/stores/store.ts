@@ -24,7 +24,7 @@ import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { createEvents } from '../utils/events';
 import { prepare } from '../utils/instance';
 import { is } from '../utils/is';
-import { makeDpr, makeId } from '../utils/make';
+import { makeDpr, makeId, makeVector3 } from '../utils/make';
 import { NgtComponentStore, tapEffect } from './component-store';
 
 type NgtAnimationRecordWithUuid = NgtBeforeRenderRecord & { uuid: string };
@@ -332,17 +332,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
 
           // Always look at center by default
           if (!state.cameraOptions?.rotation) {
-            if (state.cameraOptions.lookAt) {
-              const lookAt = state.cameraOptions.lookAt;
-
-              if (is.arr(lookAt)) {
-                camera.lookAt(lookAt[0], lookAt[1], lookAt[2]);
-              } else {
-                camera.lookAt(lookAt);
-              }
-            } else {
-              camera.lookAt(0, 0, 0);
-            }
+            camera.lookAt(state.lookAt ?? makeVector3());
           }
 
           // Update projection matrix after applying props

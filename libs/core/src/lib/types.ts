@@ -207,7 +207,7 @@ export type NgtCameraOptions = (
         NgtObject3dNode<THREE.PerspectiveCamera, typeof THREE.PerspectiveCamera> &
         NgtObject3dNode<THREE.OrthographicCamera, typeof THREE.OrthographicCamera>
     >
-) & { manual?: boolean; lookAt?: NgtVector3 };
+) & { manual?: boolean };
 
 export type NgtSceneOptions = Overwrite<
   Partial<Omit<THREE.Scene, 'isScene' | 'onBeforeRender' | 'onAfterRender' | 'type'>>,
@@ -298,6 +298,8 @@ export interface NgtState {
   glOptions: NgtGLOptions;
   /* WebGLRenderer instance */
   gl: THREE.WebGLRenderer;
+  /* initial look at instead of default */
+  lookAt?: THREE.Vector3;
   /* default camera */
   camera: NgtCamera & { manual?: boolean };
   /* default camera ref */

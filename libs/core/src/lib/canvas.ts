@@ -18,9 +18,18 @@ import { NgtLoader } from './services/loader';
 import { NgtResize } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore } from './stores/store';
-import type { BooleanInput, NgtCameraOptions, NgtDpr, NgtGLOptions, NgtSceneOptions, NgtState } from './types';
+import type {
+  BooleanInput,
+  NgtCameraOptions,
+  NgtDpr,
+  NgtGLOptions,
+  NgtSceneOptions,
+  NgtState,
+  NgtVector3,
+} from './types';
 import { coerceBooleanProperty } from './utils/coercion';
 import { createLoop } from './utils/loop';
+import { makeVector3 } from './utils/make';
 
 const rootStateMap = new Map<Element, () => NgtState>();
 const { invalidate, advance } = createLoop(rootStateMap);
@@ -97,6 +106,10 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
   }
   get cameraRef() {
     return this.store.get((s) => s.cameraRef);
+  }
+
+  @Input() set lookAt(lookAt: NgtVector3) {
+    this.store.set({ lookAt: makeVector3(lookAt) });
   }
 
   @Input() set scene(sceneOptions: NgtSceneOptions) {
