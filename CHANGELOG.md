@@ -1,3 +1,22 @@
+
+
+### [5.2.2](https://github.com/nartc/angular-three/compare/5.2.1...5.2.2) (2022-05-09)
+
+
+### Bug Fixes
+
+* **core:** destroy loader cache on Canvas unmount ([0353fdf](https://github.com/nartc/angular-three/commit/0353fdf9df79c562bf9dd1b043325a18e8eb0b8d))
+* **core:** rework loader so cache works properly; cache bursted on canvas destroyed ([8fbe4c0](https://github.com/nartc/angular-three/commit/8fbe4c09cc44d86df8bbf22cd3b5b0330978fe60))
+* **core:** use lookAt as an Input instead of passing in for camera ([2a0ac46](https://github.com/nartc/angular-three/commit/2a0ac4666b2796dbe316d9b42926be701229d4db))
+* **soba:** remove asyncScheduler from Detailed ([1561878](https://github.com/nartc/angular-three/commit/156187849be42c133f2fdea919ddb661672dfa2d))
+
+
+### Documentations
+
+* adjust lod example ([bc704d0](https://github.com/nartc/angular-three/commit/bc704d036cf7ff00c3729e2477ead9eea17f1d5e))
+* update docs and add some docs about performance/best practices ([480f396](https://github.com/nartc/angular-three/commit/480f3965c2f198c2c6c8cd30b3e7a4d3dfd66261))
+* use Scene component ([1c3ab8f](https://github.com/nartc/angular-three/commit/1c3ab8f6a9a1960db4ad395eb40cd1f41d03b399))
+
 ### [5.2.1](https://github.com/nartc/angular-three/compare/5.2.0...5.2.1) (2022-05-08)
 
 ### Bug Fixes
