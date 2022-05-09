@@ -28,22 +28,31 @@ const positions = [...Array(800)].map(() => ({
       [camera]="{ position: [0, 0, 40] }"
       (created)="$event.gl.shadowMap.autoUpdate = false; $event.gl.shadowMap.needsUpdate = true"
     >
-      <sandbox-bust
-        *ngFor="let position of positions"
-        [position]="position.position"
-        [rotation]="position.rotation"
-      ></sandbox-bust>
-
-      <ngt-soba-orbit-controls zoomSpeed="0.075"></ngt-soba-orbit-controls>
-      <ngt-point-light [position]="[0, 0, 0]" intensity="0.5"></ngt-point-light>
-      <ngt-spot-light intensity="2.5" [position]="[50, 50, 50]" castShadow></ngt-spot-light>
-      <ngt-soba-environment preset="city"></ngt-soba-environment>
+      <sandbox-scene></sandbox-scene>
     </ngt-canvas>
     <ngt-soba-loader></ngt-soba-loader>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LevelOfDetailComponent {
+export class LevelOfDetailComponent {}
+
+@Component({
+  selector: 'sandbox-scene',
+  template: `
+    <sandbox-bust
+      *ngFor="let position of positions"
+      [position]="position.position"
+      [rotation]="position.rotation"
+    ></sandbox-bust>
+
+    <ngt-soba-orbit-controls zoomSpeed="0.075"></ngt-soba-orbit-controls>
+    <ngt-point-light [position]="[0, 0, 0]" intensity="0.5"></ngt-point-light>
+    <ngt-spot-light intensity="2.5" [position]="[50, 50, 50]" castShadow></ngt-spot-light>
+    <ngt-soba-environment preset="city"></ngt-soba-environment>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {
   readonly positions = positions;
 }
 
@@ -90,7 +99,7 @@ export class Bust {
 }
 
 @NgModule({
-  declarations: [LevelOfDetailComponent, Bust],
+  declarations: [LevelOfDetailComponent, Scene, Bust],
   imports: [
     CommonModule,
     RouterModule.forChild([

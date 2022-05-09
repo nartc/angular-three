@@ -60,23 +60,31 @@ const cursor = new Ref<THREE.Object3D>();
     >
       <ngt-color attach="background" color="#171720"></ngt-color>
       <ngt-fog attach="fog" [fog]="['#171720', 20, 70]"></ngt-fog>
-
-      <ngt-ambient-light intensity="0.2"></ngt-ambient-light>
-      <ngt-point-light [position]="[-10, -10, -10]" color="red" intensity="1.5"></ngt-point-light>
-
-      <ngt-physics iterations="15" [gravity]="[0, -200, 0]" [allowSleep]="false">
-        <sandbox-cursor></sandbox-cursor>
-        <sandbox-ragdoll [position]="[0, 0, 0]"></sandbox-ragdoll>
-        <sandbox-plane></sandbox-plane>
-        <sandbox-chair></sandbox-chair>
-        <sandbox-table></sandbox-table>
-        <sandbox-lamp></sandbox-lamp>
-      </ngt-physics>
+      <sandbox-scene></sandbox-scene>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SandboxMondayMorningComponent {}
+
+@Component({
+  selector: 'sandbox-scene',
+  template: `
+    <ngt-ambient-light intensity="0.2"></ngt-ambient-light>
+    <ngt-point-light [position]="[-10, -10, -10]" color="red" intensity="1.5"></ngt-point-light>
+
+    <ngt-physics iterations="15" [gravity]="[0, -200, 0]" [allowSleep]="false">
+      <sandbox-cursor></sandbox-cursor>
+      <sandbox-ragdoll [position]="[0, 0, 0]"></sandbox-ragdoll>
+      <sandbox-plane></sandbox-plane>
+      <sandbox-chair></sandbox-chair>
+      <sandbox-table></sandbox-table>
+      <sandbox-lamp></sandbox-lamp>
+    </ngt-physics>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {}
 
 @Component({
   selector: 'sandbox-cursor',
@@ -94,7 +102,7 @@ export class SandboxMondayMorningComponent {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class SandboxCursorComponent {
+export class Cursor {
   sphereRef = this.physicBody.useSphere(
     () => ({
       args: [0.5],
@@ -118,7 +126,7 @@ export class SandboxCursorComponent {
   selector: '[sandboxDragConstraint]',
   providers: [NgtPhysicConstraint],
 })
-export class SandboxDragConstraintDirective implements OnInit {
+export class DragConstraint implements OnInit {
   private constraint!: NgtPhysicConstraintReturn<'PointToPoint'>;
 
   constructor(
@@ -171,7 +179,7 @@ export class SandboxDragConstraintDirective implements OnInit {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody, NgtPhysicConstraint],
 })
-export class SandboxBoxComponent implements OnInit {
+export class Box implements OnInit {
   @Input() position?: NgtVector3;
   @Input() args: ConstructorParameters<typeof THREE.BoxGeometry> = [1, 1, 1];
   @Input() opacity = 1;
@@ -192,7 +200,7 @@ export class SandboxBoxComponent implements OnInit {
   constructor(
     @Optional()
     @SkipSelf()
-    private parentBox: SandboxBoxComponent,
+    private parentBox: Box,
     private physicBody: NgtPhysicBody,
     private physicConstraint: NgtPhysicConstraint
   ) {}
@@ -293,7 +301,7 @@ export class SandboxBoxComponent implements OnInit {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SandboxRagdollComponent {
+export class Ragdoll {
   @Input() position?: NgtVector3;
   readonly joints = joints;
 
@@ -317,7 +325,7 @@ export class SandboxRagdollComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class SandboxPlaneComponent {
+export class Plane {
   planeRef = this.physicBody.usePlane(() => ({
     args: [1000, 1000],
     position: [0, -5, 0],
@@ -371,7 +379,7 @@ export class SandboxPlaneComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class SandboxChairComponent {
+export class Chair {
   chairRef = this.physicBody.useCompoundBody(() => ({
     mass: 1,
     position: [-6, 0, 0],
@@ -438,7 +446,7 @@ export class SandboxChairComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody, NgtPhysicConstraint],
 })
-export class SandboxLampComponent implements OnInit {
+export class Lamp implements OnInit {
   fixtureRef = this.physicBody.useSphere(
     () => ({
       args: [1],
@@ -503,7 +511,7 @@ export class SandboxLampComponent implements OnInit {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class SandboxTableComponent {
+export class Table {
   seatRef = this.physicBody.useBox(() => ({
     args: [2.5, 0.25, 2.5],
     position: [9, -0.8, 0],
@@ -569,7 +577,7 @@ interface CupGLTF extends GLTF {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class SandboxMugComponent {
+export class Mug {
   cup$ = this.loader.use(GLTFLoader, 'assets/cup.glb') as Observable<CupGLTF>;
 
   mugRef = this.physicBody.useCylinder(() => ({
@@ -585,15 +593,16 @@ export class SandboxMugComponent {
 @NgModule({
   declarations: [
     SandboxMondayMorningComponent,
-    SandboxCursorComponent,
-    SandboxBoxComponent,
-    SandboxRagdollComponent,
-    SandboxPlaneComponent,
-    SandboxDragConstraintDirective,
-    SandboxChairComponent,
-    SandboxLampComponent,
-    SandboxTableComponent,
-    SandboxMugComponent,
+    Scene,
+    Cursor,
+    Box,
+    Ragdoll,
+    Plane,
+    DragConstraint,
+    Chair,
+    Lamp,
+    Table,
+    Mug,
   ],
   imports: [
     RouterModule.forChild([{ path: '', component: SandboxMondayMorningComponent }]),

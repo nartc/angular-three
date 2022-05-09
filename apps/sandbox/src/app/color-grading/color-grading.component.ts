@@ -19,13 +19,7 @@ import { Observable } from 'rxjs';
   selector: 'sandbox-color-grading',
   template: `
     <ngt-canvas frameloop="demand" [dpr]="[1, 2]" [camera]="{ position: [0, 0, 5], fov: 45 }">
-      <ngt-spot-light intensity="0.5" angle="0.2" penumbra="1" [position]="[5, 15, 10]"></ngt-spot-light>
-
-      <sandbox-sphere></sandbox-sphere>
-      <sandbox-grading></sandbox-grading>
-      <ngt-soba-environment preset="warehouse"></ngt-soba-environment>
-
-      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+      <sandbox-scene></sandbox-scene>
     </ngt-canvas>
     <ngt-soba-loader></ngt-soba-loader>
     <ngt-stats></ngt-stats>
@@ -43,6 +37,21 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorGradingComponent {}
+
+@Component({
+  selector: 'sandbox-scene',
+  template: `
+    <ngt-spot-light intensity="0.5" angle="0.2" penumbra="1" [position]="[5, 15, 10]"></ngt-spot-light>
+
+    <sandbox-sphere></sandbox-sphere>
+    <sandbox-grading></sandbox-grading>
+    <ngt-soba-environment preset="warehouse"></ngt-soba-environment>
+
+    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {}
 
 @Component({
   selector: 'sandbox-grading',
@@ -86,7 +95,7 @@ export class Sphere {
 }
 
 @NgModule({
-  declarations: [ColorGradingComponent, Grading, Sphere],
+  declarations: [ColorGradingComponent, Scene, Grading, Sphere],
   imports: [
     RouterModule.forChild([
       {
@@ -107,5 +116,6 @@ export class Sphere {
     NgtSobaLoaderModule,
     NgtStatsModule,
   ],
+  exports: [Sphere],
 })
 export class ColorGradingComponentModule {}

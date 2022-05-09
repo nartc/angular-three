@@ -25,30 +25,38 @@ const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
   selector: 'sandbox-kinematic-cube',
   template: `
     <ngt-canvas shadows [gl]="{ alpha: false }" [camera]="{ position: [0, -12, 16] }">
-      <ngt-stats></ngt-stats>
-
-      <ngt-hemisphere-light intensity="0.35"></ngt-hemisphere-light>
-      <ngt-spot-light [position]="[30, 0, 30]" intensity="2" angle="0.3" penumbra="1" castShadow>
-        <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="256"></ngt-vector2>
-      </ngt-spot-light>
-      <ngt-point-light [position]="[-30, 0, -30]" intensity="0.5"></ngt-point-light>
-
-      <ngt-physics [gravity]="[0, 0, -30]">
-        <sandbox-plane [color]="niceColor[4]"></sandbox-plane>
-        <sandbox-plane [color]="niceColor[1]" [position]="[-6, 0, 0]" [rotation]="[0, 0.9, 0]"></sandbox-plane>
-        <sandbox-plane [color]="niceColor[2]" [position]="[6, 0, 0]" [rotation]="[0, -0.9, 0]"></sandbox-plane>
-        <sandbox-plane [color]="niceColor[3]" [position]="[0, 6, 0]" [rotation]="[0.9, 0, 0]"></sandbox-plane>
-        <sandbox-plane [color]="niceColor[0]" [position]="[0, -6, 0]" [rotation]="[-0.9, 0, 0]"></sandbox-plane>
-
-        <sandbox-box></sandbox-box>
-        <sandbox-spheres [number]="100"></sandbox-spheres>
-      </ngt-physics>
+      <sandbox-scene></sandbox-scene>
     </ngt-canvas>
+    <ngt-stats></ngt-stats>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class KinematicCubeComponent {
-  niceColor = niceColor;
+export class KinematicCubeComponent {}
+
+@Component({
+  selector: 'sandbox-scene',
+  template: `
+    <ngt-hemisphere-light intensity="0.35"></ngt-hemisphere-light>
+    <ngt-spot-light [position]="[30, 0, 30]" intensity="2" angle="0.3" penumbra="1" castShadow>
+      <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="256"></ngt-vector2>
+    </ngt-spot-light>
+    <ngt-point-light [position]="[-30, 0, -30]" intensity="0.5"></ngt-point-light>
+
+    <ngt-physics [gravity]="[0, 0, -30]">
+      <sandbox-plane [color]="niceColor[4]"></sandbox-plane>
+      <sandbox-plane [color]="niceColor[1]" [position]="[-6, 0, 0]" [rotation]="[0, 0.9, 0]"></sandbox-plane>
+      <sandbox-plane [color]="niceColor[2]" [position]="[6, 0, 0]" [rotation]="[0, -0.9, 0]"></sandbox-plane>
+      <sandbox-plane [color]="niceColor[3]" [position]="[0, 6, 0]" [rotation]="[0.9, 0, 0]"></sandbox-plane>
+      <sandbox-plane [color]="niceColor[0]" [position]="[0, -6, 0]" [rotation]="[-0.9, 0, 0]"></sandbox-plane>
+
+      <sandbox-box></sandbox-box>
+      <sandbox-spheres [number]="100"></sandbox-spheres>
+    </ngt-physics>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {
+  readonly niceColor = niceColor;
 }
 
 @Component({
@@ -62,7 +70,7 @@ export class KinematicCubeComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class PlaneComponent {
+export class Plane {
   @Input() color?: THREE.ColorRepresentation;
   @Input() position?: NgtVector3;
   @Input() rotation?: NgtEuler;
@@ -91,7 +99,7 @@ export class PlaneComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class BoxComponent {
+export class Box {
   boxSize: NgtTriple = [4, 4, 4];
 
   boxRef = this.physicBody.useBox(() => ({
@@ -125,7 +133,7 @@ export class BoxComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class InstancedSpheresComponent implements OnInit {
+export class InstancedSpheres implements OnInit {
   @Input() number = 100;
 
   colors!: Float32Array;
@@ -152,7 +160,7 @@ export class InstancedSpheresComponent implements OnInit {
 }
 
 @NgModule({
-  declarations: [KinematicCubeComponent, PlaneComponent, BoxComponent, InstancedSpheresComponent],
+  declarations: [KinematicCubeComponent, Scene, Plane, Box, InstancedSpheres],
   imports: [
     RouterModule.forChild([{ path: '', component: KinematicCubeComponent }]),
     NgtCanvasModule,
@@ -172,6 +180,6 @@ export class InstancedSpheresComponent implements OnInit {
     NgtPhysicsModule,
     NgtVector2AttributeModule,
   ],
-  exports: [InstancedSpheresComponent],
+  exports: [InstancedSpheres],
 })
 export class KinematicCubeComponentModule {}

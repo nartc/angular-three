@@ -1,12 +1,12 @@
 import {
   AnyFunction,
-  NGT_OBJECT_HOST_REF,
-  NGT_OBJECT_REF,
   NgtCanvasModule,
   NgtObjectInputs,
   NgtObjectPassThroughModule,
   NgtRadianPipeModule,
   NgtStore,
+  NGT_OBJECT_HOST_REF,
+  NGT_OBJECT_REF,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
@@ -29,24 +29,33 @@ import { GLTF } from 'three-stdlib';
   selector: 'sandbox-reuse-gltf',
   template: `
     <ngt-canvas shadows [dpr]="[1, 2]" initialLog [camera]="{ position: [0, 0, 150], fov: 40 }">
-      <ngt-soba-stage environment="city" intensity="0.6">
-        <ng-template ngt-soba-stage-content>
-          <sandbox-shoe color="tomato" [position]="[0, 0, 0]"></sandbox-shoe>
-          <sandbox-shoe
-            color="orange"
-            [scale]="-1"
-            [rotation]="[0, 0.5, 180 | radian]"
-            [position]="[0, 0, -2]"
-          ></sandbox-shoe>
-        </ng-template>
-      </ngt-soba-stage>
-
-      <ngt-soba-orbit-controls autoRotate></ngt-soba-orbit-controls>
+      <sandbox-scene></sandbox-scene>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReuseGltfComponent {}
+
+@Component({
+  selector: 'sandbox-scene',
+  template: `
+    <ngt-soba-stage environment="city" intensity="0.6">
+      <ng-template ngt-soba-stage-content>
+        <sandbox-shoe color="tomato" [position]="[0, 0, 0]"></sandbox-shoe>
+        <sandbox-shoe
+          color="orange"
+          [scale]="-1"
+          [rotation]="[0, 0.5, 180 | radian]"
+          [position]="[0, 0, -2]"
+        ></sandbox-shoe>
+      </ng-template>
+    </ngt-soba-stage>
+
+    <ngt-soba-orbit-controls autoRotate></ngt-soba-orbit-controls>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {}
 
 interface ShoeGLTF extends GLTF {
   nodes: {
@@ -125,7 +134,7 @@ export class Shoe extends NgtObjectInputs<THREE.Group> {
 }
 
 @NgModule({
-  declarations: [ReuseGltfComponent, Shoe],
+  declarations: [ReuseGltfComponent, Scene, Shoe],
   imports: [
     RouterModule.forChild([{ path: '', component: ReuseGltfComponent }]),
     CommonModule,

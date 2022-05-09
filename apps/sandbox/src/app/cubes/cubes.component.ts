@@ -16,22 +16,30 @@ import { Mesh } from 'three';
   template: `
     <ngt-canvas initialLog>
       <ngt-color attach="background" color="lightblue"></ngt-color>
-
-      <ngt-ambient-light></ngt-ambient-light>
-      <ngt-point-light [position]="10"></ngt-point-light>
-
-      <sandbox-cube [position]="[-1.5, 0, 0]"></sandbox-cube>
-      <sandbox-cube [position]="[1.5, 0, 0]"></sandbox-cube>
-
-      <sandbox-cube-with-materials></sandbox-cube-with-materials>
-
-      <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+      <sandbox-scene></sandbox-scene>
     </ngt-canvas>
     <ngt-stats></ngt-stats>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SandboxCubesComponent {}
+
+@Component({
+  selector: 'sandbox-scene',
+  template: `
+    <ngt-ambient-light></ngt-ambient-light>
+    <ngt-point-light [position]="10"></ngt-point-light>
+
+    <sandbox-cube [position]="[-1.5, 0, 0]"></sandbox-cube>
+    <sandbox-cube [position]="[1.5, 0, 0]"></sandbox-cube>
+
+    <sandbox-cube-with-materials></sandbox-cube-with-materials>
+
+    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {}
 
 @Component({
   selector: 'sandbox-cube',
@@ -50,7 +58,7 @@ export class SandboxCubesComponent {}
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CubeComponent {
+export class Cube {
   @Input() position?: NgtVector3;
 
   hovered = false;
@@ -76,7 +84,7 @@ export class CubeComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CubeWithMaterialsComponent {
+export class CubeWithMaterials {
   colors = ['red', 'green', 'blue', 'hotpink', 'orange', 'teal'];
 
   onBeforeRender(cube: Mesh) {
@@ -85,7 +93,7 @@ export class CubeWithMaterialsComponent {
 }
 
 @NgModule({
-  declarations: [SandboxCubesComponent, CubeComponent, CubeWithMaterialsComponent],
+  declarations: [SandboxCubesComponent, Scene, Cube, CubeWithMaterials],
   imports: [
     CommonModule,
     RouterModule.forChild([{ path: '', component: SandboxCubesComponent }]),

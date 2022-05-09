@@ -19,26 +19,7 @@ import * as THREE from 'three';
   selector: 'sandbox-object-clump',
   template: `
     <ngt-canvas shadows [dpr]="[1, 2]" [camera]="{ position: [0, 0, 20], fov: 35, near: 1, far: 40 }" initialLog>
-      <ngt-ambient-light intensity="0.25"></ngt-ambient-light>
-      <ngt-spot-light [position]="[30, 30, 30]" intensity="1" angle="0.2" penumbra="1" castShadow>
-        <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="[512, 512]"></ngt-vector2>
-      </ngt-spot-light>
-      <ngt-directional-light [position]="[-10, -10, -10]" intensity="5" color="purple"></ngt-directional-light>
-
-      <ngt-physics [gravity]="[0, 2, 0]" iterations="10">
-        <sandbox-pointer></sandbox-pointer>
-        <sandbox-clump></sandbox-clump>
-      </ngt-physics>
-
-      <ngt-soba-environment files="assets/adamsbridge.hdr"></ngt-soba-environment>
-
-      <ngt-effect-composer>
-        <ng-template ngt-effect-composer-content>
-          <ngt-bloom-effect></ngt-bloom-effect>
-        </ng-template>
-      </ngt-effect-composer>
-
-      <ngt-soba-sky></ngt-soba-sky>
+      <sandbox-scene></sandbox-scene>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,11 +28,39 @@ export class ObjectClumpComponent {
   readonly kernelSize = KernelSize.VERY_LARGE;
 }
 
+@Component({
+  selector: 'sandbox-scene',
+  template: `
+    <ngt-ambient-light intensity="0.25"></ngt-ambient-light>
+    <ngt-spot-light [position]="[30, 30, 30]" intensity="1" angle="0.2" penumbra="1" castShadow>
+      <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="[512, 512]"></ngt-vector2>
+    </ngt-spot-light>
+    <ngt-directional-light [position]="[-10, -10, -10]" intensity="5" color="purple"></ngt-directional-light>
+
+    <ngt-physics [gravity]="[0, 2, 0]" iterations="10">
+      <sandbox-pointer></sandbox-pointer>
+      <sandbox-clump></sandbox-clump>
+    </ngt-physics>
+
+    <ngt-soba-environment files="assets/adamsbridge.hdr"></ngt-soba-environment>
+
+    <ngt-effect-composer>
+      <ng-template ngt-effect-composer-content>
+        <ngt-bloom-effect></ngt-bloom-effect>
+      </ng-template>
+    </ngt-effect-composer>
+
+    <ngt-soba-sky></ngt-soba-sky>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {}
+
 @Directive({
   selector: 'sandbox-pointer',
   providers: [NgtPhysicBody],
 })
-export class PointerDirective extends NgtComponentStore implements OnInit {
+export class Pointer extends NgtComponentStore implements OnInit {
   readonly pointerRef = this.physicBody.useSphere(
     () => ({
       type: 'Kinematic',
@@ -107,7 +116,7 @@ const vec = new THREE.Vector3();
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtTextureLoader, NgtPhysicBody],
 })
-export class ClumpComponent {
+export class Clump {
   readonly count = 40;
   readonly texture$ = this.textureLoader.load('assets/cross.jpg');
 
@@ -139,7 +148,7 @@ export class ClumpComponent {
 }
 
 @NgModule({
-  declarations: [ObjectClumpComponent, PointerDirective, ClumpComponent],
+  declarations: [ObjectClumpComponent, Scene, Pointer, Clump],
   imports: [
     CommonModule,
     RouterModule.forChild([{ path: '', component: ObjectClumpComponent }]),

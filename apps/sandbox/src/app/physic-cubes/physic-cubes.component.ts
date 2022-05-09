@@ -20,7 +20,7 @@ import { RouterModule } from '@angular/router';
       </ngt-directional-light>
 
       <ngt-physics>
-        <sandbox-plane [position]="[0, -2.5, 0]"></sandbox-plane>
+        <sandbox-floor [position]="[0, -2.5, 0]"></sandbox-floor>
         <sandbox-cube [position]="[0.1, 5, 0]"></sandbox-cube>
         <sandbox-cube [position]="[0, 10, -1]"></sandbox-cube>
         <sandbox-cube [position]="[0, 20, -2]"></sandbox-cube>
@@ -33,7 +33,14 @@ import { RouterModule } from '@angular/router';
 export class SandboxPhysicCubesComponent {}
 
 @Component({
-  selector: 'sandbox-plane',
+  selector: 'sandbox-scene',
+  template: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {}
+
+@Component({
+  selector: 'sandbox-floor',
   template: `
     <ngt-mesh receiveShadow [ref]="planeRef.ref" [position]="position" [rotation]="rotation">
       <ngt-plane-geometry [args]="[1000, 1000]"></ngt-plane-geometry>
@@ -43,7 +50,7 @@ export class SandboxPhysicCubesComponent {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class SandboxPlaneComponent {
+export class Floor {
   @Input() position?: NgtTriple;
   rotation = [-Math.PI / 2, 0, 0] as NgtTriple;
 
@@ -67,7 +74,7 @@ export class SandboxPlaneComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
-export class SandboxCubeComponent {
+export class Cube {
   @Input() position?: NgtTriple;
   rotation = [0.4, 0.2, 0.5] as NgtTriple;
 
@@ -81,7 +88,7 @@ export class SandboxCubeComponent {
 }
 
 @NgModule({
-  declarations: [SandboxPhysicCubesComponent, SandboxPlaneComponent, SandboxCubeComponent],
+  declarations: [SandboxPhysicCubesComponent, Scene, Floor, Cube],
   imports: [
     RouterModule.forChild([{ path: '', component: SandboxPhysicCubesComponent }]),
     NgtCanvasModule,

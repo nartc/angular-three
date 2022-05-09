@@ -7,7 +7,7 @@ import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtEffectComposerModule } from '@angular-three/postprocessing';
 import { NgtSSAOEffectModule } from '@angular-three/postprocessing/effects';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BlendFunction } from 'postprocessing';
 
@@ -19,27 +19,9 @@ import { BlendFunction } from 'postprocessing';
     </button>
     <div style="height: 400px; width: 400px">
       <ngt-canvas [camera]="{ position: [10, 10, 10] }">
-        <ngt-directional-light castShadow [position]="[2.5, 5, 5]"></ngt-directional-light>
-
-        <sandbox-small-box></sandbox-small-box>
-        <sandbox-box></sandbox-box>
-        <sandbox-ball></sandbox-ball>
-        <sandbox-wall></sandbox-wall>
-        <sandbox-ground></sandbox-ground>
-
-        <!--        <ngt-effect-composer>-->
-        <!--          <ngt-ssao-effect [options]="{ blendFunction, intensity: 30, samples: 31, radius: 5 }"></ngt-ssao-effect>-->
-        <!--        </ngt-effect-composer>-->
-
-        <ngt-effect-composer>
-          <ng-template ngt-effect-composer-content>
-            <ngt-ssao-effect [blendFunction]="blendFunction" intensity="30" samples="31" radius="5"></ngt-ssao-effect>
-          </ng-template>
-        </ngt-effect-composer>
-
-        <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
-        <ngt-stats></ngt-stats>
+        <sandbox-scene [blendFunction]="blendFunction"></sandbox-scene>
       </ngt-canvas>
+      <ngt-stats></ngt-stats>
     </div>
   `,
   styles: [
@@ -70,6 +52,31 @@ export class PostProcessingSSAOComponent {
 }
 
 @Component({
+  selector: 'sandbox-scene[blendFunction]',
+  template: `
+    <ngt-directional-light castShadow [position]="[2.5, 5, 5]"></ngt-directional-light>
+
+    <sandbox-small-box></sandbox-small-box>
+    <sandbox-box></sandbox-box>
+    <sandbox-ball></sandbox-ball>
+    <sandbox-wall></sandbox-wall>
+    <sandbox-ground></sandbox-ground>
+
+    <ngt-effect-composer>
+      <ng-template ngt-effect-composer-content>
+        <ngt-ssao-effect [blendFunction]="blendFunction" intensity="30" samples="31" radius="5"></ngt-ssao-effect>
+      </ng-template>
+    </ngt-effect-composer>
+
+    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {
+  @Input() blendFunction!: BlendFunction;
+}
+
+@Component({
   selector: 'sandbox-wall',
   template: `
     <ngt-box-geometry #ngtGeometry [args]="[16, 12, 1]" noAttach></ngt-box-geometry>
@@ -96,7 +103,7 @@ export class PostProcessingSSAOComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WallComponent {}
+export class Wall {}
 
 @Component({
   selector: 'sandbox-box',
@@ -108,7 +115,7 @@ export class WallComponent {}
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BoxComponent {}
+export class Box {}
 
 @Component({
   selector: 'sandbox-small-box',
@@ -120,7 +127,7 @@ export class BoxComponent {}
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SmallBoxComponent {}
+export class SmallBox {}
 
 @Component({
   selector: 'sandbox-ball',
@@ -132,7 +139,7 @@ export class SmallBoxComponent {}
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BallComponent {}
+export class Ball {}
 
 @Component({
   selector: 'sandbox-ground',
@@ -144,17 +151,10 @@ export class BallComponent {}
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GroundComponent {}
+export class Ground {}
 
 @NgModule({
-  declarations: [
-    PostProcessingSSAOComponent,
-    WallComponent,
-    BoxComponent,
-    SmallBoxComponent,
-    BallComponent,
-    GroundComponent,
-  ],
+  declarations: [PostProcessingSSAOComponent, Scene, Wall, Box, SmallBox, Ball, Ground],
   imports: [
     RouterModule.forChild([{ path: '', component: PostProcessingSSAOComponent }]),
     NgtMeshModule,

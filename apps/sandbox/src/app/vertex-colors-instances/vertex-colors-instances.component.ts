@@ -17,17 +17,26 @@ const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
   selector: 'sandbox-vertex-colors-instances',
   template: `
     <ngt-canvas [camera]="{ position: [0, 0, 0.1] }">
-      <ngt-ambient-light></ngt-ambient-light>
-      <ngt-directional-light [position]="[150, 150, 150]" intensity="0.55"></ngt-directional-light>
-
-      <sandbox-instances></sandbox-instances>
-
-      <ngt-soba-orbit-controls enablePan="false" autoRotate></ngt-soba-orbit-controls>
+      <sandbox-scene></sandbox-scene>
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VertexColorsInstancesComponent {}
+
+@Component({
+  selector: 'sandbox-scene',
+  template: `
+    <ngt-ambient-light></ngt-ambient-light>
+    <ngt-directional-light [position]="[150, 150, 150]" intensity="0.55"></ngt-directional-light>
+
+    <sandbox-instances></sandbox-instances>
+
+    <ngt-soba-orbit-controls enablePan="false" autoRotate></ngt-soba-orbit-controls>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Scene {}
 
 @Component({
   selector: 'sandbox-instances',
@@ -44,7 +53,7 @@ export class VertexColorsInstancesComponent {}
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InstancesComponent {
+export class Instances {
   readonly length = 125000;
   readonly o = new THREE.Object3D();
   readonly c = new THREE.Color();
@@ -73,7 +82,7 @@ export class InstancesComponent {
 }
 
 @NgModule({
-  declarations: [VertexColorsInstancesComponent, InstancesComponent],
+  declarations: [VertexColorsInstancesComponent, Scene, Instances],
   imports: [
     RouterModule.forChild([{ path: '', component: VertexColorsInstancesComponent }]),
     NgtCanvasModule,
