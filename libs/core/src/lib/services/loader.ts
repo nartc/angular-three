@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { catchError, forkJoin, from, map, Observable, of, ReplaySubject, share, tap } from 'rxjs';
+import { catchError, forkJoin, from, map, Observable, of, ReplaySubject, retry, share, tap } from 'rxjs';
 import * as THREE from 'three';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import type { BranchingReturn, LoaderExtensions, NgtLoaderResult, NgtObjectMap } from '../types';
@@ -28,26 +28,24 @@ export class NgtLoader implements OnDestroy {
       if (!this.cached.has(key)) {
         this.cached.set(
           key,
-          from(loader.loadAsync(key, onProgress))
-            .pipe(
-              tap((data) => {
-                if (data.scene) {
-                  Object.assign(data, buildGraph(data.scene as THREE.Scene));
-                }
-              }),
-              catchError((err) => {
-                console.error(`Error loading ${key}: ${err.message}`);
-                return of(null);
-              })
-            )
-            .pipe(
-              share({
-                connector: () => new ReplaySubject(),
-                resetOnComplete: true,
-                resetOnRefCountZero: true,
-                resetOnError: true,
-              })
-            )
+          from(loader.loadAsync(key, onProgress)).pipe(
+            tap((data) => {
+              if (data.scene) {
+                Object.assign(data, buildGraph(data.scene as THREE.Scene));
+              }
+            }),
+            retry({ count: 2 }),
+            catchError((err) => {
+              console.error(`Error loading ${key}: ${err.message}`);
+              return of(null);
+            }),
+            share({
+              connector: () => new ReplaySubject(),
+              resetOnComplete: true,
+              resetOnRefCountZero: true,
+              resetOnError: true,
+            })
+          )
         );
       }
 
