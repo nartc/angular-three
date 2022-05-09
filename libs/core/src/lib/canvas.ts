@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 import { provideCanvasInstanceRef } from './di/object';
+import { NgtLoader } from './services/loader';
 import { NgtResize } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore } from './stores/store';
@@ -131,7 +132,7 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
   @ViewChild('rendererCanvas', { static: true })
   rendererCanvas!: ElementRef<HTMLCanvasElement>;
 
-  constructor(private zone: NgZone, private store: NgtStore) {
+  constructor(private zone: NgZone, private store: NgtStore, private loader: NgtLoader) {
     super();
   }
 
@@ -162,6 +163,11 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
         this.store.startLoop(this.store.select());
       });
     });
+  }
+
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    this.loader.destroy();
   }
 }
 

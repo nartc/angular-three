@@ -43,9 +43,9 @@ export class NgtGLTFLoader {
     useDraco: boolean | string = true,
     useMeshOpt = true,
     extensions?: (loader: GLTFLoader) => void
-  ): Observable<TInput extends any[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap> {
+  ): Observable<TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap> {
     return this.loader.use(GLTFLoader, path, _extensions(useDraco, useMeshOpt, extensions)) as Observable<
-      TInput extends any[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap
+      TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap
     >;
   }
 }

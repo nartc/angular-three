@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { catchError, defer, forkJoin, map, Observable, of, ReplaySubject, share, tap, throwError } from 'rxjs';
+import { catchError, forkJoin, from, map, Observable, of, ReplaySubject, share, tap } from 'rxjs';
 import * as THREE from 'three';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import type { BranchingReturn, LoaderExtensions, NgtLoaderResult, NgtObjectMap } from '../types';
@@ -8,14 +8,14 @@ import { is } from '../utils/is';
 
 @Injectable({ providedIn: 'root' })
 export class NgtLoader implements OnDestroy {
-  private readonly cached = new Map();
+  readonly cached = new Map();
 
   use<TReturnType, TUrl extends string | string[]>(
     loaderConstructor: new () => NgtLoaderResult<TReturnType>,
     input: TUrl,
     extensions?: LoaderExtensions,
     onProgress?: (event: ProgressEvent) => void
-  ): TUrl extends any[]
+  ): TUrl extends string[]
     ? Observable<BranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>[]>
     : Observable<BranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>> {
     const keys = (is.arr(input) ? input : [input]) as string[];
@@ -24,39 +24,44 @@ export class NgtLoader implements OnDestroy {
       extensions(loader);
     }
 
-    const results$ = forkJoin(
-      keys.map((key) => {
-        if (this.cached.has(key)) {
-          return of(this.cached.get(key));
-        }
-
-        return defer(() => loader.loadAsync(key, onProgress)).pipe(
-          tap((data) => {
-            if (data.scene) {
-              Object.assign(data, buildGraph(data.scene as THREE.Scene));
-            }
-            this.cached.set(key, data);
-          }),
-          catchError((err) => {
-            console.error(`Error loading ${key}: ${err.message}`);
-            return throwError(err);
-          })
+    const observables$ = keys.map((key) => {
+      if (!this.cached.has(key)) {
+        this.cached.set(
+          key,
+          from(loader.loadAsync(key, onProgress))
+            .pipe(
+              tap((data) => {
+                if (data.scene) {
+                  Object.assign(data, buildGraph(data.scene as THREE.Scene));
+                }
+              }),
+              catchError((err) => {
+                console.error(`Error loading ${key}: ${err.message}`);
+                return of(null);
+              })
+            )
+            .pipe(
+              share({
+                connector: () => new ReplaySubject(),
+                resetOnComplete: true,
+                resetOnRefCountZero: true,
+                resetOnError: true,
+              })
+            )
         );
-      })
-    ) as Observable<BranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>[]>;
+      }
 
-    return defer(() => (is.arr(input) ? results$ : results$.pipe(map((results) => results[0])))).pipe(
-      share({
-        connector: () => new ReplaySubject(),
-        resetOnRefCountZero: true,
-        resetOnError: true,
-      })
-    ) as TUrl extends any[]
-      ? Observable<BranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>[]>
-      : Observable<BranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>>;
+      return this.cached.get(key);
+    });
+
+    return forkJoin(observables$).pipe(map((results) => (is.arr(input) ? results : results[0])));
+  }
+
+  destroy() {
+    this.cached.clear();
   }
 
   ngOnDestroy() {
-    this.cached.clear();
+    this.destroy();
   }
 }
