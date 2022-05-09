@@ -21,7 +21,7 @@ import {
   QueryList,
   TemplateRef,
 } from '@angular/core';
-import { asyncScheduler, combineLatest, observeOn, pipe, switchMap, tap } from 'rxjs';
+import { combineLatest, switchMap, tap } from 'rxjs';
 import * as THREE from 'three';
 
 @Directive({
@@ -80,21 +80,18 @@ export class NgtSobaDetailed extends NgtObjectInputs<THREE.LOD> implements After
   }
 
   private readonly addLevels = this.effect<{}>(
-    pipe(
-      observeOn(asyncScheduler),
-      tap(() => {
-        const distances = this.get((s) => s['distances']);
-        if (this.instance.value) {
-          this.instance.value.levels.length = 0;
-          this.instance.value.children.forEach((object, index) => {
-            this.instance.value.levels.push({
-              object,
-              distance: distances[index],
-            });
+    tap(() => {
+      const distances = this.get((s) => s['distances']);
+      if (this.instance.value) {
+        this.instance.value.levels.length = 0;
+        this.instance.value.children.forEach((object, index) => {
+          this.instance.value.levels.push({
+            object,
+            distance: distances[index],
           });
-        }
-      })
-    )
+        });
+      }
+    })
   );
 
   onBeforeRender({ state: { camera }, object }: { state: NgtRenderState; object: THREE.LOD }) {
