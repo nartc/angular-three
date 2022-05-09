@@ -1,135 +1,104 @@
-
-
-### [5.2.2](https://github.com/nartc/angular-three/compare/5.2.1...5.2.2) (2022-05-09)
-
-
-### Bug Fixes
-
-* **core:** destroy loader cache on Canvas unmount ([0353fdf](https://github.com/nartc/angular-three/commit/0353fdf9df79c562bf9dd1b043325a18e8eb0b8d))
-* **core:** rework loader so cache works properly; cache bursted on canvas destroyed ([8fbe4c0](https://github.com/nartc/angular-three/commit/8fbe4c09cc44d86df8bbf22cd3b5b0330978fe60))
-* **soba:** remove asyncScheduler from Detailed ([1561878](https://github.com/nartc/angular-three/commit/156187849be42c133f2fdea919ddb661672dfa2d))
-
-
-### Documentations
-
-* adjust lod example ([bc704d0](https://github.com/nartc/angular-three/commit/bc704d036cf7ff00c3729e2477ead9eea17f1d5e))
-* update docs and add some docs about performance/best practices ([480f396](https://github.com/nartc/angular-three/commit/480f3965c2f198c2c6c8cd30b3e7a4d3dfd66261))
-* use Scene component ([1c3ab8f](https://github.com/nartc/angular-three/commit/1c3ab8f6a9a1960db4ad395eb40cd1f41d03b399))
-
 ### [5.2.1](https://github.com/nartc/angular-three/compare/5.2.0...5.2.1) (2022-05-08)
 
-
 ### Bug Fixes
 
-* **postprocessing:** clean up effect composer ([7a19642](https://github.com/nartc/angular-three/commit/7a19642f958f875d1fa61bd8c8bf31e20e98d6c7))
-* **postprocessing:** fix LUTEffect to construct correctly ([6389da5](https://github.com/nartc/angular-three/commit/6389da5c9df14408a1200700d0d3daee5a4a5b1b))
-* **postprocessing:** use this.instance$ instead for DepthofField ([142d5ce](https://github.com/nartc/angular-three/commit/142d5ce40fd11ecb7db9d930dc050ab347cb0365))
-
+- **postprocessing:** clean up effect composer ([7a19642](https://github.com/nartc/angular-three/commit/7a19642f958f875d1fa61bd8c8bf31e20e98d6c7))
+- **postprocessing:** fix LUTEffect to construct correctly ([6389da5](https://github.com/nartc/angular-three/commit/6389da5c9df14408a1200700d0d3daee5a4a5b1b))
+- **postprocessing:** use this.instance$ instead for DepthofField ([142d5ce](https://github.com/nartc/angular-three/commit/142d5ce40fd11ecb7db9d930dc050ab347cb0365))
 
 ### Documentations
 
-* add link to andivr cannon examples; add performance page ([519704b](https://github.com/nartc/angular-three/commit/519704b97c617e4e7e6c39365e11544fae042c4d))
-* add missing code changes to render 2 cubes ([#115](https://github.com/nartc/angular-three/issues/115)) ([c094683](https://github.com/nartc/angular-three/commit/c094683dcd656853c29f26478256f1df4c818e21))
-* add more performance related examples ([dad2b35](https://github.com/nartc/angular-three/commit/dad2b3548005493f02388965d01b3a6498a91c67))
+- add link to andivr cannon examples; add performance page ([519704b](https://github.com/nartc/angular-three/commit/519704b97c617e4e7e6c39365e11544fae042c4d))
+- add missing code changes to render 2 cubes ([#115](https://github.com/nartc/angular-three/issues/115)) ([c094683](https://github.com/nartc/angular-three/commit/c094683dcd656853c29f26478256f1df4c818e21))
+- add more performance related examples ([dad2b35](https://github.com/nartc/angular-three/commit/dad2b3548005493f02388965d01b3a6498a91c67))
 
 ## [5.2.0](https://github.com/nartc/angular-three/compare/5.1.1...5.2.0) (2022-05-07)
 
-
 ### Features
 
-* **core:** add update event emitter to instance which emits after setOptions ([f865c73](https://github.com/nartc/angular-three/commit/f865c7363c64311dd3b6ca31fe310fc01d29b283))
-* **postprocessing:** rename simple effects; use individual inputs ([0c871ad](https://github.com/nartc/angular-three/commit/0c871adccb92d53c762938a78d6ca856c07f7870))
-* **soba:** add AdaptiveDpr and AdaptiveEvents to react to performance regression on camera movements ([1dbbd62](https://github.com/nartc/angular-three/commit/1dbbd622c75a59f1ca07b7a8320afedfa3e711f2))
-* **soba:** add soba text3d ([8c68720](https://github.com/nartc/angular-three/commit/8c68720d2dfad76e1d3b92b03c5ba7cb801f921a))
-
+- **core:** add update event emitter to instance which emits after setOptions ([f865c73](https://github.com/nartc/angular-three/commit/f865c7363c64311dd3b6ca31fe310fc01d29b283))
+- **postprocessing:** rename simple effects; use individual inputs ([0c871ad](https://github.com/nartc/angular-three/commit/0c871adccb92d53c762938a78d6ca856c07f7870))
+- **soba:** add AdaptiveDpr and AdaptiveEvents to react to performance regression on camera movements ([1dbbd62](https://github.com/nartc/angular-three/commit/1dbbd622c75a59f1ca07b7a8320afedfa3e711f2))
+- **soba:** add soba text3d ([8c68720](https://github.com/nartc/angular-three/commit/8c68720d2dfad76e1d3b92b03c5ba7cb801f921a))
 
 ### Bug Fixes
 
-* **core:** re-int object on instanceArg$ changes ([9128e17](https://github.com/nartc/angular-three/commit/9128e170e05488b31d53251c6ee9b1ac871dfdec))
-* **core:** wrong merge logic for performance options ([e55f93e](https://github.com/nartc/angular-three/commit/e55f93e6fb13838b5ad4da8b59d76de83104edfc))
-* **postprocessing:** ssao effect ([2c871df](https://github.com/nartc/angular-three/commit/2c871dfa540a8e01ad37e9e0da7d5caf5392c143))
-* **soba:** avoid error when colors length less than stops length in gradient texture ([6cd6abf](https://github.com/nartc/angular-three/commit/6cd6abf50d16137d8682c57a6eb24e2e4ec55214))
-* **soba:** fix ContentChildren for Float ([f839b97](https://github.com/nartc/angular-three/commit/f839b97da4de5bcddf228e98e249bb45d9fdb583))
-* **soba:** fix ContentChildren for Stage ([250059c](https://github.com/nartc/angular-three/commit/250059cbbc15608383f51d2b33436d628b540223))
-* **soba:** fix ContentChildren; use ref for Center ([ea7cd19](https://github.com/nartc/angular-three/commit/ea7cd19266da4f499cf7dec80677e54a30108c6c))
-* **soba:** fix ContentChildren; use ref for Detailed ([fc150e3](https://github.com/nartc/angular-three/commit/fc150e34a7e93f19c9ee57180e666765446369c0))
-* **soba:** override update for gizmo helper since instance now has update event emitter ([b8111df](https://github.com/nartc/angular-three/commit/b8111df3d50c9959f24bf3d257c066ea0adf481a))
-* **soba:** use ref for Backdrop ([8d606fc](https://github.com/nartc/angular-three/commit/8d606fca8d570b54a70cc9c0680097b8a1a3386e))
-* **soba:** use ref for ContactShadows ([c428794](https://github.com/nartc/angular-three/commit/c428794bf5a72a5b97c21a4ab15ca2738d403834))
-* **soba:** use ref for Environment ([e479d2f](https://github.com/nartc/angular-three/commit/e479d2f1fc232cfc6af741fc873301b5a41ac3de))
-* **soba:** use ref for Gizmo ([5b35a25](https://github.com/nartc/angular-three/commit/5b35a25a33f6eabe7df00b27323cda5fb09b6dc1))
-* **soba:** use ref for Spotlight ([8cdfdb3](https://github.com/nartc/angular-three/commit/8cdfdb3efea88b662a0e6cea4d10f7a50e5454ed))
-
+- **core:** re-int object on instanceArg$ changes ([9128e17](https://github.com/nartc/angular-three/commit/9128e170e05488b31d53251c6ee9b1ac871dfdec))
+- **core:** wrong merge logic for performance options ([e55f93e](https://github.com/nartc/angular-three/commit/e55f93e6fb13838b5ad4da8b59d76de83104edfc))
+- **postprocessing:** ssao effect ([2c871df](https://github.com/nartc/angular-three/commit/2c871dfa540a8e01ad37e9e0da7d5caf5392c143))
+- **soba:** avoid error when colors length less than stops length in gradient texture ([6cd6abf](https://github.com/nartc/angular-three/commit/6cd6abf50d16137d8682c57a6eb24e2e4ec55214))
+- **soba:** fix ContentChildren for Float ([f839b97](https://github.com/nartc/angular-three/commit/f839b97da4de5bcddf228e98e249bb45d9fdb583))
+- **soba:** fix ContentChildren for Stage ([250059c](https://github.com/nartc/angular-three/commit/250059cbbc15608383f51d2b33436d628b540223))
+- **soba:** fix ContentChildren; use ref for Center ([ea7cd19](https://github.com/nartc/angular-three/commit/ea7cd19266da4f499cf7dec80677e54a30108c6c))
+- **soba:** fix ContentChildren; use ref for Detailed ([fc150e3](https://github.com/nartc/angular-three/commit/fc150e34a7e93f19c9ee57180e666765446369c0))
+- **soba:** override update for gizmo helper since instance now has update event emitter ([b8111df](https://github.com/nartc/angular-three/commit/b8111df3d50c9959f24bf3d257c066ea0adf481a))
+- **soba:** use ref for Backdrop ([8d606fc](https://github.com/nartc/angular-three/commit/8d606fca8d570b54a70cc9c0680097b8a1a3386e))
+- **soba:** use ref for ContactShadows ([c428794](https://github.com/nartc/angular-three/commit/c428794bf5a72a5b97c21a4ab15ca2738d403834))
+- **soba:** use ref for Environment ([e479d2f](https://github.com/nartc/angular-three/commit/e479d2f1fc232cfc6af741fc873301b5a41ac3de))
+- **soba:** use ref for Gizmo ([5b35a25](https://github.com/nartc/angular-three/commit/5b35a25a33f6eabe7df00b27323cda5fb09b6dc1))
+- **soba:** use ref for Spotlight ([8cdfdb3](https://github.com/nartc/angular-three/commit/8cdfdb3efea88b662a0e6cea4d10f7a50e5454ed))
 
 ### Documentations
 
-* add adaptive stories ([1117add](https://github.com/nartc/angular-three/commit/1117add387627be36f8c3720c026054e2c5900f9))
-* add args/props for gradient texture story ([0f33e0c](https://github.com/nartc/angular-three/commit/0f33e0ce9ecd38c5e83b701092b1cc5c3b83bfad))
-* add CDK to use platform for poster ([e56ea64](https://github.com/nartc/angular-three/commit/e56ea649f17fca1bac806b19af60b526bc94038a))
-* adjust workflow ([bf96d88](https://github.com/nartc/angular-three/commit/bf96d882675737b725a86b23d6e213ac231d7304))
-* match Drei's props on some stories ([f41eaf9](https://github.com/nartc/angular-three/commit/f41eaf9274787c57a681f795211c1bfdb6ad5835))
-* use createRangeControl ([2305d07](https://github.com/nartc/angular-three/commit/2305d0782c98950b036ea8fcf1101a2d89a1e8bc))
-* use white background for stage stories to see shadow better ([c6569ce](https://github.com/nartc/angular-three/commit/c6569ce954e744c32e44a9d4c3f46a7edb45eecb))
+- add adaptive stories ([1117add](https://github.com/nartc/angular-three/commit/1117add387627be36f8c3720c026054e2c5900f9))
+- add args/props for gradient texture story ([0f33e0c](https://github.com/nartc/angular-three/commit/0f33e0ce9ecd38c5e83b701092b1cc5c3b83bfad))
+- add CDK to use platform for poster ([e56ea64](https://github.com/nartc/angular-three/commit/e56ea649f17fca1bac806b19af60b526bc94038a))
+- adjust workflow ([bf96d88](https://github.com/nartc/angular-three/commit/bf96d882675737b725a86b23d6e213ac231d7304))
+- match Drei's props on some stories ([f41eaf9](https://github.com/nartc/angular-three/commit/f41eaf9274787c57a681f795211c1bfdb6ad5835))
+- use createRangeControl ([2305d07](https://github.com/nartc/angular-three/commit/2305d0782c98950b036ea8fcf1101a2d89a1e8bc))
+- use white background for stage stories to see shadow better ([c6569ce](https://github.com/nartc/angular-three/commit/c6569ce954e744c32e44a9d4c3f46a7edb45eecb))
 
 ### [5.1.1](https://github.com/nartc/angular-three/compare/5.1.0...5.1.1) (2022-05-04)
 
-
 ### Bug Fixes
 
-* **repo:** simplify registerBeforeRender call ([8506248](https://github.com/nartc/angular-three/commit/850624848bd711715e5675292e2eaf59f82dffc1))
-
+- **repo:** simplify registerBeforeRender call ([8506248](https://github.com/nartc/angular-three/commit/850624848bd711715e5675292e2eaf59f82dffc1))
 
 ### Documentations
 
-* typo ([0b13160](https://github.com/nartc/angular-three/commit/0b131607389bdf1d56ab149a28858f474988d31a))
-* update three version ([2de4468](https://github.com/nartc/angular-three/commit/2de44686d72ef61a106fbe2dfa374b7c113a8104))
+- typo ([0b13160](https://github.com/nartc/angular-three/commit/0b131607389bdf1d56ab149a28858f474988d31a))
+- update three version ([2de4468](https://github.com/nartc/angular-three/commit/2de44686d72ef61a106fbe2dfa374b7c113a8104))
 
 ## [5.1.0](https://github.com/nartc/angular-three/compare/5.0.3...5.1.0) (2022-05-04)
 
-
 ### Features
 
-* **core:** update three 0.140 ([25d6a51](https://github.com/nartc/angular-three/commit/25d6a51c4d0a2405f2b2924a03928c7741123a54))
-* **schematics:** bump three version ([7d037cc](https://github.com/nartc/angular-three/commit/7d037cc5c9aed299e3530779c02f21db9a8b4390))
-
+- **core:** update three 0.140 ([25d6a51](https://github.com/nartc/angular-three/commit/25d6a51c4d0a2405f2b2924a03928c7741123a54))
+- **schematics:** bump three version ([7d037cc](https://github.com/nartc/angular-three/commit/7d037cc5c9aed299e3530779c02f21db9a8b4390))
 
 ### Documentations
 
-* add height field example ([124a003](https://github.com/nartc/angular-three/commit/124a003dc4e542ba3e2bf5fa18414a97eb372cf3))
-* add outputs to build step ([3031d62](https://github.com/nartc/angular-three/commit/3031d622d9316e564ddbb4cb75b00f8fed4abb05))
-* add redirects ([9f9b8f8](https://github.com/nartc/angular-three/commit/9f9b8f8271cf53373ef032377370235d712ab025))
-* adjust height-field example ([aebcf41](https://github.com/nartc/angular-three/commit/aebcf41c727e7dc459907682fd64cac91c456aa7))
-* hardcode href ([5c269be](https://github.com/nartc/angular-three/commit/5c269bea43d8250aa322d6b4483558bf8cc6898a))
+- add height field example ([124a003](https://github.com/nartc/angular-three/commit/124a003dc4e542ba3e2bf5fa18414a97eb372cf3))
+- add outputs to build step ([3031d62](https://github.com/nartc/angular-three/commit/3031d622d9316e564ddbb4cb75b00f8fed4abb05))
+- add redirects ([9f9b8f8](https://github.com/nartc/angular-three/commit/9f9b8f8271cf53373ef032377370235d712ab025))
+- adjust height-field example ([aebcf41](https://github.com/nartc/angular-three/commit/aebcf41c727e7dc459907682fd64cac91c456aa7))
+- hardcode href ([5c269be](https://github.com/nartc/angular-three/commit/5c269bea43d8250aa322d6b4483558bf8cc6898a))
 
 ### [5.0.3](https://github.com/nartc/angular-three/compare/5.0.2...5.0.3) (2022-05-02)
 
-
 ### Bug Fixes
 
-* **postprocessing:** use a group for child effectx ([6a52a39](https://github.com/nartc/angular-three/commit/6a52a39d91d6496a384f79b9f6ce655dccdad5db))
-
+- **postprocessing:** use a group for child effectx ([6a52a39](https://github.com/nartc/angular-three/commit/6a52a39d91d6496a384f79b9f6ce655dccdad5db))
 
 ### Documentations
 
-* adjust keen bloom to use ngt-effect-composer-content ([a1a2cd2](https://github.com/nartc/angular-three/commit/a1a2cd214754238e7a69195906337e53b30ecf92))
-* adjust object clump to use ngt-effect-composer-content ([1c472dc](https://github.com/nartc/angular-three/commit/1c472dc3b60d0cb0078aef18889403dd0f9efa08))
+- adjust keen bloom to use ngt-effect-composer-content ([a1a2cd2](https://github.com/nartc/angular-three/commit/a1a2cd214754238e7a69195906337e53b30ecf92))
+- adjust object clump to use ngt-effect-composer-content ([1c472dc](https://github.com/nartc/angular-three/commit/1c472dc3b60d0cb0078aef18889403dd0f9efa08))
 
 ### [5.0.2](https://github.com/nartc/angular-three/compare/5.0.1...5.0.2) (2022-05-02)
 
-
 ### Bug Fixes
 
-* **core:** expose checkNeedsUpdate and call checkNeedsUpdate where needsUpdate = true was ([0514798](https://github.com/nartc/angular-three/commit/0514798b2fdf397e0a591c10bf38f49a9f174d85))
-* **soba:** ensure to update material and material uniforms for Sky ([5e683da](https://github.com/nartc/angular-three/commit/5e683dad28d7b2355cb4c732beeece3460650f9c))
-
+- **core:** expose checkNeedsUpdate and call checkNeedsUpdate where needsUpdate = true was ([0514798](https://github.com/nartc/angular-three/commit/0514798b2fdf397e0a591c10bf38f49a9f174d85))
+- **soba:** ensure to update material and material uniforms for Sky ([5e683da](https://github.com/nartc/angular-three/commit/5e683dad28d7b2355cb4c732beeece3460650f9c))
 
 ### Documentations
 
-* adjust netlify for main branch now ([263430a](https://github.com/nartc/angular-three/commit/263430abe7a613b366d623efd6916773e3e272f1))
-* adjust predocs command to run install workspace root ([a7542b0](https://github.com/nartc/angular-three/commit/a7542b0e6256f45ff23cb07daccbfbf13271edba))
-* adjust storybook ([c01ed8b](https://github.com/nartc/angular-three/commit/c01ed8b07d161b9e48be861fe9315ac300b8c60e))
-* force install devDependencies ([7013bad](https://github.com/nartc/angular-three/commit/7013bad96f6fe4407958b7c247c8bbe72eff84ab))
-* revert change to predocs ([09b1d89](https://github.com/nartc/angular-three/commit/09b1d89d746e8ca252374bf4159fa2a04d2475bf))
+- adjust netlify for main branch now ([263430a](https://github.com/nartc/angular-three/commit/263430abe7a613b366d623efd6916773e3e272f1))
+- adjust predocs command to run install workspace root ([a7542b0](https://github.com/nartc/angular-three/commit/a7542b0e6256f45ff23cb07daccbfbf13271edba))
+- adjust storybook ([c01ed8b](https://github.com/nartc/angular-three/commit/c01ed8b07d161b9e48be861fe9315ac300b8c60e))
+- force install devDependencies ([7013bad](https://github.com/nartc/angular-three/commit/7013bad96f6fe4407958b7c247c8bbe72eff84ab))
+- revert change to predocs ([09b1d89](https://github.com/nartc/angular-three/commit/09b1d89d746e8ca252374bf4159fa2a04d2475bf))
 
 ### [5.0.1](https://github.com/nartc/angular-three/compare/5.0.0...5.0.1) (2022-05-01)
 
