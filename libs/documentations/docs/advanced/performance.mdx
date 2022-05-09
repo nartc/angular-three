@@ -6,29 +6,6 @@ sidebar_label: Performance
 
 The Scene Graph can get extremely complicated which demands more and more resources of the devices. This section outlines some tips and tricks to improve the performance of rendering the Scene Graph in case we need it.
 
-## NgZone
-
-Commonly, Angular reactivity is achieved by utilizing [Zone.js](https://github.com/angular/angular/tree/main/packages/zone.js) and Angular Core has a wrapper service around Zone.js called [NgZone](https://angular.io/api/core/NgZone).
-
-In Angular Three, or any THREE.js applications, most of the actions happen inside of the root `<canvas>`. Hence, Angular's automatic change detection via Zone.js is _mostly_ unnecessary. To opt-out of Zone.js in our custom components, we can inject `NgZone` and run our logic in `runOutsideAngular()`
-
-```ts
-@Component({
-  /*...*/
-})
-export class SceneComponent {
-  constructor(private zone: NgZone) {}
-
-  ngOnInit() {
-    this.zone.runOutsideAngular(() => {
-      /* do logic like setting up Physics */
-    });
-  }
-}
-```
-
-Most common use-cases are setting up Physics or updating Object3D's options.
-
 ## Re-use Geometries and Materials
 
 Each Geometry and Material consumes the GPU's resources. If we know that certain Geometries and/or Materials will repeat, we can reuse them.

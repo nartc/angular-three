@@ -31,11 +31,6 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Advanced',
-      items: ['advanced/performance'],
-    },
-    {
-      type: 'category',
       label: 'Cannon API',
       items: [
         'cannon/overview',
@@ -52,6 +47,19 @@ const sidebars = {
       type: 'link',
       label: 'Soba API',
       href: 'https://angular-three.netlify.app/soba',
+    },
+    {
+      type: 'category',
+      label: 'Advanced',
+      items: [
+        {
+          type: 'category',
+          label: 'Best practices',
+          link: { type: 'doc', id: 'advanced/practices/best-practices' },
+          items: ['advanced/practices/wrap-existing-component'],
+        },
+        'advanced/performance',
+      ],
     },
     {
       type: 'link',

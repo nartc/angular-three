@@ -1,0 +1,36 @@
+---
+id: wrap-existing-component
+title: Wrap existing component
+sidebar_label: Wrap existing component
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+It is common that we want to wrap some existing NGT's components and there are different use-cases for "wrapping" a component
+
+## No Content Projection
+
+We've seen this use-case before in [Out first scene](../../first-scene#making-our-cube-an-angular-component) where we put `<ngt-mesh>` in `CubeComponent`.
+
+The catch here is that we **do not** intend to use Content Projection with `CubeComponent`
+
+```html
+<!-- this is all we do -->
+<app-cube></app-cube>
+
+<!-- this will not work -->
+<app-cube>
+  <ngt-mesh></ngt-mesh>
+</app-cube>
+```
+
+Angular's Content Projection works a bit differently that what we might think. Here, `<ngt-mesh>` is _supposedly_ a child of `<app-cube>` but it is **not**. `<ngt-mesh>` is a child of the component whose template we are rendering (eg: `AppComponent`). In other words, our Scene Graph _might_ look correct (aka `<ngt-mesh>` should be a child of `<app-cube>`) but in reality `<ngt-mesh>` is on the same level as `<app-cube>`
+
+## With Content Projection
+
+TBA
+
+### Extending functionality
+
+TBA

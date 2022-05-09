@@ -1,0 +1,58 @@
+---
+id: best-practices
+title: Best practices
+sidebar_label: Best practices
+---
+
+## Use NgZone as needed
+
+Commonly, Angular reactivity is achieved by utilizing [Zone.js](https://github.com/angular/angular/tree/main/packages/zone.js) and Angular Core has a wrapper service around Zone.js called [NgZone](https://angular.io/api/core/NgZone).
+
+In Angular Three, or any THREE.js applications, most of the actions happen inside of the root `<canvas>`. Hence, Angular's automatic change detection via Zone.js is _mostly_ unnecessary. To opt-out of Zone.js in our custom components, we can inject `NgZone` and run our logic in `runOutsideAngular()`
+
+```ts
+@Component({
+  /*...*/
+})
+export class SceneComponent {
+  constructor(private zone: NgZone) {}
+
+  ngOnInit() {
+    this.zone.runOutsideAngular(() => {
+      /* do logic like setting up Physics */
+    });
+  }
+}
+```
+
+Most common use-cases are setting up Physics or updating Object3D's options.
+
+## Use a `SceneComponent`
+
+Everything in NGT needs to be rendered inside of a `<ngt-canvas>`. It is recommended that we should have a `SceneComponent` instead of laying out the Scene Graph directly under `<ngt-canvas>`
+
+```html
+<!-- instead of -->
+<ngt-canvas>
+  <ngt-ambient-light></ngt-ambient-light>
+  <ngt-mesh></ngt-mesh>
+  <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+</ngt-canvas>
+
+<!-- do this -->
+<!-- scene.component.html -->
+<ngt-ambient-light></ngt-ambient-light>
+<ngt-mesh></ngt-mesh>
+<ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+
+<!-- app.component.html -->
+<ngt-canvas>
+  <app-scene></app-scene>
+</ngt-canvas>
+```
+
+The main reason is that there are some APIs (services) that are provided in **root** but there are some other APIs that are provided on the `<ngt-canvas>` component. By placing the Scene Graph in a single `SceneComponent` under `<ngt-canvas>`, we can make sure that all APIs can be injected in that **single SceneComponent** regardless of where the APIs are provided.
+
+## Use `NgtComponentStore`
+
+`NgtComponentStore` is a great way to make our component reactive and free of subscriptions. Check out [NgtComponentStore documentation](../../core/component-store)
