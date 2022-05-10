@@ -48,7 +48,11 @@
           "libs/soba/staging/**/*.ts",
           "libs/soba/staging/**/*.html",
           "libs/soba/abstractions/**/*.ts",
-          "libs/soba/abstractions/**/*.html"
+          "libs/soba/abstractions/**/*.html",
+          "libs/soba/shaders/**/*.ts",
+          "libs/soba/shaders/**/*.html",
+          "libs/soba/materials/**/*.ts",
+          "libs/soba/materials/**/*.html"
         ]
       }
     },

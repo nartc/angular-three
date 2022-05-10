@@ -13,10 +13,11 @@ import {
 import { NgtBufferAttributeModule } from '@angular-three/core/attributes';
 import { NgtBufferGeometryModule } from '@angular-three/core/geometries';
 import { NgtPointsModule } from '@angular-three/core/points';
+import { StarFieldMaterial } from '@angular-three/soba/materials';
+import { NgtSobaStarFieldMaterialModule } from '@angular-three/soba/shaders';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
-import { NgtSobaStarFieldMaterialModule, StarFieldMaterial } from './star-material';
 
 const genStar = (r: number) => {
   return new THREE.Vector3().setFromSpherical(
@@ -98,7 +99,7 @@ export class NgtSobaStars extends NgtObjectInputs<THREE.Points, NgtSobaStarsStat
     this.set({ speed: coerceNumberProperty(speed) });
   }
 
-  materialRef = new Ref<StarFieldMaterial>();
+  readonly materialRef = new Ref<StarFieldMaterial>();
   readonly blending = THREE.AdditiveBlending;
 
   readonly bufferAttributes$ = this.select(

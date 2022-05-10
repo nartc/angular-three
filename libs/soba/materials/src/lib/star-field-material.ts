@@ -1,6 +1,3 @@
-import { AnyConstructor, provideCommonMaterialRef } from '@angular-three/core';
-import { NgtShaderMaterial } from '@angular-three/core/materials';
-import { Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
 export class StarFieldMaterial extends THREE.ShaderMaterial {
@@ -32,20 +29,3 @@ export class StarFieldMaterial extends THREE.ShaderMaterial {
     });
   }
 }
-
-@Component({
-  selector: 'ngt-soba-star-field-material',
-  template: `<ng-content></ng-content>`,
-  providers: [provideCommonMaterialRef(NgtSobaStarFieldMaterial)],
-})
-export class NgtSobaStarFieldMaterial extends NgtShaderMaterial {
-  override get materialType(): AnyConstructor<StarFieldMaterial> {
-    return StarFieldMaterial;
-  }
-}
-
-@NgModule({
-  declarations: [NgtSobaStarFieldMaterial],
-  exports: [NgtSobaStarFieldMaterial],
-})
-export class NgtSobaStarFieldMaterialModule {}

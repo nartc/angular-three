@@ -3,13 +3,13 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  NGT_INSTANCE_HOST_REF,
-  NGT_INSTANCE_REF,
   NgtObjectInputs,
   NgtObjectInputsState,
   NgtObjectPassThroughModule,
   NgtRenderState,
   NgtStore,
+  NGT_INSTANCE_HOST_REF,
+  NGT_INSTANCE_REF,
   NumberInput,
   provideObjectHostRef,
   Ref,
@@ -18,6 +18,7 @@ import {
 import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtTextureLoader } from '@angular-three/soba/loaders';
+import { NgtSobaImageShaderMaterialModule } from '@angular-three/soba/shaders';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -36,7 +37,6 @@ import {
 } from '@angular/core';
 import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 import * as THREE from 'three';
-import { NgtSobaImageShaderMaterialModule } from './image-shader-material';
 
 @Directive({
   selector: 'ng-template[ngt-soba-image-content]',
