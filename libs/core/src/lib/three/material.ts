@@ -276,7 +276,7 @@ export abstract class NgtCommonMaterial<
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
       this.onCanvasReady(this.store.ready$, () => {
-        this.init();
+        this.init(this.ctorParams$);
         this.postInit();
         this.setParameters(
           this.select(
@@ -296,7 +296,7 @@ export abstract class NgtCommonMaterial<
     });
   }
 
-  private readonly init = this.effect<void>(
+  private readonly init = this.effect<{}>(
     tapEffect(() => {
       const material = this.prepareInstance(new this.materialType());
       return () => {
