@@ -75,7 +75,7 @@ export class Plane {
   @Input() position?: NgtVector3;
   @Input() rotation?: NgtEuler;
 
-  planeRef = this.physicBody.usePlane(() => ({
+  readonly planeRef = this.physicBody.usePlane<THREE.Mesh>(() => ({
     position: this.position as NgtTriple,
     rotation: this.rotation as NgtTriple,
   }));
@@ -100,9 +100,9 @@ export class Plane {
   providers: [NgtPhysicBody],
 })
 export class Box {
-  boxSize: NgtTriple = [4, 4, 4];
+  readonly boxSize: NgtTriple = [4, 4, 4];
 
-  boxRef = this.physicBody.useBox(() => ({
+  readonly boxRef = this.physicBody.useBox<THREE.Mesh>(() => ({
     mass: 1,
     type: 'Kinematic',
     args: this.boxSize,
@@ -138,7 +138,7 @@ export class InstancedSpheres implements OnInit {
 
   colors!: Float32Array;
 
-  sphereRef = this.physicBody.useSphere((index) => ({
+  readonly sphereRef = this.physicBody.useSphere<THREE.InstancedMesh>((index) => ({
     args: [1],
     mass: 1,
     position: [Math.random() - 0.5, Math.random() - 0.5, index * 2],

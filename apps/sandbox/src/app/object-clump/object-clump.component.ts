@@ -120,7 +120,7 @@ export class Clump {
   readonly count = 40;
   readonly texture$ = this.textureLoader.load('assets/cross.jpg');
 
-  readonly sphereRef = this.physicBody.useSphere(() => ({
+  readonly sphereRef = this.physicBody.useSphere<THREE.InstancedMesh>(() => ({
     args: [1],
     mass: 1,
     angularDamping: 0.1,

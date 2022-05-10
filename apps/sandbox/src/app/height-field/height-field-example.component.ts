@@ -67,7 +67,7 @@ function generateHeightmap({ width, height, number, scale }: GenerateHeightmapAr
 export class HeightFieldExampleComponent {
   @Input() scale = 10;
 
-  heights = generateHeightmap({
+  readonly heights = generateHeightmap({
     height: 128,
     number: 10,
     scale: 1,

@@ -8,6 +8,7 @@ import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import * as THREE from 'three';
 
 @Component({
   selector: 'sandbox-physic-cubes',
@@ -54,7 +55,7 @@ export class Floor {
   @Input() position?: NgtTriple;
   rotation = [-Math.PI / 2, 0, 0] as NgtTriple;
 
-  planeRef = this.physicBody.usePlane(() => ({
+  readonly planeRef = this.physicBody.usePlane<THREE.Mesh>(() => ({
     args: [1000, 1000],
     rotation: this.rotation,
     position: this.position,
@@ -78,7 +79,7 @@ export class Cube {
   @Input() position?: NgtTriple;
   rotation = [0.4, 0.2, 0.5] as NgtTriple;
 
-  boxRef = this.physicBody.useBox(() => ({
+  readonly boxRef = this.physicBody.useBox<THREE.Mesh>(() => ({
     mass: 1,
     position: this.position,
     rotation: this.rotation,

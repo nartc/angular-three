@@ -3,6 +3,7 @@ import { NgtTriple } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
+import * as THREE from 'three';
 
 @Component({
   selector: 'sandbox-height-field[elementSize][heights][position][rotation]',
@@ -18,7 +19,7 @@ export class HeightFieldComponent {
 
   readonly color = niceColors[17][4];
 
-  heightFieldRef = this.physicBody.useHeightfield(() => ({
+  readonly heightFieldRef = this.physicBody.useHeightfield<THREE.Mesh>(() => ({
     args: [
       this.heights,
       {

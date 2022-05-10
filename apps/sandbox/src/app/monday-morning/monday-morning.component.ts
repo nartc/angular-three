@@ -1,9 +1,9 @@
 import {
   ConeTwistConstraintOpts,
   NgtPhysicBody,
+  NgtPhysicBodyReturn,
   NgtPhysicConstraint,
   NgtPhysicConstraintReturn,
-  NgtPhysicsBodyPublicApi,
   NgtPhysicsModule,
 } from '@angular-three/cannon';
 import { NgtCanvasModule, NgtLoader, NgtObject, NgtRenderState, NgtTriple, NgtVector3, Ref } from '@angular-three/core';
@@ -46,7 +46,7 @@ const { joints, shapes } = createRagdoll(4.8, Math.PI / 16, Math.PI / 16, 0);
 
 const double = ([x, y, z]: Readonly<NgtTriple>): NgtTriple => [x * 2, y * 2, z * 2];
 
-const cursor = new Ref<THREE.Object3D>();
+const cursor = new Ref<THREE.Mesh>();
 
 @Component({
   selector: 'sandbox-monday-morning',
@@ -103,7 +103,7 @@ export class Scene {}
   providers: [NgtPhysicBody],
 })
 export class Cursor {
-  sphereRef = this.physicBody.useSphere(
+  readonly sphereRef = this.physicBody.useSphere<THREE.Mesh>(
     () => ({
       args: [0.5],
       position: [0, 0, 10000],
@@ -127,7 +127,7 @@ export class Cursor {
   providers: [NgtPhysicConstraint],
 })
 export class DragConstraint implements OnInit {
-  private constraint!: NgtPhysicConstraintReturn<'PointToPoint'>;
+  private constraint!: NgtPhysicConstraintReturn<'PointToPoint', THREE.Mesh>;
 
   constructor(
     private physicConstraint: NgtPhysicConstraint,
@@ -145,11 +145,10 @@ export class DragConstraint implements OnInit {
   }
 
   ngOnInit() {
-    this.constraint = this.physicConstraint.usePointToPointConstraint(
-      cursor,
-      this.object.instance as unknown as Ref<THREE.Object3D>,
-      { pivotA: [0, 0, 0], pivotB: [0, 0, 0] }
-    );
+    this.constraint = this.physicConstraint.usePointToPointConstraint<THREE.Mesh>(cursor, this.object.instance, {
+      pivotA: [0, 0, 0],
+      pivotB: [0, 0, 0],
+    });
     this.constraint.api.disable();
   }
 }
@@ -195,7 +194,7 @@ export class Box implements OnInit {
 
   shape!: ShapeConfig;
   scale!: NgtTriple;
-  boxRef!: { ref: Ref<THREE.Object3D>; api: NgtPhysicsBodyPublicApi };
+  boxRef!: NgtPhysicBodyReturn<THREE.Mesh>;
 
   constructor(
     @Optional()
@@ -208,7 +207,7 @@ export class Box implements OnInit {
   ngOnInit() {
     this.shape = shapes[this.name];
     this.scale = double(this.shape.args);
-    this.boxRef = this.physicBody.useBox(() => ({
+    this.boxRef = this.physicBody.useBox<THREE.Mesh>(() => ({
       args: [...this.shape.args],
       linearDamping: 0.99,
       mass: this.shape.mass,
@@ -326,7 +325,7 @@ export class Ragdoll {
   providers: [NgtPhysicBody],
 })
 export class Plane {
-  planeRef = this.physicBody.usePlane(() => ({
+  readonly planeRef = this.physicBody.usePlane<THREE.Mesh>(() => ({
     args: [1000, 1000],
     position: [0, -5, 0],
     rotation: [-Math.PI / 2, 0, 0],
@@ -380,7 +379,7 @@ export class Plane {
   providers: [NgtPhysicBody],
 })
 export class Chair {
-  chairRef = this.physicBody.useCompoundBody(() => ({
+  readonly chairRef = this.physicBody.useCompoundBody<THREE.Group>(() => ({
     mass: 1,
     position: [-6, 0, 0],
     shapes: [
@@ -447,7 +446,7 @@ export class Chair {
   providers: [NgtPhysicBody, NgtPhysicConstraint],
 })
 export class Lamp implements OnInit {
-  fixtureRef = this.physicBody.useSphere(
+  readonly fixtureRef = this.physicBody.useSphere(
     () => ({
       args: [1],
       position: [0, 16, 0],
@@ -455,7 +454,7 @@ export class Lamp implements OnInit {
     }),
     false
   );
-  lampRef = this.physicBody.useBox(() => ({
+  readonly lampRef = this.physicBody.useBox<THREE.Mesh>(() => ({
     angulardamping: 1.99,
     args: [1, 0, 5],
     linearDamping: 0.9,
@@ -512,27 +511,27 @@ export class Lamp implements OnInit {
   providers: [NgtPhysicBody],
 })
 export class Table {
-  seatRef = this.physicBody.useBox(() => ({
+  readonly seatRef = this.physicBody.useBox<THREE.Mesh>(() => ({
     args: [2.5, 0.25, 2.5],
     position: [9, -0.8, 0],
     type: 'Static',
   }));
-  leg1Ref = this.physicBody.useBox(() => ({
+  readonly leg1Ref = this.physicBody.useBox<THREE.Mesh>(() => ({
     args: [0.25, 2, 0.25],
     position: [7.2, -3, 1.8],
     type: 'Static',
   }));
-  leg2Ref = this.physicBody.useBox(() => ({
+  readonly leg2Ref = this.physicBody.useBox<THREE.Mesh>(() => ({
     args: [0.25, 2, 0.25],
     position: [10.8, -3, 1.8],
     type: 'Static',
   }));
-  leg3Ref = this.physicBody.useBox(() => ({
+  readonly leg3Ref = this.physicBody.useBox<THREE.Mesh>(() => ({
     args: [0.25, 2, 0.25],
     position: [7.2, -3, -1.8],
     type: 'Static',
   }));
-  leg4Ref = this.physicBody.useBox(() => ({
+  readonly leg4Ref = this.physicBody.useBox<THREE.Mesh>(() => ({
     args: [0.25, 2, 0.25],
     position: [10.8, -3, -1.8],
     type: 'Static',
@@ -580,7 +579,7 @@ interface CupGLTF extends GLTF {
 export class Mug {
   cup$ = this.loader.use(GLTFLoader, 'assets/cup.glb') as Observable<CupGLTF>;
 
-  mugRef = this.physicBody.useCylinder(() => ({
+  readonly mugRef = this.physicBody.useCylinder<THREE.Group>(() => ({
     args: [0.6, 0.6, 1, 16],
     mass: 1,
     position: [9, 0, 0],

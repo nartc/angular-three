@@ -22,7 +22,7 @@ export class SpheresComponent extends NgtComponentStore {
 
   @Input() spread = 0;
 
-  readonly sphereRef = this.physicBody.useSphere((index) => ({
+  readonly sphereRef = this.physicBody.useSphere<THREE.InstancedMesh>((index) => ({
     args: [0.2],
     mass: 1,
     position: [
