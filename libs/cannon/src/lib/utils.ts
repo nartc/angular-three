@@ -11,14 +11,14 @@ import * as THREE from 'three';
 export class NgtCannonUtils {
   static incrementingId = 0;
 
-  static getUUID(ref: Ref<THREE.Object3D>, index?: number): string | null {
+  static getUUID<TObject extends THREE.Object3D = THREE.Object3D>(ref: Ref<TObject>, index?: number): string | null {
     const suffix = index === undefined ? '' : `/${index}`;
     if (typeof ref === 'function') return null;
     return ref && ref.value && `${ref.value.uuid}${suffix}`;
   }
 
-  static subscribe<T extends SubscriptionName>(
-    ref: Ref<THREE.Object3D>,
+  static subscribe<T extends SubscriptionName, TObject extends THREE.Object3D = THREE.Object3D>(
+    ref: Ref<TObject>,
     worker: CannonWorkerAPI,
     subscriptions: Subscriptions,
     type: T,

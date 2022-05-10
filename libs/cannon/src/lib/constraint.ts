@@ -33,9 +33,13 @@ type NgtConstraintORHingeApi<T extends 'Hinge' | ConstraintTypes> = T extends Co
   ? ConstraintApi
   : HingeConstraintApi;
 
-export interface NgtPhysicConstraintReturn<T extends 'Hinge' | ConstraintTypes> {
-  bodyA: Ref<THREE.Object3D>;
-  bodyB: Ref<THREE.Object3D>;
+export interface NgtPhysicConstraintReturn<
+  T extends 'Hinge' | ConstraintTypes,
+  TObjectA extends THREE.Object3D = THREE.Object3D,
+  TObjectB extends THREE.Object3D = THREE.Object3D
+> {
+  bodyA: Ref<TObjectA>;
+  bodyB: Ref<TObjectB>;
   api: NgtConstraintORHingeApi<T>;
 }
 
@@ -48,38 +52,58 @@ export class NgtPhysicConstraint extends NgtComponentStore {
     super();
   }
 
-  usePointToPointConstraint(bodyA: Ref<THREE.Object3D>, bodyB: Ref<THREE.Object3D>, optns: PointToPointConstraintOpts) {
-    return this.useConstraint('PointToPoint', bodyA, bodyB, optns);
+  usePointToPointConstraint<
+    TObjectA extends THREE.Object3D = THREE.Object3D,
+    TObjectB extends THREE.Object3D = THREE.Object3D
+  >(bodyA: Ref<TObjectA>, bodyB: Ref<TObjectB>, optns: PointToPointConstraintOpts) {
+    return this.useConstraint<'PointToPoint', TObjectA, TObjectB>('PointToPoint', bodyA, bodyB, optns);
   }
 
-  useConeTwistConstraint(bodyA: Ref<THREE.Object3D>, bodyB: Ref<THREE.Object3D>, optns: ConeTwistConstraintOpts) {
-    return this.useConstraint('ConeTwist', bodyA, bodyB, optns);
+  useConeTwistConstraint<
+    TObjectA extends THREE.Object3D = THREE.Object3D,
+    TObjectB extends THREE.Object3D = THREE.Object3D
+  >(bodyA: Ref<TObjectA>, bodyB: Ref<TObjectB>, optns: ConeTwistConstraintOpts) {
+    return this.useConstraint<'ConeTwist', TObjectA, TObjectB>('ConeTwist', bodyA, bodyB, optns);
   }
 
-  useDistanceConstraint(bodyA: Ref<THREE.Object3D>, bodyB: Ref<THREE.Object3D>, optns: DistanceConstraintOpts) {
-    return this.useConstraint('Distance', bodyA, bodyB, optns);
+  useDistanceConstraint<
+    TObjectA extends THREE.Object3D = THREE.Object3D,
+    TObjectB extends THREE.Object3D = THREE.Object3D
+  >(bodyA: Ref<TObjectA>, bodyB: Ref<TObjectB>, optns: DistanceConstraintOpts) {
+    return this.useConstraint<'Distance', TObjectA, TObjectB>('Distance', bodyA, bodyB, optns);
   }
 
-  useHingeConstraint(bodyA: Ref<THREE.Object3D>, bodyB: Ref<THREE.Object3D>, optns: HingeConstraintOpts) {
-    return this.useConstraint('Hinge', bodyA, bodyB, optns);
+  useHingeConstraint<
+    TObjectA extends THREE.Object3D = THREE.Object3D,
+    TObjectB extends THREE.Object3D = THREE.Object3D
+  >(bodyA: Ref<TObjectA>, bodyB: Ref<TObjectB>, optns: HingeConstraintOpts) {
+    return this.useConstraint<'Hinge', TObjectA, TObjectB>('Hinge', bodyA, bodyB, optns);
   }
 
-  useLockConstraint(bodyA: Ref<THREE.Object3D>, bodyB: Ref<THREE.Object3D>, optns: LockConstraintOpts) {
-    return this.useConstraint('Lock', bodyA, bodyB, optns);
+  useLockConstraint<TObjectA extends THREE.Object3D = THREE.Object3D, TObjectB extends THREE.Object3D = THREE.Object3D>(
+    bodyA: Ref<TObjectA>,
+    bodyB: Ref<TObjectB>,
+    optns: LockConstraintOpts
+  ) {
+    return this.useConstraint<'Lock', TObjectA, TObjectB>('Lock', bodyA, bodyB, optns);
   }
 
-  private useConstraint<TConstraintType extends 'Hinge' | ConstraintTypes>(
+  private useConstraint<
+    TConstraintType extends 'Hinge' | ConstraintTypes,
+    TObjectA extends THREE.Object3D = THREE.Object3D,
+    TObjectB extends THREE.Object3D = THREE.Object3D
+  >(
     type: TConstraintType,
-    bodyA: Ref<THREE.Object3D>,
-    bodyB: Ref<THREE.Object3D>,
+    bodyA: Ref<TObjectA>,
+    bodyB: Ref<TObjectB>,
     opts: ConstraintOptns | HingeConstraintOpts = {}
-  ): NgtPhysicConstraintReturn<TConstraintType> {
+  ): NgtPhysicConstraintReturn<TConstraintType, TObjectA, TObjectB> {
     return this.zone.runOutsideAngular(() => {
       const physicsStore = this.physicsStore;
       const uuid = makeId();
 
       this.onCanvasReady(this.store.ready$, () => {
-        this.effect<[CannonWorkerAPI, THREE.Object3D, THREE.Object3D]>(
+        this.effect<[CannonWorkerAPI, TObjectA, TObjectB]>(
           tapEffect(([worker, a, b]) => {
             worker.addConstraint({
               props: [a.uuid, b.uuid, opts],

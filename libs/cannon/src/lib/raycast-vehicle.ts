@@ -25,8 +25,8 @@ export interface NgtPhysicRaycastVehiclePublicApi {
   remove: () => void;
 }
 
-export interface NgtPhysicRaycastVehicleReturn {
-  ref: Ref<THREE.Object3D>;
+export interface NgtPhysicRaycastVehicleReturn<TObject extends THREE.Object3D = THREE.Object3D> {
+  ref: Ref<TObject>;
   api: NgtPhysicRaycastVehiclePublicApi;
 }
 
@@ -39,20 +39,20 @@ export class NgtPhysicRaycastVehicle extends NgtComponentStore {
     super();
   }
 
-  useRaycastVehicle(
+  useRaycastVehicle<TObject extends THREE.Object3D = THREE.Object3D>(
     fn: () => NgtPhysicRaycastVehicleProps,
     useOnTemplate = true,
-    instanceRef?: Ref<THREE.Object3D>
-  ): NgtPhysicRaycastVehicleReturn {
+    instanceRef?: Ref<TObject>
+  ): NgtPhysicRaycastVehicleReturn<TObject> {
     return this.zone.runOutsideAngular(() => {
-      let ref = instanceRef as Ref<THREE.Object3D>;
+      let ref = instanceRef as Ref<TObject>;
 
       if (!ref) {
         ref = new Ref();
       }
 
       if (!ref.value && !useOnTemplate) {
-        ref.set(prepare(new THREE.Object3D(), () => this.store.get()));
+        ref.set(prepare(new THREE.Object3D() as TObject, () => this.store.get()));
       }
 
       const physicsStore = this.physicsStore;
@@ -80,9 +80,7 @@ export class NgtPhysicRaycastVehicle extends NgtComponentStore {
               worker.removeRaycastVehicle({ uuid });
             };
           })
-        )(
-          combineLatest([physicsStore.select((s) => s.worker), ref.pipe(filter((obj): obj is THREE.Object3D => !!obj))])
-        );
+        )(combineLatest([physicsStore.select((s) => s.worker), ref.pipe(filter((obj): obj is TObject => !!obj))]));
       });
 
       return {

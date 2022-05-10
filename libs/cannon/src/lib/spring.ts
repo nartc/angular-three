@@ -12,9 +12,12 @@ export interface NgtPhysicSpringApi {
   remove: () => void;
 }
 
-export interface NgtPhysicSpringReturn {
-  bodyA: Ref<THREE.Object3D>;
-  bodyB: Ref<THREE.Object3D>;
+export interface NgtPhysicSpringReturn<
+  TObjectA extends THREE.Object3D = THREE.Object3D,
+  TObjectB extends THREE.Object3D = THREE.Object3D
+> {
+  bodyA: Ref<TObjectA>;
+  bodyB: Ref<TObjectB>;
   api: NgtPhysicSpringApi;
 }
 
@@ -28,7 +31,11 @@ export class NgtPhysicSpring extends NgtComponentStore {
     super();
   }
 
-  useSpring(bodyA: Ref<THREE.Object3D>, bodyB: Ref<THREE.Object3D>, optns: SpringOptns): NgtPhysicSpringReturn {
+  useSpring<TObjectA extends THREE.Object3D = THREE.Object3D, TObjectB extends THREE.Object3D = THREE.Object3D>(
+    bodyA: Ref<TObjectA>,
+    bodyB: Ref<TObjectB>,
+    optns: SpringOptns
+  ): NgtPhysicSpringReturn<TObjectA, TObjectB> {
     return this.zone.runOutsideAngular(() => {
       const physicsStore = this.physicsStore;
       const uuid = makeId();

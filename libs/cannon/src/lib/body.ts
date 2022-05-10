@@ -81,8 +81,8 @@ export interface NgtPhysicsBodyPublicApi extends WorkerApi {
   at: (index: number) => WorkerApi;
 }
 
-export interface NgtPhysicBodyReturn {
-  ref: Ref<THREE.Object3D>;
+export interface NgtPhysicBodyReturn<TObject extends THREE.Object3D> {
+  ref: Ref<TObject>;
   api: NgtPhysicsBodyPublicApi;
 }
 
@@ -91,7 +91,10 @@ type ArgFn<T> = (args: T) => unknown[];
 
 const temp = new THREE.Object3D();
 
-function applyBodyProps<TBodyProps extends BodyProps>(ref: Ref<THREE.Object3D>, props: TBodyProps) {
+function applyBodyProps<TBodyProps extends BodyProps, TObject extends THREE.Object3D = THREE.Object3D>(
+  ref: Ref<TObject>,
+  props: TBodyProps
+) {
   const objectProps: UnknownRecord = {};
   if (props.position) {
     objectProps['position'] = makeVector3(props.position);
@@ -160,29 +163,33 @@ export class NgtPhysicBody extends NgtComponentStore {
     super();
   }
 
-  usePlane(fn: GetByIndex<PlaneProps>, useOnTemplate = true, ref?: Ref<THREE.Object3D>) {
-    return this.useBody('Plane', fn, () => [], useOnTemplate, ref);
+  usePlane<TObject extends THREE.Object3D>(fn: GetByIndex<PlaneProps>, useOnTemplate = true, ref?: Ref<TObject>) {
+    return this.useBody<PlaneProps, TObject>('Plane', fn, () => [], useOnTemplate, ref);
   }
 
-  useBox(fn: GetByIndex<BoxProps>, useOnTemplate = true, ref?: Ref<THREE.Object3D>) {
+  useBox<TObject extends THREE.Object3D>(fn: GetByIndex<BoxProps>, useOnTemplate = true, ref?: Ref<TObject>) {
     const defaultBoxArgs: NgtTriple = [1, 1, 1];
-    return this.useBody('Box', fn, (args = defaultBoxArgs): NgtTriple => args, useOnTemplate, ref);
+    return this.useBody<BoxProps, TObject>('Box', fn, (args = defaultBoxArgs): NgtTriple => args, useOnTemplate, ref);
   }
 
-  useCylinder(fn: GetByIndex<CylinderProps>, useOnTemplate = true, ref?: Ref<THREE.Object3D>) {
-    return this.useBody('Cylinder', fn, (args = [] as []) => args, useOnTemplate, ref);
+  useCylinder<TObject extends THREE.Object3D>(fn: GetByIndex<CylinderProps>, useOnTemplate = true, ref?: Ref<TObject>) {
+    return this.useBody<CylinderProps, TObject>('Cylinder', fn, (args = [] as []) => args, useOnTemplate, ref);
   }
 
-  useHeightfield(fn: GetByIndex<HeightfieldProps>, useOnTemplate = true, ref?: Ref<THREE.Object3D>) {
-    return this.useBody('Heightfield', fn, (args) => args, useOnTemplate, ref);
+  useHeightfield<TObject extends THREE.Object3D>(
+    fn: GetByIndex<HeightfieldProps>,
+    useOnTemplate = true,
+    ref?: Ref<TObject>
+  ) {
+    return this.useBody<HeightfieldProps, TObject>('Heightfield', fn, (args) => args, useOnTemplate, ref);
   }
 
-  useParticle(fn: GetByIndex<ParticleProps>, useOnTemplate = true, ref?: Ref<THREE.Object3D>) {
-    return this.useBody('Particle', fn, () => [], useOnTemplate, ref);
+  useParticle<TObject extends THREE.Object3D>(fn: GetByIndex<ParticleProps>, useOnTemplate = true, ref?: Ref<TObject>) {
+    return this.useBody<ParticleProps, TObject>('Particle', fn, () => [], useOnTemplate, ref);
   }
 
-  useSphere(fn: GetByIndex<SphereProps>, useOnTemplate = true, ref?: Ref<THREE.Object3D>) {
-    return this.useBody(
+  useSphere<TObject extends THREE.Object3D>(fn: GetByIndex<SphereProps>, useOnTemplate = true, ref?: Ref<TObject>) {
+    return this.useBody<SphereProps, TObject>(
       'Sphere',
       fn,
       (args: SphereArgs = [1]): SphereArgs => {
@@ -194,12 +201,16 @@ export class NgtPhysicBody extends NgtComponentStore {
     );
   }
 
-  useTrimesh(fn: GetByIndex<TrimeshProps>, useOnTemplate = true, ref?: Ref<THREE.Object3D>) {
-    return this.useBody<TrimeshProps>('Trimesh', fn, (args) => args, useOnTemplate, ref);
+  useTrimesh<TObject extends THREE.Object3D>(fn: GetByIndex<TrimeshProps>, useOnTemplate = true, ref?: Ref<TObject>) {
+    return this.useBody<TrimeshProps, TObject>('Trimesh', fn, (args) => args, useOnTemplate, ref);
   }
 
-  useConvexPolyhedron(fn: GetByIndex<ConvexPolyhedronProps>, useOnTemplate = true, ref?: Ref<THREE.Object3D>) {
-    return this.useBody<ConvexPolyhedronProps>(
+  useConvexPolyhedron<TObject extends THREE.Object3D>(
+    fn: GetByIndex<ConvexPolyhedronProps>,
+    useOnTemplate = true,
+    ref?: Ref<TObject>
+  ) {
+    return this.useBody<ConvexPolyhedronProps, TObject>(
       'ConvexPolyhedron',
       fn,
       ([vertices, faces, normals, axes, boundingSphereRadius] = []): ConvexPolyhedronArgs<NgtTriple> => [
@@ -214,26 +225,30 @@ export class NgtPhysicBody extends NgtComponentStore {
     );
   }
 
-  useCompoundBody(fn: GetByIndex<CompoundBodyProps>, useOnTemplate = true, ref?: Ref<THREE.Object3D>) {
-    return this.useBody('Compound', fn, (args) => args as unknown[], useOnTemplate, ref);
+  useCompoundBody<TObject extends THREE.Object3D>(
+    fn: GetByIndex<CompoundBodyProps>,
+    useOnTemplate = true,
+    ref?: Ref<TObject>
+  ) {
+    return this.useBody<CompoundBodyProps, TObject>('Compound', fn, (args) => args as unknown[], useOnTemplate, ref);
   }
 
-  private useBody<TBodyProps extends BodyProps>(
+  private useBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D>(
     type: BodyShapeType,
     getPropsFn: GetByIndex<TBodyProps>,
     argsFn: ArgFn<TBodyProps['args']>,
     useOnTemplate = true,
-    instanceRef?: Ref<THREE.Object3D>
-  ): NgtPhysicBodyReturn {
+    instanceRef?: Ref<TObject>
+  ): NgtPhysicBodyReturn<TObject> {
     return this.zone.runOutsideAngular(() => {
-      let ref = instanceRef as Ref<THREE.Object3D>;
+      let ref = instanceRef as Ref<TObject>;
 
       if (!ref) {
-        ref = new Ref<THREE.Object3D>();
+        ref = new Ref<TObject>();
       }
 
       if (!ref.value && !useOnTemplate) {
-        ref.set(prepareInstance(new THREE.Object3D(), () => this.store.get()));
+        ref.set(prepareInstance(new THREE.Object3D() as TObject, () => this.store.get()));
       }
 
       const physicsStore = this.physicsStore;
@@ -306,9 +321,7 @@ export class NgtPhysicBody extends NgtComponentStore {
               worker.removeBodies({ uuid });
             };
           })
-        )(
-          combineLatest([physicsStore.select((s) => s.worker), ref.pipe(filter((obj): obj is THREE.Object3D => !!obj))])
-        );
+        )(combineLatest([physicsStore.select((s) => s.worker), ref.pipe(filter((obj): obj is TObject => !!obj))]));
       });
 
       return {
