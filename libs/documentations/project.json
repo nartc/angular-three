@@ -1,5 +1,4 @@
 {
-  "root": "libs/documentations",
   "sourceRoot": "libs/documentations",
   "projectType": "library",
   "targets": {

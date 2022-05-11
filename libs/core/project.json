@@ -1,6 +1,5 @@
 {
   "projectType": "library",
-  "root": "libs/core",
   "sourceRoot": "libs/core/src",
   "prefix": "ngt",
   "targets": {

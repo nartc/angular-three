@@ -1,5 +1,4 @@
 {
-  "root": "apps/schematics-e2e",
   "projectType": "application",
   "sourceRoot": "apps/schematics-e2e/src",
   "targets": {

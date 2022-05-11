@@ -1,6 +1,5 @@
 {
   "projectType": "library",
-  "root": "libs/cannon",
   "sourceRoot": "libs/cannon/src",
   "prefix": "ngt",
   "targets": {

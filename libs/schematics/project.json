@@ -1,5 +1,4 @@
 {
-  "root": "libs/schematics",
   "sourceRoot": "libs/schematics/src",
   "projectType": "library",
   "targets": {

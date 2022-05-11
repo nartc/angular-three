@@ -1,6 +1,5 @@
 {
   "projectType": "library",
-  "root": "libs/soba",
   "sourceRoot": "libs/soba/src",
   "prefix": "ngt",
   "targets": {

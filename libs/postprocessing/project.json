@@ -1,6 +1,5 @@
 {
   "projectType": "library",
-  "root": "libs/postprocessing",
   "sourceRoot": "libs/postprocessing/src",
   "prefix": "ngt",
   "targets": {
