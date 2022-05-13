@@ -168,5 +168,6 @@ export class Clump {
     NgtValueAttributeModule,
     NgtCannonDebugModule,
   ],
+  exports: [Pointer],
 })
 export class ObjectClumpComponentModule {}

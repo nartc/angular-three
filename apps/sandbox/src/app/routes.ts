@@ -156,4 +156,16 @@ export const routes: Routes = [
       source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/level-of-detail',
     },
   },
+  {
+    path: 'raycast-vehicle',
+    loadChildren: () =>
+      import('./raycast-vehicle/raycast-vehicle.component').then((m) => m.RaycastVehicleComponentModule),
+    data: {
+      title: 'Raycast Vehicle',
+      description: 'Raycast Vehicle example using @angular-three/cannon (ported from R3F use-cannon)',
+      link: '/raycast-vehicle',
+      asset: 'assets/examples/raycast-vehicle',
+      source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/raycast-vehicle',
+    },
+  },
 ];

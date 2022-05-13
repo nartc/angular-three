@@ -180,6 +180,6 @@ export class InstancedSpheres implements OnInit {
     NgtPhysicsModule,
     NgtVector2AttributeModule,
   ],
-  exports: [InstancedSpheres],
+  exports: [InstancedSpheres, Plane],
 })
 export class KinematicCubeComponentModule {}
