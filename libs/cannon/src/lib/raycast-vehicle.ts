@@ -12,7 +12,7 @@ export interface NgtPhysicRaycastVehicleProps {
   indexRightAxis?: number;
   indexUpAxis?: number;
   wheelInfos: WheelInfoOptions[];
-  wheels: Ref<THREE.Object3D>[];
+  wheels: Array<Ref<THREE.Object3D>>;
 }
 
 export interface NgtPhysicRaycastVehiclePublicApi {
@@ -55,16 +55,14 @@ export class NgtPhysicRaycastVehicle extends NgtComponentStore {
         ref.set(prepare(new THREE.Object3D() as TObject, () => this.store.get()));
       }
 
+      const { chassisBody, indexForwardAxis = 2, indexRightAxis = 0, indexUpAxis = 1, wheelInfos, wheels } = fn();
       const physicsStore = this.physicsStore;
 
       this.onCanvasReady(this.store.ready$, () => {
-        this.effect<[CannonWorkerAPI, THREE.Object3D]>(
+        this.effect<[CannonWorkerAPI, THREE.Object3D, THREE.Object3D, THREE.Object3D[]]>(
           tapEffect(() => {
             const worker = physicsStore.get((s) => s.worker);
             const uuid = ref.value.uuid;
-
-            const { chassisBody, indexForwardAxis = 2, indexRightAxis = 0, indexUpAxis = 1, wheelInfos, wheels } = fn();
-
             const chassisBodyUUID = NgtCannonUtils.getUUID(chassisBody);
             const wheelUUIDs = wheels.map((ref) => NgtCannonUtils.getUUID(ref));
 
@@ -80,7 +78,14 @@ export class NgtPhysicRaycastVehicle extends NgtComponentStore {
               worker.removeRaycastVehicle({ uuid });
             };
           })
-        )(combineLatest([physicsStore.select((s) => s.worker), ref.pipe(filter((obj): obj is TObject => !!obj))]));
+        )(
+          combineLatest([
+            physicsStore.select((s) => s.worker),
+            ref.pipe(filter((obj): obj is TObject => !!obj)),
+            chassisBody.pipe(filter((chassis) => !!chassis)),
+            combineLatest(wheels.map((wheelRef) => wheelRef.pipe(filter((wheel): wheel is THREE.Object3D => !!wheel)))),
+          ])
+        );
       });
 
       return {
