@@ -103,17 +103,15 @@ export class NgtCannonDebug extends NgtInstance<THREE.Scene, NgtCannonDebugState
   }
 
   get api() {
-    const { bodies, bodyMap, disabled } = this.get();
+    const { bodies, bodyMap } = this.get();
 
     return {
       add(uuid: string, props: BodyProps, type: BodyShapeType) {
-        if (disabled) return;
         const body = propsToBody({ uuid, props, type });
         bodies.push(body);
         bodyMap[uuid] = body;
       },
       remove(uuid: string) {
-        if (disabled) return;
         const debugBodyIndex = bodies.indexOf(bodyMap[uuid]);
         if (debugBodyIndex > -1) bodies.splice(debugBodyIndex, 1);
         delete bodyMap[uuid];
