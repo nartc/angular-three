@@ -1,5 +1,23 @@
 
 
+### [5.2.3](https://github.com/nartc/angular-three/compare/5.2.2...5.2.3) (2022-05-13)
+
+
+### Bug Fixes
+
+* **cannon:** make sure wheels and chassis are available before calling raycastVehicle ([ec60ca4](https://github.com/nartc/angular-three/commit/ec60ca488b5b5f245b69c59f1988fd065fedd91f))
+* **cannon:** still add body to debug on disabled ([4b8e663](https://github.com/nartc/angular-three/commit/4b8e66317680f1eed474b2d479e587f378909fa6))
+* **cannon:** strong type object type for physics APIs ([7e0d788](https://github.com/nartc/angular-three/commit/7e0d788c1f20673db978f546dcdfcfc1f73b076d))
+* **core:** bump three peerDeps ([6bf9d89](https://github.com/nartc/angular-three/commit/6bf9d890a75e98d57e89ee48923a4e2a66fae4b0))
+* **core:** reinit material if ctorParams$ changes ([2a57fca](https://github.com/nartc/angular-three/commit/2a57fcaf3fbdb34b680731c378bfb4bd21f2dedf))
+
+
+### Documentations
+
+* add raycast vehicle ([991d642](https://github.com/nartc/angular-three/commit/991d6423d5689fcdb09994cffbf5a165c54cf205))
+* add reflector story ([f059d99](https://github.com/nartc/angular-three/commit/f059d99e914301efbb6e9257c78bfd1e85e87198))
+* adjust all physics examples to use strongly typed version ([45d933d](https://github.com/nartc/angular-three/commit/45d933d81245acf1d4d5ccf2c66d64dd3afee6d1))
+
 ### [5.2.2](https://github.com/nartc/angular-three/compare/5.2.1...5.2.2) (2022-05-09)
 
 
