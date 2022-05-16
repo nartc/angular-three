@@ -29,6 +29,7 @@ export interface Example {
   asset: string;
   link: string;
   source: string;
+  hidden?: boolean;
 }
 
 @Component({
@@ -45,7 +46,11 @@ export interface Example {
             <p class="text-xl text-gray-600">Here are some example of things you can do with AngularThree!</p>
           </div>
           <ul role="list" class="space-y-4 sm:grid sm:grid-cols-2 sm:gap-6 sm:space-y-0 lg:grid-cols-3 lg:gap-8">
-            <li *ngFor="let example of examples" class="bg-gray-50 rounded-xl overflow-hidden xl:text-left">
+            <li
+              *ngFor="let example of examples"
+              class="bg-gray-50 rounded-xl overflow-hidden xl:text-left"
+              [class.d-none]="example.hidden"
+            >
               <div class="space-y-6 xl:space-y-10 relative">
                 <video
                   sandboxAutoplay

@@ -1,10 +1,23 @@
 import { Routes } from '@angular/router';
+import { environment } from '../environments/environment';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
   {
     path: 'home',
     loadChildren: () => import('./home/home.component').then((m) => m.HomeComponentModule),
+  },
+  {
+    path: 'sandbox',
+    loadChildren: () => import('./sandbox/sandbox.component').then((m) => m.SandboxComponentModule),
+    data: {
+      title: 'Sandbox',
+      description: 'Two spinning cubes along with a cube with different materials',
+      link: '/sandbox',
+      asset: 'assets/examples/cubes',
+      source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/cubes',
+      hidden: environment.production,
+    },
   },
   {
     path: 'cubes',
