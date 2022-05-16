@@ -27,7 +27,7 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import { filter, tap } from 'rxjs';
+import { filter, map, tap, timer } from 'rxjs';
 import * as THREE from 'three';
 
 export interface NgtSobaGizmoHelperState extends NgtObjectInputsState<THREE.Group> {
@@ -64,7 +64,7 @@ const targetPosition = makeVector3();
 @Component({
   selector: 'ngt-soba-gizmo-helper',
   template: `
-    <ngt-portal [ref]="virtualScene">
+    <ngt-portal *ngIf="ready$ | async" [ref]="virtualScene">
       <ng-template ngt-portal-content>
         <ngt-group
           (beforeRender)="beforeRender.emit($event)"
@@ -87,6 +87,8 @@ const targetPosition = makeVector3();
   providers: [provideObjectHostRef(NgtSobaGizmoHelper)],
 })
 export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizmoHelperState> {
+  ready$ = timer(250).pipe(map(() => true));
+
   @Input() set alignment(alignment: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left') {
     this.set({ alignment });
   }
