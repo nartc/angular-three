@@ -1,5 +1,12 @@
 
 
+### [5.2.4](https://github.com/nartc/angular-three/compare/5.2.3...5.2.4) (2022-05-16)
+
+
+### Bug Fixes
+
+* **soba:** fake timer to delay gizmo-helper render as a workaround ([53d26b1](https://github.com/nartc/angular-three/commit/53d26b104091202bd3d610d06e9a35ea344985c4))
+
 ### [5.2.3](https://github.com/nartc/angular-three/compare/5.2.2...5.2.3) (2022-05-13)
 
 
