@@ -27,6 +27,7 @@ type HingeConstraintApi = {
   enableMotor: () => void;
   setMotorMaxForce: (value: number) => void;
   setMotorSpeed: (value: number) => void;
+  remove: () => void;
 };
 
 type NgtConstraintORHingeApi<T extends 'Hinge' | ConstraintTypes> = T extends ConstraintTypes
