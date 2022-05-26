@@ -63,14 +63,12 @@
       }
     },
     "storybook": {
-      "executor": "@nrwl/storybook:storybook",
+      "executor": "@storybook/angular:start-storybook",
       "options": {
-        "uiFramework": "@storybook/angular",
         "port": 4400,
-        "config": {
-          "configFolder": "libs/soba/.storybook"
-        },
-        "projectBuildConfig": "soba:build-storybook"
+        "configDir": "libs/soba/.storybook",
+        "browserTarget": "soba:build-storybook",
+        "compodoc": false
       },
       "configurations": {
         "ci": {
@@ -79,15 +77,13 @@
       }
     },
     "build-storybook": {
-      "executor": "@nrwl/storybook:build",
+      "executor": "@storybook/angular:build-storybook",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "uiFramework": "@storybook/angular",
-        "outputPath": "libs/documentations/build/soba",
-        "config": {
-          "configFolder": "libs/soba/.storybook"
-        },
-        "projectBuildConfig": "soba:build-storybook"
+        "outputDir": "libs/documentations/build/soba",
+        "configDir": "libs/soba/.storybook",
+        "browserTarget": "soba:build-storybook",
+        "compodoc": false
       },
       "configurations": {
         "ci": {
