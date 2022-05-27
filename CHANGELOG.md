@@ -1,5 +1,12 @@
 
 
+## [5.4.0](https://github.com/nartc/angular-three/compare/5.3.0...5.4.0) (2022-05-27)
+
+
+### Features
+
+* **core:** update range for three dependency in core ([c9067e5](https://github.com/nartc/angular-three/commit/c9067e5ab2f9ef2070dda55da0ae2afd56a764fe))
+
 ## [5.3.0](https://github.com/nartc/angular-three/compare/5.2.4...5.3.0) (2022-05-27)
 
 
