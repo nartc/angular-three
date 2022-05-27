@@ -49,7 +49,7 @@ export interface Example {
             <li
               *ngFor="let example of examples"
               class="bg-gray-50 rounded-xl overflow-hidden xl:text-left"
-              [class.d-none]="example.hidden"
+              [class.hidden]="example.hidden"
             >
               <div class="space-y-6 xl:space-y-10 relative">
                 <video
