@@ -1,1 +1,1 @@
-export const ANGULAR_THREE_VERSION = '~5.0.0';
+export const ANGULAR_THREE_VERSION = '^5.0.0';
