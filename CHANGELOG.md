@@ -1,5 +1,19 @@
 
 
+## [5.3.0](https://github.com/nartc/angular-three/compare/5.2.4...5.3.0) (2022-05-27)
+
+
+### Features
+
+* **core:** adjust three dep ([ced5e47](https://github.com/nartc/angular-three/commit/ced5e47ab8551f6c2e2b0530901f899a3493a3eb))
+* **schematics:** update three version ([931cc88](https://github.com/nartc/angular-three/commit/931cc88df82770293497ad860e50e024bcd669c9))
+
+
+### Documentations
+
+* add hide-able sandbox route ([2b9bba5](https://github.com/nartc/angular-three/commit/2b9bba5cdf200ec9cad778f9ce1eba6b784f5adc))
+* update tailwind class for d-none ([4541fd6](https://github.com/nartc/angular-three/commit/4541fd6a163b9f121420315206fbbb3ef3ae1d8f))
+
 ### [5.2.4](https://github.com/nartc/angular-three/compare/5.2.3...5.2.4) (2022-05-16)
 
 
