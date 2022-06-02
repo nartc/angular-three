@@ -144,8 +144,8 @@ More often than not, we want load 3D models from an external source and put them
   selector: 'some',
   template: `
     <ng-container *ngIf="model$ | async as model">
-                    <!-- 👇 NgtPrimitive exposes this object instead of itself like a NgtMesh -->
-      <ngt-primitive [object]="model.scene"></ng-primitive>
+      <!-- 👇 NgtPrimitive exposes this object instead of itself like a NgtMesh -->
+      <ngt-primitive [object]="model.scene"></ngt-primitive>
     </ng-container>
   `,
 })
