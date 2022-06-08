@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import type { AnyFunction, NgtRenderState, NgtState } from '../types';
 import { is } from './is';
 
@@ -41,7 +40,7 @@ export function addTailCallback(callback: GlobalRenderCallback): AnyFunction<voi
   return createCallback(callback, globalTailCallbacks);
 }
 
-export function render(timestamp: number, state: () => NgtState, frame?: THREE.XRFrame): number {
+export function render(timestamp: number, state: () => NgtState, frame?: XRFrame): number {
   const rootState = state();
 
   let delta = rootState.clock.getDelta();
@@ -134,7 +133,7 @@ export function createLoop(rootStateMap: Map<Element, () => NgtState>) {
     }
   }
 
-  function advance(timestamp: number, runGlobalCallbacks = true, state?: () => NgtState, frame?: THREE.XRFrame): void {
+  function advance(timestamp: number, runGlobalCallbacks = true, state?: () => NgtState, frame?: XRFrame): void {
     if (runGlobalCallbacks) runCallbacks(globalCallbacks, timestamp);
     const stateToAdvance = state?.();
     if (!stateToAdvance) {

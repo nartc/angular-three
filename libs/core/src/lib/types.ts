@@ -251,7 +251,7 @@ export type NgtCurrentViewport = Omit<NgtViewport, 'dpr' | 'initialDpr'>;
 
 export interface NgtRenderState extends NgtState {
   delta: number;
-  frame?: THREE.XRFrame;
+  frame?: XRFrame;
 }
 
 /* Animation */

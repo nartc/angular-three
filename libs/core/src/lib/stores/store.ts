@@ -211,7 +211,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     canvasElement: HTMLCanvasElement,
     rootStateMap: Map<Element, () => NgtState>,
     invalidate: (state?: () => NgtState) => void,
-    advance: (timestamp: number, runGlobalCallbacks?: boolean, state?: () => NgtState, frame?: THREE.XRFrame) => void
+    advance: (timestamp: number, runGlobalCallbacks?: boolean, state?: () => NgtState, frame?: XRFrame) => void
   ) {
     this.initEvents(canvasElement);
     this.resize(this.resizeResult$);
@@ -285,7 +285,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
   private readonly initRenderer = this.effect<{
     canvasElement: HTMLCanvasElement;
     rootStateMap: Map<Element, () => NgtState>;
-    advance: (timestamp: number, runGlobalCallbacks?: boolean, state?: () => NgtState, frame?: THREE.XRFrame) => void;
+    advance: (timestamp: number, runGlobalCallbacks?: boolean, state?: () => NgtState, frame?: XRFrame) => void;
   }>(
     tapEffect(({ canvasElement, rootStateMap, advance }) => {
       const state = this.get();
@@ -349,7 +349,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
       let xr = state.xr;
       if (!state.xr) {
         // Handle frame behavior in WebXR
-        const handleXRFrame: THREE.XRFrameRequestCallback = (timestamp: number, frame?: THREE.XRFrame) => {
+        const handleXRFrame: XRFrameRequestCallback = (timestamp: number, frame?: XRFrame) => {
           const state = this.get();
           if (state.frameloop === 'never') return;
           advance(timestamp, true, () => state, frame);
