@@ -1,11 +1,14 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/postprocessing/src",
   "prefix": "ngt",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:package",
-      "outputs": ["dist/libs/postprocessing"],
+      "outputs": [
+        "dist/libs/postprocessing"
+      ],
       "options": {
         "project": "libs/postprocessing/ng-package.json",
         "updateBuildableProjectDepsInPackageJson": false
@@ -22,7 +25,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/postprocessing"],
+      "outputs": [
+        "coverage/libs/postprocessing"
+      ],
       "options": {
         "jestConfig": "libs/postprocessing/jest.config.ts",
         "passWithNoTests": true
@@ -47,5 +52,7 @@
       }
     }
   },
-  "tags": ["scope:postprocessing"]
+  "tags": [
+    "scope:postprocessing"
+  ]
 }

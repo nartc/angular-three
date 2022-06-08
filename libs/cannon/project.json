@@ -1,11 +1,14 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/cannon/src",
   "prefix": "ngt",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:package",
-      "outputs": ["dist/libs/cannon"],
+      "outputs": [
+        "dist/libs/cannon"
+      ],
       "options": {
         "project": "libs/cannon/ng-package.json",
         "updateBuildableProjectDepsInPackageJson": false
@@ -22,7 +25,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/cannon"],
+      "outputs": [
+        "coverage/libs/cannon"
+      ],
       "options": {
         "jestConfig": "libs/cannon/jest.config.ts",
         "passWithNoTests": true
@@ -31,7 +36,10 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/cannon/src/**/*.ts", "libs/cannon/src/**/*.html"]
+        "lintFilePatterns": [
+          "libs/cannon/src/**/*.ts",
+          "libs/cannon/src/**/*.html"
+        ]
       }
     },
     "publish": {
@@ -42,5 +50,7 @@
       }
     }
   },
-  "tags": ["scope:cannon"]
+  "tags": [
+    "scope:cannon"
+  ]
 }

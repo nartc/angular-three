@@ -3,9 +3,6 @@
   "affected": {
     "defaultBase": "main"
   },
-  "cli": {
-    "defaultCollection": "@nrwl/angular"
-  },
   "implicitDependencies": {
     "package.json": {
       "dependencies": "*",
@@ -45,5 +42,6 @@
       "style": "css"
     }
   },
-  "defaultProject": "core"
+  "defaultProject": "core",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json"
 }

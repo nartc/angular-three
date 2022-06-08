@@ -1,11 +1,14 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/soba/src",
   "prefix": "ngt",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:package",
-      "outputs": ["dist/libs/soba"],
+      "outputs": [
+        "dist/libs/soba"
+      ],
       "options": {
         "project": "libs/soba/ng-package.json",
         "updateBuildableProjectDepsInPackageJson": false
@@ -22,7 +25,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/soba"],
+      "outputs": [
+        "coverage/libs/soba"
+      ],
       "options": {
         "jestConfig": "libs/soba/jest.config.ts",
         "passWithNoTests": true
@@ -78,7 +83,9 @@
     },
     "build-storybook": {
       "executor": "@storybook/angular:build-storybook",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputDir": "libs/documentations/build/soba",
         "configDir": "libs/soba/.storybook",
@@ -92,5 +99,7 @@
       }
     }
   },
-  "tags": ["scope:soba"]
+  "tags": [
+    "scope:soba"
+  ]
 }

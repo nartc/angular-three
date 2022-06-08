@@ -9,5 +9,6 @@
     "schematics": "libs/schematics",
     "schematics-e2e": "apps/schematics-e2e",
     "soba": "libs/soba"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

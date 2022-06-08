@@ -1,19 +1,27 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/sandbox/src",
   "prefix": "sandbox",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "libs/documentations/build/examples",
         "index": "apps/sandbox/src/index.html",
         "main": "apps/sandbox/src/main.ts",
         "polyfills": "apps/sandbox/src/polyfills.ts",
         "tsConfig": "apps/sandbox/tsconfig.app.json",
-        "assets": ["apps/sandbox/src/favicon.ico", "apps/sandbox/src/assets"],
-        "styles": ["apps/sandbox/src/styles.css"],
+        "assets": [
+          "apps/sandbox/src/favicon.ico",
+          "apps/sandbox/src/assets"
+        ],
+        "styles": [
+          "apps/sandbox/src/styles.css"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -71,7 +79,10 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/sandbox/src/**/*.ts", "apps/sandbox/src/**/*.html"]
+        "lintFilePatterns": [
+          "apps/sandbox/src/**/*.ts",
+          "apps/sandbox/src/**/*.html"
+        ]
       }
     }
   },
