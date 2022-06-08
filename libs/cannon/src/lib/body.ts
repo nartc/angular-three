@@ -75,6 +75,7 @@ export type WorkerApi = {
   scaleOverride: (scale: NgtTriple) => void;
   sleep: () => void;
   wakeUp: () => void;
+  remove: () => void;
 };
 
 export interface NgtPhysicsBodyPublicApi extends WorkerApi {
@@ -423,12 +424,22 @@ export class NgtPhysicBody extends NgtComponentStore {
             };
           };
 
+          const makeRemove = (index?: number) => {
+            const uuid = NgtCannonUtils.getUUID(ref, index);
+            return () => {
+              if (uuid) {
+                worker.removeBodies({ uuid: [uuid] });
+              }
+            };
+          };
+
           function makeApi(index?: number): WorkerApi {
             return {
               allowSleep: makeAtomic('allowSleep', index),
               angularDamping: makeAtomic('angularDamping', index),
               angularFactor: makeVec('angularFactor', index),
               angularVelocity: makeVec('angularVelocity', index),
+              remove: makeRemove(index),
               applyForce(force: NgtTriple, worldPoint: NgtTriple) {
                 const uuid = NgtCannonUtils.getUUID(ref, index);
                 uuid &&
