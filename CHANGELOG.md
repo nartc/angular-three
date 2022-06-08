@@ -1,5 +1,18 @@
 
 
+## [5.5.0](https://github.com/nartc/angular-three/compare/5.4.0...5.5.0) (2022-06-08)
+
+
+### Features
+
+* **cannon:** add remove to physic body ([7b09397](https://github.com/nartc/angular-three/commit/7b093972b89dfb2bf3c1d3df661aca16a6508c95))
+
+
+### Bug Fixes
+
+* **core:** XR typings ([1eba758](https://github.com/nartc/angular-three/commit/1eba758fc5dfd317f62e3673ae872426dd89b6ec))
+* **postprocessing:** LUTEffet typing ([881b92b](https://github.com/nartc/angular-three/commit/881b92b531812d21ad0a97aa4023b82497f73722))
+
 ## [5.4.0](https://github.com/nartc/angular-three/compare/5.3.0...5.4.0) (2022-05-27)
 
 
