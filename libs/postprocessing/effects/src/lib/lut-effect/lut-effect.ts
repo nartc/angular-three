@@ -7,7 +7,7 @@ import {
 } from '@angular-three/core';
 import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import { LUTEffect } from 'postprocessing';
+import { LUT3DEffect } from 'postprocessing';
 import { tap } from 'rxjs';
 import * as THREE from 'three';
 
@@ -17,7 +17,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtLUTEffect)],
 })
-export class NgtLUTEffect extends NgtCommonEffect<LUTEffect> {
+export class NgtLUTEffect extends NgtCommonEffect<LUT3DEffect> {
   @Input() set lut(lut: THREE.Texture) {
     this.set({ lut });
   }
@@ -26,8 +26,8 @@ export class NgtLUTEffect extends NgtCommonEffect<LUTEffect> {
     this.set({ tetrahedralInterpolation: coerceBooleanProperty(tetrahedralInterpolation) });
   }
 
-  override get effectType(): AnyConstructor<LUTEffect> {
-    return LUTEffect;
+  override get effectType(): AnyConstructor<LUT3DEffect> {
+    return LUT3DEffect;
   }
 
   protected override get skipConfigureBlendMode(): boolean {
