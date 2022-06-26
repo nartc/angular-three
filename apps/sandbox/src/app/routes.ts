@@ -20,7 +20,7 @@ export const routes: Routes = [
     },
   },
   {
-    path: 'cubes',
+        path: 'cubes',
     loadChildren: () => import('./cubes/cubes.component').then((m) => m.SandboxCubesModule),
     data: {
       title: 'Simple Cubes',
@@ -179,6 +179,17 @@ export const routes: Routes = [
       link: '/raycast-vehicle',
       asset: 'assets/examples/raycast-vehicle',
       source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/raycast-vehicle',
+    },
+  },
+  {
+    path: 'xrcubes',
+    loadChildren: () => import('./xrcubes/xrcubes.component').then((m) => m.SandboxXRCubesModule),
+    data: {
+      title: 'Simple Cubes in VR',
+      description: 'Delayed loading of spinning cubes after Enter VR',
+      link: '/xrcubes',
+      asset: 'assets/examples/cubes',
+      source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/xrcubes',
     },
   },
 ];

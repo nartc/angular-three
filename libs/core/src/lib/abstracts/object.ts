@@ -442,9 +442,9 @@ export abstract class NgtObject<
   }
 
   private appendToParent(): void {
-    // appendToParent is late a frame due to appendTo
-    // only emit the object is ready after it's been added to the scene
-    requestAnimationFrame(() => {
+        // appendToParent is late a frame due to appendTo
+        // only emit the object is ready after it's been added to the scene
+    const callback = () => {
       const appendToRef = this.get((s) => s.appendTo);
       if (appendToRef && appendToRef.value) {
         appendToRef.value.add(this.instance.value);
@@ -466,7 +466,15 @@ export abstract class NgtObject<
         this.addToParent();
         this.appended.emit(this.instance.value);
       }
-    });
+    }
+
+    const gl = this.store.get((s) => s.gl);
+    if (gl.xr.enabled) {
+        gl.xr.getSession()?.requestAnimationFrame(callback);
+    }
+    else {
+        requestAnimationFrame(callback);
+    }
   }
 
   private addToScene() {
