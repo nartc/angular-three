@@ -10,6 +10,7 @@ interface NgtSobaPreloadState {
 
 @Directive({
   selector: 'ngt-soba-preload',
+  standalone: true,
   exportAs: 'ngtSobaPreload',
 })
 export class NgtSobaPreload extends NgtComponentStore<NgtSobaPreloadState> implements OnInit {
@@ -75,7 +76,7 @@ export class NgtSobaPreload extends NgtComponentStore<NgtSobaPreloadState> imple
 }
 
 @NgModule({
-  declarations: [NgtSobaPreload],
+  imports: [NgtSobaPreload],
   exports: [NgtSobaPreload],
 })
 export class NgtSobaPreloadModule {}

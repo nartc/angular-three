@@ -1,5 +1,5 @@
 import { NgtComponentStore, tapEffect } from '@angular-three/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -25,6 +25,7 @@ interface NgtSobaLoaderState {
 
 @Component({
   selector: 'ngt-soba-loader',
+  standalone: true,
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <div *ngIf="vm.shown" class="loader-container" [style.opacity]="vm.active ? 1 : 0" [class]="vm.containerClass">
@@ -41,6 +42,7 @@ interface NgtSobaLoaderState {
       </div>
     </ng-container>
   `,
+  imports: [NgIf, AsyncPipe],
   styles: [
     // language=SCSS
     `
@@ -192,8 +194,7 @@ export class NgtSobaLoader extends NgtComponentStore<NgtSobaLoaderState> impleme
 }
 
 @NgModule({
-  declarations: [NgtSobaLoader],
+  imports: [NgtSobaLoader],
   exports: [NgtSobaLoader],
-  imports: [CommonModule],
 })
 export class NgtSobaLoaderModule {}

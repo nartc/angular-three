@@ -5,17 +5,18 @@ import {
   makeVector3,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
-  NgtPortalModule,
+  NgtObjectPassThrough,
+  NgtPortal,
+  NgtPortalContent,
   NgtRenderState,
   prepare,
   provideObjectHostRef,
   Ref,
   tapEffect,
 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtSobaOrthographicCameraModule } from '@angular-three/soba/cameras';
-import { CommonModule } from '@angular/common';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgtSobaOrthographicCamera } from '@angular-three/soba/cameras';
+import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -43,6 +44,7 @@ export interface NgtSobaGizmoHelperState extends NgtObjectInputsState<THREE.Grou
 
 @Directive({
   selector: 'ng-template[ngt-soba-gizmo-helper-content]',
+  standalone: true,
 })
 export class NgtSobaGizmoHelperContent {
   constructor(public templateRef: TemplateRef<{ gizmo: THREE.Group }>) {}
@@ -63,6 +65,7 @@ const targetPosition = makeVector3();
 
 @Component({
   selector: 'ngt-soba-gizmo-helper',
+  standalone: true,
   template: `
     <ngt-portal *ngIf="ready$ | async" [ref]="virtualScene">
       <ng-template ngt-portal-content>
@@ -83,6 +86,16 @@ const targetPosition = makeVector3();
       </ng-template>
     </ngt-portal>
   `,
+  imports: [
+    NgtPortal,
+    NgtPortalContent,
+    NgtGroup,
+    NgtObjectPassThrough,
+    NgtSobaOrthographicCamera,
+    NgIf,
+    NgTemplateOutlet,
+    AsyncPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaGizmoHelper)],
 })
@@ -276,8 +289,7 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
 }
 
 @NgModule({
-  declarations: [NgtSobaGizmoHelper, NgtSobaGizmoHelperContent],
+  imports: [NgtSobaGizmoHelper, NgtSobaGizmoHelperContent],
   exports: [NgtSobaGizmoHelper, NgtSobaGizmoHelperContent],
-  imports: [NgtPortalModule, NgtGroupModule, NgtObjectPassThroughModule, CommonModule, NgtSobaOrthographicCameraModule],
 })
 export class NgtSobaGizmoHelperModule {}

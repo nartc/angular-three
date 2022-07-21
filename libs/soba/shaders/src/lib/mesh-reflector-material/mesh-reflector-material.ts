@@ -17,6 +17,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-soba-mesh-reflector-material',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtSobaMeshReflectorMaterial)],
@@ -353,7 +354,7 @@ export class NgtSobaMeshReflectorMaterial extends NgtMeshStandardMaterial {
 }
 
 @NgModule({
-  declarations: [NgtSobaMeshReflectorMaterial],
+  imports: [NgtSobaMeshReflectorMaterial],
   exports: [NgtSobaMeshReflectorMaterial],
 })
 export class NgtSobaMeshReflectorMaterialModule {}

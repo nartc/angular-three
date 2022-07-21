@@ -18,6 +18,7 @@ export interface NgtSobaFlyControlsState extends NgtInstanceState<FlyControls> {
 
 @Component({
   selector: 'ngt-soba-fly-controls',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideInstanceRef(NgtSobaFlyControls)],
@@ -108,7 +109,7 @@ export class NgtSobaFlyControls extends NgtInstance<FlyControls, NgtSobaFlyContr
 }
 
 @NgModule({
-  declarations: [NgtSobaFlyControls],
+  imports: [NgtSobaFlyControls],
   exports: [NgtSobaFlyControls],
 })
 export class NgtSobaFlyControlsModule {}

@@ -8,8 +8,8 @@ import {
   NgtEvent,
   NgtInstance,
   NgtObjectInputs,
-  NgtObjectPassThroughModule,
-  NgtRadianPipeModule,
+  NgtObjectPassThrough,
+  NgtRadianPipe,
   NgtStore,
   NgtTriple,
   NumberInput,
@@ -17,13 +17,13 @@ import {
   Ref,
   startWithUndefined,
 } from '@angular-three/core';
-import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtAmbientLightModule, NgtPointLightModule } from '@angular-three/core/lights';
-import { NgtMeshBasicMaterialModule, NgtSpriteMaterialModule } from '@angular-three/core/materials';
-import { NgtMeshModule } from '@angular-three/core/meshes';
-import { NgtSpriteModule } from '@angular-three/core/sprites';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { NgtBoxGeometry } from '@angular-three/core/geometries';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
+import { NgtMeshBasicMaterial, NgtSpriteMaterial } from '@angular-three/core/materials';
+import { NgtMesh } from '@angular-three/core/meshes';
+import { NgtSprite } from '@angular-three/core/sprites';
+import { AsyncPipe, DOCUMENT, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -42,6 +42,7 @@ import { NgtSobaGizmoHelper } from './gizmo-helper';
 
 @Component({
   selector: 'ngt-soba-gizmo-viewport-axis[color][rotation]',
+  standalone: true,
   template: `
     <ngt-group [rotation]="rotation">
       <ngt-mesh [position]="[0.4, 0, 0]">
@@ -50,6 +51,7 @@ import { NgtSobaGizmoHelper } from './gizmo-helper';
       </ngt-mesh>
     </ngt-group>
   `,
+  imports: [NgtGroup, NgtMesh, NgtBoxGeometry, NgtMeshBasicMaterial],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgtSobaGizmoViewportAxis extends NgtInstance<THREE.Group> {
@@ -85,6 +87,7 @@ export class NgtSobaGizmoViewportAxis extends NgtInstance<THREE.Group> {
 @Component({
   selector:
     'ngt-soba-gizmo-viewport-axis-head[arcStyle][labelColor][font], ngt-soba-gizmo-viewport-axis-head[ngtSobaGizmoViewportAxisHead]',
+  standalone: true,
   template: `
     <ngt-sprite
       [ngtObjectInputs]="this"
@@ -103,6 +106,7 @@ export class NgtSobaGizmoViewportAxis extends NgtInstance<THREE.Group> {
       ></ngt-sprite-material>
     </ngt-sprite>
   `,
+  imports: [NgtSprite, NgtObjectPassThrough, NgtSpriteMaterial, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaGizmoViewportAxisHead)],
 })
@@ -234,8 +238,46 @@ export class NgtSobaGizmoViewportAxisHead extends NgtObjectInputs<THREE.Sprite> 
   }
 }
 
+@Directive({
+  selector: '[ngtSobaGizmoViewportAxisHead]',
+  standalone: true,
+})
+export class NgtSobaGizmoViewportAxisHeadPassThrough {
+  @Input() set ngtSobaGizmoViewportAxisHead(wrapper: unknown) {
+    this.assertWrapper(wrapper);
+
+    wrapper
+      .select(
+        wrapper.select((s) => s['labelColor']).pipe(startWithUndefined()),
+        wrapper.select((s) => s['font']).pipe(startWithUndefined()),
+        wrapper.select((s) => s['disabled']).pipe(startWithUndefined()),
+        wrapper.select((s) => s['axisHeadScale']).pipe(startWithUndefined())
+      )
+      .pipe(takeUntil(wrapper.destroy$))
+      .subscribe(() => {
+        this.axisHead.labelColor = wrapper.labelColor;
+        this.axisHead.font = wrapper.font;
+        this.axisHead.disabled = wrapper.disabled;
+        this.axisHead.axisHeadScale = wrapper.axisHeadScale;
+      });
+
+    if (wrapper.click.observed) {
+      this.axisHead.click.pipe(takeUntil(wrapper.destroy$)).subscribe(wrapper.click.emit.bind(wrapper.click));
+    }
+  }
+
+  constructor(@Self() private axisHead: NgtSobaGizmoViewportAxisHead) {}
+
+  private assertWrapper(wrapper: unknown): asserts wrapper is NgtSobaGizmoViewport {
+    if (!(wrapper instanceof NgtSobaGizmoViewport)) {
+      throw new Error('wrapper must be NgtSobaGizmoViewport');
+    }
+  }
+}
+
 @Component({
   selector: 'ngt-soba-gizmo-viewport',
+  standalone: true,
   template: `
     <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this" [scale]="40">
       <ngt-soba-gizmo-viewport-axis
@@ -296,6 +338,17 @@ export class NgtSobaGizmoViewportAxisHead extends NgtObjectInputs<THREE.Sprite> 
       <ngt-point-light [position]="10" intensity="0.5"></ngt-point-light>
     </ngt-group>
   `,
+  imports: [
+    NgtGroup,
+    NgtObjectPassThrough,
+    NgtAmbientLight,
+    NgtPointLight,
+    NgtSobaGizmoViewportAxis,
+    NgtSobaGizmoViewportAxisHead,
+    NgtSobaGizmoViewportAxisHeadPassThrough,
+    NgtRadianPipe,
+    NgIf,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaGizmoViewport)],
 })
@@ -375,62 +428,8 @@ export class NgtSobaGizmoViewport extends NgtObjectInputs<THREE.Group> {
   }
 }
 
-@Directive({
-  selector: '[ngtSobaGizmoViewportAxisHead]',
-})
-export class NgtSobaGizmoViewportAxisHeadPassThrough {
-  @Input() set ngtSobaGizmoViewportAxisHead(wrapper: unknown) {
-    this.assertWrapper(wrapper);
-
-    wrapper
-      .select(
-        wrapper.select((s) => s['labelColor']).pipe(startWithUndefined()),
-        wrapper.select((s) => s['font']).pipe(startWithUndefined()),
-        wrapper.select((s) => s['disabled']).pipe(startWithUndefined()),
-        wrapper.select((s) => s['axisHeadScale']).pipe(startWithUndefined())
-      )
-      .pipe(takeUntil(wrapper.destroy$))
-      .subscribe(() => {
-        this.axisHead.labelColor = wrapper.labelColor;
-        this.axisHead.font = wrapper.font;
-        this.axisHead.disabled = wrapper.disabled;
-        this.axisHead.axisHeadScale = wrapper.axisHeadScale;
-      });
-
-    if (wrapper.click.observed) {
-      this.axisHead.click.pipe(takeUntil(wrapper.destroy$)).subscribe(wrapper.click.emit.bind(wrapper.click));
-    }
-  }
-
-  constructor(@Self() private axisHead: NgtSobaGizmoViewportAxisHead) {}
-
-  private assertWrapper(wrapper: unknown): asserts wrapper is NgtSobaGizmoViewport {
-    if (!(wrapper instanceof NgtSobaGizmoViewport)) {
-      throw new Error('wrapper must be NgtSobaGizmoViewport');
-    }
-  }
-}
-
 @NgModule({
-  declarations: [
-    NgtSobaGizmoViewport,
-    NgtSobaGizmoViewportAxis,
-    NgtSobaGizmoViewportAxisHead,
-    NgtSobaGizmoViewportAxisHeadPassThrough,
-  ],
+  imports: [NgtSobaGizmoViewport],
   exports: [NgtSobaGizmoViewport],
-  imports: [
-    CommonModule,
-    NgtGroupModule,
-    NgtMeshModule,
-    NgtBoxGeometryModule,
-    NgtMeshBasicMaterialModule,
-    NgtSpriteModule,
-    NgtObjectPassThroughModule,
-    NgtSpriteMaterialModule,
-    NgtAmbientLightModule,
-    NgtPointLightModule,
-    NgtRadianPipeModule,
-  ],
 })
 export class NgtSobaGizmoViewportModule {}

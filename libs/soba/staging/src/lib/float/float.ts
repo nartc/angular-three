@@ -4,13 +4,13 @@ import {
   NGT_OBJECT_REF,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NumberInput,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { CommonModule } from '@angular/common';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,6 +26,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-float-content]',
+  standalone: true,
 })
 export class NgtSobaFloatContent {
   constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group> }>) {}
@@ -45,6 +46,7 @@ export interface NgtSobaFloatState extends NgtObjectInputsState<THREE.Group> {
 
 @Component({
   selector: 'ngt-soba-float',
+  standalone: true,
   template: `
     <ngt-group skipParent [ngtObjectInputs]="this" [ngtObjectOutputs]="this">
       <ngt-group [ref]="innerGroup">
@@ -57,6 +59,7 @@ export interface NgtSobaFloatState extends NgtObjectInputsState<THREE.Group> {
     </ngt-group>
     <ng-content></ng-content>
   `,
+  imports: [NgtGroup, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaFloat, (float) => float.innerGroup)],
 })
@@ -120,8 +123,7 @@ export class NgtSobaFloat extends NgtObjectInputs<THREE.Group, NgtSobaFloatState
 }
 
 @NgModule({
-  declarations: [NgtSobaFloat, NgtSobaFloatContent],
+  imports: [NgtSobaFloat, NgtSobaFloatContent],
   exports: [NgtSobaFloat, NgtSobaFloatContent],
-  imports: [CommonModule, NgtGroupModule, NgtObjectPassThroughModule],
 })
 export class NgtSobaFloatModule {}

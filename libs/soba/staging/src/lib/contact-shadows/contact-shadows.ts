@@ -7,21 +7,21 @@ import {
   makeVector3,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
-  NgtRadianPipeModule,
+  NgtObjectPassThrough,
+  NgtRadianPipe,
   NumberInput,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
-import { NgtOrthographicCameraModule } from '@angular-three/core/cameras';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
-import { NgtMeshModule } from '@angular-three/core/meshes';
-import { CommonModule } from '@angular/common';
+import { NgtOrthographicCamera } from '@angular-three/core/cameras';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgtMeshBasicMaterial } from '@angular-three/core/materials';
+import { NgtMesh } from '@angular-three/core/meshes';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
 import { HorizontalBlurShader, VerticalBlurShader } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.Group> {
   opacity: number;
@@ -37,6 +37,7 @@ export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.G
 
 @Component({
   selector: 'ngt-soba-contact-shadows',
+  standalone: true,
   template: `
     <ngt-group
       (beforeRender)="onBeforeRender($event.object)"
@@ -69,6 +70,16 @@ export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.G
       </ng-container>
     </ngt-group>
   `,
+  imports: [
+    NgtGroup,
+    NgtObjectPassThrough,
+    NgtRadianPipe,
+    NgIf,
+    AsyncPipe,
+    NgtMesh,
+    NgtMeshBasicMaterial,
+    NgtOrthographicCamera,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaContactShadows)],
 })
@@ -76,21 +87,34 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
   @Input() set opacity(opacity: NumberInput) {
     this.set({ opacity: coerceNumberProperty(opacity) });
   }
+  get opacity() {
+    return this.get((s) => s.opacity);
+  }
 
   @Input() set width(width: NumberInput) {
     this.set({ width: coerceNumberProperty(width) });
   }
 
+  get width() {
+    return this.get((s) => s['scaledWidth']);
+  }
   @Input() set height(height: NumberInput) {
     this.set({ height: coerceNumberProperty(height) });
   }
 
+  get height() {
+    return this.get((s) => s['scaledHeight']);
+  }
   @Input() set blur(blur: NumberInput) {
     this.set({ blur: coerceNumberProperty(blur) });
   }
 
   @Input() set far(far: NumberInput) {
     this.set({ far: coerceNumberProperty(far) });
+  }
+
+  get far() {
+    return this.get((s) => s.far);
   }
 
   @Input() set smooth(smooth: BooleanInput) {
@@ -108,9 +132,11 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
   @Input() set depthWrite(depthWrite: BooleanInput) {
     this.set({ depthWrite: coerceBooleanProperty(depthWrite) });
   }
+  get depthWrite() {
+    return this.get((s) => s.depthWrite);
+  }
 
   private count = 1;
-
   readonly shadowViewModel$ = this.select(
     this.select((s) => s.priority),
     this.select((s) => s['planeGeometry']),
@@ -131,27 +157,11 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
       far,
     })
   );
-
   get planeGeometry() {
     return this.get((s) => s['planeGeometry']);
   }
   get renderTarget() {
     return this.get((s) => s['renderTarget']);
-  }
-  get opacity() {
-    return this.get((s) => s.opacity);
-  }
-  get depthWrite() {
-    return this.get((s) => s.depthWrite);
-  }
-  get width() {
-    return this.get((s) => s['scaledWidth']);
-  }
-  get height() {
-    return this.get((s) => s['scaledHeight']);
-  }
-  get far() {
-    return this.get((s) => s.far);
   }
 
   get shadowCameraRef() {
@@ -312,16 +322,7 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
 }
 
 @NgModule({
-  declarations: [NgtSobaContactShadows],
+  imports: [NgtSobaContactShadows],
   exports: [NgtSobaContactShadows],
-  imports: [
-    NgtGroupModule,
-    NgtObjectPassThroughModule,
-    NgtRadianPipeModule,
-    NgtMeshModule,
-    NgtMeshBasicMaterialModule,
-    NgtOrthographicCameraModule,
-    CommonModule,
-  ],
 })
 export class NgtSobaContactShadowsModule {}

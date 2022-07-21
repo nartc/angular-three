@@ -3,23 +3,23 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  NgtObjectInputs,
-  NgtObjectInputsState,
-  NgtObjectPassThroughModule,
-  NgtRenderState,
-  NgtStore,
   NGT_INSTANCE_HOST_REF,
   NGT_INSTANCE_REF,
+  NgtObjectInputs,
+  NgtObjectInputsState,
+  NgtObjectPassThrough,
+  NgtRenderState,
+  NgtStore,
   NumberInput,
   provideObjectHostRef,
   Ref,
   startWithUndefined,
 } from '@angular-three/core';
-import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
-import { NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtPlaneGeometry } from '@angular-three/core/geometries';
+import { NgtMesh } from '@angular-three/core/meshes';
 import { NgtTextureLoader } from '@angular-three/soba/loaders';
-import { NgtSobaImageShaderMaterialModule } from '@angular-three/soba/shaders';
-import { CommonModule } from '@angular/common';
+import { NgtSobaImageShaderMaterial } from '@angular-three/soba/shaders';
+import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -40,6 +40,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-image-content]',
+  standalone: true,
 })
 export class NgtSobaImageContent {
   constructor(public templateRef: TemplateRef<{ image: Ref<THREE.Mesh> }>) {}
@@ -60,6 +61,7 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
 
 @Component({
   selector: 'ngt-soba-image[url]',
+  standalone: true,
   template: `
     <ng-container *ngIf="imageViewModel$ | async as imageViewModel">
       <ngt-plane-geometry
@@ -94,6 +96,15 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
       </ngt-mesh>
     </ng-container>
   `,
+  imports: [
+    NgtMesh,
+    NgtObjectPassThrough,
+    NgtPlaneGeometry,
+    NgtSobaImageShaderMaterial,
+    NgIf,
+    NgTemplateOutlet,
+    AsyncPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtTextureLoader, provideObjectHostRef(NgtSobaImage)],
 })
@@ -197,14 +208,7 @@ export class NgtSobaImage extends NgtObjectInputs<THREE.Mesh, NgtSobaImageState>
 }
 
 @NgModule({
-  declarations: [NgtSobaImage, NgtSobaImageContent],
+  imports: [NgtSobaImage, NgtSobaImageContent],
   exports: [NgtSobaImage, NgtSobaImageContent],
-  imports: [
-    NgtMeshModule,
-    NgtPlaneGeometryModule,
-    NgtSobaImageShaderMaterialModule,
-    CommonModule,
-    NgtObjectPassThroughModule,
-  ],
 })
 export class NgtSobaImageModule {}

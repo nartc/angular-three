@@ -1,12 +1,5 @@
 import { NgtPhysicBody, NgtPhysicsModule } from '@angular-three/cannon';
-import {
-  NgtCanvasModule,
-  NgtEuler,
-  NgtRenderState,
-  NgtTriple,
-  NgtVector3,
-  NgtVectorPipeModule,
-} from '@angular-three/core';
+import { NgtCanvasModule, NgtEuler, NgtRenderState, NgtTriple, NgtVector3 } from '@angular-three/core';
 import { NgtInstancedBufferAttributeModule, NgtVector2AttributeModule } from '@angular-three/core/attributes';
 import { NgtBoxGeometryModule, NgtPlaneGeometryModule, NgtSphereGeometryModule } from '@angular-three/core/geometries';
 import { NgtHemisphereLightModule, NgtPointLightModule, NgtSpotLightModule } from '@angular-three/core/lights';
@@ -167,7 +160,6 @@ export class InstancedSpheres implements OnInit {
     NgtStatsModule,
     NgtHemisphereLightModule,
     NgtSpotLightModule,
-    NgtVectorPipeModule,
     NgtPointLightModule,
     NgtPlaneGeometryModule,
     NgtMeshPhongMaterialModule,

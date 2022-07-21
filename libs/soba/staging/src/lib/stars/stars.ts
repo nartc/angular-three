@@ -4,18 +4,18 @@ import {
   coerceNumberProperty,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NgtRenderState,
   NumberInput,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
-import { NgtBufferAttributeModule } from '@angular-three/core/attributes';
-import { NgtBufferGeometryModule } from '@angular-three/core/geometries';
-import { NgtPointsModule } from '@angular-three/core/points';
+import { NgtBufferAttribute } from '@angular-three/core/attributes';
+import { NgtBufferGeometry } from '@angular-three/core/geometries';
+import { NgtPoints } from '@angular-three/core/points';
 import { StarFieldMaterial } from '@angular-three/soba/materials';
-import { NgtSobaStarFieldMaterialModule } from '@angular-three/soba/shaders';
-import { CommonModule } from '@angular/common';
+import { NgtSobaStarFieldMaterial } from '@angular-three/soba/shaders';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
@@ -37,6 +37,7 @@ export interface NgtSobaStarsState extends NgtObjectInputsState<THREE.Points> {
 
 @Component({
   selector: 'ngt-soba-stars',
+  standalone: true,
   template: `
     <ngt-points [ngtObjectOutputs]="this" [ngtObjectInputs]="this" (beforeRender)="onBeforeRender($event.state)">
       <ngt-buffer-geometry>
@@ -64,6 +65,15 @@ export interface NgtSobaStarsState extends NgtObjectInputsState<THREE.Points> {
       ></ngt-soba-star-field-material>
     </ngt-points>
   `,
+  imports: [
+    NgtPoints,
+    NgtObjectPassThrough,
+    NgtBufferGeometry,
+    NgtBufferAttribute,
+    NgtSobaStarFieldMaterial,
+    NgIf,
+    AsyncPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaStars)],
 })
@@ -151,15 +161,7 @@ export class NgtSobaStars extends NgtObjectInputs<THREE.Points, NgtSobaStarsStat
 }
 
 @NgModule({
-  declarations: [NgtSobaStars],
+  imports: [NgtSobaStars],
   exports: [NgtSobaStars],
-  imports: [
-    NgtPointsModule,
-    NgtObjectPassThroughModule,
-    NgtSobaStarFieldMaterialModule,
-    NgtBufferGeometryModule,
-    CommonModule,
-    NgtBufferAttributeModule,
-  ],
 })
 export class NgtSobaStarsModule {}

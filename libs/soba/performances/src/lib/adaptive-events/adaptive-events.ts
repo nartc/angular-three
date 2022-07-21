@@ -4,6 +4,7 @@ import { tap } from 'rxjs';
 
 @Directive({
   selector: 'ngt-soba-adaptive-events',
+  standalone: true,
 })
 export class NgtSobaAdaptiveEvents extends NgtComponentStore implements OnInit {
   constructor(private zone: NgZone, private store: NgtStore) {
@@ -37,7 +38,7 @@ export class NgtSobaAdaptiveEvents extends NgtComponentStore implements OnInit {
 }
 
 @NgModule({
-  declarations: [NgtSobaAdaptiveEvents],
+  imports: [NgtSobaAdaptiveEvents],
   exports: [NgtSobaAdaptiveEvents],
 })
 export class NgtSobaAdaptiveEventsModule {}

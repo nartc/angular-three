@@ -5,15 +5,15 @@ import {
   is,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NumberInput,
   provideObjectHostRef,
   Ref,
   startWithUndefined,
   tapEffect,
 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { CommonModule } from '@angular/common';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,8 +26,8 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
 import { TransformControls } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 type ControlsProto = {
   enabled: boolean;
@@ -35,6 +35,7 @@ type ControlsProto = {
 
 @Directive({
   selector: 'ng-template[ngt-soba-transform-controls-content]',
+  standalone: true,
 })
 export class NgtSobaTransformControlsContent {
   constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group> }>) {}
@@ -66,6 +67,7 @@ export interface NgtSobaTransformControlsState extends NgtObjectInputsState<Tran
 
 @Component({
   selector: 'ngt-soba-transform-controls',
+  standalone: true,
   template: `
     <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this" [ref]="groupRef">
       <ng-container
@@ -76,6 +78,7 @@ export interface NgtSobaTransformControlsState extends NgtObjectInputsState<Tran
     </ngt-group>
     <ng-content></ng-content>
   `,
+  imports: [NgtGroup, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaTransformControls, (controls) => controls.groupRef)],
 })
@@ -300,8 +303,7 @@ export class NgtSobaTransformControls extends NgtObjectInputs<TransformControls,
 }
 
 @NgModule({
-  declarations: [NgtSobaTransformControls, NgtSobaTransformControlsContent],
+  imports: [NgtSobaTransformControls, NgtSobaTransformControlsContent],
   exports: [NgtSobaTransformControls, NgtSobaTransformControlsContent],
-  imports: [NgtGroupModule, NgtObjectPassThroughModule, CommonModule],
 })
 export class NgtSobaTransformControlsModule {}

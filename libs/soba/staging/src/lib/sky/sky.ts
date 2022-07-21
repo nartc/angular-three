@@ -7,7 +7,7 @@ import {
   NumberInput,
   Ref,
 } from '@angular-three/core';
-import { CommonModule } from '@angular/common';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,8 +18,8 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
 import { Sky } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 export function calcPosFromAngles(inclination: number, azimuth: number, vector: THREE.Vector3 = new THREE.Vector3()) {
   const theta = Math.PI * (inclination - 0.5);
@@ -34,6 +34,7 @@ export function calcPosFromAngles(inclination: number, azimuth: number, vector: 
 
 @Directive({
   selector: 'ng-template[ngt-soba-sky-content]',
+  standalone: true,
 })
 export class NgtSobaSkyContent {
   constructor(public templateRef: TemplateRef<{ sky: Ref<Sky> }>) {}
@@ -45,6 +46,7 @@ export class NgtSobaSkyContent {
 
 @Component({
   selector: 'ngt-soba-sky',
+  standalone: true,
   template: `
     <ng-container
       *ngIf="content"
@@ -53,6 +55,7 @@ export class NgtSobaSkyContent {
     ></ng-container>
     <ng-content></ng-content>
   `,
+  imports: [NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgtSobaSky extends NgtCommonMesh<Sky> {
@@ -150,8 +153,7 @@ export class NgtSobaSky extends NgtCommonMesh<Sky> {
 }
 
 @NgModule({
-  declarations: [NgtSobaSky, NgtSobaSkyContent],
+  imports: [NgtSobaSky, NgtSobaSkyContent],
   exports: [NgtSobaSky, NgtSobaSkyContent],
-  imports: [CommonModule],
 })
 export class NgtSobaSkyModule {}

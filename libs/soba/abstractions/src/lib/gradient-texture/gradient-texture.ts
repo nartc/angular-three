@@ -10,6 +10,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-soba-gradient-texture[stops][colors]',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonTextureRef(NgtSobaGradientTexture)],
@@ -65,7 +66,7 @@ export class NgtSobaGradientTexture extends NgtCommonTexture {
 }
 
 @NgModule({
-  declarations: [NgtSobaGradientTexture],
+  imports: [NgtSobaGradientTexture],
   exports: [NgtSobaGradientTexture],
 })
 export class NgtSobaGradientTextureModule {}

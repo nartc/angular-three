@@ -12,11 +12,12 @@ import {
 import { NgtShaderMaterial } from '@angular-three/core/materials';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
 import { LineMaterial } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-soba-line-material',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtSobaLineMaterial)],
@@ -91,7 +92,7 @@ export class NgtSobaLineMaterial extends NgtShaderMaterial {
 }
 
 @NgModule({
-  declarations: [NgtSobaLineMaterial],
+  imports: [NgtSobaLineMaterial],
   exports: [NgtSobaLineMaterial],
 })
 export class NgtSobaLineMaterialModule {}

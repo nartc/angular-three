@@ -1,17 +1,19 @@
 import { make, makeVector3, NgtEuler, NgtTriple, NgtVector3 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
+import { NgtGroup } from '@angular-three/core/group';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import * as THREE from 'three/src/Three';
 import { Font, FontLoader, TextGeometry } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 /**
  * adapted from three.js example https://threejs.org/examples/?q=text#webgl_geometry_text
  */
 @Component({
   selector: 'ngt-soba-text3d[fontUrl]',
+  standalone: true,
   template: `
     <ngt-group (ready)="ready($event)" [position]="position" [scale]="scale" [rotation]="rotation"></ngt-group>
   `,
+  imports: [NgtGroup],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgtSobaText3d {
@@ -216,8 +218,7 @@ export class NgtSobaText3d {
 }
 
 @NgModule({
-  declarations: [NgtSobaText3d],
+  imports: [NgtSobaText3d],
   exports: [NgtSobaText3d],
-  imports: [NgtGroupModule],
 })
 export class NgtSobaText3dModule {}

@@ -1,17 +1,17 @@
 import {
   coerceNumberProperty,
   makeColor,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NumberInput,
   provideObjectHostRef,
   Ref,
   tapEffect,
 } from '@angular-three/core';
-import { NgtSpotLight, NgtSpotLightModule, NgtSpotLightPassThroughModule } from '@angular-three/core/lights';
-import { NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtSpotLight, NgtSpotLightPassThrough } from '@angular-three/core/lights';
+import { NgtMesh } from '@angular-three/core/meshes';
 import { SpotLightMaterial } from '@angular-three/soba/materials';
-import { NgtSobaSpotLightMaterialModule } from '@angular-three/soba/shaders';
-import { CommonModule } from '@angular/common';
+import { NgtSobaSpotLightMaterial } from '@angular-three/soba/shaders';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
@@ -19,6 +19,7 @@ const vec = new THREE.Vector3();
 
 @Component({
   selector: 'ngt-soba-spot-light',
+  standalone: true,
   template: `
     <ngt-spot-light
       [ngtObjectInputs]="this"
@@ -47,6 +48,7 @@ const vec = new THREE.Vector3();
       </ngt-mesh>
     </ngt-spot-light>
   `,
+  imports: [NgtSpotLight, NgtObjectPassThrough, NgtSpotLightPassThrough, NgtMesh, NgtSobaSpotLightMaterial, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaSpotLight)],
 })
@@ -193,15 +195,7 @@ export class NgtSobaSpotLight extends NgtSpotLight {
 }
 
 @NgModule({
-  declarations: [NgtSobaSpotLight],
+  imports: [NgtSobaSpotLight],
   exports: [NgtSobaSpotLight],
-  imports: [
-    NgtSpotLightModule,
-    NgtObjectPassThroughModule,
-    NgtMeshModule,
-    NgtSobaSpotLightMaterialModule,
-    CommonModule,
-    NgtSpotLightPassThroughModule,
-  ],
 })
 export class NgtSobaSpotLightModule {}

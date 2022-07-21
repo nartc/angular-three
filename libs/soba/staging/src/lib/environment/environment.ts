@@ -10,8 +10,8 @@ import {
   NgtInstance,
   NgtInstanceState,
   NgtLoader,
-  NgtPortalModule,
-  NgtSidePipeModule,
+  NgtPortal,
+  NgtSidePipe,
   NgtStore,
   NumberInput,
   prepare,
@@ -19,11 +19,11 @@ import {
   startWithUndefined,
   tapEffect,
 } from '@angular-three/core';
-import { NgtCubeCameraModule } from '@angular-three/core/cameras';
-import { NgtIcosahedronGeometryModule } from '@angular-three/core/geometries';
-import { NgtShaderMaterialModule } from '@angular-three/core/materials';
-import { NgtMeshModule } from '@angular-three/core/meshes';
-import { CommonModule } from '@angular/common';
+import { NgtCubeCamera } from '@angular-three/core/cameras';
+import { NgtIcosahedronGeometry } from '@angular-three/core/geometries';
+import { NgtShaderMaterial } from '@angular-three/core/materials';
+import { NgtMesh } from '@angular-three/core/meshes';
+import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -53,8 +53,8 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import * as THREE from 'three/src/Three';
 import { RGBELoader } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 import { presetsObj, PresetsType } from './presets';
 
 const fragmentShader =
@@ -272,6 +272,7 @@ export abstract class NgtSobaEnvironmentGeneric<T extends object = {}> extends N
 
 @Directive({
   selector: '[ngtSobaEnvironmentPassThrough]',
+  standalone: true,
 })
 export class NgtSobaEnvironmentPassThrough {
   @Input() set ngtSobaEnvironmentPassThrough(wrapper: unknown) {
@@ -424,6 +425,7 @@ export class NgtSobaEnvironmentResolver extends NgtComponentStore<NgtSobaEnviron
 
 @Component({
   selector: 'ngt-soba-environment-map[map]',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -492,6 +494,7 @@ export class NgtSobaEnvironmentMap extends NgtSobaEnvironmentGeneric {
 
 @Component({
   selector: 'ngt-soba-environment-cube',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -591,6 +594,7 @@ export class NgtSobaEnvironmentCube extends NgtSobaEnvironmentGeneric {
 
 @Directive({
   selector: 'ng-template[ngt-soba-environment-content]',
+  standalone: true,
 })
 export class NgtSobaEnvironmentContent {
   constructor(public templateRef: TemplateRef<unknown>) {}
@@ -598,6 +602,7 @@ export class NgtSobaEnvironmentContent {
 
 @Component({
   selector: 'ngt-soba-environment-portal',
+  standalone: true,
   template: `
     <ngt-portal [ref]="virtualScene">
       <ng-container *ngTemplateOutlet="content.templateRef"></ng-container>
@@ -619,6 +624,15 @@ export class NgtSobaEnvironmentContent {
       </ng-template>
     </ngt-portal>
   `,
+  imports: [
+    NgtPortal,
+    NgtCubeCamera,
+    NgtSobaEnvironmentPassThrough,
+    NgtSobaEnvironmentCube,
+    NgtSobaEnvironmentMap,
+    NgIf,
+    AsyncPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -712,6 +726,7 @@ export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
 
 @Component({
   selector: 'ngt-soba-environment-ground',
+  standalone: true,
   template: `
     <ng-container *ngIf="environmentGroundViewModel$ | async as viewModel">
       <ngt-soba-environment-map
@@ -731,6 +746,16 @@ export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
       </ngt-mesh>
     </ng-container>
   `,
+  imports: [
+    NgtSobaEnvironmentMap,
+    NgtMesh,
+    NgtIcosahedronGeometry,
+    NgtShaderMaterial,
+    NgtSidePipe,
+    NgtSobaEnvironmentPassThrough,
+    NgIf,
+    AsyncPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -924,6 +949,7 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
 
 @Component({
   selector: 'ngt-soba-environment',
+  standalone: true,
   template: `
     <ngt-soba-environment-ground
       *ngIf="!!ground; else mapOrPortalOrCube"
@@ -951,6 +977,16 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
 
     <ng-content></ng-content>
   `,
+  imports: [
+    NgtSobaEnvironmentGround,
+    NgtSobaEnvironmentMap,
+    NgtSobaEnvironmentPortal,
+    NgtSobaEnvironmentCube,
+    NgtSobaEnvironmentPassThrough,
+    NgtSobaEnvironmentContent,
+    NgIf,
+    NgTemplateOutlet,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{ provide: NgtSobaEnvironmentGeneric, useExisting: NgtSobaEnvironment }],
 })
@@ -960,24 +996,7 @@ export class NgtSobaEnvironment extends NgtSobaEnvironmentGeneric {
 }
 
 @NgModule({
-  declarations: [
-    NgtSobaEnvironment,
-    NgtSobaEnvironmentPassThrough,
-    NgtSobaEnvironmentMap,
-    NgtSobaEnvironmentCube,
-    NgtSobaEnvironmentPortal,
-    NgtSobaEnvironmentGround,
-    NgtSobaEnvironmentContent,
-  ],
+  imports: [NgtSobaEnvironment, NgtSobaEnvironmentContent],
   exports: [NgtSobaEnvironment, NgtSobaEnvironmentContent],
-  imports: [
-    NgtPortalModule,
-    CommonModule,
-    NgtCubeCameraModule,
-    NgtMeshModule,
-    NgtIcosahedronGeometryModule,
-    NgtShaderMaterialModule,
-    NgtSidePipeModule,
-  ],
 })
 export class NgtSobaEnvironmentModule {}

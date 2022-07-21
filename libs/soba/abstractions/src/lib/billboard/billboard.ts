@@ -2,13 +2,13 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   NgtObjectInputs,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NgtRenderState,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
-import { CommonModule } from '@angular/common';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,6 +24,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-billboard-content]',
+  standalone: true,
 })
 export class NgtSobaBillboardContent {
   constructor(public templateRef: TemplateRef<{ billboard: Ref<THREE.Group> }>) {}
@@ -35,6 +36,7 @@ export class NgtSobaBillboardContent {
 
 @Component({
   selector: 'ngt-soba-billboard',
+  standalone: true,
   template: `
     <ngt-group
       (beforeRender)="onBeforeRender($event); beforeRender.emit($event)"
@@ -48,6 +50,7 @@ export class NgtSobaBillboardContent {
       ></ng-container>
     </ngt-group>
   `,
+  imports: [NgtGroupModule, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaBillboard)],
 })
@@ -105,8 +108,7 @@ export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
 }
 
 @NgModule({
-  declarations: [NgtSobaBillboard, NgtSobaBillboardContent],
+  imports: [NgtSobaBillboard, NgtSobaBillboardContent],
   exports: [NgtSobaBillboard, NgtSobaBillboardContent],
-  imports: [NgtGroupModule, CommonModule, NgtObjectPassThroughModule],
 })
 export class NgtSobaBillboardModule {}

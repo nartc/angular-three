@@ -3,16 +3,16 @@ import {
   coerceNumberProperty,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
-  NgtRadianPipeModule,
+  NgtObjectPassThrough,
+  NgtRadianPipe,
   NumberInput,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
-import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtMeshModule } from '@angular-three/core/meshes';
-import { CommonModule } from '@angular/common';
+import { NgtPlaneGeometry } from '@angular-three/core/geometries';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgtMesh } from '@angular-three/core/meshes';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -36,6 +36,7 @@ export interface NgtSobaBackdropState extends NgtObjectInputsState<THREE.Group> 
 
 @Directive({
   selector: 'ng-template[ngt-soba-backdrop-content]',
+  standalone: true,
 })
 export class NgtSobaBackdropContent {
   constructor(public templateRef: TemplateRef<{ backdrop: Ref<THREE.Mesh> }>) {}
@@ -47,6 +48,7 @@ export class NgtSobaBackdropContent {
 
 @Component({
   selector: 'ngt-soba-backdrop',
+  standalone: true,
   template: `
     <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this" receiveShadow="false" skipParent>
       <ngt-mesh [ref]="backdropMesh" [receiveShadow]="receiveShadow" [rotation]="[-90 | radian, 0, 90 | radian]">
@@ -59,6 +61,7 @@ export class NgtSobaBackdropContent {
       </ngt-mesh>
     </ngt-group>
   `,
+  imports: [NgtGroup, NgtObjectPassThrough, NgtMesh, NgtPlaneGeometry, NgtRadianPipe, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaBackdrop, (backdrop) => backdrop.backdropMesh)],
 })
@@ -132,15 +135,7 @@ export class NgtSobaBackdrop extends NgtObjectInputs<THREE.Group, NgtSobaBackdro
 }
 
 @NgModule({
-  declarations: [NgtSobaBackdrop, NgtSobaBackdropContent],
+  imports: [NgtSobaBackdrop, NgtSobaBackdropContent],
   exports: [NgtSobaBackdrop, NgtSobaBackdropContent],
-  imports: [
-    NgtGroupModule,
-    NgtObjectPassThroughModule,
-    NgtMeshModule,
-    NgtRadianPipeModule,
-    NgtPlaneGeometryModule,
-    CommonModule,
-  ],
 })
 export class NgtSobaBackdropModule {}

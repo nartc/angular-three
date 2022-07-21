@@ -11,6 +11,7 @@ import { tap } from 'rxjs';
 
 @Directive({
   selector: 'ngt-soba-adaptive-dpr',
+  standalone: true,
 })
 export class NgtSobaAdaptiveDpr extends NgtComponentStore<{ pixelated: boolean }> implements OnInit {
   @Input() set pixelated(pixelated: BooleanInput) {
@@ -68,7 +69,7 @@ export class NgtSobaAdaptiveDpr extends NgtComponentStore<{ pixelated: boolean }
 }
 
 @NgModule({
-  declarations: [NgtSobaAdaptiveDpr],
+  imports: [NgtSobaAdaptiveDpr],
   exports: [NgtSobaAdaptiveDpr],
 })
 export class NgtSobaAdapativeDprModule {}

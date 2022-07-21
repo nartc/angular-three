@@ -11,8 +11,8 @@ import {
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
 import { map, tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
 import { OrbitControls } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 export interface NgtSobaOrbitControlsState extends NgtInstanceState<OrbitControls> {
   camera?: THREE.Camera;
@@ -25,6 +25,7 @@ export interface NgtSobaOrbitControlsState extends NgtInstanceState<OrbitControl
 
 @Component({
   selector: 'ngt-soba-orbit-controls',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideInstanceRef(NgtSobaOrbitControls)],
@@ -319,7 +320,7 @@ export class NgtSobaOrbitControls extends NgtInstance<OrbitControls, NgtSobaOrbi
 }
 
 @NgModule({
-  declarations: [NgtSobaOrbitControls],
+  imports: [NgtSobaOrbitControls],
   exports: [NgtSobaOrbitControls],
 })
 export class NgtSobaOrbitControlsModule {}

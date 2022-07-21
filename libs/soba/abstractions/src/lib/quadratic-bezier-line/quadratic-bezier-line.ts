@@ -1,22 +1,23 @@
 import {
   coerceNumberProperty,
   is,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NgtTriple,
   NumberInput,
   provideObjectHostRef,
   startWithUndefined,
 } from '@angular-three/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
 import * as THREE from 'three/src/Three';
-import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
+import { NgtSobaLine, NgtSobaLineContent } from '../line/line';
 
 const v = new THREE.Vector3();
 
 @Component({
   selector: 'ngt-soba-quadratic-bezier-line',
+  standalone: true,
   template: `
     <ngt-soba-line
       *ngIf="quadraticLineViewModel$ | async as quadraticLineViewModel"
@@ -37,6 +38,7 @@ const v = new THREE.Vector3();
       </ng-container>
     </ngt-soba-line>
   `,
+  imports: [NgtSobaLine, NgtObjectPassThrough, NgtSobaLineContent, NgIf, AsyncPipe, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaQuadraticBezierLine)],
 })
@@ -149,8 +151,7 @@ export class NgtSobaQuadraticBezierLine extends NgtSobaLine {
 }
 
 @NgModule({
-  declarations: [NgtSobaQuadraticBezierLine],
+  imports: [NgtSobaQuadraticBezierLine],
   exports: [NgtSobaQuadraticBezierLine],
-  imports: [NgtSobaLineModule, NgtObjectPassThroughModule, CommonModule],
 })
 export class NgtSobaQuadraticBezierLineModule {}

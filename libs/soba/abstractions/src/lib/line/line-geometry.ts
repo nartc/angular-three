@@ -1,11 +1,12 @@
 import { AnyConstructor, is, NgtCommonGeometry, NgtTriple, provideCommonGeometryRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
-import * as THREE from 'three/src/Three';
 import { LineGeometry } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-soba-line-geometry',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtSobaLineGeometry)],
@@ -47,7 +48,7 @@ export class NgtSobaLineGeometry extends NgtCommonGeometry<LineGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtSobaLineGeometry],
+  imports: [NgtSobaLineGeometry],
   exports: [NgtSobaLineGeometry],
 })
 export class NgtSobaLineGeometryModule {}

@@ -8,6 +8,7 @@ import {
 import { NgtShaderMaterial } from '@angular-three/core/materials';
 import { ImageShaderMaterial } from '@angular-three/soba/materials';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
+import * as THREE from 'three/src/Three';
 
 export type NgtSobaImageShaderMaterialParameters = THREE.ShaderMaterialParameters & {
   map: THREE.Texture;
@@ -20,6 +21,7 @@ export type NgtSobaImageShaderMaterialParameters = THREE.ShaderMaterialParameter
 
 @Component({
   selector: 'ngt-soba-image-shader-material',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtSobaImageShaderMaterial)],
@@ -69,7 +71,7 @@ export class NgtSobaImageShaderMaterial extends NgtShaderMaterial {
 }
 
 @NgModule({
-  declarations: [NgtSobaImageShaderMaterial],
+  imports: [NgtSobaImageShaderMaterial],
   exports: [NgtSobaImageShaderMaterial],
 })
 export class NgtSobaImageShaderMaterialModule {}

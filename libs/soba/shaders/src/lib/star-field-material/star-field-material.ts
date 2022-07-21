@@ -5,6 +5,7 @@ import { Component, NgModule } from '@angular/core';
 
 @Component({
   selector: 'ngt-soba-star-field-material',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   providers: [provideCommonMaterialRef(NgtSobaStarFieldMaterial)],
 })
@@ -15,7 +16,7 @@ export class NgtSobaStarFieldMaterial extends NgtShaderMaterial {
 }
 
 @NgModule({
-  declarations: [NgtSobaStarFieldMaterial],
+  imports: [NgtSobaStarFieldMaterial],
   exports: [NgtSobaStarFieldMaterial],
 })
 export class NgtSobaStarFieldMaterialModule {}

@@ -6,7 +6,7 @@ import {
   makeVector2,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NgtRenderState,
   NgtTriple,
   NgtVector2,
@@ -15,8 +15,8 @@ import {
   Ref,
   tapEffect,
 } from '@angular-three/core';
-import { NgtPrimitiveModule } from '@angular-three/core/primitive';
-import { CommonModule } from '@angular/common';
+import { NgtPrimitive } from '@angular-three/core/primitive';
+import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -29,10 +29,10 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
 import { Line2 } from 'three-stdlib';
-import { NgtSobaLineGeometryModule } from './line-geometry';
-import { NgtSobaLineMaterialModule } from './line-material';
+import * as THREE from 'three/src/Three';
+import { NgtSobaLineGeometry } from './line-geometry';
+import { NgtSobaLineMaterial } from './line-material';
 
 export interface NgtSobaCommonLineState extends NgtObjectInputsState<Line2> {
   points: Array<THREE.Vector3 | NgtTriple>;
@@ -78,6 +78,7 @@ export abstract class NgtSobaCommonLine extends NgtObjectInputs<Line2, NgtSobaCo
 
 @Directive({
   selector: 'ng-template[ngt-soba-line-content]',
+  standalone: true,
 })
 export class NgtSobaLineContent {
   constructor(public templateRef: TemplateRef<{ line: Ref<Line2> }>) {}
@@ -89,6 +90,7 @@ export class NgtSobaLineContent {
 
 @Component({
   selector: 'ngt-soba-line',
+  standalone: true,
   template: `
     <ngt-primitive
       *ngIf="lineViewModel$ | async as lineViewModel"
@@ -115,6 +117,15 @@ export class NgtSobaLineContent {
       ></ng-container>
     </ngt-primitive>
   `,
+  imports: [
+    NgtPrimitive,
+    NgtObjectPassThrough,
+    NgtSobaLineGeometry,
+    NgtSobaLineMaterial,
+    NgIf,
+    AsyncPipe,
+    NgTemplateOutlet,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaLine)],
 })
@@ -183,14 +194,7 @@ export class NgtSobaLine extends NgtSobaCommonLine {
 }
 
 @NgModule({
-  declarations: [NgtSobaLine, NgtSobaLineContent],
+  imports: [NgtSobaLine, NgtSobaLineContent],
   exports: [NgtSobaLine, NgtSobaLineContent],
-  imports: [
-    NgtPrimitiveModule,
-    NgtObjectPassThroughModule,
-    NgtSobaLineGeometryModule,
-    NgtSobaLineMaterialModule,
-    CommonModule,
-  ],
 })
 export class NgtSobaLineModule {}

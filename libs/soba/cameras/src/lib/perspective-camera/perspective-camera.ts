@@ -11,6 +11,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-soba-perspective-camera',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCameraRef(NgtSobaPerspectiveCamera)],
@@ -77,7 +78,7 @@ export class NgtSobaPerspectiveCamera extends NgtPerspectiveCamera {
 }
 
 @NgModule({
-  declarations: [NgtSobaPerspectiveCamera],
+  imports: [NgtSobaPerspectiveCamera],
   exports: [NgtSobaPerspectiveCamera],
 })
 export class NgtSobaPerspectiveCameraModule {}

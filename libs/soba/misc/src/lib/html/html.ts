@@ -5,15 +5,15 @@ import {
   is,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NumberInput,
   provideObjectHostRef,
   Ref,
   startWithUndefined,
   tapEffect,
 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { CommonModule } from '@angular/common';
+import { NgtGroup } from '@angular-three/core/group';
+import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -153,6 +153,7 @@ export interface NgtSobaHtmlState extends NgtObjectInputsState<THREE.Group> {
 
 @Directive({
   selector: '[ngtSobaHtmlElement]',
+  standalone: true,
 })
 export class NgtSobaHtmlElement {
   constructor(public elementRef: ElementRef<HTMLElement>, public viewContainerRef: ViewContainerRef) {}
@@ -160,6 +161,7 @@ export class NgtSobaHtmlElement {
 
 @Directive({
   selector: 'ng-template[ngt-soba-html-content]',
+  standalone: true,
 })
 export class NgtSobaHtmlContent {
   constructor(public templateRef: TemplateRef<unknown>) {}
@@ -167,6 +169,7 @@ export class NgtSobaHtmlContent {
 
 @Component({
   selector: 'ngt-soba-html',
+  standalone: true,
   template: `
     <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this"></ngt-group>
 
@@ -188,6 +191,7 @@ export class NgtSobaHtmlContent {
 
     <ng-content></ng-content>
   `,
+  imports: [NgtGroup, NgtObjectPassThrough, NgtSobaHtmlElement, NgIf, AsyncPipe, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaHtml)],
 })
@@ -542,8 +546,7 @@ export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> 
 }
 
 @NgModule({
-  declarations: [NgtSobaHtml, NgtSobaHtmlElement, NgtSobaHtmlContent],
+  imports: [NgtSobaHtml, NgtSobaHtmlElement, NgtSobaHtmlContent],
   exports: [NgtSobaHtml, NgtSobaHtmlElement, NgtSobaHtmlContent],
-  imports: [CommonModule, NgtGroupModule, NgtObjectPassThroughModule],
 })
 export class NgtSobaHtmlModule {}

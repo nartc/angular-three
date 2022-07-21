@@ -9,7 +9,7 @@ import {
   NgtEvent,
   NgtInstance,
   NgtInstanceState,
-  NgtRepeatModule,
+  NgtRepeat,
   NgtStore,
   NgtTriple,
   NgtVector3,
@@ -17,12 +17,12 @@ import {
   Ref,
   startWithUndefined,
 } from '@angular-three/core';
-import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtAmbientLightModule, NgtPointLightModule } from '@angular-three/core/lights';
-import { NgtMeshBasicMaterialModule, NgtMeshLambertMaterialModule } from '@angular-three/core/materials';
-import { NgtMeshModule } from '@angular-three/core/meshes';
-import { CommonModule } from '@angular/common';
+import { NgtBoxGeometry } from '@angular-three/core/geometries';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
+import { NgtMeshBasicMaterial, NgtMeshLambertMaterial } from '@angular-three/core/materials';
+import { NgtMesh } from '@angular-three/core/meshes';
+import { AsyncPipe, NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -183,6 +183,7 @@ export abstract class NgtSobaGizmoViewCubeGeneric<TPart extends object> extends 
 
 @Directive({
   selector: '[ngtSobaGizmoViewCubeGenericPassThrough]',
+  standalone: true,
 })
 export class NgtSobaGizmoViewCubePassThrough {
   @Input() set ngtSobaGizmoViewCubeGenericPassThrough(wrapper: unknown) {
@@ -227,6 +228,7 @@ export class NgtSobaGizmoViewCubePassThrough {
 
 @Component({
   selector: 'ngt-soba-gizmo-face-material[hover][index]',
+  standalone: true,
   template: `
     <ngt-mesh-lambert-material
       [ref]="instance"
@@ -237,6 +239,7 @@ export class NgtSobaGizmoViewCubePassThrough {
       [opacity]="opacity"
     ></ngt-mesh-lambert-material>
   `,
+  imports: [NgtMeshLambertMaterial, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -294,6 +297,7 @@ export class NgtSobaGizmoFaceMaterial extends NgtSobaGizmoViewCubeGeneric<THREE.
 
 @Component({
   selector: 'ngt-soba-gizmo-face-cube',
+  standalone: true,
   template: `
     <ngt-mesh
       [raycast]="raycast"
@@ -310,6 +314,7 @@ export class NgtSobaGizmoFaceMaterial extends NgtSobaGizmoViewCubeGeneric<THREE.
       ></ngt-soba-gizmo-face-material>
     </ngt-mesh>
   `,
+  imports: [NgtMesh, NgtBoxGeometry, NgtSobaGizmoFaceMaterial, NgtSobaGizmoViewCubePassThrough, NgtRepeat, NgForOf],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -343,6 +348,7 @@ export class NgtSobaGizmoFaceCube extends NgtSobaGizmoViewCubeGeneric<THREE.Mesh
 
 @Component({
   selector: 'ngt-soba-gizmo-edge-cube[dimensions][position]',
+  standalone: true,
   template: `
     <ngt-mesh
       [scale]="1.01"
@@ -361,6 +367,7 @@ export class NgtSobaGizmoFaceCube extends NgtSobaGizmoViewCubeGeneric<THREE.Mesh
       ></ngt-mesh-basic-material>
     </ngt-mesh>
   `,
+  imports: [NgtMesh, NgtBoxGeometry, NgtMeshBasicMaterial],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -408,6 +415,7 @@ export class NgtSobaGizmoEdgeCube extends NgtSobaGizmoViewCubeGeneric<THREE.Mesh
 
 @Component({
   selector: 'ngt-soba-gizmo-viewcube',
+  standalone: true,
   template: `
     <ngt-group [scale]="60">
       <ngt-soba-gizmo-face-cube [ngtSobaGizmoViewCubeGenericPassThrough]="this"></ngt-soba-gizmo-face-cube>
@@ -430,6 +438,15 @@ export class NgtSobaGizmoEdgeCube extends NgtSobaGizmoViewCubeGeneric<THREE.Mesh
       <ngt-point-light [position]="10" intensity="0.5"></ngt-point-light>
     </ngt-group>
   `,
+  imports: [
+    NgtGroup,
+    NgtSobaGizmoFaceCube,
+    NgtSobaGizmoEdgeCube,
+    NgtAmbientLight,
+    NgtPointLight,
+    NgtSobaGizmoViewCubePassThrough,
+    NgForOf,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -447,24 +464,7 @@ export class NgtSobaGizmoViewcube extends NgtSobaGizmoViewCubeGeneric<THREE.Grou
 }
 
 @NgModule({
-  declarations: [
-    NgtSobaGizmoViewcube,
-    NgtSobaGizmoViewCubePassThrough,
-    NgtSobaGizmoFaceMaterial,
-    NgtSobaGizmoFaceCube,
-    NgtSobaGizmoEdgeCube,
-  ],
+  imports: [NgtSobaGizmoViewcube],
   exports: [NgtSobaGizmoViewcube],
-  imports: [
-    CommonModule,
-    NgtMeshLambertMaterialModule,
-    NgtMeshBasicMaterialModule,
-    NgtMeshModule,
-    NgtBoxGeometryModule,
-    NgtGroupModule,
-    NgtAmbientLightModule,
-    NgtPointLightModule,
-    NgtRepeatModule,
-  ],
 })
 export class NgtSobaGizmoViewcubeModule {}

@@ -2,13 +2,13 @@ import {
   AnyFunction,
   NGT_OBJECT_REF,
   NgtObjectInputs,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NgtRenderState,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
-import { NgtLodModule } from '@angular-three/core/lod';
-import { CommonModule } from '@angular/common';
+import { NgtLod } from '@angular-three/core/lod';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
@@ -26,6 +26,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-detailed-content]',
+  standalone: true,
 })
 export class NgtSobaDetailedContent {
   constructor(public templateRef: TemplateRef<{ lod: Ref<THREE.LOD> }>) {}
@@ -37,6 +38,7 @@ export class NgtSobaDetailedContent {
 
 @Component({
   selector: 'ngt-soba-detailed',
+  standalone: true,
   template: `
     <ngt-lod [ngtObjectOutputs]="this" [ngtObjectInputs]="this" (beforeRender)="onBeforeRender($event)">
       <ng-container
@@ -47,6 +49,7 @@ export class NgtSobaDetailedContent {
     </ngt-lod>
     <ng-content></ng-content>
   `,
+  imports: [NgtLod, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaDetailed)],
 })
@@ -100,8 +103,7 @@ export class NgtSobaDetailed extends NgtObjectInputs<THREE.LOD> implements After
 }
 
 @NgModule({
-  declarations: [NgtSobaDetailed, NgtSobaDetailedContent],
+  imports: [NgtSobaDetailed, NgtSobaDetailedContent],
   exports: [NgtSobaDetailed, NgtSobaDetailedContent],
-  imports: [NgtLodModule, NgtObjectPassThroughModule, CommonModule],
 })
 export class NgtSobaDetailedModule {}

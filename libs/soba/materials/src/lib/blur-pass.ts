@@ -19,7 +19,7 @@ export class BlurPass {
   readonly scene: THREE.Scene;
   readonly camera: THREE.Camera;
   readonly screen: THREE.Mesh;
-  renderToScreen: boolean = false;
+  renderToScreen = false;
 
   constructor({
     gl,
@@ -64,8 +64,8 @@ export class BlurPass {
     const camera = this.camera;
     const renderTargetA = this.renderTargetA;
     const renderTargetB = this.renderTargetB;
-    let material = this.convolutionMaterial;
-    let uniforms = material.uniforms;
+    const material = this.convolutionMaterial;
+    const uniforms = material.uniforms;
     uniforms['depthBuffer'].value = inputBuffer.depthTexture;
     const kernel = material.kernel;
     let lastRT = inputBuffer;

@@ -5,12 +5,12 @@ import {
   NGT_OBJECT_REF,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { CommonModule } from '@angular/common';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
@@ -28,6 +28,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-center-content]',
+  standalone: true,
 })
 export class NgtSobaCenterContent {
   constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group> }>) {}
@@ -46,6 +47,7 @@ export interface NgtSobaCenterState extends NgtObjectInputsState<THREE.Group> {
 
 @Component({
   selector: 'ngt-soba-center',
+  standalone: true,
   template: `
     <ngt-group [ngtObjectInputs]="this" [ngtObjectOutputs]="this" skipParent>
       <ngt-group [ref]="outerGroup">
@@ -60,6 +62,7 @@ export interface NgtSobaCenterState extends NgtObjectInputsState<THREE.Group> {
     </ngt-group>
     <ng-content></ng-content>
   `,
+  imports: [NgtGroup, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaCenter, (center) => center.innerGroup)],
 })
@@ -123,8 +126,7 @@ export class NgtSobaCenter extends NgtObjectInputs<THREE.Group, NgtSobaCenterSta
 }
 
 @NgModule({
-  declarations: [NgtSobaCenter, NgtSobaCenterContent],
+  imports: [NgtSobaCenter, NgtSobaCenterContent],
   exports: [NgtSobaCenter, NgtSobaCenterContent],
-  imports: [NgtGroupModule, NgtObjectPassThroughModule, CommonModule],
 })
 export class NgtSobaCenterModule {}

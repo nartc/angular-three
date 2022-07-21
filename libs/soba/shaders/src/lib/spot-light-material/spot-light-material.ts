@@ -5,6 +5,7 @@ import { Component, NgModule } from '@angular/core';
 
 @Component({
   selector: 'ngt-soba-spot-light-material',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   providers: [provideCommonMaterialRef(NgtSobaSpotLightMaterial)],
 })
@@ -15,7 +16,7 @@ export class NgtSobaSpotLightMaterial extends NgtShaderMaterial {
 }
 
 @NgModule({
-  declarations: [NgtSobaSpotLightMaterial],
+  imports: [NgtSobaSpotLightMaterial],
   exports: [NgtSobaSpotLightMaterial],
 })
 export class NgtSobaSpotLightMaterialModule {}

@@ -6,15 +6,15 @@ import {
   NgtColor,
   NgtCommonMaterial,
   NgtObjectInputs,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NgtRenderState,
   NumberInput,
   provideObjectHostRef,
   Ref,
   tapEffect,
 } from '@angular-three/core';
-import { NgtPrimitiveModule } from '@angular-three/core/primitive';
-import { CommonModule } from '@angular/common';
+import { NgtPrimitive } from '@angular-three/core/primitive';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -32,6 +32,7 @@ import { preloadFont, Text as TextMeshImpl } from 'troika-three-text';
 
 @Directive({
   selector: 'ng-template[ngt-soba-text-content]',
+  standalone: true,
 })
 export class NgtSobaTextContent {
   constructor(public templateRef: TemplateRef<{ text: Ref<TextMeshImpl> }>) {}
@@ -43,6 +44,7 @@ export class NgtSobaTextContent {
 
 @Component({
   selector: 'ngt-soba-text[text]',
+  standalone: true,
   template: `
     <ngt-primitive
       [object]="textMesh"
@@ -57,6 +59,7 @@ export class NgtSobaTextContent {
       ></ng-container>
     </ngt-primitive>
   `,
+  imports: [NgtPrimitive, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaText, (text) => text.textMesh)],
 })
@@ -292,8 +295,7 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
 }
 
 @NgModule({
-  declarations: [NgtSobaText, NgtSobaTextContent],
+  imports: [NgtSobaText, NgtSobaTextContent],
   exports: [NgtSobaText, NgtSobaTextContent],
-  imports: [NgtPrimitiveModule, CommonModule, NgtObjectPassThroughModule],
 })
 export class NgtSobaTextModule {}

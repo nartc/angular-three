@@ -28,6 +28,7 @@ export interface NgtSobaCameraShakeState extends NgtInstanceState<{}> {
 
 @Component({
   selector: 'ngt-soba-camera-shake',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -183,7 +184,7 @@ export class NgtSobaCameraShake extends NgtInstance<{}, NgtSobaCameraShakeState>
 }
 
 @NgModule({
-  declarations: [NgtSobaCameraShake],
+  imports: [NgtSobaCameraShake],
   exports: [NgtSobaCameraShake],
 })
 export class NgtSobaCameraShakeModule {}

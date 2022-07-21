@@ -12,6 +12,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-soba-orthographic-camera',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCameraRef(NgtSobaOrthographicCamera)],
@@ -89,7 +90,7 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
 }
 
 @NgModule({
-  declarations: [NgtSobaOrthographicCamera],
+  imports: [NgtSobaOrthographicCamera],
   exports: [NgtSobaOrthographicCamera],
 })
 export class NgtSobaOrthographicCameraModule {}

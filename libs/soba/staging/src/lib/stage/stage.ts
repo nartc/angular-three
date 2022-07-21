@@ -6,15 +6,15 @@ import {
   NGT_OBJECT_REF,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NumberInput,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
-import { NgtValueAttributeModule } from '@angular-three/core/attributes';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtAmbientLightModule, NgtPointLightModule, NgtSpotLightModule } from '@angular-three/core/lights';
-import { CommonModule } from '@angular/common';
+import { NgtValueAttribute } from '@angular-three/core/attributes';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgtAmbientLight, NgtPointLight, NgtSpotLight } from '@angular-three/core/lights';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -29,8 +29,8 @@ import {
 } from '@angular/core';
 import { asyncScheduler, combineLatest, filter, observeOn, pipe, skip, switchMap, tap } from 'rxjs';
 import * as THREE from 'three/src/Three';
-import { NgtSobaContactShadowsModule } from '../contact-shadows/contact-shadows';
-import { NgtSobaEnvironmentModule } from '../environment/environment';
+import { NgtSobaContactShadows } from '../contact-shadows/contact-shadows';
+import { NgtSobaEnvironment } from '../environment/environment';
 import { PresetsType } from '../environment/presets';
 
 const presets = {
@@ -79,6 +79,7 @@ export interface NgtSobaStageState extends NgtObjectInputsState<THREE.Group> {
 
 @Directive({
   selector: 'ng-template[ngt-soba-stage-content]',
+  standalone: true,
 })
 export class NgtSobaStageContent {
   constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group> }>) {}
@@ -90,6 +91,7 @@ export class NgtSobaStageContent {
 
 @Component({
   selector: 'ngt-soba-stage',
+  standalone: true,
   template: `
     <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this" skipParent>
       <ngt-group [ref]="outerGroup">
@@ -128,6 +130,18 @@ export class NgtSobaStageContent {
       ></ngt-point-light>
     </ngt-group>
   `,
+  imports: [
+    NgtGroup,
+    NgtObjectPassThrough,
+    NgtSobaContactShadows,
+    NgtSobaEnvironment,
+    NgtAmbientLight,
+    NgtSpotLight,
+    NgtPointLight,
+    NgtValueAttribute,
+    NgIf,
+    NgTemplateOutlet,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaStage, (stage) => stage.innerGroup)],
 })
@@ -315,18 +329,7 @@ export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState
 }
 
 @NgModule({
-  declarations: [NgtSobaStage, NgtSobaStageContent],
+  imports: [NgtSobaStage, NgtSobaStageContent],
   exports: [NgtSobaStage, NgtSobaStageContent],
-  imports: [
-    NgtGroupModule,
-    NgtObjectPassThroughModule,
-    CommonModule,
-    NgtSobaContactShadowsModule,
-    NgtSobaEnvironmentModule,
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-    NgtValueAttributeModule,
-    NgtPointLightModule,
-  ],
 })
 export class NgtSobaStageModule {}

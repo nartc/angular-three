@@ -5,14 +5,14 @@ import {
   is,
   NgtObjectInputs,
   NgtObjectInputsState,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NumberInput,
   provideObjectHostRef,
   Ref,
   tapEffect,
 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { CommonModule } from '@angular/common';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -72,6 +72,7 @@ function damp(v: THREE.Vector3, t: THREE.Vector3, lambda: number, delta: number)
 
 @Directive({
   selector: 'ng-template[ngt-soba-bounds-content]',
+  standalone: true,
 })
 export class NgtSobaBoundsContent {
   constructor(
@@ -94,6 +95,7 @@ export class NgtSobaBoundsContent {
 
 @Component({
   selector: 'ngt-soba-bounds',
+  standalone: true,
   template: `
     <ngt-group [ngtObjectInputs]="this" [ngtObjectOutputs]="this">
       <ng-container
@@ -104,6 +106,7 @@ export class NgtSobaBoundsContent {
     </ngt-group>
     <ng-content></ng-content>
   `,
+  imports: [NgtGroup, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaBounds)],
 })
@@ -377,8 +380,7 @@ export class NgtSobaBounds extends NgtObjectInputs<THREE.Group, NgtSobaBoundsSta
 }
 
 @NgModule({
-  declarations: [NgtSobaBounds, NgtSobaBoundsContent],
+  imports: [NgtSobaBounds, NgtSobaBoundsContent],
   exports: [NgtSobaBounds, NgtSobaBoundsContent],
-  imports: [CommonModule, NgtGroupModule, NgtObjectPassThroughModule],
 })
 export class NgtSobaBoundsModule {}

@@ -2,18 +2,19 @@ import {
   coerceNumberProperty,
   is,
   makeVector3,
-  NgtObjectPassThroughModule,
+  NgtObjectPassThrough,
   NgtTriple,
   NumberInput,
   provideObjectHostRef,
 } from '@angular-three/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
-import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
+import { NgtSobaLine, NgtSobaLineContent } from '../line/line';
 
 @Component({
   selector: 'ngt-soba-cubic-bezier-line[start][end][midA][midB]',
+  standalone: true,
   template: `
     <ngt-soba-line
       *ngIf="cubicLineViewModel$ | async as cubicLineViewModel"
@@ -34,6 +35,7 @@ import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
       </ng-container>
     </ngt-soba-line>
   `,
+  imports: [NgtSobaLine, NgtObjectPassThrough, NgtSobaLineContent, NgTemplateOutlet, NgIf, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaCubicBezierLine)],
 })
@@ -104,8 +106,7 @@ export class NgtSobaCubicBezierLine extends NgtSobaLine {
 }
 
 @NgModule({
-  declarations: [NgtSobaCubicBezierLine],
+  imports: [NgtSobaCubicBezierLine],
   exports: [NgtSobaCubicBezierLine],
-  imports: [NgtSobaLineModule, NgtObjectPassThroughModule, CommonModule],
 })
 export class NgtSobaCubicBezierLineModule {}
