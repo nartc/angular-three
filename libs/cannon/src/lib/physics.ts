@@ -6,6 +6,7 @@ import { NgtPhysicsStore } from './physics.store';
 
 @Directive({
   selector: 'ngt-physics',
+  standalone: true,
   exportAs: 'ngtPhysics',
   providers: [NgtPhysicsStore],
 })
@@ -78,7 +79,7 @@ export class NgtPhysics implements OnInit {
 }
 
 @NgModule({
-  declarations: [NgtPhysics],
+  imports: [NgtPhysics],
   exports: [NgtPhysics],
 })
 export class NgtPhysicsModule {}

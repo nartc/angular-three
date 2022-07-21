@@ -9,7 +9,7 @@ import {
   provideInstanceRef,
   tapEffect,
 } from '@angular-three/core';
-import { NgtPrimitiveModule } from '@angular-three/core/primitive';
+import { NgtPrimitive } from '@angular-three/core/primitive';
 import { ChangeDetectionStrategy, Component, Input, NgModule, NgZone } from '@angular/core';
 import { BodyProps, BodyShapeType, propsToBody } from '@pmndrs/cannon-worker-api';
 import { Body, Quaternion, Vec3, World } from 'cannon-es';
@@ -43,10 +43,12 @@ export interface NgtCannonDebugState extends NgtInstanceState<THREE.Scene> {
 
 @Component({
   selector: 'ngt-cannon-debug',
+  standalone: true,
   template: `
     <ngt-primitive [object]="instance.value"></ngt-primitive>
     <ng-content></ng-content>
   `,
+  imports: [NgtPrimitive],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideInstanceRef(NgtCannonDebug)],
 })
@@ -141,8 +143,7 @@ export class NgtCannonDebug extends NgtInstance<THREE.Scene, NgtCannonDebugState
 }
 
 @NgModule({
-  declarations: [NgtCannonDebug],
+  imports: [NgtCannonDebug],
   exports: [NgtCannonDebug],
-  imports: [NgtPrimitiveModule],
 })
 export class NgtCannonDebugModule {}
