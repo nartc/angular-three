@@ -1,10 +1,10 @@
-import { NgtCanvasModule, NgtColorPipeModule } from '@angular-three/core';
+import { NgtCanvasModule } from '@angular-three/core';
 import { NgtColorAttributeModule } from '@angular-three/core/attributes';
 import { NgtAmbientLightModule, NgtPointLightModule } from '@angular-three/core/lights';
 import { NgtStatsModule } from '@angular-three/core/stats';
 import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { NgtSobaLoaderModule } from '@angular-three/soba/loaders';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export function setupCanvas({
   cameraPosition = [-5, 5, 5],
@@ -52,7 +52,6 @@ export const setupCanvasModules = [
   NgtAmbientLightModule,
   NgtPointLightModule,
   NgtSobaOrbitControlsModule,
-  NgtColorPipeModule,
   NgtSobaLoaderModule,
 ];
 

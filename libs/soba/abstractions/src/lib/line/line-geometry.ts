@@ -2,7 +2,7 @@ import { AnyConstructor, is, NgtCommonGeometry, NgtTriple, provideCommonGeometry
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LineGeometry } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-soba-line-geometry',

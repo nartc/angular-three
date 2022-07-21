@@ -1,4 +1,4 @@
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export class ConvolutionMaterial extends THREE.ShaderMaterial {
   readonly kernel: Float32Array;

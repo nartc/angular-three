@@ -8,7 +8,7 @@ import { NgtSobaFBO } from '@angular-three/soba/misc';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule, NgZone, OnInit } from '@angular/core';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { NgtSobaPerspectiveCameraModule } from '../../cameras/src';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 

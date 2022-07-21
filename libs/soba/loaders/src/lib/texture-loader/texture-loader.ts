@@ -1,7 +1,7 @@
 import { is, NgtLoader, NgtStore } from '@angular-three/core';
 import { Injectable } from '@angular/core';
 import { defer, map, Observable, tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export const IsObject = (url: any): url is Record<string, string> =>
   url === Object(url) && !is.arr(url) && typeof url !== 'function';

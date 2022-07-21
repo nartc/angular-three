@@ -1,7 +1,7 @@
 import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtSobaTextModule } from '@angular-three/soba/abstractions';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { setupCanvas, setupCanvasModules, turnAnimate } from '../setup-canvas';
 
 export default {

@@ -9,10 +9,11 @@ import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postproc
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { LUT3DEffect } from 'postprocessing';
 import { tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-lut-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtLUTEffect)],
@@ -70,7 +71,7 @@ export class NgtLUTEffect extends NgtCommonEffect<LUT3DEffect> {
 }
 
 @NgModule({
-  declarations: [NgtLUTEffect],
+  imports: [NgtLUTEffect],
   exports: [NgtLUTEffect],
 })
 export class NgtLUTEffectModule {}

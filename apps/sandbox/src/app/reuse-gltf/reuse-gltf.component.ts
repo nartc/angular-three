@@ -23,7 +23,7 @@ import { ChangeDetectionStrategy, Component, Inject, NgModule, NgZone, Optional,
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GLTF } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'sandbox-reuse-gltf',

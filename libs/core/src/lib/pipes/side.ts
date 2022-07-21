@@ -1,5 +1,5 @@
 import { NgModule, Pipe, PipeTransform } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Pipe({ name: 'side', standalone: true })
 export class NgtSidePipe implements PipeTransform {

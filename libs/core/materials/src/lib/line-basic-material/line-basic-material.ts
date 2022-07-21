@@ -7,7 +7,7 @@ import {
   NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-line-basic-material',

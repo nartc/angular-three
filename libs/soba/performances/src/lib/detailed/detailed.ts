@@ -21,8 +21,8 @@ import {
   QueryList,
   TemplateRef,
 } from '@angular/core';
-import { combineLatest, switchMap, tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import { animationFrameScheduler, combineLatest, observeOn, pipe, switchMap, tap } from 'rxjs';
+import * as THREE from 'three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-detailed-content]',
@@ -83,18 +83,21 @@ export class NgtSobaDetailed extends NgtObjectInputs<THREE.LOD> implements After
   }
 
   private readonly addLevels = this.effect<{}>(
-    tap(() => {
-      const distances = this.get((s) => s['distances']);
-      if (this.instance.value) {
-        this.instance.value.levels.length = 0;
-        this.instance.value.children.forEach((object, index) => {
-          this.instance.value.levels.push({
-            object,
-            distance: distances[index],
+    pipe(
+      observeOn(animationFrameScheduler),
+      tap(() => {
+        const distances = this.get((s) => s['distances']);
+        if (this.instance.value) {
+          this.instance.value.levels.length = 0;
+          this.instance.value.children.forEach((object, index) => {
+            this.instance.value.levels.push({
+              object,
+              distance: distances[index],
+            });
           });
-        });
-      }
-    })
+        }
+      })
+    )
   );
 
   onBeforeRender({ state: { camera }, object }: { state: NgtRenderState; object: THREE.LOD }) {

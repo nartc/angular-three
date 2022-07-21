@@ -7,7 +7,7 @@ import {
 } from '@angular-three/core';
 import { NgtPerspectiveCamera } from '@angular-three/core/cameras';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-soba-perspective-camera',

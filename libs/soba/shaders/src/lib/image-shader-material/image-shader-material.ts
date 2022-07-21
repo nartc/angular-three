@@ -8,7 +8,7 @@ import {
 import { NgtShaderMaterial } from '@angular-three/core/materials';
 import { ImageShaderMaterial } from '@angular-three/soba/materials';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export type NgtSobaImageShaderMaterialParameters = THREE.ShaderMaterialParameters & {
   map: THREE.Texture;

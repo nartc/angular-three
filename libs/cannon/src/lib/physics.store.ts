@@ -18,7 +18,7 @@ import {
 } from '@pmndrs/cannon-worker-api';
 import type { EventEmitter } from 'events';
 import { tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 type CannonEvent = CollideBeginEvent | CollideEndEvent | CollideEvent | RayhitEvent;
 type CallbackByType<T extends { type: string }> = {

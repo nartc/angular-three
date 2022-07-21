@@ -1,4 +1,4 @@
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import type { NgtCamera, NgtCameraOptions, NgtSize, NgtState } from '../types';
 import { is } from './is';
 

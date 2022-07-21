@@ -54,7 +54,7 @@ import {
   tap,
 } from 'rxjs';
 import { RGBELoader } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { presetsObj, PresetsType } from './presets';
 
 const fragmentShader =

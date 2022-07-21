@@ -2,7 +2,7 @@ import { make, makeVector3, NgtEuler, NgtTriple, NgtVector3 } from '@angular-thr
 import { NgtGroup } from '@angular-three/core/group';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { Font, FontLoader, TextGeometry } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 /**
  * adapted from three.js example https://threejs.org/examples/?q=text#webgl_geometry_text

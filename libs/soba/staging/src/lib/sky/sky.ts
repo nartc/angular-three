@@ -19,7 +19,7 @@ import {
 } from '@angular/core';
 import { tap } from 'rxjs';
 import { Sky } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export function calcPosFromAngles(inclination: number, azimuth: number, vector: THREE.Vector3 = new THREE.Vector3()) {
   const theta = Math.PI * (inclination - 0.5);

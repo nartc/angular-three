@@ -13,7 +13,7 @@ import { NgtShaderMaterial } from '@angular-three/core/materials';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
 import { LineMaterial } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-soba-line-material',

@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostListener, Input, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CylinderArgs } from '@pmndrs/cannon-worker-api';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { Chassis, Vehicle, Wheel } from './vehicle.component';
 
 @Component({

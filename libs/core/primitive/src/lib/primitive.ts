@@ -9,7 +9,7 @@ import {
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { filter } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export interface NgtPrimitiveState extends NgtObjectInputsState {
   object: THREE.Object3D;

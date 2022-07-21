@@ -20,7 +20,7 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-billboard-content]',

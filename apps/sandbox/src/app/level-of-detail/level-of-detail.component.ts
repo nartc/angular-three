@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/co
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GLTF } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 const positions = [...Array(800)].map(() => ({
   position: [40 - Math.random() * 80, 40 - Math.random() * 80, 40 - Math.random() * 80],

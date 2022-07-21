@@ -3,7 +3,7 @@ import { NgtTriple } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'sandbox-height-field[elementSize][heights][position][rotation]',

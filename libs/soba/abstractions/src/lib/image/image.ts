@@ -36,7 +36,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-image-content]',

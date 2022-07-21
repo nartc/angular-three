@@ -1,4 +1,4 @@
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import type { AnyConstructor, NgtColor, NgtDpr, NgtIntersection, NgtVector2, NgtVector3, NgtVector4 } from '../types';
 import { is } from './is';
 

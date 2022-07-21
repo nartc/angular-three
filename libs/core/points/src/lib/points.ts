@@ -1,6 +1,6 @@
 import { AnyConstructor, NgtMaterialGeometry, provideMaterialGeometryObjectRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-points',

@@ -1,6 +1,6 @@
 import { BooleanInput, coerceBooleanProperty, NgtComponentStore, NgtStore } from '@angular-three/core';
 import { Directive, Input, NgModule, NgZone, OnInit } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 interface NgtSobaPreloadState {
   all: boolean;

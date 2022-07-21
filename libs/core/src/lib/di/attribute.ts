@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { Ref } from '../ref';
 import { NgtCommonAttribute } from '../three/attribute';
 import { NGT_COMMON_ATTRIBUTE_REF } from '../tokens';

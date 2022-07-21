@@ -12,7 +12,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { provideCanvasInstanceRef } from './di/object';
 import { NgtLoader } from './services/loader';
 import { NgtResize } from './services/resize';

@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Directive, NgModule, NgZone, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { KernelSize } from 'postprocessing';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'sandbox-object-clump',

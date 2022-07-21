@@ -6,7 +6,7 @@ import type {
   Subscriptions,
   SubscriptionTarget,
 } from '@pmndrs/cannon-worker-api';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export class NgtCannonUtils {
   static incrementingId = 0;

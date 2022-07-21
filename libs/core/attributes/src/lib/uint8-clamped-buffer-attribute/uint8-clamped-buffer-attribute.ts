@@ -1,7 +1,7 @@
 // GENERATED
 import { AnyConstructor, NgtCommonAttribute, provideCommonAttributeRef } from '@angular-three/core';
 import { NgModule, Component } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-uint8-clamped-buffer-attribute',

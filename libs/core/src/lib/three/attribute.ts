@@ -1,5 +1,5 @@
 import { Directive, Input } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
 import type { AnyConstructor } from '../types';

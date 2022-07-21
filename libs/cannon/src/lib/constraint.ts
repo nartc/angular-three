@@ -11,7 +11,7 @@ import {
   PointToPointConstraintOpts,
 } from '@pmndrs/cannon-worker-api';
 import { combineLatest, filter } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { NgtPhysicsStore } from './physics.store';
 
 type ConstraintApi = {

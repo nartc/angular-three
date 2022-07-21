@@ -30,7 +30,7 @@ import {
 } from '@angular/core';
 import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
 import { Line2 } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { NgtSobaLineGeometry } from './line-geometry';
 import { NgtSobaLineMaterial } from './line-material';
 

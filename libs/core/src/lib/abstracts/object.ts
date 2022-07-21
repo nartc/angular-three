@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Inject, Input, NgZone, Optional, Output, SkipSelf } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';

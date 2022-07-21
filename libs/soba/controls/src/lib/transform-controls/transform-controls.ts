@@ -27,7 +27,7 @@ import {
 } from '@angular/core';
 import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
 import { TransformControls } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 type ControlsProto = {
   enabled: boolean;

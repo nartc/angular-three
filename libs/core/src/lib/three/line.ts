@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { NgtMaterialGeometry } from '../abstracts/material-geometry';
 import { AnyConstructor } from '../types';
 

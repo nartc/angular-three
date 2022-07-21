@@ -9,11 +9,12 @@ import {
 import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { SSAOEffect } from 'postprocessing';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { Color } from 'three';
 
 @Component({
   selector: 'ngt-ssao-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtSSAOEffect)],
@@ -200,7 +201,7 @@ export class NgtSSAOEffect extends NgtCommonEffect<SSAOEffect> {
 }
 
 @NgModule({
-  declarations: [NgtSSAOEffect],
+  imports: [NgtSSAOEffect],
   exports: [NgtSSAOEffect],
 })
 export class NgtSSAOEffectModule {}

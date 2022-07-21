@@ -1,7 +1,7 @@
 import { NgtLoader, NgtObjectMap } from '@angular-three/core';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 // @ts-ignore
 import { MeshoptDecoder } from 'three-stdlib';
 import { DRACOLoader } from 'three-stdlib/loaders/DRACOLoader';

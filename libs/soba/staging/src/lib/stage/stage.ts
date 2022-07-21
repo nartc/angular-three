@@ -28,7 +28,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { asyncScheduler, combineLatest, filter, observeOn, pipe, skip, switchMap, tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { NgtSobaContactShadows } from '../contact-shadows/contact-shadows';
 import { NgtSobaEnvironment } from '../environment/environment';
 import { PresetsType } from '../environment/presets';

@@ -1,4 +1,4 @@
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { Ref } from '../ref';
 import type { EquConfig, NgtUnknownInstance, UnknownRecord } from '../types';
 

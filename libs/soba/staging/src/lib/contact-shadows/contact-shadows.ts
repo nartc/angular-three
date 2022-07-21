@@ -21,7 +21,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
 import { HorizontalBlurShader, VerticalBlurShader } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.Group> {
   opacity: number;

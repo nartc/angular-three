@@ -23,7 +23,7 @@ import {
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Inject, Input, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import { pipe, withLatestFrom } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-skinned-mesh',

@@ -17,7 +17,7 @@ import { StarFieldMaterial } from '@angular-three/soba/materials';
 import { NgtSobaStarFieldMaterial } from '@angular-three/soba/shaders';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 const genStar = (r: number) => {
   return new THREE.Vector3().setFromSpherical(

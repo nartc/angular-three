@@ -24,7 +24,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { asyncScheduler, combineLatest, filter, observeOn, pipe, switchMap, tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-center-content]',

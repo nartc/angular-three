@@ -1,4 +1,4 @@
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import type { AnyConstructor, NgtInstanceInternal, NgtUnknownInstance, UnknownRecord } from '../types';
 import { checkNeedsUpdate } from './check-needs-update';
 import { is } from './is';

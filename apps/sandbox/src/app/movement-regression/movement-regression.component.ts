@@ -30,7 +30,7 @@ import { BlendFunction, KernelSize, SSAOEffect } from 'postprocessing';
 import { Observable } from 'rxjs';
 // @ts-ignore
 import { FlakesTexture, GLTF, RectAreaLightUniformsLib } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 RectAreaLightUniformsLib.init();
 THREE.Vector2.prototype.equals = function (v, epsilon = 0.001) {

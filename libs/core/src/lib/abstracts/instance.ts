@@ -11,7 +11,7 @@ import {
   SkipSelf,
 } from '@angular/core';
 import { filter, map, Observable, of, pairwise, pipe, startWith, switchMap, tap, withLatestFrom } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { Ref } from '../ref';
 import { NgtComponentStore, startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';

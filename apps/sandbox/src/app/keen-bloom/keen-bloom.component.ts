@@ -11,7 +11,7 @@ import { NgtGLTFLoader, NgtSobaLoaderModule } from '@angular-three/soba/loaders'
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'sandbox-keen-bloom',

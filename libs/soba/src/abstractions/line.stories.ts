@@ -5,7 +5,7 @@ import {
 } from '@angular-three/soba/abstractions';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { GeometryUtils } from 'three-stdlib/utils/GeometryUtils';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {

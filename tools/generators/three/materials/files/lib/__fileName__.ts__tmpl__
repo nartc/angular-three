@@ -5,7 +5,7 @@ import {
     provideCommonMaterialRef,<% if (hasBooleanInput) { %>coerceBooleanProperty, BooleanInput,<% } %><% if (hasNumberInput) { %> coerceNumberProperty, NumberInput,<% } %>
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule<% if (hasInput) { %>, Input<% } %> } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 <% if (extend && extend.path) { %>import { <%= extend.material %> } from '<%= extend.path %>'<% } %>
 
 @Component({

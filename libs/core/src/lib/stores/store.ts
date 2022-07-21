@@ -1,6 +1,6 @@
 import { ElementRef, Inject, Injectable, NgZone, Optional, SkipSelf } from '@angular/core';
 import { filter, map, Observable, tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
 import { WINDOW } from '../di/window';
 import { Ref } from '../ref';

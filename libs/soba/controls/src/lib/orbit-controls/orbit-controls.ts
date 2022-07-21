@@ -12,7 +12,7 @@ import {
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
 import { map, tap } from 'rxjs';
 import { OrbitControls } from 'three-stdlib';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export interface NgtSobaOrbitControlsState extends NgtInstanceState<OrbitControls> {
   camera?: THREE.Camera;

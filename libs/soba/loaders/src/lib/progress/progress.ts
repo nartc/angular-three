@@ -1,6 +1,6 @@
 import { NgtComponentStore } from '@angular-three/core';
 import { Injectable } from '@angular/core';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 interface NgtSobaProgressResult {
   errors: string[];

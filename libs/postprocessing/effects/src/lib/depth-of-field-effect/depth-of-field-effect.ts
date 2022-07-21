@@ -3,10 +3,11 @@ import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postproc
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { DepthOfFieldEffect } from 'postprocessing';
 import { tap } from 'rxjs';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-depth-of-field-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtDepthOfFieldEffect)],
@@ -122,7 +123,7 @@ export class NgtDepthOfFieldEffect extends NgtCommonEffect<DepthOfFieldEffect> {
 }
 
 @NgModule({
-  declarations: [NgtDepthOfFieldEffect],
+  imports: [NgtDepthOfFieldEffect],
   exports: [NgtDepthOfFieldEffect],
 })
 export class NgtDepthOfFieldEffectModule {}
