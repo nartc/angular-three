@@ -9,7 +9,7 @@
     "@angular/core": "^14.0.0"
   },
   "dependencies": {
-    "three-stdlib": "~2.12.1",
+    "three-stdlib": "~2.12.0",
     "troika-three-text": "~0.46.0",
     "tslib": "^2.3.0"
   }
