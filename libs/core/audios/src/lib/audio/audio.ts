@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-audio',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonAudioRef(NgtAudio)],
@@ -16,7 +17,7 @@ export class NgtAudio extends NgtCommonAudio<GainNode, THREE.Audio> {
 }
 
 @NgModule({
-  declarations: [NgtAudio],
+  imports: [NgtAudio],
   exports: [NgtAudio],
 })
 export class NgtAudioModule {}

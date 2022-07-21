@@ -6,6 +6,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-vector2[vector2]',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideInstanceRef(NgtVector2Attribute)],
@@ -34,7 +35,7 @@ export class NgtVector2Attribute extends NgtInstance<THREE.Vector2> {
 }
 
 @NgModule({
-  declarations: [NgtVector2Attribute],
+  imports: [NgtVector2Attribute],
   exports: [NgtVector2Attribute],
 })
 export class NgtVector2AttributeModule {}

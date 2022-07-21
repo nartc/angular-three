@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-instanced-buffer-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtInstancedBufferGeometry)],
@@ -18,7 +19,7 @@ export class NgtInstancedBufferGeometry extends NgtCommonGeometry<THREE.Instance
 }
 
 @NgModule({
-  declarations: [NgtInstancedBufferGeometry],
+  imports: [NgtInstancedBufferGeometry],
   exports: [NgtInstancedBufferGeometry],
 })
 export class NgtInstancedBufferGeometryModule {}

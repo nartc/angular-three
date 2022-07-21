@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-box-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtBoxGeometry)],
@@ -18,7 +19,7 @@ export class NgtBoxGeometry extends NgtCommonGeometry<THREE.BoxGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtBoxGeometry],
+  imports: [NgtBoxGeometry],
   exports: [NgtBoxGeometry],
 })
 export class NgtBoxGeometryModule {}

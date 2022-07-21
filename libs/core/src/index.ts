@@ -31,13 +31,10 @@ export * from './lib/directives/cursor';
 export * from './lib/directives/object-pass-through';
 export * from './lib/directives/repeat';
 /* pipes */
-export * from './lib/pipes/color';
-export * from './lib/pipes/fog';
 export * from './lib/pipes/math';
 export * from './lib/pipes/pi';
 export * from './lib/pipes/radian';
 export * from './lib/pipes/side';
-export * from './lib/pipes/vector';
 /* portal */
 export * from './lib/portal';
 export * from './lib/ref';

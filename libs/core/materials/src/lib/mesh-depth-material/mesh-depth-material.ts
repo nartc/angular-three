@@ -13,6 +13,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-mesh-depth-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtMeshDepthMaterial)],
@@ -75,7 +76,7 @@ export class NgtMeshDepthMaterial extends NgtCommonMaterial<
 }
 
 @NgModule({
-  declarations: [NgtMeshDepthMaterial],
+  imports: [NgtMeshDepthMaterial],
   exports: [NgtMeshDepthMaterial],
 })
 export class NgtMeshDepthMaterialModule {}

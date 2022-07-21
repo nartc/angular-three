@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-instanced-buffer-attribute',
+  standalone: true,
   template: '<ng-content></ng-content>',
   providers: [provideCommonAttributeRef(NgtInstancedBufferAttribute)],
 })
@@ -17,7 +18,7 @@ export class NgtInstancedBufferAttribute extends NgtCommonAttribute<THREE.Instan
 }
 
 @NgModule({
-  declarations: [NgtInstancedBufferAttribute],
+  imports: [NgtInstancedBufferAttribute],
   exports: [NgtInstancedBufferAttribute],
 })
 export class NgtInstancedBufferAttributeModule {}

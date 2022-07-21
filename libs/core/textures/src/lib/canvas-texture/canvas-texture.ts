@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonTexture,
-  NumberInput,
   provideCommonTextureRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-canvas-texture',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonTextureRef(NgtCanvasTexture)],
@@ -75,7 +76,7 @@ export class NgtCanvasTexture extends NgtCommonTexture<THREE.CanvasTexture> {
 }
 
 @NgModule({
-  declarations: [NgtCanvasTexture],
+  imports: [NgtCanvasTexture],
   exports: [NgtCanvasTexture],
 })
 export class NgtCanvasTextureModule {}

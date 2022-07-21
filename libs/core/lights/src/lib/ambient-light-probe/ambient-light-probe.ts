@@ -1,10 +1,11 @@
 // GENERATED
 import { AnyConstructor, NgtCommonLight, provideCommonLightRef } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-ambient-light-probe',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonLightRef(NgtAmbientLightProbe)],
@@ -18,7 +19,7 @@ export class NgtAmbientLightProbe extends NgtCommonLight<THREE.AmbientLightProbe
 }
 
 @NgModule({
-  declarations: [NgtAmbientLightProbe],
+  imports: [NgtAmbientLightProbe],
   exports: [NgtAmbientLightProbe],
 })
 export class NgtAmbientLightProbeModule {}

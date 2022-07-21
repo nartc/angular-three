@@ -10,6 +10,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-instanced-mesh[count]',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMeshRef(NgtInstancedMesh)],
@@ -37,7 +38,7 @@ export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {
 }
 
 @NgModule({
-  declarations: [NgtInstancedMesh],
+  imports: [NgtInstancedMesh],
   exports: [NgtInstancedMesh],
 })
 export class NgtInstancedMeshModule {}

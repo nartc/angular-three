@@ -11,6 +11,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-cube-camera',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectRef(NgtCubeCamera)],
@@ -66,7 +67,7 @@ export class NgtCubeCamera extends NgtObject<THREE.CubeCamera> {
 }
 
 @NgModule({
-  declarations: [NgtCubeCamera],
+  imports: [NgtCubeCamera],
   exports: [NgtCubeCamera],
 })
 export class NgtCubeCameraModule {}

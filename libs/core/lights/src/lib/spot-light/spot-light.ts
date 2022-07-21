@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonLight,
-  NumberInput,
   provideCommonLightRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-spot-light',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonLightRef(NgtSpotLight)],
@@ -60,7 +61,7 @@ export class NgtSpotLight extends NgtCommonLight<THREE.SpotLight> {
 }
 
 @NgModule({
-  declarations: [NgtSpotLight],
+  imports: [NgtSpotLight],
   exports: [NgtSpotLight],
 })
 export class NgtSpotLightModule {}

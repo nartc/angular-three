@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonCamera,
-  NumberInput,
   provideCommonCameraRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-perspective-camera',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCameraRef(NgtPerspectiveCamera)],
@@ -50,7 +51,7 @@ export class NgtPerspectiveCamera extends NgtCommonCamera<THREE.PerspectiveCamer
 }
 
 @NgModule({
-  declarations: [NgtPerspectiveCamera],
+  imports: [NgtPerspectiveCamera],
   exports: [NgtPerspectiveCamera],
 })
 export class NgtPerspectiveCameraModule {}

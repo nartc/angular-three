@@ -1,10 +1,11 @@
 // GENERATED
 import { AnyConstructor, NgtCommonCamera, provideCommonCameraRef } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-stereo-camera',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCameraRef(NgtStereoCamera)],
@@ -18,7 +19,7 @@ export class NgtStereoCamera extends NgtCommonCamera<THREE.StereoCamera> {
 }
 
 @NgModule({
-  declarations: [NgtStereoCamera],
+  imports: [NgtStereoCamera],
   exports: [NgtStereoCamera],
 })
 export class NgtStereoCameraModule {}

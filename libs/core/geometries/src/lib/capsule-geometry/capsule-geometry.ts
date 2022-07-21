@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-capsule-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtCapsuleGeometry)],
@@ -18,7 +19,7 @@ export class NgtCapsuleGeometry extends NgtCommonGeometry<THREE.CapsuleGeometry>
 }
 
 @NgModule({
-  declarations: [NgtCapsuleGeometry],
+  imports: [NgtCapsuleGeometry],
   exports: [NgtCapsuleGeometry],
 })
 export class NgtCapsuleGeometryModule {}

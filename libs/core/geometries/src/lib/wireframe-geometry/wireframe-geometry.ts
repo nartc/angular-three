@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-wireframe-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtWireframeGeometry)],
@@ -18,7 +19,7 @@ export class NgtWireframeGeometry extends NgtCommonGeometry<THREE.WireframeGeome
 }
 
 @NgModule({
-  declarations: [NgtWireframeGeometry],
+  imports: [NgtWireframeGeometry],
   exports: [NgtWireframeGeometry],
 })
 export class NgtWireframeGeometryModule {}

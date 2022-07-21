@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-ellipse-curve',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCurveRef(NgtEllipseCurve)],
@@ -18,7 +19,7 @@ export class NgtEllipseCurve extends NgtCommonCurve<THREE.EllipseCurve> {
 }
 
 @NgModule({
-  declarations: [NgtEllipseCurve],
+  imports: [NgtEllipseCurve],
   exports: [NgtEllipseCurve],
 })
 export class NgtEllipseCurveModule {}

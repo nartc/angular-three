@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-torus-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtTorusGeometry)],
@@ -18,7 +19,7 @@ export class NgtTorusGeometry extends NgtCommonGeometry<THREE.TorusGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtTorusGeometry],
+  imports: [NgtTorusGeometry],
   exports: [NgtTorusGeometry],
 })
 export class NgtTorusGeometryModule {}

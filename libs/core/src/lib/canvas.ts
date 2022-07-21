@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -36,6 +36,7 @@ const { invalidate, advance } = createLoop(rootStateMap);
 
 @Component({
   selector: 'ngt-canvas',
+  standalone: true,
   template: `
     <canvas #rendererCanvas></canvas>
     <ng-container *ngIf="projectContent" [ngTemplateOutlet]="contentTemplate"></ng-container>
@@ -43,6 +44,7 @@ const { invalidate, advance } = createLoop(rootStateMap);
       <ng-content></ng-content>
     </ng-template>
   `,
+  imports: [NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
@@ -185,17 +187,7 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
 }
 
 @NgModule({
-  declarations: [NgtCanvas],
+  imports: [NgtCanvas],
   exports: [NgtCanvas],
-  imports: [CommonModule],
 })
 export class NgtCanvasModule {}
-
-/**
- * @deprecated Use {@link NgtCanvasModule} instead. Will be removed in next major version
- */
-@NgModule({
-  imports: [NgtCanvasModule],
-  exports: [NgtCanvasModule],
-})
-export class NgtCoreModule {}

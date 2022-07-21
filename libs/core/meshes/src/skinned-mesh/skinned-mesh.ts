@@ -27,6 +27,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-skinned-mesh',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMeshRef(NgtSkinnedMesh)],
@@ -91,6 +92,7 @@ export interface NgtSkeletonState extends NgtInstanceState<THREE.Skeleton> {
 
 @Component({
   selector: 'ngt-skeleton',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideInstanceRef(NgtSkeleton)],
@@ -213,6 +215,7 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
 
 @Component({
   selector: 'ngt-bone',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectRef(NgtBone)],
@@ -259,7 +262,7 @@ export class NgtBone extends NgtObject<THREE.Bone> {
 }
 
 @NgModule({
-  declarations: [NgtSkinnedMesh, NgtSkeleton, NgtBone],
+  imports: [NgtSkinnedMesh, NgtSkeleton, NgtBone],
   exports: [NgtSkinnedMesh, NgtSkeleton, NgtBone],
 })
 export class NgtSkinnedMeshModule {}

@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonHelper,
-  NumberInput,
   provideCommonHelperRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-axes-helper',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonHelperRef(NgtAxesHelper)],
@@ -35,7 +36,7 @@ export class NgtAxesHelper extends NgtCommonHelper<THREE.AxesHelper> {
 }
 
 @NgModule({
-  declarations: [NgtAxesHelper],
+  imports: [NgtAxesHelper],
   exports: [NgtAxesHelper],
 })
 export class NgtAxesHelperModule {}

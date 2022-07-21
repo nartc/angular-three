@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: '[ngtSkeletonHelper]',
+  standalone: true,
   exportAs: 'ngtSkeletonHelper',
   providers: [provideCommonObjectHelperRef(NgtSkeletonHelper)],
 })
@@ -23,7 +24,7 @@ export class NgtSkeletonHelper extends NgtCommonObjectHelper<THREE.SkeletonHelpe
 }
 
 @NgModule({
-  declarations: [NgtSkeletonHelper],
+  imports: [NgtSkeletonHelper],
   exports: [NgtSkeletonHelper],
 })
 export class NgtSkeletonHelperModule {}

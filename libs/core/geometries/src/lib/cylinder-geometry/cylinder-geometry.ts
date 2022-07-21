@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-cylinder-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtCylinderGeometry)],
@@ -18,7 +19,7 @@ export class NgtCylinderGeometry extends NgtCommonGeometry<THREE.CylinderGeometr
 }
 
 @NgModule({
-  declarations: [NgtCylinderGeometry],
+  imports: [NgtCylinderGeometry],
   exports: [NgtCylinderGeometry],
 })
 export class NgtCylinderGeometryModule {}

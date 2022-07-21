@@ -5,6 +5,7 @@ import { NgtSpotLight } from '../spot-light/spot-light';
 
 @Directive({
   selector: '[ngtSpotLightPassThrough]',
+  standalone: true,
 })
 export class NgtSpotLightPassThrough {
   @Input() set ngtSpotLightPassThrough(wrapper: unknown) {
@@ -77,7 +78,7 @@ export class NgtSpotLightPassThrough {
 }
 
 @NgModule({
-  declarations: [NgtSpotLightPassThrough],
+  imports: [NgtSpotLightPassThrough],
   exports: [NgtSpotLightPassThrough],
 })
 export class NgtSpotLightPassThroughModule {}

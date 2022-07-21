@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-plane-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtPlaneGeometry)],
@@ -18,7 +19,7 @@ export class NgtPlaneGeometry extends NgtCommonGeometry<THREE.PlaneGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtPlaneGeometry],
+  imports: [NgtPlaneGeometry],
   exports: [NgtPlaneGeometry],
 })
 export class NgtPlaneGeometryModule {}

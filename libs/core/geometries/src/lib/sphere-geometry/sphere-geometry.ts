@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-sphere-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtSphereGeometry)],
@@ -18,7 +19,7 @@ export class NgtSphereGeometry extends NgtCommonGeometry<THREE.SphereGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtSphereGeometry],
+  imports: [NgtSphereGeometry],
   exports: [NgtSphereGeometry],
 })
 export class NgtSphereGeometryModule {}

@@ -11,6 +11,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-mesh-distance-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtMeshDistanceMaterial)],
@@ -73,7 +74,7 @@ export class NgtMeshDistanceMaterial extends NgtCommonMaterial<
 }
 
 @NgModule({
-  declarations: [NgtMeshDistanceMaterial],
+  imports: [NgtMeshDistanceMaterial],
   exports: [NgtMeshDistanceMaterial],
 })
 export class NgtMeshDistanceMaterialModule {}

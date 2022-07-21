@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngt-value[value]',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideInstanceRef(NgtValueAttribute)],
@@ -33,7 +34,7 @@ export class NgtValueAttribute extends NgtInstance<any> {
 }
 
 @NgModule({
-  declarations: [NgtValueAttribute],
+  imports: [NgtValueAttribute],
   exports: [NgtValueAttribute],
 })
 export class NgtValueAttributeModule {}

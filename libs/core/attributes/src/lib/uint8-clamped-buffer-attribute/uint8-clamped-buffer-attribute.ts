@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-uint8-clamped-buffer-attribute',
+  standalone: true,
   template: '<ng-content></ng-content>',
   providers: [provideCommonAttributeRef(NgtUint8ClampedBufferAttribute)],
 })
@@ -17,7 +18,7 @@ export class NgtUint8ClampedBufferAttribute extends NgtCommonAttribute<THREE.Uin
 }
 
 @NgModule({
-  declarations: [NgtUint8ClampedBufferAttribute],
+  imports: [NgtUint8ClampedBufferAttribute],
   exports: [NgtUint8ClampedBufferAttribute],
 })
 export class NgtUint8ClampedBufferAttributeModule {}

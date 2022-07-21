@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-line-curve',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCurveRef(NgtLineCurve)],
@@ -18,7 +19,7 @@ export class NgtLineCurve extends NgtCommonCurve<THREE.LineCurve> {
 }
 
 @NgModule({
-  declarations: [NgtLineCurve],
+  imports: [NgtLineCurve],
   exports: [NgtLineCurve],
 })
 export class NgtLineCurveModule {}

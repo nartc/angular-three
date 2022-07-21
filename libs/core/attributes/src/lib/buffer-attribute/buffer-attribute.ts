@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-buffer-attribute',
+  standalone: true,
   template: '<ng-content></ng-content>',
   providers: [provideCommonAttributeRef(NgtBufferAttribute)],
 })
@@ -17,7 +18,7 @@ export class NgtBufferAttribute extends NgtCommonAttribute<THREE.BufferAttribute
 }
 
 @NgModule({
-  declarations: [NgtBufferAttribute],
+  imports: [NgtBufferAttribute],
   exports: [NgtBufferAttribute],
 })
 export class NgtBufferAttributeModule {}

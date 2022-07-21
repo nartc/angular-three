@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonHelper,
-  NumberInput,
   provideCommonHelperRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-arrow-helper',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonHelperRef(NgtArrowHelper)],
@@ -55,7 +56,7 @@ export class NgtArrowHelper extends NgtCommonHelper<THREE.ArrowHelper> {
 }
 
 @NgModule({
-  declarations: [NgtArrowHelper],
+  imports: [NgtArrowHelper],
   exports: [NgtArrowHelper],
 })
 export class NgtArrowHelperModule {}

@@ -1,10 +1,11 @@
 // GENERATED
 import { AnyConstructor, NgtCommonSprite, provideCommonSpriteRef } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-sprite',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonSpriteRef(NgtSprite)],
@@ -18,7 +19,7 @@ export class NgtSprite extends NgtCommonSprite<THREE.Sprite> {
 }
 
 @NgModule({
-  declarations: [NgtSprite],
+  imports: [NgtSprite],
   exports: [NgtSprite],
 })
 export class NgtSpriteModule {}

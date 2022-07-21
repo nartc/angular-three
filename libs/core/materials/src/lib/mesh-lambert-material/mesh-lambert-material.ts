@@ -13,6 +13,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-mesh-lambert-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtMeshLambertMaterial)],
@@ -135,7 +136,7 @@ export class NgtMeshLambertMaterial extends NgtCommonMaterial<
 }
 
 @NgModule({
-  declarations: [NgtMeshLambertMaterial],
+  imports: [NgtMeshLambertMaterial],
   exports: [NgtMeshLambertMaterial],
 })
 export class NgtMeshLambertMaterialModule {}

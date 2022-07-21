@@ -1,7 +1,7 @@
 import { NgModule, Pipe, PipeTransform } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
-@Pipe({ name: 'side' })
+@Pipe({ name: 'side', standalone: true })
 export class NgtSidePipe implements PipeTransform {
   transform(side: 'front' | 'back' | 'double'): THREE.Side {
     switch (side) {
@@ -16,7 +16,7 @@ export class NgtSidePipe implements PipeTransform {
 }
 
 @NgModule({
-  declarations: [NgtSidePipe],
+  imports: [NgtSidePipe],
   exports: [NgtSidePipe],
 })
 export class NgtSidePipeModule {}

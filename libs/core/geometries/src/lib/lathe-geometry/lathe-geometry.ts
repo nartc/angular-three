@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-lathe-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtLatheGeometry)],
@@ -18,7 +19,7 @@ export class NgtLatheGeometry extends NgtCommonGeometry<THREE.LatheGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtLatheGeometry],
+  imports: [NgtLatheGeometry],
   exports: [NgtLatheGeometry],
 })
 export class NgtLatheGeometryModule {}

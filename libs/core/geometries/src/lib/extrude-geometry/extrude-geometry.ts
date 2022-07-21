@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-extrude-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtExtrudeGeometry)],
@@ -18,7 +19,7 @@ export class NgtExtrudeGeometry extends NgtCommonGeometry<THREE.ExtrudeGeometry>
 }
 
 @NgModule({
-  declarations: [NgtExtrudeGeometry],
+  imports: [NgtExtrudeGeometry],
   exports: [NgtExtrudeGeometry],
 })
 export class NgtExtrudeGeometryModule {}

@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonTexture,
-  NumberInput,
   provideCommonTextureRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-compressed-texture',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonTextureRef(NgtCompressedTexture)],
@@ -90,7 +91,7 @@ export class NgtCompressedTexture extends NgtCommonTexture<THREE.CompressedTextu
 }
 
 @NgModule({
-  declarations: [NgtCompressedTexture],
+  imports: [NgtCompressedTexture],
   exports: [NgtCompressedTexture],
 })
 export class NgtCompressedTextureModule {}

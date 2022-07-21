@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-octahedron-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtOctahedronGeometry)],
@@ -18,7 +19,7 @@ export class NgtOctahedronGeometry extends NgtCommonGeometry<THREE.OctahedronGeo
 }
 
 @NgModule({
-  declarations: [NgtOctahedronGeometry],
+  imports: [NgtOctahedronGeometry],
   exports: [NgtOctahedronGeometry],
 })
 export class NgtOctahedronGeometryModule {}

@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-line-segments',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonLineRef(NgtLineSegments)],
@@ -16,7 +17,7 @@ export class NgtLineSegments extends NgtCommonLine<THREE.LineSegments> {
 }
 
 @NgModule({
-  declarations: [NgtLineSegments],
+  imports: [NgtLineSegments],
   exports: [NgtLineSegments],
 })
 export class NgtLineSegmentsModule {}

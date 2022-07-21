@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -29,6 +29,7 @@ export const privateKeys = ['events', 'invalidate', 'advance', 'size', 'viewport
 
 @Directive({
   selector: 'ng-template[ngt-portal-content]',
+  standalone: true,
 })
 export class NgtPortalContent {
   constructor(public templateRef: TemplateRef<{ portal: Ref<THREE.Scene> }>) {}
@@ -50,6 +51,7 @@ export interface NgtPortalState extends NgtInstanceState<THREE.Scene> {
 
 @Component({
   selector: 'ngt-portal',
+  standalone: true,
   template: `
     <ng-container
       *ngIf="content"
@@ -58,6 +60,7 @@ export interface NgtPortalState extends NgtInstanceState<THREE.Scene> {
     ></ng-container>
     <ng-content></ng-content>
   `,
+  imports: [NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NgtResize,
@@ -277,8 +280,7 @@ export class NgtPortal extends NgtInstance<THREE.Scene, NgtPortalState> {
 }
 
 @NgModule({
-  declarations: [NgtPortal, NgtPortalContent],
+  imports: [NgtPortal, NgtPortalContent],
   exports: [NgtPortal, NgtPortalContent],
-  imports: [CommonModule],
 })
 export class NgtPortalModule {}

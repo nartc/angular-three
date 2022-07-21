@@ -13,6 +13,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-mesh-matcap-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtMeshMatcapMaterial)],
@@ -105,7 +106,7 @@ export class NgtMeshMatcapMaterial extends NgtCommonMaterial<
 }
 
 @NgModule({
-  declarations: [NgtMeshMatcapMaterial],
+  imports: [NgtMeshMatcapMaterial],
   exports: [NgtMeshMatcapMaterial],
 })
 export class NgtMeshMatcapMaterialModule {}

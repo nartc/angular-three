@@ -1,7 +1,7 @@
 import { NgModule, Pipe, PipeTransform } from '@angular/core';
 import { is } from '../utils/is';
 
-@Pipe({ name: 'math' })
+@Pipe({ name: 'math', standalone: true })
 export class NgtMathPipe implements PipeTransform {
   transform(
     value: number | number[],
@@ -15,7 +15,7 @@ export class NgtMathPipe implements PipeTransform {
 }
 
 @NgModule({
-  declarations: [NgtMathPipe],
+  imports: [NgtMathPipe],
   exports: [NgtMathPipe],
 })
 export class NgtMathPipeModule {}

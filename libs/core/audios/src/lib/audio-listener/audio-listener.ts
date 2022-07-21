@@ -9,6 +9,7 @@ export interface NgtAudioListenerState extends NgtObjectInputsState<THREE.AudioL
 
 @Component({
   selector: 'ngt-audio-listener',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectRef(NgtAudioListener)],
@@ -56,7 +57,7 @@ export class NgtAudioListener extends NgtObject<THREE.AudioListener, NgtAudioLis
 }
 
 @NgModule({
-  declarations: [NgtAudioListener],
+  imports: [NgtAudioListener],
   exports: [NgtAudioListener],
 })
 export class NgtAudioListenerModule {}

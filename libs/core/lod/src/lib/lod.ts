@@ -4,6 +4,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-lod',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectRef(NgtLod)],
@@ -15,7 +16,7 @@ export class NgtLod extends NgtObject<THREE.LOD> {
 }
 
 @NgModule({
-  declarations: [NgtLod],
+  imports: [NgtLod],
   exports: [NgtLod],
 })
 export class NgtLodModule {}

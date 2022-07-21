@@ -1,0 +1,8 @@
+- All components/directives/pipes are now standalone. Module-based APIs will be removed in future major
+- `NgtCoreModule` is removed. Use `NgtCanvasModule` instead
+- `NgtColorPipe` is removed. Use `NgtColorAttribute` instead
+- `NgtFogPipe` is removed. Use `NgtFogAttribute` instead
+- `NgtFogExp2Pipe` is removed. Use `NgtFogExp2Attribute` instead
+- `NgtVector2Pipe` is removed. Use `NgtVector2Attribute` instead
+- `NgtVector3Pipe` is removed. Use `NgtVector3Attribute` instead
+- `NgtVector4Pipe` is removed. Use `NgtVector4Attribute` instead

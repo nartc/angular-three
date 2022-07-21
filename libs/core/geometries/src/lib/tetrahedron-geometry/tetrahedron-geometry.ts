@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-tetrahedron-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtTetrahedronGeometry)],
@@ -18,7 +19,7 @@ export class NgtTetrahedronGeometry extends NgtCommonGeometry<THREE.TetrahedronG
 }
 
 @NgModule({
-  declarations: [NgtTetrahedronGeometry],
+  imports: [NgtTetrahedronGeometry],
   exports: [NgtTetrahedronGeometry],
 })
 export class NgtTetrahedronGeometryModule {}

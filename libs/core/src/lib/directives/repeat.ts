@@ -3,6 +3,7 @@ import { Directive, Input, NgModule } from '@angular/core';
 
 @Directive({
   selector: '[ngFor][ngForRepeat]',
+  standalone: true,
 })
 export class NgtRepeat extends NgForOf<number> {
   @Input() set ngForRepeat(count: number) {
@@ -11,7 +12,7 @@ export class NgtRepeat extends NgForOf<number> {
 }
 
 @NgModule({
-  declarations: [NgtRepeat],
+  imports: [NgtRepeat],
   exports: [NgtRepeat],
 })
 export class NgtRepeatModule {}

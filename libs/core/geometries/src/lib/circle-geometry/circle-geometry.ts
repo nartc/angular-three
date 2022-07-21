@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-circle-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtCircleGeometry)],
@@ -18,7 +19,7 @@ export class NgtCircleGeometry extends NgtCommonGeometry<THREE.CircleGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtCircleGeometry],
+  imports: [NgtCircleGeometry],
   exports: [NgtCircleGeometry],
 })
 export class NgtCircleGeometryModule {}

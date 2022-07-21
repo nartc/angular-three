@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-interleaved-buffer-attribute',
+  standalone: true,
   template: '<ng-content></ng-content>',
   providers: [provideCommonAttributeRef(NgtInterleavedBufferAttribute)],
 })
@@ -17,7 +18,7 @@ export class NgtInterleavedBufferAttribute extends NgtCommonAttribute<THREE.Inte
 }
 
 @NgModule({
-  declarations: [NgtInterleavedBufferAttribute],
+  imports: [NgtInterleavedBufferAttribute],
   exports: [NgtInterleavedBufferAttribute],
 })
 export class NgtInterleavedBufferAttributeModule {}

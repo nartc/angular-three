@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonHelper,
-  NumberInput,
   provideCommonHelperRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-grid-helper',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonHelperRef(NgtGridHelper)],
@@ -50,7 +51,7 @@ export class NgtGridHelper extends NgtCommonHelper<THREE.GridHelper> {
 }
 
 @NgModule({
-  declarations: [NgtGridHelper],
+  imports: [NgtGridHelper],
   exports: [NgtGridHelper],
 })
 export class NgtGridHelperModule {}

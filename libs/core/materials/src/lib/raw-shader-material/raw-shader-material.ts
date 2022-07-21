@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-raw-shader-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtRawShaderMaterial)],
@@ -18,7 +19,7 @@ export class NgtRawShaderMaterial extends NgtCommonMaterial<THREE.ShaderMaterial
 }
 
 @NgModule({
-  declarations: [NgtRawShaderMaterial],
+  imports: [NgtRawShaderMaterial],
   exports: [NgtRawShaderMaterial],
 })
 export class NgtRawShaderMaterialModule {}

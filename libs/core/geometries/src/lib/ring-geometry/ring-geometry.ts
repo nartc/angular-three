@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-ring-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtRingGeometry)],
@@ -18,7 +19,7 @@ export class NgtRingGeometry extends NgtCommonGeometry<THREE.RingGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtRingGeometry],
+  imports: [NgtRingGeometry],
   exports: [NgtRingGeometry],
 })
 export class NgtRingGeometryModule {}

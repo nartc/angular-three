@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-hemisphere-light',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonLightRef(NgtHemisphereLight)],
@@ -34,7 +35,7 @@ export class NgtHemisphereLight extends NgtCommonLight<THREE.HemisphereLight> {
 }
 
 @NgModule({
-  declarations: [NgtHemisphereLight],
+  imports: [NgtHemisphereLight],
   exports: [NgtHemisphereLight],
 })
 export class NgtHemisphereLightModule {}

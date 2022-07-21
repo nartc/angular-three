@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: '[ngtBoxHelper]',
+  standalone: true,
   exportAs: 'ngtBoxHelper',
   providers: [provideCommonObjectHelperRef(NgtBoxHelper)],
 })
@@ -23,7 +24,7 @@ export class NgtBoxHelper extends NgtCommonObjectHelper<THREE.BoxHelper> {
 }
 
 @NgModule({
-  declarations: [NgtBoxHelper],
+  imports: [NgtBoxHelper],
   exports: [NgtBoxHelper],
 })
 export class NgtBoxHelperModule {}

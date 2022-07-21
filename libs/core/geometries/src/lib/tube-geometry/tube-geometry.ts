@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-tube-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtTubeGeometry)],
@@ -18,7 +19,7 @@ export class NgtTubeGeometry extends NgtCommonGeometry<THREE.TubeGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtTubeGeometry],
+  imports: [NgtTubeGeometry],
   exports: [NgtTubeGeometry],
 })
 export class NgtTubeGeometryModule {}

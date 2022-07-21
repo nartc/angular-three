@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-edges-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtEdgesGeometry)],
@@ -18,7 +19,7 @@ export class NgtEdgesGeometry extends NgtCommonGeometry<THREE.EdgesGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtEdgesGeometry],
+  imports: [NgtEdgesGeometry],
   exports: [NgtEdgesGeometry],
 })
 export class NgtEdgesGeometryModule {}

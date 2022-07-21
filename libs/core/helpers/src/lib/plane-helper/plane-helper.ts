@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: '[ngtPlaneHelper]',
+  standalone: true,
   exportAs: 'ngtPlaneHelper',
   providers: [provideCommonObjectHelperRef(NgtPlaneHelper)],
 })
@@ -23,7 +24,7 @@ export class NgtPlaneHelper extends NgtCommonObjectHelper<THREE.PlaneHelper> {
 }
 
 @NgModule({
-  declarations: [NgtPlaneHelper],
+  imports: [NgtPlaneHelper],
   exports: [NgtPlaneHelper],
 })
 export class NgtPlaneHelperModule {}

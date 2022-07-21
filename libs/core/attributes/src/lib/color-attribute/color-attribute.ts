@@ -6,6 +6,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-color[color]',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideInstanceRef(NgtColorAttribute)],
@@ -34,7 +35,7 @@ export class NgtColorAttribute extends NgtInstance<THREE.Color> {
 }
 
 @NgModule({
-  declarations: [NgtColorAttribute],
+  imports: [NgtColorAttribute],
   exports: [NgtColorAttribute],
 })
 export class NgtColorAttributeModule {}

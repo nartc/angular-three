@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-light-probe',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonLightRef(NgtLightProbe)],
@@ -29,7 +30,7 @@ export class NgtLightProbe extends NgtCommonLight<THREE.LightProbe> {
 }
 
 @NgModule({
-  declarations: [NgtLightProbe],
+  imports: [NgtLightProbe],
   exports: [NgtLightProbe],
 })
 export class NgtLightProbeModule {}

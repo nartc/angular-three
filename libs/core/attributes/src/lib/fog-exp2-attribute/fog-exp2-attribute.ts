@@ -6,6 +6,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-fog-exp2[fogExp2]',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideInstanceRef(NgtFogExp2Attribute)],
@@ -34,7 +35,7 @@ export class NgtFogExp2Attribute extends NgtInstance<THREE.FogExp2> {
 }
 
 @NgModule({
-  declarations: [NgtFogExp2Attribute],
+  imports: [NgtFogExp2Attribute],
   exports: [NgtFogExp2Attribute],
 })
 export class NgtFogExp2AttributeModule {}

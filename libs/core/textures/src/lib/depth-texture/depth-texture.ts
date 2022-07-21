@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonTexture,
-  NumberInput,
   provideCommonTextureRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-depth-texture',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonTextureRef(NgtDepthTexture)],
@@ -75,7 +76,7 @@ export class NgtDepthTexture extends NgtCommonTexture<THREE.DepthTexture> {
 }
 
 @NgModule({
-  declarations: [NgtDepthTexture],
+  imports: [NgtDepthTexture],
   exports: [NgtDepthTexture],
 })
 export class NgtDepthTextureModule {}

@@ -12,6 +12,7 @@ import Stats from 'three/examples/jsm/libs/stats.module';
 
 @Component({
   selector: 'ngt-stats',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -64,7 +65,7 @@ export class NgtStats extends NgtComponentStore implements OnInit {
 }
 
 @NgModule({
-  declarations: [NgtStats],
+  imports: [NgtStats],
   exports: [NgtStats],
 })
 export class NgtStatsModule {}

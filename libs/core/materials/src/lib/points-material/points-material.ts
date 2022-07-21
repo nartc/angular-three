@@ -13,6 +13,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-points-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtPointsMaterial)],
@@ -62,7 +63,7 @@ export class NgtPointsMaterial extends NgtCommonMaterial<THREE.PointsMaterialPar
 }
 
 @NgModule({
-  declarations: [NgtPointsMaterial],
+  imports: [NgtPointsMaterial],
   exports: [NgtPointsMaterial],
 })
 export class NgtPointsMaterialModule {}

@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-cone-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtConeGeometry)],
@@ -18,7 +19,7 @@ export class NgtConeGeometry extends NgtCommonGeometry<THREE.ConeGeometry> {
 }
 
 @NgModule({
-  declarations: [NgtConeGeometry],
+  imports: [NgtConeGeometry],
   exports: [NgtConeGeometry],
 })
 export class NgtConeGeometryModule {}

@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-float64-buffer-attribute',
+  standalone: true,
   template: '<ng-content></ng-content>',
   providers: [provideCommonAttributeRef(NgtFloat64BufferAttribute)],
 })
@@ -17,7 +18,7 @@ export class NgtFloat64BufferAttribute extends NgtCommonAttribute<THREE.Float64B
 }
 
 @NgModule({
-  declarations: [NgtFloat64BufferAttribute],
+  imports: [NgtFloat64BufferAttribute],
   exports: [NgtFloat64BufferAttribute],
 })
 export class NgtFloat64BufferAttributeModule {}

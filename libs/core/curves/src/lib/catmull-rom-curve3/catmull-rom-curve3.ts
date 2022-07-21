@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-catmull-rom-curve3',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCurveRef(NgtCatmullRomCurve3)],
@@ -18,7 +19,7 @@ export class NgtCatmullRomCurve3 extends NgtCommonCurve<THREE.CatmullRomCurve3> 
 }
 
 @NgModule({
-  declarations: [NgtCatmullRomCurve3],
+  imports: [NgtCatmullRomCurve3],
   exports: [NgtCatmullRomCurve3],
 })
 export class NgtCatmullRomCurve3Module {}

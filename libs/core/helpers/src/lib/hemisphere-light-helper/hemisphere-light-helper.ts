@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: '[ngtHemisphereLightHelper]',
+  standalone: true,
   exportAs: 'ngtHemisphereLightHelper',
   providers: [provideCommonObjectHelperRef(NgtHemisphereLightHelper)],
 })
@@ -26,7 +27,7 @@ export class NgtHemisphereLightHelper extends NgtCommonObjectHelper<THREE.Hemisp
 }
 
 @NgModule({
-  declarations: [NgtHemisphereLightHelper],
+  imports: [NgtHemisphereLightHelper],
   exports: [NgtHemisphereLightHelper],
 })
 export class NgtHemisphereLightHelperModule {}

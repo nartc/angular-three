@@ -13,6 +13,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-mesh-standard-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtMeshStandardMaterial)],
@@ -175,7 +176,7 @@ export class NgtMeshStandardMaterial<
 }
 
 @NgModule({
-  declarations: [NgtMeshStandardMaterial],
+  imports: [NgtMeshStandardMaterial],
   exports: [NgtMeshStandardMaterial],
 })
 export class NgtMeshStandardMaterialModule {}

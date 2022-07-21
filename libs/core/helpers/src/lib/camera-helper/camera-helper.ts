@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: '[ngtCameraHelper]',
+  standalone: true,
   exportAs: 'ngtCameraHelper',
   providers: [provideCommonObjectHelperRef(NgtCameraHelper)],
 })
@@ -23,7 +24,7 @@ export class NgtCameraHelper extends NgtCommonObjectHelper<THREE.CameraHelper> {
 }
 
 @NgModule({
-  declarations: [NgtCameraHelper],
+  imports: [NgtCameraHelper],
   exports: [NgtCameraHelper],
 })
 export class NgtCameraHelperModule {}

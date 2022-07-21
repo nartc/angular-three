@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-array-camera',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCameraRef(NgtArrayCamera)],
@@ -29,7 +30,7 @@ export class NgtArrayCamera extends NgtCommonCamera<THREE.ArrayCamera> {
 }
 
 @NgModule({
-  declarations: [NgtArrayCamera],
+  imports: [NgtArrayCamera],
   exports: [NgtArrayCamera],
 })
 export class NgtArrayCameraModule {}

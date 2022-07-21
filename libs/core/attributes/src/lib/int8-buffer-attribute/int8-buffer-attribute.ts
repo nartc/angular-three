@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-int8-buffer-attribute',
+  standalone: true,
   template: '<ng-content></ng-content>',
   providers: [provideCommonAttributeRef(NgtInt8BufferAttribute)],
 })
@@ -17,7 +18,7 @@ export class NgtInt8BufferAttribute extends NgtCommonAttribute<THREE.Int8BufferA
 }
 
 @NgModule({
-  declarations: [NgtInt8BufferAttribute],
+  imports: [NgtInt8BufferAttribute],
   exports: [NgtInt8BufferAttribute],
 })
 export class NgtInt8BufferAttributeModule {}

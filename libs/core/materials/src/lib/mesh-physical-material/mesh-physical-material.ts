@@ -12,6 +12,7 @@ import { NgtMeshStandardMaterial } from '../mesh-standard-material/mesh-standard
 
 @Component({
   selector: 'ngt-mesh-physical-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtMeshPhysicalMaterial)],
@@ -129,7 +130,7 @@ export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<
 }
 
 @NgModule({
-  declarations: [NgtMeshPhysicalMaterial],
+  imports: [NgtMeshPhysicalMaterial],
   exports: [NgtMeshPhysicalMaterial],
 })
 export class NgtMeshPhysicalMaterialModule {}

@@ -12,6 +12,7 @@ import { NgtLineBasicMaterial } from '../line-basic-material/line-basic-material
 
 @Component({
   selector: 'ngt-line-dashed-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtLineDashedMaterial)],
@@ -49,7 +50,7 @@ export class NgtLineDashedMaterial extends NgtLineBasicMaterial<
 }
 
 @NgModule({
-  declarations: [NgtLineDashedMaterial],
+  imports: [NgtLineDashedMaterial],
   exports: [NgtLineDashedMaterial],
 })
 export class NgtLineDashedMaterialModule {}

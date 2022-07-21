@@ -11,6 +11,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-line-basic-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtLineBasicMaterial)],
@@ -53,7 +54,7 @@ export class NgtLineBasicMaterial<
 }
 
 @NgModule({
-  declarations: [NgtLineBasicMaterial],
+  imports: [NgtLineBasicMaterial],
   exports: [NgtLineBasicMaterial],
 })
 export class NgtLineBasicMaterialModule {}

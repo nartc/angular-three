@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonHelper,
-  NumberInput,
   provideCommonHelperRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-polar-grid-helper',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonHelperRef(NgtPolarGridHelper)],
@@ -60,7 +61,7 @@ export class NgtPolarGridHelper extends NgtCommonHelper<THREE.PolarGridHelper> {
 }
 
 @NgModule({
-  declarations: [NgtPolarGridHelper],
+  imports: [NgtPolarGridHelper],
   exports: [NgtPolarGridHelper],
 })
 export class NgtPolarGridHelperModule {}

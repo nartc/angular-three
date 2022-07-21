@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-spline-curve',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCurveRef(NgtSplineCurve)],
@@ -18,7 +19,7 @@ export class NgtSplineCurve extends NgtCommonCurve<THREE.SplineCurve> {
 }
 
 @NgModule({
-  declarations: [NgtSplineCurve],
+  imports: [NgtSplineCurve],
   exports: [NgtSplineCurve],
 })
 export class NgtSplineCurveModule {}

@@ -6,6 +6,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-matrix4[matrix4]',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideInstanceRef(NgtMatrix4Attribute)],
@@ -34,7 +35,7 @@ export class NgtMatrix4Attribute extends NgtInstance<THREE.Matrix4> {
 }
 
 @NgModule({
-  declarations: [NgtMatrix4Attribute],
+  imports: [NgtMatrix4Attribute],
   exports: [NgtMatrix4Attribute],
 })
 export class NgtMatrix4AttributeModule {}

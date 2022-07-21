@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-directional-light',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonLightRef(NgtDirectionalLight)],
@@ -29,7 +30,7 @@ export class NgtDirectionalLight extends NgtCommonLight<THREE.DirectionalLight> 
 }
 
 @NgModule({
-  declarations: [NgtDirectionalLight],
+  imports: [NgtDirectionalLight],
   exports: [NgtDirectionalLight],
 })
 export class NgtDirectionalLightModule {}

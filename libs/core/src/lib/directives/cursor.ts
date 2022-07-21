@@ -5,6 +5,7 @@ import { NgtObject } from '../abstracts/object';
 
 @Directive({
   selector: '[ngtCursor]',
+  standalone: true,
   exportAs: 'ngtCursor',
 })
 export class NgtCursor {
@@ -24,7 +25,7 @@ export class NgtCursor {
 }
 
 @NgModule({
-  declarations: [NgtCursor],
+  imports: [NgtCursor],
   exports: [NgtCursor],
 })
 export class NgtCursorModule {}

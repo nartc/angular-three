@@ -17,6 +17,7 @@ export interface NgtPrimitiveState extends NgtObjectInputsState {
 
 @Component({
   selector: 'ngt-primitive[object]',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectRef(NgtPrimitive)],
@@ -56,7 +57,7 @@ export class NgtPrimitive extends NgtObject<THREE.Object3D, NgtPrimitiveState> {
 }
 
 @NgModule({
-  declarations: [NgtPrimitive],
+  imports: [NgtPrimitive],
   exports: [NgtPrimitive],
 })
 export class NgtPrimitiveModule {}

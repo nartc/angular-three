@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-quadratic-bezier-curve3',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCurveRef(NgtQuadraticBezierCurve3)],
@@ -18,7 +19,7 @@ export class NgtQuadraticBezierCurve3 extends NgtCommonCurve<THREE.QuadraticBezi
 }
 
 @NgModule({
-  declarations: [NgtQuadraticBezierCurve3],
+  imports: [NgtQuadraticBezierCurve3],
   exports: [NgtQuadraticBezierCurve3],
 })
 export class NgtQuadraticBezierCurve3Module {}

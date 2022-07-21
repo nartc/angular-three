@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-line-loop',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonLineRef(NgtLineLoop)],
@@ -16,7 +17,7 @@ export class NgtLineLoop extends NgtCommonLine<THREE.LineLoop> {
 }
 
 @NgModule({
-  declarations: [NgtLineLoop],
+  imports: [NgtLineLoop],
   exports: [NgtLineLoop],
 })
 export class NgtLineLoopModule {}

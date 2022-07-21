@@ -13,6 +13,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-mesh-phong-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtMeshPhongMaterial)],
@@ -195,7 +196,7 @@ export class NgtMeshPhongMaterial extends NgtCommonMaterial<
 }
 
 @NgModule({
-  declarations: [NgtMeshPhongMaterial],
+  imports: [NgtMeshPhongMaterial],
   exports: [NgtMeshPhongMaterial],
 })
 export class NgtMeshPhongMaterialModule {}

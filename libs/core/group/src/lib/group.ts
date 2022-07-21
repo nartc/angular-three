@@ -4,6 +4,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-group',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectRef(NgtGroup)],
@@ -15,7 +16,7 @@ export class NgtGroup extends NgtObject<THREE.Group> {
 }
 
 @NgModule({
-  declarations: [NgtGroup],
+  imports: [NgtGroup],
   exports: [NgtGroup],
 })
 export class NgtGroupModule {}

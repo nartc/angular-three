@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonCamera,
-  NumberInput,
   provideCommonCameraRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-orthographic-camera',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonCameraRef(NgtOrthographicCamera)],
@@ -60,7 +61,7 @@ export class NgtOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCam
 }
 
 @NgModule({
-  declarations: [NgtOrthographicCamera],
+  imports: [NgtOrthographicCamera],
   exports: [NgtOrthographicCamera],
 })
 export class NgtOrthographicCameraModule {}

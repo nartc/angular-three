@@ -11,6 +11,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-shadow-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtShadowMaterial)],
@@ -40,7 +41,7 @@ export class NgtShadowMaterial extends NgtCommonMaterial<THREE.ShadowMaterialPar
 }
 
 @NgModule({
-  declarations: [NgtShadowMaterial],
+  imports: [NgtShadowMaterial],
   exports: [NgtShadowMaterial],
 })
 export class NgtShadowMaterialModule {}

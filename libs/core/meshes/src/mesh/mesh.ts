@@ -4,6 +4,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-mesh',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMeshRef(NgtMesh)],
@@ -15,7 +16,7 @@ export class NgtMesh extends NgtCommonMesh {
 }
 
 @NgModule({
-  declarations: [NgtMesh],
+  imports: [NgtMesh],
   exports: [NgtMesh],
 })
 export class NgtMeshModule {}

@@ -5,6 +5,7 @@ import { startWithUndefined } from '../stores/component-store';
 
 @Directive({
   selector: '[ngtObjectOutputs],[ngtObjectInputs],[ngtObjectInputs][ngtObjectOutputs]',
+  standalone: true,
 })
 export class NgtObjectPassThrough {
   @Input() set ngtObjectOutputs(wrapper: unknown) {
@@ -271,7 +272,7 @@ export class NgtObjectPassThrough {
 }
 
 @NgModule({
-  declarations: [NgtObjectPassThrough],
+  imports: [NgtObjectPassThrough],
   exports: [NgtObjectPassThrough],
 })
 export class NgtObjectPassThroughModule {}

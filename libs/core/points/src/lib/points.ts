@@ -4,6 +4,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-points',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideMaterialGeometryObjectRef(NgtPoints)],
@@ -15,7 +16,7 @@ export class NgtPoints extends NgtMaterialGeometry<THREE.Points> {
 }
 
 @NgModule({
-  declarations: [NgtPoints],
+  imports: [NgtPoints],
   exports: [NgtPoints],
 })
 export class NgtPointsModule {}

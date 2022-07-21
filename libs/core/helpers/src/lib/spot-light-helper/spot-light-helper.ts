@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: '[ngtSpotLightHelper]',
+  standalone: true,
   exportAs: 'ngtSpotLightHelper',
   providers: [provideCommonObjectHelperRef(NgtSpotLightHelper)],
 })
@@ -26,7 +27,7 @@ export class NgtSpotLightHelper extends NgtCommonObjectHelper<THREE.SpotLightHel
 }
 
 @NgModule({
-  declarations: [NgtSpotLightHelper],
+  imports: [NgtSpotLightHelper],
   exports: [NgtSpotLightHelper],
 })
 export class NgtSpotLightHelperModule {}

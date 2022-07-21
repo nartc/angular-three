@@ -1,16 +1,17 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonTexture,
-  NumberInput,
   provideCommonTextureRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-data-array-texture',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonTextureRef(NgtDataArrayTexture)],
@@ -50,7 +51,7 @@ export class NgtDataArrayTexture extends NgtCommonTexture<THREE.DataArrayTexture
 }
 
 @NgModule({
-  declarations: [NgtDataArrayTexture],
+  imports: [NgtDataArrayTexture],
   exports: [NgtDataArrayTexture],
 })
 export class NgtDataArrayTextureModule {}

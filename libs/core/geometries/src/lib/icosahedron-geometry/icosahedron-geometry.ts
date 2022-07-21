@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-icosahedron-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtIcosahedronGeometry)],
@@ -18,7 +19,7 @@ export class NgtIcosahedronGeometry extends NgtCommonGeometry<THREE.IcosahedronG
 }
 
 @NgModule({
-  declarations: [NgtIcosahedronGeometry],
+  imports: [NgtIcosahedronGeometry],
   exports: [NgtIcosahedronGeometry],
 })
 export class NgtIcosahedronGeometryModule {}

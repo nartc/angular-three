@@ -5,6 +5,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-torus-knot-geometry',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonGeometryRef(NgtTorusKnotGeometry)],
@@ -18,7 +19,7 @@ export class NgtTorusKnotGeometry extends NgtCommonGeometry<THREE.TorusKnotGeome
 }
 
 @NgModule({
-  declarations: [NgtTorusKnotGeometry],
+  imports: [NgtTorusKnotGeometry],
   exports: [NgtTorusKnotGeometry],
 })
 export class NgtTorusKnotGeometryModule {}

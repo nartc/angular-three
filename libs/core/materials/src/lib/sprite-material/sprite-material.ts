@@ -13,6 +13,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-sprite-material',
+  standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonMaterialRef(NgtSpriteMaterial)],
@@ -62,7 +63,7 @@ export class NgtSpriteMaterial extends NgtCommonMaterial<THREE.SpriteMaterialPar
 }
 
 @NgModule({
-  declarations: [NgtSpriteMaterial],
+  imports: [NgtSpriteMaterial],
   exports: [NgtSpriteMaterial],
 })
 export class NgtSpriteMaterialModule {}
