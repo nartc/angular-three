@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 type UninitializedUniform<Value> = { value: Value | null };
 

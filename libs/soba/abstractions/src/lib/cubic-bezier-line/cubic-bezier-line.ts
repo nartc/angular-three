@@ -9,7 +9,7 @@ import {
 } from '@angular-three/core';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
 
 @Component({

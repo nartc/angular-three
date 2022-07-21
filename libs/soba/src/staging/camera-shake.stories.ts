@@ -6,7 +6,7 @@ import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaCameraShakeModule } from '@angular-three/soba/staging';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 @Component({

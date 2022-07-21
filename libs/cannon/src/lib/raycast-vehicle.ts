@@ -2,7 +2,7 @@ import { is, NgtComponentStore, NgtStore, prepare, Ref, tapEffect } from '@angul
 import { Injectable, NgZone, Optional } from '@angular/core';
 import type { CannonWorkerAPI, WheelInfoOptions } from '@pmndrs/cannon-worker-api';
 import { combineLatest, filter } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtPhysicsStore } from './physics.store';
 import { NgtCannonUtils } from './utils';
 

@@ -53,7 +53,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { RGBELoader } from 'three-stdlib';
 import { presetsObj, PresetsType } from './presets';
 

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { ConvolutionMaterial } from './convolution-material';
 
 export interface BlurPassProps {

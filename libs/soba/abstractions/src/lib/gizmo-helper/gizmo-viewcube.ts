@@ -38,7 +38,7 @@ import {
   SkipSelf,
 } from '@angular/core';
 import { takeUntil } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtSobaGizmoHelper } from './gizmo-helper';
 
 const makePositionVector = (xyz: number[]) => makeVector3(xyz as NgtVector3).multiplyScalar(0.38);

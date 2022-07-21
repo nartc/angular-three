@@ -38,8 +38,8 @@ import {
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Observable, takeUntil } from 'rxjs';
-import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 import { createRagdoll, ShapeConfig, ShapeName } from './monday-morning.config';
 
 const { joints, shapes } = createRagdoll(4.8, Math.PI / 16, Math.PI / 16, 0);

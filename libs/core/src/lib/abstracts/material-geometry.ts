@@ -1,5 +1,5 @@
 import { Directive, Input } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { Ref } from '../ref';
 import type { AnyConstructor, UnknownRecord } from '../types';
 import { is } from '../utils/is';

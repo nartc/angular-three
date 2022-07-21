@@ -3,7 +3,7 @@ import { coerceNumberProperty, NgtComponentStore, NumberInput } from '@angular-t
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'sandbox-spheres[columns][rows][spread]',

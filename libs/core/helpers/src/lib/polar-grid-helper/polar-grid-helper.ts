@@ -1,13 +1,13 @@
 // GENERATED
 import {
   AnyConstructor,
-  NgtCommonHelper,
-  provideCommonHelperRef,
   coerceNumberProperty,
+  NgtCommonHelper,
   NumberInput,
+  provideCommonHelperRef,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-polar-grid-helper',

@@ -14,7 +14,7 @@ import { ChangeDetectionStrategy, Component, Input, NgModule, NgZone } from '@an
 import { BodyProps, BodyShapeType, propsToBody } from '@pmndrs/cannon-worker-api';
 import { Body, Quaternion, Vec3, World } from 'cannon-es';
 import CannonDebugger from 'cannon-es-debugger';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtPhysicsStore } from './physics.store';
 
 const q = new THREE.Quaternion();

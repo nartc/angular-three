@@ -37,7 +37,7 @@ import {
   SkipSelf,
 } from '@angular/core';
 import { takeUntil } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtSobaGizmoHelper } from './gizmo-helper';
 
 @Component({

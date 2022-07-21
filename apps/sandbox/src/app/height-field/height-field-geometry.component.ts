@@ -2,7 +2,7 @@ import { provideCommonGeometryRef } from '@angular-three/core';
 import { NgtBufferGeometry } from '@angular-three/core/geometries';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'sandbox-height-field-geometry[elementSize][heights]',

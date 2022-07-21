@@ -13,7 +13,7 @@ import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
 import { BlurPass, MeshReflectorMaterial } from '@angular-three/soba/materials';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-soba-mesh-reflector-material',

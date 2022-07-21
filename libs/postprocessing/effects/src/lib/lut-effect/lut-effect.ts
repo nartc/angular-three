@@ -9,7 +9,7 @@ import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postproc
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { LUT3DEffect } from 'postprocessing';
 import { tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-lut-effect',

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import type { Ref } from './ref';
 
 /* Coercion */

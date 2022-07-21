@@ -1,5 +1,5 @@
 import { Directive, Input } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import type { NgtObjectInputsState, NgtPreObjectInit } from '../abstracts/object';
 import { NgtObject } from '../abstracts/object';
 import type { AnyConstructor, NumberInput } from '../types';

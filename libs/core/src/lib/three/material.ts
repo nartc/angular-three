@@ -1,6 +1,6 @@
 import { Directive, Inject, Input, NgZone, Optional, SkipSelf } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { Plane } from 'three/src/math/Plane';
 import type { NgtInstanceState } from '../abstracts/instance';
 import { NgtInstance } from '../abstracts/instance';

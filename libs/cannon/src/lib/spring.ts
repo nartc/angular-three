@@ -2,7 +2,7 @@ import { makeId, NgtComponentStore, NgtStore, Ref, tapEffect } from '@angular-th
 import { Injectable, NgZone, Optional } from '@angular/core';
 import type { CannonWorkerAPI, SpringOptns } from '@pmndrs/cannon-worker-api';
 import { combineLatest, filter } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtPhysicsStore } from './physics.store';
 
 export interface NgtPhysicSpringApi {

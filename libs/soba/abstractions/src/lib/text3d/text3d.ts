@@ -1,7 +1,7 @@
 import { make, makeVector3, NgtEuler, NgtTriple, NgtVector3 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { Font, FontLoader, TextGeometry } from 'three-stdlib';
 
 /**

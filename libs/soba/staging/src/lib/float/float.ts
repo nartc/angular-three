@@ -22,7 +22,7 @@ import {
   QueryList,
   TemplateRef,
 } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Directive({
   selector: 'ng-template[ngt-soba-float-content]',

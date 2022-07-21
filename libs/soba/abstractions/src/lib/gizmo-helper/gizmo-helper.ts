@@ -28,7 +28,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { filter, map, tap, timer } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 export interface NgtSobaGizmoHelperState extends NgtObjectInputsState<THREE.Group> {
   virtualCamera: Ref<THREE.OrthographicCamera>;

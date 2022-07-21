@@ -11,7 +11,7 @@ import {
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
 import { map, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { OrbitControls } from 'three-stdlib';
 
 export interface NgtSobaOrbitControlsState extends NgtInstanceState<OrbitControls> {

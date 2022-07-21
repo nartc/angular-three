@@ -17,7 +17,7 @@ import {
 import { Directive, Inject, InjectionToken, Input, NgZone, Optional, Provider, SkipSelf } from '@angular/core';
 import { BlendFunction, Effect } from 'postprocessing';
 import { tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtEffectComposer } from './effect-composer';
 
 export const NGT_COMMON_EFFECT_REF = new InjectionToken('NgtCommonEffect ref');

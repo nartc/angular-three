@@ -4,8 +4,8 @@ import {
   NgtSobaQuadraticBezierLineModule,
 } from '@angular-three/soba/abstractions';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
-import * as THREE from 'three';
 import { GeometryUtils } from 'three-stdlib/utils/GeometryUtils';
+import * as THREE from 'three/src/Three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {

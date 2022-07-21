@@ -5,15 +5,15 @@ import {
   coerceBooleanProperty,
   coerceNumberProperty,
   make,
+  NGT_HOST_BONE_REF,
+  NGT_HOST_SKELETON_REF,
+  NGT_HOST_SKINNED_MESH_REF,
   NgtCommonMesh,
   NgtInstance,
   NgtInstanceState,
   NgtMatrix4,
   NgtObject,
   NgtStore,
-  NGT_HOST_BONE_REF,
-  NGT_HOST_SKELETON_REF,
-  NGT_HOST_SKINNED_MESH_REF,
   NumberInput,
   provideCommonMeshRef,
   provideInstanceRef,
@@ -23,7 +23,7 @@ import {
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Inject, Input, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import { pipe, withLatestFrom } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-skinned-mesh',

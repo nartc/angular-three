@@ -9,7 +9,7 @@ import {
 import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { SSAOEffect } from 'postprocessing';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { Color } from 'three';
 
 @Component({

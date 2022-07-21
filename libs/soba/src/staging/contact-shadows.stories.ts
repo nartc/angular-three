@@ -4,7 +4,7 @@ import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
 import { NgtMeshModule } from '@angular-three/core/meshes';
 import { NgtSobaContactShadowsModule } from '@angular-three/soba/staging';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 export default {

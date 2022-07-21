@@ -25,7 +25,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 export interface NgtSobaBoundsSize {
   box: THREE.Box3;

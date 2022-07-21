@@ -17,7 +17,7 @@ import { ChangeDetectionStrategy, Component, Input, NgModule, OnInit } from '@an
 import { RouterModule } from '@angular/router';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
 

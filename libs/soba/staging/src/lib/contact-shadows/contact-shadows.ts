@@ -20,7 +20,7 @@ import { NgtMeshModule } from '@angular-three/core/meshes';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { HorizontalBlurShader, VerticalBlurShader } from 'three-stdlib';
 
 export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.Group> {

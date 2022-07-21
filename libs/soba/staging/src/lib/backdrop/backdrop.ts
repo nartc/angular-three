@@ -23,7 +23,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { filter, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 const easeInExpo = (x: number) => (x === 0 ? 0 : Math.pow(2, 10 * x - 10));
 

@@ -1,7 +1,7 @@
 // GENERATED
 import { AnyConstructor, NgtCommonSprite, provideCommonSpriteRef } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
-import * as THREE from 'three';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-sprite',

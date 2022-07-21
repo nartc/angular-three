@@ -2,7 +2,7 @@
 import { make, NgtInstance, provideInstanceRef, NgtMatrix3 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-matrix3[matrix3]',

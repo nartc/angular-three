@@ -1,4 +1,5 @@
 {
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "angular-three",
   "affected": {
     "defaultBase": "main"
@@ -35,7 +36,6 @@
     }
   },
   "defaultProject": "core",
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"]

@@ -1,12 +1,12 @@
 import {
   AnyFunction,
+  NGT_OBJECT_HOST_REF,
+  NGT_OBJECT_REF,
   NgtCanvasModule,
   NgtObjectInputs,
   NgtObjectPassThroughModule,
   NgtRadianPipeModule,
   NgtStore,
-  NGT_OBJECT_HOST_REF,
-  NGT_OBJECT_REF,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
@@ -22,8 +22,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'sandbox-reuse-gltf',

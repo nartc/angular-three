@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { catchError, forkJoin, from, map, Observable, of, ReplaySubject, retry, share, tap } from 'rxjs';
-import * as THREE from 'three';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import * as THREE from 'three/src/Three';
 import type { BranchingReturn, LoaderExtensions, NgtLoaderResult, NgtObjectMap } from '../types';
 import { buildGraph } from '../utils/build-graph';
 import { is } from '../utils/is';

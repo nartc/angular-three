@@ -10,8 +10,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 const positions = [...Array(800)].map(() => ({
   position: [40 - Math.random() * 80, 40 - Math.random() * 80, 40 - Math.random() * 80],

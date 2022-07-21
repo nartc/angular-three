@@ -3,8 +3,8 @@ import { NgtTriple, Ref } from '@angular-three/core';
 import { NgtGLTFLoader } from '@angular-three/soba/loaders';
 import { ChangeDetectionStrategy, Component, HostListener, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 const beetleMaterials = [
   'Black paint',

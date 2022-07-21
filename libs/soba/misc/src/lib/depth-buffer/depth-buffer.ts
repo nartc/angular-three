@@ -1,7 +1,7 @@
 import { NgtComponentStore, NgtStore, Ref, tapEffect } from '@angular-three/core';
 import { Injectable, Provider } from '@angular/core';
 import { filter, isObservable, map, Observable, of, Subscription, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtSobaFBO } from '../fbo/fbo';
 
 export interface NgtSobaDepthBufferState {

@@ -13,7 +13,7 @@ import { SpotLightMaterial } from '@angular-three/soba/materials';
 import { NgtSobaSpotLightMaterialModule } from '@angular-three/soba/shaders';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 const vec = new THREE.Vector3();
 

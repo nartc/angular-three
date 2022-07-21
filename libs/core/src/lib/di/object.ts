@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtObject } from '../abstracts/object';
 import { Ref } from '../ref';
 import {

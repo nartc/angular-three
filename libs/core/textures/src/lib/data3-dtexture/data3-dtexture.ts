@@ -1,13 +1,13 @@
 // GENERATED
 import {
   AnyConstructor,
-  NgtCommonTexture,
-  provideCommonTextureRef,
   coerceNumberProperty,
+  NgtCommonTexture,
   NumberInput,
+  provideCommonTextureRef,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-data3-dtexture',

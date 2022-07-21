@@ -28,9 +28,9 @@ import { ChangeDetectionStrategy, Component, Injectable, Input, NgModule, NgZone
 import { RouterModule } from '@angular/router';
 import { BlendFunction, KernelSize, SSAOEffect } from 'postprocessing';
 import { Observable } from 'rxjs';
-import * as THREE from 'three';
 // @ts-ignore
 import { FlakesTexture, GLTF, RectAreaLightUniformsLib } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 
 RectAreaLightUniformsLib.init();
 THREE.Vector2.prototype.equals = function (v, epsilon = 0.001) {

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import type { NgtObjectMap } from '../types';
 
 export function buildGraph(object: THREE.Object3D): NgtObjectMap {

@@ -1,5 +1,5 @@
 import { shaderMaterial } from '@angular-three/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 export const ImageShaderMaterial = shaderMaterial(
   {

@@ -8,7 +8,7 @@ import { NgtSobaFBO } from '@angular-three/soba/misc';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule, NgZone, OnInit } from '@angular/core';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtSobaPerspectiveCameraModule } from '../../cameras/src';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
@@ -110,7 +110,7 @@ export default {
         CustomCameraStoryModule,
       ],
     }),
-    ],
+  ],
 } as Meta;
 
 export const Default: Story = (args) => ({
@@ -132,12 +132,12 @@ export const Default: Story = (args) => ({
 });
 
 Default.args = {
-    enabled: true,
-    enableDamping: true,
-    enablePan: true,
-    enableRotate: true,
-    enableZoom: true,
-    reverseOrbit: false,
+  enabled: true,
+  enableDamping: true,
+  enablePan: true,
+  enableRotate: true,
+  enableZoom: true,
+  reverseOrbit: false,
 };
 
 export const CustomCamera: Story = () => ({

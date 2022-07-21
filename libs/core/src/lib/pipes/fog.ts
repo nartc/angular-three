@@ -1,5 +1,5 @@
 import { NgModule, Pipe, PipeTransform } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 /**
  * @deprecated Use {@link NgtFogAttribute} instead

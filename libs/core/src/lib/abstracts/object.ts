@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Inject, Input, NgZone, Optional, Output, SkipSelf } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
@@ -442,8 +442,8 @@ export abstract class NgtObject<
   }
 
   private appendToParent(): void {
-        // appendToParent is late a frame due to appendTo
-        // only emit the object is ready after it's been added to the scene
+    // appendToParent is late a frame due to appendTo
+    // only emit the object is ready after it's been added to the scene
     const callback = () => {
       const appendToRef = this.get((s) => s.appendTo);
       if (appendToRef && appendToRef.value) {
@@ -466,14 +466,13 @@ export abstract class NgtObject<
         this.addToParent();
         this.appended.emit(this.instance.value);
       }
-    }
+    };
 
     const gl = this.store.get((s) => s.gl);
     if (gl.xr.enabled) {
-        gl.xr.getSession()?.requestAnimationFrame(callback);
-    }
-    else {
-        requestAnimationFrame(callback);
+      gl.xr.getSession()?.requestAnimationFrame(callback);
+    } else {
+      requestAnimationFrame(callback);
     }
   }
 

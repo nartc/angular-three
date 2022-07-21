@@ -30,7 +30,7 @@ import {
 } from '@angular/core';
 import type { Properties } from 'csstype';
 import { Observable, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 const v1 = new THREE.Vector3();
 const v2 = new THREE.Vector3();

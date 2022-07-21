@@ -10,7 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtSobaLine, NgtSobaLineModule } from '../line/line';
 
 const v = new THREE.Vector3();

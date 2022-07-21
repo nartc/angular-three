@@ -13,7 +13,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { NgtInstance, NgtInstanceState } from './abstracts/instance';
 import { Ref } from './ref';
 import { NgtResize, NgtResizeResult } from './services/resize';

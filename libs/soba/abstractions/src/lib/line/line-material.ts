@@ -12,7 +12,7 @@ import {
 import { NgtShaderMaterial } from '@angular-three/core/materials';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { LineMaterial } from 'three-stdlib';
 
 @Component({

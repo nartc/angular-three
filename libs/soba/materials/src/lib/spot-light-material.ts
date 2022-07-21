@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 export class SpotLightMaterial extends THREE.ShaderMaterial {
   constructor() {
@@ -23,7 +23,7 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
         varying float vIntensity;
         uniform vec3 spotPosition;
         uniform float attenuation;
-  
+
         void main() {
           // compute intensity
           vNormal = normalize( normalMatrix * normal );
@@ -36,11 +36,11 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
           vIntensity = intensity;
           // set gl_Position
           gl_Position	= projectionMatrix * viewPosition;
-  
+
         }`,
       fragmentShader: /* glsl */ `
         #include <packing>
-  
+
         varying vec3 vNormal;
         varying vec3 vWorldPosition;
         uniform vec3 lightColor;
@@ -54,13 +54,13 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
         varying float vViewZ;
         varying float vIntensity;
         uniform float opacity;
-  
+
         float readDepth( sampler2D depthSampler, vec2 coord ) {
           float fragCoordZ = texture2D( depthSampler, coord ).x;
           float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
           return viewZ;
         }
-  
+
         void main() {
           float d = 1.0;
           bool isSoft = resolution[0] > 0.0 && resolution[1] > 0.0;
@@ -77,7 +77,7 @@ export class SpotLightMaterial extends THREE.ShaderMaterial {
             intensity	*= smoothstep(0., 1., vViewZ - d);
           }
           gl_FragColor = vec4(lightColor, intensity * opacity);
-  
+
           #include <tonemapping_fragment>
             #include <encodings_fragment>
         }`,

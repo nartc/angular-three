@@ -9,7 +9,7 @@ import {
   NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 @Component({
   selector: 'ngt-mesh-toon-material',

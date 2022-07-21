@@ -18,7 +18,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { Sky } from 'three-stdlib';
 
 export function calcPosFromAngles(inclination: number, azimuth: number, vector: THREE.Vector3 = new THREE.Vector3()) {

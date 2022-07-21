@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 export class ConvolutionMaterial extends THREE.ShaderMaterial {
   readonly kernel: Float32Array;
@@ -20,7 +20,7 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
         depthToBlurRatioBias: new THREE.Uniform(0.25),
       },
       fragmentShader: `#include <common>
-          #include <dithering_pars_fragment>      
+          #include <dithering_pars_fragment>
           uniform sampler2D inputBuffer;
           uniform sampler2D depthBuffer;
           uniform float cameraNear;
@@ -34,23 +34,23 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
           varying vec2 vUv1;
           varying vec2 vUv2;
           varying vec2 vUv3;
-  
+
           void main() {
             float depthFactor = 0.0;
-            
+
             #ifdef USE_DEPTH
               vec4 depth = texture2D(depthBuffer, vUv);
               depthFactor = smoothstep(minDepthThreshold, maxDepthThreshold, 1.0-(depth.r * depth.a));
               depthFactor *= depthScale;
               depthFactor = max(0.0, min(1.0, depthFactor + 0.25));
             #endif
-            
+
             vec4 sum = texture2D(inputBuffer, mix(vUv0, vUv, depthFactor));
             sum += texture2D(inputBuffer, mix(vUv1, vUv, depthFactor));
             sum += texture2D(inputBuffer, mix(vUv2, vUv, depthFactor));
             sum += texture2D(inputBuffer, mix(vUv3, vUv, depthFactor));
             gl_FragColor = sum * 0.25 ;
-  
+
             #include <dithering_fragment>
             #include <tonemapping_fragment>
             #include <encodings_fragment>
@@ -64,17 +64,17 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
           varying vec2 vUv1;
           varying vec2 vUv2;
           varying vec2 vUv3;
-  
+
           void main() {
             vec2 uv = position.xy * 0.5 + 0.5;
             vUv = uv;
-  
+
             vec2 dUv = (texelSize * vec2(kernel) + halfTexelSize) * scale;
             vUv0 = vec2(uv.x - dUv.x, uv.y + dUv.y);
             vUv1 = vec2(uv.x + dUv.x, uv.y + dUv.y);
             vUv2 = vec2(uv.x + dUv.x, uv.y - dUv.y);
             vUv3 = vec2(uv.x - dUv.x, uv.y - dUv.y);
-  
+
             gl_Position = vec4(position.xy, 1.0, 1.0);
           }`,
       blending: THREE.NoBlending,

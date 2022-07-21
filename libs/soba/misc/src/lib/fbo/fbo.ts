@@ -1,7 +1,7 @@
 import { NgtComponentStore, NgtStore, Ref, tapEffect } from '@angular-three/core';
 import { Injectable } from '@angular/core';
 import { filter, isObservable, Observable, of, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 interface FBOSettings<T extends boolean = false> extends THREE.WebGLRenderTargetOptions {
   multisample?: T;

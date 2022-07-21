@@ -7,7 +7,7 @@ import { NgtSobaCenterModule } from '@angular-three/soba/staging';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 @Component({

@@ -35,7 +35,7 @@ import {
 } from '@angular/core';
 import { DepthDownsamplingPass, EffectComposer, EffectPass, NormalPass, RenderPass } from 'postprocessing';
 import { filter, startWith, switchMap, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 export interface NgtEffectComposerState extends NgtInstanceState<EffectComposer> {
   groupRef: Ref<NgtUnknownInstance<THREE.Group>>;

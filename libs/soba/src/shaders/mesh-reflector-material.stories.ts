@@ -15,8 +15,8 @@ import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/co
 import { FormsModule } from '@angular/forms';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { tap } from 'rxjs';
-import * as THREE from 'three';
 import { Mesh } from 'three';
+import * as THREE from 'three/src/Three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 /**

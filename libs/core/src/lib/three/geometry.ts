@@ -1,5 +1,5 @@
 import { Directive, Inject, Input, NgZone, Optional, SkipSelf } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import type { NgtInstanceState } from '../abstracts/instance';
 import { NgtInstance } from '../abstracts/instance';
 import { Ref } from '../ref';

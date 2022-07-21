@@ -10,8 +10,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { Observable } from 'rxjs';
-import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
+import * as THREE from 'three/src/Three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 interface ArcherGLTF extends GLTF {

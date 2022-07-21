@@ -1,6 +1,6 @@
 import { NgtObject, NgtObjectInputsState, NgtPreObjectInit, provideObjectRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 
 export interface NgtAudioListenerState extends NgtObjectInputsState<THREE.AudioListener> {
   filter: AudioNode;

@@ -1,7 +1,7 @@
 import { AnyConstructor, is, NgtCommonGeometry, NgtTriple, provideCommonGeometryRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { LineGeometry } from 'three-stdlib';
 
 @Component({

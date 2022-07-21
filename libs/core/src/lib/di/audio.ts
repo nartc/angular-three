@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { Ref } from '../ref';
 import { NgtCommonAudio } from '../three/audio';
 import { NGT_COMMON_AUDIO_REF } from '../tokens';

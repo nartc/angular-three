@@ -29,7 +29,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three';
 import { Line2 } from 'three-stdlib';
 import { NgtSobaLineGeometryModule } from './line-geometry';
 import { NgtSobaLineMaterialModule } from './line-material';
