@@ -24,8 +24,7 @@ import {
 } from 'typescript/lib/tsserverlibrary';
 import { astFromPath } from '../ast-utils';
 
-const postprocessingTypeDefPath =
-  'node_modules/.pnpm/postprocessing@6.26.4_three@0.140.0/node_modules/postprocessing/types/postprocessing.d.ts';
+const postprocessingTypeDefPath = 'node_modules/postprocessing/types/postprocessing.d.ts';
 
 export const simpleEffects = [
   {

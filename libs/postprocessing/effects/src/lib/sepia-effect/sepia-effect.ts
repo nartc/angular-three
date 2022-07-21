@@ -6,6 +6,7 @@ import { SepiaEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-sepia-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtSepiaEffect)],
@@ -28,7 +29,7 @@ export class NgtSepiaEffect extends NgtCommonEffect<SepiaEffect> {
 }
 
 @NgModule({
-  declarations: [NgtSepiaEffect],
+  imports: [NgtSepiaEffect],
   exports: [NgtSepiaEffect],
 })
 export class NgtSepiaEffectModule {}

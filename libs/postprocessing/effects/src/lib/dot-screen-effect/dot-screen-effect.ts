@@ -6,6 +6,7 @@ import { DotScreenEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-dot-screen-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtDotScreenEffect)],
@@ -33,7 +34,7 @@ export class NgtDotScreenEffect extends NgtCommonEffect<DotScreenEffect> {
 }
 
 @NgModule({
-  declarations: [NgtDotScreenEffect],
+  imports: [NgtDotScreenEffect],
   exports: [NgtDotScreenEffect],
 })
 export class NgtDotScreenEffectModule {}

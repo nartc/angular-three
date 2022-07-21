@@ -6,6 +6,7 @@ import { BrightnessContrastEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-brightness-contrast-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtBrightnessContrastEffect)],
@@ -33,7 +34,7 @@ export class NgtBrightnessContrastEffect extends NgtCommonEffect<BrightnessContr
 }
 
 @NgModule({
-  declarations: [NgtBrightnessContrastEffect],
+  imports: [NgtBrightnessContrastEffect],
   exports: [NgtBrightnessContrastEffect],
 })
 export class NgtBrightnessContrastEffectModule {}

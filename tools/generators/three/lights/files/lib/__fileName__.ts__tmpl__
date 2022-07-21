@@ -14,6 +14,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
     selector: 'ngt-<%= fileName %>',
+    standalone: true,
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [provideCommonLightRef(Ngt<%= name %>)],
@@ -42,7 +43,7 @@ export class Ngt<%= name %> extends NgtCommonLight<THREE.<%= name %>> {
 }
 
 @NgModule({
-    declarations: [Ngt<%= name %>],
+    imports: [Ngt<%= name %>],
     exports: [Ngt<%= name %>],
 })
 export class Ngt<%= name %>Module {}

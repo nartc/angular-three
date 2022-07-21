@@ -6,6 +6,7 @@ import { BlendFunction, ScanlineEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-scanline-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtScanlineEffect)],
@@ -32,7 +33,7 @@ export class NgtScanlineEffect extends NgtCommonEffect<ScanlineEffect> {
 }
 
 @NgModule({
-  declarations: [NgtScanlineEffect],
+  imports: [NgtScanlineEffect],
   exports: [NgtScanlineEffect],
 })
 export class NgtScanlineEffectModule {}

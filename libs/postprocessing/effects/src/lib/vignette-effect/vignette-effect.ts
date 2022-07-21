@@ -12,6 +12,7 @@ import { VignetteEffect, VignetteTechnique } from 'postprocessing';
 
 @Component({
   selector: 'ngt-vignette-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtVignetteEffect)],
@@ -49,7 +50,7 @@ export class NgtVignetteEffect extends NgtCommonEffect<VignetteEffect> {
 }
 
 @NgModule({
-  declarations: [NgtVignetteEffect],
+  imports: [NgtVignetteEffect],
   exports: [NgtVignetteEffect],
 })
 export class NgtVignetteEffectModule {}

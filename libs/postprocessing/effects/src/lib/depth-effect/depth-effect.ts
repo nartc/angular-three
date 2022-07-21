@@ -6,6 +6,7 @@ import { DepthEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-depth-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtDepthEffect)],
@@ -28,7 +29,7 @@ export class NgtDepthEffect extends NgtCommonEffect<DepthEffect> {
 }
 
 @NgModule({
-  declarations: [NgtDepthEffect],
+  imports: [NgtDepthEffect],
   exports: [NgtDepthEffect],
 })
 export class NgtDepthEffectModule {}

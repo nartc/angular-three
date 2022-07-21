@@ -16,6 +16,7 @@ import * as THREE from 'three/src/Three';
 
 @Component({
     selector: 'ngt-<%= fileName %>[<%= propertyName %>]',
+    standalone: true,
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [provideInstanceRef(Ngt<%= name %>Attribute)],
@@ -44,7 +45,7 @@ export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
 }
 
 @NgModule({
-    declarations: [Ngt<%= name %>Attribute],
+    imports: [Ngt<%= name %>Attribute],
     exports: [Ngt<%= name %>Attribute],
 })
 export class Ngt<%= name %>AttributeModule {}

@@ -6,6 +6,7 @@ import { BlendFunction, NoiseEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-noise-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtNoiseEffect)],
@@ -32,7 +33,7 @@ export class NgtNoiseEffect extends NgtCommonEffect<NoiseEffect> {
 }
 
 @NgModule({
-  declarations: [NgtNoiseEffect],
+  imports: [NgtNoiseEffect],
   exports: [NgtNoiseEffect],
 })
 export class NgtNoiseEffectModule {}

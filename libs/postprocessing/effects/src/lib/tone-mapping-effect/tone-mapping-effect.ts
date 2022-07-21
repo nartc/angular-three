@@ -12,6 +12,7 @@ import { ToneMappingEffect, ToneMappingMode } from 'postprocessing';
 
 @Component({
   selector: 'ngt-tone-mapping-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtToneMappingEffect)],
@@ -74,7 +75,7 @@ export class NgtToneMappingEffect extends NgtCommonEffect<ToneMappingEffect> {
 }
 
 @NgModule({
-  declarations: [NgtToneMappingEffect],
+  imports: [NgtToneMappingEffect],
   exports: [NgtToneMappingEffect],
 })
 export class NgtToneMappingEffectModule {}

@@ -6,6 +6,7 @@ import { HueSaturationEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-hue-saturation-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtHueSaturationEffect)],
@@ -33,7 +34,7 @@ export class NgtHueSaturationEffect extends NgtCommonEffect<HueSaturationEffect>
 }
 
 @NgModule({
-  declarations: [NgtHueSaturationEffect],
+  imports: [NgtHueSaturationEffect],
   exports: [NgtHueSaturationEffect],
 })
 export class NgtHueSaturationEffectModule {}

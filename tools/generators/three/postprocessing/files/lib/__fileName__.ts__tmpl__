@@ -9,6 +9,7 @@ import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %><% for (cons
 
 @Component({
     selector: 'ngt-<%= fileName %>',
+    standalone: true,
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [provideCommonEffectRef(Ngt<%= name %>)],
@@ -37,7 +38,7 @@ export class Ngt<%= name %> extends NgtCommonEffect<<%= name %>> {
 }
 
 @NgModule({
-    declarations: [Ngt<%= name %>],
+    imports: [Ngt<%= name %>],
     exports: [Ngt<%= name %>],
 })
 export class Ngt<%= name %>Module {}

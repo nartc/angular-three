@@ -6,6 +6,7 @@ import { BlendFunction, BloomEffect, KernelSize } from 'postprocessing';
 
 @Component({
   selector: 'ngt-bloom-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtBloomEffect)],
@@ -23,12 +24,20 @@ export class NgtBloomEffect extends NgtCommonEffect<BloomEffect> {
     this.set({ luminanceSmoothing: coerceNumberProperty(luminanceSmoothing) });
   }
 
+  @Input() set intensity(intensity: NumberInput) {
+    this.set({ intensity: coerceNumberProperty(intensity) });
+  }
+
   @Input() set resolutionScale(resolutionScale: NumberInput) {
     this.set({ resolutionScale: coerceNumberProperty(resolutionScale) });
   }
 
-  @Input() set intensity(intensity: NumberInput) {
-    this.set({ intensity: coerceNumberProperty(intensity) });
+  @Input() set resolutionX(resolutionX: NumberInput) {
+    this.set({ resolutionX: coerceNumberProperty(resolutionX) });
+  }
+
+  @Input() set resolutionY(resolutionY: NumberInput) {
+    this.set({ resolutionY: coerceNumberProperty(resolutionY) });
   }
 
   @Input() set width(width: NumberInput) {
@@ -52,8 +61,10 @@ export class NgtBloomEffect extends NgtCommonEffect<BloomEffect> {
       ...super.effectOptionsFields,
       luminanceThreshold: true,
       luminanceSmoothing: true,
-      resolutionScale: true,
       intensity: true,
+      resolutionScale: true,
+      resolutionX: true,
+      resolutionY: true,
       width: true,
       height: true,
       kernelSize: true,
@@ -62,7 +73,7 @@ export class NgtBloomEffect extends NgtCommonEffect<BloomEffect> {
 }
 
 @NgModule({
-  declarations: [NgtBloomEffect],
+  imports: [NgtBloomEffect],
   exports: [NgtBloomEffect],
 })
 export class NgtBloomEffectModule {}

@@ -1,7 +1,7 @@
 import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
 import { formatFiles, generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/devkit';
 import { join } from 'path';
-import * as THREE from 'three/src/Three';
+import * as THREE from 'three';
 
 export const audios = [
   [THREE.Audio.name, 'GainNode'],

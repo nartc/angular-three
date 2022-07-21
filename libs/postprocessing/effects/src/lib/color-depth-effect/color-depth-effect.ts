@@ -6,6 +6,7 @@ import { ColorDepthEffect } from 'postprocessing';
 
 @Component({
   selector: 'ngt-color-depth-effect',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideCommonEffectRef(NgtColorDepthEffect)],
@@ -28,7 +29,7 @@ export class NgtColorDepthEffect extends NgtCommonEffect<ColorDepthEffect> {
 }
 
 @NgModule({
-  declarations: [NgtColorDepthEffect],
+  imports: [NgtColorDepthEffect],
   exports: [NgtColorDepthEffect],
 })
 export class NgtColorDepthEffectModule {}
