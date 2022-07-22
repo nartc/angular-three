@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Directive, OnDestroy } from '@angular/core';
 import type { MonoTypeOperatorFunction } from 'rxjs';
 import {
   combineLatest,
@@ -35,8 +35,8 @@ export type Projector<Selectors extends Observable<unknown>[], TResult> = (
 /**
  * Implementation from ngrx/component-store with slight modification
  */
-@Injectable()
-export class NgtComponentStore<TState extends object = any> implements OnDestroy {
+@Directive()
+export abstract class NgtComponentStore<TState extends object = any> implements OnDestroy {
   // Should be used only in ngOnDestroy.
   private readonly destroySubject$ = new ReplaySubject<void>(1);
   // Exposed to any extending Store to be used for the teardown.
