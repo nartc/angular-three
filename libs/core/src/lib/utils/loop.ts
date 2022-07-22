@@ -1,43 +1,45 @@
-import type { AnyFunction, NgtRenderState, NgtState } from '../types';
+import type { NgtRenderState, NgtState } from '../types';
 import { is } from './is';
 
 type GlobalRenderCallback = (timeStamp: number) => void;
 
-const globalCallbacks: GlobalRenderCallback[] = [];
-const globalAfterCallbacks: GlobalRenderCallback[] = [];
-const globalTailCallbacks: GlobalRenderCallback[] = [];
-
-function createCallback(callback: GlobalRenderCallback, callbacks: GlobalRenderCallback[]): () => void {
-  const index = callbacks.length;
-  callbacks.push(callback);
-  return () => void callbacks.splice(index, 1);
+interface SubItem {
+  callback: GlobalRenderCallback;
 }
 
-function runCallbacks(effects: GlobalRenderCallback[], timestamp: number) {
-  for (let i = 0, length = effects.length; i < length; i++) {
-    effects[i](timestamp);
-  }
+const globalEffects: Set<SubItem> = new Set();
+const globalAfterEffects: Set<SubItem> = new Set();
+const globalTailEffects: Set<SubItem> = new Set();
+
+function createSub(callback: GlobalRenderCallback, subs: Set<SubItem>): () => void {
+  const sub = { callback };
+  subs.add(sub);
+  return () => void subs.delete(sub);
 }
 
-/**
- * Adds a global render callback which is called before each frame.
- */
-export function addCallback(callback: GlobalRenderCallback): AnyFunction<void> {
-  return createCallback(callback, globalCallbacks);
+function run(effects: Set<SubItem>, timestamp: number) {
+  effects.forEach(({ callback }) => callback(timestamp));
 }
 
 /**
- * Adds a global render callback which is called after each frame has been rendered.
+ * Adds a global render callback which is called each frame.
  */
-export function addAfterCallback(callback: GlobalRenderCallback): AnyFunction<void> {
-  return createCallback(callback, globalAfterCallbacks);
+export function addCallback(callback: GlobalRenderCallback) {
+  return createSub(callback, globalEffects);
+}
+
+/**
+ * Adds a global after-render callback which is called each frame.
+ */
+export function addAfterCallback(callback: GlobalRenderCallback) {
+  return createSub(callback, globalAfterEffects);
 }
 
 /**
  * Adds a global callback which is called when rendering stops.
  */
-export function addTailCallback(callback: GlobalRenderCallback): AnyFunction<void> {
-  return createCallback(callback, globalTailCallbacks);
+export function addTail(callback: GlobalRenderCallback) {
+  return createSub(callback, globalTailEffects);
 }
 
 export function render(timestamp: number, state: () => NgtState, frame?: XRFrame): number {
@@ -79,12 +81,10 @@ export function createLoop(rootStateMap: Map<Element, () => NgtState>) {
     running = true;
     repeat = 0;
 
-    // Run callbacks
-    if (globalCallbacks.length) {
-      runCallbacks(globalCallbacks, timestamp);
-    }
+    // Run effects
+    if (globalEffects.size) run(globalEffects, timestamp);
 
-    // Render all roots
+    // Render all rootStateMap
     rootStateMap.forEach((rootState) => {
       state = rootState();
       // If the frameloop is invalidated, do not run another frame
@@ -97,17 +97,13 @@ export function createLoop(rootStateMap: Map<Element, () => NgtState>) {
       }
     });
 
-    // Run after-callbacks
-    if (globalAfterCallbacks.length) {
-      runCallbacks(globalAfterCallbacks, timestamp);
-    }
+    // Run after-effects
+    if (globalAfterEffects.size) run(globalAfterEffects, timestamp);
 
     // Stop the loop if nothing invalidates it
     if (repeat === 0) {
       // Tail call effects, they are called when rendering stops
-      if (globalTailCallbacks.length) {
-        runCallbacks(globalTailCallbacks, timestamp);
-      }
+      if (globalTailEffects.size) run(globalTailEffects, timestamp);
 
       // Flag end of operation
       running = false;
@@ -115,9 +111,9 @@ export function createLoop(rootStateMap: Map<Element, () => NgtState>) {
     }
   }
 
-  function invalidate(state?: () => NgtState): void {
+  function invalidate(state?: () => NgtState, frames = 1): void {
     const stateToInvalidate = state?.();
-    if (!stateToInvalidate) return rootStateMap.forEach((rootState) => invalidate(rootState));
+    if (!stateToInvalidate) return rootStateMap.forEach((rootState) => invalidate(rootState, frames));
     if (
       stateToInvalidate.gl.xr?.isPresenting ||
       !stateToInvalidate.internal.active ||
@@ -125,7 +121,7 @@ export function createLoop(rootStateMap: Map<Element, () => NgtState>) {
     )
       return;
     // Increase frames, do not go higher than 60
-    stateToInvalidate.internal.frames = Math.min(60, stateToInvalidate.internal.frames + 1);
+    stateToInvalidate.internal.frames = Math.min(60, stateToInvalidate.internal.frames + frames);
     // If the render-loop isn't active, start it
     if (!running) {
       running = true;
@@ -133,16 +129,22 @@ export function createLoop(rootStateMap: Map<Element, () => NgtState>) {
     }
   }
 
-  function advance(timestamp: number, runGlobalCallbacks = true, state?: () => NgtState, frame?: XRFrame): void {
-    if (runGlobalCallbacks) runCallbacks(globalCallbacks, timestamp);
-    const stateToAdvance = state?.();
-    if (!stateToAdvance) {
-      rootStateMap.forEach((rootState) => render(timestamp, rootState));
-    } else {
-      render(timestamp, () => stateToAdvance, frame);
-    }
-    if (runGlobalCallbacks) runCallbacks(globalAfterCallbacks, timestamp);
+  function advance(timestamp: number, runGlobalEffects = true, state?: () => NgtState, frame?: XRFrame): void {
+    if (runGlobalEffects) run(globalEffects, timestamp);
+    if (!state) rootStateMap.forEach((rootState) => render(timestamp, rootState));
+    else render(timestamp, state, frame);
+    if (runGlobalEffects) run(globalAfterEffects, timestamp);
   }
 
-  return { loop, advance, invalidate };
+  return {
+    loop,
+    /**
+     * Invalidates the view, requesting a frame to be rendered. Will globally invalidate unless passed a root's state.
+     */
+    invalidate,
+    /**
+     * Advances the frameloop and runs render effects, useful for when manually rendering via `frameloop="never"`.
+     */
+    advance,
+  };
 }
