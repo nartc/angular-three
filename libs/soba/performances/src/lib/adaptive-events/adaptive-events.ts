@@ -29,7 +29,7 @@ export class NgtSobaAdaptiveEvents extends NgtComponentStore implements OnInit {
     })
   );
 
-  private updateEvents = this.effect<{}>(
+  private updateEvents = this.effect(
     tap(() => {
       const current = this.store.get((s) => s.performance.current);
       this.store.set((state) => ({ events: { ...state.events, enabled: current === 1 } }));

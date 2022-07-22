@@ -31,7 +31,7 @@ export class NgtSobaAdaptiveDpr extends NgtComponentStore<{ pixelated: boolean }
     });
   }
 
-  private readonly updateDpr = this.effect<{}>(
+  private readonly updateDpr = this.effect(
     tap(() => {
       const current = this.store.get((s) => s.performance.current);
       const initialDpr = this.store.get((s) => s.viewport.initialDpr);

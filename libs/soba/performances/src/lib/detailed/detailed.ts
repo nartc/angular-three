@@ -82,7 +82,7 @@ export class NgtSobaDetailed extends NgtObjectInputs<THREE.LOD> implements After
     });
   }
 
-  private readonly addLevels = this.effect<{}>(
+  private readonly addLevels = this.effect(
     pipe(
       observeOn(animationFrameScheduler),
       tap(() => {

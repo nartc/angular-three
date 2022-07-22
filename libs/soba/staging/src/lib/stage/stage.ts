@@ -283,7 +283,7 @@ export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState
     });
   }
 
-  private readonly setDimensions = this.effect<{}>(
+  private readonly setDimensions = this.effect(
     pipe(
       observeOn(asyncScheduler),
       tap(() => {
@@ -309,7 +309,7 @@ export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState
     )
   );
 
-  private readonly updateControls = this.effect<{}>(
+  private readonly updateControls = this.effect(
     tap(() => {
       const { adjustCamera, width, height, radius } = this.get();
       const { camera, controls } = this.store.get();

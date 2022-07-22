@@ -88,7 +88,7 @@ export abstract class NgtCommonTexture<TTexture extends THREE.Texture = THREE.Te
     });
   }
 
-  private readonly init = this.effect<{}>(
+  private readonly init = this.effect(
     tapEffect(() => {
       const gl = this.store.get((s) => s.gl);
       const instanceArgs = this.get((s) => s.instanceArgs);

@@ -87,7 +87,7 @@ export class NgtSobaFBO extends NgtComponentStore<NgtSobaFBOState> {
     })
   );
 
-  private readonly setup = this.effect<{}>(
+  private readonly setup = this.effect(
     tapEffect(() => {
       const {
         target,

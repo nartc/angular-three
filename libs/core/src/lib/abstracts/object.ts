@@ -361,7 +361,7 @@ export abstract class NgtObject<
     return undefined;
   }
 
-  private readonly init = this.effect<{}>(
+  private readonly init = this.effect(
     tapEffect(() => {
       if (this.instance.value && this.__ngt__) {
         this.switch();

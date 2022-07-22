@@ -67,7 +67,7 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
     });
   }
 
-  private readonly setDefaultCamera = this.effect<{}>(
+  private readonly setDefaultCamera = this.effect(
     tapEffect(() => {
       const camera = this.store.get((s) => s.camera);
       const cameraRef = this.store.get((s) => s.cameraRef);

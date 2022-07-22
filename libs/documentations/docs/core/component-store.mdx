@@ -142,7 +142,7 @@ export class CubeComponent extends NgtComponentStore {
     })
   );
 
-  private readonly reactToSizeTwo = this.effect<{}>(
+  private readonly reactToSizeTwo = this.effect(
     tapEffect(() => {
       //                                  👇 or we can read it imperatively from the Source
       const { width, height } = this.store.get((s) => s.size);

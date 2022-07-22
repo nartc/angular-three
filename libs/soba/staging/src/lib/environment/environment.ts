@@ -53,8 +53,8 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { RGBELoader } from 'three-stdlib';
 import * as THREE from 'three';
+import { RGBELoader } from 'three-stdlib';
 import { presetsObj, PresetsType } from './presets';
 
 const fragmentShader =
@@ -381,7 +381,7 @@ export class NgtSobaEnvironmentResolver extends NgtComponentStore<NgtSobaEnviron
     return this.get((s) => s.textureRef);
   }
 
-  private readonly setTexture = this.effect<{}>(
+  private readonly setTexture = this.effect(
     tapEffect(() => {
       const { textureRef, extensions, preset } = this.get();
       let { files, path } = this.get();
@@ -459,7 +459,7 @@ export class NgtSobaEnvironmentMap extends NgtSobaEnvironmentGeneric {
     });
   }
 
-  private readonly setEnvironment = this.effect<{}>(
+  private readonly setEnvironment = this.effect(
     tapEffect(() => {
       const { map, background, scene } = this.get();
       const defaultScene = this.store.get((s) => s.scene);
@@ -683,7 +683,7 @@ export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
     });
   }
 
-  private readonly setEnvironment = this.effect<{}>(
+  private readonly setEnvironment = this.effect(
     tapEffect(() => {
       const { gl, scene: defaultScene } = this.store.get();
       const { frames, scene, background, fbo } = this.get();
@@ -858,7 +858,7 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
     });
   }
 
-  private readonly setDefines = this.effect<{}>(
+  private readonly setDefines = this.effect(
     tap(() => {
       const { isCubeMap, texture } = this.get();
       const w = (isCubeMap ? texture.image[0]?.width : texture.image.width) ?? 1024;
@@ -880,14 +880,14 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
     })
   );
 
-  private readonly setFragment = this.effect<{}>(
+  private readonly setFragment = this.effect(
     tap(() => {
       const defines = this.get((s) => s['defines']);
       this.set({ fragment: defines.join('\n') + fragmentShader });
     })
   );
 
-  private readonly setMaterialOptions = this.effect<{}>(
+  private readonly setMaterialOptions = this.effect(
     tap(() => {
       const ground = this.get((s) => s.ground) as {
         radius?: number;
@@ -903,7 +903,7 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
     })
   );
 
-  private readonly setHeightUniform = this.effect<{}>(
+  private readonly setHeightUniform = this.effect(
     pipe(
       observeOn(animationFrameScheduler),
       tap(() => {
@@ -918,7 +918,7 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
     )
   );
 
-  private readonly setRadiusUniform = this.effect<{}>(
+  private readonly setRadiusUniform = this.effect(
     pipe(
       observeOn(animationFrameScheduler),
       tap(() => {
@@ -933,7 +933,7 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
     )
   );
 
-  private readonly setCubeMapUniform = this.effect<{}>(
+  private readonly setCubeMapUniform = this.effect(
     pipe(
       observeOn(animationFrameScheduler),
       tap(() => {

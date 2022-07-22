@@ -98,7 +98,7 @@ export class NgtDepthOfFieldEffect extends NgtCommonEffect<DepthOfFieldEffect> {
     this.setTarget(this.targetParams$);
   }
 
-  private readonly setTarget = this.effect<{}>(
+  private readonly setTarget = this.effect(
     tap(() => {
       const invalidate = this.store.get((s) => s.invalidate);
       const effect = this.get((s) => s.instance);

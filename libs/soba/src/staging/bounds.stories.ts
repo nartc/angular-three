@@ -117,7 +117,7 @@ class Model extends NgtObjectInputs<THREE.Mesh> {
     this.loadModel(this.select((s) => s.name));
   }
 
-  private readonly loadModel = this.effect<{}>(
+  private readonly loadModel = this.effect(
     pipe(
       switchMap(() => this.gltfLoader.load('soba/bounds-assets.glb')),
       tap(({ nodes }) => {

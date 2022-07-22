@@ -168,7 +168,7 @@ export class NgtSobaMeshReflectorMaterial extends NgtMeshStandardMaterial {
     return this.select((s) => s['reflectorDefines']);
   }
 
-  private readonly setReflectorOptions = this.effect<{}>(
+  private readonly setReflectorOptions = this.effect(
     tap(() => {
       const { reflectorOffset, resolution, reflectorDefines } = this.get();
 
@@ -182,7 +182,7 @@ export class NgtSobaMeshReflectorMaterial extends NgtMeshStandardMaterial {
     })
   );
 
-  private readonly setRenderTargets = this.effect<{}>(
+  private readonly setRenderTargets = this.effect(
     tap(() => {
       const gl = this.store.get((s) => s.gl);
       const {
@@ -233,7 +233,7 @@ export class NgtSobaMeshReflectorMaterial extends NgtMeshStandardMaterial {
     })
   );
 
-  private readonly setDefines = this.effect<{}>(
+  private readonly setDefines = this.effect(
     tap(() => {
       const { hasBlur, depthScale, distortionMap } = this.get();
       this.set({

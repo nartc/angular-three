@@ -391,7 +391,7 @@ export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> 
     });
   }
 
-  private readonly setTarget = this.effect<{}>(
+  private readonly setTarget = this.effect(
     tap(() => {
       const portal = this.get((s) => s.portal);
       const gl = this.store.get((s) => s.gl);
@@ -399,7 +399,7 @@ export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> 
     })
   );
 
-  private readonly appendElement = this.effect<{}>(
+  private readonly appendElement = this.effect(
     tapEffect(() => {
       const { scene, camera, size } = this.store.get();
       const { transform, target, calculatePosition, prepend } = this.get();
@@ -426,7 +426,7 @@ export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> 
     })
   );
 
-  private readonly setWrapperClass = this.effect<{}>(
+  private readonly setWrapperClass = this.effect(
     tap(() => {
       const wrapperClass = this.get((s) => s.wrapperClass);
       if (wrapperClass) {
@@ -435,7 +435,7 @@ export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> 
     })
   );
 
-  private readonly render = this.effect<{}>(
+  private readonly render = this.effect(
     tap(() => {
       const { transform, target } = this.get();
 
@@ -453,7 +453,7 @@ export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> 
     })
   );
 
-  private readonly setBeforeRender = this.effect<{}>(
+  private readonly setBeforeRender = this.effect(
     tapEffect(() =>
       this.store.registerBeforeRender({
         callback: () => {

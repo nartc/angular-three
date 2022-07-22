@@ -49,7 +49,7 @@ export abstract class NgtCommonGeometry<
     });
   }
 
-  private readonly init = this.effect<{}>(
+  private readonly init = this.effect(
     tapEffect(() => {
       const instanceArgs = this.get((s) => s.instanceArgs);
       const geometryArgs = this.adjustCtorParams(instanceArgs);

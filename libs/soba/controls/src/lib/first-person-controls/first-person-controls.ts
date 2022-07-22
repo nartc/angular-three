@@ -105,7 +105,7 @@ export class NgtSobaFirstPersonControls extends NgtInstance<FirstPersonControls,
     });
   }
 
-  private readonly init = this.effect<{}>(
+  private readonly init = this.effect(
     tap(() => {
       const camera = this.store.get((s) => s.camera);
       const domElement = this.get((s) => s.domElement);
@@ -113,7 +113,7 @@ export class NgtSobaFirstPersonControls extends NgtInstance<FirstPersonControls,
     })
   );
 
-  private readonly setBeforeRender = this.effect<{}>(
+  private readonly setBeforeRender = this.effect(
     tapEffect(() =>
       this.store.registerBeforeRender({
         priority: -1,

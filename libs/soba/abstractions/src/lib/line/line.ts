@@ -29,8 +29,8 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
-import { Line2 } from 'three-stdlib';
 import * as THREE from 'three';
+import { Line2 } from 'three-stdlib';
 import { NgtSobaLineGeometry } from './line-geometry';
 import { NgtSobaLineMaterial } from './line-material';
 
@@ -182,7 +182,7 @@ export class NgtSobaLine extends NgtSobaCommonLine {
     this.instance,
     this.select((s) => s.points)
   );
-  private readonly computeLineDistances = this.effect<{}>(
+  private readonly computeLineDistances = this.effect(
     pipe(
       observeOn(animationFrameScheduler),
       tap(() => {

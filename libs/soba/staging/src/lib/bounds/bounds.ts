@@ -189,7 +189,7 @@ export class NgtSobaBounds extends NgtObjectInputs<THREE.Group, NgtSobaBoundsSta
     });
   }
 
-  private readonly preventDragHijacking = this.effect<{}>(
+  private readonly preventDragHijacking = this.effect(
     tapEffect(() => {
       const controls = this.store.get((s) => s.controls) as unknown as ControlsProto;
 
@@ -203,7 +203,7 @@ export class NgtSobaBounds extends NgtObjectInputs<THREE.Group, NgtSobaBoundsSta
     })
   );
 
-  private readonly observeSizeChange = this.effect<{}>(
+  private readonly observeSizeChange = this.effect(
     tap(() => {
       const { clip, fit, observe } = this.get();
       if (observe || this.count++ === 0) {

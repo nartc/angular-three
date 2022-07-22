@@ -20,8 +20,8 @@ import { NgtMesh } from '@angular-three/core/meshes';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
-import { HorizontalBlurShader, VerticalBlurShader } from 'three-stdlib';
 import * as THREE from 'three';
+import { HorizontalBlurShader, VerticalBlurShader } from 'three-stdlib';
 
 export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.Group> {
   opacity: number;
@@ -220,7 +220,7 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
     });
   }
 
-  private readonly setShadows = this.effect<{}>(
+  private readonly setShadows = this.effect(
     tap(() => {
       const { resolution, scaledWidth: width, scaledHeight: height, color } = this.get();
       const gl = this.store.get((s) => s.gl);

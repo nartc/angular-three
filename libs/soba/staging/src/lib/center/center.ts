@@ -106,7 +106,7 @@ export class NgtSobaCenter extends NgtObjectInputs<THREE.Group, NgtSobaCenterSta
     });
   }
 
-  private readonly setPosition = this.effect<{}>(
+  private readonly setPosition = this.effect(
     pipe(
       observeOn(asyncScheduler),
       tap(() => {

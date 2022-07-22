@@ -55,7 +55,7 @@ export class NgtLUTEffect extends NgtCommonEffect<LUT3DEffect> {
     );
   }
 
-  private readonly setLut = this.effect<{}>(
+  private readonly setLut = this.effect(
     tap(() => {
       const invalidate = this.store.get((s) => s.invalidate);
       const { lut, tetrahedralInterpolation } = this.get();

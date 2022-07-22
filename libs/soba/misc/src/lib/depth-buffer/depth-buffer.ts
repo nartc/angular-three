@@ -63,7 +63,7 @@ export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferStat
     return depthTextureRef;
   }
 
-  private readonly setDepthConfig = this.effect<{}>(
+  private readonly setDepthConfig = this.effect(
     tap(() => {
       const size = this.get((s) => s.size);
       const dpr = this.store.get((s) => s.viewport.dpr);
@@ -89,7 +89,7 @@ export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferStat
     })
   );
 
-  private readonly setDepthFBO = this.effect<{}>(
+  private readonly setDepthFBO = this.effect(
     tapEffect(() => {
       const sub = this.fbo
         .use(() =>
@@ -117,7 +117,7 @@ export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferStat
     })
   );
 
-  private readonly setFboBeforeRender = this.effect<{}>(
+  private readonly setFboBeforeRender = this.effect(
     tapEffect(() => {
       const { depthFBO, frames } = this.get();
 

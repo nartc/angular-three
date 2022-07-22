@@ -242,7 +242,7 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
     )
   );
 
-  private readonly preloadFont = this.effect<{}>(
+  private readonly preloadFont = this.effect(
     tap(() => {
       const { font, characters } = this.get();
       if (font && characters) {

@@ -124,7 +124,7 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
     return false;
   }
 
-  private readonly configureBlendMode = this.effect<{}>(
+  private readonly configureBlendMode = this.effect(
     tap(() => {
       const { instance: effect, blendFunction, opacity } = this.get();
       const invalidate = this.store.get((s) => s.invalidate);

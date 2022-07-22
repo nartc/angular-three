@@ -112,7 +112,7 @@ export class NgtSobaBackdrop extends NgtObjectInputs<THREE.Group, NgtSobaBackdro
     });
   }
 
-  private readonly setup = this.effect<{}>(
+  private readonly setup = this.effect(
     tap(() => {
       const { segments, floor, planeGeometry } = this.get();
       let i = 0;

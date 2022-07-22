@@ -112,7 +112,7 @@ export class NgtSobaCameraShake extends NgtInstance<{}, NgtSobaCameraShakeState>
     });
   }
 
-  private readonly configureChangeEvent = this.effect<{}>(
+  private readonly configureChangeEvent = this.effect(
     tapEffect(() => {
       const { controls, camera } = this.store.get();
       if (controls) {

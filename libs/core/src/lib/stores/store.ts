@@ -1,5 +1,5 @@
 import { ElementRef, Inject, Injectable, NgZone, Optional, SkipSelf } from '@angular/core';
-import { filter, map, Observable, tap } from 'rxjs';
+import { filter, Observable, tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
 import { WINDOW } from '../di/window';
@@ -63,8 +63,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     this.gl$,
     this.raycaster$,
     this.active$,
-    (camera, scene, gl, raycaster, active) => !!camera && !!gl && !!scene && !!raycaster && active === true
-  ).pipe(map((ready) => ({ ready })));
+    (camera, scene, gl, raycaster, active) => ({ ready: !!camera && !!gl && !!scene && !!raycaster && active === true })
+  );
 
   private performanceTimeoutId: ReturnType<typeof setTimeout> | undefined = undefined;
 

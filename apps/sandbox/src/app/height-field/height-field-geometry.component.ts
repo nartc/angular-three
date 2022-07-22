@@ -20,7 +20,7 @@ export class HeightFieldGeometryComponent extends NgtBufferGeometry {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
       this.onCanvasReady(this.store.ready$, () => {
-        this.effect<{}>(
+        this.effect(
           tap(() => {
             if (!this.instanceValue) return;
             const heights = this.get((s) => s['heights']) as number[][];

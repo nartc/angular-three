@@ -18,8 +18,8 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { tap } from 'rxjs';
-import { Sky } from 'three-stdlib';
 import * as THREE from 'three';
+import { Sky } from 'three-stdlib';
 
 export function calcPosFromAngles(inclination: number, azimuth: number, vector: THREE.Vector3 = new THREE.Vector3()) {
   const theta = Math.PI * (inclination - 0.5);
@@ -125,14 +125,14 @@ export class NgtSobaSky extends NgtCommonMesh<Sky> {
     );
   }
 
-  private readonly setScale = this.effect<{}>(
+  private readonly setScale = this.effect(
     tap(() => {
       const distance = this.get((s) => s['distance']);
       this.instance.value.scale.copy(new THREE.Vector3().setScalar(distance));
     })
   );
 
-  private readonly updateMaterialUniforms = this.effect<{}>(
+  private readonly updateMaterialUniforms = this.effect(
     tap(() => {
       const { mieCoefficient, mieDirectionalG, rayleigh, sunPosition, turbidity } = this.get();
 

@@ -1,7 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import type { MonoTypeOperatorFunction } from 'rxjs';
 import {
-  asapScheduler,
   combineLatest,
   concatMap,
   distinctUntilChanged,
@@ -264,7 +263,7 @@ export class NgtComponentStore<TState extends object = any> implements OnDestroy
 export function tapEffect<TValue>(
   effectFn: (
     value: TValue
-  ) => ((cleanUpParams: { prev: TValue | undefined; complete: boolean; error: boolean }) => void) | void
+  ) => ((cleanUpParams: { prev: TValue | undefined; complete: boolean; error: boolean }) => void) | void | undefined
 ): MonoTypeOperatorFunction<TValue> {
   let cleanupFn: (cleanUpParams: { prev: TValue | undefined; complete: boolean; error: boolean }) => void = noop;
   let firstRun = false;
@@ -299,39 +298,6 @@ export function tapEffect<TValue>(
     unsubscribe: teardown(false),
     error: teardown(true),
   });
-}
-
-export function debounceSync<T>(): MonoTypeOperatorFunction<T> {
-  return (source) =>
-    new Observable<T>((observer) => {
-      let actionSubscription: Subscription | undefined;
-      let actionValue: T | undefined;
-      const rootSubscription = new Subscription();
-      rootSubscription.add(
-        source.subscribe({
-          complete: () => {
-            if (actionSubscription) {
-              observer.next(actionValue);
-            }
-            observer.complete();
-          },
-          error: (error) => {
-            observer.error(error);
-          },
-          next: (value) => {
-            actionValue = value;
-            if (!actionSubscription) {
-              actionSubscription = asapScheduler.schedule(() => {
-                observer.next(actionValue);
-                actionSubscription = undefined;
-              });
-              rootSubscription.add(actionSubscription);
-            }
-          },
-        })
-      );
-      return rootSubscription;
-    });
 }
 
 export function skipUndefined<TValue>(): MonoTypeOperatorFunction<TValue> {

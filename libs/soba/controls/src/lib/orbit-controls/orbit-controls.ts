@@ -11,8 +11,8 @@ import {
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
 import { map, tap } from 'rxjs';
-import { OrbitControls } from 'three-stdlib';
 import * as THREE from 'three';
+import { OrbitControls } from 'three-stdlib';
 
 export interface NgtSobaOrbitControlsState extends NgtInstanceState<OrbitControls> {
   camera?: THREE.Camera;
@@ -193,7 +193,7 @@ export class NgtSobaOrbitControls extends NgtInstance<OrbitControls, NgtSobaOrbi
     });
   }
 
-  private readonly init = this.effect<{}>(
+  private readonly init = this.effect(
     tap(() => {
       const camera = this.get((s) => s.camera);
       if (camera) {
@@ -215,7 +215,7 @@ export class NgtSobaOrbitControls extends NgtInstance<OrbitControls, NgtSobaOrbi
     )
   );
 
-  private readonly connectDomElement = this.effect<{}>(
+  private readonly connectDomElement = this.effect(
     tapEffect(() => {
       const domElement =
         this.get((s) => s.domElement) ||
@@ -230,7 +230,7 @@ export class NgtSobaOrbitControls extends NgtInstance<OrbitControls, NgtSobaOrbi
     })
   );
 
-  private readonly setEvents = this.effect<{}>(
+  private readonly setEvents = this.effect(
     tapEffect(() => {
       const { invalidate, performance } = this.store.get();
       const regress = this.get((s) => s.regress);
@@ -272,7 +272,7 @@ export class NgtSobaOrbitControls extends NgtInstance<OrbitControls, NgtSobaOrbi
     })
   );
 
-  private readonly setDefaultControls = this.effect<{}>(
+  private readonly setDefaultControls = this.effect(
     tapEffect(() => {
       const makeDefault = this.get((s) => s.makeDefault);
       if (makeDefault) {

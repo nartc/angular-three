@@ -296,7 +296,7 @@ export abstract class NgtCommonMaterial<
     });
   }
 
-  private readonly init = this.effect<{}>(
+  private readonly init = this.effect(
     tapEffect(() => {
       const material = this.prepareInstance(new this.materialType());
       return () => {

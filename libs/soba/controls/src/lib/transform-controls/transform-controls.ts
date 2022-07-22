@@ -26,8 +26,8 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
-import { TransformControls } from 'three-stdlib';
 import * as THREE from 'three';
+import { TransformControls } from 'three-stdlib';
 
 type ControlsProto = {
   enabled: boolean;
@@ -184,7 +184,7 @@ export class NgtSobaTransformControls extends NgtObjectInputs<TransformControls,
     });
   }
 
-  private readonly init = this.effect<{}>(
+  private readonly init = this.effect(
     tap(() => {
       this.set((state) => ({
         camera: state.camera ?? this.store.get((s) => s.camera),
@@ -197,7 +197,7 @@ export class NgtSobaTransformControls extends NgtObjectInputs<TransformControls,
     })
   );
 
-  private readonly attachObject = this.effect<{}>(
+  private readonly attachObject = this.effect(
     pipe(
       observeOn(animationFrameScheduler),
       tapEffect(() => {
@@ -223,7 +223,7 @@ export class NgtSobaTransformControls extends NgtObjectInputs<TransformControls,
     )
   );
 
-  private readonly setDraggingEvent = this.effect<{}>(
+  private readonly setDraggingEvent = this.effect(
     tapEffect(() => {
       const defaultControls = this.store.get((s) => s.controls) as unknown as ControlsProto;
       if (defaultControls) {
@@ -235,7 +235,7 @@ export class NgtSobaTransformControls extends NgtObjectInputs<TransformControls,
     })
   );
 
-  private readonly setEvents = this.effect<{}>(
+  private readonly setEvents = this.effect(
     tapEffect(() => {
       const invalidate = this.store.get((s) => s.invalidate);
       const callback = (event: THREE.Event) => {

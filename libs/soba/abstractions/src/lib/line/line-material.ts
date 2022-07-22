@@ -12,8 +12,8 @@ import {
 import { NgtShaderMaterial } from '@angular-three/core/materials';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { tap } from 'rxjs';
-import { LineMaterial } from 'three-stdlib';
 import * as THREE from 'three';
+import { LineMaterial } from 'three-stdlib';
 
 @Component({
   selector: 'ngt-soba-line-material',
@@ -64,7 +64,7 @@ export class NgtSobaLineMaterial extends NgtShaderMaterial {
     this.select((s) => s['dashed'])
   );
 
-  private readonly setDashed = this.effect<{}>(
+  private readonly setDashed = this.effect(
     tap(() => {
       const { instance: material, dashed } = this.get();
       if (dashed) {

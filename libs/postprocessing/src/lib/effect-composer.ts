@@ -219,7 +219,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
     });
   }
 
-  private readonly init = this.effect<{}>(
+  private readonly init = this.effect(
     tap(() => {
       const { gl, scene: defaultScene, camera: defaultCamera } = this.store.get();
       const {
@@ -274,7 +274,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
     })
   );
 
-  private readonly setSize = this.effect<{}>(
+  private readonly setSize = this.effect(
     tap(() => {
       const composer = this.get((s) => s.instance);
       if (composer.value) {
@@ -284,7 +284,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
     })
   );
 
-  private readonly setBeforeRender = this.effect<{}>(
+  private readonly setBeforeRender = this.effect(
     tapEffect(() => {
       const { renderPriority, enabled, instance: composer, autoClear } = this.get();
       const gl = this.store.get((s) => s.gl);
@@ -301,7 +301,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
     })
   );
 
-  private readonly effectPasses = this.effect<{}>(
+  private readonly effectPasses = this.effect(
     tapEffect(() => {
       let effectPass: EffectPass;
       const defaultCamera = this.store.get((s) => s.camera);

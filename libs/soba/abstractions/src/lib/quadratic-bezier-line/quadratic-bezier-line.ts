@@ -102,7 +102,7 @@ export class NgtSobaQuadraticBezierLine extends NgtSobaLine {
     this.setLineSetPoints(this.instance);
   }
 
-  private readonly setLineSetPoints = this.effect<{}>(
+  private readonly setLineSetPoints = this.effect(
     tap(() => {
       const lineRef = this.get((s) => s.instance);
       if (lineRef.value) {

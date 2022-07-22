@@ -64,7 +64,7 @@ export class NgtSobaFlyControls extends NgtInstance<FlyControls, NgtSobaFlyContr
     });
   }
 
-  private readonly init = this.effect<{}>(
+  private readonly init = this.effect(
     tap(() => {
       const camera = this.store.get((s) => s.camera);
       const domElement = this.get((s) => s.domElement) as HTMLElement;
@@ -72,7 +72,7 @@ export class NgtSobaFlyControls extends NgtInstance<FlyControls, NgtSobaFlyContr
     })
   );
 
-  private readonly setup = this.effect<{}>(
+  private readonly setup = this.effect(
     tapEffect(() => {
       const unregister = this.store.registerBeforeRender({
         callback: ({ delta }) => {
