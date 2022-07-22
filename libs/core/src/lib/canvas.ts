@@ -29,7 +29,7 @@ import type {
 } from './types';
 import { coerceBooleanProperty } from './utils/coercion';
 import { createLoop } from './utils/loop';
-import { makeVector3 } from './utils/make';
+import { make } from './utils/make';
 
 const rootStateMap = new Map<Element, () => NgtState>();
 const { invalidate, advance } = createLoop(rootStateMap);
@@ -111,7 +111,7 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
   }
 
   @Input() set lookAt(lookAt: NgtVector3) {
-    this.store.set({ lookAt: makeVector3(lookAt) });
+    this.store.set({ lookAt: make(THREE.Vector3, lookAt) });
   }
 
   @Input() set scene(sceneOptions: NgtSceneOptions) {

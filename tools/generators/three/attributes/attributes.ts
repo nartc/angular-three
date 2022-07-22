@@ -26,32 +26,26 @@ export const primitiveAttributes = [
   {
     name: THREE.Color.name,
     inputType: 'NgtColor',
-    makeFunction: 'makeColor',
   },
   {
     name: THREE.Fog.name,
     inputType: 'NgtFog',
-    makeFunction: 'make',
   },
   {
     name: THREE.FogExp2.name,
     inputType: 'NgtFogExp2',
-    makeFunction: 'make',
   },
   {
     name: THREE.Vector2.name,
     inputType: 'NgtVector2',
-    makeFunction: 'makeVector2',
   },
   {
     name: THREE.Vector3.name,
     inputType: 'NgtVector3',
-    makeFunction: 'makeVector3',
   },
   {
     name: THREE.Vector4.name,
     inputType: 'NgtVector4',
-    makeFunction: 'makeVector4',
   },
   {
     name: THREE.Matrix3.name,
@@ -61,7 +55,6 @@ export const primitiveAttributes = [
   {
     name: THREE.Matrix4.name,
     inputType: 'NgtMatrix4',
-    makeFunction: 'make',
   },
 ];
 

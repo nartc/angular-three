@@ -1,6 +1,6 @@
 // GENERATED
 import {
-    <%= makeFunction %>,
+    make,
     NgtInstance,
     provideInstanceRef,
     <%= inputType %>
@@ -29,7 +29,7 @@ export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
             }
 
             this.initSubscription = this.store.onReady(() => {
-                   this.prepareInstance(<%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>))
+                   this.prepareInstance(make(THREE.<%= name %>, <%= propertyName %>))
                    return () => {
                        this.initSubscription?.unsubscribe();
                    };

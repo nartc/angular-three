@@ -22,7 +22,7 @@ import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { createEvents } from '../utils/events';
 import { prepare } from '../utils/instance';
 import { is } from '../utils/is';
-import { makeDpr, makeId, makeVector3 } from '../utils/make';
+import { make, makeDpr, makeId } from '../utils/make';
 import { NgtComponentStore, tapEffect } from './component-store';
 
 type NgtAnimationRecordWithUuid = NgtBeforeRenderRecord & { uuid: string };
@@ -359,7 +359,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
 
           // Always look at center by default
           if (!state.cameraOptions?.rotation) {
-            camera.lookAt(state.lookAt ?? makeVector3());
+            camera.lookAt(state.lookAt ?? make(THREE.Vector3));
           }
 
           // Update projection matrix after applying props
@@ -434,7 +434,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
       // Set color management
       // Safely set color management if available.
       // Avoid accessing THREE.ColorManagement to play nice with older versions
-      if ('ColorManagement' in THREE) {
+      if (is.supportColorManagement()) {
         (THREE as any)['ColorManagement'].legacyMode = state.legacy;
       }
       const outputEncoding = state.linear ? THREE.LinearEncoding : THREE.sRGBEncoding;

@@ -2,8 +2,7 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  makeColor,
-  makeVector2,
+  make,
   NgtObjectInputs,
   NgtObjectInputsState,
   NgtObjectPassThrough,
@@ -70,8 +69,8 @@ export abstract class NgtSobaCommonLine extends NgtObjectInputs<Line2, NgtSobaCo
       points: state.points ?? [],
       vertexColors: state.vertexColors ?? [],
       dashed: state.dashed ?? false,
-      color: state.color ?? makeColor('black'),
-      resolution: state.resolution ?? makeVector2([512, 512]),
+      color: state.color ?? make(THREE.Color, 'black'),
+      resolution: state.resolution ?? make(THREE.Vector2, [512, 512]),
     }));
   }
 }

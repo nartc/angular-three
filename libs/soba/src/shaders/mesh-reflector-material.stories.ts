@@ -1,4 +1,4 @@
-import { makeVector2, NgtRadianPipeModule, NgtRenderState, NgtVector2 } from '@angular-three/core';
+import { make, NgtRadianPipeModule, NgtRenderState, NgtVector2 } from '@angular-three/core';
 import {
   NgtBoxGeometryModule,
   NgtPlaneGeometryModule,
@@ -15,8 +15,8 @@ import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/co
 import { FormsModule } from '@angular/forms';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { tap } from 'rxjs';
-import { Mesh } from 'three';
 import * as THREE from 'three';
+import { Mesh } from 'three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 /**
@@ -80,7 +80,7 @@ class ReflectorStory {
   @Input() reflectorOffset?: number;
 
   @Input() set normalScale(normalScale: NgtVector2) {
-    this._normalScale = makeVector2(normalScale);
+    this._normalScale = make(THREE.Vector2, normalScale);
   }
   get normalScale(): THREE.Vector2 {
     return this._normalScale;

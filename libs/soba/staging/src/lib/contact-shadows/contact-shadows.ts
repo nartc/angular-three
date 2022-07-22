@@ -3,8 +3,7 @@ import {
   coerceBooleanProperty,
   coerceNumberProperty,
   is,
-  makeColor,
-  makeVector3,
+  make,
   NgtObjectInputs,
   NgtObjectInputsState,
   NgtObjectPassThrough,
@@ -173,7 +172,7 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
     this.set((state) => {
       return {
         shadowCameraRef: new Ref(),
-        scale: is.equ(state.scale.toArray(), makeVector3(1).toArray()) ? makeVector3(10) : state.scale,
+        scale: is.equ(state.scale.toArray(), make(THREE.Vector3, 1).toArray()) ? make(THREE.Vector3, 10) : state.scale,
         frames: state.frames ?? Infinity,
         opacity: state.opacity ?? 1,
         width: state.width ?? 1,
@@ -182,7 +181,7 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
         far: state.far ?? 10,
         resolution: state.resolution ?? 512,
         smooth: state.smooth ?? true,
-        color: is.equ(state.color.toArray(), makeColor().toArray()) ? makeColor('#000000') : state.color,
+        color: is.equ(state.color.toArray(), make(THREE.Color).toArray()) ? make(THREE.Color, '#000000') : state.color,
         depthWrite: state.depthWrite ?? false,
       };
     });

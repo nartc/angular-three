@@ -1,52 +1,14 @@
 import * as THREE from 'three';
-import type { AnyConstructor, NgtColor, NgtDpr, NgtIntersection, NgtVector2, NgtVector3, NgtVector4 } from '../types';
+import type { AnyConstructor, NgtDpr, NgtIntersection } from '../types';
 import { is } from './is';
 
-export function makeVector2(input?: NgtVector2): THREE.Vector2 {
-  if (!input) return new THREE.Vector2();
-
-  if (input instanceof THREE.Vector2) {
-    return input;
-  }
-
-  if (is.arr(input)) {
-    return new THREE.Vector2(...input);
-  }
-
-  return new THREE.Vector2(input, input);
-}
-
-export function makeVector3(input?: NgtVector3): THREE.Vector3 {
-  if (!input) return new THREE.Vector3();
-
-  if (input instanceof THREE.Vector3) {
-    return input;
-  }
-
-  if (is.arr(input)) {
-    return new THREE.Vector3(...input);
-  }
-
-  return new THREE.Vector3(input, input, input);
-}
-
-export function makeVector4(input?: NgtVector4): THREE.Vector4 {
-  if (!input) return new THREE.Vector4();
-
-  if (input instanceof THREE.Vector4) {
-    return input;
-  }
-
-  if (is.arr(input)) {
-    return new THREE.Vector4(...input);
-  }
-
-  return new THREE.Vector4(input, input, input, input);
-}
-
-export function make<TType extends AnyConstructor<any>>(
+export function make<TType extends AnyConstructor>(
   type: TType,
-  input?: InstanceType<TType> | Parameters<typeof type.prototype['set']> | ConstructorParameters<TType>
+  input?:
+    | InstanceType<TType>
+    | Parameters<typeof type.prototype['set']>
+    | Parameters<typeof type.prototype['setScalar']>[0]
+    | ConstructorParameters<TType>
 ): InstanceType<TType> {
   if (!input) return new type();
 
@@ -54,20 +16,11 @@ export function make<TType extends AnyConstructor<any>>(
     return input as InstanceType<TType>;
   }
 
-  return new type(...(input as Parameters<typeof type.prototype['set']>));
-}
-
-export function makeColor(color?: NgtColor): THREE.Color {
-  if (!color) return new THREE.Color();
-  if (color instanceof THREE.Color) {
-    return color;
+  if (!is.arr(input)) {
+    input = typeof input === 'number' ? [input, input, input] : [input];
   }
 
-  if (is.arr(color)) {
-    return new THREE.Color(...color);
-  }
-
-  return new THREE.Color(color);
+  return new type(...(input as any[]));
 }
 
 export function makeDpr(dpr: NgtDpr) {

@@ -3,7 +3,7 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  makeVector3,
+  make,
   NGT_OBJECT_HOST_REF,
   NGT_OBJECT_REF,
   NgtEvent,
@@ -41,7 +41,7 @@ import { takeUntil } from 'rxjs';
 import * as THREE from 'three';
 import { NgtSobaGizmoHelper } from './gizmo-helper';
 
-const makePositionVector = (xyz: number[]) => makeVector3(xyz as NgtVector3).multiplyScalar(0.38);
+const makePositionVector = (xyz: number[]) => make(THREE.Vector3, xyz as NgtVector3).multiplyScalar(0.38);
 
 const colors = { bg: '#f0f0f0', hover: '#999', text: 'black', stroke: 'black' };
 const defaultFaces = ['Right', 'Left', 'Top', 'Bottom', 'Front', 'Back'];
@@ -398,7 +398,7 @@ export class NgtSobaGizmoEdgeCube extends NgtSobaGizmoViewCubeGeneric<THREE.Mesh
       this.click.emit($event);
     } else {
       $event.stopPropagation();
-      this.gizmoHelper.tweenCamera(makeVector3(this.position));
+      this.gizmoHelper.tweenCamera(make(THREE.Vector3, this.position));
     }
   }
 

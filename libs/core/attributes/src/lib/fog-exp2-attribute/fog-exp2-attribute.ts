@@ -1,5 +1,5 @@
 // GENERATED
-import { make, NgtFogExp2, NgtInstance, provideInstanceRef } from '@angular-three/core';
+import { make, NgtInstance, provideInstanceRef, NgtFogExp2 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';

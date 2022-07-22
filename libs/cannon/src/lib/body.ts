@@ -3,7 +3,6 @@ import {
   checkNeedsUpdate,
   is,
   make,
-  makeVector3,
   NgtComponentStore,
   NgtQuadruple,
   NgtStore,
@@ -98,7 +97,7 @@ function applyBodyProps<TBodyProps extends BodyProps, TObject extends THREE.Obje
 ) {
   const objectProps: UnknownRecord = {};
   if (props.position) {
-    objectProps['position'] = makeVector3(props.position);
+    objectProps['position'] = make(THREE.Vector3, props.position);
   }
 
   if (props.quaternion) {

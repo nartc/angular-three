@@ -1,18 +1,18 @@
 import * as THREE from 'three';
-import type { AnyConstructor, NgtInstanceInternal, NgtUnknownInstance, UnknownRecord } from '../types';
+import type { AnyConstructor, AnyFunction, NgtInstanceInternal, NgtUnknownInstance, UnknownRecord } from '../types';
 import { checkNeedsUpdate } from './check-needs-update';
+import { getInstanceInternal } from './instance';
 import { is } from './is';
 
 export function applyProps<TInstance extends object = UnknownRecord>(instance: TInstance, props: UnknownRecord): void {
   // props is empty
   if (!Object.keys(props).length) return;
 
-  const instanceInternal: NgtInstanceInternal = (instance as NgtUnknownInstance).__ngt__ || {};
-  const root = instanceInternal.root;
-  const rootState = root?.() ?? {};
+  const instanceInternal: NgtInstanceInternal = getInstanceInternal(instance) || ({} as NgtInstanceInternal);
+  const rootState = instanceInternal.root?.() ?? {};
 
   if ('__ngt__' in props) {
-    (instance as NgtUnknownInstance).__ngt__ = (props as any).__ngt__ as NgtInstanceInternal;
+    (instance as NgtUnknownInstance).__ngt__ = getInstanceInternal(props) as NgtInstanceInternal;
   }
 
   /** TODO: check if this is still needed */
@@ -47,22 +47,22 @@ export function applyProps<TInstance extends object = UnknownRecord>(instance: T
     if (target && target['set'] && (target['copy'] || target instanceof THREE.Layers)) {
       // If value is an array
       if (is.arr(prop)) {
-        if (target['fromArray']) (target['fromArray'] as Function)(prop);
-        else (target['set'] as Function)(...prop);
+        if (target['fromArray']) (target['fromArray'] as AnyFunction)(prop);
+        else (target['set'] as AnyFunction)(...prop);
       } else if (
         target['copy'] &&
         prop &&
         (prop as AnyConstructor<unknown>).constructor &&
         target.constructor.name === (prop as AnyConstructor<unknown>).constructor.name
       ) {
-        (target['copy'] as Function)(prop);
+        (target['copy'] as AnyFunction)(prop);
       } // If nothing else fits, just set the single value, ignore undefined
       // https://github.com/pmndrs/react-three-fiber/issues/274
       else if (prop !== undefined) {
         const isColor = target instanceof THREE.Color;
         // Allow setting array scalars
         if (!isColor && target['setScalar']) {
-          (target['setScalar'] as Function)(prop);
+          (target['setScalar'] as AnyFunction)(prop);
         }
         // Layers have no copy function, we must therefore copy the mask property
         else if (target instanceof THREE.Layers && prop instanceof THREE.Layers) {
@@ -70,13 +70,12 @@ export function applyProps<TInstance extends object = UnknownRecord>(instance: T
         }
         // Otherwise just set ...
         else {
-          (target['set'] as Function)(prop);
+          (target['set'] as AnyFunction)(prop);
         }
         // For versions of three which don't support THREE.ColorManagement,
         // Auto-convert sRGB colors
         // https://github.com/pmndrs/react-three-fiber/issues/344
-        const supportsColorManagement = (THREE as any).ColorManagement;
-        if (!supportsColorManagement && !rootState.linear && isColor) {
+        if (!is.supportColorManagement() && !rootState.linear && isColor) {
           target.convertSRGBToLinear();
         }
       }

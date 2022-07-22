@@ -1,6 +1,6 @@
 import {
   coerceNumberProperty,
-  makeColor,
+  make,
   NgtObjectPassThrough,
   NumberInput,
   provideObjectHostRef,
@@ -144,7 +144,7 @@ export class NgtSobaSpotLight extends NgtSpotLight {
       const radiusBottomExplicit = !!state['radiusBottom'];
       return {
         opacity: state['opacity'] ?? 1,
-        color: state['color'] ?? makeColor('white'),
+        color: state['color'] ?? make(THREE.Color, 'white'),
         distance: state['distance'] ?? 5,
         angle,
         attenuation: state['attenuation'] ?? 5,

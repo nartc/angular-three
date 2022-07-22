@@ -16,8 +16,8 @@ export type EquConfig = {
 };
 export type UnknownRecord = Record<string, unknown>;
 export type AnyFunction<TReturn = any> = (...args: any[]) => TReturn;
-export type AnyConstructor<TObject> = new (...args: any[]) => TObject;
-export type AnyAbstractConstructor<TObject> = abstract new (...args: any[]) => TObject;
+export type AnyConstructor<TObject = any> = new (...args: any[]) => TObject;
+export type AnyAbstractConstructor<TObject = any> = abstract new (...args: any[]) => TObject;
 /**
  * If **T** contains a constructor, @see ConstructorParameters must be used, otherwise **T**.
  */

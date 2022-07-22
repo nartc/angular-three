@@ -22,7 +22,7 @@ import type {
 import { applyProps } from '../utils/apply-props';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
 import { is } from '../utils/is';
-import { make, makeColor, makeVector3 } from '../utils/make';
+import { make } from '../utils/make';
 import type { NgtInstanceState } from './instance';
 import { NgtInstance } from './instance';
 
@@ -99,7 +99,7 @@ export abstract class NgtObjectInputs<
     this.set({
       positionExplicit: true,
 
-      position: makeVector3(position),
+      position: make(THREE.Vector3, position),
     } as Partial<TObjectInputsState>);
   }
   get position(): THREE.Vector3 {
@@ -134,7 +134,7 @@ export abstract class NgtObjectInputs<
   @Input() set scale(scale: NgtVector3 | undefined) {
     this.set({
       scaleExplicit: true,
-      scale: makeVector3(scale),
+      scale: make(THREE.Vector3, scale),
     } as Partial<TObjectInputsState>);
   }
 
@@ -144,7 +144,7 @@ export abstract class NgtObjectInputs<
   @Input() set color(color: NgtColor | undefined) {
     this.set({
       colorExplicit: true,
-      color: makeColor(color),
+      color: make(THREE.Color, color),
     } as Partial<TObjectInputsState>);
   }
 

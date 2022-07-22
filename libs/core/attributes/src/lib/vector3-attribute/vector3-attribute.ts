@@ -1,5 +1,5 @@
 // GENERATED
-import { makeVector3, NgtInstance, NgtVector3, provideInstanceRef } from '@angular-three/core';
+import { make, NgtInstance, provideInstanceRef, NgtVector3 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';
@@ -19,7 +19,7 @@ export class NgtVector3Attribute extends NgtInstance<THREE.Vector3> {
       }
 
       this.initSubscription = this.store.onReady(() => {
-        this.prepareInstance(makeVector3(vector3));
+        this.prepareInstance(make(THREE.Vector3, vector3));
         return () => {
           this.initSubscription?.unsubscribe();
         };

@@ -2,7 +2,6 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   make,
-  makeVector3,
   NgtObjectInputs,
   NgtObjectInputsState,
   NgtObjectPassThrough,
@@ -60,8 +59,8 @@ const turnRate = 2 * Math.PI; // turn rate in angles per second
 const dummy = new THREE.Object3D();
 const matrix = make(THREE.Matrix4);
 const [q1, q2] = [make(THREE.Quaternion), make(THREE.Quaternion)];
-const target = makeVector3();
-const targetPosition = makeVector3();
+const target = make(THREE.Vector3);
+const targetPosition = make(THREE.Vector3);
 
 @Component({
   selector: 'ngt-soba-gizmo-helper',
@@ -144,12 +143,12 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
       const x = alignment.endsWith('-left') ? -size.width / 2 + marginX : size.width / 2 - marginX;
       const y = alignment.startsWith('top-') ? size.height / 2 - marginY : -size.height / 2 + marginY;
 
-      return makeVector3([x, y, 0]);
+      return make(THREE.Vector3, [x, y, 0]);
     }
   );
 
   private animating = false;
-  private focusPoint = makeVector3([0, 0, 0]);
+  private focusPoint = make(THREE.Vector3, [0, 0, 0]);
   private radius = 0;
 
   protected override preInit() {

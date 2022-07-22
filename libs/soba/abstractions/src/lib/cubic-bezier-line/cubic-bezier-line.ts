@@ -1,7 +1,7 @@
 import {
   coerceNumberProperty,
   is,
-  makeVector3,
+  make,
   NgtObjectPassThrough,
   NgtTriple,
   NumberInput,
@@ -71,10 +71,10 @@ export class NgtSobaCubicBezierLine extends NgtSobaLine {
     this.select((s) => s['midB']),
     this.select((s) => s['segments']),
     (start, end, midA, midB, segments) => {
-      const startV = is.vector3(start) ? start : makeVector3(start);
-      const endV = is.vector3(end) ? end : makeVector3(end);
-      const midAV = is.vector3(midA) ? midA : makeVector3(midA);
-      const midBV = is.vector3(midB) ? midB : makeVector3(midB);
+      const startV = is.vector3(start) ? start : make(THREE.Vector3, start);
+      const endV = is.vector3(end) ? end : make(THREE.Vector3, end);
+      const midAV = is.vector3(midA) ? midA : make(THREE.Vector3, midA);
+      const midBV = is.vector3(midB) ? midB : make(THREE.Vector3, midB);
 
       return new THREE.CubicBezierCurve3(startV, midAV, midBV, endV).getPoints(segments);
     }

@@ -1,8 +1,8 @@
-import { make, makeVector3, NgtEuler, NgtTriple, NgtVector3 } from '@angular-three/core';
+import { make, NgtEuler, NgtTriple, NgtVector3 } from '@angular-three/core';
 import { NgtGroup } from '@angular-three/core/group';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import { Font, FontLoader, TextGeometry } from 'three-stdlib';
 import * as THREE from 'three';
+import { Font, FontLoader, TextGeometry } from 'three-stdlib';
 
 /**
  * adapted from three.js example https://threejs.org/examples/?q=text#webgl_geometry_text
@@ -152,7 +152,7 @@ export class NgtSobaText3d {
 
   private _position = new THREE.Vector3();
   @Input() set position(position: NgtVector3 | undefined) {
-    this._position = makeVector3(position);
+    this._position = make(THREE.Vector3, position);
   }
   get position(): THREE.Vector3 {
     return this._position;
@@ -168,7 +168,7 @@ export class NgtSobaText3d {
 
   private _scale = new THREE.Vector3(1, 1, 1);
   @Input() set scale(scale: NgtVector3 | undefined) {
-    this._scale = makeVector3(scale);
+    this._scale = make(THREE.Vector3, scale);
   }
   get scale(): THREE.Vector3 {
     return this._scale;

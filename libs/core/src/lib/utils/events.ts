@@ -8,7 +8,7 @@ import type {
   NgtPointerCaptureTarget,
   NgtState,
 } from '../types';
-import { getInstanceRootState } from './instance';
+import { getInstanceInternal } from './instance';
 import { makeId } from './make';
 
 /**
@@ -63,8 +63,7 @@ export function createEvents(state: () => NgtState) {
   function filterPointerEvents(objects: THREE.Object3D[]) {
     return objects.filter((obj) =>
       ['move', 'over', 'enter', 'out', 'leave'].some(
-        (name) =>
-          ((obj as any).__ngt__ as NgtInstanceInternal)?.handlers?.[('pointer' + name) as keyof NgtEventHandlers]
+        (name) => getInstanceInternal(obj)?.handlers?.[('pointer' + name) as keyof NgtEventHandlers]
       )
     );
   }
@@ -77,9 +76,9 @@ export function createEvents(state: () => NgtState) {
     const eventsObjects = filter ? filter(rootState.internal.interaction) : rootState.internal.interaction;
     // Reset all raycaster cameras to undefined
     eventsObjects.forEach((obj) => {
-      const state = getInstanceRootState(obj);
-      if (state) {
-        state.raycaster.camera = undefined!;
+      const instanceRootState = getInstanceInternal(obj)?.root();
+      if (instanceRootState) {
+        instanceRootState.raycaster.camera = undefined!;
       }
     });
 
@@ -93,24 +92,25 @@ export function createEvents(state: () => NgtState) {
       // Intersect objects
       // @ts-ignore
       .flatMap((obj) => {
-        const state = getInstanceRootState(obj);
+        const instanceRootState = getInstanceInternal(obj)?.root();
         // Skip event handling when noEvents is set, or when the raycasters camera is null
-        if (!state || !state.events.enabled || state.raycaster.camera === null) return [];
+        if (!instanceRootState || !instanceRootState.events.enabled || instanceRootState.raycaster.camera === null)
+          return [];
 
         // When the camera is undefined we have to call the event layers update function
-        if (state.raycaster.camera === undefined) {
-          state.events.compute?.(event, state, state.previousState);
+        if (instanceRootState.raycaster.camera === undefined) {
+          instanceRootState.events.compute?.(event, instanceRootState, instanceRootState.previousState);
           // If the camera is still undefined we have to skip this layer entirely
-          if (state.raycaster.camera === undefined) state.raycaster.camera = null!;
+          if (instanceRootState.raycaster.camera === undefined) instanceRootState.raycaster.camera = null!;
         }
 
         // Intersect object by object
-        return state.raycaster.camera ? state.raycaster.intersectObject(obj, true) : [];
+        return instanceRootState.raycaster.camera ? instanceRootState.raycaster.intersectObject(obj, true) : [];
       })
       // Sort by event priority and distance
       .sort((a: any, b: any) => {
-        const aState = getInstanceRootState(a.object);
-        const bState = getInstanceRootState(b.object);
+        const aState = getInstanceInternal(a.object)?.root();
+        const bState = getInstanceInternal(b.object)?.root();
         if (!aState || !bState) return 0;
         return bState.events.priority - aState.events.priority || a.distance - b.distance;
       })
@@ -131,8 +131,7 @@ export function createEvents(state: () => NgtState) {
       let eventObject: THREE.Object3D | null = hit.object;
       // Bubble event up
       while (eventObject) {
-        if (((eventObject as any).__ngt__ as NgtInstanceInternal)?.eventCount)
-          intersections.push({ ...hit, eventObject });
+        if (getInstanceInternal(eventObject)?.eventCount) intersections.push({ ...hit, eventObject });
         eventObject = eventObject.parent;
       }
     }
@@ -273,7 +272,7 @@ export function createEvents(state: () => NgtState) {
         )
       ) {
         const eventObject = hoveredObj.eventObject;
-        const instance = (eventObject as any).__ngt__ as NgtInstanceInternal;
+        const instance = getInstanceInternal(eventObject) as NgtInstanceInternal;
         const handlers = instance?.handlers;
         internal.hovered.delete(makeId(hoveredObj));
         if (instance?.eventCount) {
@@ -338,7 +337,7 @@ export function createEvents(state: () => NgtState) {
 
       handleIntersects(hits, event, delta, (data: NgtEvent<NgtDomEvent>) => {
         const eventObject = data.eventObject;
-        const instance = (eventObject as any).__ngt__ as NgtInstanceInternal;
+        const instance = getInstanceInternal(eventObject) as NgtInstanceInternal;
         const handlers = instance?.handlers;
         // Check presence of handlers
         if (!instance?.eventCount) return;
@@ -391,9 +390,7 @@ export function createEvents(state: () => NgtState) {
   };
 
   function objectPointerMissed(event: MouseEvent, objects: THREE.Object3D[]) {
-    objects.forEach((object: THREE.Object3D) =>
-      ((object as any).__ngt__ as NgtInstanceInternal)?.handlers?.pointermissed?.(event)
-    );
+    objects.forEach((object: THREE.Object3D) => getInstanceInternal(object)?.handlers?.pointermissed?.(event));
   }
 
   return { handlePointer };

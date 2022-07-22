@@ -17,6 +17,7 @@ export const is = {
   ref: (a: unknown): a is Ref => !!a && a instanceof Ref,
   vector3: (a: unknown): a is THREE.Vector3 => !!a && (a as THREE.Vector3).isVector3,
   color: (a: unknown): a is THREE.Color => !!a && (a as THREE.Color).isColor,
+  supportColorManagement: (): boolean => 'ColorManagement' in THREE,
   fun: (a: unknown): a is Function => typeof a === 'function',
   str: (a: unknown): a is string => typeof a === 'string',
   num: (a: unknown): a is number => typeof a === 'number',

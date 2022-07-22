@@ -4,7 +4,7 @@ import {
   checkNeedsUpdate,
   coerceBooleanProperty,
   coerceNumberProperty,
-  makeVector2,
+  make,
   NgtVector2,
   NumberInput,
   provideCommonMaterialRef,
@@ -44,7 +44,7 @@ export class NgtSobaLineMaterial extends NgtShaderMaterial {
   }
 
   @Input() set resolution(resolution: NgtVector2) {
-    this.set({ resolution: makeVector2(resolution) });
+    this.set({ resolution: make(THREE.Vector2, resolution) });
   }
 
   @Input() set color(color: THREE.ColorRepresentation) {
