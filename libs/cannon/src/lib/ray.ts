@@ -28,7 +28,7 @@ export class NgtPhysicRaycast extends NgtComponentStore {
     this.zone.runOutsideAngular(() => {
       const uuid = makeId();
 
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.effect<CannonWorkerAPI>(
           tapEffect((worker) => {
             const events = this.physicsStore.get((s) => s.events);

@@ -58,7 +58,7 @@ export class NgtPhysicRaycastVehicle extends NgtComponentStore {
       const { chassisBody, indexForwardAxis = 2, indexRightAxis = 0, indexUpAxis = 1, wheelInfos, wheels } = fn();
       const physicsStore = this.physicsStore;
 
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.effect<[CannonWorkerAPI, THREE.Object3D, THREE.Object3D, THREE.Object3D[]]>(
           tapEffect(() => {
             const worker = physicsStore.get((s) => s.worker);

@@ -1,5 +1,5 @@
 // GENERATED
-import { make, NgtInstance, provideInstanceRef, NgtFog } from '@angular-three/core';
+import { make, NgtFog, NgtInstance, provideInstanceRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';
@@ -18,16 +18,12 @@ export class NgtFogAttribute extends NgtInstance<THREE.Fog> {
         this.initSubscription.unsubscribe();
       }
 
-      this.initSubscription = this.onCanvasReady(
-        this.store.ready$,
-        () => {
-          this.prepareInstance(make(THREE.Fog, fog));
-          return () => {
-            this.initSubscription?.unsubscribe();
-          };
-        },
-        true
-      );
+      this.initSubscription = this.store.onReady(() => {
+        this.prepareInstance(make(THREE.Fog, fog));
+        return () => {
+          this.initSubscription?.unsubscribe();
+        };
+      });
     });
   }
 

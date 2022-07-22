@@ -197,7 +197,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
 
   ngAfterViewInit() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         const effectPassesParams$ = this.select(
           this.select((s) => s.camera),
           this.select((s) => s.normalPass),

@@ -56,7 +56,7 @@ export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.setDefaultCamera(
           this.select(
             this.instance$,

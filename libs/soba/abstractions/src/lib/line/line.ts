@@ -160,7 +160,7 @@ export class NgtSobaLine extends NgtSobaCommonLine {
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         if (this.shouldPassThroughRef) {
           this.init();
           this.computeLineDistances(this.computeLineDistancesParams$);

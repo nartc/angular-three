@@ -98,7 +98,7 @@ export class NgtSobaFirstPersonControls extends NgtInstance<FirstPersonControls,
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.init(this.store.select((s) => s.camera));
         this.setBeforeRender(this.instance$);
       });

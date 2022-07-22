@@ -1,5 +1,5 @@
 // GENERATED
-import { makeColor, NgtInstance, provideInstanceRef, NgtColor } from '@angular-three/core';
+import { makeColor, NgtColor, NgtInstance, provideInstanceRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';
@@ -18,16 +18,12 @@ export class NgtColorAttribute extends NgtInstance<THREE.Color> {
         this.initSubscription.unsubscribe();
       }
 
-      this.initSubscription = this.onCanvasReady(
-        this.store.ready$,
-        () => {
-          this.prepareInstance(makeColor(color));
-          return () => {
-            this.initSubscription?.unsubscribe();
-          };
-        },
-        true
-      );
+      this.initSubscription = this.store.onReady(() => {
+        this.prepareInstance(makeColor(color));
+        return () => {
+          this.initSubscription?.unsubscribe();
+        };
+      });
     });
   }
 

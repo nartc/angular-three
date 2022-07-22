@@ -168,7 +168,7 @@ export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizm
   override ngOnInit(): void {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.switchSceneBackground();
         this.setBeforeRender();
         this.setRaycast(this.get((s) => s.virtualCamera).pipe(filter((camera) => !!camera)));

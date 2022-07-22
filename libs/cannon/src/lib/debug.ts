@@ -91,7 +91,7 @@ export class NgtCannonDebug extends NgtInstance<THREE.Scene, NgtCannonDebugState
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.prepareInstance(new THREE.Scene());
         this.set((state) => ({
           cannonDebugger: state.impl(this.instance.value, { bodies: state.bodies } as World, {

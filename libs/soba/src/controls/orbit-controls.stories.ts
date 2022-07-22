@@ -53,7 +53,7 @@ class CustomCameraStory extends NgtComponentStore implements OnInit {
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.setBeforeRender();
       });
     });

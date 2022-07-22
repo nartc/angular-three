@@ -44,7 +44,7 @@ export class NgtSobaPerspectiveCamera extends NgtPerspectiveCamera {
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.setDefaultCamera(
           this.select(
             this.instance$,

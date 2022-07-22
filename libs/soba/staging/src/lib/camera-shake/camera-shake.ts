@@ -96,7 +96,7 @@ export class NgtSobaCameraShake extends NgtInstance<{}, NgtSobaCameraShakeState>
   override ngOnInit(): void {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         const camera = this.store.get((s) => s.camera);
         this.get((s) => s.initialRotation).set(camera.rotation.clone());
 

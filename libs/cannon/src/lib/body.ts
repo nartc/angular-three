@@ -254,7 +254,7 @@ export class NgtPhysicBody extends NgtComponentStore {
 
       const physicsStore = this.physicsStore;
 
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.effect<[CannonWorkerAPI, THREE.Object3D]>(
           tapEffect(() => {
             const { worker, refs, events } = physicsStore.get();

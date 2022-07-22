@@ -28,16 +28,12 @@ export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
                 this.initSubscription.unsubscribe();
             }
 
-            this.initSubscription = this.onCanvasReady(
-                this.store.ready$,
-                () => {
-                    this.prepareInstance(<%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>))
-                    return () => {
-                        this.initSubscription?.unsubscribe();
-                    };
-                },
-                true
-            );
+            this.initSubscription = this.store.onReady(() => {
+                   this.prepareInstance(<%= makeFunction %>(<% if (makeFunction === 'make') { %>THREE.<%= name %>, <%= propertyName %><% } else { %><%= propertyName %><% }%>))
+                   return () => {
+                       this.initSubscription?.unsubscribe();
+                   };
+               });
         });
     }
 

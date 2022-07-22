@@ -339,7 +339,7 @@ export abstract class NgtObject<
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         if (this.preObjectInit) {
           this.preObjectInit(() => this.init(this.instanceArgs$));
         } else {

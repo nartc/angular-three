@@ -158,7 +158,7 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
 
   override ngOnInit() {
     super.ngOnInit();
-    this.onCanvasReady(this.store.ready$, () => {
+    this.store.onReady(() => {
       this.init(this.instanceArgs$);
     });
   }

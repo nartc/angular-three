@@ -13,7 +13,7 @@ export class NgtSobaAdaptiveEvents extends NgtComponentStore implements OnInit {
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.reset();
         this.updateEvents(this.store.select((s) => s.performance.current));
       });

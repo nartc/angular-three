@@ -48,7 +48,7 @@ export class NgtSobaPreload extends NgtComponentStore<NgtSobaPreloadState> imple
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         const { all, scene, camera, gl } = this.precompileParams;
         const invisible: THREE.Object3D[] = [];
 

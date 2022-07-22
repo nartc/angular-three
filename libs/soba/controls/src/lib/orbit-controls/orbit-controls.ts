@@ -169,7 +169,7 @@ export class NgtSobaOrbitControls extends NgtInstance<OrbitControls, NgtSobaOrbi
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         if (!this.get((s) => s.camera)) {
           this.set(this.store.select((s) => s.camera).pipe(map((camera) => ({ camera }))));
         }

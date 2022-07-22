@@ -194,15 +194,6 @@ export abstract class NgtComponentStore<TState extends object = any> implements 
     }) as unknown as TReturnType;
   }
 
-  onCanvasReady(ready$: Observable<boolean>, callback: () => void, useEffect = false): Subscription {
-    const operator = useEffect ? tapEffect : tap;
-    return this.effect<boolean>(operator(() => callback()))(ready$);
-  }
-
-  subscribeTo<TValue>(obs: Observable<TValue>): Subscription {
-    return this.effect<TValue>(($) => $)(obs) as Subscription;
-  }
-
   private updateState<
     // Allow to force-provide the type
     TProvidedType = void,

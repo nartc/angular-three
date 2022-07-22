@@ -76,15 +76,12 @@ export class Pointer extends NgtComponentStore implements OnInit {
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(
-        this.store.ready$,
-        () =>
-          this.store.registerBeforeRender({
-            callback: ({ pointer, viewport }) => {
-              this.pointerRef.api.position.set((pointer.x * viewport.width) / 2, (pointer.y * viewport.height) / 2, 0);
-            },
-          }),
-        true
+      this.store.onReady(() =>
+        this.store.registerBeforeRender({
+          callback: ({ pointer, viewport }) => {
+            this.pointerRef.api.position.set((pointer.x * viewport.width) / 2, (pointer.y * viewport.height) / 2, 0);
+          },
+        })
       );
     });
   }

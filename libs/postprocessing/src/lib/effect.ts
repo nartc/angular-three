@@ -95,7 +95,7 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.init(
           this.select(
             this.optionsFieldsToOptions(this.effectOptionsFields, true),

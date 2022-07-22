@@ -28,9 +28,9 @@ import { ChangeDetectionStrategy, Component, Injectable, Input, NgModule, NgZone
 import { RouterModule } from '@angular/router';
 import { BlendFunction, KernelSize, SSAOEffect } from 'postprocessing';
 import { Observable } from 'rxjs';
+import * as THREE from 'three';
 // @ts-ignore
 import { FlakesTexture, GLTF, RectAreaLightUniformsLib } from 'three-stdlib';
-import * as THREE from 'three';
 
 RectAreaLightUniformsLib.init();
 THREE.Vector2.prototype.equals = function (v, epsilon = 0.001) {
@@ -48,23 +48,19 @@ export class LerpedPointer extends NgtComponentStore {
 
   load() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(
-        this.store.ready$,
-        () => {
-          this.pointerRef.set(this.store.get((s) => s.pointer).clone());
-          return this.store.registerBeforeRender({
-            callback: ({ performance, pointer }) => {
-              this.previous.copy(this.pointerRef.value);
-              this.pointerRef.value.lerp(pointer, 0.1);
-              // Regress system when the mouse is moved
-              if (!this.previous.equals(this.pointerRef.value)) {
-                performance.regress();
-              }
-            },
-          });
-        },
-        true
-      );
+      this.store.onReady(() => {
+        this.pointerRef.set(this.store.get((s) => s.pointer).clone());
+        return this.store.registerBeforeRender({
+          callback: ({ performance, pointer }) => {
+            this.previous.copy(this.pointerRef.value);
+            this.pointerRef.value.lerp(pointer, 0.1);
+            // Regress system when the mouse is moved
+            if (!this.previous.equals(this.pointerRef.value)) {
+              performance.regress();
+            }
+          },
+        });
+      });
     });
   }
 }
@@ -262,18 +258,15 @@ export class Effects extends NgtComponentStore implements OnInit {
   }
 
   ngOnInit() {
-    this.onCanvasReady(
-      this.store.ready$,
-      () =>
-        this.store.registerBeforeRender({
-          callback: ({ performance }) => {
-            if (this.ssaoRef.value) {
-              this.ssaoRef.value.blendMode.blendFunction =
-                performance.current! < 1 ? BlendFunction.SKIP : BlendFunction.MULTIPLY;
-            }
-          },
-        }),
-      true
+    this.store.onReady(() =>
+      this.store.registerBeforeRender({
+        callback: ({ performance }) => {
+          if (this.ssaoRef.value) {
+            this.ssaoRef.value.blendMode.blendFunction =
+              performance.current && performance.current < 1 ? BlendFunction.SKIP : BlendFunction.MULTIPLY;
+          }
+        },
+      })
     );
   }
 }

@@ -93,7 +93,7 @@ export class NgtSobaCenter extends NgtObjectInputs<THREE.Group, NgtSobaCenterSta
 
   ngAfterContentInit() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.setPosition(
           this.select(
             this.innerGroup.pipe(filter((group) => !!group)),

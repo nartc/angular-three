@@ -24,7 +24,7 @@ export class NgtSobaAdaptiveDpr extends NgtComponentStore<{ pixelated: boolean }
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.reset();
         this.updateDpr(this.store.select((s) => s.performance.current));
       });

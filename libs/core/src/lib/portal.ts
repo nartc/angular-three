@@ -135,7 +135,7 @@ export class NgtPortal extends NgtInstance<THREE.Scene, NgtPortalState> {
     this.zone.runOutsideAngular(() => {
       // portal initialization does not need to wait for canvas ready
       this.init();
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         // init portal store
         this.initPortalStore();
         this.subscribeToRoot();

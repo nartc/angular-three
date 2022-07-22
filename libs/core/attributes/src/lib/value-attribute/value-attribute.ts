@@ -16,16 +16,12 @@ export class NgtValueAttribute extends NgtInstance<any> {
         this.initSubscription.unsubscribe();
       }
 
-      this.initSubscription = this.onCanvasReady(
-        this.store.ready$,
-        () => {
-          this.prepareInstance(value);
-          return () => {
-            this.initSubscription?.unsubscribe();
-          };
-        },
-        true
-      );
+      this.initSubscription = this.store.onReady(() => {
+        this.prepareInstance(value);
+        return () => {
+          this.initSubscription?.unsubscribe();
+        };
+      });
     });
   }
 

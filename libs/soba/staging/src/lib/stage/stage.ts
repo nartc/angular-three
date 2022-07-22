@@ -16,6 +16,7 @@ import { NgtGroup } from '@angular-three/core/group';
 import { NgtAmbientLight, NgtPointLight, NgtSpotLight } from '@angular-three/core/lights';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
+  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   ContentChild,
@@ -145,7 +146,7 @@ export class NgtSobaStageContent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaStage, (stage) => stage.innerGroup)],
 })
-export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState> implements OnInit {
+export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState> implements OnInit, AfterContentInit {
   get shadows() {
     return this.get((s) => s.shadows);
   }
@@ -261,7 +262,7 @@ export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState
 
   ngAfterContentInit() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.setDimensions(
           this.select(
             this.innerGroup.pipe(filter((group) => !!group)),

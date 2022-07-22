@@ -100,7 +100,7 @@ export class NgtSobaBackdrop extends NgtObjectInputs<THREE.Group, NgtSobaBackdro
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.setup(
           this.select(
             this.select((s) => s.segments),

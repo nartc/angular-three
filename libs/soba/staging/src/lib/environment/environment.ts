@@ -357,26 +357,22 @@ export class NgtSobaEnvironmentResolver extends NgtComponentStore<NgtSobaEnviron
 
     this.set(params$);
 
-    this.useSubscription = this.onCanvasReady(
-      this.store.ready$,
-      () => {
-        this.setTexture(
-          this.select(
-            this.select((s) => s.path),
-            this.select((s) => s.files),
-            this.select((s) => s.preset).pipe(startWithUndefined()),
-            this.select((s) => s.extensions).pipe(startWithUndefined())
-          )
-        );
+    this.useSubscription = this.store.onReady(() => {
+      this.setTexture(
+        this.select(
+          this.select((s) => s.path),
+          this.select((s) => s.files),
+          this.select((s) => s.preset).pipe(startWithUndefined()),
+          this.select((s) => s.extensions).pipe(startWithUndefined())
+        )
+      );
 
-        return () => {
-          if (this.useSubscription) {
-            this.useSubscription.unsubscribe();
-          }
-        };
-      },
-      true
-    );
+      return () => {
+        if (this.useSubscription) {
+          this.useSubscription.unsubscribe();
+        }
+      };
+    });
 
     return this.get((s) => s.textureRef);
   }
@@ -446,7 +442,7 @@ export class NgtSobaEnvironmentMap extends NgtSobaEnvironmentGeneric {
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.setEnvironment(
           this.select(
             this.store.select((s) => s.scene),
@@ -532,7 +528,7 @@ export class NgtSobaEnvironmentCube extends NgtSobaEnvironmentGeneric {
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         const textureRef = this.environmentResolver.use((defaultParams) => {
           return this.select(
             this.select((s) => s.files).pipe(startWith(defaultParams.files)),
@@ -666,7 +662,7 @@ export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.set(
           this.select(
             this.select((s) => s.resolution),
@@ -801,7 +797,7 @@ export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
 
   override ngOnInit() {
     super.ngOnInit();
-    this.onCanvasReady(this.store.ready$, () => {
+    this.store.onReady(() => {
       const textureRef = this.environmentResolver.use((defaultParams) =>
         this.select(
           this.select((s) => s.files).pipe(startWith(defaultParams.files)),

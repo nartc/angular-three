@@ -81,7 +81,7 @@ export abstract class NgtCommonTexture<TTexture extends THREE.Texture = THREE.Te
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.init(this.ctorParams$);
         this.postInit();
       });

@@ -100,23 +100,20 @@ export class NgtSobaFloat extends NgtObjectInputs<THREE.Group, NgtSobaFloatState
   override ngOnInit(): void {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(
-        this.store.ready$,
-        () =>
-          this.store.registerBeforeRender({
-            callback: ({ clock }) => {
-              const { speed, rotationIntensity, floatIntensity } = this.get();
-              const t = this.offset + clock.getElapsedTime();
+      this.store.onReady(() =>
+        this.store.registerBeforeRender({
+          callback: ({ clock }) => {
+            const { speed, rotationIntensity, floatIntensity } = this.get();
+            const t = this.offset + clock.getElapsedTime();
 
-              if (this.instance.value) {
-                this.instance.value.rotation.x = (Math.cos((t / 4) * speed) / 8) * rotationIntensity;
-                this.instance.value.rotation.y = (Math.sin((t / 4) * speed) / 8) * rotationIntensity;
-                this.instance.value.rotation.z = (Math.sin((t / 4) * speed) / 20) * rotationIntensity;
-                this.instance.value.position.y = (Math.sin((t / 4) * speed) / 10) * floatIntensity;
-              }
-            },
-          }),
-        true
+            if (this.instance.value) {
+              this.instance.value.rotation.x = (Math.cos((t / 4) * speed) / 8) * rotationIntensity;
+              this.instance.value.rotation.y = (Math.sin((t / 4) * speed) / 8) * rotationIntensity;
+              this.instance.value.rotation.z = (Math.sin((t / 4) * speed) / 20) * rotationIntensity;
+              this.instance.value.position.y = (Math.sin((t / 4) * speed) / 10) * floatIntensity;
+            }
+          },
+        })
       );
     });
   }

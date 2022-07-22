@@ -187,7 +187,7 @@ export class NgtSobaImage extends NgtObjectInputs<THREE.Mesh, NgtSobaImageState>
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.setTexture(this.select((s) => s.url));
       });
     });

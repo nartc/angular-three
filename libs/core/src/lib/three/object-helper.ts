@@ -42,7 +42,7 @@ export abstract class NgtCommonObjectHelper<TObjectHelper extends THREE.Object3D
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.init(this.instanceArgs$);
         this.postInit();
       });

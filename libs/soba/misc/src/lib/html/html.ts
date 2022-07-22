@@ -367,7 +367,7 @@ export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> 
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.setTarget(
           this.select(
             this.select((s) => s.portal).pipe(startWithUndefined()),

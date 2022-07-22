@@ -45,20 +45,16 @@ export class NgtSobaDepthBuffer extends NgtComponentStore<NgtSobaDepthBufferStat
 
     const depthTextureRef = this.get((s) => s.depthTexture);
 
-    this.useSubscription = this.onCanvasReady(
-      this.store.ready$,
-      () => {
-        this.setDepthConfig(this.select((s) => s.size));
-        this.setDepthFBO(this.select((s) => s.depthConfig));
+    this.useSubscription = this.store.onReady(() => {
+      this.setDepthConfig(this.select((s) => s.size));
+      this.setDepthFBO(this.select((s) => s.depthConfig));
 
-        return () => {
-          if (this.useSubscription) {
-            this.useSubscription.unsubscribe();
-          }
-        };
-      },
-      true
-    );
+      return () => {
+        if (this.useSubscription) {
+          this.useSubscription.unsubscribe();
+        }
+      };
+    });
 
     return depthTextureRef;
   }

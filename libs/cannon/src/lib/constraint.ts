@@ -103,7 +103,7 @@ export class NgtPhysicConstraint extends NgtComponentStore {
       const physicsStore = this.physicsStore;
       const uuid = makeId();
 
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.effect<[CannonWorkerAPI, TObjectA, TObjectB]>(
           tapEffect(([worker, a, b]) => {
             worker.addConstraint({

@@ -79,7 +79,7 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
   }
 
   @Input() set frameloop(frameloop: 'always' | 'demand' | 'never') {
-    this.store.set({ frameloop });
+    this.store.setFrameloop(frameloop);
   }
 
   @Input() set orthographic(orthographic: BooleanInput) {
@@ -89,7 +89,7 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
   }
 
   @Input() set dpr(dpr: NgtDpr) {
-    this.store.set({ dpr });
+    this.store.setDpr(dpr);
   }
 
   @Input() set raycaster(raycaster: Partial<THREE.Raycaster>) {
@@ -166,8 +166,7 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
       rootStateMap.set(this.rendererCanvas.nativeElement, () => this.store.get());
 
       this.store.init(this.rendererCanvas.nativeElement, rootStateMap, invalidate, advance);
-
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         const canvasState = this.store.get();
         this.created.emit(canvasState);
         if (this.initialLog) {

@@ -17,19 +17,15 @@ export abstract class NgtCommonAttribute<
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(
-        this.store.ready$,
-        () => {
-          const initSub = this.init(this.instanceArgs$);
-          this.postInit();
-          return () => {
-            if (initSub && initSub.unsubscribe) {
-              initSub.unsubscribe();
-            }
-          };
-        },
-        true
-      );
+      this.store.onReady(() => {
+        const initSub = this.init(this.instanceArgs$);
+        this.postInit();
+        return () => {
+          if (initSub && initSub.unsubscribe) {
+            initSub.unsubscribe();
+          }
+        };
+      });
     });
   }
 

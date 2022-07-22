@@ -40,7 +40,7 @@ export class NgtPhysicSpring extends NgtComponentStore {
       const physicsStore = this.physicsStore;
       const uuid = makeId();
 
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.effect<[CannonWorkerAPI, THREE.Object3D, THREE.Object3D]>(
           tapEffect(([worker, a, b]) => {
             worker.addSpring({

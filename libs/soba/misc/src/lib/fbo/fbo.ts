@@ -35,7 +35,7 @@ export class NgtSobaFBO extends NgtComponentStore<NgtSobaFBOState> {
     const params = paramsFactory({});
     const params$ = isObservable(params) ? params : of(params);
 
-    this.onCanvasReady(this.store.ready$, () => {
+    this.store.onReady(() => {
       this.setTarget(params$);
       this.setup(
         this.select(

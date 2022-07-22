@@ -29,7 +29,7 @@ export abstract class NgtCommonCurve<
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.init(this.instanceArgs$);
         this.postInit();
       });

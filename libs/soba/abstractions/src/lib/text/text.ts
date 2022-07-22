@@ -214,7 +214,7 @@ export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
         )
       );
     });
-    this.onCanvasReady(this.store.ready$, () => {
+    this.store.onReady(() => {
       this.init();
     });
   }

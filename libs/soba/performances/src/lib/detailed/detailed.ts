@@ -70,7 +70,7 @@ export class NgtSobaDetailed extends NgtObjectInputs<THREE.LOD> implements After
 
   ngAfterContentInit() {
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.addLevels(
           this.select(
             this.select((s) => s['distances']),

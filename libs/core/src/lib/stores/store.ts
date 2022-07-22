@@ -1,21 +1,19 @@
 import { ElementRef, Inject, Injectable, NgZone, Optional, SkipSelf } from '@angular/core';
-import { filter, Observable, tap } from 'rxjs';
+import { filter, Observable, Subscription, tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
 import { WINDOW } from '../di/window';
 import { Ref } from '../ref';
 import { NgtResize, NgtResizeResult } from '../services/resize';
 import type {
+  EquConfig,
   NgtBeforeRenderRecord,
   NgtCamera,
   NgtEvents,
   NgtGLOptions,
-  NgtInternalState,
   NgtPerformanceOptions,
-  NgtSize,
   NgtState,
   NgtUnknownInstance,
-  NgtViewport,
   UnknownRecord,
 } from '../types';
 import { applyProps } from '../utils/apply-props';
@@ -42,36 +40,31 @@ const DOM_EVENTS = {
   lostpointercapture: true,
 } as const;
 
+const shallowLoose = { objects: 'shallow', strict: false } as EquConfig;
+
 @Injectable()
 export class NgtStore extends NgtComponentStore<NgtState> {
-  private readonly pointer = new THREE.Vector2();
-  private readonly position = new THREE.Vector3();
-  private readonly defaultTarget = new THREE.Vector3();
-  private readonly tempTarget = new THREE.Vector3();
+  readonly #pointer = new THREE.Vector2();
+  readonly #position = new THREE.Vector3();
+  readonly #defaultTarget = new THREE.Vector3();
+  readonly #tempTarget = new THREE.Vector3();
 
   readonly ready$ = this.select((s) => s.ready).pipe(filter((ready) => ready));
 
-  readonly camera$ = this.select((s) => s.camera);
-  readonly scene$ = this.select((s) => s.scene);
-  readonly gl$ = this.select((s) => s.gl);
-  readonly raycaster$ = this.select((s) => s.raycaster);
-  readonly active$ = this.select((s) => s.internal.active);
-
-  private allConstructed$ = this.select(
-    this.camera$,
-    this.scene$,
-    this.gl$,
-    this.raycaster$,
-    this.active$,
+  readonly #allConstructed$ = this.select(
+    this.select((s) => s.camera),
+    this.select((s) => s.scene),
+    this.select((s) => s.gl),
+    this.select((s) => s.raycaster),
+    this.select((s) => s.internal.active),
     (camera, scene, gl, raycaster, active) => ({ ready: !!camera && !!gl && !!scene && !!raycaster && active === true })
   );
 
-  private performanceTimeoutId: ReturnType<typeof setTimeout> | undefined = undefined;
+  #performanceTimeoutId: ReturnType<typeof setTimeout> | undefined = undefined;
 
-  private dimensions$ = this.select(
+  readonly #dimensions$ = this.select(
     this.select((s) => s.size),
-    this.select((s) => s.viewport),
-    (size, viewport) => ({ size, viewport })
+    this.select((s) => s.viewport)
   );
 
   constructor(
@@ -94,8 +87,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
       orthographic: false,
       shadows: false,
       controls: null,
-      pointer: this.pointer,
-      mouse: this.pointer,
+      pointer: this.#pointer,
+      mouse: this.#pointer,
       sceneRef: new Ref(),
       cameraRef: new Ref(),
       events: {
@@ -144,14 +137,14 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         factor: 0,
         getCurrentViewport: (
           camera = this.get((s) => s.camera),
-          target: THREE.Vector3 | Parameters<THREE.Vector3['set']> = this.defaultTarget,
+          target: THREE.Vector3 | Parameters<THREE.Vector3['set']> = this.#defaultTarget,
           size = this.get((s) => s.size)
         ) => {
           const { width, height } = size;
           const aspect = width / height;
-          if (target instanceof THREE.Vector3) this.tempTarget.copy(target);
-          else this.tempTarget.set(...target);
-          const distance = camera.getWorldPosition(this.position).distanceTo(this.tempTarget);
+          if (target instanceof THREE.Vector3) this.#tempTarget.copy(target);
+          else this.#tempTarget.set(...target);
+          const distance = camera.getWorldPosition(this.#position).distanceTo(this.#tempTarget);
           if (is.orthographic(camera)) {
             return {
               width: width / camera.zoom,
@@ -179,7 +172,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
           this.zone.runOutsideAngular(() => {
             const performance = this.get((s) => s.performance);
             // Clear timeout
-            if (this.performanceTimeoutId) clearTimeout(this.performanceTimeoutId);
+            if (this.#performanceTimeoutId) clearTimeout(this.#performanceTimeoutId);
             // Set lower bound performance
             if (performance.current !== performance.min) {
               this.set((state) => ({
@@ -190,7 +183,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
               }));
             }
             // Go back to upper bound performance after a while unless something regresses meanwhile
-            this.performanceTimeoutId = setTimeout(
+            this.#performanceTimeoutId = setTimeout(
               () =>
                 this.set((state) => ({
                   performance: {
@@ -210,31 +203,34 @@ export class NgtStore extends NgtComponentStore<NgtState> {
   init(
     canvasElement: HTMLCanvasElement,
     rootStateMap: Map<Element, () => NgtState>,
-    invalidate: (state?: () => NgtState) => void,
+    invalidate: (state?: () => NgtState, frames?: number) => void,
     advance: (timestamp: number, runGlobalCallbacks?: boolean, state?: () => NgtState, frame?: XRFrame) => void
   ) {
-    this.initEvents(canvasElement);
-    this.resize(this.resizeResult$);
-    this.updateDimensions(this.dimensions$);
-    this.initRenderer({ canvasElement, rootStateMap, advance });
-    this.updateSubscribers(
+    this.#initEvents(canvasElement);
+    this.#resize(this.resizeResult$);
+    this.#updateDimensions(this.#dimensions$);
+    this.#initRenderer({ canvasElement, rootStateMap, advance, invalidate });
+    this.#updateSubscribers(
       this.select(
         this.select((s) => s.internal.animations),
-        this.select((s) => s.internal.priority),
-        (animations, priority) => ({ animations, priority })
+        this.select((s) => s.internal.priority)
       )
     );
     this.set((state) => ({
-      invalidate: () => invalidate(() => this.get()),
-      advance: (timestamp, runGlobalCallbacks) => advance(timestamp, runGlobalCallbacks, () => this.get()),
+      invalidate: () => invalidate(this.get.bind(this)),
+      advance: (timestamp, runGlobalCallbacks) => advance(timestamp, runGlobalCallbacks, this.get.bind(this)),
       internal: { ...state.internal, active: true },
     }));
-    this.set(this.allConstructed$);
+    this.set(this.#allConstructed$);
+  }
+
+  onReady(cb: Parameters<typeof tapEffect>[0]): Subscription {
+    return this.effect(tapEffect(cb))(this.ready$);
   }
 
   registerBeforeRender(record: NgtBeforeRenderRecord) {
     const uuid = is.object3d(record.obj) ? record.obj.uuid : is.ref(record.obj) ? record.obj.value.uuid : makeId();
-    this.registerBeforeRenderEffect({ ...record, uuid });
+    this.#registerBeforeRenderEffect({ ...record, uuid });
     return () => {
       this.unregisterBeforeRender(uuid);
     };
@@ -276,23 +272,54 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     }));
   }
 
+  setFrameloop(frameloop: NgtState['frameloop'] = 'always') {
+    const clock = this.get((s) => s.clock);
+
+    // if frameloop === "never" clock.elapsedTime is updated using advance(timestamp)
+    clock.stop();
+    clock.elapsedTime = 0;
+
+    if (frameloop !== 'never') {
+      clock.start();
+      clock.elapsedTime = 0;
+    }
+    this.set({ frameloop });
+  }
+
+  setDpr(dpr: NgtState['dpr']) {
+    const resolved = makeDpr(dpr);
+    this.set(({ viewport }) => ({
+      dpr: resolved,
+      viewport: {
+        ...viewport,
+        dpr: resolved,
+        initialDpr: viewport.initialDpr || resolved,
+      },
+    }));
+  }
+
   readonly startLoop = this.effect<NgtState>(
     tap(({ invalidate }) => {
       invalidate();
     })
   );
 
-  private readonly initRenderer = this.effect<{
+  readonly #initRenderer = this.effect<{
     canvasElement: HTMLCanvasElement;
     rootStateMap: Map<Element, () => NgtState>;
     advance: (timestamp: number, runGlobalCallbacks?: boolean, state?: () => NgtState, frame?: XRFrame) => void;
+    invalidate: (state?: () => NgtState, frames?: number) => void;
   }>(
-    tapEffect(({ canvasElement, rootStateMap, advance }) => {
+    tapEffect(({ canvasElement, rootStateMap, advance, invalidate }) => {
       const state = this.get();
 
       // Scene
-      const scene = prepare(new THREE.Scene(), () => this.get(), this.parentStore?.get((s) => s.sceneRef) || null);
-      applyProps(scene, state.sceneOptions as UnknownRecord);
+      const scene = prepare(
+        new THREE.Scene(),
+        () => this.get(),
+        this.parentStore?.get((s) => s.sceneRef)
+      );
+      applyProps(scene, state.sceneOptions);
       this.get((s) => s.sceneRef).set(scene);
 
       // Set up renderer (one time only!)
@@ -309,11 +336,11 @@ export class NgtStore extends NgtComponentStore<NgtState> {
       }
       // Set raycaster options
       const { params, ...options } = state.raycasterOptions || {};
-      applyProps(raycaster as any, {
-        enabled: true,
-        ...options,
-        params: { ...raycaster.params, ...(params || {}) },
-      });
+      if (!is.equ(options, raycaster, shallowLoose)) applyProps(raycaster, { ...options });
+      if (!is.equ(params, raycaster.params, shallowLoose))
+        applyProps(raycaster, {
+          params: { ...raycaster.params, ...(params || {}) },
+        });
 
       // Create default camera (one time only!)
       let camera = state.camera;
@@ -322,7 +349,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         camera = isCamera ? (state.cameraOptions as NgtCamera) : createDefaultCamera(state);
         if (!isCamera) {
           if (state.cameraOptions) {
-            applyProps(camera as any, state.cameraOptions as any);
+            applyProps(camera, state.cameraOptions as UnknownRecord);
           }
 
           // Set position.z if position not passed in
@@ -340,7 +367,11 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         }
 
         if (!is.instance(camera)) {
-          camera = prepare(camera, () => this.get(), this.parentStore?.get((s) => s.cameraRef) || null);
+          camera = prepare(
+            camera,
+            () => this.get(),
+            this.parentStore?.get((s) => s.cameraRef)
+          );
         }
         this.get((s) => s.cameraRef).set(camera as NgtUnknownInstance<NgtCamera>);
       }
@@ -352,7 +383,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         const handleXRFrame: XRFrameRequestCallback = (timestamp: number, frame?: XRFrame) => {
           const state = this.get();
           if (state.frameloop === 'never') return;
-          advance(timestamp, true, () => state, frame);
+          advance(timestamp, true, this.get.bind(this), frame);
         };
 
         // Toggle render switching on session
@@ -362,6 +393,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
           // WebXRManager's signature is incorrect.
           // See: https://github.com/pmndrs/react-three-fiber/pull/2017#discussion_r790134505
           gl.xr.setAnimationLoop(gl.xr.isPresenting ? handleXRFrame : null);
+          if (!gl.xr.isPresenting) invalidate(this.get.bind(this));
         };
 
         // WebXR session manager
@@ -380,46 +412,42 @@ export class NgtStore extends NgtComponentStore<NgtState> {
 
         // Subscribe to WebXR session events
         if (gl.xr) xr.connect();
+        this.set({ xr });
       }
 
       // Set shadowmap
       if (gl.shadowMap) {
-        if (state.shadows) {
-          gl.shadowMap.enabled = true;
-          if (typeof state.shadows === 'object') {
-            Object.assign(gl.shadowMap, state.shadows);
-          } else {
-            gl.shadowMap.type = THREE.PCFSoftShadowMap;
-          }
-          checkNeedsUpdate(gl.shadowMap);
+        const isBoolean = is.boo(state.shadows);
+        if (
+          (isBoolean && gl.shadowMap.enabled !== state.shadows) ||
+          !is.equ(state.shadows, gl.shadowMap, shallowLoose)
+        ) {
+          const old = gl.shadowMap.enabled;
+          gl.shadowMap.enabled = !!state.shadows;
+          if (!isBoolean) Object.assign(gl.shadowMap, state.shadows);
+          else gl.shadowMap.type = THREE.PCFSoftShadowMap;
+
+          if (old !== gl.shadowMap.enabled) checkNeedsUpdate(gl.shadowMap);
         }
       }
 
       // Set color management
-      if ((THREE as any).ColorManagement) {
-        (THREE as any).ColorManagement.legacyMode = state.legacy;
+      // Safely set color management if available.
+      // Avoid accessing THREE.ColorManagement to play nice with older versions
+      if ('ColorManagement' in THREE) {
+        (THREE as any)['ColorManagement'].legacyMode = state.legacy;
       }
       const outputEncoding = state.linear ? THREE.LinearEncoding : THREE.sRGBEncoding;
       const toneMapping = state.flat ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
-
-      if (gl.outputEncoding !== outputEncoding) {
-        gl.outputEncoding = outputEncoding;
-      }
-
-      if (gl.toneMapping !== toneMapping) {
-        gl.toneMapping = toneMapping;
-      }
+      if (gl.outputEncoding !== outputEncoding) gl.outputEncoding = outputEncoding;
+      if (gl.toneMapping !== toneMapping) gl.toneMapping = toneMapping;
 
       gl.setClearAlpha(0);
       gl.setPixelRatio(makeDpr(state.viewport.dpr));
       gl.setSize(state.size.width, state.size.height);
 
-      if (
-        typeof state.glOptions === 'object' &&
-        typeof state.glOptions !== 'function' &&
-        !is.glRenderer(state.glOptions)
-      ) {
-        applyProps(gl as any, state.glOptions as UnknownRecord);
+      if (is.obj(state.glOptions) && !is.fun(state.glOptions) && !is.glRenderer(state.glOptions)) {
+        applyProps(gl, state.glOptions as UnknownRecord);
       }
 
       this.set({ gl, camera, scene, raycaster });
@@ -453,7 +481,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     })
   );
 
-  private readonly resize = this.effect<NgtResizeResult>(
+  readonly #resize = this.effect<NgtResizeResult>(
     tap(({ width, height, dpr }) => {
       this.set(({ viewport, camera }) => {
         const size = { width, height };
@@ -461,7 +489,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
           size,
           viewport: {
             ...viewport,
-            ...viewport.getCurrentViewport(camera, this.defaultTarget, size),
+            ...viewport.getCurrentViewport(camera, this.#defaultTarget, size),
             dpr: makeDpr(dpr),
           },
         };
@@ -469,12 +497,9 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     })
   );
 
-  private readonly updateDimensions = this.effect<{
-    size: NgtSize;
-    viewport: NgtViewport;
-  }>(
-    tap(({ size, viewport }) => {
-      const { camera, gl, ready, cameraOptions } = this.get();
+  readonly #updateDimensions = this.effect(
+    tap(() => {
+      const { camera, gl, ready, cameraOptions, size, viewport } = this.get();
       if (ready) {
         updateCamera(cameraOptions, camera, size);
 
@@ -485,7 +510,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     })
   );
 
-  private readonly registerBeforeRenderEffect = this.effect<NgtAnimationRecordWithUuid>(
+  readonly #registerBeforeRenderEffect = this.effect<NgtAnimationRecordWithUuid>(
     tapEffect(({ uuid, ...record }) => {
       if (uuid) {
         this.set((state) => ({
@@ -505,13 +530,11 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     })
   );
 
-  private readonly updateSubscribers = this.effect<{
-    animations: NgtInternalState['animations'];
-    priority: NgtInternalState['priority'];
-  }>(
-    tap(({ animations, priority }) => {
-      if (!animations.size) return;
-      const subscribers = Array.from(animations.values());
+  readonly #updateSubscribers = this.effect(
+    tap(() => {
+      const internal = this.get((s) => s.internal);
+      if (!internal.animations.size) return;
+      const subscribers = Array.from(internal.animations.values());
       subscribers.sort((a, b) => (a.priority || 0) - (b.priority || 0));
       this.set((state) => ({
         internal: { ...state.internal, subscribers },
@@ -519,7 +542,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     })
   );
 
-  private initEvents(canvasElement: HTMLCanvasElement) {
+  #initEvents(canvasElement: HTMLCanvasElement) {
     const { handlePointer } = createEvents(() => this.get());
 
     this.set((state) => ({
@@ -532,10 +555,10 @@ export class NgtStore extends NgtComponentStore<NgtState> {
       },
     }));
 
-    this.connectElement(canvasElement);
+    this.#connectElement(canvasElement);
   }
 
-  private connectElement(canvasElement: HTMLCanvasElement) {
+  #connectElement(canvasElement: HTMLCanvasElement) {
     this.set((state) => ({
       events: { ...state.events, connected: canvasElement },
     }));
@@ -546,7 +569,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     });
   }
 
-  private disconnectElement() {
+  #disconnectElement() {
     const { handlers, connected } = this.get((s) => s.events);
     if (connected) {
       Object.entries(handlers ?? {}).forEach(([eventName, handler]) => {
@@ -558,7 +581,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
   }
 
   override ngOnDestroy() {
-    this.disconnectElement();
+    this.#disconnectElement();
     super.ngOnDestroy();
   }
 }

@@ -57,7 +57,7 @@ export class NgtSobaFlyControls extends NgtInstance<FlyControls, NgtSobaFlyContr
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.init(this.store.select((s) => s.camera));
         this.setup(this.instance$);
       });

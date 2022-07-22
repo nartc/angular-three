@@ -171,7 +171,7 @@ export class NgtSobaBounds extends NgtObjectInputs<THREE.Group, NgtSobaBoundsSta
   override ngOnInit(): void {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         this.preventDragHijacking(this.store.select((s) => s.controls));
         this.observeSizeChange(
           this.select(

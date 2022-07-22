@@ -1,5 +1,7 @@
 - All components/directives/pipes are now standalone. Module-based APIs will be removed in future major
+- All private variables are now truly private using `#`
 - `NgtComponentStore` is now an abstract `Directive` instead of an `Injectable`
+- `NgtComponentStore#onCanvasReady` is replaced with `NgtStore#onReady`
 - `NgtCoreModule` is removed. Use `NgtCanvasModule` instead
 - `NgtColorPipe` is removed. Use `NgtColorAttribute` instead
 - `NgtFogPipe` is removed. Use `NgtFogAttribute` instead

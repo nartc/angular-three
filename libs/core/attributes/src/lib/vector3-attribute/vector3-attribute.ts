@@ -1,5 +1,5 @@
 // GENERATED
-import { makeVector3, NgtInstance, provideInstanceRef, NgtVector3 } from '@angular-three/core';
+import { makeVector3, NgtInstance, NgtVector3, provideInstanceRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';
@@ -18,16 +18,12 @@ export class NgtVector3Attribute extends NgtInstance<THREE.Vector3> {
         this.initSubscription.unsubscribe();
       }
 
-      this.initSubscription = this.onCanvasReady(
-        this.store.ready$,
-        () => {
-          this.prepareInstance(makeVector3(vector3));
-          return () => {
-            this.initSubscription?.unsubscribe();
-          };
-        },
-        true
-      );
+      this.initSubscription = this.store.onReady(() => {
+        this.prepareInstance(makeVector3(vector3));
+        return () => {
+          this.initSubscription?.unsubscribe();
+        };
+      });
     });
   }
 

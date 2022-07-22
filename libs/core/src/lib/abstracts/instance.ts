@@ -151,7 +151,7 @@ export abstract class NgtInstance<
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
       this.preInit();
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         // make sure `instance()` is available before doing anything
         this.instanceReady(this.instance$);
       });

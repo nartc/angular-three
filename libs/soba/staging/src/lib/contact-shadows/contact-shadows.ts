@@ -191,7 +191,7 @@ export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaC
   override ngOnInit() {
     super.ngOnInit();
     this.zone.runOutsideAngular(() => {
-      this.onCanvasReady(this.store.ready$, () => {
+      this.store.onReady(() => {
         // reset width and height
         this.set(
           this.select(
