@@ -22,8 +22,7 @@ const vec = new THREE.Vector3();
   standalone: true,
   template: `
     <ngt-spot-light
-      [ngtObjectInputs]="this"
-      [ngtObjectOutputs]="this"
+      [ngtObjectPassThrough]="this"
       [ngtSpotLightPassThrough]="this"
       [angle]="lightAngle"
       [color]="color"

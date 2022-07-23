@@ -90,8 +90,7 @@ export class NgtSobaGizmoViewportAxis extends NgtInstance<THREE.Group> {
   standalone: true,
   template: `
     <ngt-sprite
-      [ngtObjectInputs]="this"
-      [ngtObjectOutputs]="this"
+      [ngtObjectPassThrough]="this"
       [scale]="(scale$ | async)!"
       [raycast]="raycast"
       (pointerout)="onPointerOut($event)"
@@ -279,7 +278,7 @@ export class NgtSobaGizmoViewportAxisHeadPassThrough {
   selector: 'ngt-soba-gizmo-viewport',
   standalone: true,
   template: `
-    <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this" [scale]="40">
+    <ngt-group [ngtObjectPassThrough]="this" [scale]="40">
       <ngt-soba-gizmo-viewport-axis
         [color]="axisColors[0]"
         [rotation]="[0, 0, 0]"

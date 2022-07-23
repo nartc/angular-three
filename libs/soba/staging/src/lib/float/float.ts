@@ -48,7 +48,7 @@ export interface NgtSobaFloatState extends NgtObjectInputsState<THREE.Group> {
   selector: 'ngt-soba-float',
   standalone: true,
   template: `
-    <ngt-group skipParent [ngtObjectInputs]="this" [ngtObjectOutputs]="this">
+    <ngt-group skipParent [ngtObjectPassThrough]="this">
       <ngt-group [ref]="innerGroup">
         <ng-container
           *ngIf="content"

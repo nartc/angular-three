@@ -40,7 +40,7 @@ export class NgtSobaDetailedContent {
   selector: 'ngt-soba-detailed',
   standalone: true,
   template: `
-    <ngt-lod [ngtObjectOutputs]="this" [ngtObjectInputs]="this" (beforeRender)="onBeforeRender($event)">
+    <ngt-lod [ngtObjectPassThrough]="this" (beforeRender)="onBeforeRender($event)">
       <ng-container
         *ngIf="content"
         [ngTemplateOutlet]="content.templateRef"

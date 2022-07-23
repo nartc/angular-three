@@ -46,12 +46,7 @@ export class NgtSobaTextContent {
   selector: 'ngt-soba-text[text]',
   standalone: true,
   template: `
-    <ngt-primitive
-      [object]="textMesh"
-      (beforeRender)="beforeRender.emit($event)"
-      [ngtObjectInputs]="this"
-      [ngtObjectOutputs]="this"
-    >
+    <ngt-primitive [object]="textMesh" (beforeRender)="beforeRender.emit($event)" [ngtObjectPassThrough]="this">
       <ng-container
         *ngIf="content"
         [ngTemplateOutlet]="content.templateRef"

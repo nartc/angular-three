@@ -171,7 +171,7 @@ export class NgtSobaHtmlContent {
   selector: 'ngt-soba-html',
   standalone: true,
   template: `
-    <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this"></ngt-group>
+    <ngt-group [ngtObjectPassThrough]="this"></ngt-group>
 
     <ng-template #transformTemplate>
       <div #transformedOuterDiv [style]="styles$ | async">

@@ -1,3 +1,4 @@
+import { EventEmitter } from '@angular/core';
 import * as THREE from 'three';
 import { Ref } from '../ref';
 import type { EquConfig, NgtUnknownInstance, UnknownRecord } from '../types';
@@ -23,6 +24,7 @@ export const is = {
   num: (a: unknown): a is number => typeof a === 'number',
   boo: (a: unknown): a is boolean => typeof a === 'boolean',
   und: (a: unknown) => a === void 0,
+  eventEmitter: (a: unknown): a is EventEmitter<any> => a instanceof EventEmitter,
   arr: (a: unknown): a is Array<any> => Array.isArray(a),
   equ(a: any, b: any, { arrays = 'shallow', objects = 'reference', strict = true }: EquConfig = {}) {
     // Wrong type or one of the two undefined, doesn't match

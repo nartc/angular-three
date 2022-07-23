@@ -97,7 +97,7 @@ export class NgtSobaBoundsContent {
   selector: 'ngt-soba-bounds',
   standalone: true,
   template: `
-    <ngt-group [ngtObjectInputs]="this" [ngtObjectOutputs]="this">
+    <ngt-group [ngtObjectPassThrough]="this">
       <ng-container
         *ngIf="content"
         [ngTemplateOutlet]="content.templateRef"

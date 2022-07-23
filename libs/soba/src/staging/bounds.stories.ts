@@ -78,13 +78,7 @@ class BoundsStory {
   selector: 'model',
   template: `
     <ng-container *ngIf="modelRef | async as model">
-      <ngt-mesh
-        [ngtObjectInputs]="this"
-        [ngtObjectOutputs]="this"
-        [geometry]="model.geometry"
-        [material]="model.material"
-        [dispose]="null"
-      >
+      <ngt-mesh [ngtObjectPassThrough]="this" [geometry]="model.geometry" [material]="model.material" [dispose]="null">
         <ngt-value [attach]="['material', 'emissive']" value="red"></ngt-value>
         <ngt-value [attach]="['material', 'roughness']" [value]="1"></ngt-value>
       </ngt-mesh>

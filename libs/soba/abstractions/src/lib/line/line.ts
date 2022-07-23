@@ -95,8 +95,7 @@ export class NgtSobaLineContent {
       *ngIf="lineViewModel$ | async as lineViewModel"
       (beforeRender)="beforeRender.emit($any($event))"
       [object]="lineViewModel.line"
-      [ngtObjectOutputs]="this"
-      [ngtObjectInputs]="this"
+      [ngtObjectPassThrough]="this"
     >
       <ngt-soba-line-geometry
         [points]="lineViewModel.points"

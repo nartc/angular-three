@@ -49,7 +49,7 @@ export interface NgtSobaCenterState extends NgtObjectInputsState<THREE.Group> {
   selector: 'ngt-soba-center',
   standalone: true,
   template: `
-    <ngt-group [ngtObjectInputs]="this" [ngtObjectOutputs]="this" skipParent>
+    <ngt-group [ngtObjectPassThrough]="this" skipParent>
       <ngt-group [ref]="outerGroup">
         <ngt-group [ref]="innerGroup">
           <ng-container

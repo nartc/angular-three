@@ -94,7 +94,7 @@ export class NgtSobaStageContent {
   selector: 'ngt-soba-stage',
   standalone: true,
   template: `
-    <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this" skipParent>
+    <ngt-group [ngtObjectPassThrough]="this" skipParent>
       <ngt-group [ref]="outerGroup">
         <ngt-group [ref]="innerGroup">
           <ng-container

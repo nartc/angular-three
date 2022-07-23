@@ -40,8 +40,7 @@ export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.G
   template: `
     <ngt-group
       (beforeRender)="onBeforeRender($event.object)"
-      [ngtObjectInputs]="this"
-      [ngtObjectOutputs]="this"
+      [ngtObjectPassThrough]="this"
       [rotation]="[90 | radian, 0, 0]"
       name="soba-contact-shadows"
     >

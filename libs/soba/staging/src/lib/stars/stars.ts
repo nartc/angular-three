@@ -39,7 +39,7 @@ export interface NgtSobaStarsState extends NgtObjectInputsState<THREE.Points> {
   selector: 'ngt-soba-stars',
   standalone: true,
   template: `
-    <ngt-points [ngtObjectOutputs]="this" [ngtObjectInputs]="this" (beforeRender)="onBeforeRender($event.state)">
+    <ngt-points [ngtObjectPassThrough]="this" (beforeRender)="onBeforeRender($event.state)">
       <ngt-buffer-geometry>
         <ng-container *ngIf="bufferAttributes$ | async as bufferAttributes">
           <ngt-buffer-attribute

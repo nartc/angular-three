@@ -22,8 +22,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
+import { GLTF } from 'three-stdlib';
 
 @Component({
   selector: 'sandbox-reuse-gltf',
@@ -70,7 +70,7 @@ interface ShoeGLTF extends GLTF {
   selector: 'sandbox-shoe',
   template: `
     <ng-container *ngIf="shoe$ | async as shoe">
-      <ngt-group [ngtObjectInputs]="this" [ngtObjectOutputs]="this">
+      <ngt-group [ngtObjectPassThrough]="this">
         <ngt-mesh castShadow receiveShadow [geometry]="shoe.nodes.shoe.geometry" [material]="shoe.materials.laces">
           <ngt-value [attach]="['material', 'envMapIntensity']" [value]="0.8"></ngt-value>
         </ngt-mesh>

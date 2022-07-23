@@ -25,8 +25,7 @@ import { NgtSobaLine, NgtSobaLineContent } from '../line/line';
       [dashed]="cubicLineViewModel.dashed"
       [color]="cubicLineViewModel.color"
       [lineWidth]="cubicLineViewModel.lineWidth"
-      [ngtObjectOutputs]="this"
-      [ngtObjectInputs]="this"
+      [ngtObjectPassThrough]="this"
     >
       <ng-container *ngIf="content">
         <ng-template ngt-soba-line-content let-line="line">

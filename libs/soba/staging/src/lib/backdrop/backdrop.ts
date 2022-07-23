@@ -50,7 +50,7 @@ export class NgtSobaBackdropContent {
   selector: 'ngt-soba-backdrop',
   standalone: true,
   template: `
-    <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this" receiveShadow="false" skipParent>
+    <ngt-group [ngtObjectPassThrough]="this" receiveShadow="false" skipParent>
       <ngt-mesh [ref]="backdropMesh" [receiveShadow]="receiveShadow" [rotation]="[-90 | radian, 0, 90 | radian]">
         <ngt-plane-geometry [ref]="planeGeometry" [args]="[1, 1, $any(segments), $any(segments)]"></ngt-plane-geometry>
         <ng-container

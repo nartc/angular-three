@@ -28,8 +28,7 @@ const v = new THREE.Vector3();
       [dashed]="quadraticLineViewModel.dashed"
       [color]="quadraticLineViewModel.color"
       [lineWidth]="quadraticLineViewModel.lineWidth"
-      [ngtObjectOutputs]="this"
-      [ngtObjectInputs]="this"
+      [ngtObjectPassThrough]="this"
     >
       <ng-container *ngIf="content">
         <ng-template ngt-soba-line-content let-line="line">

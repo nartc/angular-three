@@ -85,8 +85,7 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
         (beforeRender)="beforeRender.emit($event)"
         [material]="$any(ngtMaterial.instance)"
         [geometry]="$any(ngtPlane.instance)"
-        [ngtObjectInputs]="this"
-        [ngtObjectOutputs]="this"
+        [ngtObjectPassThrough]="this"
       >
         <ng-container
           *ngIf="content"

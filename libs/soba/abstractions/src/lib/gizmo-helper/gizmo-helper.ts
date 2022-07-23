@@ -70,8 +70,7 @@ const targetPosition = make(THREE.Vector3);
       <ng-template ngt-portal-content>
         <ngt-group
           (beforeRender)="beforeRender.emit($event)"
-          [ngtObjectInputs]="this"
-          [ngtObjectOutputs]="this"
+          [ngtObjectPassThrough]="this"
           [position]="(position$ | async)!"
         >
           <ng-container

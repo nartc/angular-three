@@ -69,7 +69,7 @@ export interface NgtSobaTransformControlsState extends NgtObjectInputsState<Tran
   selector: 'ngt-soba-transform-controls',
   standalone: true,
   template: `
-    <ngt-group [ngtObjectOutputs]="this" [ngtObjectInputs]="this" [ref]="groupRef">
+    <ngt-group [ngtObjectPassThrough]="this" [ref]="groupRef">
       <ng-container
         *ngIf="content"
         [ngTemplateOutlet]="content.templateRef"

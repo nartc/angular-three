@@ -38,11 +38,7 @@ export class NgtSobaBillboardContent {
   selector: 'ngt-soba-billboard',
   standalone: true,
   template: `
-    <ngt-group
-      (beforeRender)="onBeforeRender($event); beforeRender.emit($event)"
-      [ngtObjectInputs]="this"
-      [ngtObjectOutputs]="this"
-    >
+    <ngt-group (beforeRender)="onBeforeRender($event); beforeRender.emit($event)" [ngtObjectPassThrough]="this">
       <ng-container
         *ngIf="content"
         [ngTemplateOutlet]="content.templateRef"
