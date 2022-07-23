@@ -2,9 +2,9 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   make,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NgtPortal,
   NgtPortalContent,
   NgtRenderState,
@@ -30,7 +30,7 @@ import {
 import { filter, map, tap, timer } from 'rxjs';
 import * as THREE from 'three';
 
-export interface NgtSobaGizmoHelperState extends NgtObjectInputsState<THREE.Group> {
+export interface NgtSobaGizmoHelperState extends NgtObjectPropsState<THREE.Group> {
   virtualCamera: Ref<THREE.OrthographicCamera>;
   virtualScene: Ref<THREE.Scene>;
   raycast: THREE.Object3D['raycast'];
@@ -97,7 +97,7 @@ const targetPosition = make(THREE.Vector3);
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaGizmoHelper)],
 })
-export class NgtSobaGizmoHelper extends NgtObjectInputs<THREE.Group, NgtSobaGizmoHelperState> {
+export class NgtSobaGizmoHelper extends NgtObjectProps<THREE.Group, NgtSobaGizmoHelperState> {
   ready$ = timer(250).pipe(map(() => true));
 
   @Input() set alignment(alignment: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left') {

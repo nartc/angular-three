@@ -1,8 +1,7 @@
-import { Directive, EventEmitter, Inject, Input, NgZone, Optional, Output, SkipSelf } from '@angular/core';
+import { Directive, EventEmitter, inject, Input, Output } from '@angular/core';
 import * as THREE from 'three';
 import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
-import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
 import type {
   AnyFunction,
@@ -44,7 +43,7 @@ const supportedEvents = [
 
 export type NgtPreObjectInit = ((initFn: () => void) => void) | undefined;
 
-export interface NgtObjectInputsState<TObject extends THREE.Object3D = THREE.Object3D>
+export interface NgtObjectPropsState<TObject extends THREE.Object3D = THREE.Object3D>
   extends NgtInstanceState<TObject> {
   name: string;
   nameExplicit?: boolean;
@@ -81,9 +80,9 @@ export interface NgtObjectInputsState<TObject extends THREE.Object3D = THREE.Obj
 }
 
 @Directive()
-export abstract class NgtObjectInputs<
+export abstract class NgtObjectProps<
   TObject extends THREE.Object3D = THREE.Object3D,
-  TObjectInputsState extends NgtObjectInputsState<TObject> = NgtObjectInputsState<TObject>
+  TObjectInputsState extends NgtObjectPropsState<TObject> = NgtObjectPropsState<TObject>
 > extends NgtInstance<TObject, TObjectInputsState> {
   @Input() set name(name: string) {
     this.set({
@@ -98,7 +97,6 @@ export abstract class NgtObjectInputs<
   @Input() set position(position: NgtVector3 | undefined) {
     this.set({
       positionExplicit: true,
-
       position: make(THREE.Vector3, position),
     } as Partial<TObjectInputsState>);
   }
@@ -112,7 +110,6 @@ export abstract class NgtObjectInputs<
   @Input() set rotation(rotation: NgtEuler | NgtTriple | undefined) {
     this.set({
       rotationExplicit: true,
-
       rotation: make(THREE.Euler, rotation),
     } as Partial<TObjectInputsState>);
   }
@@ -123,7 +120,6 @@ export abstract class NgtObjectInputs<
   @Input() set quaternion(quaternion: NgtQuaternion | undefined) {
     this.set({
       quaternionExplicit: true,
-
       quaternion: make(THREE.Quaternion, quaternion),
     } as Partial<TObjectInputsState>);
   }
@@ -154,7 +150,6 @@ export abstract class NgtObjectInputs<
   @Input() set castShadow(value: BooleanInput) {
     this.set({
       castShadowExplicit: true,
-
       castShadow: coerceBooleanProperty(value),
     } as Partial<TObjectInputsState>);
   }
@@ -165,7 +160,6 @@ export abstract class NgtObjectInputs<
   @Input() set receiveShadow(value: BooleanInput) {
     this.set({
       receiveShadowExplicit: true,
-
       receiveShadow: coerceBooleanProperty(value),
     } as Partial<TObjectInputsState>);
   }
@@ -176,7 +170,6 @@ export abstract class NgtObjectInputs<
   @Input() set priority(priority: NumberInput) {
     this.set({
       priorityExplicit: true,
-
       priority: coerceNumberProperty(priority),
     } as Partial<TObjectInputsState>);
   }
@@ -187,7 +180,6 @@ export abstract class NgtObjectInputs<
   @Input() set visible(visible: BooleanInput) {
     this.set({
       visibleExplicit: true,
-
       visible: coerceBooleanProperty(visible),
     } as Partial<TObjectInputsState>);
   }
@@ -197,7 +189,6 @@ export abstract class NgtObjectInputs<
   @Input() set matrixAutoUpdate(matrixAutoUpdate: BooleanInput) {
     this.set({
       matrixAutoUpdateExplicit: true,
-
       matrixAutoUpdate: coerceBooleanProperty(matrixAutoUpdate),
     } as Partial<TObjectInputsState>);
   }
@@ -248,7 +239,6 @@ export abstract class NgtObjectInputs<
   @Input() set appendTo(appendTo: Ref<THREE.Object3D> | THREE.Object3D | undefined) {
     this.set({
       appendToExplicit: true,
-
       appendTo: appendTo ? (is.ref(appendTo) ? appendTo : new Ref(appendTo)) : undefined,
     } as Partial<TObjectInputsState>);
   }
@@ -288,19 +278,14 @@ export abstract class NgtObjectInputs<
     };
   }
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_REF)
-    protected parentObjectRef: AnyFunction<Ref<THREE.Object3D>>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_HOST_REF)
-    protected parentObjectHostRef: AnyFunction<Ref<THREE.Object3D>>
-  ) {
-    super(zone, store, parentObjectRef, parentObjectHostRef);
+  protected override parentRef = inject(NGT_OBJECT_REF, { optional: true, skipSelf: true }) as AnyFunction<Ref>;
+  protected override parentHostRef = inject(NGT_OBJECT_HOST_REF, {
+    optional: true,
+    skipSelf: true,
+  }) as AnyFunction<Ref>;
+
+  constructor() {
+    super();
     this.set({
       name: '',
       position: new THREE.Vector3(),
@@ -322,8 +307,8 @@ export abstract class NgtObjectInputs<
 @Directive()
 export abstract class NgtObject<
   TObject extends THREE.Object3D = THREE.Object3D,
-  TObjectState extends NgtObjectInputsState<TObject> = NgtObjectInputsState<TObject>
-> extends NgtObjectInputs<TObject, TObjectState> {
+  TObjectState extends NgtObjectPropsState<TObject> = NgtObjectPropsState<TObject>
+> extends NgtObjectProps<TObject, TObjectState> {
   @Output() appended = new EventEmitter<TObject>();
   @Output() beforeRender = new EventEmitter<{
     state: NgtRenderState;

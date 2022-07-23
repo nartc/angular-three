@@ -1,11 +1,11 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import type { NgtObjectInputsState, NgtPreObjectInit } from '../abstracts/object';
+import type { NgtObjectPropsState, NgtPreObjectInit } from '../abstracts/object';
 import { NgtObject } from '../abstracts/object';
 import type { AnyConstructor, NumberInput } from '../types';
 import { coerceNumberProperty } from '../utils/coercion';
 
-export interface NgtCommonLightState<TLight extends THREE.Light = THREE.Light> extends NgtObjectInputsState<TLight> {
+export interface NgtCommonLightState<TLight extends THREE.Light = THREE.Light> extends NgtObjectPropsState<TLight> {
   intensity: number;
 }
 

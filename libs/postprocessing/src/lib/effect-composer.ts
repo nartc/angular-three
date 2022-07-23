@@ -1,14 +1,10 @@
 import {
-  AnyFunction,
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  NGT_INSTANCE_HOST_REF,
-  NGT_INSTANCE_REF,
   NGT_IS_WEBGL_AVAILABLE,
   NgtInstance,
   NgtInstanceState,
-  NgtStore,
   NgtUnknownInstance,
   NumberInput,
   provideInstanceRef,
@@ -25,12 +21,9 @@ import {
   Component,
   ContentChild,
   Directive,
-  Inject,
+  inject,
   Input,
   NgModule,
-  NgZone,
-  Optional,
-  SkipSelf,
   TemplateRef,
 } from '@angular/core';
 import { DepthDownsamplingPass, EffectComposer, EffectPass, NormalPass, RenderPass } from 'postprocessing';
@@ -164,22 +157,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
     return this.get((s) => s.groupRef);
   }
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_REF)
-    parentRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_HOST_REF)
-    parentHostRef: AnyFunction<Ref>,
-    @Inject(NGT_IS_WEBGL_AVAILABLE)
-    private isWebGLAvailable: boolean
-  ) {
-    super(zone, store, parentRef, parentHostRef);
-  }
+  private isWebGLAvailable = inject(NGT_IS_WEBGL_AVAILABLE);
 
   protected override preInit() {
     super.preInit();

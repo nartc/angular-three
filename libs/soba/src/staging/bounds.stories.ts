@@ -1,13 +1,9 @@
 import {
-  AnyFunction,
-  NGT_OBJECT_HOST_REF,
-  NGT_OBJECT_REF,
   NgtEvent,
-  NgtObjectInputs,
   NgtObjectPassThroughModule,
+  NgtObjectProps,
   NgtPiPipeModule,
   NgtRadianPipeModule,
-  NgtStore,
   provideObjectHostRef,
   Ref,
   UnknownRecord,
@@ -20,9 +16,10 @@ import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { NgtGLTFLoader } from '@angular-three/soba/loaders';
 import { NgtSobaBoundsApi, NgtSobaBoundsModule, NgtSobaContactShadowsModule } from '@angular-three/soba/staging';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, NgModule } from '@angular/core';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { pipe, switchMap, tap } from 'rxjs';
+import * as THREE from 'three';
 import { setupCanvas, setupCanvasModules } from '../setup-canvas';
 
 @Component({
@@ -87,24 +84,10 @@ class BoundsStory {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(Model)],
 })
-class Model extends NgtObjectInputs<THREE.Mesh> {
+class Model extends NgtObjectProps<THREE.Mesh> {
   modelRef = new Ref<THREE.Mesh>();
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_REF)
-    parentObjectRef: AnyFunction<Ref<THREE.Object3D>>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_HOST_REF)
-    parentObjectHostRef: AnyFunction<Ref<THREE.Object3D>>,
-    private gltfLoader: NgtGLTFLoader
-  ) {
-    super(zone, store, parentObjectRef, parentObjectHostRef);
-  }
+  private gltfLoader = inject(NgtGLTFLoader);
 
   override ngOnInit(): void {
     super.ngOnInit();

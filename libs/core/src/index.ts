@@ -72,3 +72,4 @@ export * from './lib/utils/loop';
 export * from './lib/utils/make';
 export * from './lib/utils/shader-material';
 export * from './lib/utils/pass-through';
+export * from './lib/utils/inject';

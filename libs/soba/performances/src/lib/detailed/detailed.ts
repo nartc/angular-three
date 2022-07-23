@@ -1,8 +1,8 @@
 import {
   AnyFunction,
   NGT_OBJECT_REF,
-  NgtObjectInputs,
   NgtObjectPassThrough,
+  NgtObjectProps,
   NgtRenderState,
   provideObjectHostRef,
   Ref,
@@ -53,7 +53,7 @@ export class NgtSobaDetailedContent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaDetailed)],
 })
-export class NgtSobaDetailed extends NgtObjectInputs<THREE.LOD> implements AfterContentInit {
+export class NgtSobaDetailed extends NgtObjectProps<THREE.LOD> implements AfterContentInit {
   @ContentChild(NgtSobaDetailedContent) content?: NgtSobaDetailedContent;
   @ContentChildren(NGT_OBJECT_REF) children!: QueryList<AnyFunction<Ref>>;
 

@@ -3,9 +3,9 @@ import {
   coerceBooleanProperty,
   coerceNumberProperty,
   is,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NumberInput,
   provideObjectHostRef,
   Ref,
@@ -41,7 +41,7 @@ export interface NgtSobaBoundsApi {
   fit(): NgtSobaBoundsApi;
 }
 
-export interface NgtSobaBoundsState extends NgtObjectInputsState<THREE.Group> {
+export interface NgtSobaBoundsState extends NgtObjectPropsState<THREE.Group> {
   damping: number;
   fit: boolean;
   clip: boolean;
@@ -110,7 +110,7 @@ export class NgtSobaBoundsContent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaBounds)],
 })
-export class NgtSobaBounds extends NgtObjectInputs<THREE.Group, NgtSobaBoundsState> {
+export class NgtSobaBounds extends NgtObjectProps<THREE.Group, NgtSobaBoundsState> {
   @Input() set damping(damping: NumberInput) {
     this.set({ damping: coerceNumberProperty(damping) });
   }

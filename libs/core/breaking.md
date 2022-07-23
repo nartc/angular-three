@@ -10,3 +10,5 @@
 - `NgtVector2Pipe` is removed. Use `NgtVector2Attribute` instead
 - `NgtVector3Pipe` is removed. Use `NgtVector3Attribute` instead
 - `NgtVector4Pipe` is removed. Use `NgtVector4Attribute` instead
+- `NgtObjectInputs` -> `NgtObjectProps`
+- `NgtObjectInputsState` -> `NgtObjectPropsState`

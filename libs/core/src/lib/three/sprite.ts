@@ -1,11 +1,11 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import type { NgtObjectInputsState } from '../abstracts/object';
+import type { NgtObjectPropsState } from '../abstracts/object';
 import { NgtObject } from '../abstracts/object';
 import type { AnyConstructor } from '../types';
 
 export interface NgtCommonSpriteState<TSprite extends THREE.Sprite = THREE.Sprite>
-  extends NgtObjectInputsState<TSprite> {
+  extends NgtObjectPropsState<TSprite> {
   material?: THREE.SpriteMaterial;
 }
 

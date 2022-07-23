@@ -1,15 +1,5 @@
-import {
-  Directive,
-  EventEmitter,
-  Inject,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  Optional,
-  Output,
-  SkipSelf,
-} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Directive, EventEmitter, inject, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { filter, map, Observable, of, pairwise, pipe, startWith, switchMap, tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
 import { Ref } from '../ref';
@@ -126,18 +116,13 @@ export abstract class NgtInstance<
     return this.get((s) => s.instanceArgs);
   }
 
-  constructor(
-    protected zone: NgZone,
-    protected store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_REF)
-    protected parentRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_HOST_REF)
-    protected parentHostRef: AnyFunction<Ref>
-  ) {
+  protected zone = inject(NgZone);
+  protected store = inject(NgtStore);
+  protected document = inject(DOCUMENT);
+  protected parentRef = inject(NGT_INSTANCE_REF, { skipSelf: true, optional: true }) as AnyFunction<Ref>;
+  protected parentHostRef = inject(NGT_INSTANCE_HOST_REF, { skipSelf: true, optional: true }) as AnyFunction<Ref>;
+
+  constructor() {
     super();
     this.set({
       instance: new Ref(null),

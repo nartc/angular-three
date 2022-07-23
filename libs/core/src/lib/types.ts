@@ -18,12 +18,12 @@ export type UnknownRecord = Record<string, unknown>;
 export type AnyFunction<TReturn = any> = (...args: any[]) => TReturn;
 export type AnyConstructor<TObject = any> = new (...args: any[]) => TObject;
 export type AnyAbstractConstructor<TObject = any> = abstract new (...args: any[]) => TObject;
+export type AnyCtor<TObject = any> = AnyConstructor<TObject> & AnyAbstractConstructor<TObject>;
+
 /**
  * If **T** contains a constructor, @see ConstructorParameters must be used, otherwise **T**.
  */
 type NgtArgs<T> = T extends new (...args: any) => any ? ConstructorParameters<T> : T;
-
-export type AnyCtor<TObject> = AnyConstructor<TObject> & AnyAbstractConstructor<TObject>;
 
 export type AnyExtenderFunction<TObject> = (object: TObject) => void;
 

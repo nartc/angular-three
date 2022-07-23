@@ -1,5 +1,5 @@
 import { makeId, NgtComponentStore, NgtStore, Ref, tapEffect } from '@angular-three/core';
-import { Injectable, NgZone, Optional } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import {
   CannonWorkerAPI,
   ConeTwistConstraintOpts,
@@ -46,11 +46,15 @@ export interface NgtPhysicConstraintReturn<
 
 @Injectable()
 export class NgtPhysicConstraint extends NgtComponentStore {
-  constructor(private zone: NgZone, private store: NgtStore, @Optional() private physicsStore: NgtPhysicsStore) {
-    if (!physicsStore) {
+  private zone = inject(NgZone);
+  private store = inject(NgtStore);
+  private physicsStore = inject(NgtPhysicsStore, { optional: true });
+
+  constructor() {
+    super();
+    if (!this.physicsStore) {
       throw new Error('NgtPhysicConstraint must be used inside of <ngt-physics>');
     }
-    super();
   }
 
   usePointToPointConstraint<
@@ -115,7 +119,7 @@ export class NgtPhysicConstraint extends NgtComponentStore {
           })
         )(
           combineLatest([
-            physicsStore.select((s) => s.worker),
+            physicsStore!.select((s) => s.worker),
             bodyA.pipe(filter((ref) => ref != undefined)),
             bodyB.pipe(filter((ref) => ref != undefined)),
           ])
@@ -126,7 +130,7 @@ export class NgtPhysicConstraint extends NgtComponentStore {
         bodyA,
         bodyB,
         get api() {
-          const worker = physicsStore.get((s) => s.worker);
+          const worker = physicsStore!.get((s) => s.worker);
 
           const commonApi = {
             disable: () => {

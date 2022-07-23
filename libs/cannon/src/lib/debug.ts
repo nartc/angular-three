@@ -4,13 +4,12 @@ import {
   coerceNumberProperty,
   NgtInstance,
   NgtInstanceState,
-  NgtStore,
   NumberInput,
   provideInstanceRef,
   tapEffect,
 } from '@angular-three/core';
 import { NgtPrimitive } from '@angular-three/core/primitive';
-import { ChangeDetectionStrategy, Component, Input, NgModule, NgZone } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, NgModule } from '@angular/core';
 import { BodyProps, BodyShapeType, propsToBody } from '@pmndrs/cannon-worker-api';
 import { Body, Quaternion, Vec3, World } from 'cannon-es';
 import CannonDebugger from 'cannon-es-debugger';
@@ -69,12 +68,13 @@ export class NgtCannonDebug extends NgtInstance<THREE.Scene, NgtCannonDebugState
     this.set({ disabled: coerceBooleanProperty(disabled) });
   }
 
-  constructor(zone: NgZone, store: NgtStore, private physicsStore: NgtPhysicsStore) {
-    if (!physicsStore) {
+  private physicsStore = inject(NgtPhysicsStore);
+
+  constructor() {
+    super();
+    if (!this.physicsStore) {
       throw new Error('ngt-cannon-debug must be used within ngt-physics');
     }
-
-    super(zone, store, null!, null!);
   }
 
   protected override preInit() {

@@ -3,9 +3,9 @@ import {
   coerceBooleanProperty,
   coerceNumberProperty,
   is,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NumberInput,
   provideObjectHostRef,
   Ref,
@@ -45,7 +45,7 @@ export class NgtSobaTransformControlsContent {
   }
 }
 
-export interface NgtSobaTransformControlsState extends NgtObjectInputsState<TransformControls> {
+export interface NgtSobaTransformControlsState extends NgtObjectPropsState<TransformControls> {
   groupRef: Ref<THREE.Group>;
 
   object?: THREE.Object3D | Ref<THREE.Object3D>;
@@ -82,7 +82,7 @@ export interface NgtSobaTransformControlsState extends NgtObjectInputsState<Tran
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaTransformControls, (controls) => controls.groupRef)],
 })
-export class NgtSobaTransformControls extends NgtObjectInputs<TransformControls, NgtSobaTransformControlsState> {
+export class NgtSobaTransformControls extends NgtObjectProps<TransformControls, NgtSobaTransformControlsState> {
   @Input() set object(object: THREE.Object3D | Ref<THREE.Object3D>) {
     this.set({ object });
   }

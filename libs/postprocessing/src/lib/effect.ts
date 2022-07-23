@@ -1,11 +1,7 @@
 import {
   AnyConstructor,
-  AnyFunction,
   coerceNumberProperty,
-  NGT_INSTANCE_HOST_REF,
-  NGT_INSTANCE_REF,
   NgtInstance,
-  NgtStore,
   NgtUnknownInstance,
   NumberInput,
   provideInstanceRef,
@@ -14,7 +10,7 @@ import {
   tapEffect,
   UnknownRecord,
 } from '@angular-three/core';
-import { Directive, Inject, InjectionToken, Input, NgZone, Optional, Provider, SkipSelf } from '@angular/core';
+import { Directive, inject, InjectionToken, Input, Provider } from '@angular/core';
 import { BlendFunction, Effect } from 'postprocessing';
 import { tap } from 'rxjs';
 import * as THREE from 'three';
@@ -61,25 +57,13 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
     this.instance$
   );
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_REF)
-    parentRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_HOST_REF)
-    parentHostRef: AnyFunction<Ref>,
-    @Optional()
-    protected effectComposer: NgtEffectComposer
-  ) {
-    if (!effectComposer) {
+  protected effectComposer = inject(NgtEffectComposer, { optional: true }) as NgtEffectComposer;
+
+  constructor() {
+    super();
+    if (!this.effectComposer) {
       throw new Error(`Effects can only be used within <ngt-effect-composer>`);
     }
-
-    super(zone, store, parentRef, parentHostRef);
   }
 
   protected override preInit() {

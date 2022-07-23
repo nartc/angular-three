@@ -1,9 +1,8 @@
-import { Directive, Inject, Input, NgZone, Optional } from '@angular/core';
+import { Directive, inject, Input } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
 import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
-import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
 import { AnyConstructor, AnyFunction, BooleanInput } from '../types';
 import { coerceBooleanProperty } from '../utils/coercion';
@@ -19,18 +18,8 @@ export abstract class NgtCommonObjectHelper<TObjectHelper extends THREE.Object3D
     this.set({ visible: coerceBooleanProperty(helperVisible) });
   }
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @Inject(NGT_OBJECT_REF)
-    parentRef: AnyFunction<Ref<THREE.Object3D>>,
-    @Optional()
-    @Inject(NGT_OBJECT_HOST_REF)
-    parentHostRef: AnyFunction<Ref<THREE.Object3D>>
-  ) {
-    super(zone, store, parentRef, parentHostRef);
-  }
+  protected override parentRef = inject(NGT_OBJECT_REF, { optional: true }) as AnyFunction<Ref>;
+  protected override parentHostRef = inject(NGT_OBJECT_HOST_REF, { optional: true }) as AnyFunction<Ref>;
 
   protected override preInit() {
     super.preInit();

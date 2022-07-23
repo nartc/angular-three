@@ -1,9 +1,9 @@
 import {
   checkNeedsUpdate,
   coerceNumberProperty,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NgtRadianPipe,
   NumberInput,
   provideObjectHostRef,
@@ -27,7 +27,7 @@ import * as THREE from 'three';
 
 const easeInExpo = (x: number) => (x === 0 ? 0 : Math.pow(2, 10 * x - 10));
 
-export interface NgtSobaBackdropState extends NgtObjectInputsState<THREE.Group> {
+export interface NgtSobaBackdropState extends NgtObjectPropsState<THREE.Group> {
   backdrop: Ref<THREE.Mesh>;
   planeGeometry: Ref<THREE.PlaneGeometry>;
   floor: number;
@@ -65,7 +65,7 @@ export class NgtSobaBackdropContent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaBackdrop, (backdrop) => backdrop.backdropMesh)],
 })
-export class NgtSobaBackdrop extends NgtObjectInputs<THREE.Group, NgtSobaBackdropState> {
+export class NgtSobaBackdrop extends NgtObjectProps<THREE.Group, NgtSobaBackdropState> {
   @Input() set floor(floor: NumberInput) {
     this.set({ floor: coerceNumberProperty(floor) });
   }

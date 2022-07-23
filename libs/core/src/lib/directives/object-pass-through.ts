@@ -1,5 +1,5 @@
 import { Directive, Input, NgModule, Optional, Self } from '@angular/core';
-import { NgtObject, NgtObjectInputs } from '../abstracts/object';
+import { NgtObject, NgtObjectProps } from '../abstracts/object';
 import { createPassThroughInput, createPassThroughOutput } from '../utils/pass-through';
 
 @Directive({
@@ -56,8 +56,8 @@ export class NgtObjectPassThrough {
     if (!host) return;
   }
 
-  private static assertWrapper(wrapper: unknown): asserts wrapper is NgtObjectInputs {
-    if (!(wrapper instanceof NgtObjectInputs)) {
+  private static assertWrapper(wrapper: unknown): asserts wrapper is NgtObjectProps {
+    if (!(wrapper instanceof NgtObjectProps)) {
       throw new Error(`[NgtObjectPassThrough] wrapper is not an NgtObject`);
     }
   }

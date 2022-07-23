@@ -1,15 +1,19 @@
 import { makeId, NgtComponentStore, NgtStore, tapEffect } from '@angular-three/core';
-import { Injectable, NgZone, Optional } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import type { CannonWorkerAPI, RayhitEvent, RayMode, RayOptions } from '@pmndrs/cannon-worker-api';
 import { NgtPhysicsStore } from './physics.store';
 
 @Injectable()
 export class NgtPhysicRaycast extends NgtComponentStore {
-  constructor(private zone: NgZone, private store: NgtStore, @Optional() private physicsStore: NgtPhysicsStore) {
-    if (!physicsStore) {
+  private zone = inject(NgZone);
+  private store = inject(NgtStore);
+  private physicsStore = inject(NgtPhysicsStore, { optional: true });
+
+  constructor() {
+    super();
+    if (!this.physicsStore) {
       throw new Error('NgtPhysicRaycast must be used inside of <ngt-physics>');
     }
-    super();
   }
 
   useRaycastClosest(options: RayOptions, callback: (e: RayhitEvent) => void) {
@@ -31,7 +35,7 @@ export class NgtPhysicRaycast extends NgtComponentStore {
       this.store.onReady(() => {
         this.effect<CannonWorkerAPI>(
           tapEffect((worker) => {
-            const events = this.physicsStore.get((s) => s.events);
+            const events = this.physicsStore!.get((s) => s.events);
             events[uuid] = { rayhit: callback };
             worker.addRay({ props: { ...options, mode }, uuid });
             return () => {
@@ -39,7 +43,7 @@ export class NgtPhysicRaycast extends NgtComponentStore {
               delete events[uuid];
             };
           })
-        )(this.physicsStore.select((s) => s.worker));
+        )(this.physicsStore!.select((s) => s.worker));
       });
     });
   }

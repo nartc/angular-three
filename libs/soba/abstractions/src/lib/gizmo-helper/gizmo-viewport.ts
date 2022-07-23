@@ -1,20 +1,15 @@
 import {
-  AnyFunction,
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  NGT_OBJECT_HOST_REF,
-  NGT_OBJECT_REF,
   NgtEvent,
   NgtInstance,
-  NgtObjectInputs,
   NgtObjectPassThrough,
+  NgtObjectProps,
   NgtRadianPipe,
-  NgtStore,
   NgtTriple,
   NumberInput,
   provideObjectHostRef,
-  Ref,
   startWithUndefined,
 } from '@angular-three/core';
 import { NgtBoxGeometry } from '@angular-three/core/geometries';
@@ -23,19 +18,8 @@ import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
 import { NgtMeshBasicMaterial, NgtSpriteMaterial } from '@angular-three/core/materials';
 import { NgtMesh } from '@angular-three/core/meshes';
 import { NgtSprite } from '@angular-three/core/sprites';
-import { AsyncPipe, DOCUMENT, NgIf } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Directive,
-  Inject,
-  Input,
-  NgModule,
-  NgZone,
-  Optional,
-  Self,
-  SkipSelf,
-} from '@angular/core';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Directive, inject, Input, NgModule, Self } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import * as THREE from 'three';
 import { NgtSobaGizmoHelper } from './gizmo-helper';
@@ -109,7 +93,7 @@ export class NgtSobaGizmoViewportAxis extends NgtInstance<THREE.Group> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaGizmoViewportAxisHead)],
 })
-export class NgtSobaGizmoViewportAxisHead extends NgtObjectInputs<THREE.Sprite> {
+export class NgtSobaGizmoViewportAxisHead extends NgtObjectProps<THREE.Sprite> {
   @Input() set arcStyle(arcStyle: string) {
     this.set({ arcStyle });
   }
@@ -134,28 +118,17 @@ export class NgtSobaGizmoViewportAxisHead extends NgtObjectInputs<THREE.Sprite> 
     this.set({ font });
   }
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_REF)
-    parentObjectRef: AnyFunction<Ref<THREE.Object3D>>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_HOST_REF)
-    parentObjectHostRef: AnyFunction<Ref<THREE.Object3D>>,
-    @Inject(DOCUMENT) private document: Document,
-    @Optional() private gizmoHelper: NgtSobaGizmoHelper
-  ) {
-    if (!gizmoHelper) {
+  private gizmoHelper = inject(NgtSobaGizmoHelper, { optional: true });
+
+  constructor() {
+    super();
+    if (!this.gizmoHelper) {
       throw new Error(`<ngt-soba-gizmo-viewport> can only be used in <ngt-soba-gizmo-helper>`);
     }
-    super(zone, store, parentObjectRef, parentObjectHostRef);
   }
 
   override get raycast() {
-    return this.gizmoHelper.get((s) => s.raycast);
+    return this.gizmoHelper!.get((s) => s.raycast);
   }
 
   protected override preInit() {
@@ -231,7 +204,7 @@ export class NgtSobaGizmoViewportAxisHead extends NgtObjectInputs<THREE.Sprite> 
 
   onPointerDown($event: NgtEvent<PointerEvent>) {
     if (!this.disabled) {
-      this.gizmoHelper.tweenCamera($event.object.position);
+      this.gizmoHelper!.tweenCamera($event.object.position);
       $event.stopPropagation();
     }
   }
@@ -351,7 +324,7 @@ export class NgtSobaGizmoViewportAxisHeadPassThrough {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaGizmoViewport)],
 })
-export class NgtSobaGizmoViewport extends NgtObjectInputs<THREE.Group> {
+export class NgtSobaGizmoViewport extends NgtObjectProps<THREE.Group> {
   @Input() set axisColors(axisColors: [string, string, string]) {
     this.set({ axisColors });
   }

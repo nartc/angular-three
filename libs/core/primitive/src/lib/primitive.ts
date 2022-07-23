@@ -1,7 +1,7 @@
 import {
   is,
   NgtObject,
-  NgtObjectInputsState,
+  NgtObjectPropsState,
   NgtPreObjectInit,
   provideObjectRef,
   Ref,
@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/co
 import { filter } from 'rxjs';
 import * as THREE from 'three';
 
-export interface NgtPrimitiveState extends NgtObjectInputsState {
+export interface NgtPrimitiveState extends NgtObjectPropsState {
   object: THREE.Object3D;
 }
 

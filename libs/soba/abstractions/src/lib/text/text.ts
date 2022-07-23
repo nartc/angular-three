@@ -5,8 +5,8 @@ import {
   is,
   NgtColor,
   NgtCommonMaterial,
-  NgtObjectInputs,
   NgtObjectPassThrough,
+  NgtObjectProps,
   NgtRenderState,
   NumberInput,
   provideObjectHostRef,
@@ -58,7 +58,7 @@ export class NgtSobaTextContent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaText, (text) => text.textMesh)],
 })
-export class NgtSobaText extends NgtObjectInputs<TextMeshImpl> {
+export class NgtSobaText extends NgtObjectProps<TextMeshImpl> {
   @Input() set text(text: string) {
     this.set({ text });
   }

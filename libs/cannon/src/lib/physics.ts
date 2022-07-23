@@ -1,6 +1,6 @@
 import type { BooleanInput, NgtTriple, NumberInput } from '@angular-three/core';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular-three/core';
-import { Directive, Input, NgModule, OnInit } from '@angular/core';
+import { Directive, inject, Input, NgModule, OnInit } from '@angular/core';
 import type { Broadphase, CannonWorkerProps, ContactMaterialOptions, Solver } from '@pmndrs/cannon-worker-api';
 import { NgtPhysicsStore } from './physics.store';
 
@@ -71,7 +71,7 @@ export class NgtPhysics implements OnInit {
     this.physicsStore.set({ defaultContactMaterial });
   }
 
-  constructor(private physicsStore: NgtPhysicsStore) {}
+  private physicsStore = inject(NgtPhysicsStore);
 
   ngOnInit() {
     this.physicsStore.init();

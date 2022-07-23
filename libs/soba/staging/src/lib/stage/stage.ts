@@ -4,9 +4,9 @@ import {
   coerceBooleanProperty,
   coerceNumberProperty,
   NGT_OBJECT_REF,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NumberInput,
   provideObjectHostRef,
   Ref,
@@ -55,7 +55,7 @@ const presets = {
 
 type ControlsProto = { update(): void; target: THREE.Vector3 };
 
-export interface NgtSobaStageState extends NgtObjectInputsState<THREE.Group> {
+export interface NgtSobaStageState extends NgtObjectPropsState<THREE.Group> {
   outerGroup: Ref<THREE.Group>;
   innerGroup: Ref<THREE.Group>;
   radius: number;
@@ -146,7 +146,7 @@ export class NgtSobaStageContent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaStage, (stage) => stage.innerGroup)],
 })
-export class NgtSobaStage extends NgtObjectInputs<THREE.Group, NgtSobaStageState> implements OnInit, AfterContentInit {
+export class NgtSobaStage extends NgtObjectProps<THREE.Group, NgtSobaStageState> implements OnInit, AfterContentInit {
   get shadows() {
     return this.get((s) => s.shadows);
   }

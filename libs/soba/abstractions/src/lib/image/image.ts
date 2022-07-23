@@ -1,15 +1,11 @@
 import {
-  AnyFunction,
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  NGT_INSTANCE_HOST_REF,
-  NGT_INSTANCE_REF,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NgtRenderState,
-  NgtStore,
   NumberInput,
   provideObjectHostRef,
   Ref,
@@ -26,13 +22,10 @@ import {
   ContentChild,
   Directive,
   EventEmitter,
-  Inject,
+  inject,
   Input,
   NgModule,
-  NgZone,
-  Optional,
   Output,
-  SkipSelf,
   TemplateRef,
 } from '@angular/core';
 import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
@@ -50,7 +43,7 @@ export class NgtSobaImageContent {
   }
 }
 
-export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
+export interface NgtSobaImageState extends NgtObjectPropsState<THREE.Mesh> {
   url: string;
   segments?: number;
   zoom?: number;
@@ -107,7 +100,7 @@ export interface NgtSobaImageState extends NgtObjectInputsState<THREE.Mesh> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtTextureLoader, provideObjectHostRef(NgtSobaImage)],
 })
-export class NgtSobaImage extends NgtObjectInputs<THREE.Mesh, NgtSobaImageState> {
+export class NgtSobaImage extends NgtObjectProps<THREE.Mesh, NgtSobaImageState> {
   @Output() beforeRender = new EventEmitter<{
     state: NgtRenderState;
     object: THREE.Mesh;
@@ -139,21 +132,7 @@ export class NgtSobaImage extends NgtObjectInputs<THREE.Mesh, NgtSobaImageState>
   imageBounds!: [number, number];
   planeBounds: [number, number] = [1, 1];
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_REF)
-    parentRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_HOST_REF)
-    parentHostRef: AnyFunction<Ref>,
-    private textureLoader: NgtTextureLoader
-  ) {
-    super(zone, store, parentRef, parentHostRef);
-  }
+  private textureLoader = inject(NgtTextureLoader);
 
   readonly imageViewModel$ = this.select(
     this.select((s) => s.texture),

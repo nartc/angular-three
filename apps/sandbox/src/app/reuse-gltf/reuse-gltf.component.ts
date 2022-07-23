@@ -1,14 +1,9 @@
 import {
-  AnyFunction,
-  NGT_OBJECT_HOST_REF,
-  NGT_OBJECT_REF,
   NgtCanvasModule,
-  NgtObjectInputs,
   NgtObjectPassThroughModule,
+  NgtObjectProps,
   NgtRadianPipeModule,
-  NgtStore,
   provideObjectHostRef,
-  Ref,
 } from '@angular-three/core';
 import { NgtValueAttributeModule } from '@angular-three/core/attributes';
 import { NgtSphereGeometryModule } from '@angular-three/core/geometries';
@@ -19,7 +14,7 @@ import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
 import { NgtGLTFLoader } from '@angular-three/soba/loaders';
 import { NgtSobaContactShadowsModule, NgtSobaStageModule } from '@angular-three/soba/staging';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as THREE from 'three';
@@ -112,25 +107,11 @@ interface ShoeGLTF extends GLTF {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(Shoe)],
 })
-export class Shoe extends NgtObjectInputs<THREE.Group> {
+export class Shoe extends NgtObjectProps<THREE.Group> {
+  private gltfLoader = inject(NgtGLTFLoader);
+
   readonly shoe$: Observable<ShoeGLTF> = this.gltfLoader.load('assets/shoe.gltf') as Observable<ShoeGLTF>;
   readonly encoding = THREE.LinearEncoding;
-
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_REF)
-    parentObjectRef: AnyFunction<Ref<THREE.Object3D>>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_HOST_REF)
-    parentObjectHostRef: AnyFunction<Ref<THREE.Object3D>>,
-    private gltfLoader: NgtGLTFLoader
-  ) {
-    super(zone, store, parentObjectRef, parentObjectHostRef);
-  }
 }
 
 @NgModule({

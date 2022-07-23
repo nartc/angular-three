@@ -1,5 +1,5 @@
 import { checkNeedsUpdate, NgtComponentStore, NgtStore, tapEffect } from '@angular-three/core';
-import { Injectable, NgZone } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import {
   Buffers,
   CannonWorkerAPI,
@@ -122,7 +122,10 @@ export class NgtPhysicsStore extends NgtComponentStore<NgtPhysicsState> {
     })
   );
 
-  constructor(private zone: NgZone, private store: NgtStore) {
+  private zone = inject(NgZone);
+  private store = inject(NgtStore);
+
+  constructor() {
     super();
     this.set({
       bodies: {},

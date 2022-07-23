@@ -3,10 +3,10 @@ import * as THREE from 'three';
 import { Ref } from '../ref';
 import type { AnyConstructor, UnknownRecord } from '../types';
 import { is } from '../utils/is';
-import { NgtObject, NgtObjectInputsState } from './object';
+import { NgtObject, NgtObjectPropsState } from './object';
 
 export interface NgtMaterialGeometryState<TObject extends THREE.Object3D = THREE.Object3D>
-  extends NgtObjectInputsState<TObject> {
+  extends NgtObjectPropsState<TObject> {
   material: THREE.Material | THREE.Material[] | Ref<THREE.Material> | Ref<THREE.Material>[];
   geometry: THREE.BufferGeometry | Ref<THREE.BufferGeometry>;
   morphTargetInfluences?: number[];

@@ -3,9 +3,9 @@ import {
   coerceBooleanProperty,
   coerceNumberProperty,
   make,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NgtRenderState,
   NgtTriple,
   NgtVector2,
@@ -33,7 +33,7 @@ import { Line2 } from 'three-stdlib';
 import { NgtSobaLineGeometry } from './line-geometry';
 import { NgtSobaLineMaterial } from './line-material';
 
-export interface NgtSobaCommonLineState extends NgtObjectInputsState<Line2> {
+export interface NgtSobaCommonLineState extends NgtObjectPropsState<Line2> {
   points: Array<THREE.Vector3 | NgtTriple>;
   vertexColors: Array<THREE.Color | NgtTriple>;
   dashed: boolean;
@@ -42,7 +42,7 @@ export interface NgtSobaCommonLineState extends NgtObjectInputsState<Line2> {
 }
 
 @Directive()
-export abstract class NgtSobaCommonLine extends NgtObjectInputs<Line2, NgtSobaCommonLineState> {
+export abstract class NgtSobaCommonLine extends NgtObjectProps<Line2, NgtSobaCommonLineState> {
   @Input() set points(points: Array<THREE.Vector3 | NgtTriple>) {
     this.set({ points });
   }

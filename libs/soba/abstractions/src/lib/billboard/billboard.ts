@@ -1,8 +1,8 @@
 import {
   BooleanInput,
   coerceBooleanProperty,
-  NgtObjectInputs,
   NgtObjectPassThrough,
+  NgtObjectProps,
   NgtRenderState,
   provideObjectHostRef,
   Ref,
@@ -50,7 +50,7 @@ export class NgtSobaBillboardContent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaBillboard)],
 })
-export class NgtSobaBillboard extends NgtObjectInputs<THREE.Group> {
+export class NgtSobaBillboard extends NgtObjectProps<THREE.Group> {
   @Input() set follow(value: BooleanInput) {
     this.set({ follow: coerceBooleanProperty(value) });
   }

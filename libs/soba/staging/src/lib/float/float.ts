@@ -2,9 +2,9 @@ import {
   AnyFunction,
   coerceNumberProperty,
   NGT_OBJECT_REF,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NumberInput,
   provideObjectHostRef,
   Ref,
@@ -36,7 +36,7 @@ export class NgtSobaFloatContent {
   }
 }
 
-export interface NgtSobaFloatState extends NgtObjectInputsState<THREE.Group> {
+export interface NgtSobaFloatState extends NgtObjectPropsState<THREE.Group> {
   innerGroup: Ref<THREE.Group>;
 
   speed: number;
@@ -63,7 +63,7 @@ export interface NgtSobaFloatState extends NgtObjectInputsState<THREE.Group> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaFloat, (float) => float.innerGroup)],
 })
-export class NgtSobaFloat extends NgtObjectInputs<THREE.Group, NgtSobaFloatState> {
+export class NgtSobaFloat extends NgtObjectProps<THREE.Group, NgtSobaFloatState> {
   @Input() set speed(speed: NumberInput) {
     this.set({ speed: coerceNumberProperty(speed) });
   }

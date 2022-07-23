@@ -1,11 +1,8 @@
 import {
-  AnyFunction,
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
   is,
-  NGT_INSTANCE_HOST_REF,
-  NGT_INSTANCE_REF,
   NgtComponentStore,
   NgtInstance,
   NgtInstanceState,
@@ -29,14 +26,12 @@ import {
   Component,
   ContentChild,
   Directive,
-  Inject,
+  inject,
   Injectable,
   Input,
   NgModule,
-  NgZone,
   Optional,
   Self,
-  SkipSelf,
   TemplateRef,
 } from '@angular/core';
 import {
@@ -502,21 +497,7 @@ export class NgtSobaEnvironmentMap extends NgtSobaEnvironmentGeneric {
   ],
 })
 export class NgtSobaEnvironmentCube extends NgtSobaEnvironmentGeneric {
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_REF)
-    parentRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_HOST_REF)
-    parentHostRef: AnyFunction<Ref>,
-    private environmentResolver: NgtSobaEnvironmentResolver
-  ) {
-    super(zone, store, parentRef, parentHostRef);
-  }
+  private environmentResolver = inject(NgtSobaEnvironmentResolver);
 
   protected override preInit() {
     super.preInit();
@@ -763,24 +744,9 @@ export class NgtSobaEnvironmentPortal extends NgtSobaEnvironmentGeneric {
 })
 export class NgtSobaEnvironmentGround extends NgtSobaEnvironmentGeneric {
   readonly materialRef = new Ref<THREE.ShaderMaterial>();
-
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_REF)
-    parentRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_HOST_REF)
-    parentHostRef: AnyFunction<Ref>,
-    private environmentResolver: NgtSobaEnvironmentResolver
-  ) {
-    super(zone, store, parentRef, parentHostRef);
-  }
-
   readonly vertexShader = vertexShader;
+
+  private environmentResolver = inject(NgtSobaEnvironmentResolver);
 
   readonly uniforms = {
     cubemap: { value: null },

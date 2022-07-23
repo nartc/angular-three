@@ -1,13 +1,8 @@
-import { DOCUMENT } from '@angular/common';
-import { Directive, Inject, Input, NgZone, Optional, SkipSelf } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
-import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
-import { NgtStore } from '../stores/store';
-import { NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF } from '../tokens';
 import type { AnyConstructor, NumberInput } from '../types';
-import { AnyFunction } from '../types';
 import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { coerceNumberProperty } from '../utils/coercion';
 
@@ -60,22 +55,6 @@ export abstract class NgtCommonTexture<TTexture extends THREE.Texture = THREE.Te
 
   @Input() set encoding(encoding: THREE.TextureEncoding) {
     this.set({ encoding });
-  }
-
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_REF)
-    parentRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_HOST_REF)
-    parentHostRef: AnyFunction<Ref>,
-    @Inject(DOCUMENT) protected document: Document
-  ) {
-    super(zone, store, parentRef, parentHostRef);
   }
 
   override ngOnInit() {

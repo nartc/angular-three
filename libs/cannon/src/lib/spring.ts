@@ -1,5 +1,5 @@
 import { makeId, NgtComponentStore, NgtStore, Ref, tapEffect } from '@angular-three/core';
-import { Injectable, NgZone, Optional } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import type { CannonWorkerAPI, SpringOptns } from '@pmndrs/cannon-worker-api';
 import { combineLatest, filter } from 'rxjs';
 import * as THREE from 'three';
@@ -23,12 +23,15 @@ export interface NgtPhysicSpringReturn<
 
 @Injectable()
 export class NgtPhysicSpring extends NgtComponentStore {
-  constructor(private zone: NgZone, private store: NgtStore, @Optional() private physicsStore: NgtPhysicsStore) {
-    if (!physicsStore) {
-      throw new Error('NgtPhysicSpring must be used inside of <ngt-physics>');
-    }
+  private zone = inject(NgZone);
+  private store = inject(NgtStore);
+  private physicsStore = inject(NgtPhysicsStore, { optional: true });
 
+  constructor() {
     super();
+    if (!this.physicsStore) {
+      throw new Error('NgtPhysicRaycast must be used inside of <ngt-physics>');
+    }
   }
 
   useSpring<TObjectA extends THREE.Object3D = THREE.Object3D, TObjectB extends THREE.Object3D = THREE.Object3D>(
@@ -54,7 +57,7 @@ export class NgtPhysicSpring extends NgtComponentStore {
           })
         )(
           combineLatest([
-            physicsStore.select((s) => s.worker),
+            physicsStore!.select((s) => s.worker),
             bodyA.pipe(filter((ref) => ref != undefined)),
             bodyB.pipe(filter((ref) => ref != undefined)),
           ])
@@ -65,7 +68,7 @@ export class NgtPhysicSpring extends NgtComponentStore {
         bodyA,
         bodyB,
         get api() {
-          const worker = physicsStore.get((s) => s.worker);
+          const worker = physicsStore!.get((s) => s.worker);
           return {
             setDamping: (value: number) => {
               worker.setSpringDamping({ props: value, uuid });

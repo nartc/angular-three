@@ -3,9 +3,9 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   NGT_OBJECT_REF,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   provideObjectHostRef,
   Ref,
 } from '@angular-three/core';
@@ -38,7 +38,7 @@ export class NgtSobaCenterContent {
   }
 }
 
-export interface NgtSobaCenterState extends NgtObjectInputsState<THREE.Group> {
+export interface NgtSobaCenterState extends NgtObjectPropsState<THREE.Group> {
   innerGroup: Ref<THREE.Group>;
   outerGroup: Ref<THREE.Group>;
 
@@ -66,7 +66,7 @@ export interface NgtSobaCenterState extends NgtObjectInputsState<THREE.Group> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaCenter, (center) => center.innerGroup)],
 })
-export class NgtSobaCenter extends NgtObjectInputs<THREE.Group, NgtSobaCenterState> implements AfterContentInit {
+export class NgtSobaCenter extends NgtObjectProps<THREE.Group, NgtSobaCenterState> implements AfterContentInit {
   @Input() set alignTop(alignTop: BooleanInput) {
     this.set({ alignTop: coerceBooleanProperty(alignTop) });
   }

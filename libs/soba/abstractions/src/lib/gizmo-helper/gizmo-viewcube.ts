@@ -1,20 +1,15 @@
 import {
-  AnyFunction,
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
   make,
-  NGT_OBJECT_HOST_REF,
-  NGT_OBJECT_REF,
   NgtEvent,
   NgtInstance,
   NgtInstanceState,
   NgtRepeat,
-  NgtStore,
   NgtTriple,
   NgtVector3,
   NumberInput,
-  Ref,
   startWithUndefined,
 } from '@angular-three/core';
 import { NgtBoxGeometry } from '@angular-three/core/geometries';
@@ -28,14 +23,12 @@ import {
   Component,
   Directive,
   EventEmitter,
-  Inject,
+  inject,
   Input,
   NgModule,
-  NgZone,
   Optional,
   Output,
   Self,
-  SkipSelf,
 } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import * as THREE from 'three';
@@ -145,26 +138,16 @@ export abstract class NgtSobaGizmoViewCubeGeneric<TPart extends object> extends 
   @Output() click = new EventEmitter<NgtEvent<MouseEvent>>();
 
   get raycast() {
-    return this.gizmoHelper.get((s) => s.raycast);
+    return this.gizmoHelper!.get((s) => s.raycast);
   }
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_REF)
-    parentRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_HOST_REF)
-    parentHostRef: AnyFunction<Ref>,
-    @Optional() protected gizmoHelper: NgtSobaGizmoHelper
-  ) {
-    if (!gizmoHelper) {
+  protected gizmoHelper = inject(NgtSobaGizmoHelper, { optional: true });
+
+  constructor() {
+    super();
+    if (!this.gizmoHelper) {
       throw new Error(`<ngt-soba-gizmo-viewcube> can only be used in <ngt-soba-gizmo-helper>`);
     }
-    super(zone, store, parentRef, parentHostRef);
   }
 
   protected override preInit(): void {
@@ -331,7 +314,7 @@ export class NgtSobaGizmoFaceCube extends NgtSobaGizmoViewCubeGeneric<THREE.Mesh
       this.click.emit($event);
     } else {
       $event.stopPropagation();
-      this.gizmoHelper.tweenCamera($event.face!.normal);
+      this.gizmoHelper!.tweenCamera($event.face!.normal);
     }
   }
 
@@ -398,7 +381,7 @@ export class NgtSobaGizmoEdgeCube extends NgtSobaGizmoViewCubeGeneric<THREE.Mesh
       this.click.emit($event);
     } else {
       $event.stopPropagation();
-      this.gizmoHelper.tweenCamera(make(THREE.Vector3, this.position));
+      this.gizmoHelper!.tweenCamera(make(THREE.Vector3, this.position));
     }
   }
 

@@ -5,6 +5,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  inject,
   Input,
   NgModule,
   NgZone,
@@ -147,9 +148,9 @@ export class NgtCanvas extends NgtComponentStore implements OnInit {
   @ViewChild('rendererCanvas', { static: true })
   rendererCanvas!: ElementRef<HTMLCanvasElement>;
 
-  constructor(private zone: NgZone, private store: NgtStore, private loader: NgtLoader) {
-    super();
-  }
+  private zone = inject(NgZone);
+  private store = inject(NgtStore);
+  private loader = inject(NgtLoader);
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {

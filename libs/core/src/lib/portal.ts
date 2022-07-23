@@ -4,23 +4,20 @@ import {
   Component,
   ContentChild,
   Directive,
-  Inject,
+  inject,
   Input,
   NgModule,
-  NgZone,
-  Optional,
-  SkipSelf,
   TemplateRef,
 } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from './abstracts/instance';
 import { Ref } from './ref';
-import { NgtResize, NgtResizeResult } from './services/resize';
+import { NgtResize } from './services/resize';
 import { tapEffect } from './stores/component-store';
 import { NgtStore } from './stores/store';
-import { NGT_CAMERA_REF, NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF, NGT_OBJECT_REF, NGT_SCENE_REF } from './tokens';
-import type { AnyFunction, NgtEventManager, NgtSize, NgtState } from './types';
+import { NGT_CAMERA_REF, NGT_INSTANCE_REF, NGT_OBJECT_REF, NGT_SCENE_REF } from './tokens';
+import type { NgtEventManager, NgtSize, NgtState } from './types';
 import { updateCamera } from './utils/camera';
 import { prepare } from './utils/instance';
 import { makeDpr } from './utils/make';
@@ -112,22 +109,7 @@ export class NgtPortal extends NgtInstance<THREE.Scene, NgtPortalState> {
 
   @ContentChild(NgtPortalContent) content?: NgtPortalContent;
 
-  constructor(
-    zone: NgZone,
-    @SkipSelf()
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_REF)
-    parentRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_INSTANCE_HOST_REF)
-    parentHostRef: AnyFunction<Ref>,
-    @Inject(NgtResize) private resizeResult$: Observable<NgtResizeResult>
-  ) {
-    super(zone, store, parentRef, parentHostRef);
-  }
+  private resizeResult$ = inject(NgtResize);
 
   override ngOnInit() {
     super.ngOnInit();

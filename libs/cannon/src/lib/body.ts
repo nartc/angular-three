@@ -13,7 +13,7 @@ import {
   tapEffect,
   UnknownRecord,
 } from '@angular-three/core';
-import { Injectable, NgZone, Optional } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import type {
   AtomicName,
   AtomicProps,
@@ -149,18 +149,16 @@ export function makeTriplet(v: THREE.Vector3 | NgtTriple): NgtTriple {
 
 @Injectable()
 export class NgtPhysicBody extends NgtComponentStore {
-  constructor(
-    private zone: NgZone,
-    private store: NgtStore,
-    @Optional() private physicsStore: NgtPhysicsStore,
-    @Optional()
-    private debug: NgtCannonDebug
-  ) {
-    if (!physicsStore) {
+  private zone = inject(NgZone);
+  private store = inject(NgtStore);
+  private physicsStore = inject(NgtPhysicsStore, { optional: true });
+  private debug = inject(NgtCannonDebug, { optional: true });
+
+  constructor() {
+    super();
+    if (!this.physicsStore) {
       throw new Error('NgtPhysicBody must be used inside of <ngt-physics>');
     }
-
-    super();
   }
 
   usePlane<TObject extends THREE.Object3D>(fn: GetByIndex<PlaneProps>, useOnTemplate = true, ref?: Ref<TObject>) {
@@ -256,7 +254,7 @@ export class NgtPhysicBody extends NgtComponentStore {
       this.store.onReady(() => {
         this.effect<[CannonWorkerAPI, THREE.Object3D]>(
           tapEffect(() => {
-            const { worker, refs, events } = physicsStore.get();
+            const { worker, refs, events } = physicsStore!.get();
             const object = ref.value;
             let objectCount = 1;
 
@@ -321,13 +319,13 @@ export class NgtPhysicBody extends NgtComponentStore {
               worker.removeBodies({ uuid });
             };
           })
-        )(combineLatest([physicsStore.select((s) => s.worker), ref.pipe(filter((obj): obj is TObject => !!obj))]));
+        )(combineLatest([physicsStore!.select((s) => s.worker), ref.pipe(filter((obj): obj is TObject => !!obj))]));
       });
 
       return {
         ref,
         get api() {
-          const { worker, subscriptions, scaleOverrides } = physicsStore.get();
+          const { worker, subscriptions, scaleOverrides } = physicsStore!.get();
 
           const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
             const op: SetOpName<T> = `set${capitalize(type)}`;

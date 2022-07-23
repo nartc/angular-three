@@ -1,5 +1,5 @@
 import { is, NgtComponentStore, NgtStore, prepare, Ref, tapEffect } from '@angular-three/core';
-import { Injectable, NgZone, Optional } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import type { CannonWorkerAPI, WheelInfoOptions } from '@pmndrs/cannon-worker-api';
 import { combineLatest, filter } from 'rxjs';
 import * as THREE from 'three';
@@ -32,11 +32,15 @@ export interface NgtPhysicRaycastVehicleReturn<TObject extends THREE.Object3D = 
 
 @Injectable()
 export class NgtPhysicRaycastVehicle extends NgtComponentStore {
-  constructor(private zone: NgZone, private store: NgtStore, @Optional() private physicsStore: NgtPhysicsStore) {
-    if (!physicsStore) {
-      throw new Error('NgtPhysicRaycastVehicle must be used inside of <ngt-physics>');
-    }
+  private zone = inject(NgZone);
+  private store = inject(NgtStore);
+  private physicsStore = inject(NgtPhysicsStore, { optional: true });
+
+  constructor() {
     super();
+    if (!this.physicsStore) {
+      throw new Error('NgtPhysicRaycast must be used inside of <ngt-physics>');
+    }
   }
 
   useRaycastVehicle<TObject extends THREE.Object3D = THREE.Object3D>(
@@ -61,7 +65,7 @@ export class NgtPhysicRaycastVehicle extends NgtComponentStore {
       this.store.onReady(() => {
         this.effect<[CannonWorkerAPI, THREE.Object3D, THREE.Object3D, THREE.Object3D[]]>(
           tapEffect(() => {
-            const worker = physicsStore.get((s) => s.worker);
+            const worker = physicsStore!.get((s) => s.worker);
             const uuid = ref.value.uuid;
             const chassisBodyUUID = NgtCannonUtils.getUUID(chassisBody);
             const wheelUUIDs = wheels.map((ref) => NgtCannonUtils.getUUID(ref));
@@ -80,7 +84,7 @@ export class NgtPhysicRaycastVehicle extends NgtComponentStore {
           })
         )(
           combineLatest([
-            physicsStore.select((s) => s.worker),
+            physicsStore!.select((s) => s.worker),
             ref.pipe(filter((obj): obj is TObject => !!obj)),
             chassisBody.pipe(filter((chassis) => !!chassis)),
             combineLatest(wheels.map((wheelRef) => wheelRef.pipe(filter((wheel): wheel is THREE.Object3D => !!wheel)))),
@@ -91,7 +95,7 @@ export class NgtPhysicRaycastVehicle extends NgtComponentStore {
       return {
         ref,
         get api() {
-          const { worker, subscriptions } = physicsStore.get();
+          const { worker, subscriptions } = physicsStore!.get();
           return {
             applyEngineForce(value: number, wheelIndex: number) {
               const uuid = NgtCannonUtils.getUUID(ref);

@@ -1,6 +1,6 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import { NgtObject, NgtObjectInputsState, NgtPreObjectInit } from '../abstracts/object';
+import { NgtObject, NgtObjectPropsState, NgtPreObjectInit } from '../abstracts/object';
 import { tapEffect } from '../stores/component-store';
 import type { AnyConstructor, BooleanInput, NumberInput } from '../types';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
@@ -8,7 +8,7 @@ import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
 export interface NgtCommonAudioState<
   TAudioNode extends AudioNode = GainNode,
   TAudio extends THREE.Audio<TAudioNode> = THREE.Audio<TAudioNode>
-> extends NgtObjectInputsState<TAudio> {
+> extends NgtObjectPropsState<TAudio> {
   listener: THREE.AudioListener;
   buffer: null | AudioBuffer;
   detune: number;

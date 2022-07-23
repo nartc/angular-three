@@ -2,9 +2,9 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NgtRenderState,
   NumberInput,
   provideObjectHostRef,
@@ -25,7 +25,7 @@ const genStar = (r: number) => {
   );
 };
 
-export interface NgtSobaStarsState extends NgtObjectInputsState<THREE.Points> {
+export interface NgtSobaStarsState extends NgtObjectPropsState<THREE.Points> {
   radius: number;
   depth: number;
   count: number;
@@ -77,7 +77,7 @@ export interface NgtSobaStarsState extends NgtObjectInputsState<THREE.Points> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaStars)],
 })
-export class NgtSobaStars extends NgtObjectInputs<THREE.Points, NgtSobaStarsState> {
+export class NgtSobaStars extends NgtObjectProps<THREE.Points, NgtSobaStarsState> {
   @Input() set radius(radius: NumberInput) {
     this.set({ radius: coerceNumberProperty(radius) });
   }

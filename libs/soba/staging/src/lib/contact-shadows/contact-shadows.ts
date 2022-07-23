@@ -4,9 +4,9 @@ import {
   coerceNumberProperty,
   is,
   make,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NgtRadianPipe,
   NumberInput,
   provideObjectHostRef,
@@ -22,7 +22,7 @@ import { tap } from 'rxjs';
 import * as THREE from 'three';
 import { HorizontalBlurShader, VerticalBlurShader } from 'three-stdlib';
 
-export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.Group> {
+export interface NgtSobaContactShadowsState extends NgtObjectPropsState<THREE.Group> {
   opacity: number;
   width: number;
   height: number;
@@ -81,7 +81,7 @@ export interface NgtSobaContactShadowsState extends NgtObjectInputsState<THREE.G
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaContactShadows)],
 })
-export class NgtSobaContactShadows extends NgtObjectInputs<THREE.Group, NgtSobaContactShadowsState> {
+export class NgtSobaContactShadows extends NgtObjectProps<THREE.Group, NgtSobaContactShadowsState> {
   @Input() set opacity(opacity: NumberInput) {
     this.set({ opacity: coerceNumberProperty(opacity) });
   }

@@ -13,7 +13,6 @@ import {
   NgtInstanceState,
   NgtMatrix4,
   NgtObject,
-  NgtStore,
   NumberInput,
   provideCommonMeshRef,
   provideInstanceRef,
@@ -21,7 +20,7 @@ import {
   Ref,
   tapEffect,
 } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component, Inject, Input, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, NgModule } from '@angular/core';
 import { pipe, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
 
@@ -128,20 +127,18 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
     this.set({ frame: coerceNumberProperty(frame) });
   }
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_HOST_SKINNED_MESH_REF)
-    parentHostRef: AnyFunction<Ref<THREE.SkinnedMesh>>,
-    @Optional() private skinnedMesh: NgtSkinnedMesh
-  ) {
-    if (parentHostRef && !parentHostRef().value.isSkinnedMesh) {
+  private skinnedMesh = inject(NgtSkinnedMesh, { optional: true });
+  protected override parentRef = (() => this.skinnedMesh?.instance) as AnyFunction<Ref>;
+  protected override parentHostRef = inject(NGT_HOST_SKINNED_MESH_REF, {
+    optional: true,
+    skipSelf: true,
+  }) as AnyFunction<Ref>;
+
+  constructor() {
+    super();
+    if (this.parentHostRef && !this.parentHostRef().value.isSkinnedMesh) {
       throw new Error('<ngt-skeleton> can only be used within <ngt-skinned-mesh>');
     }
-
-    super(zone, store, () => skinnedMesh?.instance, parentHostRef);
   }
 
   protected override preInit() {
@@ -189,8 +186,8 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
           new THREE.Skeleton(...(skeletonArgs as ConstructorParameters<typeof THREE.Skeleton>))
         );
 
-        if (!this.skinnedMesh.instance.value.skeleton) {
-          this.skinnedMesh.bind(skeleton);
+        if (!this.skinnedMesh?.instance.value.skeleton) {
+          this.skinnedMesh?.bind(skeleton);
         }
 
         return () => {
@@ -221,32 +218,20 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
   providers: [provideObjectRef(NgtBone)],
 })
 export class NgtBone extends NgtObject<THREE.Bone> {
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional() @SkipSelf() private parentBone: NgtBone,
-    @Optional() private parentSkinnedMesh: NgtSkinnedMesh,
-    @Optional() private parentSkeleton: NgtSkeleton,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_HOST_BONE_REF)
-    private hostBoneRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_HOST_SKELETON_REF)
-    private hostSkeletonRef: AnyFunction<Ref>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_HOST_SKINNED_MESH_REF)
-    private hostSkinnedMeshRef: AnyFunction<Ref>
-  ) {
-    super(
-      zone,
-      store,
-      () => (parentBone?.instance || parentSkinnedMesh?.instance) as Ref,
-      (hostBoneRef || hostSkinnedMeshRef) as AnyFunction
-    );
-  }
+  private hostBoneRef = inject(NGT_HOST_BONE_REF, { skipSelf: true, optional: true }) as AnyFunction<Ref>;
+  private hostSkeletonRef = inject(NGT_HOST_SKELETON_REF, { skipSelf: true, optional: true }) as AnyFunction<Ref>;
+  private hostSkinnedMeshRef = inject(NGT_HOST_SKINNED_MESH_REF, {
+    skipSelf: true,
+    optional: true,
+  }) as AnyFunction<Ref>;
+
+  private parentBone = inject(NgtBone, { skipSelf: true, optional: true });
+  private parentSkinnedMesh = inject(NgtSkinnedMesh, { optional: true });
+  private parentSkeleton = inject(NgtSkeleton, { optional: true });
+
+  protected override parentRef = (() =>
+    this.parentBone?.instance || this.parentSkinnedMesh?.instance) as AnyFunction<Ref>;
+  protected override parentHostRef = this.hostBoneRef || this.hostSkinnedMeshRef;
 
   protected override objectInitFn(): THREE.Bone {
     return new THREE.Bone();

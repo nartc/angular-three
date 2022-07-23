@@ -3,9 +3,9 @@ import {
   coerceBooleanProperty,
   coerceNumberProperty,
   is,
-  NgtObjectInputs,
-  NgtObjectInputsState,
   NgtObjectPassThrough,
+  NgtObjectProps,
+  NgtObjectPropsState,
   NumberInput,
   provideObjectHostRef,
   Ref,
@@ -133,7 +133,7 @@ type PointerEventsProperties =
   | 'all'
   | 'inherit';
 
-export interface NgtSobaHtmlState extends NgtObjectInputsState<THREE.Group> {
+export interface NgtSobaHtmlState extends NgtObjectPropsState<THREE.Group> {
   prepend?: boolean;
   center?: boolean;
   fullscreen?: boolean;
@@ -195,7 +195,7 @@ export class NgtSobaHtmlContent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideObjectHostRef(NgtSobaHtml)],
 })
-export class NgtSobaHtml extends NgtObjectInputs<THREE.Group, NgtSobaHtmlState> {
+export class NgtSobaHtml extends NgtObjectProps<THREE.Group, NgtSobaHtmlState> {
   @Input() set prepend(prepend: BooleanInput) {
     this.set({ prepend: coerceBooleanProperty(prepend) });
   }

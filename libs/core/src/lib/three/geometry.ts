@@ -1,10 +1,9 @@
-import { Directive, Inject, Input, NgZone, Optional, SkipSelf } from '@angular/core';
+import { Directive, inject, Input } from '@angular/core';
 import * as THREE from 'three';
 import type { NgtInstanceState } from '../abstracts/instance';
 import { NgtInstance } from '../abstracts/instance';
 import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
-import { NgtStore } from '../stores/store';
 import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
 import type { AnyConstructor, AnyFunction } from '../types';
 
@@ -18,20 +17,11 @@ export abstract class NgtCommonGeometry<
     this.instanceArgs = v;
   }
 
-  constructor(
-    zone: NgZone,
-    store: NgtStore,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_REF)
-    parentRef: AnyFunction<Ref<THREE.Object3D>>,
-    @Optional()
-    @SkipSelf()
-    @Inject(NGT_OBJECT_HOST_REF)
-    parentHostRef: AnyFunction<Ref<THREE.Object3D>>
-  ) {
-    super(zone, store, parentRef, parentHostRef);
-  }
+  protected override parentRef = inject(NGT_OBJECT_REF, { optional: true, skipSelf: true }) as AnyFunction<Ref>;
+  protected override parentHostRef = inject(NGT_OBJECT_HOST_REF, {
+    optional: true,
+    skipSelf: true,
+  }) as AnyFunction<Ref>;
 
   protected override preInit() {
     this.set((state) => ({
