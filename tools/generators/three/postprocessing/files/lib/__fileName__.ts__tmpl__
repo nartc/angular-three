@@ -2,6 +2,7 @@
 import { AnyConstructor,<% if (hasBooleanInput) { %>coerceBooleanProperty, BooleanInput,<% } %><% if (hasNumberInput) { %> coerceNumberProperty, NumberInput,<% } %> } from '@angular-three/core';
 import {
     NgtCommonEffect,
+    provideNgtCommonEffect,
     provideCommonEffectRef,
 } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule<% if (hasInput) { %>, Input<% } %> } from '@angular/core';
@@ -12,7 +13,10 @@ import { <% if (blendFunction) { %>BlendFunction,<% } %> <%= name %><% for (cons
     standalone: true,
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonEffectRef(Ngt<%= name %>)],
+    providers: [
+        provideNgtCommonEffect(Ngt<%= name %>),
+        provideCommonEffectRef(Ngt<%= name %>)
+    ],
 })
 export class Ngt<%= name %> extends NgtCommonEffect<<%= name %>> {
     override get effectType(): AnyConstructor<<%= name %>> {

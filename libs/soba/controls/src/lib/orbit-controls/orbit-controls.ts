@@ -7,6 +7,7 @@ import {
   NgtVector3,
   NumberInput,
   provideInstanceRef,
+  provideNgtInstance,
   tapEffect,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
@@ -28,7 +29,7 @@ export interface NgtSobaOrbitControlsState extends NgtInstanceState<OrbitControl
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtSobaOrbitControls)],
+  providers: [provideNgtInstance(NgtSobaOrbitControls), provideInstanceRef(NgtSobaOrbitControls)],
 })
 export class NgtSobaOrbitControls extends NgtInstance<OrbitControls, NgtSobaOrbitControlsState> {
   @Input() set enabled(enabled: BooleanInput) {

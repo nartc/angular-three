@@ -5,7 +5,7 @@ import {
   startWithUndefined,
   UnknownRecord,
 } from '@angular-three/core';
-import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
+import { NgtCommonEffect, provideCommonEffectRef, provideNgtCommonEffect } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { LUT3DEffect } from 'postprocessing';
 import { tap } from 'rxjs';
@@ -16,7 +16,7 @@ import * as THREE from 'three';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonEffectRef(NgtLUTEffect)],
+  providers: [provideNgtCommonEffect(NgtLUTEffect), provideCommonEffectRef(NgtLUTEffect)],
 })
 export class NgtLUTEffect extends NgtCommonEffect<LUT3DEffect> {
   @Input() set lut(lut: THREE.Texture) {

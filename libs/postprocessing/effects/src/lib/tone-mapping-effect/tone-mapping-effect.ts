@@ -6,7 +6,7 @@ import {
   coerceNumberProperty,
   NumberInput,
 } from '@angular-three/core';
-import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
+import { NgtCommonEffect, provideNgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import { ToneMappingEffect, ToneMappingMode } from 'postprocessing';
 
@@ -15,7 +15,7 @@ import { ToneMappingEffect, ToneMappingMode } from 'postprocessing';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonEffectRef(NgtToneMappingEffect)],
+  providers: [provideNgtCommonEffect(NgtToneMappingEffect), provideCommonEffectRef(NgtToneMappingEffect)],
 })
 export class NgtToneMappingEffect extends NgtCommonEffect<ToneMappingEffect> {
   override get effectType(): AnyConstructor<ToneMappingEffect> {

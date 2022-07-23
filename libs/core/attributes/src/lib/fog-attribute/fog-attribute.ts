@@ -1,5 +1,5 @@
 // GENERATED
-import { make, NgtInstance, provideInstanceRef, NgtFog } from '@angular-three/core';
+import { make, NgtInstance, provideNgtInstance, provideInstanceRef, NgtFog } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';
@@ -9,7 +9,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtFogAttribute)],
+  providers: [provideNgtInstance(NgtFogAttribute), provideInstanceRef(NgtFogAttribute)],
 })
 export class NgtFogAttribute extends NgtInstance<THREE.Fog> {
   @Input() set fog(fog: NgtFog) {

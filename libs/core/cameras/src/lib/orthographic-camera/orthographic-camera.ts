@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonCamera,
+  provideNgtCommonCamera,
   provideCommonCameraRef,
   coerceNumberProperty,
   NumberInput,
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonCameraRef(NgtOrthographicCamera)],
+  providers: [provideNgtCommonCamera(NgtOrthographicCamera), provideCommonCameraRef(NgtOrthographicCamera)],
 })
 export class NgtOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCamera> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.OrthographicCamera> | undefined;

@@ -1,5 +1,5 @@
 // GENERATED
-import { make, NgtInstance, provideInstanceRef, NgtColor } from '@angular-three/core';
+import { make, NgtInstance, provideNgtInstance, provideInstanceRef, NgtColor } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';
@@ -9,7 +9,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtColorAttribute)],
+  providers: [provideNgtInstance(NgtColorAttribute), provideInstanceRef(NgtColorAttribute)],
 })
 export class NgtColorAttribute extends NgtInstance<THREE.Color> {
   @Input() set color(color: NgtColor) {

@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonMaterial,
+  provideNgtCommonMaterial,
   provideCommonMaterialRef,
   coerceNumberProperty,
   NumberInput,
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtLineBasicMaterial)],
+  providers: [provideNgtCommonMaterial(NgtLineBasicMaterial), provideCommonMaterialRef(NgtLineBasicMaterial)],
 })
 export class NgtLineBasicMaterial<
   TLineBasicMaterialParameters extends THREE.LineBasicMaterialParameters = THREE.LineBasicMaterialParameters,

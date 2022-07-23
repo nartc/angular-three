@@ -4,6 +4,7 @@ import {
   NgtCommonMesh,
   NumberInput,
   provideCommonMeshRef,
+  provideNgtCommonMesh,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
@@ -13,7 +14,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMeshRef(NgtInstancedMesh)],
+  providers: [provideNgtCommonMesh(NgtInstancedMesh), provideCommonMeshRef(NgtInstancedMesh)],
 })
 export class NgtInstancedMesh extends NgtCommonMesh<THREE.InstancedMesh> {
   @Input() set count(count: NumberInput) {

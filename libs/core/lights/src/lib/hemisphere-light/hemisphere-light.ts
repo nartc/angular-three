@@ -1,5 +1,5 @@
 // GENERATED
-import { AnyConstructor, NgtCommonLight, provideCommonLightRef } from '@angular-three/core';
+import { AnyConstructor, NgtCommonLight, provideNgtCommonLight, provideCommonLightRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -8,7 +8,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonLightRef(NgtHemisphereLight)],
+  providers: [provideNgtCommonLight(NgtHemisphereLight), provideCommonLightRef(NgtHemisphereLight)],
 })
 export class NgtHemisphereLight extends NgtCommonLight<THREE.HemisphereLight> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.HemisphereLight> | undefined;

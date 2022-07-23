@@ -1,24 +1,15 @@
-import { InjectionToken, Provider } from '@angular/core';
 import type { NgtPerformanceOptions } from '../types';
+import { createInjection } from '../utils/inject';
 
-export const NGT_PERFORMANCE_OPTIONS = new InjectionToken<NgtPerformanceOptions>('NgtPerformance options', {
-  factory: () => ({
-    current: 1,
-    min: 0.5,
-    max: 1,
-    debounce: 200,
-  }),
-});
+const defaultPerformance = {
+  current: 1,
+  min: 0.5,
+  max: 1,
+  debounce: 200,
+};
 
-export function providePerformanceOptions(options: Partial<NgtPerformanceOptions>): Provider {
-  return {
-    provide: NGT_PERFORMANCE_OPTIONS,
-    useValue: {
-      current: 1,
-      min: 0.5,
-      max: 1,
-      debounce: 200,
-      ...options,
-    },
-  };
-}
+export const [injectPerformanceOptions, providePerformanceOptions, NGT_PERFORMANCE_OPTIONS] =
+  createInjection<NgtPerformanceOptions>('NgtPerformance options', {
+    defaultValueOrFactory: defaultPerformance,
+    provideValueFactory: (value) => ({ ...defaultPerformance, ...value }),
+  });

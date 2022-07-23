@@ -1,6 +1,6 @@
 // GENERATED
 import { AnyConstructor, coerceBooleanProperty, BooleanInput } from '@angular-three/core';
-import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
+import { NgtCommonEffect, provideNgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import { DepthEffect } from 'postprocessing';
 
@@ -9,7 +9,7 @@ import { DepthEffect } from 'postprocessing';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonEffectRef(NgtDepthEffect)],
+  providers: [provideNgtCommonEffect(NgtDepthEffect), provideCommonEffectRef(NgtDepthEffect)],
 })
 export class NgtDepthEffect extends NgtCommonEffect<DepthEffect> {
   override get effectType(): AnyConstructor<DepthEffect> {

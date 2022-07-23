@@ -6,7 +6,9 @@ import {
   NgtObjectPropsState,
   NgtRadianPipe,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
 } from '@angular-three/core';
 import { NgtPlaneGeometry } from '@angular-three/core/geometries';
@@ -63,7 +65,11 @@ export class NgtSobaBackdropContent {
   `,
   imports: [NgtGroup, NgtObjectPassThrough, NgtMesh, NgtPlaneGeometry, NgtRadianPipe, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaBackdrop, (backdrop) => backdrop.backdropMesh)],
+  providers: [
+    provideNgtObject(NgtSobaBackdrop),
+    provideObjectRef(NgtSobaBackdrop, (backdrop) => backdrop.backdropMesh),
+    provideObjectHostRef(NgtSobaBackdrop),
+  ],
 })
 export class NgtSobaBackdrop extends NgtObjectProps<THREE.Group, NgtSobaBackdropState> {
   @Input() set floor(floor: NumberInput) {

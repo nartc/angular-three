@@ -7,7 +7,9 @@ import {
   NgtObjectProps,
   NgtObjectPropsState,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
   startWithUndefined,
   tapEffect,
@@ -193,7 +195,7 @@ export class NgtSobaHtmlContent {
   `,
   imports: [NgtGroup, NgtObjectPassThrough, NgtSobaHtmlElement, NgIf, AsyncPipe, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaHtml)],
+  providers: [provideNgtObject(NgtSobaHtml), provideObjectRef(NgtSobaHtml), provideObjectHostRef(NgtSobaHtml)],
 })
 export class NgtSobaHtml extends NgtObjectProps<THREE.Group, NgtSobaHtmlState> {
   @Input() set prepend(prepend: BooleanInput) {

@@ -1,5 +1,5 @@
 // GENERATED
-import { AnyConstructor, NgtCommonSprite, provideCommonSpriteRef } from '@angular-three/core';
+import { AnyConstructor, NgtCommonSprite, provideNgtCommonSprite, provideCommonSpriteRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import * as THREE from 'three';
 
@@ -8,7 +8,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonSpriteRef(NgtSprite)],
+  providers: [provideNgtCommonSprite(NgtSprite), provideCommonSpriteRef(NgtSprite)],
 })
 export class NgtSprite extends NgtCommonSprite<THREE.Sprite> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.Sprite> | undefined;

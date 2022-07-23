@@ -1,5 +1,10 @@
 // GENERATED
-import { AnyConstructor, NgtCommonAttribute, provideCommonAttributeRef } from '@angular-three/core';
+import {
+  AnyConstructor,
+  NgtCommonAttribute,
+  provideNgtCommonAttribute,
+  provideCommonAttributeRef,
+} from '@angular-three/core';
 import { NgModule, Component } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,7 +12,7 @@ import * as THREE from 'three';
   selector: 'ngt-uint8-buffer-attribute',
   standalone: true,
   template: '<ng-content></ng-content>',
-  providers: [provideCommonAttributeRef(NgtUint8BufferAttribute)],
+  providers: [provideNgtCommonAttribute(NgtUint8BufferAttribute), provideCommonAttributeRef(NgtUint8BufferAttribute)],
 })
 export class NgtUint8BufferAttribute extends NgtCommonAttribute<THREE.Uint8BufferAttribute> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.Uint8BufferAttribute> | undefined;

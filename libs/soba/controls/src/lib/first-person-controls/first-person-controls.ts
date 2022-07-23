@@ -6,6 +6,7 @@ import {
   NgtInstanceState,
   NumberInput,
   provideInstanceRef,
+  provideNgtInstance,
   tapEffect,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
@@ -21,7 +22,7 @@ export interface NgtSobaFirstPersonControlsState extends NgtInstanceState<FirstP
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtSobaFirstPersonControls)],
+  providers: [provideNgtInstance(NgtSobaFirstPersonControls), provideInstanceRef(NgtSobaFirstPersonControls)],
 })
 export class NgtSobaFirstPersonControls extends NgtInstance<FirstPersonControls, NgtSobaFirstPersonControlsState> {
   @Input() set domElement(domElement: HTMLElement) {

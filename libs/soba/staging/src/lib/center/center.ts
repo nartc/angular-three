@@ -6,7 +6,9 @@ import {
   NgtObjectPassThrough,
   NgtObjectProps,
   NgtObjectPropsState,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
 } from '@angular-three/core';
 import { NgtGroup } from '@angular-three/core/group';
@@ -64,7 +66,11 @@ export interface NgtSobaCenterState extends NgtObjectPropsState<THREE.Group> {
   `,
   imports: [NgtGroup, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaCenter, (center) => center.innerGroup)],
+  providers: [
+    provideNgtObject(NgtSobaCenter),
+    provideObjectRef(NgtSobaCenter, (center) => center.innerGroup),
+    provideObjectHostRef(NgtSobaCenter),
+  ],
 })
 export class NgtSobaCenter extends NgtObjectProps<THREE.Group, NgtSobaCenterState> implements AfterContentInit {
   @Input() set alignTop(alignTop: BooleanInput) {

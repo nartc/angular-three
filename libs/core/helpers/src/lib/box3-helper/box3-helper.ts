@@ -1,5 +1,11 @@
 // GENERATED
-import { AnyConstructor, NgtCommonObjectHelper, provideCommonObjectHelperRef, Tail } from '@angular-three/core';
+import {
+  AnyConstructor,
+  NgtCommonObjectHelper,
+  provideNgtCommonObjectHelper,
+  provideCommonObjectHelperRef,
+  Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,7 +13,7 @@ import * as THREE from 'three';
   selector: '[ngtBox3Helper]',
   standalone: true,
   exportAs: 'ngtBox3Helper',
-  providers: [provideCommonObjectHelperRef(NgtBox3Helper)],
+  providers: [provideNgtCommonObjectHelper(NgtBox3Helper), provideCommonObjectHelperRef(NgtBox3Helper)],
 })
 export class NgtBox3Helper extends NgtCommonObjectHelper<THREE.Box3Helper> {
   static ngAcceptInputType_ngtBox3Helper: Tail<ConstructorParameters<typeof THREE.Box3Helper>> | '' | undefined;

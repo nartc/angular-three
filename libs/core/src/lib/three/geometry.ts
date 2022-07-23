@@ -1,11 +1,11 @@
-import { Directive, inject, Input } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import type { NgtInstanceState } from '../abstracts/instance';
-import { NgtInstance } from '../abstracts/instance';
-import { Ref } from '../ref';
+import { NgtInstance, provideNgtInstance } from '../abstracts/instance';
+import { injectObjectHostRef, injectObjectRef } from '../di/object';
 import { tapEffect } from '../stores/component-store';
-import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
-import type { AnyConstructor, AnyFunction } from '../types';
+import type { AnyConstructor } from '../types';
+import { createNgtProvider } from '../utils/inject';
 
 @Directive()
 export abstract class NgtCommonGeometry<
@@ -17,11 +17,8 @@ export abstract class NgtCommonGeometry<
     this.instanceArgs = v;
   }
 
-  protected override parentRef = inject(NGT_OBJECT_REF, { optional: true, skipSelf: true }) as AnyFunction<Ref>;
-  protected override parentHostRef = inject(NGT_OBJECT_HOST_REF, {
-    optional: true,
-    skipSelf: true,
-  }) as AnyFunction<Ref>;
+  protected override parentRef = injectObjectRef({ optional: true, skipSelf: true });
+  protected override parentHostRef = injectObjectHostRef({ optional: true, skipSelf: true });
 
   protected override preInit() {
     this.set((state) => ({
@@ -51,3 +48,5 @@ export abstract class NgtCommonGeometry<
     })
   );
 }
+
+export const provideNgtCommonGeometry = createNgtProvider(NgtCommonGeometry, provideNgtInstance);

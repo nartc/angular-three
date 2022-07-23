@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonMaterial,
+  provideNgtCommonMaterial,
   provideCommonMaterialRef,
   coerceNumberProperty,
   NumberInput,
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtMeshDistanceMaterial)],
+  providers: [provideNgtCommonMaterial(NgtMeshDistanceMaterial), provideCommonMaterialRef(NgtMeshDistanceMaterial)],
 })
 export class NgtMeshDistanceMaterial extends NgtCommonMaterial<
   THREE.MeshDistanceMaterialParameters,

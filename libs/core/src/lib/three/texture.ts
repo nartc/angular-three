@@ -1,10 +1,11 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
+import { NgtInstance, NgtInstanceState, provideNgtInstance } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
 import type { AnyConstructor, NumberInput } from '../types';
 import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { coerceNumberProperty } from '../utils/coercion';
+import { createNgtProvider } from '../utils/inject';
 
 @Directive()
 export abstract class NgtCommonTexture<TTexture extends THREE.Texture = THREE.Texture> extends NgtInstance<
@@ -99,3 +100,5 @@ export abstract class NgtCommonTexture<TTexture extends THREE.Texture = THREE.Te
     };
   }
 }
+
+export const provideNgtCommonTexture = createNgtProvider(NgtCommonTexture, provideNgtInstance);

@@ -7,7 +7,9 @@ import {
   NgtObjectPropsState,
   NgtRenderState,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
   startWithUndefined,
 } from '@angular-three/core';
@@ -98,7 +100,12 @@ export interface NgtSobaImageState extends NgtObjectPropsState<THREE.Mesh> {
     AsyncPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NgtTextureLoader, provideObjectHostRef(NgtSobaImage)],
+  providers: [
+    NgtTextureLoader,
+    provideNgtObject(NgtSobaImage),
+    provideObjectRef(NgtSobaImage),
+    provideObjectHostRef(NgtSobaImage),
+  ],
 })
 export class NgtSobaImage extends NgtObjectProps<THREE.Mesh, NgtSobaImageState> {
   @Output() beforeRender = new EventEmitter<{

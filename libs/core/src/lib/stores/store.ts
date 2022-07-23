@@ -2,7 +2,7 @@ import { ElementRef, Inject, Injectable, NgZone, Optional, SkipSelf } from '@ang
 import { filter, Observable, Subscription, tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_PERFORMANCE_OPTIONS } from '../di/performance';
-import { WINDOW } from '../di/window';
+import { NGT_WINDOW } from '../di/window';
 import { Ref } from '../ref';
 import { NgtResize, NgtResizeResult } from '../services/resize';
 import type {
@@ -71,7 +71,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     { nativeElement: { clientWidth, clientHeight } }: ElementRef<HTMLElement>,
     @Inject(NGT_PERFORMANCE_OPTIONS)
     performanceOptions: NgtPerformanceOptions,
-    @Inject(WINDOW) { devicePixelRatio }: Window,
+    @Inject(NGT_WINDOW) { devicePixelRatio }: Window,
     @Optional() @SkipSelf() private parentStore: NgtStore,
     @Inject(NgtResize) private resizeResult$: Observable<NgtResizeResult>,
     private zone: NgZone

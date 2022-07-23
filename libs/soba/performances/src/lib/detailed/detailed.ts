@@ -4,7 +4,9 @@ import {
   NgtObjectPassThrough,
   NgtObjectProps,
   NgtRenderState,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
 } from '@angular-three/core';
 import { NgtLod } from '@angular-three/core/lod';
@@ -51,7 +53,11 @@ export class NgtSobaDetailedContent {
   `,
   imports: [NgtLod, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaDetailed)],
+  providers: [
+    provideNgtObject(NgtSobaDetailed),
+    provideObjectRef(NgtSobaDetailed),
+    provideObjectHostRef(NgtSobaDetailed),
+  ],
 })
 export class NgtSobaDetailed extends NgtObjectProps<THREE.LOD> implements AfterContentInit {
   @ContentChild(NgtSobaDetailedContent) content?: NgtSobaDetailedContent;

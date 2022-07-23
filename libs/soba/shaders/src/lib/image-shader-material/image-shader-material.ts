@@ -4,6 +4,7 @@ import {
   NgtColor,
   NumberInput,
   provideCommonMaterialRef,
+  provideNgtCommonMaterial,
 } from '@angular-three/core';
 import { NgtShaderMaterial } from '@angular-three/core/materials';
 import { ImageShaderMaterial } from '@angular-three/soba/materials';
@@ -24,7 +25,10 @@ export type NgtSobaImageShaderMaterialParameters = THREE.ShaderMaterialParameter
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtSobaImageShaderMaterial)],
+  providers: [
+    provideNgtCommonMaterial(NgtSobaImageShaderMaterial),
+    provideCommonMaterialRef(NgtSobaImageShaderMaterial),
+  ],
 })
 export class NgtSobaImageShaderMaterial extends NgtShaderMaterial {
   static override ngAcceptInputType_parameters: NgtSobaImageShaderMaterialParameters | undefined;

@@ -1,5 +1,5 @@
 import { AnyConstructor, coerceNumberProperty, NgtVector3, NumberInput } from '@angular-three/core';
-import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
+import { NgtCommonEffect, provideCommonEffectRef, provideNgtCommonEffect } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { DepthOfFieldEffect } from 'postprocessing';
 import { tap } from 'rxjs';
@@ -10,7 +10,7 @@ import * as THREE from 'three';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonEffectRef(NgtDepthOfFieldEffect)],
+  providers: [provideNgtCommonEffect(NgtDepthOfFieldEffect), provideCommonEffectRef(NgtDepthOfFieldEffect)],
 })
 export class NgtDepthOfFieldEffect extends NgtCommonEffect<DepthOfFieldEffect> {
   override get effectType(): AnyConstructor<DepthOfFieldEffect> {

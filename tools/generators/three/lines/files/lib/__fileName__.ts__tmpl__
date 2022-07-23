@@ -2,6 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonLine,
+    provideNgtCommonLine,
     provideCommonLineRef,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
@@ -12,7 +13,10 @@ import * as THREE from 'three';
     standalone: true,
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonLineRef(Ngt<%= name %>)],
+    providers: [
+        provideNgtCommonLine(Ngt<%= name %>),
+        provideCommonLineRef(Ngt<%= name %>)
+    ],
 })
 export class Ngt<%= name %> extends NgtCommonLine<THREE.<%= name %>> {
     override get lineType(): AnyConstructor<THREE.<%= name %>> {

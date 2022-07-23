@@ -1,5 +1,11 @@
 // GENERATED
-import { AnyConstructor, NgtCommonObjectHelper, provideCommonObjectHelperRef, Tail } from '@angular-three/core';
+import {
+  AnyConstructor,
+  NgtCommonObjectHelper,
+  provideNgtCommonObjectHelper,
+  provideCommonObjectHelperRef,
+  Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,7 +13,7 @@ import * as THREE from 'three';
   selector: '[ngtCameraHelper]',
   standalone: true,
   exportAs: 'ngtCameraHelper',
-  providers: [provideCommonObjectHelperRef(NgtCameraHelper)],
+  providers: [provideNgtCommonObjectHelper(NgtCameraHelper), provideCommonObjectHelperRef(NgtCameraHelper)],
 })
 export class NgtCameraHelper extends NgtCommonObjectHelper<THREE.CameraHelper> {
   static ngAcceptInputType_ngtCameraHelper: Tail<ConstructorParameters<typeof THREE.CameraHelper>> | '' | undefined;

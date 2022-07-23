@@ -6,7 +6,9 @@ import {
   NgtObjectProps,
   NgtObjectPropsState,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
 } from '@angular-three/core';
 import { NgtGroup } from '@angular-three/core/group';
@@ -61,7 +63,11 @@ export interface NgtSobaFloatState extends NgtObjectPropsState<THREE.Group> {
   `,
   imports: [NgtGroup, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaFloat, (float) => float.innerGroup)],
+  providers: [
+    provideNgtObject(NgtSobaFloat),
+    provideObjectRef(NgtSobaFloat, (float) => float.innerGroup),
+    provideObjectHostRef(NgtSobaFloat),
+  ],
 })
 export class NgtSobaFloat extends NgtObjectProps<THREE.Group, NgtSobaFloatState> {
   @Input() set speed(speed: NumberInput) {

@@ -1,5 +1,10 @@
 // GENERATED
-import { AnyConstructor, NgtCommonMaterial, provideCommonMaterialRef } from '@angular-three/core';
+import {
+  AnyConstructor,
+  NgtCommonMaterial,
+  provideNgtCommonMaterial,
+  provideCommonMaterialRef,
+} from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -8,7 +13,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtRawShaderMaterial)],
+  providers: [provideNgtCommonMaterial(NgtRawShaderMaterial), provideCommonMaterialRef(NgtRawShaderMaterial)],
 })
 export class NgtRawShaderMaterial extends NgtCommonMaterial<THREE.ShaderMaterialParameters, THREE.RawShaderMaterial> {
   static ngAcceptInputType_parameters: THREE.ShaderMaterialParameters | undefined;

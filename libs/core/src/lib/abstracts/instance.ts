@@ -1,23 +1,28 @@
 import { DOCUMENT } from '@angular/common';
-import { Directive, EventEmitter, inject, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Inject,
+  inject,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Output,
+} from '@angular/core';
 import { filter, map, Observable, of, pairwise, pipe, startWith, switchMap, tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
+import { injectInstanceHostRef, injectInstanceRef } from '../di/instance';
 import { Ref } from '../ref';
 import { NgtComponentStore, startWithUndefined, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import { NGT_INSTANCE_HOST_REF, NGT_INSTANCE_REF } from '../tokens';
-import type {
-  AnyFunction,
-  AttachFunction,
-  BooleanInput,
-  NgtInstanceInternal,
-  NgtUnknownInstance,
-  UnknownRecord,
-} from '../types';
+import type { AttachFunction, BooleanInput, NgtInstanceInternal, NgtUnknownInstance, UnknownRecord } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { coerceBooleanProperty } from '../utils/coercion';
 import { removeInteractivity } from '../utils/events';
+import { createNgtProvider } from '../utils/inject';
 import { prepare } from '../utils/instance';
 import { is } from '../utils/is';
 import { mutate } from '../utils/mutate';
@@ -117,12 +122,12 @@ export abstract class NgtInstance<
   }
 
   protected zone = inject(NgZone);
-  protected store = inject(NgtStore);
+  protected store = this.skipSelfStore ? inject(NgtStore, { skipSelf: true }) : inject(NgtStore);
   protected document = inject(DOCUMENT);
-  protected parentRef = inject(NGT_INSTANCE_REF, { skipSelf: true, optional: true }) as AnyFunction<Ref>;
-  protected parentHostRef = inject(NGT_INSTANCE_HOST_REF, { skipSelf: true, optional: true }) as AnyFunction<Ref>;
+  protected parentRef = injectInstanceRef({ skipSelf: true, optional: true });
+  protected parentHostRef = injectInstanceHostRef({ skipSelf: true, optional: true });
 
-  constructor() {
+  constructor(@Optional() @Inject('NGT_SKIP_SELF_STORE') private skipSelfStore = false) {
     super();
     this.set({
       instance: new Ref(null),
@@ -441,3 +446,5 @@ export abstract class NgtInstance<
     checkNeedsUpdate(value);
   }
 }
+
+export const provideNgtInstance = createNgtProvider(NgtInstance);

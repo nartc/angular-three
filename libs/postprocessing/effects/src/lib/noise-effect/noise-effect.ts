@@ -1,6 +1,6 @@
 // GENERATED
 import { AnyConstructor, coerceBooleanProperty, BooleanInput } from '@angular-three/core';
-import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
+import { NgtCommonEffect, provideNgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import { BlendFunction, NoiseEffect } from 'postprocessing';
 
@@ -9,7 +9,7 @@ import { BlendFunction, NoiseEffect } from 'postprocessing';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonEffectRef(NgtNoiseEffect)],
+  providers: [provideNgtCommonEffect(NgtNoiseEffect), provideCommonEffectRef(NgtNoiseEffect)],
 })
 export class NgtNoiseEffect extends NgtCommonEffect<NoiseEffect> {
   override get effectType(): AnyConstructor<NoiseEffect> {

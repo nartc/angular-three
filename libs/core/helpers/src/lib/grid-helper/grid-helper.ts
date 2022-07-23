@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonHelper,
+  provideNgtCommonHelper,
   provideCommonHelperRef,
   coerceNumberProperty,
   NumberInput,
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonHelperRef(NgtGridHelper)],
+  providers: [provideNgtCommonHelper(NgtGridHelper), provideCommonHelperRef(NgtGridHelper)],
 })
 export class NgtGridHelper extends NgtCommonHelper<THREE.GridHelper> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.GridHelper> | undefined;

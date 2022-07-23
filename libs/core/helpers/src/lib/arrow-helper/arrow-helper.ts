@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonHelper,
+  provideNgtCommonHelper,
   provideCommonHelperRef,
   coerceNumberProperty,
   NumberInput,
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonHelperRef(NgtArrowHelper)],
+  providers: [provideNgtCommonHelper(NgtArrowHelper), provideCommonHelperRef(NgtArrowHelper)],
 })
 export class NgtArrowHelper extends NgtCommonHelper<THREE.ArrowHelper> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.ArrowHelper> | undefined;

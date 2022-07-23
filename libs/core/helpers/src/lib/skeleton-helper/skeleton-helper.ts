@@ -1,5 +1,11 @@
 // GENERATED
-import { AnyConstructor, NgtCommonObjectHelper, provideCommonObjectHelperRef, Tail } from '@angular-three/core';
+import {
+  AnyConstructor,
+  NgtCommonObjectHelper,
+  provideNgtCommonObjectHelper,
+  provideCommonObjectHelperRef,
+  Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,7 +13,7 @@ import * as THREE from 'three';
   selector: '[ngtSkeletonHelper]',
   standalone: true,
   exportAs: 'ngtSkeletonHelper',
-  providers: [provideCommonObjectHelperRef(NgtSkeletonHelper)],
+  providers: [provideNgtCommonObjectHelper(NgtSkeletonHelper), provideCommonObjectHelperRef(NgtSkeletonHelper)],
 })
 export class NgtSkeletonHelper extends NgtCommonObjectHelper<THREE.SkeletonHelper> {
   static ngAcceptInputType_ngtSkeletonHelper: Tail<ConstructorParameters<typeof THREE.SkeletonHelper>> | '' | undefined;

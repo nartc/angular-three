@@ -1,5 +1,10 @@
 // GENERATED
-import { AnyConstructor, NgtCommonGeometry, provideCommonGeometryRef } from '@angular-three/core';
+import {
+  AnyConstructor,
+  NgtCommonGeometry,
+  provideNgtCommonGeometry,
+  provideCommonGeometryRef,
+} from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -8,7 +13,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonGeometryRef(NgtCircleGeometry)],
+  providers: [provideNgtCommonGeometry(NgtCircleGeometry), provideCommonGeometryRef(NgtCircleGeometry)],
 })
 export class NgtCircleGeometry extends NgtCommonGeometry<THREE.CircleGeometry> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.CircleGeometry> | undefined;

@@ -1,5 +1,5 @@
 // GENERATED
-import { AnyConstructor, NgtCommonCurve, provideCommonCurveRef } from '@angular-three/core';
+import { AnyConstructor, NgtCommonCurve, provideNgtCommonCurve, provideCommonCurveRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -8,7 +8,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonCurveRef(NgtQuadraticBezierCurve3)],
+  providers: [provideNgtCommonCurve(NgtQuadraticBezierCurve3), provideCommonCurveRef(NgtQuadraticBezierCurve3)],
 })
 export class NgtQuadraticBezierCurve3 extends NgtCommonCurve<THREE.QuadraticBezierCurve3> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.QuadraticBezierCurve3> | undefined;

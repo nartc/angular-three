@@ -2,6 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonMaterial,
+    provideNgtCommonMaterial,
     provideCommonMaterialRef,<% if (hasBooleanInput) { %>coerceBooleanProperty, BooleanInput,<% } %><% if (hasNumberInput) { %> coerceNumberProperty, NumberInput,<% } %>
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule<% if (hasInput) { %>, Input<% } %> } from '@angular/core';
@@ -13,7 +14,10 @@ import * as THREE from 'three';
     standalone: true,
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonMaterialRef(Ngt<%= name %>)]
+    providers: [
+        provideNgtCommonMaterial(Ngt<%= name %>),
+        provideCommonMaterialRef(Ngt<%= name %>)
+    ]
 })
 export class Ngt<%= name %><% if (typeDef) { %><<%= typeDef %>><% } %> extends <% if (extend && extend.material) { %><%= extend.material %><% } else { %>NgtCommonMaterial<% } %><
     THREE.<%= parameters %>,

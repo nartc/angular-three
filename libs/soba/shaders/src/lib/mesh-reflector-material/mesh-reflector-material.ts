@@ -6,6 +6,7 @@ import {
   NgtUnknownInstance,
   NumberInput,
   provideCommonMaterialRef,
+  provideNgtCommonMaterial,
   Ref,
   tapEffect,
 } from '@angular-three/core';
@@ -20,7 +21,10 @@ import * as THREE from 'three';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtSobaMeshReflectorMaterial)],
+  providers: [
+    provideNgtCommonMaterial(NgtSobaMeshReflectorMaterial),
+    provideCommonMaterialRef(NgtSobaMeshReflectorMaterial),
+  ],
 })
 export class NgtSobaMeshReflectorMaterial extends NgtMeshStandardMaterial {
   @Input() set resolution(resolution: NumberInput) {

@@ -1,5 +1,5 @@
 // GENERATED
-import { AnyConstructor, NgtCommonLight, provideCommonLightRef } from '@angular-three/core';
+import { AnyConstructor, NgtCommonLight, provideNgtCommonLight, provideCommonLightRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -8,7 +8,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonLightRef(NgtDirectionalLight)],
+  providers: [provideNgtCommonLight(NgtDirectionalLight), provideCommonLightRef(NgtDirectionalLight)],
 })
 export class NgtDirectionalLight extends NgtCommonLight<THREE.DirectionalLight> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.DirectionalLight> | undefined;

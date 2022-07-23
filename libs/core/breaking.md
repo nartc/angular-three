@@ -12,3 +12,4 @@
 - `NgtVector4Pipe` is removed. Use `NgtVector4Attribute` instead
 - `NgtObjectInputs` -> `NgtObjectProps`
 - `NgtObjectInputsState` -> `NgtObjectPropsState`
+- Abstract classes are rewritten to use `inject()`. Hence, derived classes do not need to pass DIs into `super()` calls anymore

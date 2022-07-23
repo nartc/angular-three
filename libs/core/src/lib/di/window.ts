@@ -1,8 +1,9 @@
 import { DOCUMENT } from '@angular/common';
-import { inject, InjectionToken } from '@angular/core';
+import { inject } from '@angular/core';
+import { createInjection } from '../utils/inject';
 
-export const WINDOW = new InjectionToken<Window & typeof globalThis>('window', {
-  factory: () => {
+export const [injectWindow, , NGT_WINDOW] = createInjection<Window & typeof globalThis>('window', {
+  defaultValueOrFactory: () => {
     const { defaultView } = inject(DOCUMENT);
 
     if (!defaultView) {

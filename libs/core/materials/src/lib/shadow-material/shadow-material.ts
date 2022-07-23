@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonMaterial,
+  provideNgtCommonMaterial,
   provideCommonMaterialRef,
   coerceBooleanProperty,
   BooleanInput,
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtShadowMaterial)],
+  providers: [provideNgtCommonMaterial(NgtShadowMaterial), provideCommonMaterialRef(NgtShadowMaterial)],
 })
 export class NgtShadowMaterial extends NgtCommonMaterial<THREE.ShadowMaterialParameters, THREE.ShadowMaterial> {
   static ngAcceptInputType_parameters: THREE.ShadowMaterialParameters | undefined;

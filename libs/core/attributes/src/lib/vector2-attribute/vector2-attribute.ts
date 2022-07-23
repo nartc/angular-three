@@ -1,5 +1,5 @@
 // GENERATED
-import { make, NgtInstance, provideInstanceRef, NgtVector2 } from '@angular-three/core';
+import { make, NgtInstance, provideNgtInstance, provideInstanceRef, NgtVector2 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';
@@ -9,7 +9,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtVector2Attribute)],
+  providers: [provideNgtInstance(NgtVector2Attribute), provideInstanceRef(NgtVector2Attribute)],
 })
 export class NgtVector2Attribute extends NgtInstance<THREE.Vector2> {
   @Input() set vector2(vector2: NgtVector2) {

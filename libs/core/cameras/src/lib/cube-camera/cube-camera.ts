@@ -3,6 +3,7 @@ import {
   NgtObject,
   NgtPreObjectInit,
   NumberInput,
+  provideNgtObject,
   provideObjectRef,
   tapEffect,
 } from '@angular-three/core';
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectRef(NgtCubeCamera)],
+  providers: [provideNgtObject(NgtCubeCamera), provideObjectRef(NgtCubeCamera)],
 })
 export class NgtCubeCamera extends NgtObject<THREE.CubeCamera> {
   @Input() set args(args: ConstructorParameters<typeof THREE.CubeCamera>) {

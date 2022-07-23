@@ -4,7 +4,9 @@ import {
   NgtObjectPassThrough,
   NgtTriple,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   startWithUndefined,
 } from '@angular-three/core';
 import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
@@ -39,7 +41,11 @@ const v = new THREE.Vector3();
   `,
   imports: [NgtSobaLine, NgtObjectPassThrough, NgtSobaLineContent, NgIf, AsyncPipe, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaQuadraticBezierLine)],
+  providers: [
+    provideNgtObject(NgtSobaQuadraticBezierLine),
+    provideObjectRef(NgtSobaQuadraticBezierLine),
+    provideObjectHostRef(NgtSobaQuadraticBezierLine),
+  ],
 })
 export class NgtSobaQuadraticBezierLine extends NgtSobaLine {
   @Input() set start(start: THREE.Vector3 | NgtTriple) {

@@ -6,6 +6,7 @@ import {
   NgtInstanceState,
   NumberInput,
   provideInstanceRef,
+  provideNgtInstance,
   tapEffect,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
@@ -21,7 +22,7 @@ export interface NgtSobaFlyControlsState extends NgtInstanceState<FlyControls> {
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtSobaFlyControls)],
+  providers: [provideNgtInstance(NgtSobaFlyControls), provideInstanceRef(NgtSobaFlyControls)],
 })
 export class NgtSobaFlyControls extends NgtInstance<FlyControls, NgtSobaFlyControlsState> {
   @Input() set domElement(domElement: HTMLElement) {

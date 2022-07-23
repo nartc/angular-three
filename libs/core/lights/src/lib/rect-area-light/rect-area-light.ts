@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonLight,
+  provideNgtCommonLight,
   provideCommonLightRef,
   coerceNumberProperty,
   NumberInput,
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonLightRef(NgtRectAreaLight)],
+  providers: [provideNgtCommonLight(NgtRectAreaLight), provideCommonLightRef(NgtRectAreaLight)],
 })
 export class NgtRectAreaLight extends NgtCommonLight<THREE.RectAreaLight> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.RectAreaLight> | undefined;

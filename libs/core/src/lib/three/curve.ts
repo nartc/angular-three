@@ -1,9 +1,10 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
+import { NgtInstance, NgtInstanceState, provideNgtInstance } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
 import type { AnyConstructor, NumberInput } from '../types';
 import { coerceNumberProperty } from '../utils/coercion';
+import { createNgtProvider } from '../utils/inject';
 
 export interface NgtCommonCurveState<TCurve extends THREE.Curve<THREE.Vector> = THREE.Curve<THREE.Vector>>
   extends NgtInstanceState<TCurve> {
@@ -49,3 +50,5 @@ export abstract class NgtCommonCurve<
     })
   );
 }
+
+export const provideNgtCommonCurve = createNgtProvider(NgtCommonCurve, provideNgtInstance);

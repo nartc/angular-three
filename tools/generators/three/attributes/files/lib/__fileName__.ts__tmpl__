@@ -2,6 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonAttribute,
+    provideNgtCommonAttribute,
     provideCommonAttributeRef,
 } from '@angular-three/core';
 import { NgModule, Component } from '@angular/core';
@@ -11,7 +12,10 @@ import * as THREE from 'three';
   selector: 'ngt-<%= fileName %>',
   standalone: true,
   template: '<ng-content></ng-content>',
-  providers: [provideCommonAttributeRef(Ngt<%= name %>)],
+  providers: [
+    provideNgtCommonAttribute(Ngt<%= name %>),
+    provideCommonAttributeRef(Ngt<%= name %>)
+  ],
 })
 export class Ngt<%= name %> extends NgtCommonAttribute<THREE.<%= name %>> {
 

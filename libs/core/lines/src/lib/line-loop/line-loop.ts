@@ -1,5 +1,5 @@
 // GENERATED
-import { AnyConstructor, NgtCommonLine, provideCommonLineRef } from '@angular-three/core';
+import { AnyConstructor, NgtCommonLine, provideNgtCommonLine, provideCommonLineRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -8,7 +8,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonLineRef(NgtLineLoop)],
+  providers: [provideNgtCommonLine(NgtLineLoop), provideCommonLineRef(NgtLineLoop)],
 })
 export class NgtLineLoop extends NgtCommonLine<THREE.LineLoop> {
   override get lineType(): AnyConstructor<THREE.LineLoop> {

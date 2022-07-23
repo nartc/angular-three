@@ -14,7 +14,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
-import { provideCanvasInstanceRef } from './di/object';
+import { provideCameraRef, provideObjectRef, provideSceneRef } from './di/object';
 import { NgtLoader } from './services/loader';
 import { NgtResize } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
@@ -62,7 +62,13 @@ const { invalidate, advance } = createLoop(rootStateMap);
       }
     `,
   ],
-  providers: [NgtStore, NgtResize, provideCanvasInstanceRef(NgtCanvas)],
+  providers: [
+    NgtStore,
+    NgtResize,
+    provideObjectRef(NgtCanvas, (canvas) => canvas.sceneRef),
+    provideSceneRef(NgtCanvas, (canvas) => canvas.sceneRef),
+    provideCameraRef(NgtCanvas, (canvas) => canvas.cameraRef),
+  ],
 })
 export class NgtCanvas extends NgtComponentStore implements OnInit {
   @HostBinding('class.ngt-canvas') hostClass = true;

@@ -1,9 +1,10 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import type { NgtObjectPropsState, NgtPreObjectInit } from '../abstracts/object';
-import { NgtObject } from '../abstracts/object';
+import { NgtObject, provideNgtObject } from '../abstracts/object';
 import type { AnyConstructor, NumberInput } from '../types';
 import { coerceNumberProperty } from '../utils/coercion';
+import { createNgtProvider } from '../utils/inject';
 
 export interface NgtCommonLightState<TLight extends THREE.Light = THREE.Light> extends NgtObjectPropsState<TLight> {
   intensity: number;
@@ -47,3 +48,5 @@ export abstract class NgtCommonLight<TLight extends THREE.Light = THREE.Light> e
     return { ...super.optionFields, intensity: false };
   }
 }
+
+export const provideNgtCommonLight = createNgtProvider(NgtCommonLight, provideNgtObject);

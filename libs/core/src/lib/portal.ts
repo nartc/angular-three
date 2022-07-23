@@ -12,11 +12,11 @@ import {
 import { tap } from 'rxjs';
 import * as THREE from 'three';
 import { NgtInstance, NgtInstanceState } from './abstracts/instance';
+import { provideCameraRef, provideObjectRef, provideSceneRef } from './di/object';
 import { Ref } from './ref';
 import { NgtResize } from './services/resize';
 import { tapEffect } from './stores/component-store';
 import { NgtStore } from './stores/store';
-import { NGT_CAMERA_REF, NGT_INSTANCE_REF, NGT_OBJECT_REF, NGT_SCENE_REF } from './tokens';
 import type { NgtEventManager, NgtSize, NgtState } from './types';
 import { updateCamera } from './utils/camera';
 import { prepare } from './utils/instance';
@@ -68,34 +68,9 @@ export interface NgtPortalState extends NgtInstanceState<THREE.Scene> {
       },
       deps: [NgtPortal],
     },
-    {
-      provide: NGT_INSTANCE_REF,
-      useFactory: (portal: NgtPortal) => {
-        return () => portal.get((s) => s.portalStore).get((s) => s.sceneRef);
-      },
-      deps: [NgtPortal],
-    },
-    {
-      provide: NGT_OBJECT_REF,
-      useFactory: (portal: NgtPortal) => {
-        return () => portal.get((s) => s.portalStore).get((s) => s.sceneRef);
-      },
-      deps: [NgtPortal],
-    },
-    {
-      provide: NGT_SCENE_REF,
-      useFactory: (portal: NgtPortal) => {
-        return () => portal.get((s) => s.portalStore).get((s) => s.sceneRef);
-      },
-      deps: [NgtPortal],
-    },
-    {
-      provide: NGT_CAMERA_REF,
-      useFactory: (portal: NgtPortal) => {
-        return () => portal.get((s) => s.portalStore).get((s) => s.cameraRef);
-      },
-      deps: [NgtPortal],
-    },
+    provideObjectRef(NgtPortal, (portal) => portal.get((s) => s.portalStore).get((s) => s.sceneRef)),
+    provideSceneRef(NgtPortal, (portal) => portal.get((s) => s.portalStore).get((s) => s.sceneRef)),
+    provideCameraRef(NgtPortal, (portal) => portal.get((s) => s.portalStore).get((s) => s.cameraRef)),
   ],
 })
 export class NgtPortal extends NgtInstance<THREE.Scene, NgtPortalState> {
@@ -110,6 +85,10 @@ export class NgtPortal extends NgtInstance<THREE.Scene, NgtPortalState> {
   @ContentChild(NgtPortalContent) content?: NgtPortalContent;
 
   private resizeResult$ = inject(NgtResize);
+
+  constructor() {
+    super(true);
+  }
 
   override ngOnInit() {
     super.ngOnInit();

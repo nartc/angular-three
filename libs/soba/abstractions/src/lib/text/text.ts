@@ -9,7 +9,9 @@ import {
   NgtObjectProps,
   NgtRenderState,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
   tapEffect,
 } from '@angular-three/core';
@@ -56,7 +58,11 @@ export class NgtSobaTextContent {
   `,
   imports: [NgtPrimitive, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaText, (text) => text.textMesh)],
+  providers: [
+    provideNgtObject(NgtSobaText),
+    provideObjectRef(NgtSobaText, (text) => text.textMesh),
+    provideObjectHostRef(NgtSobaText),
+  ],
 })
 export class NgtSobaText extends NgtObjectProps<TextMeshImpl> {
   @Input() set text(text: string) {

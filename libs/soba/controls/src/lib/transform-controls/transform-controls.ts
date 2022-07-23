@@ -7,7 +7,9 @@ import {
   NgtObjectProps,
   NgtObjectPropsState,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
   startWithUndefined,
   tapEffect,
@@ -80,7 +82,11 @@ export interface NgtSobaTransformControlsState extends NgtObjectPropsState<Trans
   `,
   imports: [NgtGroup, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaTransformControls, (controls) => controls.groupRef)],
+  providers: [
+    provideNgtObject(NgtSobaTransformControls),
+    provideObjectRef(NgtSobaTransformControls, (controls) => controls.groupRef),
+    provideObjectHostRef(NgtSobaTransformControls),
+  ],
 })
 export class NgtSobaTransformControls extends NgtObjectProps<TransformControls, NgtSobaTransformControlsState> {
   @Input() set object(object: THREE.Object3D | Ref<THREE.Object3D>) {

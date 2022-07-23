@@ -1,11 +1,13 @@
 import { DOCUMENT } from '@angular/common';
-import { inject, InjectionToken } from '@angular/core';
-import { WINDOW } from './window';
+import { inject } from '@angular/core';
+import { createInjection } from '../utils/inject';
+import { injectWindow } from './window';
 
-export const NGT_IS_WEBGL_AVAILABLE = new InjectionToken<boolean>('isWebGLAvailable', {
-  factory: () => {
+export const [injectIsWebGLAvailable, , NGT_IS_WEBGL_AVAILABLE] = createInjection<boolean>('isWebGLAvailable', {
+  defaultValueOrFactory: () => {
     const document = inject(DOCUMENT);
-    const window = inject(WINDOW);
+    const window = injectWindow();
+
     try {
       const canvas = document.createElement('canvas');
       return !!(window.WebGL2RenderingContext && canvas.getContext('webgl2'));

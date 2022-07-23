@@ -7,7 +7,9 @@ import {
   NgtObjectPropsState,
   NgtRenderState,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
 } from '@angular-three/core';
 import { NgtBufferAttribute } from '@angular-three/core/attributes';
@@ -75,7 +77,7 @@ export interface NgtSobaStarsState extends NgtObjectPropsState<THREE.Points> {
     AsyncPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaStars)],
+  providers: [provideNgtObject(NgtSobaStars), provideObjectRef(NgtSobaStars), provideObjectHostRef(NgtSobaStars)],
 })
 export class NgtSobaStars extends NgtObjectProps<THREE.Points, NgtSobaStarsState> {
   @Input() set radius(radius: NumberInput) {

@@ -4,10 +4,10 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
+  injectBoneHostRef,
+  injectSkeletonHostRef,
+  injectSkinnedMeshHostRef,
   make,
-  NGT_HOST_BONE_REF,
-  NGT_HOST_SKELETON_REF,
-  NGT_HOST_SKINNED_MESH_REF,
   NgtCommonMesh,
   NgtInstance,
   NgtInstanceState,
@@ -16,6 +16,9 @@ import {
   NumberInput,
   provideCommonMeshRef,
   provideInstanceRef,
+  provideNgtCommonMesh,
+  provideNgtInstance,
+  provideNgtObject,
   provideObjectRef,
   Ref,
   tapEffect,
@@ -29,7 +32,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMeshRef(NgtSkinnedMesh)],
+  providers: [provideNgtCommonMesh(NgtSkinnedMesh), provideCommonMeshRef(NgtSkinnedMesh)],
 })
 export class NgtSkinnedMesh extends NgtCommonMesh<THREE.SkinnedMesh> {
   @Input() set skeleton(skeleton: THREE.Skeleton) {
@@ -94,7 +97,7 @@ export interface NgtSkeletonState extends NgtInstanceState<THREE.Skeleton> {
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtSkeleton)],
+  providers: [provideNgtInstance(NgtSkeleton), provideInstanceRef(NgtSkeleton)],
 })
 export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
   @Input() set args(args: ConstructorParameters<typeof THREE.Skeleton>) {
@@ -129,10 +132,7 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
 
   private skinnedMesh = inject(NgtSkinnedMesh, { optional: true });
   protected override parentRef = (() => this.skinnedMesh?.instance) as AnyFunction<Ref>;
-  protected override parentHostRef = inject(NGT_HOST_SKINNED_MESH_REF, {
-    optional: true,
-    skipSelf: true,
-  }) as AnyFunction<Ref>;
+  protected override parentHostRef = injectSkinnedMeshHostRef({ optional: true, skipSelf: true });
 
   constructor() {
     super();
@@ -215,15 +215,12 @@ export class NgtSkeleton extends NgtInstance<THREE.Skeleton, NgtSkeletonState> {
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectRef(NgtBone)],
+  providers: [provideNgtObject(NgtBone), provideObjectRef(NgtBone)],
 })
 export class NgtBone extends NgtObject<THREE.Bone> {
-  private hostBoneRef = inject(NGT_HOST_BONE_REF, { skipSelf: true, optional: true }) as AnyFunction<Ref>;
-  private hostSkeletonRef = inject(NGT_HOST_SKELETON_REF, { skipSelf: true, optional: true }) as AnyFunction<Ref>;
-  private hostSkinnedMeshRef = inject(NGT_HOST_SKINNED_MESH_REF, {
-    skipSelf: true,
-    optional: true,
-  }) as AnyFunction<Ref>;
+  private hostBoneRef = injectBoneHostRef({ skipSelf: true, optional: true });
+  private hostSkeletonRef = injectSkeletonHostRef({ skipSelf: true, optional: true });
+  private hostSkinnedMeshRef = injectSkinnedMeshHostRef({ skipSelf: true, optional: true });
 
   private parentBone = inject(NgtBone, { skipSelf: true, optional: true });
   private parentSkinnedMesh = inject(NgtSkinnedMesh, { optional: true });

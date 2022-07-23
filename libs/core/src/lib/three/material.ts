@@ -1,15 +1,15 @@
-import { Directive, inject, Input } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import * as THREE from 'three';
 import { Plane } from 'three/src/math/Plane';
 import type { NgtInstanceState } from '../abstracts/instance';
-import { NgtInstance } from '../abstracts/instance';
-import { Ref } from '../ref';
+import { NgtInstance, provideNgtInstance } from '../abstracts/instance';
+import { injectObjectHostRef, injectObjectRef } from '../di/object';
 import { startWithUndefined, tapEffect } from '../stores/component-store';
-import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
-import type { AnyConstructor, AnyFunction, BooleanInput, NumberInput, UnknownRecord } from '../types';
+import type { AnyConstructor, BooleanInput, NumberInput, UnknownRecord } from '../types';
 import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
+import { createNgtProvider } from '../utils/inject';
 
 export interface NgtCommonMaterialState<
   TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
@@ -249,11 +249,8 @@ export abstract class NgtCommonMaterial<
 
   abstract get materialType(): AnyConstructor<TMaterial>;
 
-  protected override parentRef = inject(NGT_OBJECT_REF, { optional: true, skipSelf: true }) as AnyFunction<Ref>;
-  protected override parentHostRef = inject(NGT_OBJECT_HOST_REF, {
-    optional: true,
-    skipSelf: true,
-  }) as AnyFunction<Ref>;
+  protected override parentRef = injectObjectRef({ optional: true, skipSelf: true });
+  protected override parentHostRef = injectObjectHostRef({ optional: true, skipSelf: true });
 
   protected override preInit() {
     this.set((state) => ({
@@ -518,3 +515,5 @@ export abstract class NgtCommonMaterial<
     })
   );
 }
+
+export const provideNgtCommonMaterial = createNgtProvider(NgtCommonMaterial, provideNgtInstance);

@@ -1,5 +1,5 @@
 // GENERATED
-import { AnyConstructor, NgtCommonAudio, provideCommonAudioRef } from '@angular-three/core';
+import { AnyConstructor, NgtCommonAudio, provideNgtCommonAudio, provideCommonAudioRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -8,7 +8,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonAudioRef(NgtAudio)],
+  providers: [provideNgtCommonAudio(NgtAudio), provideCommonAudioRef(NgtAudio)],
 })
 export class NgtAudio extends NgtCommonAudio<GainNode, THREE.Audio> {
   override get audioType(): AnyConstructor<THREE.Audio> {

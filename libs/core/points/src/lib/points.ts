@@ -1,4 +1,4 @@
-import { AnyConstructor, NgtMaterialGeometry, provideMaterialGeometryObjectRef } from '@angular-three/core';
+import { AnyConstructor, NgtMaterialGeometry, provideNgtObject, provideObjectRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,7 +7,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideMaterialGeometryObjectRef(NgtPoints)],
+  providers: [provideNgtObject(NgtPoints), provideObjectRef(NgtPoints)],
 })
 export class NgtPoints extends NgtMaterialGeometry<THREE.Points> {
   override get objectType(): AnyConstructor<THREE.Points> {

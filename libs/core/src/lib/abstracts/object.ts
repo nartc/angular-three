@@ -1,10 +1,9 @@
-import { Directive, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import * as THREE from 'three';
+import { injectObjectHostRef, injectObjectRef } from '../di/object';
 import { Ref } from '../ref';
 import { tapEffect } from '../stores/component-store';
-import { NGT_OBJECT_HOST_REF, NGT_OBJECT_REF } from '../tokens';
 import type {
-  AnyFunction,
   BooleanInput,
   NgtColor,
   NgtEuler,
@@ -20,10 +19,10 @@ import type {
 } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
+import { createNgtProvider } from '../utils/inject';
 import { is } from '../utils/is';
 import { make } from '../utils/make';
-import type { NgtInstanceState } from './instance';
-import { NgtInstance } from './instance';
+import { NgtInstance, NgtInstanceState, provideNgtInstance } from './instance';
 
 const supportedEvents = [
   'click',
@@ -278,11 +277,8 @@ export abstract class NgtObjectProps<
     };
   }
 
-  protected override parentRef = inject(NGT_OBJECT_REF, { optional: true, skipSelf: true }) as AnyFunction<Ref>;
-  protected override parentHostRef = inject(NGT_OBJECT_HOST_REF, {
-    optional: true,
-    skipSelf: true,
-  }) as AnyFunction<Ref>;
+  protected override parentRef = injectObjectRef({ optional: true, skipSelf: true });
+  protected override parentHostRef = injectObjectHostRef({ optional: true, skipSelf: true });
 
   constructor() {
     super();
@@ -532,3 +528,5 @@ export abstract class NgtObject<
     };
   }
 }
+
+export const provideNgtObject = createNgtProvider(NgtObject, provideNgtInstance);

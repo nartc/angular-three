@@ -1,43 +1,13 @@
-import { Provider } from '@angular/core';
-import { Ref } from '../ref';
-import { NGT_HOST_BONE_REF, NGT_HOST_SKELETON_REF, NGT_HOST_SKINNED_MESH_REF } from '../tokens';
-import type { AnyConstructor } from '../types';
+import { createRefInjection } from '../utils/inject';
 
-export function provideSkinnedMeshHostRef<TType extends AnyConstructor<any>>(
-  subType: TType,
-  factory: (instance: InstanceType<TType>) => Ref
-): Provider {
-  return {
-    provide: NGT_HOST_SKINNED_MESH_REF,
-    useFactory: (instance: InstanceType<TType>) => {
-      return () => factory(instance);
-    },
-    deps: [subType],
-  };
-}
+export const [injectSkinnedMeshHostRef, provideSkinnedMeshHostRef, NGT_HOST_SKINNED_MESH_REF] = createRefInjection(
+  'NgtSkinnedMesh host ref',
+  true
+);
 
-export function provideSkeletonHostRef<TType extends AnyConstructor<any>>(
-  subType: TType,
-  factory: (instance: InstanceType<TType>) => Ref
-): Provider {
-  return {
-    provide: NGT_HOST_SKELETON_REF,
-    useFactory: (instance: InstanceType<TType>) => {
-      return () => factory(instance);
-    },
-    deps: [subType],
-  };
-}
+export const [injectSkeletonHostRef, provideSkeletonHostRef, NGT_HOST_SKELETON_REF] = createRefInjection(
+  'NgtSkeleton host ref',
+  true
+);
 
-export function provideBoneHostRef<TType extends AnyConstructor<any>>(
-  subType: TType,
-  factory: (instance: InstanceType<TType>) => Ref
-): Provider {
-  return {
-    provide: NGT_HOST_BONE_REF,
-    useFactory: (instance: InstanceType<TType>) => {
-      return () => factory(instance);
-    },
-    deps: [subType],
-  };
-}
+export const [injectBoneHostRef, provideBoneHostRef, NGT_HOST_BONE_REF] = createRefInjection('NgtBone host ref', true);

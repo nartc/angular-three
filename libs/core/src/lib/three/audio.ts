@@ -1,9 +1,10 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import { NgtObject, NgtObjectPropsState, NgtPreObjectInit } from '../abstracts/object';
+import { NgtObject, NgtObjectPropsState, NgtPreObjectInit, provideNgtObject } from '../abstracts/object';
 import { tapEffect } from '../stores/component-store';
 import type { AnyConstructor, BooleanInput, NumberInput } from '../types';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
+import { createNgtProvider } from '../utils/inject';
 
 export interface NgtCommonAudioState<
   TAudioNode extends AudioNode = GainNode,
@@ -153,3 +154,5 @@ export abstract class NgtCommonAudio<
     };
   }
 }
+
+export const provideNgtCommonAudio = createNgtProvider(NgtCommonAudio, provideNgtObject);

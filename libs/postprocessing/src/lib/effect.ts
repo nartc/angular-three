@@ -1,39 +1,27 @@
 import {
   AnyConstructor,
   coerceNumberProperty,
+  createNgtProvider,
+  createRefInjection,
   NgtInstance,
   NgtUnknownInstance,
   NumberInput,
   provideInstanceRef,
-  Ref,
+  provideNgtInstance,
   startWithUndefined,
   tapEffect,
   UnknownRecord,
 } from '@angular-three/core';
-import { Directive, inject, InjectionToken, Input, Provider } from '@angular/core';
+import { Directive, inject, Input } from '@angular/core';
 import { BlendFunction, Effect } from 'postprocessing';
 import { tap } from 'rxjs';
 import * as THREE from 'three';
 import { NgtEffectComposer } from './effect-composer';
 
-export const NGT_COMMON_EFFECT_REF = new InjectionToken('NgtCommonEffect ref');
-
-export function provideCommonEffectRef<TType extends AnyConstructor<any>>(
-  subEffect: TType,
-  factory?: (instance: InstanceType<TType>) => Ref
-): Provider {
-  return [
-    provideInstanceRef(subEffect, factory),
-    { provide: NgtCommonEffect, useExisting: subEffect },
-    {
-      provide: NGT_COMMON_EFFECT_REF,
-      useFactory: (instance: InstanceType<TType>) => {
-        return () => factory?.(instance) || instance.instance;
-      },
-      deps: [subEffect],
-    },
-  ];
-}
+export const [injectCommonEffectRef, provideCommonEffectRef, NGT_COMMON_EFFECT_REF] = createRefInjection(
+  'NgtCommonEffect ref',
+  provideInstanceRef
+);
 
 @Directive()
 export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends NgtInstance<TEffect> {
@@ -140,3 +128,5 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
     })
   );
 }
+
+export const provideNgtCommonEffect = createNgtProvider(NgtCommonEffect, provideNgtInstance);

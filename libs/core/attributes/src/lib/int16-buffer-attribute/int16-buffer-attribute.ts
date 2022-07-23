@@ -1,5 +1,10 @@
 // GENERATED
-import { AnyConstructor, NgtCommonAttribute, provideCommonAttributeRef } from '@angular-three/core';
+import {
+  AnyConstructor,
+  NgtCommonAttribute,
+  provideNgtCommonAttribute,
+  provideCommonAttributeRef,
+} from '@angular-three/core';
 import { NgModule, Component } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,7 +12,7 @@ import * as THREE from 'three';
   selector: 'ngt-int16-buffer-attribute',
   standalone: true,
   template: '<ng-content></ng-content>',
-  providers: [provideCommonAttributeRef(NgtInt16BufferAttribute)],
+  providers: [provideNgtCommonAttribute(NgtInt16BufferAttribute), provideCommonAttributeRef(NgtInt16BufferAttribute)],
 })
 export class NgtInt16BufferAttribute extends NgtCommonAttribute<THREE.Int16BufferAttribute> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.Int16BufferAttribute> | undefined;

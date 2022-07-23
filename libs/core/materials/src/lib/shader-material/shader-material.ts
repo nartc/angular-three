@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonMaterial,
+  provideNgtCommonMaterial,
   provideCommonMaterialRef,
   coerceBooleanProperty,
   BooleanInput,
@@ -16,7 +17,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtShaderMaterial)],
+  providers: [provideNgtCommonMaterial(NgtShaderMaterial), provideCommonMaterialRef(NgtShaderMaterial)],
 })
 export class NgtShaderMaterial extends NgtCommonMaterial<THREE.ShaderMaterialParameters, THREE.ShaderMaterial> {
   static ngAcceptInputType_parameters: THREE.ShaderMaterialParameters | undefined;

@@ -10,7 +10,9 @@ import {
   NgtTriple,
   NgtVector2,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
   tapEffect,
 } from '@angular-three/core';
@@ -125,7 +127,7 @@ export class NgtSobaLineContent {
     NgTemplateOutlet,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaLine)],
+  providers: [provideNgtObject(NgtSobaLine), provideObjectRef(NgtSobaLine), provideObjectHostRef(NgtSobaLine)],
 })
 export class NgtSobaLine extends NgtSobaCommonLine {
   @Output() beforeRender = new EventEmitter<{

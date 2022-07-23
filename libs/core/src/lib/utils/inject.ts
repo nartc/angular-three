@@ -6,8 +6,7 @@ import { is } from './is';
 export function createNgtProvider(base: AnyCtor, ...providers: AnyFunction[]) {
   return (sub: AnyCtor) => {
     return [
-      // @ts-ignore
-      (providers || []).flatMap((providerFn) => providerFn(sub)),
+      ...(providers || []).map((providerFn) => providerFn(sub)),
       {
         provide: base,
         useExisting: sub,
@@ -29,7 +28,7 @@ export function createInjection<
     provideValueFactory?: (value: TProvideValue) => TTokenValue;
   } = {}
 ): [
-  injectFn: (options: InjectOptions) => TTokenValue,
+  injectFn: (options?: InjectOptions) => TTokenValue,
   provideFn: (value: TProvideValue) => Provider,
   token: InjectionToken<TTokenValue>
 ] {
@@ -84,14 +83,19 @@ export function createRefInjection<
     factory?: (instance: InstanceType<TProvideCtor>) => Ref
   ) {
     return [
-      // @ts-ignore
-      providersFactory.flatMap((providerFn) => providerFn(sub, factory)),
+      ...(providersFactory || []).map((providerFn) => providerFn(sub, factory)),
       {
         provide: injectionToken,
         useFactory: (instance: InstanceType<TProvideCtor>) => {
-          return () =>
-            factory?.(instance) ||
-            (is.boo(hostOrProviderFactory) ? (instance as any)['parentRef'] : (instance as any)['instance']);
+          if (factory) {
+            return () => factory(instance);
+          }
+
+          if (is.boo(hostOrProviderFactory)) {
+            return (instance as any)['parentRef'];
+          }
+
+          return () => (instance as any)['instance'];
         },
         deps: [sub],
       },

@@ -1,5 +1,5 @@
 // GENERATED
-import { make, NgtInstance, provideInstanceRef, NgtMatrix4 } from '@angular-three/core';
+import { make, NgtInstance, provideNgtInstance, provideInstanceRef, NgtMatrix4 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import type { Subscription } from 'rxjs';
 import * as THREE from 'three';
@@ -9,7 +9,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtMatrix4Attribute)],
+  providers: [provideNgtInstance(NgtMatrix4Attribute), provideInstanceRef(NgtMatrix4Attribute)],
 })
 export class NgtMatrix4Attribute extends NgtInstance<THREE.Matrix4> {
   @Input() set matrix4(matrix4: NgtMatrix4) {

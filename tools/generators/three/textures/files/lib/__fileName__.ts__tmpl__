@@ -2,6 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonTexture,
+    provideNgtCommonTexture,
     provideCommonTextureRef,<% if (hasBooleanInput) { %>coerceBooleanProperty, BooleanInput,<% } %><% if (hasNumberInput) { %> coerceNumberProperty, NumberInput,<% } %>
 } from '@angular-three/core';
 import {
@@ -17,7 +18,10 @@ import * as THREE from 'three';
     standalone: true,
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonTextureRef(Ngt<%= name %>)],
+    providers: [
+        provideNgtCommonTexture(Ngt<%= name %>),
+        provideCommonTextureRef(Ngt<%= name %>)
+    ],
 })
 export class Ngt<%= name %> extends NgtCommonTexture<THREE.<%= name %>> {
     override get textureType(): AnyConstructor<THREE.<%= name %>> {

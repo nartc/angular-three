@@ -1,6 +1,6 @@
 // GENERATED
 import { AnyConstructor, coerceNumberProperty, NumberInput } from '@angular-three/core';
-import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
+import { NgtCommonEffect, provideNgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import { SepiaEffect } from 'postprocessing';
 
@@ -9,7 +9,7 @@ import { SepiaEffect } from 'postprocessing';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonEffectRef(NgtSepiaEffect)],
+  providers: [provideNgtCommonEffect(NgtSepiaEffect), provideCommonEffectRef(NgtSepiaEffect)],
 })
 export class NgtSepiaEffect extends NgtCommonEffect<SepiaEffect> {
   override get effectType(): AnyConstructor<SepiaEffect> {

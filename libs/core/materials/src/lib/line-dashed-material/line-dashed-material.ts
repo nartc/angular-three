@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonMaterial,
+  provideNgtCommonMaterial,
   provideCommonMaterialRef,
   coerceNumberProperty,
   NumberInput,
@@ -15,7 +16,7 @@ import { NgtLineBasicMaterial } from '../line-basic-material/line-basic-material
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtLineDashedMaterial)],
+  providers: [provideNgtCommonMaterial(NgtLineDashedMaterial), provideCommonMaterialRef(NgtLineDashedMaterial)],
 })
 export class NgtLineDashedMaterial extends NgtLineBasicMaterial<
   THREE.LineDashedMaterialParameters,

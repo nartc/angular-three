@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonMaterial,
+  provideNgtCommonMaterial,
   provideCommonMaterialRef,
   coerceBooleanProperty,
   BooleanInput,
@@ -16,7 +17,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtPointsMaterial)],
+  providers: [provideNgtCommonMaterial(NgtPointsMaterial), provideCommonMaterialRef(NgtPointsMaterial)],
 })
 export class NgtPointsMaterial extends NgtCommonMaterial<THREE.PointsMaterialParameters, THREE.PointsMaterial> {
   static ngAcceptInputType_parameters: THREE.PointsMaterialParameters | undefined;

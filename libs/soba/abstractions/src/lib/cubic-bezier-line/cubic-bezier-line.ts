@@ -5,7 +5,9 @@ import {
   NgtObjectPassThrough,
   NgtTriple,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
 } from '@angular-three/core';
 import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
@@ -36,7 +38,11 @@ import { NgtSobaLine, NgtSobaLineContent } from '../line/line';
   `,
   imports: [NgtSobaLine, NgtObjectPassThrough, NgtSobaLineContent, NgTemplateOutlet, NgIf, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaCubicBezierLine)],
+  providers: [
+    provideNgtObject(NgtSobaCubicBezierLine),
+    provideObjectRef(NgtSobaCubicBezierLine),
+    provideObjectHostRef(NgtSobaCubicBezierLine),
+  ],
 })
 export class NgtSobaCubicBezierLine extends NgtSobaLine {
   static ngAcceptInputType_points: never;

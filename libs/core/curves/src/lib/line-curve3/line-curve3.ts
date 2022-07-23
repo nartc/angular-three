@@ -1,5 +1,5 @@
 // GENERATED
-import { AnyConstructor, NgtCommonCurve, provideCommonCurveRef } from '@angular-three/core';
+import { AnyConstructor, NgtCommonCurve, provideNgtCommonCurve, provideCommonCurveRef } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -8,7 +8,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonCurveRef(NgtLineCurve3)],
+  providers: [provideNgtCommonCurve(NgtLineCurve3), provideCommonCurveRef(NgtLineCurve3)],
 })
 export class NgtLineCurve3 extends NgtCommonCurve<THREE.LineCurve3> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.LineCurve3> | undefined;

@@ -8,7 +8,9 @@ import {
   NgtObjectProps,
   NgtObjectPropsState,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
 } from '@angular-three/core';
 import { NgtValueAttribute } from '@angular-three/core/attributes';
@@ -144,7 +146,11 @@ export class NgtSobaStageContent {
     NgTemplateOutlet,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaStage, (stage) => stage.innerGroup)],
+  providers: [
+    provideNgtObject(NgtSobaStage),
+    provideObjectRef(NgtSobaStage, (stage) => stage.innerGroup),
+    provideObjectHostRef(NgtSobaStage),
+  ],
 })
 export class NgtSobaStage extends NgtObjectProps<THREE.Group, NgtSobaStageState> implements OnInit, AfterContentInit {
   get shadows() {

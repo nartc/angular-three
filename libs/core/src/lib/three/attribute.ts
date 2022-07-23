@@ -1,8 +1,9 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import { NgtInstance, NgtInstanceState } from '../abstracts/instance';
+import { NgtInstance, NgtInstanceState, provideNgtInstance } from '../abstracts/instance';
 import { tapEffect } from '../stores/component-store';
 import type { AnyConstructor } from '../types';
+import { createNgtProvider } from '../utils/inject';
 
 @Directive()
 export abstract class NgtCommonAttribute<
@@ -35,3 +36,5 @@ export abstract class NgtCommonAttribute<
     })
   );
 }
+
+export const provideNgtCommonAttribute = createNgtProvider(NgtCommonAttribute, provideNgtInstance);

@@ -9,7 +9,9 @@ import {
   NgtObjectPropsState,
   NgtRadianPipe,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
 } from '@angular-three/core';
 import { NgtOrthographicCamera } from '@angular-three/core/cameras';
@@ -79,7 +81,11 @@ export interface NgtSobaContactShadowsState extends NgtObjectPropsState<THREE.Gr
     NgtOrthographicCamera,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaContactShadows)],
+  providers: [
+    provideNgtObject(NgtSobaContactShadows),
+    provideObjectRef(NgtSobaContactShadows),
+    provideObjectHostRef(NgtSobaContactShadows),
+  ],
 })
 export class NgtSobaContactShadows extends NgtObjectProps<THREE.Group, NgtSobaContactShadowsState> {
   @Input() set opacity(opacity: NumberInput) {

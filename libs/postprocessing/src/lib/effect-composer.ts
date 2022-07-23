@@ -2,13 +2,14 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  NGT_IS_WEBGL_AVAILABLE,
+  injectIsWebGLAvailable,
   NgtInstance,
   NgtInstanceState,
   NgtUnknownInstance,
   NumberInput,
-  provideInstanceRef,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
   startWithUndefined,
   tapEffect,
@@ -21,7 +22,6 @@ import {
   Component,
   ContentChild,
   Directive,
-  inject,
   Input,
   NgModule,
   TemplateRef,
@@ -76,8 +76,9 @@ export class NgtEffectComposerContent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    provideInstanceRef(NgtEffectComposer),
-    provideObjectHostRef(NgtEffectComposer, (composer) => composer.groupRef),
+    provideNgtObject(NgtEffectComposer),
+    provideObjectRef(NgtEffectComposer, (composer) => composer.groupRef),
+    provideObjectHostRef(NgtEffectComposer),
   ],
 })
 export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComposerState> implements AfterViewInit {
@@ -157,7 +158,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
     return this.get((s) => s.groupRef);
   }
 
-  private isWebGLAvailable = inject(NGT_IS_WEBGL_AVAILABLE);
+  private isWebGLAvailable = injectIsWebGLAvailable();
 
   protected override preInit() {
     super.preInit();

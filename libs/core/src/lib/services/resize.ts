@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { ElementRef, Inject, Injectable, NgZone } from '@angular/core';
+import { ElementRef, inject, Injectable, NgZone } from '@angular/core';
 import {
   debounceTime,
   fromEvent,
@@ -11,8 +10,8 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { NGT_RESIZE_OBSERVER_SUPPORT, NGT_RESIZE_OPTIONS, NgtResizeOptions } from '../di/resize';
-import { WINDOW } from '../di/window';
+import { injectResizeObserverSupport, injectResizeOptions } from '../di/resize';
+import { injectWindow } from '../di/window';
 
 export interface NgtResizeResult {
   readonly entries: ReadonlyArray<ResizeObserverEntry>;
@@ -29,15 +28,13 @@ export interface NgtResizeResult {
 
 @Injectable()
 export class NgtResize extends Observable<NgtResizeResult> {
-  constructor(
-    @Inject(ElementRef) { nativeElement }: ElementRef<Element>,
-    @Inject(NgZone) zone: NgZone,
-    @Inject(DOCUMENT) document: Document,
-    @Inject(WINDOW) window: Window,
-    @Inject(NGT_RESIZE_OBSERVER_SUPPORT) isSupport: boolean,
-    @Inject(NGT_RESIZE_OPTIONS)
-    { box, offsetSize, scroll, debounce }: NgtResizeOptions
-  ) {
+  constructor() {
+    const { nativeElement } = inject(ElementRef) as ElementRef<Element>;
+    const zone = inject(NgZone);
+    const window = injectWindow();
+    const isSupport = injectResizeObserverSupport();
+    const { box, offsetSize, scroll, debounce } = injectResizeOptions();
+
     let observer: ResizeObserver;
     let lastBounds: Omit<NgtResizeResult, 'entries' | 'dpr'>;
     let lastEntries: ResizeObserverEntry[] = [];

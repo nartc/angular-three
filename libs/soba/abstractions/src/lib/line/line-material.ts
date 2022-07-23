@@ -8,6 +8,7 @@ import {
   NgtVector2,
   NumberInput,
   provideCommonMaterialRef,
+  provideNgtCommonMaterial,
 } from '@angular-three/core';
 import { NgtShaderMaterial } from '@angular-three/core/materials';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
@@ -20,7 +21,7 @@ import { LineMaterial } from 'three-stdlib';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtSobaLineMaterial)],
+  providers: [provideNgtCommonMaterial(NgtSobaLineMaterial), provideCommonMaterialRef(NgtSobaLineMaterial)],
 })
 export class NgtSobaLineMaterial extends NgtShaderMaterial {
   @Input() set dashed(dashed: BooleanInput) {

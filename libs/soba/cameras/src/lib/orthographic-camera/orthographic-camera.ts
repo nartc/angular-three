@@ -3,6 +3,7 @@ import {
   coerceBooleanProperty,
   NgtPreObjectInit,
   provideCommonCameraRef,
+  provideNgtCommonCamera,
   startWithUndefined,
   tapEffect,
 } from '@angular-three/core';
@@ -15,7 +16,7 @@ import * as THREE from 'three';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonCameraRef(NgtSobaOrthographicCamera)],
+  providers: [provideNgtCommonCamera(NgtSobaOrthographicCamera), provideCommonCameraRef(NgtSobaOrthographicCamera)],
 })
 export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
   @Input() set makeDefault(makeDefault: BooleanInput) {

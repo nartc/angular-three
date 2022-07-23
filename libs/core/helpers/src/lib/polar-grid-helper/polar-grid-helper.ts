@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonHelper,
+  provideNgtCommonHelper,
   provideCommonHelperRef,
   coerceNumberProperty,
   NumberInput,
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonHelperRef(NgtPolarGridHelper)],
+  providers: [provideNgtCommonHelper(NgtPolarGridHelper), provideCommonHelperRef(NgtPolarGridHelper)],
 })
 export class NgtPolarGridHelper extends NgtCommonHelper<THREE.PolarGridHelper> {
   static ngAcceptInputType_args: ConstructorParameters<typeof THREE.PolarGridHelper> | undefined;

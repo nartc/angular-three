@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonMaterial,
+  provideNgtCommonMaterial,
   provideCommonMaterialRef,
   coerceNumberProperty,
   NumberInput,
@@ -15,7 +16,7 @@ import { NgtMeshStandardMaterial } from '../mesh-standard-material/mesh-standard
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtMeshPhysicalMaterial)],
+  providers: [provideNgtCommonMaterial(NgtMeshPhysicalMaterial), provideCommonMaterialRef(NgtMeshPhysicalMaterial)],
 })
 export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<
   THREE.MeshPhysicalMaterialParameters,

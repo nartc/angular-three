@@ -1,5 +1,11 @@
 // GENERATED
-import { AnyConstructor, NgtCommonObjectHelper, provideCommonObjectHelperRef, Tail } from '@angular-three/core';
+import {
+  AnyConstructor,
+  NgtCommonObjectHelper,
+  provideNgtCommonObjectHelper,
+  provideCommonObjectHelperRef,
+  Tail,
+} from '@angular-three/core';
 import { Directive, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,7 +13,7 @@ import * as THREE from 'three';
   selector: '[ngtPlaneHelper]',
   standalone: true,
   exportAs: 'ngtPlaneHelper',
-  providers: [provideCommonObjectHelperRef(NgtPlaneHelper)],
+  providers: [provideNgtCommonObjectHelper(NgtPlaneHelper), provideCommonObjectHelperRef(NgtPlaneHelper)],
 })
 export class NgtPlaneHelper extends NgtCommonObjectHelper<THREE.PlaneHelper> {
   static ngAcceptInputType_ngtPlaneHelper: Tail<ConstructorParameters<typeof THREE.PlaneHelper>> | '' | undefined;

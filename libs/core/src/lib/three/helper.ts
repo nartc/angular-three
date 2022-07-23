@@ -1,7 +1,8 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
-import { NgtObject } from '../abstracts/object';
+import { NgtObject, provideNgtObject } from '../abstracts/object';
 import type { AnyConstructor } from '../types';
+import { createNgtProvider } from '../utils/inject';
 
 @Directive()
 export abstract class NgtCommonHelper<THelper extends THREE.Object3D = THREE.Object3D> extends NgtObject<THelper> {
@@ -16,3 +17,5 @@ export abstract class NgtCommonHelper<THelper extends THREE.Object3D = THREE.Obj
     return new this.helperType(...instanceArgs);
   }
 }
+
+export const provideNgtCommonHelper = createNgtProvider(NgtCommonHelper, provideNgtObject);

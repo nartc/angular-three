@@ -1,8 +1,9 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import type { NgtObjectPropsState } from '../abstracts/object';
-import { NgtObject } from '../abstracts/object';
+import { NgtObject, provideNgtObject } from '../abstracts/object';
 import type { AnyConstructor } from '../types';
+import { createNgtProvider } from '../utils/inject';
 
 export interface NgtCommonSpriteState<TSprite extends THREE.Sprite = THREE.Sprite>
   extends NgtObjectPropsState<TSprite> {
@@ -33,3 +34,5 @@ export abstract class NgtCommonSprite<TSprite extends THREE.Sprite = THREE.Sprit
     return { ...super.optionFields, material: true };
   }
 }
+
+export const provideNgtCommonSprite = createNgtProvider(NgtCommonSprite, provideNgtObject);

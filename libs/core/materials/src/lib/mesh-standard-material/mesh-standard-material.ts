@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonMaterial,
+  provideNgtCommonMaterial,
   provideCommonMaterialRef,
   coerceBooleanProperty,
   BooleanInput,
@@ -16,7 +17,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtMeshStandardMaterial)],
+  providers: [provideNgtCommonMaterial(NgtMeshStandardMaterial), provideCommonMaterialRef(NgtMeshStandardMaterial)],
 })
 export class NgtMeshStandardMaterial<
   TStandardMaterialParameters extends THREE.MeshStandardMaterialParameters = THREE.MeshStandardMaterialParameters,

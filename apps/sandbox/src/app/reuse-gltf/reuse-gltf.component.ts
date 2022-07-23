@@ -3,7 +3,9 @@ import {
   NgtObjectPassThroughModule,
   NgtObjectProps,
   NgtRadianPipeModule,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
 } from '@angular-three/core';
 import { NgtValueAttributeModule } from '@angular-three/core/attributes';
 import { NgtSphereGeometryModule } from '@angular-three/core/geometries';
@@ -105,7 +107,7 @@ interface ShoeGLTF extends GLTF {
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(Shoe)],
+  providers: [provideNgtObject(Shoe), provideObjectRef(Shoe), provideObjectHostRef(Shoe)],
 })
 export class Shoe extends NgtObjectProps<THREE.Group> {
   private gltfLoader = inject(NgtGLTFLoader);

@@ -4,6 +4,7 @@ import {
   NgtCommonTexture,
   NumberInput,
   provideCommonTextureRef,
+  provideNgtCommonTexture,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import * as THREE from 'three';
@@ -13,7 +14,7 @@ import * as THREE from 'three';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonTextureRef(NgtSobaGradientTexture)],
+  providers: [provideNgtCommonTexture(NgtSobaGradientTexture), provideCommonTextureRef(NgtSobaGradientTexture)],
 })
 export class NgtSobaGradientTexture extends NgtCommonTexture {
   @Input() set stops(stops: Array<number>) {

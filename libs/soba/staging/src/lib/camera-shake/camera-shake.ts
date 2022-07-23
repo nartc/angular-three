@@ -9,6 +9,7 @@ import {
   tapEffect,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
+import * as THREE from 'three';
 import { SimplexNoise } from 'three-stdlib';
 
 export interface NgtSobaCameraShakeState extends NgtInstanceState<{}> {

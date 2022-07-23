@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonTexture,
+  provideNgtCommonTexture,
   provideCommonTextureRef,
   coerceNumberProperty,
   NumberInput,
@@ -14,7 +15,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonTextureRef(NgtCompressedTexture)],
+  providers: [provideNgtCommonTexture(NgtCompressedTexture), provideCommonTextureRef(NgtCompressedTexture)],
 })
 export class NgtCompressedTexture extends NgtCommonTexture<THREE.CompressedTexture> {
   override get textureType(): AnyConstructor<THREE.CompressedTexture> {

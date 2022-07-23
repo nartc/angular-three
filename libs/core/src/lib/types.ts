@@ -18,7 +18,7 @@ export type UnknownRecord = Record<string, unknown>;
 export type AnyFunction<TReturn = any> = (...args: any[]) => TReturn;
 export type AnyConstructor<TObject = any> = new (...args: any[]) => TObject;
 export type AnyAbstractConstructor<TObject = any> = abstract new (...args: any[]) => TObject;
-export type AnyCtor<TObject = any> = AnyConstructor<TObject> & AnyAbstractConstructor<TObject>;
+export type AnyCtor<TObject = any> = AnyConstructor<TObject> | AnyAbstractConstructor<TObject>;
 
 /**
  * If **T** contains a constructor, @see ConstructorParameters must be used, otherwise **T**.

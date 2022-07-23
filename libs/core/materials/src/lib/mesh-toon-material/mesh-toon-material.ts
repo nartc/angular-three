@@ -2,6 +2,7 @@
 import {
   AnyConstructor,
   NgtCommonMaterial,
+  provideNgtCommonMaterial,
   provideCommonMaterialRef,
   coerceBooleanProperty,
   BooleanInput,
@@ -16,7 +17,7 @@ import * as THREE from 'three';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonMaterialRef(NgtMeshToonMaterial)],
+  providers: [provideNgtCommonMaterial(NgtMeshToonMaterial), provideCommonMaterialRef(NgtMeshToonMaterial)],
 })
 export class NgtMeshToonMaterial extends NgtCommonMaterial<THREE.MeshToonMaterialParameters, THREE.MeshToonMaterial> {
   static ngAcceptInputType_parameters: THREE.MeshToonMaterialParameters | undefined;

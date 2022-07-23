@@ -2,6 +2,7 @@
 import {
     make,
     NgtInstance,
+    provideNgtInstance,
     provideInstanceRef,
     <%= inputType %>
 } from '@angular-three/core';
@@ -19,7 +20,10 @@ import * as THREE from 'three';
     standalone: true,
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideInstanceRef(Ngt<%= name %>Attribute)],
+    providers: [
+        provideNgtInstance(Ngt<%= name %>Attribute),
+        provideInstanceRef(Ngt<%= name %>Attribute)
+    ],
 })
 export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
     @Input() set <%= propertyName %>(<%= propertyName %>: <%= inputType %>) {

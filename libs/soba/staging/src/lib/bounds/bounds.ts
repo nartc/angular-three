@@ -7,7 +7,9 @@ import {
   NgtObjectProps,
   NgtObjectPropsState,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
   tapEffect,
 } from '@angular-three/core';
@@ -108,7 +110,7 @@ export class NgtSobaBoundsContent {
   `,
   imports: [NgtGroup, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaBounds)],
+  providers: [provideNgtObject(NgtSobaBounds), provideObjectRef(NgtSobaBounds), provideObjectHostRef(NgtSobaBounds)],
 })
 export class NgtSobaBounds extends NgtObjectProps<THREE.Group, NgtSobaBoundsState> {
   @Input() set damping(damping: NumberInput) {

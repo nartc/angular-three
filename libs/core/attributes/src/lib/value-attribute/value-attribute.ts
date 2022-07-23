@@ -1,4 +1,4 @@
-import { NgtInstance, provideInstanceRef } from '@angular-three/core';
+import { NgtInstance, provideInstanceRef, provideNgtInstance } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtValueAttribute)],
+  providers: [provideNgtInstance(NgtValueAttribute), provideInstanceRef(NgtValueAttribute)],
 })
 export class NgtValueAttribute extends NgtInstance<any> {
   @Input() set value(value: any) {

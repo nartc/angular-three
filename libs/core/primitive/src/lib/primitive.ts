@@ -3,6 +3,7 @@ import {
   NgtObject,
   NgtObjectPropsState,
   NgtPreObjectInit,
+  provideNgtObject,
   provideObjectRef,
   Ref,
   tapEffect,
@@ -20,7 +21,7 @@ export interface NgtPrimitiveState extends NgtObjectPropsState {
   standalone: true,
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectRef(NgtPrimitive)],
+  providers: [provideNgtObject(NgtPrimitive), provideObjectRef(NgtPrimitive)],
 })
 export class NgtPrimitive extends NgtObject<THREE.Object3D, NgtPrimitiveState> {
   @Input() set object(object: THREE.Object3D | Ref<THREE.Object3D>) {

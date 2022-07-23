@@ -1,15 +1,22 @@
-import { AnyConstructor, is, NgtCommonGeometry, NgtTriple, provideCommonGeometryRef } from '@angular-three/core';
+import {
+  AnyConstructor,
+  is,
+  NgtCommonGeometry,
+  NgtTriple,
+  provideCommonGeometryRef,
+  provideNgtCommonGeometry,
+} from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LineGeometry } from 'three-stdlib';
 import * as THREE from 'three';
+import { LineGeometry } from 'three-stdlib';
 
 @Component({
   selector: 'ngt-soba-line-geometry',
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonGeometryRef(NgtSobaLineGeometry)],
+  providers: [provideNgtCommonGeometry(NgtSobaLineGeometry), provideCommonGeometryRef(NgtSobaLineGeometry)],
 })
 export class NgtSobaLineGeometry extends NgtCommonGeometry<LineGeometry> {
   static ngAcceptInputType_args: ConstructorParameters<typeof LineGeometry> | undefined;

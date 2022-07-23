@@ -3,7 +3,9 @@ import {
   make,
   NgtObjectPassThrough,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
   tapEffect,
 } from '@angular-three/core';
@@ -49,7 +51,11 @@ const vec = new THREE.Vector3();
   `,
   imports: [NgtSpotLight, NgtObjectPassThrough, NgtSpotLightPassThrough, NgtMesh, NgtSobaSpotLightMaterial, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaSpotLight)],
+  providers: [
+    provideNgtObject(NgtSobaSpotLight),
+    provideObjectRef(NgtSobaSpotLight),
+    provideObjectHostRef(NgtSobaSpotLight),
+  ],
 })
 export class NgtSobaSpotLight extends NgtSpotLight {
   readonly meshRef = new Ref<THREE.Mesh>();

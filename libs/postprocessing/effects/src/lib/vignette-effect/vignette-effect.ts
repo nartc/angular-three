@@ -6,7 +6,7 @@ import {
   coerceNumberProperty,
   NumberInput,
 } from '@angular-three/core';
-import { NgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
+import { NgtCommonEffect, provideNgtCommonEffect, provideCommonEffectRef } from '@angular-three/postprocessing';
 import { ChangeDetectionStrategy, Component, NgModule, Input } from '@angular/core';
 import { VignetteEffect, VignetteTechnique } from 'postprocessing';
 
@@ -15,7 +15,7 @@ import { VignetteEffect, VignetteTechnique } from 'postprocessing';
   standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonEffectRef(NgtVignetteEffect)],
+  providers: [provideNgtCommonEffect(NgtVignetteEffect), provideCommonEffectRef(NgtVignetteEffect)],
 })
 export class NgtVignetteEffect extends NgtCommonEffect<VignetteEffect> {
   override get effectType(): AnyConstructor<VignetteEffect> {

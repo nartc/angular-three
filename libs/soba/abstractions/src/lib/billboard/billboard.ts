@@ -4,7 +4,9 @@ import {
   NgtObjectPassThrough,
   NgtObjectProps,
   NgtRenderState,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
 } from '@angular-three/core';
 import { NgtGroupModule } from '@angular-three/core/group';
@@ -48,7 +50,11 @@ export class NgtSobaBillboardContent {
   `,
   imports: [NgtGroupModule, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaBillboard)],
+  providers: [
+    provideNgtObject(NgtSobaBillboard),
+    provideObjectRef(NgtSobaBillboard),
+    provideObjectHostRef(NgtSobaBillboard),
+  ],
 })
 export class NgtSobaBillboard extends NgtObjectProps<THREE.Group> {
   @Input() set follow(value: BooleanInput) {

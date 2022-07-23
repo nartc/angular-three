@@ -6,6 +6,7 @@ import {
   NgtInstanceState,
   NumberInput,
   provideInstanceRef,
+  provideNgtInstance,
   tapEffect,
 } from '@angular-three/core';
 import { NgtPrimitive } from '@angular-three/core/primitive';
@@ -49,7 +50,7 @@ export interface NgtCannonDebugState extends NgtInstanceState<THREE.Scene> {
   `,
   imports: [NgtPrimitive],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideInstanceRef(NgtCannonDebug)],
+  providers: [provideNgtInstance(NgtCannonDebug), provideInstanceRef(NgtCannonDebug)],
 })
 export class NgtCannonDebug extends NgtInstance<THREE.Scene, NgtCannonDebugState> {
   @Input() set color(color: THREE.ColorRepresentation) {

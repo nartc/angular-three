@@ -2,6 +2,7 @@
 import {
     AnyConstructor,
     NgtCommonObjectHelper,
+    provideNgtCommonObjectHelper,
     provideCommonObjectHelperRef,
     Tail,
 } from '@angular-three/core';
@@ -13,7 +14,8 @@ import * as THREE from 'three';
     standalone: true,
     exportAs: 'ngt<%= name %>',
     providers: [
-        provideCommonObjectHelperRef(Ngt<%= name %>),
+        provideNgtCommonObjectHelper(Ngt<%= name %>),
+        provideCommonObjectHelperRef(Ngt<%= name %>)
     ],
 })
 export class Ngt<%= name %> extends NgtCommonObjectHelper<THREE.<%= name %>> {
@@ -37,6 +39,7 @@ export class Ngt<%= name %> extends NgtCommonObjectHelper<THREE.<%= name %>> {
 import {
     AnyConstructor,
     NgtCommonHelper,
+    provideNgtCommonHelper,
     provideCommonHelperRef,<% if (hasBooleanInput) { %>coerceBooleanProperty, BooleanInput,<% } %><% if (hasNumberInput) { %> coerceNumberProperty, NumberInput,<% } %>
 } from '@angular-three/core';
 import {
@@ -52,7 +55,10 @@ import * as THREE from 'three';
     standalone: true,
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideCommonHelperRef(Ngt<%= name %>)],
+    providers: [
+        provideNgtCommonHelper(Ngt<%= name %>),
+        provideCommonHelperRef(Ngt<%= name %>)
+    ],
 })
 export class Ngt<%= name %> extends NgtCommonHelper<THREE.<%= name %>> {
     static ngAcceptInputType_args:

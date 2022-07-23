@@ -9,7 +9,9 @@ import {
   NgtRadianPipe,
   NgtTriple,
   NumberInput,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   startWithUndefined,
 } from '@angular-three/core';
 import { NgtBoxGeometry } from '@angular-three/core/geometries';
@@ -91,7 +93,11 @@ export class NgtSobaGizmoViewportAxis extends NgtInstance<THREE.Group> {
   `,
   imports: [NgtSprite, NgtObjectPassThrough, NgtSpriteMaterial, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaGizmoViewportAxisHead)],
+  providers: [
+    provideNgtObject(NgtSobaGizmoViewportAxisHead),
+    provideObjectRef(NgtSobaGizmoViewportAxisHead),
+    provideObjectHostRef(NgtSobaGizmoViewportAxisHead),
+  ],
 })
 export class NgtSobaGizmoViewportAxisHead extends NgtObjectProps<THREE.Sprite> {
   @Input() set arcStyle(arcStyle: string) {
@@ -322,7 +328,11 @@ export class NgtSobaGizmoViewportAxisHeadPassThrough {
     NgIf,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaGizmoViewport)],
+  providers: [
+    provideNgtObject(NgtSobaGizmoViewport),
+    provideObjectRef(NgtSobaGizmoViewport),
+    provideObjectHostRef(NgtSobaGizmoViewport),
+  ],
 })
 export class NgtSobaGizmoViewport extends NgtObjectProps<THREE.Group> {
   @Input() set axisColors(axisColors: [string, string, string]) {

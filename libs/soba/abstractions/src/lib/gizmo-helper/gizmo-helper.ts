@@ -9,7 +9,9 @@ import {
   NgtPortalContent,
   NgtRenderState,
   prepare,
+  provideNgtObject,
   provideObjectHostRef,
+  provideObjectRef,
   Ref,
   tapEffect,
 } from '@angular-three/core';
@@ -95,7 +97,11 @@ const targetPosition = make(THREE.Vector3);
     AsyncPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideObjectHostRef(NgtSobaGizmoHelper)],
+  providers: [
+    provideNgtObject(NgtSobaGizmoHelper),
+    provideObjectRef(NgtSobaGizmoHelper),
+    provideObjectHostRef(NgtSobaGizmoHelper),
+  ],
 })
 export class NgtSobaGizmoHelper extends NgtObjectProps<THREE.Group, NgtSobaGizmoHelperState> {
   ready$ = timer(250).pipe(map(() => true));
