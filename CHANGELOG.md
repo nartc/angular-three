@@ -1,5 +1,38 @@
 
 
+## [6.0.0-beta.0](https://github.com/nartc/angular-three/compare/5.5.0...6.0.0-beta.0) (2022-07-24)
+
+
+### Features
+
+* bump peer deps ([223c604](https://github.com/nartc/angular-three/commit/223c604cf25884cef8385638c3087cc87a064244))
+* **cannon:** standalone api ([6c26dcd](https://github.com/nartc/angular-three/commit/6c26dcdf151d91fd1b900eb247ea5eafc82ba655))
+* **core:** clean up ngtObjectPassThrough ([35a77f6](https://github.com/nartc/angular-three/commit/35a77f6e9eff9b675e859db2cbc7443cb1c0e270))
+* **core:** consolidate make fns ([a2486fe](https://github.com/nartc/angular-three/commit/a2486fe7d4d564c6c81133ecf69d3ddc1fde1515))
+* **core:** remove material parameters inputs ([0029fa7](https://github.com/nartc/angular-three/commit/0029fa77311efd3302d9722730d53b0edb70c83d))
+* **core:** replace onCanvasReady with onReady ([2083c50](https://github.com/nartc/angular-three/commit/2083c506502f4f06fad1115a2cde5f66f5ba8872))
+* **core:** standalone api ([e1071d6](https://github.com/nartc/angular-three/commit/e1071d6127d9638c3868447eb09f26a73b526ca4))
+* **core:** use inject ([336b453](https://github.com/nartc/angular-three/commit/336b4534670e6ff7e5b8a77fc40e80308e3d08aa))
+* **core:** use inject ([2b627b6](https://github.com/nartc/angular-three/commit/2b627b68d25a004633c9ababb40ef86fd94b2a53))
+* **postprocessing:** standalone api ([ef72f25](https://github.com/nartc/angular-three/commit/ef72f258cd88843775e467da8fab24c7ad7ed7a7))
+* **schematics:** remove configure cannon generator/schematic ([3391638](https://github.com/nartc/angular-three/commit/3391638e962a7db94c24d6f78800bbd0a969201b))
+* **soba:** standalone api ([5707f85](https://github.com/nartc/angular-three/commit/5707f857ea3bb801edc43167843c97d6bbf36696))
+
+
+### Bug Fixes
+
+* **core:** adjust loop logici ([f174630](https://github.com/nartc/angular-three/commit/f174630460b34a52ae7560800513bc0eb550ecc7))
+* **core:** change component store to be an abstract directive instead ([a077d83](https://github.com/nartc/angular-three/commit/a077d83e98f648c50b66e81b1a2cfa4f87d9acaa))
+* **core:** clean up instance ([104523f](https://github.com/nartc/angular-three/commit/104523f7f71ed8b9b6513dd59a419855def8823d))
+* **core:** objects now added to scene after Enter VR on Oculus Quest ([#135](https://github.com/nartc/angular-three/issues/135)) ([f203fd5](https://github.com/nartc/angular-three/commit/f203fd5103a4dd2d82f86cc57c5d3b10589243b7))
+* revert to three import ([7384f93](https://github.com/nartc/angular-three/commit/7384f93f7b929574af85fa0c7476e96319f68b1a))
+* update three import to three/src/Three ([8942c28](https://github.com/nartc/angular-three/commit/8942c28063625d4d3a5f52b28d2919251a71b56f))
+
+
+### Documentations
+
+* **core:** fixed typo in ngt-primitive component ([#128](https://github.com/nartc/angular-three/issues/128)) ([6254323](https://github.com/nartc/angular-three/commit/625432381599043de15b8e0d2b76b93288f6b4de))
+
 ## [5.5.0](https://github.com/nartc/angular-three/compare/5.4.0...5.5.0) (2022-06-08)
 
 
