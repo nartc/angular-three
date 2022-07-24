@@ -20,11 +20,8 @@ import * as THREE from 'three';
   providers: [provideNgtCommonMaterial(NgtMeshStandardMaterial), provideCommonMaterialRef(NgtMeshStandardMaterial)],
 })
 export class NgtMeshStandardMaterial<
-  TStandardMaterialParameters extends THREE.MeshStandardMaterialParameters = THREE.MeshStandardMaterialParameters,
   TStandardMaterial extends THREE.MeshStandardMaterial = THREE.MeshStandardMaterial
-> extends NgtCommonMaterial<THREE.MeshStandardMaterialParameters, THREE.MeshStandardMaterial> {
-  static ngAcceptInputType_parameters: THREE.MeshStandardMaterialParameters | undefined;
-
+> extends NgtCommonMaterial<THREE.MeshStandardMaterial> {
   @Input() set color(color: THREE.ColorRepresentation) {
     this.set({ color });
   }

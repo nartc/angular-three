@@ -19,12 +19,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtMeshDepthMaterial), provideCommonMaterialRef(NgtMeshDepthMaterial)],
 })
-export class NgtMeshDepthMaterial extends NgtCommonMaterial<
-  THREE.MeshDepthMaterialParameters,
-  THREE.MeshDepthMaterial
-> {
-  static ngAcceptInputType_parameters: THREE.MeshDepthMaterialParameters | undefined;
-
+export class NgtMeshDepthMaterial extends NgtCommonMaterial<THREE.MeshDepthMaterial> {
   @Input() set map(map: THREE.Texture | null) {
     this.set({ map });
   }

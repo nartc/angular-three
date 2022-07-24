@@ -19,9 +19,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtSpriteMaterial), provideCommonMaterialRef(NgtSpriteMaterial)],
 })
-export class NgtSpriteMaterial extends NgtCommonMaterial<THREE.SpriteMaterialParameters, THREE.SpriteMaterial> {
-  static ngAcceptInputType_parameters: THREE.SpriteMaterialParameters | undefined;
-
+export class NgtSpriteMaterial extends NgtCommonMaterial<THREE.SpriteMaterial> {
   @Input() set color(color: THREE.ColorRepresentation) {
     this.set({ color });
   }

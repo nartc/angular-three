@@ -1,21 +1,16 @@
 import { Directive, Input } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
 import * as THREE from 'three';
 import { Plane } from 'three/src/math/Plane';
 import type { NgtInstanceState } from '../abstracts/instance';
 import { NgtInstance, provideNgtInstance } from '../abstracts/instance';
 import { injectObjectHostRef, injectObjectRef } from '../di/object';
-import { startWithUndefined, tapEffect } from '../stores/component-store';
-import type { AnyConstructor, BooleanInput, NumberInput, UnknownRecord } from '../types';
-import { checkNeedsUpdate } from '../utils/check-needs-update';
+import { tapEffect } from '../stores/component-store';
+import type { AnyConstructor, BooleanInput, NumberInput } from '../types';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
 import { createNgtProvider } from '../utils/inject';
 
-export interface NgtCommonMaterialState<
-  TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
-  TMaterial extends THREE.Material = THREE.Material
-> extends NgtInstanceState<TMaterial> {
-  materialParameters: TMaterialParameters;
+export interface NgtCommonMaterialState<TMaterial extends THREE.Material = THREE.Material>
+  extends NgtInstanceState<TMaterial> {
   alphaTest?: number;
   alphaToCoverage?: boolean;
   blendDst?: THREE.BlendingDstFactor;
@@ -60,10 +55,10 @@ export interface NgtCommonMaterialState<
 }
 
 @Directive()
-export abstract class NgtCommonMaterial<
-  TMaterialParameters extends THREE.MaterialParameters = THREE.MaterialParameters,
-  TMaterial extends THREE.Material = THREE.Material
-> extends NgtInstance<TMaterial, NgtCommonMaterialState<TMaterialParameters, TMaterial>> {
+export abstract class NgtCommonMaterial<TMaterial extends THREE.Material = THREE.Material> extends NgtInstance<
+  TMaterial,
+  NgtCommonMaterialState<TMaterial>
+> {
   @Input() set alphaTest(alphaTest: NumberInput) {
     this.set({ alphaTest: coerceNumberProperty(alphaTest) });
   }
@@ -236,17 +231,6 @@ export abstract class NgtCommonMaterial<
     this.set({ userData });
   }
 
-  /**
-   * @deprecated Use individual inputs instead. Notice: Do not mix [parameters] and individual inputs, they will not be merged. Will be removed in next major version
-   */
-  @Input() set parameters(v: TMaterialParameters | undefined) {
-    this.set({ materialParameters: v });
-  }
-
-  get parameters(): TMaterialParameters | undefined {
-    return this.get((s) => s.materialParameters);
-  }
-
   abstract get materialType(): AnyConstructor<TMaterial>;
 
   protected override parentRef = injectObjectRef({ optional: true, skipSelf: true });
@@ -255,7 +239,6 @@ export abstract class NgtCommonMaterial<
   protected override preInit() {
     this.set((state) => ({
       attach: state.attach.length ? state.attach : ['material'],
-      materialParameters: state.materialParameters || ({} as TMaterialParameters),
     }));
   }
 
@@ -265,20 +248,6 @@ export abstract class NgtCommonMaterial<
       this.store.onReady(() => {
         this.init(this.ctorParams$);
         this.postInit();
-        this.setParameters(
-          this.select(
-            this.instance$,
-            this.select((s) => s.materialParameters),
-            this.parameters$,
-            this.subParameters$,
-            (material, materialParameters, parameters, subParameters) => ({
-              material,
-              parameters: Object.keys(materialParameters).length
-                ? (materialParameters as UnknownRecord)
-                : { ...parameters, ...subParameters },
-            })
-          )
-        );
       });
     });
   }
@@ -292,228 +261,53 @@ export abstract class NgtCommonMaterial<
     })
   );
 
-  private readonly setParameters = this.effect<{
-    material: TMaterial;
-    parameters: UnknownRecord;
-  }>(
-    tap(({ parameters, material }) => {
-      material.setValues(
-        Object.assign(
-          Object.entries(parameters).reduce((result, [key, value]) => {
-            if (value !== undefined) {
-              result[key as keyof typeof result] = value;
-            }
-            return result;
-          }, {} as THREE.MaterialParameters),
-          'uniforms' in material && 'uniforms' in parameters
-            ? {
-                uniforms: {
-                  ...(material as unknown as THREE.ShaderMaterial).uniforms,
-                  ...(parameters as unknown as THREE.ShaderMaterialParameters).uniforms,
-                },
-              }
-            : {}
-        )
-      );
-      checkNeedsUpdate(material);
-    })
-  );
-
-  // TODO: put these back after [parameters] is removed. Right now, Material needs to handle their own update options logic
-  // protected override get optionFields(): Record<string, boolean> {
-  //     return { ...super.optionFields,
-  //         alphaTest: true,
-  //         alphaToCoverage: true,
-  //         blendDst: true,
-  //         blendDstAlpha: true,
-  //         blendEquation: true,
-  //         blendEquationAlpha: true,
-  //         blending: true,
-  //         blendSrc: true,
-  //         blendSrcAlpha: true,
-  //         clipIntersection: true,
-  //         clippingPlanes: true,
-  //         clipShadows: true,
-  //         colorWrite: true,
-  //         defines: true,
-  //         depthFunc: true,
-  //         depthTest: true,
-  //         depthWrite: true,
-  //         fog: true,
-  //         name: true,
-  //         opacity: true,
-  //         polygonOffset: true,
-  //         polygonOffsetFactor: true,
-  //         polygonOffsetUnits: true,
-  //         precision: true,
-  //         premultipliedAlpha: true,
-  //         dithering: true,
-  //         side: true,
-  //         shadowSide: true,
-  //         toneMapped: true,
-  //         transparent: true,
-  //         vertexColors: true,
-  //         visible: true,
-  //         format: true,
-  //         stencilWrite: true,
-  //         stencilFunc: true,
-  //         stencilRef: true,
-  //         stencilWriteMask: true,
-  //         stencilFuncMask: true,
-  //         stencilFail: true,
-  //         stencilZFail: true,
-  //         stencilZPass: true,
-  //         userData: true,
-  //     };
-  // }
-
-  // TODO: remove when [parameters] is removed
-  private get subParameters$(): Observable<UnknownRecord> {
-    const optionFieldEntries = Object.entries(this.optionFields);
-    if (optionFieldEntries.length === 0) return of({});
-    return this.select(
-      ...optionFieldEntries.map(([inputKey, shouldStartWithUndefined]) => {
-        const option$ = this.select((s) => (s as unknown as UnknownRecord)[inputKey]);
-        if (shouldStartWithUndefined) return option$.pipe(startWithUndefined());
-        return option$;
-      }),
-      (...args: any[]) =>
-        args.reduce((record, arg, index) => {
-          record[optionFieldEntries[index][0]] = arg;
-          return record;
-        }, {} as UnknownRecord)
-    );
+  protected override get optionFields(): Record<string, boolean> {
+    return {
+      ...super.optionFields,
+      alphaTest: true,
+      alphaToCoverage: true,
+      blendDst: true,
+      blendDstAlpha: true,
+      blendEquation: true,
+      blendEquationAlpha: true,
+      blending: true,
+      blendSrc: true,
+      blendSrcAlpha: true,
+      clipIntersection: true,
+      clippingPlanes: true,
+      clipShadows: true,
+      colorWrite: true,
+      defines: true,
+      depthFunc: true,
+      depthTest: true,
+      depthWrite: true,
+      fog: true,
+      name: true,
+      opacity: true,
+      polygonOffset: true,
+      polygonOffsetFactor: true,
+      polygonOffsetUnits: true,
+      precision: true,
+      premultipliedAlpha: true,
+      dithering: true,
+      side: true,
+      shadowSide: true,
+      toneMapped: true,
+      transparent: true,
+      vertexColors: true,
+      visible: true,
+      format: true,
+      stencilWrite: true,
+      stencilFunc: true,
+      stencilRef: true,
+      stencilWriteMask: true,
+      stencilFuncMask: true,
+      stencilFail: true,
+      stencilZFail: true,
+      stencilZPass: true,
+      userData: true,
+    };
   }
-
-  // TODO: remove when [parameters] is removed
-  protected readonly parameters$ = this.select(
-    this.select((s) => s.alphaTest).pipe(startWithUndefined()),
-    this.select((s) => s.alphaToCoverage).pipe(startWithUndefined()),
-    this.select((s) => s.blendDst).pipe(startWithUndefined()),
-    this.select((s) => s.blendDstAlpha).pipe(startWithUndefined()),
-    this.select((s) => s.blendEquation).pipe(startWithUndefined()),
-    this.select((s) => s.blendEquationAlpha).pipe(startWithUndefined()),
-    this.select((s) => s.blending).pipe(startWithUndefined()),
-    this.select((s) => s.blendSrc).pipe(startWithUndefined()),
-    this.select((s) => s.blendSrcAlpha).pipe(startWithUndefined()),
-    this.select((s) => s.clipIntersection).pipe(startWithUndefined()),
-    this.select((s) => s.clippingPlanes).pipe(startWithUndefined()),
-    this.select((s) => s.clipShadows).pipe(startWithUndefined()),
-    this.select((s) => s.colorWrite).pipe(startWithUndefined()),
-    this.select((s) => s.defines).pipe(startWithUndefined()),
-    this.select((s) => s.depthFunc).pipe(startWithUndefined()),
-    this.select((s) => s.depthTest).pipe(startWithUndefined()),
-    this.select((s) => s.depthWrite).pipe(startWithUndefined()),
-    this.select((s) => s.name).pipe(startWithUndefined()),
-    this.select((s) => s.opacity).pipe(startWithUndefined()),
-    this.select((s) => s.polygonOffset).pipe(startWithUndefined()),
-    this.select((s) => s.polygonOffsetFactor).pipe(startWithUndefined()),
-    this.select((s) => s.polygonOffsetUnits).pipe(startWithUndefined()),
-    this.select((s) => s.precision).pipe(startWithUndefined()),
-    this.select((s) => s.premultipliedAlpha).pipe(startWithUndefined()),
-    this.select((s) => s.dithering).pipe(startWithUndefined()),
-    this.select((s) => s.side).pipe(startWithUndefined()),
-    this.select((s) => s.shadowSide).pipe(startWithUndefined()),
-    this.select((s) => s.toneMapped).pipe(startWithUndefined()),
-    this.select((s) => s.transparent).pipe(startWithUndefined()),
-    this.select((s) => s.vertexColors).pipe(startWithUndefined()),
-    this.select((s) => s.visible).pipe(startWithUndefined()),
-    this.select((s) => s.format).pipe(startWithUndefined()),
-    this.select((s) => s.stencilWrite).pipe(startWithUndefined()),
-    this.select((s) => s.stencilFunc).pipe(startWithUndefined()),
-    this.select((s) => s.stencilRef).pipe(startWithUndefined()),
-    this.select((s) => s.stencilWriteMask).pipe(startWithUndefined()),
-    this.select((s) => s.stencilFuncMask).pipe(startWithUndefined()),
-    this.select((s) => s.stencilFail).pipe(startWithUndefined()),
-    this.select((s) => s.stencilZFail).pipe(startWithUndefined()),
-    this.select((s) => s.stencilZPass).pipe(startWithUndefined()),
-    this.select((s) => s.userData).pipe(startWithUndefined()),
-    (
-      alphaTest,
-      alphaToCoverage,
-      blendDst,
-      blendDstAlpha,
-      blendEquation,
-      blendEquationAlpha,
-      blending,
-      blendSrc,
-      blendSrcAlpha,
-      clipIntersection,
-      clippingPlanes,
-      clipShadows,
-      colorWrite,
-      defines,
-      depthFunc,
-      depthTest,
-      depthWrite,
-      name,
-      opacity,
-      polygonOffset,
-      polygonOffsetFactor,
-      polygonOffsetUnits,
-      precision,
-      premultipliedAlpha,
-      dithering,
-      side,
-      shadowSide,
-      toneMapped,
-      transparent,
-      vertexColors,
-      visible,
-      format,
-      stencilWrite,
-      stencilFunc,
-      stencilRef,
-      stencilWriteMask,
-      stencilFuncMask,
-      stencilFail,
-      stencilZFail,
-      stencilZPass,
-      userData
-    ) => ({
-      alphaTest,
-      alphaToCoverage,
-      blendDst,
-      blendDstAlpha,
-      blendEquation,
-      blendEquationAlpha,
-      blending,
-      blendSrc,
-      blendSrcAlpha,
-      clipIntersection,
-      clippingPlanes,
-      clipShadows,
-      colorWrite,
-      defines,
-      depthFunc,
-      depthTest,
-      depthWrite,
-      name,
-      opacity,
-      polygonOffset,
-      polygonOffsetFactor,
-      polygonOffsetUnits,
-      precision,
-      premultipliedAlpha,
-      dithering,
-      side,
-      shadowSide,
-      toneMapped,
-      transparent,
-      vertexColors,
-      visible,
-      format,
-      stencilWrite,
-      stencilFunc,
-      stencilRef,
-      stencilWriteMask,
-      stencilFuncMask,
-      stencilFail,
-      stencilZFail,
-      stencilZPass,
-      userData,
-    })
-  );
 }
 
 export const provideNgtCommonMaterial = createNgtProvider(NgtCommonMaterial, provideNgtInstance);

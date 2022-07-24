@@ -13,3 +13,4 @@
 - `NgtObjectInputs` -> `NgtObjectProps`
 - `NgtObjectInputsState` -> `NgtObjectPropsState`
 - Abstract classes are rewritten to use `inject()`. Hence, derived classes do not need to pass DIs into `super()` calls anymore
+- `[parameters]` on Materials are removed. Please use individual Inputs

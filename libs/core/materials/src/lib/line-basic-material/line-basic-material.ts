@@ -18,11 +18,8 @@ import * as THREE from 'three';
   providers: [provideNgtCommonMaterial(NgtLineBasicMaterial), provideCommonMaterialRef(NgtLineBasicMaterial)],
 })
 export class NgtLineBasicMaterial<
-  TLineBasicMaterialParameters extends THREE.LineBasicMaterialParameters = THREE.LineBasicMaterialParameters,
   TLineBasicMaterial extends THREE.LineBasicMaterial = THREE.LineBasicMaterial
-> extends NgtCommonMaterial<THREE.LineBasicMaterialParameters, THREE.LineBasicMaterial> {
-  static ngAcceptInputType_parameters: THREE.LineBasicMaterialParameters | undefined;
-
+> extends NgtCommonMaterial<THREE.LineBasicMaterial> {
   @Input() set color(color: THREE.ColorRepresentation) {
     this.set({ color });
   }

@@ -18,12 +18,7 @@ import { NgtMeshStandardMaterial } from '../mesh-standard-material/mesh-standard
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtMeshPhysicalMaterial), provideCommonMaterialRef(NgtMeshPhysicalMaterial)],
 })
-export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<
-  THREE.MeshPhysicalMaterialParameters,
-  THREE.MeshPhysicalMaterial
-> {
-  static override ngAcceptInputType_parameters: THREE.MeshPhysicalMaterialParameters | undefined;
-
+export class NgtMeshPhysicalMaterial extends NgtMeshStandardMaterial<THREE.MeshPhysicalMaterial> {
   @Input() set clearcoat(clearcoat: NumberInput) {
     this.set({ clearcoat: coerceNumberProperty(clearcoat) });
   }

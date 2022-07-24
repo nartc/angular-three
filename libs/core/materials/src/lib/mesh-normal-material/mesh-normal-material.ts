@@ -19,12 +19,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtMeshNormalMaterial), provideCommonMaterialRef(NgtMeshNormalMaterial)],
 })
-export class NgtMeshNormalMaterial extends NgtCommonMaterial<
-  THREE.MeshNormalMaterialParameters,
-  THREE.MeshNormalMaterial
-> {
-  static ngAcceptInputType_parameters: THREE.MeshNormalMaterialParameters | undefined;
-
+export class NgtMeshNormalMaterial extends NgtCommonMaterial<THREE.MeshNormalMaterial> {
   @Input() set bumpMap(bumpMap: THREE.Texture | null) {
     this.set({ bumpMap });
   }

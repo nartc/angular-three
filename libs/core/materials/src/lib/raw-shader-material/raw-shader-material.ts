@@ -15,9 +15,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtRawShaderMaterial), provideCommonMaterialRef(NgtRawShaderMaterial)],
 })
-export class NgtRawShaderMaterial extends NgtCommonMaterial<THREE.ShaderMaterialParameters, THREE.RawShaderMaterial> {
-  static ngAcceptInputType_parameters: THREE.ShaderMaterialParameters | undefined;
-
+export class NgtRawShaderMaterial extends NgtCommonMaterial<THREE.RawShaderMaterial> {
   get materialType(): AnyConstructor<THREE.RawShaderMaterial> {
     return THREE.RawShaderMaterial;
   }

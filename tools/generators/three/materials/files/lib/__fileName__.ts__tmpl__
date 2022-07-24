@@ -19,14 +19,7 @@ import * as THREE from 'three';
         provideCommonMaterialRef(Ngt<%= name %>)
     ]
 })
-export class Ngt<%= name %><% if (typeDef) { %><<%= typeDef %>><% } %> extends <% if (extend && extend.material) { %><%= extend.material %><% } else { %>NgtCommonMaterial<% } %><
-    THREE.<%= parameters %>,
-    THREE.<%= name %>
-> {
-    static<% if (extend) { %> override<% } %> ngAcceptInputType_parameters:
-        | THREE.<%= parameters %>
-        | undefined;
-
+export class Ngt<%= name %><% if (typeDef) { %><<%= typeDef %>><% } %> extends <% if (extend && extend.material) { %><%= extend.material %><% } else { %>NgtCommonMaterial<% } %><THREE.<%= name %>> {
     <% for (const input of inputs) { %>
     @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <% if (input.isBooleanInput) { %>BooleanInput<% } else if (input.isNumberInput) { %>NumberInput<% } else { %><%= input.type %><% } %>) {
         this.set({ <% if (input.isBooleanInput || input.isNumberInput) { %><%= input.name %>: <% if (input.isNumberInput) { %>coerceNumberProperty<% } else { %>coerceBooleanProperty<% } %>(<%= input.name %>)<% } else { %><%= input.name %><% } %> });

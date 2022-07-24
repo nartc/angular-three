@@ -19,9 +19,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtShaderMaterial), provideCommonMaterialRef(NgtShaderMaterial)],
 })
-export class NgtShaderMaterial extends NgtCommonMaterial<THREE.ShaderMaterialParameters, THREE.ShaderMaterial> {
-  static ngAcceptInputType_parameters: THREE.ShaderMaterialParameters | undefined;
-
+export class NgtShaderMaterial extends NgtCommonMaterial<THREE.ShaderMaterial> {
   @Input() set uniforms(uniforms: { [uniform: string]: THREE.IUniform }) {
     this.set({ uniforms });
   }

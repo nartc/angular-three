@@ -19,9 +19,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtPointsMaterial), provideCommonMaterialRef(NgtPointsMaterial)],
 })
-export class NgtPointsMaterial extends NgtCommonMaterial<THREE.PointsMaterialParameters, THREE.PointsMaterial> {
-  static ngAcceptInputType_parameters: THREE.PointsMaterialParameters | undefined;
-
+export class NgtPointsMaterial extends NgtCommonMaterial<THREE.PointsMaterial> {
   @Input() set color(color: THREE.ColorRepresentation) {
     this.set({ color });
   }

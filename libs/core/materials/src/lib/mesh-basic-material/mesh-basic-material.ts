@@ -19,12 +19,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtMeshBasicMaterial), provideCommonMaterialRef(NgtMeshBasicMaterial)],
 })
-export class NgtMeshBasicMaterial extends NgtCommonMaterial<
-  THREE.MeshBasicMaterialParameters,
-  THREE.MeshBasicMaterial
-> {
-  static ngAcceptInputType_parameters: THREE.MeshBasicMaterialParameters | undefined;
-
+export class NgtMeshBasicMaterial extends NgtCommonMaterial<THREE.MeshBasicMaterial> {
   @Input() set color(color: THREE.ColorRepresentation) {
     this.set({ color });
   }

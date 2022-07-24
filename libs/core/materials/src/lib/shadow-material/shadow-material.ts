@@ -17,9 +17,7 @@ import * as THREE from 'three';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtShadowMaterial), provideCommonMaterialRef(NgtShadowMaterial)],
 })
-export class NgtShadowMaterial extends NgtCommonMaterial<THREE.ShadowMaterialParameters, THREE.ShadowMaterial> {
-  static ngAcceptInputType_parameters: THREE.ShadowMaterialParameters | undefined;
-
+export class NgtShadowMaterial extends NgtCommonMaterial<THREE.ShadowMaterial> {
   @Input() set color(color: THREE.ColorRepresentation) {
     this.set({ color });
   }

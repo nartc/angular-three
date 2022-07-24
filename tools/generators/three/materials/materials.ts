@@ -51,8 +51,7 @@ const materials = [
   {
     name: THREE.MeshStandardMaterial.name,
     parameters: 'MeshStandardMaterialParameters',
-    typeDef:
-      'TStandardMaterialParameters extends THREE.MeshStandardMaterialParameters = THREE.MeshStandardMaterialParameters, TStandardMaterial extends THREE.MeshStandardMaterial = THREE.MeshStandardMaterial',
+    typeDef: 'TStandardMaterial extends THREE.MeshStandardMaterial = THREE.MeshStandardMaterial',
     defPath: 'node_modules/@types/three/src/materials/MeshStandardMaterial.d.ts',
   },
   {
@@ -107,8 +106,7 @@ const materials = [
   {
     name: THREE.LineBasicMaterial.name,
     parameters: 'LineBasicMaterialParameters',
-    typeDef:
-      'TLineBasicMaterialParameters extends THREE.LineBasicMaterialParameters = THREE.LineBasicMaterialParameters, TLineBasicMaterial extends THREE.LineBasicMaterial = THREE.LineBasicMaterial',
+    typeDef: 'TLineBasicMaterial extends THREE.LineBasicMaterial = THREE.LineBasicMaterial',
     defPath: 'node_modules/@types/three/src/materials/LineBasicMaterial.d.ts',
   },
 ];

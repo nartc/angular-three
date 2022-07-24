@@ -31,8 +31,6 @@ export type NgtSobaImageShaderMaterialParameters = THREE.ShaderMaterialParameter
   ],
 })
 export class NgtSobaImageShaderMaterial extends NgtShaderMaterial {
-  static override ngAcceptInputType_parameters: NgtSobaImageShaderMaterialParameters | undefined;
-
   @Input() set map(map: THREE.Texture) {
     this.set({ map });
   }

@@ -18,12 +18,7 @@ import { NgtLineBasicMaterial } from '../line-basic-material/line-basic-material
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMaterial(NgtLineDashedMaterial), provideCommonMaterialRef(NgtLineDashedMaterial)],
 })
-export class NgtLineDashedMaterial extends NgtLineBasicMaterial<
-  THREE.LineDashedMaterialParameters,
-  THREE.LineDashedMaterial
-> {
-  static override ngAcceptInputType_parameters: THREE.LineDashedMaterialParameters | undefined;
-
+export class NgtLineDashedMaterial extends NgtLineBasicMaterial<THREE.LineDashedMaterial> {
   @Input() set scale(scale: NumberInput) {
     this.set({ scale: coerceNumberProperty(scale) });
   }

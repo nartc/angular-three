@@ -270,7 +270,11 @@ export abstract class NgtInstance<
     tapEffect(() => {
       // assigning
       const setOptionsSub = this.setOptions(
-        this.select(optionsFieldsToOptions(this, this.optionFields), this.setOptionsTrigger$, (options) => options)
+        this.select(
+          optionsFieldsToOptions(this, this.optionFields, is.material(this.instanceValue)),
+          this.setOptionsTrigger$,
+          (options) => options
+        )
       );
 
       // attaching
@@ -306,7 +310,7 @@ export abstract class NgtInstance<
 
       if (this.instanceValue) {
         // TODO: Material is handling this on their own. To be changed when [parameters] is removed
-        if (is.material(this.instanceValue)) return;
+        // if (is.material(this.instanceValue)) return;
 
         const state = this.get();
         const customOptions = {} as UnknownRecord;
@@ -320,12 +324,24 @@ export abstract class NgtInstance<
         }
 
         for (const option of Object.keys(restOptions)) {
-          if (state[option] != null) {
+          const skipOption = is.material(this.instanceValue) ? state[option] !== undefined : state[option] != null;
+          if (skipOption) {
             customOptions[option] = state[option];
           }
         }
 
-        applyProps(this.instanceValue, customOptions);
+        if (is.material(this.instanceValue)) {
+          customOptions['uniforms'] = {};
+          if ('uniforms' in this.instanceValue && 'uniforms' in restOptions) {
+            customOptions['uniforms'] = {
+              ...(this.instanceValue as THREE.ShaderMaterial)['uniforms'],
+              ...(restOptions as THREE.ShaderMaterialParameters)['uniforms'],
+            };
+          }
+          this.instanceValue.setValues(customOptions);
+        } else {
+          applyProps(this.instanceValue, customOptions);
+        }
 
         this.postSetOptions(this.instanceValue);
 
