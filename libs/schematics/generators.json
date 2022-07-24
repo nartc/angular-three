@@ -7,12 +7,6 @@
       "factory": "./src/generators/init/generator",
       "schema": "./src/generators/init/schema.json",
       "description": "Initialize AngularThree"
-    },
-    "configure-cannon": {
-      "factory": "./src/generators/configure-cannon/generator",
-      "schema": "./src/generators/configure-cannon/schema.json",
-      "description": "Configure @angular-three/cannon",
-      "aliases": ["cannon"]
     }
   },
   "schematics": {
@@ -20,12 +14,6 @@
       "factory": "./src/generators/init/compat",
       "schema": "./src/generators/init/schema.json",
       "description": "Add Angular Three"
-    },
-    "configure-cannon": {
-      "factory": "./src/generators/configure-cannon/compat",
-      "schema": "./src/generators/configure-cannon/schema.json",
-      "description": "Configure @angular-three/cannon",
-      "aliases": ["cannon"]
     }
   }
 }
