@@ -1,0 +1,155 @@
+---
+id: migrate-to-v6
+title: Migrate to v6
+sidebar_label: Migrate to v6
+---
+
+`@angular-three/core@6` are mostly about removing old APIs, supporting Angular 14, and THREE 0.142
+
+## Standalone APIs
+
+Angular 14 comes with Standalone Components. Angular Three v6 provides all components/directives/pipes as Standalone. However, Angular Three v6 still exposes Module APIs to ease the migrations. Please consider moving to Standalone APIs as Module APIs will be removed in the next major version
+
+```diff
+- import { NgtCanvasModule } from '@angular-three/core';
++ import { NgtCanvas } from '@angular-three/core';
+
+@NgModule({
+    imports: [
+-       NgtCanvasModule
++       NgtCanvas
+    ]
+})
+export class AppModule {}
+```
+
+## `make()` API
+
+`makeVector*()` and `makeColor()` have been removed in favor of `make()`
+
+```diff
+- makeVector2();
++ make(THREE.Vector2);
+
+- makeVector3();
++ make(THREE.Vector3);
+
+- makeVector4();
++ make(THREE.Vector4);
+
+- makeColor();
++ make(THREE.Color);
+```
+
+## `NgtComponentStore`
+
+In v5, `NgtComponentStore` is a normal class which can be instantiated. In v6, this has been changed to an abstract class and cannot be instantiated. If you rely on new-ing up an `NgtComponentStore`, please adjust
+
+#### `NgtComponentStore#onCanvasReady`
+
+`onCanvasReady` is removed in favor of a more concrete `NgtStore#onReady`. You might be using this method to run some code **after** the `NgtCanvas` finishes initializing
+
+```diff
+@Component(/*..*/)
+export class Some extends NgtComponentStore {
+    constructor(private store: NgtStore) {}
+
+    ngOnInit() {
+-       //      👇 was available on NgtComponentStore
+-       this.onCanvasReady(this.store.ready$, () => {/*...*/});
++       //          👇 this replaces onCanvasReady
++       this.store.onReady(() => {/*...*/});
+    }
+}
+```
+
+This results in a cleaner way to run some code **after** `NgtCanvas` finishes initializing as well as might remove the need for extending `NgtComponentStore` just to access `onCanvasReady`
+
+## `NgtCoreModule`
+
+`NgtCoreModule` has been removed. Please use `NgtCanvasModule` instead or use the Standalone `NgtCanvas`
+
+## `NgtColorPipe`
+
+`NgtColorPipe` has been removed. Please use `NgtColorAttribute` instead
+
+```diff
+- <ngt-canvas [scene]="{ background: 'black' | color }"></ngt-canvas>
++ <ngt-canvas>
++   <ngt-color attach="background" color="black"></ngt-color>
++ </ngt-canvas>
+```
+
+## `NgtFogPipe` and `NgtFogExp2Pipe`
+
+- `NgtFogPipe` has been removed. Please use `NgtFogAttribute` instead
+- `NgtFogExp2Pipe` has been removed. Please use `NgtFogExp2Attribute` instead
+
+```diff
+- <ngt-canvas [scene]="{ fog: ['#171720', 20, 70] | fog }"></ngt-canvas>
++ <ngt-canvas>
++   <ngt-fog attach="fog" [fog]="['#171720', 20, 70]"></ngt-fog>
++ </ngt-canvas>
+```
+
+## `NgtVector*Pipe`
+
+All `NgtVector*Pipe` has been removed. Please use `NgtVector*Attribute` instead
+
+```diff
+- <ngt-spot-light castShadow [shadow]="{ mapSize: [512, 512] | vector2 }"></ngt-spot-light>
++ <ngt-spot-light castShadow>
++   <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="[512, 512]"></ngt-vector2>
++ </ngt-spot-light>
+```
+
+## `NgtObjectInputs` name change
+
+`NgtObjectInputs` has been renamed to `NgtObjectProps` as it also contains `Outputs`. Similarly, `NgtObjectInputsState` has been renamed to `NgtObjectPropsState`. Please update your code accordingly if you utilize these symbols.
+
+## `inject()` API
+
+Abstract classes are rewritten to use Angular 14 `inject()` API to move the Dependencies out of the `constructor`. This results in cleaner and more scalable inheritance story. Sub-classes **do not** need to pass in the dependencies to `super()` call anymore.
+
+```diff
+export class Some extends NgtInstance {
+-   constructor(
+-       zone: NgZone,
+-       store: NgtStore,
+-       @Optional()
+-       @SkipSelf()
+-       @Inject(NGT_INSTANCE_REF)
+-       parentRef: AnyFunction<Ref>,
+-       @Optional()
+-       @SkipSelf()
+-       @Inject(NGT_INSTANCE_HOST_REF)
+-       parentHostRef: AnyFunction<Ref>,
+-       private gtlfLoader: NgtGLTFLoader
+-   ) {
+-       super(zone, store, parentRef, parentHostRef);
+-   }
+
++   constructor(private gltfLoader:  NgtGLTFLoader) {
++       super();
++   }
+
++   // or if you prefer inject()
++   private gltfLoader = inject(NgtGLTFLoader);
+}
+```
+
+## `[parameters]` on Materials are removed
+
+`[parameters]` Input on `<ngt-*-material>` are removed. Please use individual inputs instead
+
+```diff
+- <ngt-mesh-basic-material
+-     [parameters]="{ color: 'pink', transparent: true, opacity: 0.5 }"
+- ></ngt-mesh-basic-material>
+
++ <ngt-mesh-basic-material
++     color="pink"
++     opacity="0.4"
++     transparent
++ ></ngt-mesh-basic-material>
+```

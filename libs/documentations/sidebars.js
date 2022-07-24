@@ -5,7 +5,12 @@ const sidebars = {
     {
       type: 'category',
       label: 'Getting Started',
-      items: ['getting-started/overview', 'getting-started/installation', 'getting-started/migrate-to-v5'],
+      items: [
+        'getting-started/overview',
+        'getting-started/installation',
+        'getting-started/migrate-to-v6',
+        'getting-started/migrate-to-v5',
+      ],
     },
     {
       type: 'doc',
