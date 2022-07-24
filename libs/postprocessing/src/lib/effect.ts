@@ -6,6 +6,7 @@ import {
   NgtInstance,
   NgtUnknownInstance,
   NumberInput,
+  optionsFieldsToOptions,
   provideInstanceRef,
   provideNgtInstance,
   startWithUndefined,
@@ -70,7 +71,7 @@ export abstract class NgtCommonEffect<TEffect extends Effect = Effect> extends N
       this.store.onReady(() => {
         this.init(
           this.select(
-            this.optionsFieldsToOptions(this.effectOptionsFields, true),
+            optionsFieldsToOptions(this, this.effectOptionsFields, true),
             this.ctorParams$,
             (effectOptions) => effectOptions
           )

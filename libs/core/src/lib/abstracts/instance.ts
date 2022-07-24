@@ -11,11 +11,11 @@ import {
   Optional,
   Output,
 } from '@angular/core';
-import { filter, map, Observable, of, pairwise, pipe, startWith, switchMap, tap, withLatestFrom } from 'rxjs';
+import { filter, map, Observable, of, pipe, switchMap, tap, withLatestFrom } from 'rxjs';
 import * as THREE from 'three';
 import { injectInstanceHostRef, injectInstanceRef } from '../di/instance';
 import { Ref } from '../ref';
-import { NgtComponentStore, startWithUndefined, tapEffect } from '../stores/component-store';
+import { NgtComponentStore, tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import type { AttachFunction, BooleanInput, NgtInstanceInternal, NgtUnknownInstance, UnknownRecord } from '../types';
 import { applyProps } from '../utils/apply-props';
@@ -23,7 +23,7 @@ import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { coerceBooleanProperty } from '../utils/coercion';
 import { removeInteractivity } from '../utils/events';
 import { createNgtProvider } from '../utils/inject';
-import { prepare } from '../utils/instance';
+import { checkUpdate, optionsFieldsToOptions, prepare } from '../utils/instance';
 import { is } from '../utils/is';
 import { mutate } from '../utils/mutate';
 
@@ -259,34 +259,6 @@ export abstract class NgtInstance<
     return {};
   }
 
-  protected optionsFieldsToOptions(fields: Record<string, boolean>, keepPrevious = false): Observable<UnknownRecord> {
-    const optionEntries = Object.entries(fields);
-    if (optionEntries.length === 0) return of({});
-    return this.select(
-      ...optionEntries.map(([inputKey, shouldStartWithUndefined]) => {
-        const subInput$ = this.select((s) => (s as UnknownRecord)[inputKey]);
-        if (shouldStartWithUndefined) return subInput$.pipe(startWithUndefined());
-        return subInput$;
-      }),
-      (...args: any[]) =>
-        args.reduce((record, arg, index) => {
-          record[optionEntries[index][0]] = arg;
-          return record;
-        }, {} as UnknownRecord)
-    ).pipe(
-      startWith({}),
-      pairwise(),
-      map(([prev, curr]) => {
-        return Object.entries(curr).reduce((options, [currKey, currValue]) => {
-          if (!is.equ(prev[currKey], currValue) || (keepPrevious && is.equ(prev[currKey], currValue))) {
-            options[currKey] = currValue;
-          }
-          return options;
-        }, {} as UnknownRecord);
-      })
-    );
-  }
-
   override ngOnDestroy() {
     this.zone.runOutsideAngular(() => {
       this.destroy();
@@ -298,7 +270,7 @@ export abstract class NgtInstance<
     tapEffect(() => {
       // assigning
       const setOptionsSub = this.setOptions(
-        this.select(this.optionsFieldsToOptions(this.optionFields), this.setOptionsTrigger$, (options) => options)
+        this.select(optionsFieldsToOptions(this, this.optionFields), this.setOptionsTrigger$, (options) => options)
       );
 
       // attaching
@@ -357,7 +329,7 @@ export abstract class NgtInstance<
 
         this.postSetOptions(this.instanceValue);
 
-        this.checkUpdate(this.instanceValue);
+        checkUpdate(this.instanceValue);
 
         if (this.update.observed) {
           this.update.emit(this.instanceValue);
@@ -427,24 +399,11 @@ export abstract class NgtInstance<
           this.__ngt__.previousAttach = propertyToAttach;
           this.set({ attach: propertyToAttach } as Partial<TInstanceState>);
         }
-        this.checkUpdate(parentInstanceRef.value);
-        this.checkUpdate(this.instanceValue);
+        checkUpdate(parentInstanceRef.value);
+        checkUpdate(this.instanceValue);
       })
     )
   );
-
-  private checkUpdate(value: unknown): void {
-    if (is.object3d(value)) {
-      value.updateMatrix();
-    } else if (is.camera(value)) {
-      if (is.perspective(value) || is.orthographic(value)) {
-        value.updateProjectionMatrix();
-      }
-      value.updateMatrixWorld();
-    }
-
-    checkNeedsUpdate(value);
-  }
 }
 
 export const provideNgtInstance = createNgtProvider(NgtInstance);
