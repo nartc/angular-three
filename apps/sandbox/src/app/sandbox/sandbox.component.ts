@@ -1,13 +1,13 @@
-import { NgtCanvasModule } from '@angular-three/core';
-import { NgtGridHelperModule } from '@angular-three/core/helpers';
-import { NgtAmbientLightModule, NgtPointLightModule, NgtSpotLightModule } from '@angular-three/core/lights';
-import { NgtSobaGizmoHelperModule, NgtSobaGizmoViewcubeModule } from '@angular-three/soba/abstractions';
-import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NgtCanvas } from '@angular-three/core';
+import { NgtGridHelper } from '@angular-three/core/helpers';
+import { NgtAmbientLight, NgtPointLight, NgtSpotLight } from '@angular-three/core/lights';
+import { NgtSobaGizmoHelper, NgtSobaGizmoHelperContent, NgtSobaGizmoViewcube } from '@angular-three/soba/abstractions';
+import { NgtSobaOrbitControls } from '@angular-three/soba/controls';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'sandbox-sandbox',
+  standalone: true,
   template: `
     <ngt-canvas initialLog projectContent>
       <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
@@ -32,26 +32,16 @@ import { RouterModule } from '@angular/router';
     </ngt-canvas>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class SandboxComponent {}
-
-@NgModule({
-  declarations: [SandboxComponent],
   imports: [
-    RouterModule.forChild([
-      {
-        path: '',
-        component: SandboxComponent,
-      },
-    ]),
-    NgtCanvasModule,
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-    NgtPointLightModule,
-    NgtGridHelperModule,
-    NgtSobaGizmoHelperModule,
-    NgtSobaGizmoViewcubeModule,
-    NgtSobaOrbitControlsModule,
+    NgtCanvas,
+    NgtAmbientLight,
+    NgtSpotLight,
+    NgtPointLight,
+    NgtGridHelper,
+    NgtSobaGizmoHelper,
+    NgtSobaGizmoHelperContent,
+    NgtSobaGizmoViewcube,
+    NgtSobaOrbitControls,
   ],
 })
-export class SandboxComponentModule {}
+export class SandboxComponent {}

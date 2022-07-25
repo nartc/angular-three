@@ -6,22 +6,8 @@
       "files": ["*.ts"],
       "extends": ["plugin:@nrwl/nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
       "rules": {
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "type": "attribute",
-            "prefix": "sandbox",
-            "style": "camelCase"
-          }
-        ],
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "sandbox",
-            "style": "kebab-case"
-          }
-        ]
+        "@angular-eslint/directive-class-suffix": 0,
+        "@angular-eslint/component-class-suffix": 0
       }
     },
     {

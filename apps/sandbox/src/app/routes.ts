@@ -5,11 +5,11 @@ export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
   {
     path: 'home',
-    loadChildren: () => import('./home/home.component').then((m) => m.HomeComponentModule),
+    loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'sandbox',
-    loadChildren: () => import('./sandbox/sandbox.component').then((m) => m.SandboxComponentModule),
+    loadComponent: () => import('./sandbox/sandbox.component').then((m) => m.SandboxComponent),
     data: {
       title: 'Sandbox',
       description: 'Two spinning cubes along with a cube with different materials',
@@ -21,7 +21,7 @@ export const routes: Routes = [
   },
   {
     path: 'cubes',
-    loadChildren: () => import('./cubes/cubes.component').then((m) => m.SandboxCubesModule),
+    loadComponent: () => import('./cubes/cubes.component').then((m) => m.SandboxCubesComponent),
     data: {
       title: 'Simple Cubes',
       description: 'Two spinning cubes along with a cube with different materials',
@@ -32,7 +32,7 @@ export const routes: Routes = [
   },
   {
     path: 'keen-bloom',
-    loadChildren: () => import('./keen-bloom/keen-bloom.component').then((m) => m.KeenComponentModule),
+    loadComponent: () => import('./keen-bloom/keen-bloom.component').then((m) => m.KeenBloomComponent),
     data: {
       title: 'Keen Bloom',
       description: 'Simple example to show @angular-three/postprocessing',
@@ -43,7 +43,7 @@ export const routes: Routes = [
   },
   {
     path: 'physic-cubes',
-    loadChildren: () => import('./physic-cubes/physic-cubes.component').then((m) => m.SandboxPhysicCubesModule),
+    loadComponent: () => import('./physic-cubes/physic-cubes.component').then((m) => m.SandboxPhysicCubesComponent),
     data: {
       title: 'Physic Cubes',
       description: 'Simple example to show @angular-three/cannon',
@@ -54,7 +54,7 @@ export const routes: Routes = [
   },
   {
     path: 'kinematic-cube',
-    loadChildren: () => import('./kinematic-cube/kinematic-cube.component').then((m) => m.KinematicCubeComponentModule),
+    loadComponent: () => import('./kinematic-cube/kinematic-cube.component').then((m) => m.KinematicCubeComponent),
     data: {
       title: 'Kinematic Cube',
       description: '@angular-three/cannon example with InstancedMesh',
@@ -65,7 +65,8 @@ export const routes: Routes = [
   },
   {
     path: 'monday-morning',
-    loadChildren: () => import('./monday-morning/monday-morning.component').then((m) => m.SandboxMondayMorningModule),
+    loadComponent: () =>
+      import('./monday-morning/monday-morning.component').then((m) => m.SandboxMondayMorningComponent),
     data: {
       title: 'Monday Morning',
       description: '@angular-three/cannon example with Constraints',
@@ -76,7 +77,7 @@ export const routes: Routes = [
   },
   {
     path: 'object-clump',
-    loadChildren: () => import('./object-clump/object-clump.component').then((m) => m.ObjectClumpComponentModule),
+    loadComponent: () => import('./object-clump/object-clump.component').then((m) => m.ObjectClumpComponent),
     data: {
       title: 'Object Clump',
       description: '@angular-three/cannon example with Constraints and Force',
@@ -87,8 +88,8 @@ export const routes: Routes = [
   },
   {
     path: 'postprocessing-ssao',
-    loadChildren: () =>
-      import('./postprocessing-ssao/postprocessing-ssao.component').then((m) => m.PostProcessingSSAOComponentModule),
+    loadComponent: () =>
+      import('./postprocessing-ssao/postprocessing-ssao.component').then((m) => m.PostProcessingSSAOComponent),
     data: {
       title: 'Postprocessing SSAO',
       description: '@angular-three/postprocessing example with SSAO',
@@ -99,9 +100,9 @@ export const routes: Routes = [
   },
   {
     path: 'vertex-colors-instances',
-    loadChildren: () =>
+    loadComponent: () =>
       import('./vertex-colors-instances/vertex-colors-instances.component').then(
-        (m) => m.VertexColorsInstancesComponentModule
+        (m) => m.VertexColorsInstancesComponent
       ),
     data: {
       title: 'Vertex Colors Instances',
@@ -113,8 +114,8 @@ export const routes: Routes = [
   },
   {
     path: 'height-field',
-    loadChildren: () =>
-      import('./height-field/height-field-example.component').then((m) => m.HeightFieldExampleComponentModule),
+    loadComponent: () =>
+      import('./height-field/height-field-example.component').then((m) => m.HeightFieldExampleComponent),
     data: {
       title: 'Height Field',
       description: 'Example with Height Field physic body using custom Height Field Geometry',
@@ -125,8 +126,8 @@ export const routes: Routes = [
   },
   {
     path: 'movement-regression',
-    loadChildren: () =>
-      import('./movement-regression/movement-regression.component').then((m) => m.MovementRegressionComponentModule),
+    loadComponent: () =>
+      import('./movement-regression/movement-regression.component').then((m) => m.MovementRegressionComponent),
     data: {
       title: 'Movement Regression',
       description: 'Performance tip by regressing camera controls using AdaptiveDpr',
@@ -137,7 +138,7 @@ export const routes: Routes = [
   },
   {
     path: 'reuse-gltf',
-    loadChildren: () => import('./reuse-gltf/reuse-gltf.component').then((m) => m.ReuseGltfComponentModule),
+    loadComponent: () => import('./reuse-gltf/reuse-gltf.component').then((m) => m.ReuseGltfComponent),
     data: {
       title: 'Reusing GLTF',
       description: 'Performance tip by reusing GLTF with NgtGLTFLoader',
@@ -159,8 +160,7 @@ export const routes: Routes = [
   },
   {
     path: 'level-of-detail',
-    loadChildren: () =>
-      import('./level-of-detail/level-of-detail.component').then((m) => m.LevelOfDetailComponentModule),
+    loadComponent: () => import('./level-of-detail/level-of-detail.component').then((m) => m.LevelOfDetailComponent),
     data: {
       title: 'Level of Detail',
       description: 'Performance tip by leveraging LOD and reusing Geometry',
@@ -171,8 +171,7 @@ export const routes: Routes = [
   },
   {
     path: 'raycast-vehicle',
-    loadChildren: () =>
-      import('./raycast-vehicle/raycast-vehicle.component').then((m) => m.RaycastVehicleComponentModule),
+    loadComponent: () => import('./raycast-vehicle/raycast-vehicle.component').then((m) => m.RaycastVehicleComponent),
     data: {
       title: 'Raycast Vehicle',
       description: 'Raycast Vehicle example using @angular-three/cannon (ported from R3F use-cannon)',
@@ -183,7 +182,7 @@ export const routes: Routes = [
   },
   {
     path: 'xrcubes',
-    loadChildren: () => import('./xrcubes/xrcubes.component').then((m) => m.SandboxXRCubesModule),
+    loadComponent: () => import('./xrcubes/xrcubes.component').then((m) => m.SandboxXRCubesComponent),
     data: {
       title: 'Simple Cubes in VR',
       description: 'Delayed loading of spinning cubes after Enter VR',

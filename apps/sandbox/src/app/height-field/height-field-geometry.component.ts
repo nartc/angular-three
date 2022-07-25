@@ -1,16 +1,20 @@
-import { provideCommonGeometryRef } from '@angular-three/core';
+import { provideCommonGeometryRef, provideNgtCommonGeometry } from '@angular-three/core';
 import { NgtBufferGeometry } from '@angular-three/core/geometries';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { tap } from 'rxjs';
 import * as THREE from 'three';
 
 @Component({
   selector: 'sandbox-height-field-geometry[elementSize][heights]',
+  standalone: true,
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideCommonGeometryRef(HeightFieldGeometryComponent)],
+  providers: [
+    provideNgtCommonGeometry(HeightFieldGeometryComponent),
+    provideCommonGeometryRef(HeightFieldGeometryComponent),
+  ],
 })
-export class HeightFieldGeometryComponent extends NgtBufferGeometry {
+export class HeightFieldGeometryComponent extends NgtBufferGeometry implements OnInit {
   @Input() elementSize = 0;
   @Input() set heights(heights: number[][]) {
     this.set({ heights });

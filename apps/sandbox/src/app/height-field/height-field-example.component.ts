@@ -1,16 +1,10 @@
-import { NgtPhysicsModule } from '@angular-three/cannon';
-import { NgtCanvasModule, NgtRadianPipeModule } from '@angular-three/core';
-import { NgtColorAttributeModule, NgtInstancedBufferAttributeModule } from '@angular-three/core/attributes';
-import { NgtBufferGeometryModule, NgtSphereGeometryModule } from '@angular-three/core/geometries';
-import { NgtAmbientLightModule, NgtDirectionalLightModule } from '@angular-three/core/lights';
-import { NgtMeshPhongMaterialModule } from '@angular-three/core/materials';
-import { NgtInstancedMeshModule, NgtMeshModule } from '@angular-three/core/meshes';
-import { NgtStatsModule } from '@angular-three/core/stats';
-import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { HeightFieldGeometryComponent } from './height-field-geometry.component';
+import { NgtPhysics } from '@angular-three/cannon';
+import { NgtCanvas, NgtRadianPipe } from '@angular-three/core';
+import { NgtColorAttribute } from '@angular-three/core/attributes';
+import { NgtAmbientLight, NgtDirectionalLight } from '@angular-three/core/lights';
+import { NgtStats } from '@angular-three/core/stats';
+import { NgtSobaOrbitControls } from '@angular-three/soba/controls';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { HeightFieldComponent } from './height-field.component';
 import { SpheresComponent } from './spheres.component';
 
@@ -61,8 +55,21 @@ function generateHeightmap({ width, height, number, scale }: GenerateHeightmapAr
 
 @Component({
   selector: 'sandbox-height-field-example',
+  standalone: true,
   templateUrl: 'height-field-example.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    NgtCanvas,
+    NgtColorAttribute,
+    NgtSobaOrbitControls,
+    NgtPhysics,
+    NgtAmbientLight,
+    NgtDirectionalLight,
+    NgtStats,
+    HeightFieldComponent,
+    NgtRadianPipe,
+    SpheresComponent,
+  ],
 })
 export class HeightFieldExampleComponent {
   @Input() scale = 10;
@@ -74,31 +81,3 @@ export class HeightFieldExampleComponent {
     width: 128,
   });
 }
-
-@NgModule({
-  declarations: [HeightFieldExampleComponent, HeightFieldGeometryComponent, HeightFieldComponent, SpheresComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: HeightFieldExampleComponent,
-      },
-    ]),
-    NgtStatsModule,
-    NgtBufferGeometryModule,
-    NgtMeshModule,
-    NgtMeshPhongMaterialModule,
-    NgtInstancedMeshModule,
-    NgtSphereGeometryModule,
-    NgtInstancedBufferAttributeModule,
-    NgtCanvasModule,
-    NgtColorAttributeModule,
-    NgtSobaOrbitControlsModule,
-    NgtRadianPipeModule,
-    NgtPhysicsModule,
-    NgtAmbientLightModule,
-    NgtDirectionalLightModule,
-  ],
-})
-export class HeightFieldExampleComponentModule {}

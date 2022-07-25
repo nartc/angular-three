@@ -1,65 +1,19 @@
-import { NgtCanvasModule, NgtState, NgtVector3 } from '@angular-three/core';
-import { NgtColorAttributeModule } from '@angular-three/core/attributes';
-import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
-import { NgtAmbientLightModule, NgtPointLightModule } from '@angular-three/core/lights';
-import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
-import { NgtMeshModule } from '@angular-three/core/meshes';
-import { NgtStatsModule } from '@angular-three/core/stats';
-import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
-import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NgtCanvas, NgtState, NgtVector3 } from '@angular-three/core';
+import { NgtColorAttribute } from '@angular-three/core/attributes';
+import { NgtBoxGeometry } from '@angular-three/core/geometries';
+import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
+import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
+import { NgtMesh } from '@angular-three/core/meshes';
+import { NgtStats } from '@angular-three/core/stats';
+import { NgtSobaOrbitControls } from '@angular-three/soba/controls';
+import { NgForOf, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Mesh } from 'three';
 import { VRButton } from 'three-stdlib';
-import { NgtGroupModule } from '@angular-three/core/group';
-
-@Component({
-  selector: 'xrsandbox-cubes',
-  template: `
-    <ngt-canvas initialLog (created)="created($event)" >
-      <ngt-color attach="background" color="lightblue"></ngt-color>
-
-      <sandbox-scene></sandbox-scene>
-    </ngt-canvas>
-    <ngt-stats></ngt-stats>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class SandboxXRCubesComponent {
-    created(state: NgtState) {
-        document.body.appendChild(VRButton.createButton(state.gl));
-    }
-
-}
-
-@Component({
-  selector: 'sandbox-scene',
-  template: `
-    <ngt-ambient-light></ngt-ambient-light>
-    <ngt-point-light [position]="10"></ngt-point-light>
-
-    <sandbox-cube *ngIf="ready" [position]="[-1.5, 0, 0]"></sandbox-cube>
-    <sandbox-cube *ngIf="ready" [position]="[1.5, 0, 0]"></sandbox-cube>
-
-    <sandbox-cube-with-materials  *ngIf="ready"></sandbox-cube-with-materials>
-
-    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class Scene {
-  ready = false;
-
-  constructor(private cd: ChangeDetectorRef) {
-    setTimeout(() => {
-      this.ready = true;
-      this.cd.detectChanges();
-    }, 10000);
-  }
-}
 
 @Component({
   selector: 'sandbox-cube',
+  standalone: true,
   template: `
     <ngt-mesh
       (pointerover)="hovered = true"
@@ -74,6 +28,7 @@ export class Scene {
     </ngt-mesh>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtMesh, NgtBoxGeometry, NgtMeshStandardMaterial],
 })
 export class Cube {
   @Input() position?: NgtVector3;
@@ -88,6 +43,7 @@ export class Cube {
 
 @Component({
   selector: 'sandbox-cube-with-materials',
+  standalone: true,
   template: `
     <ngt-mesh (beforeRender)="onBeforeRender($event.object)">
       <ngt-box-geometry></ngt-box-geometry>
@@ -100,6 +56,7 @@ export class Cube {
     </ngt-mesh>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtMesh, NgtBoxGeometry, NgtMeshStandardMaterial, NgForOf],
 })
 export class CubeWithMaterials {
   colors = ['red', 'green', 'blue', 'hotpink', 'orange', 'teal'];
@@ -109,21 +66,50 @@ export class CubeWithMaterials {
   }
 }
 
-@NgModule({
-  declarations: [SandboxXRCubesComponent, Scene, Cube, CubeWithMaterials],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([{ path: '', component: SandboxXRCubesComponent }]),
-    NgtCanvasModule,
-    NgtColorAttributeModule,
-    NgtAmbientLightModule,
-    NgtPointLightModule,
-    NgtStatsModule,
-    NgtMeshModule,
-    NgtGroupModule,
-    NgtBoxGeometryModule,
-    NgtMeshStandardMaterialModule,
-    NgtSobaOrbitControlsModule,
-  ],
+@Component({
+  selector: 'sandbox-scene',
+  standalone: true,
+  template: `
+    <ngt-ambient-light></ngt-ambient-light>
+    <ngt-point-light [position]="10"></ngt-point-light>
+
+    <ng-container *ngIf="ready">
+      <sandbox-cube [position]="[-1.5, 0, 0]"></sandbox-cube>
+      <sandbox-cube [position]="[1.5, 0, 0]"></sandbox-cube>
+      <sandbox-cube-with-materials></sandbox-cube-with-materials>
+    </ng-container>
+
+    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtAmbientLight, NgtPointLight, Cube, NgIf, CubeWithMaterials, NgtSobaOrbitControls],
 })
-export class SandboxXRCubesModule {}
+export class Scene {
+  ready = false;
+
+  constructor(private cd: ChangeDetectorRef) {
+    setTimeout(() => {
+      this.ready = true;
+      this.cd.detectChanges();
+    }, 10000);
+  }
+}
+
+@Component({
+  selector: 'xrsandbox-cubes',
+  standalone: true,
+  template: `
+    <ngt-canvas initialLog (created)="created($event)">
+      <ngt-color attach="background" color="lightblue"></ngt-color>
+      <sandbox-scene></sandbox-scene>
+    </ngt-canvas>
+    <ngt-stats></ngt-stats>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtCanvas, NgtColorAttribute, Scene, NgtStats],
+})
+export class SandboxXRCubesComponent {
+  created(state: NgtState) {
+    document.body.appendChild(VRButton.createButton(state.gl));
+  }
+}

@@ -1,58 +1,24 @@
 import {
-  NgtCanvasModule,
-  NgtObjectPassThroughModule,
+  NgtCanvas,
+  NgtObjectPassThrough,
   NgtObjectProps,
-  NgtRadianPipeModule,
+  NgtRadianPipe,
   provideNgtObject,
   provideObjectHostRef,
   provideObjectRef,
 } from '@angular-three/core';
-import { NgtValueAttributeModule } from '@angular-three/core/attributes';
-import { NgtSphereGeometryModule } from '@angular-three/core/geometries';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtMeshPhongMaterialModule, NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
-import { NgtMeshModule } from '@angular-three/core/meshes';
-import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
+import { NgtValueAttribute } from '@angular-three/core/attributes';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
+import { NgtMesh } from '@angular-three/core/meshes';
+import { NgtSobaOrbitControls } from '@angular-three/soba/controls';
 import { NgtGLTFLoader } from '@angular-three/soba/loaders';
-import { NgtSobaContactShadowsModule, NgtSobaStageModule } from '@angular-three/soba/staging';
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NgtSobaStage, NgtSobaStageContent } from '@angular-three/soba/staging';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
-
-@Component({
-  selector: 'sandbox-reuse-gltf',
-  template: `
-    <ngt-canvas shadows [dpr]="[1, 2]" initialLog [camera]="{ position: [0, 0, 150], fov: 40 }">
-      <sandbox-scene></sandbox-scene>
-    </ngt-canvas>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ReuseGltfComponent {}
-
-@Component({
-  selector: 'sandbox-scene',
-  template: `
-    <ngt-soba-stage environment="city" intensity="0.6">
-      <ng-template ngt-soba-stage-content>
-        <sandbox-shoe color="tomato" [position]="[0, 0, 0]"></sandbox-shoe>
-        <sandbox-shoe
-          color="orange"
-          [scale]="-1"
-          [rotation]="[0, 0.5, 180 | radian]"
-          [position]="[0, 0, -2]"
-        ></sandbox-shoe>
-      </ng-template>
-    </ngt-soba-stage>
-
-    <ngt-soba-orbit-controls autoRotate></ngt-soba-orbit-controls>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class Scene {}
 
 interface ShoeGLTF extends GLTF {
   nodes: {
@@ -65,6 +31,7 @@ interface ShoeGLTF extends GLTF {
 
 @Component({
   selector: 'sandbox-shoe',
+  standalone: true,
   template: `
     <ng-container *ngIf="shoe$ | async as shoe">
       <ngt-group [ngtObjectPassThrough]="this">
@@ -108,6 +75,7 @@ interface ShoeGLTF extends GLTF {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtObject(Shoe), provideObjectRef(Shoe), provideObjectHostRef(Shoe)],
+  imports: [NgIf, AsyncPipe, NgtGroup, NgtObjectPassThrough, NgtMesh, NgtValueAttribute, NgtMeshStandardMaterial],
 })
 export class Shoe extends NgtObjectProps<THREE.Group> {
   private gltfLoader = inject(NgtGLTFLoader);
@@ -116,23 +84,38 @@ export class Shoe extends NgtObjectProps<THREE.Group> {
   readonly encoding = THREE.LinearEncoding;
 }
 
-@NgModule({
-  declarations: [ReuseGltfComponent, Scene, Shoe],
-  imports: [
-    RouterModule.forChild([{ path: '', component: ReuseGltfComponent }]),
-    CommonModule,
-    NgtGroupModule,
-    NgtObjectPassThroughModule,
-    NgtMeshModule,
-    NgtValueAttributeModule,
-    NgtMeshStandardMaterialModule,
-    NgtSobaStageModule,
-    NgtRadianPipeModule,
-    NgtSobaOrbitControlsModule,
-    NgtCanvasModule,
-    NgtSphereGeometryModule,
-    NgtMeshPhongMaterialModule,
-    NgtSobaContactShadowsModule,
-  ],
+@Component({
+  selector: 'sandbox-scene',
+  standalone: true,
+  template: `
+    <ngt-soba-stage environment="city" intensity="0.6">
+      <ng-template ngt-soba-stage-content>
+        <sandbox-shoe color="tomato" [position]="[0, 0, 0]"></sandbox-shoe>
+        <sandbox-shoe
+          color="orange"
+          [scale]="-1"
+          [rotation]="[0, 0.5, 180 | radian]"
+          [position]="[0, 0, -2]"
+        ></sandbox-shoe>
+      </ng-template>
+    </ngt-soba-stage>
+
+    <ngt-soba-orbit-controls autoRotate></ngt-soba-orbit-controls>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtSobaStage, NgtSobaStageContent, Shoe, NgtRadianPipe, NgtSobaOrbitControls],
 })
-export class ReuseGltfComponentModule {}
+export class Scene {}
+
+@Component({
+  selector: 'sandbox-reuse-gltf',
+  standalone: true,
+  template: `
+    <ngt-canvas shadows [dpr]="[1, 2]" initialLog [camera]="{ position: [0, 0, 150], fov: 40 }">
+      <sandbox-scene></sandbox-scene>
+    </ngt-canvas>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtCanvas, Scene],
+})
+export class ReuseGltfComponent {}

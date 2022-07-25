@@ -1,48 +1,18 @@
-import { NgtCanvasModule, NgtVector3 } from '@angular-three/core';
-import { NgtColorAttributeModule } from '@angular-three/core/attributes';
-import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
-import { NgtAmbientLightModule, NgtPointLightModule } from '@angular-three/core/lights';
-import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
-import { NgtMeshModule } from '@angular-three/core/meshes';
-import { NgtStatsModule } from '@angular-three/core/stats';
-import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NgtCanvas, NgtVector3 } from '@angular-three/core';
+import { NgtColorAttribute } from '@angular-three/core/attributes';
+import { NgtBoxGeometry } from '@angular-three/core/geometries';
+import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
+import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
+import { NgtMesh } from '@angular-three/core/meshes';
+import { NgtStats } from '@angular-three/core/stats';
+import { NgtSobaOrbitControls } from '@angular-three/soba/controls';
+import { NgForOf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Mesh } from 'three';
 
 @Component({
-  selector: 'sandbox-cubes',
-  template: `
-    <ngt-canvas initialLog>
-      <ngt-color attach="background" color="lightblue"></ngt-color>
-      <sandbox-scene></sandbox-scene>
-    </ngt-canvas>
-    <ngt-stats></ngt-stats>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class SandboxCubesComponent {}
-
-@Component({
-  selector: 'sandbox-scene',
-  template: `
-    <ngt-ambient-light></ngt-ambient-light>
-    <ngt-point-light [position]="10"></ngt-point-light>
-
-    <sandbox-cube [position]="[-1.5, 0, 0]"></sandbox-cube>
-    <sandbox-cube [position]="[1.5, 0, 0]"></sandbox-cube>
-
-    <sandbox-cube-with-materials></sandbox-cube-with-materials>
-
-    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class Scene {}
-
-@Component({
   selector: 'sandbox-cube',
+  standalone: true,
   template: `
     <ngt-mesh
       (pointerover)="hovered = true"
@@ -56,6 +26,7 @@ export class Scene {}
       <ngt-mesh-standard-material [color]="hovered ? 'hotpink' : 'orange'"></ngt-mesh-standard-material>
     </ngt-mesh>
   `,
+  imports: [NgtMesh, NgtBoxGeometry, NgtMeshStandardMaterial],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Cube {
@@ -71,6 +42,7 @@ export class Cube {
 
 @Component({
   selector: 'sandbox-cube-with-materials',
+  standalone: true,
   template: `
     <ngt-mesh (beforeRender)="onBeforeRender($event.object)">
       <ngt-box-geometry></ngt-box-geometry>
@@ -82,6 +54,7 @@ export class Cube {
       ></ngt-mesh-standard-material>
     </ngt-mesh>
   `,
+  imports: [NgtMesh, NgtBoxGeometry, NgtMeshStandardMaterial, NgForOf],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeWithMaterials {
@@ -92,20 +65,36 @@ export class CubeWithMaterials {
   }
 }
 
-@NgModule({
-  declarations: [SandboxCubesComponent, Scene, Cube, CubeWithMaterials],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([{ path: '', component: SandboxCubesComponent }]),
-    NgtCanvasModule,
-    NgtColorAttributeModule,
-    NgtAmbientLightModule,
-    NgtPointLightModule,
-    NgtStatsModule,
-    NgtMeshModule,
-    NgtBoxGeometryModule,
-    NgtMeshStandardMaterialModule,
-    NgtSobaOrbitControlsModule,
-  ],
+@Component({
+  selector: 'sandbox-scene',
+  standalone: true,
+  template: `
+    <ngt-ambient-light></ngt-ambient-light>
+    <ngt-point-light [position]="10"></ngt-point-light>
+
+    <sandbox-cube [position]="[-1.5, 0, 0]"></sandbox-cube>
+    <sandbox-cube [position]="[1.5, 0, 0]"></sandbox-cube>
+
+    <sandbox-cube-with-materials></sandbox-cube-with-materials>
+
+    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
+  `,
+  imports: [NgtAmbientLight, NgtPointLight, NgtSobaOrbitControls, CubeWithMaterials, Cube],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SandboxCubesModule {}
+export class Scene {}
+
+@Component({
+  selector: 'sandbox-cubes',
+  standalone: true,
+  template: `
+    <ngt-canvas initialLog>
+      <ngt-color attach="background" color="lightblue"></ngt-color>
+      <sandbox-scene></sandbox-scene>
+    </ngt-canvas>
+    <ngt-stats></ngt-stats>
+  `,
+  imports: [NgtCanvas, NgtStats, NgtColorAttribute, Scene],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SandboxCubesComponent {}

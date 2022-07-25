@@ -1,5 +1,10 @@
 import { NgtPhysicBody } from '@angular-three/cannon';
 import { coerceNumberProperty, NgtComponentStore, NumberInput } from '@angular-three/core';
+import { NgtInstancedBufferAttribute } from '@angular-three/core/attributes';
+import { NgtSphereGeometry } from '@angular-three/core/geometries';
+import { NgtMeshPhongMaterial } from '@angular-three/core/materials';
+import { NgtInstancedMesh } from '@angular-three/core/meshes';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
@@ -7,9 +12,11 @@ import * as THREE from 'three';
 
 @Component({
   selector: 'sandbox-spheres[columns][rows][spread]',
+  standalone: true,
   templateUrl: 'spheres.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
+  imports: [NgIf, AsyncPipe, NgtInstancedMesh, NgtSphereGeometry, NgtInstancedBufferAttribute, NgtMeshPhongMaterial],
 })
 export class SpheresComponent extends NgtComponentStore {
   @Input() set columns(columns: NumberInput) {

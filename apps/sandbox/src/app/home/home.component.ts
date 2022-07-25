@@ -1,11 +1,12 @@
 import { Platform, PlatformModule } from '@angular/cdk/platform';
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Directive, ElementRef, HostListener, NgModule } from '@angular/core';
+import { NgForOf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Directive, ElementRef, HostListener } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { routes } from '../routes';
 
 @Directive({
   selector: 'video[sandboxAutoplay]',
+  standalone: true,
 })
 export class AutoplayVideoDirective {
   constructor(private videoElementRef: ElementRef<HTMLVideoElement>) {}
@@ -34,6 +35,7 @@ export interface Example {
 
 @Component({
   selector: 'sandbox-home',
+  standalone: true,
   template: `
     <small class="absolute right-4 font-xs italic">
       * Interact (click anywhere) on the page to enable example play on hover
@@ -97,6 +99,7 @@ export interface Example {
       </div>
     </div>
   `,
+  imports: [PlatformModule, RouterModule, NgForOf, AutoplayVideoDirective],
   styles: [
     `
       .header-background {
@@ -110,12 +113,5 @@ export interface Example {
 })
 export class HomeComponent {
   readonly examples = routes.filter((route) => !!route.data).map((route) => route.data) as Example[];
-
   constructor(public platform: Platform) {}
 }
-
-@NgModule({
-  declarations: [HomeComponent, AutoplayVideoDirective],
-  imports: [CommonModule, RouterModule.forChild([{ path: '', component: HomeComponent }]), PlatformModule],
-})
-export class HomeComponentModule {}

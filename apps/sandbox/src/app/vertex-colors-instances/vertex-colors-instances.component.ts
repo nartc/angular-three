@@ -1,12 +1,11 @@
-import { checkNeedsUpdate, NgtCanvasModule } from '@angular-three/core';
-import { NgtInstancedBufferAttributeModule } from '@angular-three/core/attributes';
-import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
-import { NgtAmbientLightModule, NgtDirectionalLightModule } from '@angular-three/core/lights';
-import { NgtMeshLambertMaterialModule } from '@angular-three/core/materials';
-import { NgtInstancedMeshModule } from '@angular-three/core/meshes';
-import { NgtSobaOrbitControlsModule } from '@angular-three/soba/controls';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { checkNeedsUpdate, NgtCanvas } from '@angular-three/core';
+import { NgtInstancedBufferAttribute } from '@angular-three/core/attributes';
+import { NgtBoxGeometry } from '@angular-three/core/geometries';
+import { NgtAmbientLight, NgtDirectionalLight } from '@angular-three/core/lights';
+import { NgtMeshLambertMaterial } from '@angular-three/core/materials';
+import { NgtInstancedMesh } from '@angular-three/core/meshes';
+import { NgtSobaOrbitControls } from '@angular-three/soba/controls';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
 import * as THREE from 'three';
@@ -14,32 +13,8 @@ import * as THREE from 'three';
 const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
 
 @Component({
-  selector: 'sandbox-vertex-colors-instances',
-  template: `
-    <ngt-canvas [camera]="{ position: [0, 0, 0.1] }">
-      <sandbox-scene></sandbox-scene>
-    </ngt-canvas>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class VertexColorsInstancesComponent {}
-
-@Component({
-  selector: 'sandbox-scene',
-  template: `
-    <ngt-ambient-light></ngt-ambient-light>
-    <ngt-directional-light [position]="[150, 150, 150]" intensity="0.55"></ngt-directional-light>
-
-    <sandbox-instances></sandbox-instances>
-
-    <ngt-soba-orbit-controls enablePan="false" autoRotate></ngt-soba-orbit-controls>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class Scene {}
-
-@Component({
   selector: 'sandbox-instances',
+  standalone: true,
   template: `
     <ngt-instanced-mesh (ready)="onReady($event)" [count]="length">
       <ngt-box-geometry [args]="[0.15, 0.15, 0.15]">
@@ -52,6 +27,7 @@ export class Scene {}
     </ngt-instanced-mesh>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtInstancedMesh, NgtBoxGeometry, NgtInstancedBufferAttribute, NgtMeshLambertMaterial],
 })
 export class Instances {
   readonly length = 125000;
@@ -81,18 +57,31 @@ export class Instances {
   }
 }
 
-@NgModule({
-  declarations: [VertexColorsInstancesComponent, Scene, Instances],
-  imports: [
-    RouterModule.forChild([{ path: '', component: VertexColorsInstancesComponent }]),
-    NgtCanvasModule,
-    NgtAmbientLightModule,
-    NgtDirectionalLightModule,
-    NgtSobaOrbitControlsModule,
-    NgtInstancedMeshModule,
-    NgtBoxGeometryModule,
-    NgtInstancedBufferAttributeModule,
-    NgtMeshLambertMaterialModule,
-  ],
+@Component({
+  selector: 'sandbox-scene',
+  standalone: true,
+  template: `
+    <ngt-ambient-light></ngt-ambient-light>
+    <ngt-directional-light [position]="[150, 150, 150]" intensity="0.55"></ngt-directional-light>
+
+    <sandbox-instances></sandbox-instances>
+
+    <ngt-soba-orbit-controls enablePan="false" autoRotate></ngt-soba-orbit-controls>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtAmbientLight, NgtDirectionalLight, Instances, NgtSobaOrbitControls],
 })
-export class VertexColorsInstancesComponentModule {}
+export class Scene {}
+
+@Component({
+  selector: 'sandbox-vertex-colors-instances',
+  standalone: true,
+  template: `
+    <ngt-canvas [camera]="{ position: [0, 0, 0.1] }">
+      <sandbox-scene></sandbox-scene>
+    </ngt-canvas>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtCanvas, Scene],
+})
+export class VertexColorsInstancesComponent {}

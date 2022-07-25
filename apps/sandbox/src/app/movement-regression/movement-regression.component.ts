@@ -1,5 +1,5 @@
 import {
-  NgtCanvasModule,
+  NgtCanvas,
   NgtComponentStore,
   NgtStore,
   NgtVector3,
@@ -7,25 +7,24 @@ import {
   Ref,
 } from '@angular-three/core';
 import {
-  NgtColorAttributeModule,
-  NgtFogAttributeModule,
-  NgtValueAttributeModule,
-  NgtVector2AttributeModule,
+  NgtColorAttribute,
+  NgtFogAttribute,
+  NgtValueAttribute,
+  NgtVector2Attribute,
 } from '@angular-three/core/attributes';
-import { NgtPlaneGeometryModule } from '@angular-three/core/geometries';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { NgtDirectionalLightModule, NgtRectAreaLightModule, NgtSpotLightModule } from '@angular-three/core/lights';
-import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
-import { NgtMeshModule } from '@angular-three/core/meshes';
-import { NgtStatsModule } from '@angular-three/core/stats';
-import { NgtEffectComposerModule } from '@angular-three/postprocessing';
-import { NgtBloomEffectModule, NgtSSAOEffectModule } from '@angular-three/postprocessing/effects';
-import { NgtSobaTextModule } from '@angular-three/soba/abstractions';
+import { NgtPlaneGeometry } from '@angular-three/core/geometries';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgtDirectionalLight, NgtRectAreaLight, NgtSpotLight } from '@angular-three/core/lights';
+import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
+import { NgtMesh } from '@angular-three/core/meshes';
+import { NgtStats } from '@angular-three/core/stats';
+import { NgtEffectComposer, NgtEffectComposerContent } from '@angular-three/postprocessing';
+import { NgtBloomEffect, NgtSSAOEffect } from '@angular-three/postprocessing/effects';
+import { NgtSobaText } from '@angular-three/soba/abstractions';
 import { NgtGLTFLoader } from '@angular-three/soba/loaders';
-import { NgtSobaAdapativeDprModule } from '@angular-three/soba/performances';
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Injectable, Input, NgModule, NgZone, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NgtSobaAdaptiveDpr } from '@angular-three/soba/performances';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Injectable, Input, NgZone, OnInit } from '@angular/core';
 import { BlendFunction, KernelSize, SSAOEffect } from 'postprocessing';
 import { Observable } from 'rxjs';
 import * as THREE from 'three';
@@ -65,67 +64,6 @@ export class LerpedPointer extends NgtComponentStore {
   }
 }
 
-@Component({
-  selector: 'sandbox-movement-regression',
-  template: `
-    <ngt-canvas
-      shadows
-      initialLog
-      [dpr]="[1, 2]"
-      [gl]="{ alpha: false, antialias: false }"
-      [camera]="{ position: [0, 0, 0.8], fov: 75, near: 0.5, far: 1 }"
-      (created)="onCreated($event.scene)"
-    >
-      <ngt-color attach="background" color="lightblue"></ngt-color>
-      <ngt-fog attach="fog" [fog]="['#000', 0.8, 1]"></ngt-fog>
-
-      <sandbox-scene></sandbox-scene>
-    </ngt-canvas>
-    <ngt-stats></ngt-stats>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [providePerformanceOptions({ min: 0.1 })],
-})
-export class MovementRegressionComponent {
-  onCreated(scene: THREE.Scene) {
-    setTimeout(() => {
-      console.log(scene.toJSON());
-    });
-  }
-}
-
-@Component({
-  selector: 'sandbox-scene',
-  template: `
-    <sandbox-lights></sandbox-lights>
-
-    <sandbox-y-bot [position]="[0, -1.3, 0]"></sandbox-y-bot>
-    <ngt-soba-text text="hello" [position]="[0, 0, -0.2]" fontSize="0.6" color="white" letterSpacing="0">
-      <ngt-value [attach]="['material', 'fog']" [value]="false"></ngt-value>
-    </ngt-soba-text>
-
-    <ngt-mesh [scale]="4" [position]="[0, 1, -0.2]">
-      <ngt-plane-geometry></ngt-plane-geometry>
-      <ngt-mesh-standard-material
-        color="lightblue"
-        toneMapped="false"
-        fog="false"
-        envMapIntensity="0"
-      ></ngt-mesh-standard-material>
-    </ngt-mesh>
-
-    <ngt-soba-adaptive-dpr pixelated></ngt-soba-adaptive-dpr>
-    <sandbox-effects></sandbox-effects>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [LerpedPointer],
-})
-export class Scene {
-  constructor(lerpedPointer: LerpedPointer) {
-    lerpedPointer.load();
-  }
-}
-
 interface BotGLTF extends GLTF {
   nodes: {
     Alpha_Surface: THREE.Mesh;
@@ -139,6 +77,7 @@ interface BotGLTF extends GLTF {
 
 @Component({
   selector: 'sandbox-y-bot',
+  standalone: true,
   template: `
     <ng-container *ngIf="bot$ | async as bot">
       <ngt-group (beforeRender)="onBeforeRender($event.object)" [dispose]="null" [position]="position">
@@ -164,6 +103,7 @@ interface BotGLTF extends GLTF {
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgIf, AsyncPipe, NgtGroup, NgtMesh, NgtMeshStandardMaterial, NgtVector2Attribute],
 })
 export class YBot {
   @Input() position?: NgtVector3;
@@ -187,6 +127,7 @@ export class YBot {
 
 @Component({
   selector: 'sandbox-lights',
+  standalone: true,
   template: `
     <ngt-directional-light intensity="1" [position]="[2, 2, 0]" color="red"></ngt-directional-light>
     <ngt-spot-light intensity="2" [position]="[-5, 10, 2]" angle="0.2" penumbra="1" castShadow>
@@ -210,6 +151,7 @@ export class YBot {
     </ngt-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtDirectionalLight, NgtSpotLight, NgtVector2Attribute, NgtGroup, NgtRectAreaLight],
 })
 export class Lights {
   constructor(private lerpedPointer: LerpedPointer) {}
@@ -227,6 +169,7 @@ export class Lights {
 
 @Component({
   selector: 'sandbox-effects',
+  standalone: true,
   template: `
     <ngt-effect-composer multisampling="8">
       <ng-template ngt-effect-composer-content>
@@ -247,6 +190,7 @@ export class Lights {
     </ngt-effect-composer>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtEffectComposer, NgtEffectComposerContent, NgtSSAOEffect, NgtBloomEffect],
 })
 export class Effects extends NgtComponentStore implements OnInit {
   readonly ssaoRef = new Ref<SSAOEffect>();
@@ -271,29 +215,70 @@ export class Effects extends NgtComponentStore implements OnInit {
   }
 }
 
-@NgModule({
-  declarations: [MovementRegressionComponent, Scene, YBot, Lights, Effects],
+@Component({
+  selector: 'sandbox-scene',
+  standalone: true,
+  template: `
+    <sandbox-lights></sandbox-lights>
+
+    <sandbox-y-bot [position]="[0, -1.3, 0]"></sandbox-y-bot>
+    <ngt-soba-text text="hello" [position]="[0, 0, -0.2]" fontSize="0.6" color="white" letterSpacing="0">
+      <ngt-value [attach]="['material', 'fog']" [value]="false"></ngt-value>
+    </ngt-soba-text>
+
+    <ngt-mesh [scale]="4" [position]="[0, 1, -0.2]">
+      <ngt-plane-geometry></ngt-plane-geometry>
+      <ngt-mesh-standard-material
+        color="lightblue"
+        toneMapped="false"
+        fog="false"
+        envMapIntensity="0"
+      ></ngt-mesh-standard-material>
+    </ngt-mesh>
+
+    <ngt-soba-adaptive-dpr pixelated></ngt-soba-adaptive-dpr>
+    <sandbox-effects></sandbox-effects>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [LerpedPointer],
   imports: [
-    RouterModule.forChild([{ path: '', component: MovementRegressionComponent }]),
-    CommonModule,
-    NgtGroupModule,
-    NgtMeshModule,
-    NgtMeshStandardMaterialModule,
-    NgtVector2AttributeModule,
-    NgtDirectionalLightModule,
-    NgtSpotLightModule,
-    NgtRectAreaLightModule,
-    NgtEffectComposerModule,
-    NgtSSAOEffectModule,
-    NgtBloomEffectModule,
-    NgtCanvasModule,
-    NgtColorAttributeModule,
-    NgtFogAttributeModule,
-    NgtSobaTextModule,
-    NgtValueAttributeModule,
-    NgtPlaneGeometryModule,
-    NgtSobaAdapativeDprModule,
-    NgtStatsModule,
+    Lights,
+    YBot,
+    NgtSobaText,
+    NgtValueAttribute,
+    NgtMesh,
+    NgtPlaneGeometry,
+    NgtMeshStandardMaterial,
+    NgtSobaAdaptiveDpr,
+    Effects,
   ],
 })
-export class MovementRegressionComponentModule {}
+export class Scene {
+  constructor(lerpedPointer: LerpedPointer) {
+    lerpedPointer.load();
+  }
+}
+
+@Component({
+  selector: 'sandbox-movement-regression',
+  standalone: true,
+  template: `
+    <ngt-canvas
+      shadows
+      initialLog
+      [dpr]="[1, 2]"
+      [gl]="{ alpha: false, antialias: false }"
+      [camera]="{ position: [0, 0, 0.8], fov: 75, near: 0.5, far: 1 }"
+    >
+      <ngt-color attach="background" color="lightblue"></ngt-color>
+      <ngt-fog attach="fog" [fog]="['#000', 0.8, 1]"></ngt-fog>
+
+      <sandbox-scene></sandbox-scene>
+    </ngt-canvas>
+    <ngt-stats></ngt-stats>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [providePerformanceOptions({ min: 0.1 })],
+  imports: [NgtCanvas, NgtColorAttribute, NgtFogAttribute, Scene, NgtStats],
+})
+export class MovementRegressionComponent {}

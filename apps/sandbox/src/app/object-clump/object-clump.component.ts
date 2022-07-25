@@ -1,63 +1,22 @@
-import { NgtCannonDebugModule, NgtPhysicBody, NgtPhysicsModule } from '@angular-three/cannon';
-import { NgtCanvasModule, NgtComponentStore, NgtRenderState, NgtStore } from '@angular-three/core';
-import { NgtValueAttributeModule, NgtVector2AttributeModule } from '@angular-three/core/attributes';
-import { NgtSphereGeometryModule } from '@angular-three/core/geometries';
-import { NgtAmbientLightModule, NgtDirectionalLightModule, NgtSpotLightModule } from '@angular-three/core/lights';
-import { NgtMeshStandardMaterialModule } from '@angular-three/core/materials';
-import { NgtInstancedMeshModule } from '@angular-three/core/meshes';
-import { NgtEffectComposerModule } from '@angular-three/postprocessing';
-import { NgtBloomEffectModule } from '@angular-three/postprocessing/effects';
+import { NgtPhysicBody, NgtPhysics } from '@angular-three/cannon';
+import { NgtCanvas, NgtComponentStore, NgtRenderState, NgtStore } from '@angular-three/core';
+import { NgtVector2Attribute } from '@angular-three/core/attributes';
+import { NgtSphereGeometry } from '@angular-three/core/geometries';
+import { NgtAmbientLight, NgtDirectionalLight, NgtSpotLight } from '@angular-three/core/lights';
+import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
+import { NgtInstancedMesh } from '@angular-three/core/meshes';
+import { NgtEffectComposer, NgtEffectComposerContent } from '@angular-three/postprocessing';
+import { NgtBloomEffect } from '@angular-three/postprocessing/effects';
 import { NgtTextureLoader } from '@angular-three/soba/loaders';
-import { NgtSobaEnvironmentModule, NgtSobaSkyModule } from '@angular-three/soba/staging';
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Directive, NgModule, NgZone, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NgtSobaEnvironment, NgtSobaSky } from '@angular-three/soba/staging';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Directive, NgZone, OnInit } from '@angular/core';
 import { KernelSize } from 'postprocessing';
 import * as THREE from 'three';
 
-@Component({
-  selector: 'sandbox-object-clump',
-  template: `
-    <ngt-canvas shadows [dpr]="[1, 2]" [camera]="{ position: [0, 0, 20], fov: 35, near: 1, far: 40 }" initialLog>
-      <sandbox-scene></sandbox-scene>
-    </ngt-canvas>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ObjectClumpComponent {
-  readonly kernelSize = KernelSize.VERY_LARGE;
-}
-
-@Component({
-  selector: 'sandbox-scene',
-  template: `
-    <ngt-ambient-light intensity="0.25"></ngt-ambient-light>
-    <ngt-spot-light [position]="[30, 30, 30]" intensity="1" angle="0.2" penumbra="1" castShadow>
-      <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="[512, 512]"></ngt-vector2>
-    </ngt-spot-light>
-    <ngt-directional-light [position]="[-10, -10, -10]" intensity="5" color="purple"></ngt-directional-light>
-
-    <ngt-physics [gravity]="[0, 2, 0]" iterations="10">
-      <sandbox-pointer></sandbox-pointer>
-      <sandbox-clump></sandbox-clump>
-    </ngt-physics>
-
-    <ngt-soba-environment files="assets/adamsbridge.hdr"></ngt-soba-environment>
-
-    <ngt-effect-composer>
-      <ng-template ngt-effect-composer-content>
-        <ngt-bloom-effect></ngt-bloom-effect>
-      </ng-template>
-    </ngt-effect-composer>
-
-    <ngt-soba-sky></ngt-soba-sky>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class Scene {}
-
 @Directive({
   selector: 'sandbox-pointer',
+  standalone: true,
   providers: [NgtPhysicBody],
 })
 export class Pointer extends NgtComponentStore implements OnInit {
@@ -92,6 +51,7 @@ const vec = new THREE.Vector3();
 
 @Component({
   selector: 'sandbox-clump',
+  standalone: true,
   template: `
     <ngt-instanced-mesh
       [ref]="sphereRef.ref"
@@ -112,6 +72,7 @@ const vec = new THREE.Vector3();
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtTextureLoader, NgtPhysicBody],
+  imports: [NgtInstancedMesh, NgtSphereGeometry, NgtMeshStandardMaterial, AsyncPipe],
 })
 export class Clump {
   readonly count = 40;
@@ -144,27 +105,60 @@ export class Clump {
   }
 }
 
-@NgModule({
-  declarations: [ObjectClumpComponent, Scene, Pointer, Clump],
+@Component({
+  selector: 'sandbox-scene',
+  standalone: true,
+  template: `
+    <ngt-ambient-light intensity="0.25"></ngt-ambient-light>
+    <ngt-spot-light [position]="[30, 30, 30]" intensity="1" angle="0.2" penumbra="1" castShadow>
+      <ngt-vector2 [attach]="['shadow', 'mapSize']" [vector2]="[512, 512]"></ngt-vector2>
+    </ngt-spot-light>
+    <ngt-directional-light [position]="[-10, -10, -10]" intensity="5" color="purple"></ngt-directional-light>
+
+    <ngt-physics [gravity]="[0, 2, 0]" iterations="10">
+      <sandbox-pointer></sandbox-pointer>
+      <sandbox-clump></sandbox-clump>
+    </ngt-physics>
+
+    <ngt-soba-environment files="assets/adamsbridge.hdr"></ngt-soba-environment>
+
+    <ngt-effect-composer>
+      <ng-template ngt-effect-composer-content>
+        <ngt-bloom-effect></ngt-bloom-effect>
+      </ng-template>
+    </ngt-effect-composer>
+
+    <ngt-soba-sky></ngt-soba-sky>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
-    RouterModule.forChild([{ path: '', component: ObjectClumpComponent }]),
-    NgtEffectComposerModule,
-    NgtInstancedMeshModule,
-    NgtSphereGeometryModule,
-    NgtMeshStandardMaterialModule,
-    NgtCanvasModule,
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-    NgtVector2AttributeModule,
-    NgtDirectionalLightModule,
-    NgtPhysicsModule,
-    NgtSobaEnvironmentModule,
-    NgtSobaSkyModule,
-    NgtBloomEffectModule,
-    NgtValueAttributeModule,
-    NgtCannonDebugModule,
+    NgtAmbientLight,
+    NgtSpotLight,
+    NgtVector2Attribute,
+    NgtDirectionalLight,
+    NgtPhysics,
+    Pointer,
+    Clump,
+    NgtSobaEnvironment,
+    NgtEffectComposer,
+    NgtEffectComposerContent,
+    NgtBloomEffect,
+    NgtSobaSky,
   ],
-  exports: [Pointer],
 })
-export class ObjectClumpComponentModule {}
+export class Scene {}
+
+@Component({
+  selector: 'sandbox-object-clump',
+  standalone: true,
+  template: `
+    <ngt-canvas shadows [dpr]="[1, 2]" [camera]="{ position: [0, 0, 20], fov: 35, near: 1, far: 40 }" initialLog>
+      <sandbox-scene></sandbox-scene>
+    </ngt-canvas>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtCanvas, Scene],
+})
+export class ObjectClumpComponent {
+  readonly kernelSize = KernelSize.VERY_LARGE;
+}

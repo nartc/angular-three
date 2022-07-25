@@ -1,10 +1,14 @@
 import { NgtPhysicBody, NgtPhysicRaycastVehicle, WheelInfoOptions } from '@angular-three/cannon';
-import { NgtTriple, Ref } from '@angular-three/core';
+import { NgtRadianPipe, NgtTriple, Ref } from '@angular-three/core';
+import { NgtValueAttribute } from '@angular-three/core/attributes';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgtMesh } from '@angular-three/core/meshes';
 import { NgtGLTFLoader } from '@angular-three/soba/loaders';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostListener, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
+import { GLTF } from 'three-stdlib';
 
 const beetleMaterials = [
   'Black paint',
@@ -53,6 +57,7 @@ interface BeetleGLTF extends GLTF {
 
 @Component({
   selector: 'sandbox-chassis[ref]',
+  standalone: true,
   template: `
     <ng-container *ngIf="beetle$ | async as beetle">
       <ngt-mesh [ref]="ref" [position]="position" [rotation]="rotation">
@@ -141,6 +146,7 @@ interface BeetleGLTF extends GLTF {
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgIf, AsyncPipe, NgtMesh, NgtGroup, NgtValueAttribute],
 })
 export class Chassis {
   @Input() ref!: Ref;
@@ -159,6 +165,7 @@ interface WheelGLTF extends GLTF {
 
 @Component({
   selector: 'sandbox-wheel[ref]',
+  standalone: true,
   template: `
     <ng-container *ngIf="wheel$ | async as wheel">
       <ngt-group [ref]="ref">
@@ -172,6 +179,7 @@ interface WheelGLTF extends GLTF {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
+  imports: [NgIf, AsyncPipe, NgtGroup, NgtMesh, NgtRadianPipe],
 })
 export class Wheel implements OnInit {
   @Input() ref!: Ref;
@@ -219,6 +227,7 @@ const isKeyCode = (v: unknown): v is KeyCode => keyCodes.includes(v as KeyCode);
 
 @Component({
   selector: 'sandbox-vehicle',
+  standalone: true,
   template: `
     <ngt-group [ref]="raycastVehicleRef.ref" [position]="[0, -0.4, 0]" (beforeRender)="onBeforeRender()">
       <sandbox-chassis [ref]="chassisRef.ref"></sandbox-chassis>
@@ -232,6 +241,7 @@ const isKeyCode = (v: unknown): v is KeyCode => keyCodes.includes(v as KeyCode);
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody, NgtPhysicRaycastVehicle],
+  imports: [NgtGroup, Chassis, Wheel, NgForOf],
 })
 export class Vehicle {
   @Input() position?: NgtTriple;
