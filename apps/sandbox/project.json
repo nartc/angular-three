@@ -5,23 +5,17 @@
   "prefix": "sandbox",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "executor": "@nrwl/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
       "options": {
+        "buildLibsFromSource": false,
         "outputPath": "libs/documentations/build/examples",
         "index": "apps/sandbox/src/index.html",
         "main": "apps/sandbox/src/main.ts",
         "polyfills": "apps/sandbox/src/polyfills.ts",
         "tsConfig": "apps/sandbox/tsconfig.app.json",
-        "assets": [
-          "apps/sandbox/src/favicon.ico",
-          "apps/sandbox/src/assets"
-        ],
-        "styles": [
-          "apps/sandbox/src/styles.css"
-        ],
+        "assets": ["apps/sandbox/src/favicon.ico", "apps/sandbox/src/assets"],
+        "styles": ["apps/sandbox/src/styles.css"],
         "scripts": []
       },
       "configurations": {
@@ -59,7 +53,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nrwl/angular:webpack-server",
       "configurations": {
         "production": {
           "browserTarget": "sandbox:build:production"
@@ -79,10 +73,7 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/sandbox/src/**/*.ts",
-          "apps/sandbox/src/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/sandbox/src/**/*.ts", "apps/sandbox/src/**/*.html"]
       }
     }
   },
