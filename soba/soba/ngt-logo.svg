@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="27.337 20.779 195.126 208.812" xmlns="http://www.w3.org/2000/svg">
+  <path d="M125,227a2,2,0,0,1-.969-.25l-78.9-43.7a2,2,0,0,1-1.018-1.521l-14.2-123.1a2,2,0,0,1,1.316-2.113l93.1-33.2a2,2,0,0,1,1.344,0l93.1,33.2a2,2,0,0,1,1.316,2.113l-14.2,123.1a2,2,0,0,1-1.018,1.521l-78.9,43.7A2,2,0,0,1,125,227Z" style="fill:#e4e4dc"/>
+  <path d="M125,25l93.1,33.2L203.9,181.3,125,225,46.1,181.3,31.9,58.2,125,25m0-4a4,4,0,0,0-1.344.232l-93.1,33.2a4,4,0,0,0-2.631,4.226l14.2,123.1a4,4,0,0,0,2.036,3.041l78.9,43.7a4,4,0,0,0,3.876,0l78.9-43.7a4,4,0,0,0,2.036-3.041l14.2-123.1a4,4,0,0,0-2.631-4.226l-93.1-33.2A4,4,0,0,0,125,21Z"/>
+  <polygon points="125 25 125 225 203.9 181.3 218.1 58.2 125 25" style="fill:#fff"/>
+  <path d="M103.742,194.4,71.811,66.4l128,36.492Z" style="fill:none;stroke:#060606;stroke-linejoin:round;stroke-width:2.94112754864569px"/>
+  <path d="M135.788,84.648l15.953,64.019L87.777,130.415Z" style="fill:none;stroke:#060606;stroke-linejoin:round;stroke-width:2.94112754864569px"/>
+  <path d="M119.916,139.1l-7.924-31.8,31.779,9.034Z" style="fill:none;stroke:#060606;stroke-linejoin:round;stroke-width:2.94112754864569px"/>
+  <path d="M104.065,75.532l7.924,31.8L80.211,98.3Z" style="fill:none;stroke:#060606;stroke-linejoin:round;stroke-width:2.94112754864569px"/>
+  <path d="M167.62,93.66l7.924,31.8-31.779-9.033Z" style="fill:none;stroke:#060606;stroke-linejoin:round;stroke-width:2.94112754864569px"/>
+  <path d="M119.92,139.12l7.924,31.8-31.779-9.033Z" style="fill:none;stroke:#060606;stroke-linejoin:round;stroke-width:2.94112754864569px"/>
+</svg>
