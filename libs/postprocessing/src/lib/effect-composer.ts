@@ -14,8 +14,8 @@ import {
   startWithUndefined,
   tapEffect,
 } from '@angular-three/core';
-import { NgtGroupModule } from '@angular-three/core/group';
-import { CommonModule } from '@angular/common';
+import { NgtGroup } from '@angular-three/core/group';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -51,6 +51,7 @@ export interface NgtEffectComposerState extends NgtInstanceState<EffectComposer>
 
 @Directive({
   selector: 'ng-template[ngt-effect-composer-content]',
+  standalone: true,
 })
 export class NgtEffectComposerContent {
   constructor(public templateRef: TemplateRef<{ group: Ref<THREE.Group>; effectComposer: Ref<EffectComposer> }>) {}
@@ -65,6 +66,7 @@ export class NgtEffectComposerContent {
 
 @Component({
   selector: 'ngt-effect-composer',
+  standalone: true,
   template: `
     <ngt-group [ref]="groupRef">
       <ng-container
@@ -75,6 +77,7 @@ export class NgtEffectComposerContent {
     </ngt-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtGroup, NgIf, NgTemplateOutlet],
   providers: [
     provideNgtObject(NgtEffectComposer),
     provideObjectRef(NgtEffectComposer, (composer) => composer.groupRef),
@@ -319,8 +322,7 @@ export class NgtEffectComposer extends NgtInstance<EffectComposer, NgtEffectComp
 }
 
 @NgModule({
-  declarations: [NgtEffectComposer, NgtEffectComposerContent],
+  imports: [NgtEffectComposer, NgtEffectComposerContent],
   exports: [NgtEffectComposer, NgtEffectComposerContent],
-  imports: [CommonModule, NgtGroupModule],
 })
 export class NgtEffectComposerModule {}
