@@ -49,6 +49,7 @@ export interface NgtPhysicBodyReturn {
 ```ts
 @Component({
   selector: 'sandbox-box',
+  standalone: true,
   template: `
     <ngt-mesh
       [ref]="boxRef.ref"
@@ -60,6 +61,7 @@ export interface NgtPhysicBodyReturn {
       <ngt-mesh-lambert-material></ngt-mesh-lambert-material>
     </ngt-mesh>
   `,
+  imports: [NgtMesh, NgtBoxGeometry, NgtMeshLambertMaterial],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody],
 })
@@ -93,6 +95,7 @@ However, there are cases where we would want to still constraint some object in 
 ```ts
 @Component({
   selector: 'sandbox-lamp',
+  standalone: true,
   template: `
     <ngt-mesh sandboxDragConstraint [ref]="lampRef.ref" [position]="[0, 16, 0]">
       <ngt-cone-geometry [args]="[2, 2.5, 32]"></ngt-cone-geometry>
@@ -107,6 +110,7 @@ However, there are cases where we would want to still constraint some object in 
       ></ngt-spot-light>
     </ngt-mesh>
   `,
+  imports: [NgtMesh, NgtConeGeometry, NgtMeshStandardMaterial, NgtPointLight, NgtSpotLight],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NgtPhysicBody, NgtPhysicConstraint],
 })

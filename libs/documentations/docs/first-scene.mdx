@@ -15,6 +15,12 @@ This tutorial assumes basic knowledge of [Angular](https://angular.io) and [THRE
 
 :::
 
+:::note
+
+This tutorial uses Angular Standalone APIs available since Angular 14
+
+:::
+
 ## TLDR;
 
 The tutorial is a bit long so here's the TLDR; version for folks that want to get straight to the code.
@@ -49,7 +55,9 @@ The tutorial is a bit long so here's the TLDR; version for folks that want to ge
 ```ts
 @Component({
   selector: 'app-root',
+  standalone: true,
   templateUrl: './app.component.html',
+  imports: [NgtCanvas, NgtAmbientLight, NgtSpotLight, NgtPointLight, NgtSobaOrbitControls, CubeComponent],
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {}
@@ -80,7 +88,9 @@ export class AppComponent {}
 ```ts
 @Component({
   selector: 'app-cube',
+  standalone: true,
   templateUrl: 'cube.component.html',
+  imports: [NgtMesh, NgtBoxGeometry, NgtMeshStandardMaterial],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
@@ -114,35 +124,11 @@ body {
 
 </TabItem>
 
-<TabItem value="appModuleTs" label="app.module.ts">
-
-```ts
-@NgModule({
-  declarations: [AppComponent, CubeComponent],
-  imports: [
-    BrowserModule,
-    NgtCanvasModule,
-    NgtMeshModule,
-    NgtBoxGeometryModule,
-    NgtMeshStandardMaterialModule,
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-    NgtPointLightModule,
-    NgtSobaOrbitControlsModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
-```
-
-</TabItem>
-
 </Tabs>
 
 ## Setting up the Canvas
 
-The scene graph in NGT starts with the `CanvasComponent`. Let's start by putting `<ngt-canvas>` on our `app.component.html`, and import `NgtCanvasModule` in our `app.module.ts`
+The scene graph in NGT starts with the `CanvasComponent`. Let's start by putting `<ngt-canvas>` on our `app.component.html`, and import `NgtCanvas` in our `app.component.ts`
 
 <Tabs>
 
@@ -156,25 +142,26 @@ The scene graph in NGT starts with the `CanvasComponent`. Let's start by putting
 
 </TabItem>
 
-<TabItem value="module" label="app.module.ts" default>
+<TabItem value="component" label="app.component.ts">
 
 ```ts
 // highlight-start
-//          👇 this provides the CanvasComponent
-import { NgtCanvasModule } from '@angular-three/core';
+//          👇 Standalone component NgtCanvas
+import { NgtCanvas } from '@angular-three/core';
 // highlight-end
 
-@NgModule({
+@Component({
   /* ... */
+  standalone: true,
   imports: [
     /* ... */
     // highlight-start
-    NgtCanvasModule,
+    NgtCanvas,
     // highlight-end
   ],
   /* ... */
 })
-export class AppModule {}
+export class AppComponent {}
 ```
 
 </TabItem>
@@ -238,27 +225,28 @@ Our scene is empty at the moment. Let's fill it with our first THREE Object3D by
 
 </TabItem>
 
-<TabItem value="module" label="app.module.ts" default>
+<TabItem value="component" label="app.component.ts">
 
 ```ts
-import { NgtCanvasModule } from '@angular-three/core';
+import { NgtCanvas } from '@angular-three/core';
 // highlight-start
-//          👇 this provides the MeshComponent
-import { NgtMeshModule } from '@angular-three/core/meshes';
+//          👇 Standalone component NgtMesh
+import { NgtMesh } from '@angular-three/core/meshes';
 // highlight-end
 
-@NgModule({
+@Component({
   /* ... */
+  standalone: true,
   imports: [
     /* ... */
-    NgtCanvasModule,
+    NgtCanvas,
     // highlight-start
-    NgtMeshModule,
+    NgtMesh,
     // highlight-end
   ],
   /* ... */
 })
-export class AppModule {}
+export class AppComponent {}
 ```
 
 </TabItem>
@@ -284,30 +272,31 @@ export class AppModule {}
 
 </TabItem>
 
-<TabItem value="module" label="app.module.ts" default>
+<TabItem value="component" label="app.component.ts">
 
 ```ts
-import { NgtCanvasModule } from '@angular-three/core';
-import { NgtMeshModule } from '@angular-three/core/meshes';
+import { NgtCanvas } from '@angular-three/core';
+import { NgtMesh } from '@angular-three/core/meshes';
 // highlight-start
-import { NgtBoxGeometryModule } from '@angular-three/core/geometries';
-import { NgtMeshBasicMaterialModule } from '@angular-three/core/materials';
+import { NgtBoxGeometry } from '@angular-three/core/geometries';
+import { NgtMeshBasicMaterial } from '@angular-three/core/materials';
 // highlight-end
 
-@NgModule({
+@Component({
   /* ... */
+  standalone: true,
   imports: [
     /* ... */
-    NgtCanvasModule,
-    NgtMeshModule,
+    NgtCanvas,
+    NgtMesh,
     // highlight-start
-    NgtBoxGeometryModule,
-    NgtMeshBasicMaterialModule,
+    NgtBoxGeometry,
+    NgtMeshBasicMaterial,
     // highlight-end
   ],
   /* ... */
 })
-export class AppModule {}
+export class AppComponent {}
 ```
 
 </TabItem>
@@ -344,7 +333,7 @@ At this point, we have something on the scene that we can check out
 
 </TabItem>
 
-<TabItem value="ts" label="app.component.ts" default>
+<TabItem value="ts" label="app.component.ts">
 
 ```ts
 import { NgtRenderState } from '@angular-three/core';
@@ -352,7 +341,11 @@ import { Mesh } from 'three';
 
 @Component({
   /* ... */
+  standalone: true,
   template: 'app.component.html',
+  imports: [
+    /*...*/
+  ],
   /* ... */
 })
 export class AppComponent {
@@ -415,7 +408,7 @@ function animate() {
 animate();
 ```
 
-Vanilla THREE.js does not look so bad either. However, by leveraging Angular template, we are able to express our Scene in a declarative way. We can use Angular template expression like `*ngIf` and `*ngFor` to allow our scene to be more dynamic In addition, the objects on our scene are also aware of their life-cycles which means they can clean themselves up when they are _destroyed_.
+Vanilla THREE.js does not look so bad either. However, by leveraging Angular template, we are able to express our Scene in a declarative way. We can use Angular template expression like `*ngIf` and `*ngFor` to allow our scene to be more dynamic. In addition, the objects on our scene are also aware of their life-cycles which means they can clean themselves up when they are _destroyed_.
 
 Next section of the tutorial will show even a _better_ reason to use NGT. Let's continue
 
@@ -441,7 +434,9 @@ What is better than one cube? TWO cubes! Let's start by making our cube an Angul
 ```ts
 @Component({
   selector: 'app-cube',
+  standalone: true,
   templateUrl: 'cube.component.html',
+  imports: [NgtMesh, NgtMeshBasicMaterial, NgtBoxGeometry],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
@@ -470,28 +465,17 @@ export class CubeComponent {
 ```ts
 @Component({
   /* ... */
+  standalone: true,
   template: 'app.component.html',
-  /* ... */
-})
-export class AppComponent {}
-```
-
-</TabItem>
-
-<TabItem value="module" label="app.module.ts" default>
-
-```ts
-@NgModule({
-  declarations: [
-    AppComponent,
-    /* ... */
+  imports: [
+    NgtCanvas,
     // highlight-start
     CubeComponent,
     // highlight-end
-    /* ... */
   ],
+  /* ... */
 })
-export class AppModule {}
+export class AppComponent {}
 ```
 
 </TabItem>
@@ -539,7 +523,11 @@ We will add two states: `hovered` and `active` to our `CubeComponent`
 ```ts
 @Component({
   selector: 'app-cube',
+  standalone: true,
   templateUrl: 'cube.component.html',
+  imports: [
+    /* ... */
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
@@ -661,25 +649,21 @@ First, let's switch out `<ngt-mesh-basic-material>` for `<ngt-mesh-standard-mate
 
 </TabItem>
 
-<TabItem value="module" label="app.module.ts">
+<TabItem value="cubeTs" label="cube.component.ts">
 
 ```diff
--
-+
-
-@NgModule({
+@Component({
     /* ... */
     imports: [
         /* ... */
-        NgtCanvasModule,
-        NgtMeshModule,
-        NgtBoxGeometryModule,
--       NgtMeshBasicMaterialModule,
-+       NgtMeshStandardMaterialModule,
+        NgtMesh,
+        NgtBoxGeometry,
+-       NgtMeshBasicMaterial,
++       NgtMeshStandardMaterial,
     ],
     /* ... */
 })
-export class AppModule {}
+export class CubeComponent {}
 ```
 
 </TabItem>
@@ -713,30 +697,28 @@ Next, let's start adding lights. We'll use `<ngt-ambient-light>`, `<ngt-spot-lig
 
 </TabItem>
 
-<TabItem value="module" label="app.module.ts">
+<TabItem value="component" label="app.component.ts">
 
 ```ts
 // highlight-start
-import { NgtAmbientLightModule, NgtSpotLightModule, NgtPointLightModule } from '@angular-three/core/lights';
+import { NgtAmbientLight, NgtSpotLight, NgtPointLight } from '@angular-three/core/lights';
 // highlight-end
 
-@NgModule({
+@Component({
   /* ... */
+  standalone: true,
   imports: [
     /* ... */
-    NgtCanvasModule,
-    NgtMeshModule,
-    NgtBoxGeometryModule,
-    NgtMeshStandardMaterialModule,
+    NgtCanvas,
     // highlight-start
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-    NgtPointLightModule,
+    NgtAmbientLight,
+    NgtSpotLight,
+    NgtPointLight,
     // highlight-end
   ],
   /* ... */
 })
-export class AppModule {}
+export class AppComponent {}
 ```
 
 </TabItem>
@@ -796,30 +778,28 @@ All utilities exported from `@angular-three/soba` are prefixed with `ngt-soba`
 
 </TabItem>
 
-<TabItem value="module" label="app.module.ts">
+<TabItem value="component" label="app.component.ts">
 
 ```ts
-import { NgtAmbientLightModule, NgtSpotLightModule, NgtPointLightModule } from '@angular-three/core/lights';
+// highlight-start
+import { NgtSobaOrbitControls } from '@angular-three/soba/controls';
 // highlight-end
 
-@NgModule({
+@Component({
   /* ... */
   imports: [
     /* ... */
-    NgtCanvasModule,
-    NgtMeshModule,
-    NgtBoxGeometryModule,
-    NgtMeshStandardMaterialModule,
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-    NgtPointLightModule,
+    NgtCanvas,
+    NgtAmbientLight,
+    NgtSpotLight,
+    NgtPointLight,
     // highlight-start
-    NgtSobaOrbitControlsModule,
+    NgtSobaOrbitControls,
     // highlight-end
   ],
   /* ... */
 })
-export class AppModule {}
+export class AppComponent {}
 ```
 
 </TabItem>

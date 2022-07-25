@@ -17,10 +17,12 @@ We can have static geometries and materials as Component's properties
 ```ts
 @Component({
   selector: 'app-scene',
+  standalone: true,
   template: `
     <ngt-mesh [position]="[1, 1, 1]" [geometry]="sphere" [material]="redMaterial"></ngt-mesh>
     <ngt-mesh [position]="[2, 2, 2]" [geometry]="sphere" [material]="redMaterial"></ngt-mesh>
   `,
+  imports: [NgtMesh],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SceneComponent {
@@ -50,6 +52,7 @@ There are also cases where we want to render the Geometries and/or Materials on 
 ```ts
 @Component({
   selector: 'app-scene',
+  standalone: true,
   template: `
     <ngt-sphere-geometry #sphereGeometry [args]="[1, 32, 32]" noAttach></ngt-sphere-geometry>
     <ngt-mesh-standard-material #standardMaterial [color]="color" noAttach></ngt-mesh-standard-material>
@@ -65,6 +68,7 @@ There are also cases where we want to render the Geometries and/or Materials on 
       [material]="standardMaterial.instance"
     ></ngt-mesh>
   `,
+  imports: [NgtMesh, NgtSphereGeometry, NgtMeshStandardMaterial],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SceneComponent {}
@@ -113,6 +117,7 @@ Setting up InstancedMesh is not hard but it might be hard for people who are new
 ```ts
 @Component({
   selector: 'sandbox-instances',
+  standalone: true,
   template: `
     <ngt-instanced-mesh (ready)="onReady($event)" [count]="length">
       <ngt-box-geometry [args]="[0.15, 0.15, 0.15]">
@@ -124,6 +129,7 @@ Setting up InstancedMesh is not hard but it might be hard for people who are new
       <ngt-mesh-lambert-material vertexColors toneMapped="false"></ngt-mesh-lambert-material>
     </ngt-instanced-mesh>
   `,
+  imports: [NgtInstancedMesh, NgtBoxGeometry, NgtInstancedBufferAttribute, NgtMeshLambertMaterial],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InstancesComponent {

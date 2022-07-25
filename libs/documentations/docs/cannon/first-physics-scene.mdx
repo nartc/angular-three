@@ -48,31 +48,19 @@ We'll set up our `ngt-canvas` with some lighting configurations
 <TabItem value="physicsTs" label="physic-boxes.component.ts">
 
 ```ts
-import { NgtCanvasModule } from '@angular-three/core';
-import { NgtStatsModule } from '@angular-three/core/stats';
-import { NgtAmbientLightModule, NgtDirectionalLightModule } from '@angular-three/core/lights';
-import { NgtColorAttributeModule, NgtVector2AttributeModule } from '@angular-three/core/attributes';
+import { NgtCanvas } from '@angular-three/core';
+import { NgtStats } from '@angular-three/core/stats';
+import { NgtAmbientLight, NgtDirectionalLight } from '@angular-three/core/lights';
+import { NgtColorAttribute, NgtVector2Attribute } from '@angular-three/core/attributes';
 
 @Component({
   selector: 'physic-boxes',
+  standalone: true,
   templateUrl: 'physic-boxes.component.html',
+  imports: [NgtCanvas, NgtAmbientLight, NgtDirectionalLight, NgtStats, NgtColorAttribute, NgtVector2Attribute],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhysicBoxesComponent {}
-
-@NgModule({
-  imports: [
-    NgtCanvasModule,
-    NgtAmbientLightModule,
-    NgtDirectionalLightModule,
-    NgtStatsModule,
-    NgtColorAttributeModule,
-    NgtVector2AttributeModule,
-  ],
-  declarations: [PhysicBoxesComponent],
-  exports: [PhysicBoxesComponent],
-})
-export class PhysicsBoxesModule {}
 ```
 
 </TabItem>
@@ -113,25 +101,20 @@ All objects that are participating in the Physic World need to be rendered insid
 ```ts
 /* ... */
 // highlight-start
-import { NgtPhysicsModule } from '@angular-three/cannon';
+import { NgtPhysics } from '@angular-three/cannon';
 // highlight-end
 
 @Component({
   /* ... */
-})
-export class PhysicBoxesComponent {}
-
-@NgModule({
+  standalone: true,
   imports: [
     /* ... */
     // highlight-start
-    NgtPhysicsModule,
+    NgtPhysics,
     // highlight-end
   ],
-  declarations: [PhysicBoxesComponent],
-  exports: [PhysicBoxesComponent],
 })
-export class PhysicsBoxesModule {}
+export class PhysicBoxesComponent {}
 ```
 
 </TabItem>
@@ -164,8 +147,10 @@ Next, we'll add our "floor". A floor is usually a `THREE.Mesh` with a `THREE.Pla
 ```ts
 @Component({
   selector: 'physic-floor',
+  standalone: true,
   templateUrl: 'floor.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgtMesh, NgtPlaneGeometry, NgtShadowMaterial],
   // 👇 we provide NgtPhysicBody for this Floor
   providers: [NgtPhysicBody],
 })
@@ -200,22 +185,15 @@ import { PhysicFloorComponent } from './floor.component';
 
 @Component({
   /* ... */
-})
-export class PhysicBoxesComponent {}
-
-@NgModule({
+  standalone: true,
   imports: [
     /* ... */
-  ],
-  declarations: [
-    PhysicBoxesComponent,
     // highlight-start
     PhysicFloorComponent,
     // highlight-end
   ],
-  exports: [PhysicBoxesComponent],
 })
-export class PhysicsBoxesModule {}
+export class PhysicBoxesComponent {}
 ```
 
 </TabItem>
@@ -272,7 +250,9 @@ Now that we have a floor, we can _drop_ things on it. In this case, the thing is
 ```ts
 @Component({
   selector: 'physic-box',
+  standalone: true,
   templateUrl: 'box.component.html',
+  imports: [NgtMesh, NgtBoxGeometry, NgtMeshLambertMaterial],
   changeDetection: ChangeDetectionStrategy.OnPush,
   // 👇 provide the Physic Body API
   providers: [NgtPhysicBody],
@@ -305,24 +285,17 @@ import { PhysicBoxComponent } from './box.component';
 // highlight-end
 
 @Component({
-  /* ... */
-})
-export class PhysicBoxesComponent {}
-
-@NgModule({
+  /* ... */,
+  standalone: true,
   imports: [
     /* ... */
-  ],
-  declarations: [
-    PhysicBoxesComponent,
     PhysicFloorComponent,
     // highlight-start
     PhysicBoxComponent,
     // highlight-end
-  ],
-  exports: [PhysicBoxesComponent],
+  ]
 })
-export class PhysicsBoxesModule {}
+export class PhysicBoxesComponent {}
 ```
 
 </TabItem>

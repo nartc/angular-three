@@ -23,6 +23,15 @@ Angular 14 comes with Standalone Components. Angular Three v6 provides all compo
 export class AppModule {}
 ```
 
+## `(animateReady)`
+
+`(animateReady)` is removed. Please use `(beforeRender)` instead.
+
+```diff
+- <ngt-mesh (animateReady)="onAnimateReady($event)"></ngt-mesh>
++ <ngt-mesh (beforeRender)="onAnimateReady($event)"></ngt-mesh>
+```
+
 ## `make()` API
 
 `makeVector*()` and `makeColor()` have been removed in favor of `make()`

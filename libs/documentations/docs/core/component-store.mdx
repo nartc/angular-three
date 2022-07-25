@@ -239,10 +239,6 @@ export class CubeComponent extends NgtComponentStore<CubeState> {
 
 The API is almost identical to `@ngrx/component-store` with the following differences:
 
-### `onCanvasReady`
-
-This is a short-cut method for `this.effect() + tap()/tapEffect()`
-
 ### `select()`
 
 - `this.select()` does not emit for `undefined` values. This allows for the `NgtComponentStore` to be initialized with a `Partial<State>`

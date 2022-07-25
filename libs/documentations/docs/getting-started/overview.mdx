@@ -49,7 +49,7 @@ It is recommended that you should get familiar with [Angular](https://angular.io
 
 ## What does the code look like?
 
-We can take a peak at the code for the [Simple Cubes example](https://codesandbox.io/s/simple-cubes-dt4vy7?file=/src/app/app.component.html) here
+We can take a peak at the code for the [Simple Cubes example](https://stackblitz.com/edit/angular-ivy-hxkcf9?file=src/app/app.component.ts) here
 
 <Tabs>
 <TabItem value="appComponentHtml" label="app.component.html" default>
@@ -73,7 +73,9 @@ We can take a peak at the code for the [Simple Cubes example](https://codesandbo
 ```ts
 @Component({
   selector: 'app-root',
+  standalone: true,
   templateUrl: 'app.component.html',
+  imports: [NgtCanvas, NgtAmbientLight, NgtSpotLight, NgtPointLight, CubeComponent]
 })
 export class AppComponent {}
 ```
@@ -103,7 +105,9 @@ export class AppComponent {}
 ```ts
 @Component({
   selector: 'app-cube',
+  standalone: true,
   templateUrl: 'cube.component.html',
+  imports: [NgtMesh, NgtBoxGeometry, NgtMeshStandardMaterial],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CubeComponent {
@@ -123,24 +127,10 @@ export class CubeComponent {
 
 </TabItem>
 
-<TabItem value="appModuleTs" label="app.module.ts">
+<TabItem value="mainTs" label="main.ts">
 
 ```ts
-@NgModule({
-  declarations: [AppComponent, CubeComponent],
-  imports: [
-    /* ... */
-    // NGT is a highly modular library that follows Angular-library best practices
-    NgtCanvasModule,
-    NgtAmbientLightModule,
-    NgtSpotLightModule,
-    NgtPointLightModule,
-    NgtMeshModule,
-    NgtBoxGeometryModule,
-    NgtMeshStandardMaterialModule,
-  ],
-})
-export class AppModule {}
+bootstrapApplication(AppComponent);
 ```
 
 </TabItem>
@@ -150,6 +140,12 @@ export class AppModule {}
 and the result
 
 ![simple cubes gif](/img/intro-ngt.gif)
+
+:::note
+
+Since Angular Three v6, all examples are written with Angular Standalone APIs
+
+:::
 
 :::info
 

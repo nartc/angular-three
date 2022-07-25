@@ -9,9 +9,10 @@ sidebar_label: Additional Exports
 A collection of utility functions used to construct THREE objects like `THREE.Vector*`, `THREE.Color` etc... from different arguments
 
 ```ts
-makeVector2(10); // new THREE.Vector2().setScalar(10);
-makeVector2([10, 20]); // new THREE.Vector2(10, 20);
+make(THREE.Vector2, 10); // new THREE.Vector2(10, 10);
+make(THREE.Vector2, [10, 20]); // new THREE.Vector2(10, 20);
 make(THREE.Quaternion, [10, 10, 10, 10]); // new THREE.Quaternion(10, 10, 10, 10);
+make(THREE.Color, 'black'); // new THREE.Color('black');
 ```
 
 ## `is`
