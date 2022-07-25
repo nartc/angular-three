@@ -20,7 +20,7 @@ export const routes: Routes = [
     },
   },
   {
-        path: 'cubes',
+    path: 'cubes',
     loadChildren: () => import('./cubes/cubes.component').then((m) => m.SandboxCubesModule),
     data: {
       title: 'Simple Cubes',
@@ -148,7 +148,7 @@ export const routes: Routes = [
   },
   {
     path: 'color-grading',
-    loadChildren: () => import('./color-grading/color-grading.component').then((m) => m.ColorGradingComponentModule),
+    loadComponent: () => import('./color-grading/color-grading.component').then((m) => m.ColorGradingComponent),
     data: {
       title: 'Color Grading',
       description: 'Performance tip by color grading with LUTEffect',
