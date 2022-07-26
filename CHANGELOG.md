@@ -1,113 +1,152 @@
+## [6.0.0](https://github.com/nartc/angular-three/compare/6.0.0-beta.0...6.0.0) (2022-07-26)
 
+### ⚠ BREAKING CHANGES
+
+- All components/directives/pipes are now standalone. Module-based APIs will be removed in future major
+- `makeVector*`, `makeColor` are removed. Use `make()` instead
+- `NgtComponentStore` is now an abstract `Directive` instead of an `Injectable`
+- `NgtComponentStore#onCanvasReady` is replaced with `NgtStore#onReady`
+- `NgtCoreModule` is removed. Use `NgtCanvasModule` instead
+- `NgtColorPipe` is removed. Use `NgtColorAttribute` instead
+- `NgtFogPipe` is removed. Use `NgtFogAttribute` instead
+- `NgtFogExp2Pipe` is removed. Use `NgtFogExp2Attribute` instead
+- `NgtVector2Pipe` is removed. Use `NgtVector2Attribute` instead
+- `NgtVector3Pipe` is removed. Use `NgtVector3Attribute` instead
+- `NgtVector4Pipe` is removed. Use `NgtVector4Attribute` instead
+- `NgtObjectInputs` -> `NgtObjectProps`
+- `NgtObjectInputsState` -> `NgtObjectPropsState`
+- Abstract classes are rewritten to use `inject()`. Hence, derived classes do not need to pass DIs into `super()` calls anymore
+- `[parameters]` on Materials are removed. Please use individual Inputs
+- `schematics:configure-cannon` is removed
+
+### Features
+
+- bump peer deps ([223c604](https://github.com/nartc/angular-three/commit/223c604cf25884cef8385638c3087cc87a064244))
+- **cannon:** standalone api ([6c26dcd](https://github.com/nartc/angular-three/commit/6c26dcdf151d91fd1b900eb247ea5eafc82ba655))
+- **core:** clean up ngtObjectPassThrough ([35a77f6](https://github.com/nartc/angular-three/commit/35a77f6e9eff9b675e859db2cbc7443cb1c0e270))
+- **core:** consolidate make fns ([a2486fe](https://github.com/nartc/angular-three/commit/a2486fe7d4d564c6c81133ecf69d3ddc1fde1515))
+- **core:** remove material parameters inputs ([0029fa7](https://github.com/nartc/angular-three/commit/0029fa77311efd3302d9722730d53b0edb70c83d))
+- **core:** replace onCanvasReady with onReady ([2083c50](https://github.com/nartc/angular-three/commit/2083c506502f4f06fad1115a2cde5f66f5ba8872))
+- **core:** standalone api ([e1071d6](https://github.com/nartc/angular-three/commit/e1071d6127d9638c3868447eb09f26a73b526ca4))
+- **core:** use inject ([336b453](https://github.com/nartc/angular-three/commit/336b4534670e6ff7e5b8a77fc40e80308e3d08aa))
+- **core:** use inject ([2b627b6](https://github.com/nartc/angular-three/commit/2b627b68d25a004633c9ababb40ef86fd94b2a53))
+- **postprocessing:** standalone api ([ef72f25](https://github.com/nartc/angular-three/commit/ef72f258cd88843775e467da8fab24c7ad7ed7a7))
+- **schematics:** remove configure cannon generator/schematic ([3391638](https://github.com/nartc/angular-three/commit/3391638e962a7db94c24d6f78800bbd0a969201b))
+- **soba:** standalone api ([5707f85](https://github.com/nartc/angular-three/commit/5707f857ea3bb801edc43167843c97d6bbf36696))
+
+### Bug Fixes
+
+- **core:** adjust loop logici ([f174630](https://github.com/nartc/angular-three/commit/f174630460b34a52ae7560800513bc0eb550ecc7))
+- **core:** change component store to be an abstract directive instead ([a077d83](https://github.com/nartc/angular-three/commit/a077d83e98f648c50b66e81b1a2cfa4f87d9acaa))
+- **core:** clean up instance ([104523f](https://github.com/nartc/angular-three/commit/104523f7f71ed8b9b6513dd59a419855def8823d))
+- **core:** objects now added to scene after Enter VR on Oculus Quest ([#135](https://github.com/nartc/angular-three/issues/135)) ([f203fd5](https://github.com/nartc/angular-three/commit/f203fd5103a4dd2d82f86cc57c5d3b10589243b7))
+- revert to three import ([7384f93](https://github.com/nartc/angular-three/commit/7384f93f7b929574af85fa0c7476e96319f68b1a))
+- update three import to three/src/Three ([8942c28](https://github.com/nartc/angular-three/commit/8942c28063625d4d3a5f52b28d2919251a71b56f))
+- **postprocessing:** standalone-ize effect composer ([a682deb](https://github.com/nartc/angular-three/commit/a682deb94e89a1980a8c400ab8b13c757214a882))
+
+### Documentations
+
+- **core:** fixed typo in ngt-primitive component ([#128](https://github.com/nartc/angular-three/issues/128)) ([6254323](https://github.com/nartc/angular-three/commit/625432381599043de15b8e0d2b76b93288f6b4de))
+- add docusaurus workflow for branch deploy ([c0c3b37](https://github.com/nartc/angular-three/commit/c0c3b375f8295aae4907d95c5bfe78bc5e623e3c))
+- converting to standalone ([d1f5622](https://github.com/nartc/angular-three/commit/d1f562209e46e63109fc8610f15058064cdf8d83))
+- migration to v6 ([31415f8](https://github.com/nartc/angular-three/commit/31415f86a320fc823f8dd1071833c3654577f3d3))
+- update docs to use standalone apis ([b1a5cc0](https://github.com/nartc/angular-three/commit/b1a5cc04a34ab777ccc083918365d109ff0c6743))
 
 ## [6.0.0-beta.0](https://github.com/nartc/angular-three/compare/5.5.0...6.0.0-beta.0) (2022-07-24)
 
-
 ### Features
 
-* bump peer deps ([223c604](https://github.com/nartc/angular-three/commit/223c604cf25884cef8385638c3087cc87a064244))
-* **cannon:** standalone api ([6c26dcd](https://github.com/nartc/angular-three/commit/6c26dcdf151d91fd1b900eb247ea5eafc82ba655))
-* **core:** clean up ngtObjectPassThrough ([35a77f6](https://github.com/nartc/angular-three/commit/35a77f6e9eff9b675e859db2cbc7443cb1c0e270))
-* **core:** consolidate make fns ([a2486fe](https://github.com/nartc/angular-three/commit/a2486fe7d4d564c6c81133ecf69d3ddc1fde1515))
-* **core:** remove material parameters inputs ([0029fa7](https://github.com/nartc/angular-three/commit/0029fa77311efd3302d9722730d53b0edb70c83d))
-* **core:** replace onCanvasReady with onReady ([2083c50](https://github.com/nartc/angular-three/commit/2083c506502f4f06fad1115a2cde5f66f5ba8872))
-* **core:** standalone api ([e1071d6](https://github.com/nartc/angular-three/commit/e1071d6127d9638c3868447eb09f26a73b526ca4))
-* **core:** use inject ([336b453](https://github.com/nartc/angular-three/commit/336b4534670e6ff7e5b8a77fc40e80308e3d08aa))
-* **core:** use inject ([2b627b6](https://github.com/nartc/angular-three/commit/2b627b68d25a004633c9ababb40ef86fd94b2a53))
-* **postprocessing:** standalone api ([ef72f25](https://github.com/nartc/angular-three/commit/ef72f258cd88843775e467da8fab24c7ad7ed7a7))
-* **schematics:** remove configure cannon generator/schematic ([3391638](https://github.com/nartc/angular-three/commit/3391638e962a7db94c24d6f78800bbd0a969201b))
-* **soba:** standalone api ([5707f85](https://github.com/nartc/angular-three/commit/5707f857ea3bb801edc43167843c97d6bbf36696))
-
+- bump peer deps ([223c604](https://github.com/nartc/angular-three/commit/223c604cf25884cef8385638c3087cc87a064244))
+- **cannon:** standalone api ([6c26dcd](https://github.com/nartc/angular-three/commit/6c26dcdf151d91fd1b900eb247ea5eafc82ba655))
+- **core:** clean up ngtObjectPassThrough ([35a77f6](https://github.com/nartc/angular-three/commit/35a77f6e9eff9b675e859db2cbc7443cb1c0e270))
+- **core:** consolidate make fns ([a2486fe](https://github.com/nartc/angular-three/commit/a2486fe7d4d564c6c81133ecf69d3ddc1fde1515))
+- **core:** remove material parameters inputs ([0029fa7](https://github.com/nartc/angular-three/commit/0029fa77311efd3302d9722730d53b0edb70c83d))
+- **core:** replace onCanvasReady with onReady ([2083c50](https://github.com/nartc/angular-three/commit/2083c506502f4f06fad1115a2cde5f66f5ba8872))
+- **core:** standalone api ([e1071d6](https://github.com/nartc/angular-three/commit/e1071d6127d9638c3868447eb09f26a73b526ca4))
+- **core:** use inject ([336b453](https://github.com/nartc/angular-three/commit/336b4534670e6ff7e5b8a77fc40e80308e3d08aa))
+- **core:** use inject ([2b627b6](https://github.com/nartc/angular-three/commit/2b627b68d25a004633c9ababb40ef86fd94b2a53))
+- **postprocessing:** standalone api ([ef72f25](https://github.com/nartc/angular-three/commit/ef72f258cd88843775e467da8fab24c7ad7ed7a7))
+- **schematics:** remove configure cannon generator/schematic ([3391638](https://github.com/nartc/angular-three/commit/3391638e962a7db94c24d6f78800bbd0a969201b))
+- **soba:** standalone api ([5707f85](https://github.com/nartc/angular-three/commit/5707f857ea3bb801edc43167843c97d6bbf36696))
 
 ### Bug Fixes
 
-* **core:** adjust loop logici ([f174630](https://github.com/nartc/angular-three/commit/f174630460b34a52ae7560800513bc0eb550ecc7))
-* **core:** change component store to be an abstract directive instead ([a077d83](https://github.com/nartc/angular-three/commit/a077d83e98f648c50b66e81b1a2cfa4f87d9acaa))
-* **core:** clean up instance ([104523f](https://github.com/nartc/angular-three/commit/104523f7f71ed8b9b6513dd59a419855def8823d))
-* **core:** objects now added to scene after Enter VR on Oculus Quest ([#135](https://github.com/nartc/angular-three/issues/135)) ([f203fd5](https://github.com/nartc/angular-three/commit/f203fd5103a4dd2d82f86cc57c5d3b10589243b7))
-* revert to three import ([7384f93](https://github.com/nartc/angular-three/commit/7384f93f7b929574af85fa0c7476e96319f68b1a))
-* update three import to three/src/Three ([8942c28](https://github.com/nartc/angular-three/commit/8942c28063625d4d3a5f52b28d2919251a71b56f))
-
+- **core:** adjust loop logici ([f174630](https://github.com/nartc/angular-three/commit/f174630460b34a52ae7560800513bc0eb550ecc7))
+- **core:** change component store to be an abstract directive instead ([a077d83](https://github.com/nartc/angular-three/commit/a077d83e98f648c50b66e81b1a2cfa4f87d9acaa))
+- **core:** clean up instance ([104523f](https://github.com/nartc/angular-three/commit/104523f7f71ed8b9b6513dd59a419855def8823d))
+- **core:** objects now added to scene after Enter VR on Oculus Quest ([#135](https://github.com/nartc/angular-three/issues/135)) ([f203fd5](https://github.com/nartc/angular-three/commit/f203fd5103a4dd2d82f86cc57c5d3b10589243b7))
+- revert to three import ([7384f93](https://github.com/nartc/angular-three/commit/7384f93f7b929574af85fa0c7476e96319f68b1a))
+- update three import to three/src/Three ([8942c28](https://github.com/nartc/angular-three/commit/8942c28063625d4d3a5f52b28d2919251a71b56f))
 
 ### Documentations
 
-* **core:** fixed typo in ngt-primitive component ([#128](https://github.com/nartc/angular-three/issues/128)) ([6254323](https://github.com/nartc/angular-three/commit/625432381599043de15b8e0d2b76b93288f6b4de))
+- **core:** fixed typo in ngt-primitive component ([#128](https://github.com/nartc/angular-three/issues/128)) ([6254323](https://github.com/nartc/angular-three/commit/625432381599043de15b8e0d2b76b93288f6b4de))
 
 ## [5.5.0](https://github.com/nartc/angular-three/compare/5.4.0...5.5.0) (2022-06-08)
 
-
 ### Features
 
-* **cannon:** add remove to physic body ([7b09397](https://github.com/nartc/angular-three/commit/7b093972b89dfb2bf3c1d3df661aca16a6508c95))
-
+- **cannon:** add remove to physic body ([7b09397](https://github.com/nartc/angular-three/commit/7b093972b89dfb2bf3c1d3df661aca16a6508c95))
 
 ### Bug Fixes
 
-* **core:** XR typings ([1eba758](https://github.com/nartc/angular-three/commit/1eba758fc5dfd317f62e3673ae872426dd89b6ec))
-* **postprocessing:** LUTEffet typing ([881b92b](https://github.com/nartc/angular-three/commit/881b92b531812d21ad0a97aa4023b82497f73722))
+- **core:** XR typings ([1eba758](https://github.com/nartc/angular-three/commit/1eba758fc5dfd317f62e3673ae872426dd89b6ec))
+- **postprocessing:** LUTEffet typing ([881b92b](https://github.com/nartc/angular-three/commit/881b92b531812d21ad0a97aa4023b82497f73722))
 
 ## [5.4.0](https://github.com/nartc/angular-three/compare/5.3.0...5.4.0) (2022-05-27)
 
-
 ### Features
 
-* **core:** update range for three dependency in core ([c9067e5](https://github.com/nartc/angular-three/commit/c9067e5ab2f9ef2070dda55da0ae2afd56a764fe))
+- **core:** update range for three dependency in core ([c9067e5](https://github.com/nartc/angular-three/commit/c9067e5ab2f9ef2070dda55da0ae2afd56a764fe))
 
 ## [5.3.0](https://github.com/nartc/angular-three/compare/5.2.4...5.3.0) (2022-05-27)
 
-
 ### Features
 
-* **core:** adjust three dep ([ced5e47](https://github.com/nartc/angular-three/commit/ced5e47ab8551f6c2e2b0530901f899a3493a3eb))
-* **schematics:** update three version ([931cc88](https://github.com/nartc/angular-three/commit/931cc88df82770293497ad860e50e024bcd669c9))
-
+- **core:** adjust three dep ([ced5e47](https://github.com/nartc/angular-three/commit/ced5e47ab8551f6c2e2b0530901f899a3493a3eb))
+- **schematics:** update three version ([931cc88](https://github.com/nartc/angular-three/commit/931cc88df82770293497ad860e50e024bcd669c9))
 
 ### Documentations
 
-* add hide-able sandbox route ([2b9bba5](https://github.com/nartc/angular-three/commit/2b9bba5cdf200ec9cad778f9ce1eba6b784f5adc))
-* update tailwind class for d-none ([4541fd6](https://github.com/nartc/angular-three/commit/4541fd6a163b9f121420315206fbbb3ef3ae1d8f))
+- add hide-able sandbox route ([2b9bba5](https://github.com/nartc/angular-three/commit/2b9bba5cdf200ec9cad778f9ce1eba6b784f5adc))
+- update tailwind class for d-none ([4541fd6](https://github.com/nartc/angular-three/commit/4541fd6a163b9f121420315206fbbb3ef3ae1d8f))
 
 ### [5.2.4](https://github.com/nartc/angular-three/compare/5.2.3...5.2.4) (2022-05-16)
 
-
 ### Bug Fixes
 
-* **soba:** fake timer to delay gizmo-helper render as a workaround ([53d26b1](https://github.com/nartc/angular-three/commit/53d26b104091202bd3d610d06e9a35ea344985c4))
+- **soba:** fake timer to delay gizmo-helper render as a workaround ([53d26b1](https://github.com/nartc/angular-three/commit/53d26b104091202bd3d610d06e9a35ea344985c4))
 
 ### [5.2.3](https://github.com/nartc/angular-three/compare/5.2.2...5.2.3) (2022-05-13)
 
-
 ### Bug Fixes
 
-* **cannon:** make sure wheels and chassis are available before calling raycastVehicle ([ec60ca4](https://github.com/nartc/angular-three/commit/ec60ca488b5b5f245b69c59f1988fd065fedd91f))
-* **cannon:** still add body to debug on disabled ([4b8e663](https://github.com/nartc/angular-three/commit/4b8e66317680f1eed474b2d479e587f378909fa6))
-* **cannon:** strong type object type for physics APIs ([7e0d788](https://github.com/nartc/angular-three/commit/7e0d788c1f20673db978f546dcdfcfc1f73b076d))
-* **core:** bump three peerDeps ([6bf9d89](https://github.com/nartc/angular-three/commit/6bf9d890a75e98d57e89ee48923a4e2a66fae4b0))
-* **core:** reinit material if ctorParams$ changes ([2a57fca](https://github.com/nartc/angular-three/commit/2a57fcaf3fbdb34b680731c378bfb4bd21f2dedf))
-
+- **cannon:** make sure wheels and chassis are available before calling raycastVehicle ([ec60ca4](https://github.com/nartc/angular-three/commit/ec60ca488b5b5f245b69c59f1988fd065fedd91f))
+- **cannon:** still add body to debug on disabled ([4b8e663](https://github.com/nartc/angular-three/commit/4b8e66317680f1eed474b2d479e587f378909fa6))
+- **cannon:** strong type object type for physics APIs ([7e0d788](https://github.com/nartc/angular-three/commit/7e0d788c1f20673db978f546dcdfcfc1f73b076d))
+- **core:** bump three peerDeps ([6bf9d89](https://github.com/nartc/angular-three/commit/6bf9d890a75e98d57e89ee48923a4e2a66fae4b0))
+- **core:** reinit material if ctorParams$ changes ([2a57fca](https://github.com/nartc/angular-three/commit/2a57fcaf3fbdb34b680731c378bfb4bd21f2dedf))
 
 ### Documentations
 
-* add raycast vehicle ([991d642](https://github.com/nartc/angular-three/commit/991d6423d5689fcdb09994cffbf5a165c54cf205))
-* add reflector story ([f059d99](https://github.com/nartc/angular-three/commit/f059d99e914301efbb6e9257c78bfd1e85e87198))
-* adjust all physics examples to use strongly typed version ([45d933d](https://github.com/nartc/angular-three/commit/45d933d81245acf1d4d5ccf2c66d64dd3afee6d1))
+- add raycast vehicle ([991d642](https://github.com/nartc/angular-three/commit/991d6423d5689fcdb09994cffbf5a165c54cf205))
+- add reflector story ([f059d99](https://github.com/nartc/angular-three/commit/f059d99e914301efbb6e9257c78bfd1e85e87198))
+- adjust all physics examples to use strongly typed version ([45d933d](https://github.com/nartc/angular-three/commit/45d933d81245acf1d4d5ccf2c66d64dd3afee6d1))
 
 ### [5.2.2](https://github.com/nartc/angular-three/compare/5.2.1...5.2.2) (2022-05-09)
 
-
 ### Bug Fixes
 
-* **core:** destroy loader cache on Canvas unmount ([0353fdf](https://github.com/nartc/angular-three/commit/0353fdf9df79c562bf9dd1b043325a18e8eb0b8d))
-* **core:** rework loader so cache works properly; cache bursted on canvas destroyed ([8fbe4c0](https://github.com/nartc/angular-three/commit/8fbe4c09cc44d86df8bbf22cd3b5b0330978fe60))
-* **core:** use lookAt as an Input instead of passing in for camera ([2a0ac46](https://github.com/nartc/angular-three/commit/2a0ac4666b2796dbe316d9b42926be701229d4db))
-* **soba:** remove asyncScheduler from Detailed ([1561878](https://github.com/nartc/angular-three/commit/156187849be42c133f2fdea919ddb661672dfa2d))
-
+- **core:** destroy loader cache on Canvas unmount ([0353fdf](https://github.com/nartc/angular-three/commit/0353fdf9df79c562bf9dd1b043325a18e8eb0b8d))
+- **core:** rework loader so cache works properly; cache bursted on canvas destroyed ([8fbe4c0](https://github.com/nartc/angular-three/commit/8fbe4c09cc44d86df8bbf22cd3b5b0330978fe60))
+- **core:** use lookAt as an Input instead of passing in for camera ([2a0ac46](https://github.com/nartc/angular-three/commit/2a0ac4666b2796dbe316d9b42926be701229d4db))
+- **soba:** remove asyncScheduler from Detailed ([1561878](https://github.com/nartc/angular-three/commit/156187849be42c133f2fdea919ddb661672dfa2d))
 
 ### Documentations
 
-* adjust lod example ([bc704d0](https://github.com/nartc/angular-three/commit/bc704d036cf7ff00c3729e2477ead9eea17f1d5e))
-* update docs and add some docs about performance/best practices ([480f396](https://github.com/nartc/angular-three/commit/480f3965c2f198c2c6c8cd30b3e7a4d3dfd66261))
-* use Scene component ([1c3ab8f](https://github.com/nartc/angular-three/commit/1c3ab8f6a9a1960db4ad395eb40cd1f41d03b399))
+- adjust lod example ([bc704d0](https://github.com/nartc/angular-three/commit/bc704d036cf7ff00c3729e2477ead9eea17f1d5e))
+- update docs and add some docs about performance/best practices ([480f396](https://github.com/nartc/angular-three/commit/480f3965c2f198c2c6c8cd30b3e7a4d3dfd66261))
+- use Scene component ([1c3ab8f](https://github.com/nartc/angular-three/commit/1c3ab8f6a9a1960db4ad395eb40cd1f41d03b399))
 
 ### [5.2.1](https://github.com/nartc/angular-three/compare/5.2.0...5.2.1) (2022-05-08)
 
