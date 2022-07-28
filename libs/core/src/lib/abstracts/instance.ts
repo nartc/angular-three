@@ -393,6 +393,14 @@ export abstract class NgtInstance<
             }
           }
 
+          // return early if instance is material or geometry but parent isn't a Mesh
+          if (
+            (propertyToAttach[0] === 'material' || propertyToAttach[0] === 'geometry') &&
+            !is.mesh(parentInstanceRef.value)
+          ) {
+            return;
+          }
+
           // retrieve the current value on the parentInstance so we can reset it later
           this.__ngt__.previousAttachValue = propertyToAttach.reduce(
             (value: any, property) => value[property],

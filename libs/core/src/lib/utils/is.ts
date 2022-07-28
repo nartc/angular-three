@@ -7,6 +7,7 @@ export const is = {
   obj: (a: unknown): a is object => a === Object(a) && !is.arr(a) && typeof a !== 'function',
   material: (a: unknown): a is THREE.Material => !!a && (a as THREE.Material)['isMaterial'],
   geometry: (a: unknown): a is THREE.BufferGeometry => !!a && (a as THREE.BufferGeometry)['isBufferGeometry'],
+  mesh: (a: unknown): a is THREE.Mesh => !!a && (a as THREE.Mesh).isMesh,
   orthographic: (a: unknown): a is THREE.OrthographicCamera =>
     !!a && (a as THREE.OrthographicCamera).isOrthographicCamera,
   perspective: (a: unknown): a is THREE.PerspectiveCamera => !!a && (a as THREE.PerspectiveCamera).isPerspectiveCamera,
