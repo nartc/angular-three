@@ -35,7 +35,6 @@
       "style": "css"
     }
   },
-  "defaultProject": "core",
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"]
