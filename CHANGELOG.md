@@ -1,3 +1,13 @@
+
+
+### [6.0.1](https://github.com/nartc/angular-three/compare/6.0.0...6.0.1) (2022-07-31)
+
+
+### Bug Fixes
+
+* **core:** add check for material and geometry but parent is not a mesh ([6c3943d](https://github.com/nartc/angular-three/commit/6c3943d4a8897fafef170df5a17892dec65a4791))
+* **core:** adjust three peer deps ([c14400f](https://github.com/nartc/angular-three/commit/c14400f5803361300234794754297af50c84edb9))
+
 ## [6.0.0](https://github.com/nartc/angular-three/compare/6.0.0-beta.0...6.0.0) (2022-07-26)
 
 ### ⚠ BREAKING CHANGES
