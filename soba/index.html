@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><title>Webpack App</title><meta name="viewport" content="width=device-width,initial-scale=1"/><style>html, body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }</style><script>/* globals window */
+  /* eslint-disable no-underscore-dangle */
+  try {
+    if (window.top !== window) {
+      window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.top.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    }
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.warn('unable to connect to top frame for connecting dev tools');
+  }
+
+  window.onerror = function onerror(message, source, line, column, err) {
+    if (window.CONFIG_TYPE !== 'DEVELOPMENT') return;
+    // eslint-disable-next-line no-var, vars-on-top
+    var xhr = new window.XMLHttpRequest();
+    xhr.open('POST', '/runtime-error');
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.send(
+      JSON.stringify({
+        /* eslint-disable object-shorthand */
+        message: message,
+        source: source,
+        line: line,
+        column: column,
+        error: err && { message: err.message, name: err.name, stack: err.stack },
+        origin: 'manager',
+        /* eslint-enable object-shorthand */
+      })
+    );
+  };</script><title>Angular Three Documentation</title><base href="/soba/"/><meta name="description" content="Documentation site (Storybook) of Angular Three Soba"/><meta name="author" content="Chau Tran"/><meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1"/><meta property="og:title" content="Angular Three - Soba"/><meta property="og:description" content="Documentation site (Storybook) of Angular Three Soba"/><meta property="og:url" content="https://angular-three.netlify.app"/><meta property="og:image" content="https://angular-three.netlify.app/img/ngt-logo.png"/><meta name="twitter:title" content="Angular Three Soba Documentation"/><meta name="twitter:description" content="Documentation site (Storybook) of Angular Three Soba"/><meta name="twitter:image" content=" https://angular-three.netlify.app/img/ngt-logo.png"/><meta name="twitter:card" content="summary_large_image"/><link rel="icon" type="image/x-icon" href="/soba/ngt-logo.svg"/><style>#root[hidden],
+      #docs-root[hidden] {
+        display: none !important;
+      }</style></head><body><div id="root"></div><div id="docs-root"></div><script>window['CONFIG_TYPE'] = "PRODUCTION";
+          
+      
+          
+            window['LOGLEVEL'] = "info";
+          
+      
+          
+            window['FEATURES'] = {"postcss":true,"emotionAlias":false,"warnOnLegacyHierarchySeparator":true,"buildStoriesJson":false,"storyStoreV7":false,"modernInlineRender":false,"breakingChangesV7":false,"interactionsDebugger":false,"babelModeV7":false,"argTypeTargetsV7":false,"previewMdx2":false};</script><script src="runtime~main.5a15bde18da7b41dffff.manager.bundle.js"></script><script src="779.ed7f498e774e7c13f8b4.manager.bundle.js"></script><script src="main.9b25dc029cfe6cad9809.manager.bundle.js"></script></body></html>
