@@ -80,10 +80,21 @@ export const routes: Routes = [
     loadComponent: () => import('./object-clump/object-clump.component').then((m) => m.ObjectClumpComponent),
     data: {
       title: 'Object Clump',
-      description: '@angular-three/cannon example with Constraints and Force',
+      description: '@angular-three/cannon example with Force',
       link: '/object-clump',
       asset: 'assets/examples/clump',
       source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/object-clump',
+    },
+  },
+  {
+    path: 'object-constraint',
+      loadComponent: () => import('./object-constraint/object-constraint.component').then((m) => m.ObjectConstraintComponent),
+    data: {
+      title: 'Object Constraint',
+      description: '@angular-three/cannon example with Constraints',
+      link: '/object-constraint',
+      asset: 'assets/examples/clump',
+      source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/object-constraint',
     },
   },
   {

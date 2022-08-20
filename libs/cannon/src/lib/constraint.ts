@@ -13,6 +13,7 @@ import {
 import { combineLatest, filter } from 'rxjs';
 import * as THREE from 'three';
 import { NgtPhysicsStore } from './physics.store';
+import { NgtCannonUtils } from './utils';
 
 type ConstraintApi = {
   disable: () => void;
@@ -43,6 +44,7 @@ export interface NgtPhysicConstraintReturn<
   bodyB: Ref<TObjectB>;
   api: NgtConstraintORHingeApi<T>;
 }
+
 
 @Injectable()
 export class NgtPhysicConstraint extends NgtComponentStore {
@@ -93,6 +95,7 @@ export class NgtPhysicConstraint extends NgtComponentStore {
     return this.useConstraint<'Lock', TObjectA, TObjectB>('Lock', bodyA, bodyB, optns);
   }
 
+
   private useConstraint<
     TConstraintType extends 'Hinge' | ConstraintTypes,
     TObjectA extends THREE.Object3D = THREE.Object3D,
@@ -101,7 +104,9 @@ export class NgtPhysicConstraint extends NgtComponentStore {
     type: TConstraintType,
     bodyA: Ref<TObjectA>,
     bodyB: Ref<TObjectB>,
-    opts: ConstraintOptns | HingeConstraintOpts = {}
+    opts: ConstraintOptns | HingeConstraintOpts = {},
+    indexA: number = 0, 
+    indexB: number = 0, 
   ): NgtPhysicConstraintReturn<TConstraintType, TObjectA, TObjectB> {
     return this.zone.runOutsideAngular(() => {
       const physicsStore = this.physicsStore;
@@ -109,9 +114,20 @@ export class NgtPhysicConstraint extends NgtComponentStore {
 
       this.store.onReady(() => {
         this.effect<[CannonWorkerAPI, TObjectA, TObjectB]>(
-          tapEffect(([worker, a, b]) => {
+            tapEffect(([worker, a, b]) => {
+            let auuid = a.uuid;
+            let buuid = b.uuid;
+
+            if (indexA || indexB) {
+                let uuid = NgtCannonUtils.getUUID(bodyA, indexA);
+                if (uuid) auuid = uuid;
+
+                uuid = NgtCannonUtils.getUUID(bodyB, indexB);
+                if (uuid) buuid = uuid;
+            }
+
             worker.addConstraint({
-              props: [a.uuid, b.uuid, opts],
+              props: [auuid, buuid, opts],
               type,
               uuid,
             });
@@ -172,5 +188,36 @@ export class NgtPhysicConstraint extends NgtComponentStore {
         },
       };
     });
-  }
+    }
+
+    usePointToPointConstraintInst<
+        TObjectA extends THREE.InstancedMesh = THREE.InstancedMesh,
+        >(bodyA: Ref<TObjectA>, indexA: number, indexB: number, optns: PointToPointConstraintOpts) {
+        return this.useConstraint<'PointToPoint', TObjectA, TObjectA>('PointToPoint', bodyA, bodyA, optns, indexA, indexB);
+    }
+
+    useConeTwistConstraintInst<
+        TObjectA extends THREE.InstancedMesh = THREE.InstancedMesh,
+        >(bodyA: Ref<TObjectA>, indexA: number, indexB: number, optns: ConeTwistConstraintOpts) {
+        return this.useConstraint<'ConeTwist', TObjectA, TObjectA>('ConeTwist', bodyA, bodyA, optns, indexA, indexB);
+    }
+
+    useDistanceConstraintInst<
+        TObjectA extends THREE.InstancedMesh = THREE.InstancedMesh,
+        >(bodyA: Ref<TObjectA>, indexA: number, indexB: number, optns: DistanceConstraintOpts) {
+        return this.useConstraint<'Distance', TObjectA, TObjectA>('Distance', bodyA, bodyA, optns, indexA, indexB);
+    }
+
+    useHingeConstraintInst<
+        TObjectA extends THREE.InstancedMesh = THREE.InstancedMesh,
+        >(bodyA: Ref<TObjectA>, indexA: number, indexB: number, optns: HingeConstraintOpts) {
+        return this.useConstraint<'Hinge', TObjectA, TObjectA>('Hinge', bodyA, bodyA, optns, indexA, indexB);
+    }
+
+    useLockConstraintInst<
+        TObjectA extends THREE.InstancedMesh = THREE.InstancedMesh,
+        >(bodyA: Ref<TObjectA>, indexA: number, indexB: number, optns: LockConstraintOpts    ) {
+        return this.useConstraint<'Lock', TObjectA, TObjectA>('Lock', bodyA, bodyA, optns, indexA, indexB);
+    }
+
 }
