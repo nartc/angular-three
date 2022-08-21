@@ -22,9 +22,10 @@ import {
   NgtSobaContactShadows,
 } from '@angular-three/soba/staging';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Injectable } from '@angular/core';
-import { BehaviorSubject, filter, map, pipe, switchMap, tap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { filter, map, pipe, switchMap, tap } from 'rxjs';
 import * as THREE from 'three';
+import { StateService } from './state.service';
 
 const MODES = ['translate', 'rotate', 'scale'];
 
@@ -77,32 +78,6 @@ export class Model extends NgtObjectProps<THREE.Mesh> {
   override ngOnInit(): void {
     super.ngOnInit();
     this.loadModel(this.select((s) => s.name));
-  }
-}
-
-@Injectable()
-export class StateService {
-  private currentName$ = new BehaviorSubject<string>('');
-  private currentMode$ = new BehaviorSubject<number>(0);
-
-  get currentName() {
-    return this.currentName$.asObservable();
-  }
-
-  get currentMode() {
-    return this.currentMode$.asObservable();
-  }
-
-  get currentModeSnapshot() {
-    return this.currentMode$.getValue();
-  }
-
-  updateCurrentName(value: string) {
-    this.currentName$.next(value);
-  }
-
-  updateCurrentMode(value: number) {
-    this.currentMode$.next(value);
   }
 }
 

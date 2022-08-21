@@ -201,7 +201,6 @@ export const routes: Routes = [
       title: 'TransformControls and makeDefault',
       description: 'Combining TransformControls, OrbitControls and Valtio.',
       link: '/transform-and-makedefault',
-      //asset: 'assets/examples/cubes',
       source:
         'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/transform-controls-and-make-default',
     },
