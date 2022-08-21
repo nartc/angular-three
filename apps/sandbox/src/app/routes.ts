@@ -191,4 +191,19 @@ export const routes: Routes = [
       source: 'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/xrcubes',
     },
   },
+  {
+    path: 'transform-and-makedefault',
+    loadComponent: () =>
+      import('./transform-controls-and-make-default/transform-controls-and-make-default.component').then(
+        (m) => m.TransformSandBox
+      ),
+    data: {
+      title: 'TransformControls and makeDefault',
+      description: 'Combining TransformControls, OrbitControls and Valtio.',
+      link: '/transform-and-makedefault',
+      //asset: 'assets/examples/cubes',
+      source:
+        'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/transform-controls-and-make-default',
+    },
+  },
 ];
