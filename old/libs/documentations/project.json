@@ -1,13 +1,12 @@
 {
+  "name": "old-libs-documentations",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "",
   "projectType": "library",
   "targets": {
     "build-external-docs": {
       "executor": "@nrwl/workspace:run-commands",
-      "outputs": [
-        "libs/documentations/build"
-      ],
+      "outputs": ["libs/documentations/build"],
       "options": {
         "commands": [
           "NX_CLOUD=true STORYBOOK_BASE_HREF=soba/ npx nx build-storybook soba",
@@ -24,7 +23,5 @@
       ]
     }
   },
-  "tags": [
-    "documentations"
-  ]
+  "tags": ["documentations"]
 }

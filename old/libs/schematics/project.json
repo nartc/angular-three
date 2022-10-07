@@ -1,24 +1,19 @@
 {
+  "name": "old-libs-schematics",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/schematics/**/*.ts"
-        ]
+        "lintFilePatterns": ["libs/schematics/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/libs/schematics"
-      ],
+      "outputs": ["coverage/libs/schematics"],
       "options": {
         "jestConfig": "libs/schematics/jest.config.ts",
         "passWithNoTests": true
@@ -26,9 +21,7 @@
     },
     "build": {
       "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/schematics",
         "tsConfig": "libs/schematics/tsconfig.lib.json",
@@ -67,7 +60,5 @@
       }
     }
   },
-  "tags": [
-    "scope:schematics"
-  ]
+  "tags": ["scope:schematics"]
 }
