@@ -13,7 +13,7 @@
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
+    "baseUrl": "..",
     "paths": {
       "@angular-three/cannon": ["libs/cannon/src/index.ts"],
       "@angular-three/core": ["libs/core/src/index.ts"],

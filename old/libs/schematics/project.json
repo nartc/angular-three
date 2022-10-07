@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/schematics/src",
+  "sourceRoot": "src",
   "projectType": "library",
   "targets": {
     "lint": {
