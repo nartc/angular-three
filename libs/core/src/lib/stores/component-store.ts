@@ -1,65 +1,67 @@
-import { Directive, OnDestroy } from '@angular/core';
-import type { MonoTypeOperatorFunction } from 'rxjs';
+import type { OnDestroy } from '@angular/core';
+import { Directive } from '@angular/core';
 import {
+  catchError,
   combineLatest,
-  concatMap,
   distinctUntilChanged,
+  EMPTY,
   filter,
   isObservable,
   map,
+  MonoTypeOperatorFunction,
   noop,
   Observable,
+  observeOn,
   of,
   OperatorFunction,
   queueScheduler,
   ReplaySubject,
-  scheduled,
   share,
+  ShareConfig,
   startWith,
   Subject,
   Subscription,
   take,
   takeUntil,
   tap,
+  throwError,
   withLatestFrom,
 } from 'rxjs';
+import { debounceSync } from './debounce-sync';
 
+type SelectConfig = {
+  debounce?: boolean;
+};
 
 export type SelectorResults<TSelectors extends Observable<unknown>[]> = {
-  [Key in keyof TSelectors]: TSelectors[Key] extends Observable<infer TResult> ? TResult : never;
+  [Key in keyof TSelectors]: TSelectors[Key] extends Observable<infer TResult>
+    ? TResult
+    : never;
 };
 
 export type Projector<Selectors extends Observable<unknown>[], TResult> = (
   ...args: SelectorResults<Selectors>
 ) => TResult;
 
-/**
- * Implementation from ngrx/component-store with slight modification
- */
 @Directive()
-export abstract class NgtComponentStore<TState extends object = any> implements OnDestroy {
+export abstract class NgtComponentStore<TState extends object = any>
+  implements OnDestroy
+{
   // Should be used only in ngOnDestroy.
-  private readonly destroySubject$ = new ReplaySubject<void>(1);
+  readonly #destroySubject$ = new ReplaySubject<void>(1);
   // Exposed to any extending Store to be used for the teardown.
-  readonly destroy$ = this.destroySubject$.asObservable();
+  readonly destroy$ = this.#destroySubject$.asObservable();
 
-  private readonly stateSubject$ = new ReplaySubject<TState>(1);
-
-  /** Completes all relevant Observable streams. */
-  ngOnDestroy() {
-    this.stateSubject$.complete();
-    this.destroySubject$.next();
-  }
+  readonly #stateSubject$ = new ReplaySubject<TState>(1);
 
   get(): TState;
   get<TResult>(projector: (s: TState) => TResult): TResult;
   get<TResult>(projector?: (s: TState) => TResult): TResult | TState {
     let value: TResult | TState;
 
-    this.stateSubject$
+    this.#stateSubject$
       .pipe(
         take(1),
-        skipUndefined(),
         map((state) => (projector ? projector(state) : state)),
         skipUndefined()
       )
@@ -83,9 +85,11 @@ export abstract class NgtComponentStore<TState extends object = any> implements 
       | ((state: TState) => Partial<TState> | Observable<Partial<TState>>)
   ): void {
     const patchedState =
-      typeof partialStateOrUpdaterFn === 'function' ? partialStateOrUpdaterFn(this.get()) : partialStateOrUpdaterFn;
+      typeof partialStateOrUpdaterFn === 'function'
+        ? partialStateOrUpdaterFn(this.get())
+        : partialStateOrUpdaterFn;
 
-    this.updateState((state, partialState: Partial<TState>) => ({
+    this.#update((state, partialState: Partial<TState>) => ({
       ...state,
       ...partialState,
     }))(patchedState);
@@ -94,67 +98,86 @@ export abstract class NgtComponentStore<TState extends object = any> implements 
   /**
    * Creates a selector.
    *
-   * @param projector A pure projection function that takes the current state and
-   *   returns some new slice/projection of that state.
    * @return An observable of the projector results.
    */
   select(): Observable<TState>;
-  select<TResult>(projector: (s: TState) => TResult): Observable<TResult>;
-  select<TSelectors extends Observable<unknown>[], TResult>(
-    ...args: [...selectors: TSelectors, projector: Projector<TSelectors, TResult>]
+  select<TResult>(
+    projector: (s: TState) => TResult,
+    config?: SelectConfig
   ): Observable<TResult>;
-  select<TSelectors extends Observable<unknown>[]>(...args: [...selectors: TSelectors]): Observable<{}>;
+  select<TSelectors extends Observable<unknown>[], TResult>(
+    ...args: [
+      ...selectors: TSelectors,
+      projector: Projector<TSelectors, TResult>
+    ]
+  ): Observable<TResult>;
+  select<TSelectors extends Observable<unknown>[]>(
+    ...args: [...selectors: TSelectors]
+  ): Observable<[]>;
+  select<TSelectors extends Observable<unknown>[], TResult>(
+    ...args: [
+      ...selectors: TSelectors,
+      projector: Projector<TSelectors, TResult>,
+      config: SelectConfig
+    ]
+  ): Observable<TResult>;
+  select<TSelectors extends Observable<unknown>[]>(
+    ...args: [...selectors: TSelectors, config: SelectConfig]
+  ): Observable<[]>;
   select<
     TSelectors extends Array<Observable<unknown> | TProjectorFn>,
     TResult,
-    TProjectorFn = (...a: unknown[]) => TResult
-  >(...args: TSelectors): Observable<TResult> | Observable<TState> {
+    TProjectorFn extends (...a: unknown[]) => TResult
+  >(
+    ...args: TSelectors
+  ): Observable<TState> | Observable<TResult> | Observable<[]> {
+    const shareConfig: ShareConfig<TState | TResult> = {
+      connector: () => new ReplaySubject(1),
+      resetOnComplete: true,
+      resetOnRefCountZero: true,
+      resetOnError: true,
+    };
+
     if (args.length === 0) {
-      return this.stateSubject$.pipe(
+      return this.#stateSubject$.pipe(
         skipUndefined(),
         distinctUntilChanged(),
-        share({
-          connector: () => new ReplaySubject(1),
-          resetOnComplete: true,
-          resetOnRefCountZero: true,
-          resetOnError: true,
-        }),
+        share(shareConfig as ShareConfig<TState>),
         takeUntil(this.destroy$)
-      );
+      ) as Observable<TState>;
     }
 
     // if last item is an observable, then the project is missing
     if (isObservable(args[args.length - 1])) {
-      const defaultProjector = (() => ({})) as unknown as TProjectorFn;
-      args.push(defaultProjector);
+      args.push((() => []) as TProjectorFn);
     }
 
-    const { observables, projector } = processSelectorArgs<TSelectors, TResult, TProjectorFn>(args);
+    const { observables, projector, config } = processSelectorArgs<
+      TSelectors,
+      TResult,
+      TProjectorFn
+    >(args);
 
     let observable$: Observable<TResult>;
     // If there are no Observables to combine, then we'll just map the value.
     if (observables.length === 0) {
-      observable$ = this.stateSubject$.pipe(
-        skipUndefined(),
-        map(projector as unknown as (value: TState, index: number) => TResult)
+      observable$ = this.#stateSubject$.pipe(
+        config.debounce ? debounceSync() : (source$) => source$,
+        map((state) => projector(state))
       );
     } else {
       // If there are multiple arguments, then we're aggregating selectors, so we need
       // to take the combineLatest of them before calling the map function.
       observable$ = combineLatest(observables).pipe(
-        map((projectorArgs) => (projector as unknown as (...a: unknown[]) => TResult)(...projectorArgs))
+        config.debounce ? debounceSync() : (source$) => source$,
+        map((projectorArgs) => projector(...projectorArgs))
       );
     }
 
     return observable$.pipe(
       skipUndefined(),
       distinctUntilChanged(),
-      share({
-        connector: () => new ReplaySubject(1),
-        resetOnComplete: true,
-        resetOnRefCountZero: true,
-        resetOnError: true,
-      }),
+      share(shareConfig as ShareConfig<TResult>),
       takeUntil(this.destroy$)
     );
   }
@@ -170,32 +193,42 @@ export abstract class NgtComponentStore<TState extends object = any> implements 
    */
   effect<
     // This type quickly became part of effect 'API'
-    TProvidedType = void,
+    ProvidedType = void,
     // The actual origin$ type, which could be unknown, when not specified
-    TOriginType extends Observable<TProvidedType> | unknown = Observable<TProvidedType>,
+    OriginType extends
+      | Observable<ProvidedType>
+      | unknown = Observable<ProvidedType>,
     // Unwrapped actual type of the origin$ Observable, after default was applied
-    TObservableType = TOriginType extends Observable<infer A> ? A : never,
-    // Return either an empty callback or a function requiring specific types as inputs
-    TReturnType = TProvidedType | TObservableType extends void
-      ? () => void
-      : (observableOrValue: TObservableType | Observable<TObservableType>) => Subscription
-  >(generator: (origin$: TOriginType) => Observable<unknown>): TReturnType {
-    const origin$ = new Subject<TObservableType>();
-    generator(origin$ as TOriginType)
+    ObservableType = OriginType extends Observable<infer A> ? A : never,
+    // Return either an optional callback or a function requiring specific types as inputs
+    ReturnType = ProvidedType | ObservableType extends void
+      ? (
+          observableOrValue?: ObservableType | Observable<ObservableType>
+        ) => Subscription
+      : (
+          observableOrValue: ObservableType | Observable<ObservableType>
+        ) => Subscription
+  >(generator: (origin$: OriginType) => Observable<unknown>): ReturnType {
+    const origin$ = new Subject<ObservableType>();
+    generator(origin$ as OriginType)
       // tied to the lifecycle 👇 of ComponentStore
       .pipe(takeUntil(this.destroy$))
       .subscribe();
 
-    return ((observableOrValue?: TObservableType | Observable<TObservableType>): Subscription => {
-      const observable$ = isObservable(observableOrValue) ? observableOrValue : of(observableOrValue);
+    return ((
+      observableOrValue?: ObservableType | Observable<ObservableType>
+    ): Subscription => {
+      const observable$ = isObservable(observableOrValue)
+        ? observableOrValue
+        : of(observableOrValue);
       return observable$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
         // any new 👇 value is pushed into a stream
-        origin$.next(value as TObservableType);
+        origin$.next(value as ObservableType);
       });
-    }) as unknown as TReturnType;
+    }) as unknown as ReturnType;
   }
 
-  private updateState<
+  #update<
     // Allow to force-provide the type
     TProvidedType = void,
     // This type is derived from the `value` property, defaulting to void if it's missing
@@ -207,25 +240,50 @@ export abstract class NgtComponentStore<TState extends object = any> implements 
       ? () => void
       : (observableOrValue: TValueType | Observable<TValueType>) => Subscription
   >(updaterFn: (state: TState, value: TOriginType) => TState): TReturnType {
-    return ((observableOrValue?: TOriginType | Observable<TOriginType>): Subscription => {
-      const observable$ = isObservable(observableOrValue) ? observableOrValue : of(observableOrValue);
-
-      return observable$
+    return ((
+      observableOrValue?: TOriginType | Observable<TOriginType>
+    ): Subscription => {
+      // We need to explicitly throw an error if a synchronous error occurs.
+      // This is necessary to make synchronous errors catchable.
+      let isSyncUpdate = true;
+      let syncError: unknown;
+      // We can receive either the value or an observable. In case it's a
+      // simple value, we'll wrap it with `of` operator to turn it into
+      // Observable.
+      const observable$ = isObservable(observableOrValue)
+        ? observableOrValue
+        : of(observableOrValue);
+      const subscription = observable$
         .pipe(
-          concatMap((value) =>
-            scheduled([value], queueScheduler).pipe(withLatestFrom(this.stateSubject$.pipe(startWith({}))))
-          ),
+          // Push the value into queueScheduler
+          observeOn(queueScheduler),
+          withLatestFrom(this.#stateSubject$.pipe(startWith({} as TState))),
+          map(([value, currentState]) => updaterFn(currentState || {}, value!)),
+          tap((newState) => this.#stateSubject$.next(newState)),
+          catchError((error: unknown) => {
+            if (isSyncUpdate) {
+              syncError = error;
+              return EMPTY;
+            }
+
+            return throwError(() => error);
+          }),
           takeUntil(this.destroy$)
         )
-        .subscribe({
-          next: ([value, currentState]) => {
-            this.stateSubject$.next(updaterFn((currentState || {}) as TState, value!));
-          },
-          error: (error: Error) => {
-            this.stateSubject$.error(error);
-          },
-        });
-    }) as unknown as TReturnType;
+        .subscribe();
+
+      if (syncError) {
+        throw syncError;
+      }
+      isSyncUpdate = false;
+
+      return subscription;
+    }) as TReturnType;
+  }
+
+  ngOnDestroy() {
+    this.#destroySubject$.next();
+    this.#destroySubject$.complete();
   }
 }
 
@@ -255,9 +313,20 @@ export abstract class NgtComponentStore<TState extends object = any> implements 
 export function tapEffect<TValue>(
   effectFn: (
     value: TValue
-  ) => ((cleanUpParams: { prev: TValue | undefined; complete: boolean; error: boolean }) => void) | void | undefined
+  ) =>
+    | ((cleanUpParams: {
+        prev: TValue | undefined;
+        complete: boolean;
+        error: boolean;
+      }) => void)
+    | void
+    | undefined
 ): MonoTypeOperatorFunction<TValue> {
-  let cleanupFn: (cleanUpParams: { prev: TValue | undefined; complete: boolean; error: boolean }) => void = noop;
+  let cleanupFn: (cleanUpParams: {
+    prev: TValue | undefined;
+    complete: boolean;
+    error: boolean;
+  }) => void = noop;
   let firstRun = false;
   let prev: TValue | undefined = undefined;
 
@@ -301,23 +370,36 @@ export function startWithUndefined<TValue>(): OperatorFunction<TValue, TValue> {
 }
 
 function processSelectorArgs<
-  TSelectors extends Array<Observable<unknown> | TProjectorFn>,
-  TResult,
-  TProjectorFn = (...a: unknown[]) => TResult
+  Selectors extends Array<Observable<unknown> | SelectConfig | ProjectorFn>,
+  Result,
+  ProjectorFn extends (...a: unknown[]) => Result
 >(
-  args: TSelectors
+  args: Selectors
 ): {
   observables: Observable<unknown>[];
-  projector: TProjectorFn;
+  projector: ProjectorFn;
+  config: Required<SelectConfig>;
 } {
   const selectorArgs = Array.from(args);
+  // Assign default values.
+  let config: Required<SelectConfig> = { debounce: false };
+  let projector: ProjectorFn;
   // Last argument is either projector or config
-  const projector = selectorArgs.pop() as TProjectorFn;
+  const projectorOrConfig = selectorArgs.pop() as ProjectorFn | SelectConfig;
 
+  if (typeof projectorOrConfig !== 'function') {
+    // We got the config as the last argument, replace any default values with it.
+    config = { ...config, ...projectorOrConfig };
+    // Pop the next args, which would be the projector fn.
+    projector = selectorArgs.pop() as ProjectorFn;
+  } else {
+    projector = projectorOrConfig;
+  }
   // The Observables to combine, if there are any.
   const observables = selectorArgs as Observable<unknown>[];
   return {
     observables,
     projector,
+    config,
   };
 }

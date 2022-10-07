@@ -17,6 +17,7 @@
     "@angular/cli": "~15.0.0-next.4",
     "@angular/compiler-cli": "~15.0.0-next.5",
     "@angular/language-service": "~15.0.0-next.5",
+    "@hirez_io/observer-spy": "2.2.0",
     "@nrwl/angular": "15.0.0-beta.1",
     "@nrwl/cli": "15.0.0-beta.1",
     "@nrwl/eslint-plugin-nx": "15.0.0-beta.1",
