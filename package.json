@@ -25,6 +25,7 @@
     "@nrwl/workspace": "15.0.0-beta.1",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",
+    "@types/three": "0.144.0",
     "@typescript-eslint/eslint-plugin": "~5.39.0",
     "@typescript-eslint/parser": "~5.39.0",
     "eslint": "~8.15.0",
@@ -53,6 +54,7 @@
     "@angular/platform-browser-dynamic": "~15.0.0-next.5",
     "@angular/router": "~15.0.0-next.5",
     "rxjs": "~7.5.0",
+    "three": "0.145.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   }
