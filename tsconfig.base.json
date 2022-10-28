@@ -13,7 +13,7 @@
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": "./new",
+    "baseUrl": "./",
     "paths": {
       "@angular-three/core": ["libs/core/src/index.ts"]
     }

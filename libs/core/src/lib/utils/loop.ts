@@ -87,8 +87,9 @@ function render(
   }
 
   // Render content
-  if (!state.internal.priority && state.gl.render)
+  if (!state.internal.priority && state.gl.render) {
     state.gl.render(state.scene, state.camera);
+  }
   // Decrease frame count
   state.internal.frames = Math.max(0, state.internal.frames - 1);
   return state.frameloop === 'always' ? 1 : state.internal.frames;

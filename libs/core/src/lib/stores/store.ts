@@ -522,6 +522,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
   }
 
   startLoop() {
+    // start render
+    this.set((s) => ({ internal: { ...s.internal, active: true } }));
     this.effect<NgtState>(
       tap(({ invalidate }) => {
         invalidate();

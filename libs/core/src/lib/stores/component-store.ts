@@ -73,7 +73,7 @@ export abstract class NgtComponentStore<
         value = result;
       });
 
-    return value!;
+    return (value! || {}) as TResult | TInternalState;
   }
 
   /**
