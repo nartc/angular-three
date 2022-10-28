@@ -394,7 +394,7 @@ function processSelectorArgs<
 } {
   const selectorArgs = Array.from(args);
   // Assign default values.
-  let config: Required<SelectConfig> = { debounce: false };
+  let config: Required<SelectConfig> = { debounce: true };
   let projector: ProjectorFn;
   // Last argument is either projector or config
   const projectorOrConfig = selectorArgs.pop() as ProjectorFn | SelectConfig;

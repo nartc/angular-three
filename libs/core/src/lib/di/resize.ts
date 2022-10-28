@@ -1,3 +1,4 @@
+import type { UnknownRecord } from '../types';
 import { createInjection } from '../utils/inject';
 import { injectWindow } from './window';
 
@@ -28,7 +29,7 @@ export const [injectResizeObserverSupport] = createInjection<boolean>(
       const window = injectWindow();
       return (
         'ResizeObserver' in window &&
-        (window as unknown as Record<string, unknown>)['ResizeObserver'] != null
+        (window as unknown as UnknownRecord)['ResizeObserver'] != null
       );
     },
   }
