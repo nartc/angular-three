@@ -17,7 +17,7 @@ export function make<TType extends AnyConstructor>(
   }
 
   if (!is.arr(input)) {
-    input = typeof input === 'number' ? [input, input, input] : [input];
+    input = typeof input === 'number' ? [input, input, input, input] : [input];
   }
 
   return new type(...(input as any[]));

@@ -82,11 +82,10 @@ export type NgtVector4 =
 export type NgtLayers = THREE.Layers | Parameters<THREE.Layers['set']>[0];
 export type NgtQuaternion = THREE.Quaternion | Parameters<THREE.Quaternion['set']> | NgtQuadruple;
 
-export type NgtColor = ConstructorParameters<typeof THREE.Color> | THREE.ColorRepresentation;
-
 export type NgtFog = THREE.Fog | ConstructorParameters<typeof THREE.Fog>;
 export type NgtFogExp2 = THREE.FogExp2 | ConstructorParameters<typeof THREE.FogExp2>;
 
+export type NgtColor = ConstructorParameters<typeof THREE.Color> | THREE.ColorRepresentation;
 export type NgtExtendedColors<T> = {
   [K in keyof T]: T[K] extends THREE.Color | undefined ? NgtColor : T[K];
 };
@@ -182,7 +181,6 @@ export interface NgtNodeProps<P> {
 }
 
 export type NgtNode<T, P> = NgtExtendedColors<Overwrite<Partial<T>, NgtNodeProps<P>>>;
-
 export type NgtObject3dNode<T, P> = Overwrite<
   NgtNode<T, P>,
   {

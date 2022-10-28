@@ -44,20 +44,24 @@ export type Projector<Selectors extends Observable<unknown>[], TResult> = (
 ) => TResult;
 
 @Directive()
-export abstract class NgtComponentStore<TState extends object = any>
-  implements OnDestroy
+export abstract class NgtComponentStore<
+  TState extends object = any,
+  TInternalState = TState & { [key: string]: any }
+> implements OnDestroy
 {
   // Should be used only in ngOnDestroy.
   readonly #destroySubject$ = new ReplaySubject<void>(1);
   // Exposed to any extending Store to be used for the teardown.
   readonly destroy$ = this.#destroySubject$.asObservable();
 
-  readonly #stateSubject$ = new ReplaySubject<TState>(1);
+  readonly #stateSubject$ = new ReplaySubject<TInternalState>(1);
 
-  get(): TState;
-  get<TResult>(projector: (s: TState) => TResult): TResult;
-  get<TResult>(projector?: (s: TState) => TResult): TResult | TState {
-    let value: TResult | TState;
+  get(): TInternalState;
+  get<TResult>(projector: (s: TInternalState) => TResult): TResult;
+  get<TResult>(
+    projector?: (s: TInternalState) => TResult
+  ): TResult | TInternalState {
+    let value: TResult | TInternalState;
 
     this.#stateSubject$
       .pipe(
@@ -80,16 +84,18 @@ export abstract class NgtComponentStore<TState extends object = any>
    */
   set(
     partialStateOrUpdaterFn:
-      | Partial<TState>
-      | Observable<Partial<TState>>
-      | ((state: TState) => Partial<TState> | Observable<Partial<TState>>)
+      | Partial<TInternalState>
+      | Observable<Partial<TInternalState>>
+      | ((
+          state: TInternalState
+        ) => Partial<TInternalState> | Observable<Partial<TInternalState>>)
   ): void {
     const patchedState =
       typeof partialStateOrUpdaterFn === 'function'
         ? partialStateOrUpdaterFn(this.get())
         : partialStateOrUpdaterFn;
 
-    this.#update((state, partialState: Partial<TState>) => ({
+    this.#update((state, partialState: Partial<TInternalState>) => ({
       ...state,
       ...partialState,
     }))(patchedState);
@@ -100,9 +106,9 @@ export abstract class NgtComponentStore<TState extends object = any>
    *
    * @return An observable of the projector results.
    */
-  select(): Observable<TState>;
+  select(): Observable<TInternalState>;
   select<TResult>(
-    projector: (s: TState) => TResult,
+    projector: (s: TInternalState) => TResult,
     config?: SelectConfig
   ): Observable<TResult>;
   select<TSelectors extends Observable<unknown>[], TResult>(
@@ -130,8 +136,8 @@ export abstract class NgtComponentStore<TState extends object = any>
     TProjectorFn extends (...a: unknown[]) => TResult
   >(
     ...args: TSelectors
-  ): Observable<TState> | Observable<TResult> | Observable<[]> {
-    const shareConfig: ShareConfig<TState | TResult> = {
+  ): Observable<TInternalState> | Observable<TResult> | Observable<[]> {
+    const shareConfig: ShareConfig<TInternalState | TResult> = {
       connector: () => new ReplaySubject(1),
       resetOnComplete: true,
       resetOnRefCountZero: true,
@@ -142,9 +148,9 @@ export abstract class NgtComponentStore<TState extends object = any>
       return this.#stateSubject$.pipe(
         skipUndefined(),
         distinctUntilChanged(),
-        share(shareConfig as ShareConfig<TState>),
+        share(shareConfig as ShareConfig<TInternalState>),
         takeUntil(this.destroy$)
-      ) as Observable<TState>;
+      ) as Observable<TInternalState>;
     }
 
     // if last item is an observable, then the project is missing
@@ -239,7 +245,9 @@ export abstract class NgtComponentStore<TState extends object = any>
     TReturnType = TOriginType extends void
       ? () => void
       : (observableOrValue: TValueType | Observable<TValueType>) => Subscription
-  >(updaterFn: (state: TState, value: TOriginType) => TState): TReturnType {
+  >(
+    updaterFn: (state: TInternalState, value: TOriginType) => TInternalState
+  ): TReturnType {
     return ((
       observableOrValue?: TOriginType | Observable<TOriginType>
     ): Subscription => {
@@ -257,8 +265,12 @@ export abstract class NgtComponentStore<TState extends object = any>
         .pipe(
           // Push the value into queueScheduler
           observeOn(queueScheduler),
-          withLatestFrom(this.#stateSubject$.pipe(startWith({} as TState))),
-          map(([value, currentState]) => updaterFn(currentState || {}, value!)),
+          withLatestFrom(
+            this.#stateSubject$.pipe(startWith({} as TInternalState))
+          ),
+          map(([value, currentState]) =>
+            updaterFn(currentState || ({} as TInternalState), value!)
+          ),
           tap((newState) => this.#stateSubject$.next(newState)),
           catchError((error: unknown) => {
             if (isSyncUpdate) {
