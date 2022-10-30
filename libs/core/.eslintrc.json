@@ -9,12 +9,15 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "@nrwl/nx/enforce-module-boundaries": 0,
         "@angular-eslint/component-selector": 0,
         "@angular-eslint/component-class-suffix": 0,
         "@angular-eslint/no-host-metadata-property": 0,
         "@angular-eslint/directive-selector": 0,
+        "@angular-eslint/no-output-native": 0,
         "@typescript-eslint/no-non-null-assertion": 0,
-        "@typescript-eslint/ban-types": 0
+        "@typescript-eslint/ban-types": 0,
+        "@typescript-eslint/no-empty-function": 0
       }
     },
     {

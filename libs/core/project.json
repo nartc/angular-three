@@ -32,7 +32,16 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/core/**/*.ts", "libs/core/**/*.html"]
+        "lintFilePatterns": [
+          "libs/core/**/*.ts",
+          "libs/core/**/*.html",
+          "libs/core/meshes/**/*.ts",
+          "libs/core/meshes/**/*.html",
+          "libs/core/geometries/**/*.ts",
+          "libs/core/geometries/**/*.html",
+          "libs/core/materials/**/*.ts",
+          "libs/core/materials/**/*.html"
+        ]
       }
     }
   },

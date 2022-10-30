@@ -314,6 +314,13 @@ export interface NgtRenderState extends NgtState {
   frame?: XRFrame;
 }
 
+export interface NgtBeforeRender<
+  TObject extends THREE.Object3D = THREE.Object3D
+> {
+  state: NgtRenderState;
+  object: TObject;
+}
+
 export type NgtBeforeRenderCallback<TObject> = (
   state: NgtRenderState,
   obj: TObject
@@ -324,6 +331,11 @@ export interface NgtBeforeRenderRecord {
   callback: NgtBeforeRenderCallback<THREE.Object3D | undefined>;
   priority?: number;
 }
+
+export type NgtAttachFunction = (
+  parent: NgtRef,
+  child: NgtRef
+) => void | (() => void);
 
 export interface NgtInstanceLocalState {
   /** the state getter of the canvas that the instance is being rendered to */

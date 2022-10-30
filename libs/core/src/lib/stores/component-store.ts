@@ -27,6 +27,7 @@ import {
   throwError,
   withLatestFrom,
 } from 'rxjs';
+import { UnknownRecord } from '../types';
 import { debounceSync } from './debounce-sync';
 
 type SelectConfig = {
@@ -73,7 +74,7 @@ export abstract class NgtComponentStore<
         value = result;
       });
 
-    return (value! || {}) as TResult | TInternalState;
+    return value! as TResult | TInternalState;
   }
 
   /**
@@ -88,8 +89,16 @@ export abstract class NgtComponentStore<
       | Observable<Partial<TInternalState>>
       | ((
           state: TInternalState
-        ) => Partial<TInternalState> | Observable<Partial<TInternalState>>)
+        ) =>
+          | Partial<TInternalState>
+          | Partial<UnknownRecord>
+          | Observable<Partial<TInternalState>>)
+      | Partial<UnknownRecord>
   ): void {
+    if (this.get() == undefined) {
+      this.#stateSubject$.next({} as TInternalState);
+    }
+
     const patchedState =
       typeof partialStateOrUpdaterFn === 'function'
         ? partialStateOrUpdaterFn(this.get())
@@ -98,7 +107,7 @@ export abstract class NgtComponentStore<
     this.#update((state, partialState: Partial<TInternalState>) => ({
       ...state,
       ...partialState,
-    }))(patchedState);
+    }))(patchedState as Partial<TInternalState>);
   }
 
   /**
@@ -394,7 +403,7 @@ function processSelectorArgs<
 } {
   const selectorArgs = Array.from(args);
   // Assign default values.
-  let config: Required<SelectConfig> = { debounce: true };
+  let config: Required<SelectConfig> = { debounce: false };
   let projector: ProjectorFn;
   // Last argument is either projector or config
   const projectorOrConfig = selectorArgs.pop() as ProjectorFn | SelectConfig;

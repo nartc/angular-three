@@ -1,4 +1,19 @@
 import { inject, InjectionToken, InjectOptions, Provider } from '@angular/core';
+import { NgtRef } from '../ref';
+import type { AnyCtor, AnyFunction } from '../types';
+import { is } from './is';
+
+export function createNgtProvider(base: AnyCtor, ...providers: AnyFunction[]) {
+  return (sub: AnyCtor) => {
+    return [
+      ...(providers || []).map((providerFn) => providerFn(sub)),
+      {
+        provide: base,
+        useExisting: sub,
+      },
+    ];
+  };
+}
 
 export function createInjection<
   TTokenValue,
@@ -38,4 +53,56 @@ export function createInjection<
   }
 
   return [injectFn, provideFn, injectionToken];
+}
+
+export function createRefInjection<
+  TInstanceType extends object = any,
+  TCtor extends AnyCtor<TInstanceType> = AnyCtor<TInstanceType>
+>(
+  description: string,
+  hostOrProviderFactory?: AnyFunction<Provider> | true,
+  ...providersFactory: AnyFunction<Provider>[]
+): [
+  injectFn: (options?: InjectOptions) => AnyFunction<NgtRef<TInstanceType>>,
+  providedFn: <TProvideCtor extends TCtor = TCtor>(
+    sub: TProvideCtor,
+    factory?: (instance: InstanceType<TProvideCtor>) => NgtRef
+  ) => Provider,
+  token: InjectionToken<AnyFunction<NgtRef<TInstanceType>>>
+] {
+  if (is.fun(hostOrProviderFactory)) {
+    providersFactory = [hostOrProviderFactory, ...providersFactory];
+  }
+
+  const injectionToken = new InjectionToken(description);
+
+  function injectFn(options: InjectOptions = {}) {
+    return inject(injectionToken, options) as AnyFunction<NgtRef>;
+  }
+
+  function providedFn<TProvideCtor extends TCtor = TCtor>(
+    sub: TProvideCtor,
+    factory?: (instance: InstanceType<TProvideCtor>) => NgtRef
+  ) {
+    return [
+      ...(providersFactory || []).map((providerFn) => providerFn(sub, factory)),
+      {
+        provide: injectionToken,
+        useFactory: (instance: InstanceType<TProvideCtor>) => {
+          if (factory) {
+            return () => factory(instance);
+          }
+
+          if (is.boo(hostOrProviderFactory)) {
+            return (instance as any)['parentRef'];
+          }
+
+          return () => (instance as any)['instance'];
+        },
+        deps: [sub],
+      },
+    ];
+  }
+
+  return [injectFn, providedFn, injectionToken];
 }

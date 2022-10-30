@@ -12,6 +12,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
+import {
+  provideCameraRef,
+  provideObjectRef,
+  provideSceneRef,
+} from './di/object';
 import { createPointerEvents } from './events';
 import { NgtResize } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
@@ -43,7 +48,13 @@ const { invalidate, advance } = createLoop(rootStateMap);
   host: {
     '[class.ngt-canvas]': 'true',
   },
-  providers: [NgtStore, NgtResize],
+  providers: [
+    NgtStore,
+    NgtResize,
+    provideObjectRef(NgtCanvas, (canvas) => canvas.sceneRef),
+    provideSceneRef(NgtCanvas, (canvas) => canvas.sceneRef),
+    provideCameraRef(NgtCanvas, (canvas) => canvas.cameraRef),
+  ],
   styles: [
     `
       :host {
@@ -137,6 +148,14 @@ export class NgtCanvas
 
   readonly #store = inject(NgtStore);
   readonly #zone = inject(NgZone);
+
+  get cameraRef() {
+    return this.#store.get((s) => s.cameraRef);
+  }
+
+  get sceneRef() {
+    return this.#store.get((s) => s.sceneRef);
+  }
 
   ngOnInit() {
     this.#zone.runOutsideAngular(() => {
