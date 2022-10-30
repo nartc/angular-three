@@ -20,10 +20,16 @@
     "@hirez_io/observer-spy": "2.2.0",
     "@nrwl/angular": "15.0.4",
     "@nrwl/cli": "15.0.4",
+    "@nrwl/devkit": "15.0.4",
     "@nrwl/eslint-plugin-nx": "15.0.4",
     "@nrwl/jest": "15.0.4",
+    "@nrwl/js": "15.0.4",
     "@nrwl/linter": "15.0.4",
+    "@nrwl/nx-plugin": "15.0.4",
     "@nrwl/workspace": "15.0.4",
+    "@swc-node/register": "^1.4.2",
+    "@swc/cli": "~0.1.55",
+    "@swc/core": "^1.2.173",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",
     "@types/three": "0.144.0",
@@ -34,6 +40,7 @@
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
     "jest-preset-angular": "~12.2.2",
+    "jsonc-eslint-parser": "^2.1.0",
     "ng-packagr": "~15.0.0-next.3",
     "nx": "15.0.4",
     "postcss": "^8.4.18",
@@ -54,10 +61,10 @@
     "@angular/platform-browser": "~15.0.0-rc.1",
     "@angular/platform-browser-dynamic": "~15.0.0-rc.1",
     "@angular/router": "~15.0.0-rc.1",
+    "@swc/helpers": "~0.4.11",
     "rxjs": "~7.5.7",
     "three": "0.146.0",
     "tslib": "^2.4.0",
     "zone.js": "~0.11.8"
   }
 }
-
