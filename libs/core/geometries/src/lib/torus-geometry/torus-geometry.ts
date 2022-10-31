@@ -1,4 +1,4 @@
-// GENERATED
+// GENERATED - AngularThree v7.0.0
 import {
     AnyConstructor,
     NgtCommonGeometry,
