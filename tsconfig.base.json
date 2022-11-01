@@ -18,6 +18,7 @@
       "@angular-three/core": ["libs/core/src/index.ts"],
       "@angular-three/core/attributes": ["libs/core/attributes/src/index.ts"],
       "@angular-three/core/audios": ["libs/core/audios/src/index.ts"],
+      "@angular-three/core/cameras": ["libs/core/cameras/src/index.ts"],
       "@angular-three/core/geometries": ["libs/core/geometries/src/index.ts"],
       "@angular-three/core/materials": ["libs/core/materials/src/index.ts"],
       "@angular-three/core/meshes": ["libs/core/meshes/src/index.ts"],

@@ -44,7 +44,9 @@
           "libs/core/attributes/**/*.ts",
           "libs/core/attributes/**/*.html",
           "libs/core/audios/**/*.ts",
-          "libs/core/audios/**/*.html"
+          "libs/core/audios/**/*.html",
+          "libs/core/cameras/**/*.ts",
+          "libs/core/cameras/**/*.html"
         ]
       }
     }
