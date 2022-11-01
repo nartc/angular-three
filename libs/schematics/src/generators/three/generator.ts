@@ -2,6 +2,7 @@ import { logger, readJson, Tree } from '@nrwl/devkit';
 import attributesGenerator from './attributes/attributes';
 import audiosGenerator from './audios/audios';
 import camerasGenerator from './cameras/cameras';
+import curvesGenerator from './curves/curves';
 import geometriesGenerator from './geometries/geometries';
 import materialsGenerator from './materials/materials';
 
@@ -28,5 +29,6 @@ export default async function (tree: Tree) {
     attributesGenerator(tree),
     audiosGenerator(tree),
     camerasGenerator(tree),
+    curvesGenerator(tree),
   ]);
 }

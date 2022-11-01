@@ -10,6 +10,7 @@ export * from './lib/three/geometry';
 export * from './lib/three/attribute';
 export * from './lib/three/audio';
 export * from './lib/three/camera';
+export * from './lib/three/curve';
 
 export * from './lib/di/instance';
 export * from './lib/di/object';
@@ -19,6 +20,7 @@ export * from './lib/di/geometry';
 export * from './lib/di/attribute';
 export * from './lib/di/audio';
 export * from './lib/di/camera';
+export * from './lib/di/curve';
 
 export * from './lib/utils/coercion';
 export * from './lib/utils/make';

@@ -46,7 +46,9 @@
           "libs/core/audios/**/*.ts",
           "libs/core/audios/**/*.html",
           "libs/core/cameras/**/*.ts",
-          "libs/core/cameras/**/*.html"
+          "libs/core/cameras/**/*.html",
+          "libs/core/curves/**/*.ts",
+          "libs/core/curves/**/*.html"
         ]
       }
     }
