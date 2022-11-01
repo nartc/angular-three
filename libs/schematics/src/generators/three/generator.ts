@@ -1,4 +1,5 @@
 import { logger, readJson, Tree } from '@nrwl/devkit';
+import attributesGenerator from './attributes/attributes';
 import geometriesGenerator from './geometries/geometries';
 import materialsGenerator from './materials/materials';
 
@@ -19,5 +20,9 @@ export default async function (tree: Tree) {
     return;
   }
 
-  await Promise.all([geometriesGenerator(tree), materialsGenerator(tree)]);
+  await Promise.all([
+    geometriesGenerator(tree),
+    materialsGenerator(tree),
+    attributesGenerator(tree),
+  ]);
 }

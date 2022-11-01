@@ -45,7 +45,7 @@ export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
 
 @Directive()
 export abstract class NgtInstance<
-    TInstance extends object,
+    TInstance extends object = any,
     TInstanceState extends NgtInstanceState<TInstance> = NgtInstanceState<TInstance>
   >
   extends NgtComponentStore<TInstanceState>
@@ -149,7 +149,7 @@ export abstract class NgtInstance<
     ) => NgtInstanceNode<TInstance>
   ): (() => void) | void | undefined;
 
-  protected abstract instanceInitFn(): TInstance;
+  protected instanceInitFn!: () => TInstance;
 
   protected initTrigger$: Observable<{}> = this.instanceArgs$;
 

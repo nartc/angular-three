@@ -270,9 +270,7 @@ export abstract class NgtCommonMaterial<
     };
   }
 
-  protected override instanceInitFn(): TMaterial {
-    return new this.materialType();
-  }
+  protected override instanceInitFn = (): TMaterial => new this.materialType();
 
   protected override get optionsFields(): Record<string, boolean> {
     return {

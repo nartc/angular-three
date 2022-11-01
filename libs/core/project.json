@@ -40,7 +40,9 @@
           "libs/core/geometries/**/*.ts",
           "libs/core/geometries/**/*.html",
           "libs/core/materials/**/*.ts",
-          "libs/core/materials/**/*.html"
+          "libs/core/materials/**/*.html",
+          "libs/core/attributes/**/*.ts",
+          "libs/core/attributes/**/*.html"
         ]
       }
     }

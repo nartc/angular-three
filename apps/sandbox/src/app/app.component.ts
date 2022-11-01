@@ -1,4 +1,5 @@
 import { NgtBeforeRender, NgtCanvas } from '@angular-three/core';
+import { NgtColorAttribute } from '@angular-three/core/attributes';
 import { NgtBoxGeometry } from '@angular-three/core/geometries';
 import { NgtMeshBasicMaterial } from '@angular-three/core/materials';
 import { NgtMesh } from '@angular-three/core/meshes';
@@ -10,14 +11,21 @@ import { Mesh } from 'three';
   standalone: true,
   template: `
     <ngt-canvas>
+      <ngt-color attach="background" color="lightblue"></ngt-color>
+
       <ngt-mesh (beforeRender)="onBeforeRender($event)">
         <ngt-box-geometry></ngt-box-geometry>
         <ngt-mesh-basic-material></ngt-mesh-basic-material>
       </ngt-mesh>
     </ngt-canvas>
   `,
-  styles: [],
-  imports: [NgtCanvas, NgtMesh, NgtBoxGeometry, NgtMeshBasicMaterial],
+  imports: [
+    NgtCanvas,
+    NgtMesh,
+    NgtBoxGeometry,
+    NgtMeshBasicMaterial,
+    NgtColorAttribute,
+  ],
 })
 export class AppComponent {
   title = 'sandbox';

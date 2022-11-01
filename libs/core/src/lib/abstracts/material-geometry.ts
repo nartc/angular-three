@@ -56,7 +56,7 @@ export abstract class NgtMaterialGeometry<
 
   protected argsKeys: string[] = [];
 
-  protected override instanceInitFn(): TMaterialGeometryObject {
+  protected override instanceInitFn = (): TMaterialGeometryObject => {
     const state = this.get();
 
     // this is the additional arguments to pass into the object constructor
@@ -87,7 +87,7 @@ export abstract class NgtMaterialGeometry<
     }
 
     return object;
-  }
+  };
 
   protected override get optionsFields(): Record<string, boolean> {
     return {

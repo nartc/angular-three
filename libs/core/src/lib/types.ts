@@ -66,6 +66,10 @@ export type NgtQuaternion =
   | THREE.Quaternion
   | Parameters<THREE.Quaternion['set']>
   | NgtQuadruple;
+export type NgtFog = THREE.Fog | ConstructorParameters<typeof THREE.Fog>;
+export type NgtFogExp2 =
+  | THREE.FogExp2
+  | ConstructorParameters<typeof THREE.FogExp2>;
 export type NgtColor =
   | ConstructorParameters<typeof THREE.Color>
   | THREE.ColorRepresentation;
