@@ -42,7 +42,9 @@
           "libs/core/materials/**/*.ts",
           "libs/core/materials/**/*.html",
           "libs/core/attributes/**/*.ts",
-          "libs/core/attributes/**/*.html"
+          "libs/core/attributes/**/*.html",
+          "libs/core/audios/**/*.ts",
+          "libs/core/audios/**/*.html"
         ]
       }
     }
