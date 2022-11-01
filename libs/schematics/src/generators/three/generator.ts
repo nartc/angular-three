@@ -4,6 +4,7 @@ import audiosGenerator from './audios/audios';
 import camerasGenerator from './cameras/cameras';
 import curvesGenerator from './curves/curves';
 import geometriesGenerator from './geometries/geometries';
+import helpersGenerator from './helpers/helpers';
 import materialsGenerator from './materials/materials';
 
 export default async function (tree: Tree) {
@@ -30,5 +31,6 @@ export default async function (tree: Tree) {
     audiosGenerator(tree),
     camerasGenerator(tree),
     curvesGenerator(tree),
+    helpersGenerator(tree),
   ]);
 }

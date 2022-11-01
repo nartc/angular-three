@@ -27,7 +27,7 @@ export class NgtAudioListener extends NgtObject<
   THREE.AudioListener,
   NgtAudioListenerState
 > {
-  override instanceInitFn = () => {
+  override instanceInitFn = (): THREE.AudioListener => {
     return new THREE.AudioListener();
   };
 

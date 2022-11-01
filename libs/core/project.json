@@ -48,7 +48,9 @@
           "libs/core/cameras/**/*.ts",
           "libs/core/cameras/**/*.html",
           "libs/core/curves/**/*.ts",
-          "libs/core/curves/**/*.html"
+          "libs/core/curves/**/*.html",
+          "libs/core/helpers/**/*.ts",
+          "libs/core/helpers/**/*.html"
         ]
       }
     }

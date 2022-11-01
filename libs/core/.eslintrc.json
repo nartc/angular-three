@@ -12,6 +12,7 @@
         "@nrwl/nx/enforce-module-boundaries": 0,
         "@angular-eslint/component-selector": 0,
         "@angular-eslint/component-class-suffix": 0,
+        "@angular-eslint/directive-class-suffix": 0,
         "@angular-eslint/no-host-metadata-property": 0,
         "@angular-eslint/directive-selector": 0,
         "@angular-eslint/no-output-native": 0,

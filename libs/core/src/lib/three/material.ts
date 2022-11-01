@@ -264,13 +264,11 @@ export abstract class NgtCommonMaterial<
       uuid?: string
     ) => NgtInstanceNode<TMaterial>
   ): (() => void) | void | undefined {
-    const material = prepareInstance(this.instanceInitFn());
+    const material = prepareInstance(new this.materialType());
     return () => {
       material.dispose();
     };
   }
-
-  protected override instanceInitFn = (): TMaterial => new this.materialType();
 
   protected override get optionsFields(): Record<string, boolean> {
     return {

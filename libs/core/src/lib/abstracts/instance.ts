@@ -149,8 +149,6 @@ export abstract class NgtInstance<
     ) => NgtInstanceNode<TInstance>
   ): (() => void) | void | undefined;
 
-  protected instanceInitFn!: () => TInstance;
-
   protected initTrigger$: Observable<{}> = this.instanceArgs$;
 
   /**

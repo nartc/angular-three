@@ -1,10 +1,16 @@
-import { ElementRef } from '@angular/core';
+import type { ElementRef } from '@angular/core';
 import * as THREE from 'three';
 import type { NgtRef } from './ref';
 
 /* Coercion */
 export type BooleanInput = string | boolean | null | undefined;
 export type NumberInput = string | number | null | undefined;
+export type Tail<X extends readonly any[]> = ((...args: X) => any) extends (
+  arg: any,
+  ...rest: infer U
+) => any
+  ? U
+  : never;
 
 /* Common + Utility */
 export type EquConfig = {
@@ -31,6 +37,7 @@ export type Properties<T> = Pick<
 export type NonFunctionKeys<T> = {
   [K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];
+
 export type Overwrite<T, O> = Omit<T, NonFunctionKeys<O>> & O;
 
 /**
@@ -39,7 +46,6 @@ export type Overwrite<T, O> = Omit<T, NonFunctionKeys<O>> & O;
 type NgtArgs<T> = T extends new (...args: any) => any
   ? ConstructorParameters<T>
   : T;
-
 export type NgtDouble = [x: number, y: number];
 export type NgtTriple = [x: number, y: number, z: number];
 export type NgtQuadruple = [x: number, y: number, z: number, w: number];

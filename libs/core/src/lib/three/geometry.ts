@@ -41,18 +41,14 @@ export abstract class NgtCommonGeometry<
       uuid?: string
     ) => NgtInstanceNode<TGeometry>
   ): (() => void) | void | undefined {
-    const geometry = prepareInstance(this.instanceInitFn());
+    const instanceArgs = this.get((s) => s.instanceArgs);
+    const geometryArgs = this.initInstanceArgs(instanceArgs);
+    const geometry = prepareInstance(new this.geometryType(...geometryArgs));
 
     return () => {
       geometry.dispose();
     };
   }
-
-  protected override instanceInitFn = (): TGeometry => {
-    const instanceArgs = this.get((s) => s.instanceArgs);
-    const geometryArgs = this.initInstanceArgs(instanceArgs);
-    return new this.geometryType(...geometryArgs);
-  };
 }
 
 export const provideNgtCommonGeometry = createNgtProvider(

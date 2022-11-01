@@ -15,8 +15,7 @@ export abstract class NgtCommonCamera<
   }
 
   protected override instanceInitFn = (): TCamera => {
-    const instanceArgs = this.get((s) => s.instanceArgs);
-    return new this.cameraType(...instanceArgs);
+    return new this.cameraType(...this.get((s) => s.instanceArgs));
   };
 }
 

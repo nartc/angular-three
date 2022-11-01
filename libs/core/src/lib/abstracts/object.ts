@@ -338,6 +338,8 @@ export abstract class NgtObject<
     };
   }
 
+  protected abstract instanceInitFn: () => TObject;
+
   #switch(prepareInstance: (instance: TObject) => NgtInstanceNode<TObject>) {
     const newObject3d = this.instanceInitFn();
     if (this.instanceValue.children) {
