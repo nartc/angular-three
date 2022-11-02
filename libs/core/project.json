@@ -54,7 +54,9 @@
           "libs/core/lights/**/*.ts",
           "libs/core/lights/**/*.html",
           "libs/core/stats/**/*.ts",
-          "libs/core/stats/**/*.html"
+          "libs/core/stats/**/*.html",
+          "libs/core/textures/**/*.ts",
+          "libs/core/textures/**/*.html"
         ]
       }
     }

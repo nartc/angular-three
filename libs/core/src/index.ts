@@ -18,6 +18,7 @@ export * from './lib/three/curve';
 export * from './lib/three/helper';
 export * from './lib/three/object-helper';
 export * from './lib/three/light';
+export * from './lib/three/texture';
 
 export * from './lib/di/instance';
 export * from './lib/di/object';
@@ -31,6 +32,7 @@ export * from './lib/di/camera';
 export * from './lib/di/curve';
 export * from './lib/di/helper';
 export * from './lib/di/light';
+export * from './lib/di/texture';
 
 export * from './lib/utils/coercion';
 export * from './lib/utils/make';

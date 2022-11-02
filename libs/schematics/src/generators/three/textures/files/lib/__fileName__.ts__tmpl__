@@ -1,0 +1,46 @@
+// GENERATED
+import {
+    AnyConstructor,
+    NgtCommonTexture,
+    provideNgtCommonTexture,
+    provideCommonTextureRef,<% if (hasBooleanInput) { %>coerceBooleanProperty, BooleanInput,<% } %><% if (hasNumberInput) { %> coerceNumberProperty, NumberInput,<% } %>
+} from '@angular-three/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input
+} from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    standalone: true,
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        provideNgtCommonTexture(Ngt<%= name %>),
+        provideCommonTextureRef(Ngt<%= name %>)
+    ],
+})
+export class Ngt<%= name %> extends NgtCommonTexture<THREE.<%= name %>> {
+    override get textureType(): AnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+
+    static ngAcceptInputType_args:
+        | ConstructorParameters<typeof THREE.<%= name %>>
+        | undefined;
+
+    <% for (const input of inputs) { %>
+    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: <% if (input.isBooleanInput) { %>BooleanInput<% } else if (input.isNumberInput) { %>NumberInput<% } else { %><%= input.type %><% } %>) {
+        this.set({ <% if (input.isBooleanInput || input.isNumberInput) { %><%= input.name %>: <% if (input.isNumberInput) { %>coerceNumberProperty<% } else { %>coerceBooleanProperty<% } %>(<%= input.name %>)<% } else { %><%= input.name %><% } %> });
+    }
+    <% } %>
+    <% if (hasInput) { %>
+    protected override get optionsFields(): Record<string, boolean> {
+        return {
+            ...super.optionsFields,<% for (const input of inputs) { %>
+           <%= input.name %>: <%= input.isOptional %>,<% } %>
+        };
+    }<% } %>
+}

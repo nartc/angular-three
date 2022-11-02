@@ -324,9 +324,14 @@ export abstract class NgtInstance<
     return;
   }
 
-  protected initInstanceArgs: (instanceArgs: unknown[]) => unknown[] = (
-    instanceArgs
-  ) => instanceArgs;
+  /**
+   * Subclasses can use this function to calculate instance arguments
+   * @param instanceArgs
+   * @protected
+   */
+  protected initInstanceArgs(instanceArgs: unknown[]) {
+    return instanceArgs;
+  }
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {

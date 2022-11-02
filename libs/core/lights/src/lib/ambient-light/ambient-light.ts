@@ -2,10 +2,10 @@
 import {
   AnyConstructor,
   NgtCommonLight,
-  provideCommonLightRef,
   provideNgtCommonLight,
+  provideCommonLightRef,
 } from '@angular-three/core';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
