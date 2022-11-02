@@ -3,7 +3,7 @@ import { NgtColorAttribute } from '@angular-three/core/attributes';
 import { NgtBoxGeometry } from '@angular-three/core/geometries';
 import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
 import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
-import { NgtMesh } from '@angular-three/core/meshes';
+import { NgtMesh } from '@angular-three/core/objects';
 import { NgtStats } from '@angular-three/core/stats';
 import { NgForOf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
