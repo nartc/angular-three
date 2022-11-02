@@ -5,6 +5,7 @@ import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
 import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
 import { NgtMesh } from '@angular-three/core/objects';
 import { NgtStats } from '@angular-three/core/stats';
+import { NgtSobaOrbitControls } from '@angular-three/soba/controls';
 import { NgForOf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import * as THREE from 'three';
@@ -83,9 +84,17 @@ export class CubeWithMaterials {
     <cube [position]="[1.5, 0, 0]"></cube>
 
     <cube-with-materials></cube-with-materials>
+
+    <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgtAmbientLight, NgtPointLight, Cube, CubeWithMaterials],
+  imports: [
+    NgtAmbientLight,
+    NgtPointLight,
+    Cube,
+    CubeWithMaterials,
+    NgtSobaOrbitControls,
+  ],
 })
 export class Scene {}
 

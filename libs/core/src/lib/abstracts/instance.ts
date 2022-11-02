@@ -132,7 +132,7 @@ export abstract class NgtInstance<
     prepareInstance: NgtPrepareInstanceFn<TInstance>
   ): (() => void) | void | undefined;
 
-  protected initTrigger$: Observable<{}> = this.instanceArgs$;
+  protected initTrigger$: Observable<any> = this.instanceArgs$;
 
   readonly #instanceReady = this.effect(
     tapEffect(() => {
