@@ -26,6 +26,7 @@ import {
   provideSceneRef,
 } from './di/object';
 import { createPointerEvents } from './events';
+import { NgtLoader } from './services/loader';
 import { NgtResize } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore } from './stores/store';
@@ -156,6 +157,7 @@ export class NgtCanvas
 
   readonly #store = inject(NgtStore);
   readonly #zone = inject(NgZone);
+  readonly #loader = inject(NgtLoader);
 
   get cameraRef() {
     return this.#store.get((s) => s.cameraRef);
@@ -253,5 +255,6 @@ export class NgtCanvas
   override ngOnDestroy() {
     super.ngOnDestroy();
     this.#store.destroy(rootStateMap, this.rendererCanvas.nativeElement);
+    this.#loader.destroy();
   }
 }

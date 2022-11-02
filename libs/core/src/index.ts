@@ -7,6 +7,7 @@ export * from './lib/stores/component-store';
 export * from './lib/abstracts/object';
 export * from './lib/abstracts/instance';
 export * from './lib/abstracts/material-geometry';
+export * from './lib/abstracts/object-pass-through';
 
 export * from './lib/three/mesh';
 export * from './lib/three/material';
@@ -33,6 +34,14 @@ export * from './lib/di/curve';
 export * from './lib/di/helper';
 export * from './lib/di/light';
 export * from './lib/di/texture';
+
+export * from './lib/directives/cursor';
+export * from './lib/directives/repeat';
+
+export * from './lib/pipes/pi';
+export * from './lib/pipes/math';
+export * from './lib/pipes/side';
+export * from './lib/pipes/radian';
 
 export * from './lib/utils/coercion';
 export * from './lib/utils/make';

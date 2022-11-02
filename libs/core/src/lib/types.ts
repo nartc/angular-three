@@ -40,6 +40,38 @@ export type NonFunctionKeys<T> = {
 
 export type Overwrite<T, O> = Omit<T, NonFunctionKeys<O>> & O;
 
+export type ConditionalType<Child, Parent, Truthy, Falsy> = Child extends Parent
+  ? Truthy
+  : Falsy;
+
+export interface NgtLoaderProto<T> extends THREE.Loader {
+  load(
+    url: string | string[],
+    onLoad?: (result: T) => void,
+    onProgress?: (event: ProgressEvent) => void,
+    onError?: (event: ErrorEvent) => void
+  ): unknown;
+}
+
+export interface NgtLoaderExtensions {
+  (loader: THREE.Loader): void;
+}
+
+export type NgtLoaderResult<T> = T extends any[]
+  ? NgtLoaderProto<T[number]>
+  : NgtLoaderProto<T>;
+export type NgtBranchingReturn<
+  T = any,
+  Parent = any,
+  Coerced = any
+> = ConditionalType<T, Parent, Coerced, T>;
+
+export interface NgtObjectMap {
+  nodes: { [name: string]: THREE.Object3D };
+  materials: { [name: string]: THREE.Material };
+  [key: string]: any;
+}
+
 /**
  * If **T** contains a constructor, @see ConstructorParameters must be used, otherwise **T**.
  */
