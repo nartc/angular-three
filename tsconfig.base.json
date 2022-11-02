@@ -27,7 +27,8 @@
       "@angular-three/core/objects": ["libs/core/objects/src/index.ts"],
       "@angular-three/core/stats": ["libs/core/stats/src/index.ts"],
       "@angular-three/core/textures": ["libs/core/textures/src/index.ts"],
-      "@angular-three/schematics": ["libs/schematics/src/index.ts"]
+      "@angular-three/schematics": ["libs/schematics/src/index.ts"],
+      "@angular-three/soba": ["libs/soba/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
