@@ -7,38 +7,32 @@ import { is } from '../utils/is';
 import { NgtObject, NgtObjectInputsState, provideNgtObject } from './object';
 
 export interface NgtMaterialGeometryState<
-  TObject extends THREE.Object3D = THREE.Object3D
+  TObject extends THREE.Object3D = THREE.Object3D,
+  TMaterial extends THREE.Material = THREE.Material,
+  TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
 > extends NgtObjectInputsState<TObject> {
-  material:
-    | THREE.Material
-    | THREE.Material[]
-    | NgtRef<THREE.Material>
-    | NgtRef<THREE.Material>[];
-  geometry: THREE.BufferGeometry | NgtRef<THREE.BufferGeometry>;
+  material: TMaterial | TMaterial[] | NgtRef<TMaterial> | NgtRef<TMaterial>[];
+  geometry: TGeometry | NgtRef<TGeometry>;
   morphTargetInfluences?: number[];
   morphTargetDictionary?: Record<string, number>;
 }
 
 @Directive()
 export abstract class NgtMaterialGeometry<
-  TMaterialGeometryObject extends THREE.Object3D = THREE.Object3D
+  TMaterialGeometryObject extends THREE.Object3D = THREE.Object3D,
+  TMaterial extends THREE.Material = THREE.Material,
+  TGeometry extends THREE.BufferGeometry = THREE.BufferGeometry
 > extends NgtObject<
   TMaterialGeometryObject,
-  NgtMaterialGeometryState<TMaterialGeometryObject>
+  NgtMaterialGeometryState<TMaterialGeometryObject, TMaterial, TGeometry>
 > {
   @Input() set material(
-    material:
-      | THREE.Material
-      | THREE.Material[]
-      | NgtRef<THREE.Material>
-      | NgtRef<THREE.Material>[]
+    material: TMaterial | TMaterial[] | NgtRef<TMaterial> | NgtRef<TMaterial>[]
   ) {
     this.set({ material });
   }
 
-  @Input() set geometry(
-    geometry: THREE.BufferGeometry | NgtRef<THREE.BufferGeometry>
-  ) {
+  @Input() set geometry(geometry: TGeometry | NgtRef<TGeometry>) {
     this.set({ geometry });
   }
 
@@ -66,7 +60,7 @@ export abstract class NgtMaterialGeometry<
       return args;
     }, [] as unknown[]);
 
-    const object = new this.objectType(
+    return new this.objectType(
       is.ref(state.geometry) ? state.geometry.value : state.geometry,
       is.arr(state.material)
         ? state.material.map((m) => (is.ref(m) ? m.value : m))
@@ -75,6 +69,10 @@ export abstract class NgtMaterialGeometry<
         : state.material,
       ...objectArgs
     );
+  };
+
+  protected override postPrepare(object: TMaterialGeometryObject) {
+    const state = this.get();
 
     if (state.morphTargetDictionary && 'morphTargetDictionary' in object) {
       (object as UnknownRecord)['morphTargetDictionary'] =
@@ -85,9 +83,7 @@ export abstract class NgtMaterialGeometry<
       (object as UnknownRecord)['morphTargetInfluences'] =
         state.morphTargetInfluences;
     }
-
-    return object;
-  };
+  }
 
   protected override get optionsFields(): Record<string, boolean> {
     return {

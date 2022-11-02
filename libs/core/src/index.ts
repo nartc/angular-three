@@ -1,10 +1,12 @@
 export * from './lib/canvas';
 export * from './lib/types';
+export * from './lib/ref';
 
 export * from './lib/stores/component-store';
 
 export * from './lib/abstracts/object';
 export * from './lib/abstracts/instance';
+export * from './lib/abstracts/material-geometry';
 
 export * from './lib/three/mesh';
 export * from './lib/three/material';
@@ -19,6 +21,7 @@ export * from './lib/three/light';
 
 export * from './lib/di/instance';
 export * from './lib/di/object';
+export * from './lib/di/material-geometry';
 export * from './lib/di/mesh';
 export * from './lib/di/material';
 export * from './lib/di/geometry';
