@@ -10,7 +10,7 @@ import { injectObjectHostRef, injectObjectRef } from '../di/object';
 import type {
   AnyConstructor,
   BooleanInput,
-  NgtInstanceNode,
+  NgtPrepareInstanceFn,
   NumberInput,
 } from '../types';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
@@ -259,10 +259,7 @@ export abstract class NgtCommonMaterial<
   }
 
   protected override initFn(
-    prepareInstance: (
-      instance: TMaterial,
-      uuid?: string
-    ) => NgtInstanceNode<TMaterial>
+    prepareInstance: NgtPrepareInstanceFn<TMaterial>
   ): (() => void) | void | undefined {
     const material = prepareInstance(new this.materialType());
     return () => {

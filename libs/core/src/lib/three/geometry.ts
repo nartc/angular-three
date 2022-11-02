@@ -6,7 +6,7 @@ import {
   provideNgtInstance,
 } from '../abstracts/instance';
 import { injectObjectHostRef, injectObjectRef } from '../di/object';
-import { AnyConstructor, NgtInstanceNode } from '../types';
+import { AnyConstructor, NgtPrepareInstanceFn } from '../types';
 import { createNgtProvider } from '../utils/inject';
 
 @Directive()
@@ -36,10 +36,7 @@ export abstract class NgtCommonGeometry<
   }
 
   protected override initFn(
-    prepareInstance: (
-      instance: TGeometry,
-      uuid?: string
-    ) => NgtInstanceNode<TGeometry>
+    prepareInstance: NgtPrepareInstanceFn<TGeometry>
   ): (() => void) | void | undefined {
     const instanceArgs = this.get((s) => s.instanceArgs);
     const geometryArgs = this.initInstanceArgs(instanceArgs);

@@ -9,6 +9,7 @@ import type {
   NgtEuler,
   NgtEventHandlers,
   NgtInstanceNode,
+  NgtPrepareInstanceFn,
   NgtQuaternion,
   NgtThreeEvent,
   NgtTriple,
@@ -280,15 +281,14 @@ export abstract class NgtObject<
   @Output() beforeRender = new EventEmitter<NgtBeforeRender<TObject>>();
 
   protected override initFn(
-    prepareInstance: (
-      instance: TObject,
-      uuid?: string
-    ) => NgtInstanceNode<TObject>
+    prepareInstance: NgtPrepareInstanceFn<TObject>
   ): (() => void) | void | undefined {
     if (this.instanceValue && this.__ngt__) {
       this.#switch(prepareInstance);
     } else {
-      prepareInstance(this.instanceInitFn(), this.instanceValue?.uuid);
+      prepareInstance(this.instanceInitFn(), {
+        uuid: this.instanceValue?.uuid,
+      });
     }
 
     if (this.instanceValue) {

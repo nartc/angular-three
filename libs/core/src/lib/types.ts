@@ -396,6 +396,11 @@ export type NgtInstanceNode<TNode = any> = TNode & {
   [key: string]: any;
 };
 
+export type NgtPrepareInstanceFn<TInstance> = (
+  instance: TInstance,
+  prepareOptions?: { uuid?: string; parentStateGetter?: NgtStateGetter }
+) => NgtInstanceNode<TInstance>;
+
 export type NgtGLOptions =
   | NgtRenderer
   | ((canvas: HTMLCanvasElement) => NgtRenderer)

@@ -2,10 +2,10 @@ import * as THREE from 'three';
 import {
   make,
   NgtInstance,
-  NgtInstanceNode,
+  NgtPrepareInstanceFn,
   provideInstanceRef,
   provideNgtInstance,
-  NgtVector4
+  NgtVector4,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
@@ -15,19 +15,19 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-      provideNgtInstance(NgtVector4Attribute),
-      provideInstanceRef(NgtVector4Attribute)
+    provideNgtInstance(NgtVector4Attribute),
+    provideInstanceRef(NgtVector4Attribute),
   ],
 })
 export class NgtVector4Attribute extends NgtInstance<THREE.Vector4> {
   @Input() set vector4(vector4: NgtVector4) {
-    this.set({ vector4 })
+    this.set({ vector4 });
   }
 
   override initTrigger$ = this.select((s) => s['vector4']);
 
   protected override initFn(
-    prepareInstance: (instance: THREE.Vector4, uuid?: string) => NgtInstanceNode
+    prepareInstance: NgtPrepareInstanceFn<THREE.Vector4>
   ): (() => void) | void | undefined {
     prepareInstance(
       make(

@@ -2,10 +2,10 @@ import * as THREE from 'three';
 import {
   make,
   NgtInstance,
-  NgtInstanceNode,
+  NgtPrepareInstanceFn,
   provideInstanceRef,
   provideNgtInstance,
-  NgtMatrix4
+  NgtMatrix4,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
@@ -15,19 +15,19 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-      provideNgtInstance(NgtMatrix4Attribute),
-      provideInstanceRef(NgtMatrix4Attribute)
+    provideNgtInstance(NgtMatrix4Attribute),
+    provideInstanceRef(NgtMatrix4Attribute),
   ],
 })
 export class NgtMatrix4Attribute extends NgtInstance<THREE.Matrix4> {
   @Input() set matrix4(matrix4: NgtMatrix4) {
-    this.set({ matrix4 })
+    this.set({ matrix4 });
   }
 
   override initTrigger$ = this.select((s) => s['matrix4']);
 
   protected override initFn(
-    prepareInstance: (instance: THREE.Matrix4, uuid?: string) => NgtInstanceNode
+    prepareInstance: NgtPrepareInstanceFn<THREE.Matrix4>
   ): (() => void) | void | undefined {
     prepareInstance(
       make(

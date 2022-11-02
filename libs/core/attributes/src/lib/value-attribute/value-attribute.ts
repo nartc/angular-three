@@ -1,6 +1,6 @@
 import {
   NgtInstance,
-  NgtInstanceNode,
+  NgtPrepareInstanceFn,
   provideInstanceRef,
   provideNgtInstance,
 } from '@angular-three/core';
@@ -24,7 +24,7 @@ export class NgtValueAttribute extends NgtInstance {
   override initTrigger$ = this.select((s) => s['value']);
 
   protected override initFn(
-    prepareInstance: (instance: any, uuid?: string) => NgtInstanceNode
+    prepareInstance: NgtPrepareInstanceFn<any>
   ): (() => void) | void | undefined {
     prepareInstance(this.get((s) => s['value']));
   }

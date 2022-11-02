@@ -6,7 +6,11 @@ import {
   provideNgtInstance,
 } from '../abstracts/instance';
 import { injectObjectHostRef, injectObjectRef } from '../di/object';
-import type { AnyConstructor, BooleanInput, NgtInstanceNode } from '../types';
+import type {
+  AnyConstructor,
+  BooleanInput,
+  NgtPrepareInstanceFn,
+} from '../types';
 import { coerceBooleanProperty } from '../utils/coercion';
 import { createNgtProvider } from '../utils/inject';
 
@@ -30,10 +34,7 @@ export abstract class NgtCommonObjectHelper<
   }
 
   protected override initFn(
-    prepareInstance: (
-      instance: TObjectHelper,
-      uuid?: string
-    ) => NgtInstanceNode<TObjectHelper>
+    prepareInstance: NgtPrepareInstanceFn<TObjectHelper>
   ): (() => void) | void | undefined {
     if (
       !this.parent ||

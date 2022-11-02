@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {
   make,
   NgtInstance,
-  NgtInstanceNode,
+  NgtPrepareInstanceFn,
   provideInstanceRef,
   provideNgtInstance,
   <%= inputType %>
@@ -27,7 +27,7 @@ export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
   override initTrigger$ = this.select((s) => s['<%= propertyName %>']);
 
   protected override initFn(
-    prepareInstance: (instance: THREE.<%= name %>, uuid?: string) => NgtInstanceNode
+    prepareInstance: NgtPrepareInstanceFn<THREE.<%= name %>>
   ): (() => void) | void | undefined {
     prepareInstance(
       make(

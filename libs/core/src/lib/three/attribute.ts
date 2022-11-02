@@ -5,7 +5,7 @@ import {
   NgtInstanceState,
   provideNgtInstance,
 } from '../abstracts/instance';
-import { AnyConstructor, NgtInstanceNode } from '../types';
+import { AnyConstructor, NgtPrepareInstanceFn } from '../types';
 import { createNgtProvider } from '../utils/inject';
 
 @Directive()
@@ -21,10 +21,7 @@ export abstract class NgtCommonAttribute<
   }
 
   protected override initFn(
-    prepareInstance: (
-      instance: TAttribute,
-      uuid?: string
-    ) => NgtInstanceNode<TAttribute>
+    prepareInstance: NgtPrepareInstanceFn<TAttribute>
   ): (() => void) | void | undefined {
     const instanceArgs = this.get((s) => s.instanceArgs);
     prepareInstance(new this.attributeType(...instanceArgs));

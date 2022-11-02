@@ -5,7 +5,11 @@ import {
   NgtInstanceState,
   provideNgtInstance,
 } from '../abstracts/instance';
-import type { AnyConstructor, NgtInstanceNode, NumberInput } from '../types';
+import type {
+  AnyConstructor,
+  NgtPrepareInstanceFn,
+  NumberInput,
+} from '../types';
 import { checkNeedsUpdate } from '../utils/check-needs-update';
 import { coerceNumberProperty } from '../utils/coercion';
 import { createNgtProvider } from '../utils/inject';
@@ -63,10 +67,7 @@ export abstract class NgtCommonTexture<
   }
 
   protected override initFn(
-    prepareInstance: (
-      instance: TTexture,
-      uuid?: string
-    ) => NgtInstanceNode<TTexture>
+    prepareInstance: NgtPrepareInstanceFn<TTexture>
   ): (() => void) | void | undefined {
     const instanceArgs = this.get((s) => s.instanceArgs);
     const textureInstanceArgs = this.initInstanceArgs(instanceArgs);

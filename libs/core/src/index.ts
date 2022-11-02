@@ -1,6 +1,7 @@
 export * from './lib/canvas';
 export * from './lib/types';
 export * from './lib/ref';
+export * from './lib/portal';
 
 export * from './lib/stores/component-store';
 

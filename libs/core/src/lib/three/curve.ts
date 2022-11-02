@@ -5,7 +5,11 @@ import {
   NgtInstanceState,
   provideNgtInstance,
 } from '../abstracts/instance';
-import type { AnyConstructor, NgtInstanceNode, NumberInput } from '../types';
+import type {
+  AnyConstructor,
+  NgtPrepareInstanceFn,
+  NumberInput,
+} from '../types';
 import { coerceNumberProperty } from '../utils/coercion';
 import { createNgtProvider } from '../utils/inject';
 
@@ -32,10 +36,7 @@ export abstract class NgtCommonCurve<
   }
 
   protected override initFn(
-    prepareInstance: (
-      instance: TCurve,
-      uuid?: string
-    ) => NgtInstanceNode<TCurve>
+    prepareInstance: NgtPrepareInstanceFn<TCurve>
   ): (() => void) | void | undefined {
     prepareInstance(new this.curveType(...this.get((s) => s.instanceArgs)));
   }

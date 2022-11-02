@@ -20,8 +20,10 @@ import type {
   NgtAttachFunction,
   NgtInstanceLocalState,
   NgtInstanceNode,
+  NgtStateGetter,
   UnknownRecord,
 } from '../types';
+import { NgtPrepareInstanceFn } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { coerceBooleanProperty } from '../utils/coercion';
 import { removeInteractivity } from '../utils/events';
@@ -127,10 +129,7 @@ export abstract class NgtInstance<
   );
 
   protected abstract initFn(
-    prepareInstance: (
-      instance: TInstance,
-      uuid?: string
-    ) => NgtInstanceNode<TInstance>
+    prepareInstance: NgtPrepareInstanceFn<TInstance>
   ): (() => void) | void | undefined;
 
   protected initTrigger$: Observable<{}> = this.instanceArgs$;
@@ -309,6 +308,14 @@ export abstract class NgtInstance<
   }
 
   /**
+   * Subclasses can use this function to run logic **before** NgtStore is ready
+   * @protected
+   */
+  protected preStoreReady() {
+    return;
+  }
+
+  /**
    * Subclasses can use this function to run post-init logic
    * @protected
    */
@@ -346,6 +353,9 @@ export abstract class NgtInstance<
         skipParentExplicit: s['skipParentExplicit'] || false,
         attachExplicit: s['attachExplicit'] || false,
       }));
+
+      // preStoreInit
+      this.preStoreReady();
 
       this.store.onReady(() => {
         this.preInit();
@@ -417,15 +427,22 @@ export abstract class NgtInstance<
 
   #prepareInstance(
     instance: TInstance,
-    uuid?: string
+    prepareOptions: {
+      parentStateGetter?: NgtStateGetter;
+      uuid?: string;
+    } = {}
   ): NgtInstanceNode<TInstance> {
-    if (uuid && 'uuid' in instance) {
-      (instance as UnknownRecord)['uuid'] = uuid;
+    if (!prepareOptions.parentStateGetter) {
+      prepareOptions.parentStateGetter = this.store.get.bind(this.store);
+    }
+
+    if (prepareOptions.uuid && 'uuid' in instance) {
+      (instance as UnknownRecord)['uuid'] = prepareOptions.uuid;
     }
 
     const prepInstance = prepare(
       instance,
-      this.store.get.bind(this.store),
+      prepareOptions.parentStateGetter!,
       this.parent,
       this.instance,
       this.isPrimitive

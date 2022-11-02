@@ -2,10 +2,10 @@ import * as THREE from 'three';
 import {
   make,
   NgtInstance,
-  NgtInstanceNode,
+  NgtPrepareInstanceFn,
   provideInstanceRef,
   provideNgtInstance,
-  NgtFog
+  NgtFog,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
@@ -15,19 +15,19 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-      provideNgtInstance(NgtFogAttribute),
-      provideInstanceRef(NgtFogAttribute)
+    provideNgtInstance(NgtFogAttribute),
+    provideInstanceRef(NgtFogAttribute),
   ],
 })
 export class NgtFogAttribute extends NgtInstance<THREE.Fog> {
   @Input() set fog(fog: NgtFog) {
-    this.set({ fog })
+    this.set({ fog });
   }
 
   override initTrigger$ = this.select((s) => s['fog']);
 
   protected override initFn(
-    prepareInstance: (instance: THREE.Fog, uuid?: string) => NgtInstanceNode
+    prepareInstance: NgtPrepareInstanceFn<THREE.Fog>
   ): (() => void) | void | undefined {
     prepareInstance(
       make(
