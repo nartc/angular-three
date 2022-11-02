@@ -52,7 +52,9 @@
           "libs/core/helpers/**/*.ts",
           "libs/core/helpers/**/*.html",
           "libs/core/lights/**/*.ts",
-          "libs/core/lights/**/*.html"
+          "libs/core/lights/**/*.html",
+          "libs/core/stats/**/*.ts",
+          "libs/core/stats/**/*.html"
         ]
       }
     }

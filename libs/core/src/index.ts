@@ -1,6 +1,8 @@
 export * from './lib/canvas';
 export * from './lib/types';
 
+export * from './lib/stores/component-store';
+
 export * from './lib/abstracts/object';
 export * from './lib/abstracts/instance';
 
@@ -30,3 +32,4 @@ export * from './lib/di/light';
 export * from './lib/utils/coercion';
 export * from './lib/utils/make';
 export * from './lib/utils/pass-through';
+export * from './lib/utils/loop';
