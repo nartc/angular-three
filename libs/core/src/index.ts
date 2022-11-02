@@ -4,6 +4,7 @@ export * from './lib/ref';
 export * from './lib/portal';
 
 export * from './lib/stores/component-store';
+export * from './lib/stores/store';
 
 export * from './lib/abstracts/object';
 export * from './lib/abstracts/instance';
@@ -48,3 +49,4 @@ export * from './lib/utils/coercion';
 export * from './lib/utils/make';
 export * from './lib/utils/pass-through';
 export * from './lib/utils/loop';
+export * from './lib/utils/apply-props';
