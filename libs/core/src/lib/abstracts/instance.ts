@@ -107,18 +107,6 @@ export abstract class NgtInstance<
   }
 
   /**
-   * Subclasses can use this function to run pre-init logic
-   * @protected
-   */
-  protected preInit: (() => void) | undefined;
-
-  /**
-   * Subclasses can use this function to run post-init logic
-   * @protected
-   */
-  protected postInit: (() => void) | undefined;
-
-  /**
    * Can be used by subclasses to run additional logic after options are set
    * @protected
    */
@@ -133,11 +121,7 @@ export abstract class NgtInstance<
   readonly #init = this.effect(
     tapEffect(() => {
       const initFnReturn = this.initFn(this.#prepareInstance.bind(this));
-
-      if (this.postInit) {
-        this.postInit();
-      }
-
+      this.postInit();
       return initFnReturn;
     })
   );
@@ -150,12 +134,6 @@ export abstract class NgtInstance<
   ): (() => void) | void | undefined;
 
   protected initTrigger$: Observable<{}> = this.instanceArgs$;
-
-  /**
-   * Can be used by subclasses to run additional logic after prepare
-   * @protected
-   */
-  protected postPrepare: ((instance: TInstance) => void) | undefined;
 
   readonly #instanceReady = this.effect(
     tapEffect(() => {
@@ -216,7 +194,7 @@ export abstract class NgtInstance<
         }
 
         if (is.material(this.instanceValue)) {
-          customOptions['uniforms'] = {};
+          // customOptions['uniforms'] = {};
           if ('uniforms' in this.instanceValue && 'uniforms' in restOptions) {
             customOptions['uniforms'] = {
               ...(this.instanceValue as THREE.ShaderMaterial)['uniforms'],
@@ -322,6 +300,30 @@ export abstract class NgtInstance<
     )
   );
 
+  /**
+   * Subclasses can use this function to run pre-init logic
+   * @protected
+   */
+  protected preInit() {
+    return;
+  }
+
+  /**
+   * Subclasses can use this function to run post-init logic
+   * @protected
+   */
+  protected postInit() {
+    return;
+  }
+
+  /**
+   * Can be used by subclasses to run additional logic after prepare
+   * @protected
+   */
+  protected postPrepare(_: TInstance) {
+    return;
+  }
+
   protected initInstanceArgs: (instanceArgs: unknown[]) => unknown[] = (
     instanceArgs
   ) => instanceArgs;
@@ -341,9 +343,7 @@ export abstract class NgtInstance<
       }));
 
       this.store.onReady(() => {
-        if (this.preInit) {
-          this.preInit();
-        }
+        this.preInit();
 
         // run init
         this.#init(this.initTrigger$);
@@ -426,9 +426,7 @@ export abstract class NgtInstance<
       this.isPrimitive
     );
 
-    if (this.postPrepare) {
-      this.postPrepare(prepInstance);
-    }
+    this.postPrepare(prepInstance);
 
     this.instance.set(prepInstance);
 

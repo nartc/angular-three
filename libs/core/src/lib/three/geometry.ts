@@ -29,11 +29,11 @@ export abstract class NgtCommonGeometry<
     skipSelf: true,
   });
 
-  protected override preInit = () => {
+  protected override preInit() {
     this.set((s) => ({
       attach: s.attach.length ? s.attach : ['geometry'],
     }));
-  };
+  }
 
   protected override initFn(
     prepareInstance: (

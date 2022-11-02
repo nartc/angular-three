@@ -252,11 +252,11 @@ export abstract class NgtCommonMaterial<
     skipSelf: true,
   });
 
-  protected override preInit = () => {
+  protected override preInit() {
     this.set((s) => ({
       attach: s.attach.length ? s.attach : ['material'],
     }));
-  };
+  }
 
   protected override initFn(
     prepareInstance: (

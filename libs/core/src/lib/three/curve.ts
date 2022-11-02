@@ -40,12 +40,12 @@ export abstract class NgtCommonCurve<
     prepareInstance(new this.curveType(...this.get((s) => s.instanceArgs)));
   }
 
-  override postInit = () => {
+  override postPrepare(curve: TCurve) {
     const arcLengthDivisions = this.get((s) => s.arcLengthDivisions);
     if (arcLengthDivisions != undefined) {
-      this.instanceValue.arcLengthDivisions = arcLengthDivisions;
+      curve.arcLengthDivisions = arcLengthDivisions;
     }
-  };
+  }
 }
 
 export const provideNgtCommonCurve = createNgtProvider(

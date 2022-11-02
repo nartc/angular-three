@@ -28,9 +28,10 @@ export abstract class NgtCommonLight<
     this.set({ intensity: coerceNumberProperty(intensity) });
   }
 
-  override preInit = () => {
+  override preInit() {
+    super.preInit();
     this.set((s) => ({ intensity: s.intensity ?? 1 }));
-  };
+  }
 
   override instanceInitFn = (): TLight => {
     const { intensity, instanceArgs } = this.get();

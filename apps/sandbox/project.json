@@ -6,15 +6,16 @@
   "prefix": "new",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@nrwl/angular:webpack-browser",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "buildLibsFromSource": false,
         "outputPath": "dist/apps/sandbox",
         "index": "apps/sandbox/src/index.html",
         "main": "apps/sandbox/src/main.ts",
         "polyfills": "apps/sandbox/src/polyfills.ts",
         "tsConfig": "apps/sandbox/tsconfig.app.json",
-        "assets": ["apps/sandbox/src/favicon.ico", "apps/sandbox/src/assets"],
+        "assets": ["apps/sandbox/src/favicon.png", "apps/sandbox/src/assets"],
         "styles": ["apps/sandbox/src/styles.css"],
         "scripts": []
       },
@@ -52,7 +53,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nrwl/angular:webpack-dev-server",
       "configurations": {
         "production": {
           "browserTarget": "sandbox:build:production"

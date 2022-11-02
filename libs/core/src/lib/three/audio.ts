@@ -116,7 +116,8 @@ export abstract class NgtCommonAudio<
     return new this.audioType(listener);
   };
 
-  override preInit = () => {
+  override preInit() {
+    super.preInit();
     this.set((s) => ({
       buffer: s.buffer || null,
       detune: s.detune || 0,
@@ -132,7 +133,7 @@ export abstract class NgtCommonAudio<
       source: s.source || null,
       filters: s.filters || [],
     }));
-  };
+  }
 
   protected override get optionsFields(): Record<string, boolean> {
     return {

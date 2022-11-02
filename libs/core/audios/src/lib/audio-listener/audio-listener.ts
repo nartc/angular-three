@@ -31,26 +31,27 @@ export class NgtAudioListener extends NgtObject<
     return new THREE.AudioListener();
   };
 
-  override preInit = () => {
+  override preInit() {
+    super.preInit();
     this.set({ appendMode: 'none' });
-  };
+  }
 
-  override postInit = () => {
+  override postPrepare(listener: THREE.AudioListener) {
     const { filter, timeDelta } = this.get();
 
     if (filter != null) {
-      this.instanceValue.filter = filter;
+      listener.filter = filter;
     }
 
     if (timeDelta != null) {
-      this.instanceValue.timeDelta = timeDelta;
+      listener.timeDelta = timeDelta;
     }
 
     const camera = this.store.get((s) => s.camera);
     if (camera) {
-      camera.add(this.instanceValue);
+      camera.add(listener);
     }
-  };
+  }
 
   protected override destroy() {
     const camera = this.store.get((s) => s.camera);

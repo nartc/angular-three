@@ -82,117 +82,115 @@ export abstract class NgtObjectInputs<
     return this.get((s) => s.position);
   }
 
-  get rotation() {
-    return this.get((s) => s.rotation);
-  }
   @Input() set rotation(rotation: NgtEuler | NgtTriple | undefined) {
     this.set({ rotationExplicit: true, rotation: make(THREE.Euler, rotation) });
   }
-
-  get quaternion() {
-    return this.get((s) => s.quaternion);
+  get rotation() {
+    return this.get((s) => s.rotation);
   }
+
   @Input() set quaternion(quaternion: NgtQuaternion | undefined) {
     this.set({
       quaternionExplicit: true,
       quaternion: make(THREE.Quaternion, quaternion),
     });
   }
-
-  get scale() {
-    return this.get((s) => s.scale);
+  get quaternion() {
+    return this.get((s) => s.quaternion);
   }
+
   @Input() set scale(scale: NgtVector3 | undefined) {
     this.set({ scaleExplicit: true, scale: make(THREE.Vector3, scale) });
   }
-
-  get color() {
-    return this.get((s) => s.color);
+  get scale() {
+    return this.get((s) => s.scale);
   }
+
   @Input() set color(color: NgtColor | undefined) {
     this.set({ colorExplicit: true, color: make(THREE.Color, color) });
   }
-
-  get castShadow() {
-    return this.get((s) => s.castShadow);
+  get color() {
+    return this.get((s) => s.color);
   }
+
   @Input() set castShadow(value: BooleanInput) {
     this.set({
       castShadowExplicit: true,
       castShadow: coerceBooleanProperty(value),
     });
   }
-
-  get receiveShadow() {
-    return this.get((s) => s.receiveShadow);
+  get castShadow() {
+    return this.get((s) => s.castShadow);
   }
+
   @Input() set receiveShadow(value: BooleanInput) {
     this.set({
       receiveShadowExplicit: true,
       receiveShadow: coerceBooleanProperty(value),
     });
   }
-
-  get priority() {
-    return this.get((s) => s.priority);
+  get receiveShadow() {
+    return this.get((s) => s.receiveShadow);
   }
+
   @Input() set priority(priority: NumberInput) {
     this.set({
       priorityExplicit: true,
       priority: coerceNumberProperty(priority),
     });
   }
-
-  get visible() {
-    return this.get((s) => s.visible);
+  get priority() {
+    return this.get((s) => s.priority);
   }
+
   @Input() set visible(visible: BooleanInput) {
     this.set({
       visibleExplicit: true,
       visible: coerceBooleanProperty(visible),
     });
   }
-  get matrixAutoUpdate() {
-    return this.get((s) => s.matrixAutoUpdate);
+  get visible() {
+    return this.get((s) => s.visible);
   }
+
   @Input() set matrixAutoUpdate(matrixAutoUpdate: BooleanInput) {
     this.set({
       matrixAutoUpdateExplicit: true,
       matrixAutoUpdate: coerceBooleanProperty(matrixAutoUpdate),
     });
   }
-
-  get userData() {
-    return this.get((s) => s.userData);
+  get matrixAutoUpdate() {
+    return this.get((s) => s.matrixAutoUpdate);
   }
+
   @Input() set userData(userData: UnknownRecord | undefined) {
     this.set({ userDataExplicit: true, userData });
   }
-
-  get dispose() {
-    return this.get((s) => s.dispose);
+  get userData() {
+    return this.get((s) => s.userData);
   }
+
   @Input() set dispose(dispose: (() => void) | null | undefined) {
     this.set({ disposeExplicit: true, dispose });
   }
-
-  get raycast() {
-    return this.get((s) => s.raycast);
+  get dispose() {
+    return this.get((s) => s.dispose);
   }
+
   @Input() set raycast(raycast: THREE.Object3D['raycast'] | null | undefined) {
     this.set({ raycastExplicit: true, raycast });
   }
-
-  get appendMode() {
-    return this.get((s) => s.appendMode);
+  get raycast() {
+    return this.get((s) => s.raycast);
   }
+
   @Input() set appendMode(appendMode: 'immediate' | 'root' | 'none') {
     this.set({ appendModeExplicit: true, appendMode });
   }
-
-  get appendTo() {
-    return this.get((s) => s.appendTo);
+  get appendMode() {
+    return this.get((s) => s.appendMode);
   }
+
   @Input() set appendTo(
     appendTo: NgtRef<THREE.Object3D> | THREE.Object3D | undefined
   ) {
@@ -204,6 +202,9 @@ export abstract class NgtObjectInputs<
           : new NgtRef(appendTo)
         : undefined,
     });
+  }
+  get appendTo() {
+    return this.get((s) => s.appendTo);
   }
 
   // events
@@ -250,7 +251,7 @@ export abstract class NgtObjectInputs<
     skipSelf: true,
   });
 
-  override preInit = () => {
+  override preInit() {
     this.set((s) => ({
       name: s.name || '',
       position: s.position || new THREE.Vector3(),
@@ -267,7 +268,7 @@ export abstract class NgtObjectInputs<
       priority: s.priority ?? 0,
       appendMode: s.appendMode ?? 'immediate',
     }));
-  };
+  }
 }
 
 @Directive()

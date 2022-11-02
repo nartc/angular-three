@@ -23,11 +23,11 @@ export abstract class NgtCommonObjectHelper<
   protected override parentRef = injectObjectRef({ optional: true });
   protected override parentHostRef = injectObjectHostRef({ optional: true });
 
-  override preInit = () => {
+  override preInit() {
     this.set((s) => ({
       visible: s['visible'] ?? true,
     }));
-  };
+  }
 
   protected override initFn(
     prepareInstance: (
