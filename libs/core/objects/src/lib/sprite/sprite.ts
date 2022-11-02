@@ -11,9 +11,7 @@ import * as THREE from 'three';
 @Component({
   selector: 'ngt-sprite',
   standalone: true,
-  template: `
-    <ng-content></ng-content>
-  `,
+  template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     provideNgtMaterialGeometry(NgtSprite),

@@ -32,7 +32,7 @@ export class NgtCubeCamera extends NgtObject<THREE.CubeCamera> {
     this.set({ renderTarget });
   }
 
-  override instanceInitFn = (): THREE.CubeCamera => {
+  override instanceInitFn(): THREE.CubeCamera {
     const args = this.get((s) => s.instanceArgs) as ConstructorParameters<
       typeof THREE.CubeCamera
     >;
@@ -46,7 +46,7 @@ export class NgtCubeCamera extends NgtObject<THREE.CubeCamera> {
     }
 
     return new THREE.CubeCamera(...args);
-  };
+  }
 
   override get optionsFields(): Record<string, boolean> {
     return {

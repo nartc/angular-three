@@ -104,7 +104,7 @@ export abstract class NgtCommonAudio<
     switchMap(() => this.instanceArgs$)
   );
 
-  override instanceInitFn = (): TAudio => {
+  override instanceInitFn(): TAudio {
     const listener = this.get((s) => s.listener);
 
     if (!listener) {
@@ -114,7 +114,7 @@ export abstract class NgtCommonAudio<
     }
 
     return new this.audioType(listener);
-  };
+  }
 
   override preInit() {
     super.preInit();

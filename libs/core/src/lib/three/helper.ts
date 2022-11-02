@@ -14,9 +14,9 @@ export abstract class NgtCommonHelper<
     this.instanceArgs = v;
   }
 
-  override instanceInitFn = (): THelper => {
+  override instanceInitFn(): THelper {
     return new this.helperType(...this.get((s) => s.instanceArgs));
-  };
+  }
 }
 
 export const provideNgtCommonHelper = createNgtProvider(

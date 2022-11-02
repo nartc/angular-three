@@ -33,7 +33,7 @@ export abstract class NgtCommonLight<
     this.set((s) => ({ intensity: s.intensity ?? 1 }));
   }
 
-  override instanceInitFn = (): TLight => {
+  override instanceInitFn(): TLight {
     const { intensity, instanceArgs } = this.get();
 
     const light = new this.lightType(...instanceArgs);
@@ -43,7 +43,7 @@ export abstract class NgtCommonLight<
     }
 
     return light;
-  };
+  }
 
   protected override get optionsFields(): Record<string, boolean> {
     return { ...super.optionsFields, intensity: false };

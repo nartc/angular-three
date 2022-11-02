@@ -10,9 +10,7 @@ import * as THREE from 'three';
 @Component({
   selector: 'ngt-mesh',
   standalone: true,
-  template: `
-    <ng-content></ng-content>
-  `,
+  template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgtCommonMesh(NgtMesh), provideCommonMeshRef(NgtMesh)],
 })
