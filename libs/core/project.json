@@ -50,7 +50,9 @@
           "libs/core/curves/**/*.ts",
           "libs/core/curves/**/*.html",
           "libs/core/helpers/**/*.ts",
-          "libs/core/helpers/**/*.html"
+          "libs/core/helpers/**/*.html",
+          "libs/core/lights/**/*.ts",
+          "libs/core/lights/**/*.html"
         ]
       }
     }

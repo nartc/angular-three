@@ -5,6 +5,7 @@ import camerasGenerator from './cameras/cameras';
 import curvesGenerator from './curves/curves';
 import geometriesGenerator from './geometries/geometries';
 import helpersGenerator from './helpers/helpers';
+import lightsGenerator from './lights/lights';
 import materialsGenerator from './materials/materials';
 
 export default async function (tree: Tree) {
@@ -32,5 +33,6 @@ export default async function (tree: Tree) {
     camerasGenerator(tree),
     curvesGenerator(tree),
     helpersGenerator(tree),
+    lightsGenerator(tree),
   ]);
 }
