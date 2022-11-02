@@ -1,0 +1,70 @@
+{
+    "projectName": "angular-three",
+    "projectOwner": "nartc",
+    "repoType": "github",
+    "repoHost": "https://github.com/nartc/angular-three",
+    "files": [
+        "README.md"
+    ],
+    "imageSize": 100,
+    "commit": true,
+    "commitConvention": "angular",
+    "contributors": [
+        {
+            "login": "nartc",
+            "name": "Chau Tran",
+            "avatar_url": "https://avatars.githubusercontent.com/u/25516557?v=4",
+            "profile": "https://nartc.me/",
+            "contributions": [
+                "code",
+                "ideas"
+            ]
+        },
+        {
+            "login": "barbados-clemens",
+            "name": "Caleb Ukle",
+            "avatar_url": "https://avatars.githubusercontent.com/u/23272162?v=4",
+            "profile": "https://github.com/barbados-clemens",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "joshuamorony",
+            "name": "Joshua Morony",
+            "avatar_url": "https://avatars.githubusercontent.com/u/2578009?v=4",
+            "profile": "https://www.joshmorony.com/",
+            "contributions": [
+                "doc"
+            ]
+        },
+        {
+            "login": "BenLune",
+            "name": "BenLune",
+            "avatar_url": "https://avatars.githubusercontent.com/u/5662714?v=4",
+            "profile": "https://github.com/BenLune",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "IKatsuba",
+            "name": "Igor Katsuba",
+            "avatar_url": "https://avatars.githubusercontent.com/u/10637135?v=4",
+            "profile": "https://blog.katsuba.dev",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "IRobot1",
+            "name": "andivr",
+            "avatar_url": "https://avatars.githubusercontent.com/u/25032599?v=4",
+            "profile": "https://github.com/IRobot1",
+            "contributions": [
+                "doc"
+            ]
+        }
+    ],
+    "contributorsPerLine": 7
+}

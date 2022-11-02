@@ -7,8 +7,8 @@
     "commit": "git-cz",
     "contributors:init": "all-contributors init",
     "contributors:add": "all-contributors add",
-    "release": "dotenv release-it --",
     "storybook": "nx storybook soba",
+    "release": "dotenv release-it --",
     "build": "nx run-many --target=build --projects=core,cannon,postprocessing,soba,schematics",
     "publish": "nx run-many --target=publish --all --parallel"
   },

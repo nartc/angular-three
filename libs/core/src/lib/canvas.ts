@@ -1,3 +1,11 @@
+/**
+ * AngularThree (NGT) is partly ported from React Three Fiber (R3F).
+ *
+ * Current SHA from R3F:
+ * 17ff08f6731c32fb182ccf4eb48cd44cbc1608d6
+ * chore(docs): add Vercel prism example
+ */
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -206,7 +214,7 @@ export class NgtCanvas
         const state = this.#store.get();
         const inputs = this.get();
 
-        // Connect to event source
+        // Connect to eventsource
         state.events.connect?.(
           inputs.eventSource instanceof ElementRef
             ? inputs.eventSource.nativeElement
