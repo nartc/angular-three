@@ -1,6 +1,9 @@
 import { map, Observable, of, pairwise, startWith } from 'rxjs';
 import { NgtRef } from '../ref';
-import { NgtComponentStore } from '../stores/component-store';
+import {
+  NgtComponentStore,
+  startWithUndefined,
+} from '../stores/component-store';
 import type {
   NgtInstanceLocalState,
   NgtInstanceNode,
@@ -20,7 +23,8 @@ export function getInstanceInternal<T extends object = UnknownRecord>(
 
 export function prepare<TInstance extends object = UnknownRecord>(
   instance: TInstance,
-  rootGetter: NgtStateGetter,
+  parentStateGetter: NgtStateGetter,
+  rootStateGetter: NgtStateGetter,
   parentInstance?: NgtRef,
   previousInstance?: NgtRef,
   isPrimitive = false
@@ -39,7 +43,8 @@ export function prepare<TInstance extends object = UnknownRecord>(
 
   return Object.assign(instance, {
     __ngt__: {
-      stateGetter: rootGetter,
+      stateGetter: parentStateGetter,
+      rootGetter: rootStateGetter,
       primitive: !isPrimitive
         ? previousInstanceInternal?.primitive
         : isPrimitive,
@@ -61,9 +66,12 @@ export function optionsFieldsToOptions(
   return instance
     .select(
       ...optionEntries.map(([inputKey, shouldStartWithUndefined]) => {
-        return instance.select((s) => (s as UnknownRecord)[inputKey], {
-          startWithUndefined: shouldStartWithUndefined,
-        });
+        const subInput$ = instance.select(
+          (s) => (s as UnknownRecord)[inputKey]
+        );
+        if (shouldStartWithUndefined)
+          return subInput$.pipe(startWithUndefined());
+        return subInput$;
       }),
       (...args: any[]) =>
         args.reduce((record, arg, index) => {

@@ -1,14 +1,10 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ContentChild,
-  Directive,
   inject,
   Input,
   NgZone,
   OnInit,
-  TemplateRef,
 } from '@angular/core';
 import * as THREE from 'three';
 import {
@@ -38,15 +34,6 @@ const privateKeys = [
 
 type PrivateKeys = typeof privateKeys[number];
 
-@Directive({
-  selector: 'ng-template[ngt-portal-content]',
-  standalone: true,
-  exportAs: 'ngtPortalContent',
-})
-export class NgtPortalContent {
-  readonly templateRef = inject(TemplateRef);
-}
-
 export interface NgtPortalState {
   container: NgtRef<THREE.Object3D>;
   state: Partial<Omit<NgtState, PrivateKeys>>;
@@ -60,13 +47,7 @@ export interface NgtPortalState {
 @Component({
   selector: 'ngt-portal',
   standalone: true,
-  template: `
-    <ng-container
-      *ngIf="content"
-      [ngTemplateOutlet]="content.templateRef"
-    ></ng-container>
-    <ng-content></ng-content>
-  `,
+  template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NgtResize,
@@ -75,7 +56,6 @@ export interface NgtPortalState {
     provideSceneRef(NgtPortal, (portal) => portal.containerRef),
     provideCameraRef(NgtPortal, (portal) => portal.cameraRef),
   ],
-  imports: [NgIf, NgTemplateOutlet],
 })
 export class NgtPortal
   extends NgtComponentStore<NgtPortalState>
@@ -98,8 +78,6 @@ export class NgtPortal
   @Input() set state(state: NgtPortalState['state']) {
     this.set({ state });
   }
-
-  @ContentChild(NgtPortalContent) content?: NgtPortalContent;
 
   readonly #zone = inject(NgZone);
   readonly #portalStore = inject(NgtStore, { self: true });
@@ -152,9 +130,14 @@ export class NgtPortal
     let container = containerRef.value;
 
     if (!container) {
+      let previousRoot = this.#portalStore.get((s) => s.previousRoot);
+      while (previousRoot && previousRoot().previousRoot) {
+        previousRoot = previousRoot().previousRoot;
+      }
       container = prepare(
         new THREE.Scene(),
         this.#portalStore.get.bind(this.#portalStore),
+        previousRoot || this.#portalStore.get.bind(this.#portalStore),
         this.#parentStore?.get((s) => s.sceneRef)
       );
       containerRef.set(container);
@@ -170,8 +153,6 @@ export class NgtPortal
       events: { ...parentState.events, ...(portalState.events || {}) },
       size: { ...parentState.size, ...(portalState.size || {}) },
       ...portalState.state,
-      setEvents: (events) =>
-        this.set((s) => ({ events: { ...s.events, ...events } })),
     });
   }
 

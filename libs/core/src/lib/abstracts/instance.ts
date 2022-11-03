@@ -75,14 +75,22 @@ export abstract class NgtInstance<
   }
 
   @Input() set attach(
-    value: string | string[] | NgtAttachFunction | undefined
+    value:
+      | string
+      | string[]
+      | [string, ...(string | number)[]]
+      | NgtAttachFunction
+      | undefined
   ) {
     if (value) {
-      this.set({
-        attach:
-          typeof value === 'function' ? value : is.arr(value) ? value : [value],
-        attachExplicit: true,
-      });
+      const attach =
+        typeof value === 'function'
+          ? value
+          : is.arr(value)
+          ? value.map((item) => (is.num(item) ? item.toString() : item))
+          : [value];
+
+      this.set({ attach, attachExplicit: true });
     }
   }
 
@@ -363,7 +371,9 @@ export abstract class NgtInstance<
         this.preInit();
 
         // run init
-        this.#init(this.initTrigger$);
+        if (!this.isWrapper) {
+          this.#init(this.initTrigger$);
+        }
 
         // make sure `instance()` is available before doing anything
         this.#instanceReady(
@@ -431,11 +441,21 @@ export abstract class NgtInstance<
     instance: TInstance,
     prepareOptions: {
       parentStateGetter?: NgtStateGetter;
+      rootStateGetter?: NgtStateGetter;
       uuid?: string;
     } = {}
   ): NgtInstanceNode<TInstance> {
     if (!prepareOptions.parentStateGetter) {
       prepareOptions.parentStateGetter = this.store.get.bind(this.store);
+    }
+
+    if (!prepareOptions.rootStateGetter) {
+      let previousRoot = this.store.get((s) => s.previousRoot);
+      while (previousRoot && previousRoot().previousRoot) {
+        previousRoot = previousRoot().previousRoot;
+      }
+      prepareOptions.rootStateGetter =
+        previousRoot || this.store.get.bind(this.store);
     }
 
     if (prepareOptions.uuid && 'uuid' in instance) {
@@ -445,6 +465,7 @@ export abstract class NgtInstance<
     const prepInstance = prepare(
       instance,
       prepareOptions.parentStateGetter!,
+      prepareOptions.rootStateGetter!,
       this.parent,
       this.instance,
       this.isPrimitive

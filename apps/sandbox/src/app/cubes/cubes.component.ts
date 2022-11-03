@@ -50,7 +50,7 @@ export class Cube {
 
       <ngt-mesh-standard-material
         *ngFor="let color of colors; index as i"
-        [attach]="['material', '' + i]"
+        [attach]="['material', i]"
         [color]="color"
       ></ngt-mesh-standard-material>
     </ngt-mesh>

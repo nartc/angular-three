@@ -121,7 +121,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
 
     const scene = prepare(
       new THREE.Scene(),
-      () => this.get(),
+      this.#get,
+      this.#get,
       this.#parentStore?.get((s) => s.sceneRef)
     );
 
@@ -211,6 +212,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
       setSize: this.#setSize.bind(this),
       setDpr: this.#setDpr.bind(this),
       setCamera: this.#setCamera.bind(this),
+      addInteraction: this.#addInteraction.bind(this),
+      removeInteraction: this.#removeInteraction.bind(this),
     });
 
     this.#onResize(this.#resizeResult);
@@ -309,6 +312,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
       if (!is.instance(camera)) {
         camera = prepare(
           camera,
+          this.#get,
           this.#get,
           this.#parentStore?.get((s) => s.cameraRef)
         );
@@ -493,7 +497,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     }
   }
 
-  addInteraction(interaction: THREE.Object3D) {
+  #addInteraction(interaction: THREE.Object3D) {
     this.set((state) => ({
       ...state,
       internal: {
@@ -503,7 +507,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     }));
   }
 
-  removeInteraction(uuid: string) {
+  #removeInteraction(uuid: string) {
     this.set((state) => ({
       ...state,
       internal: {

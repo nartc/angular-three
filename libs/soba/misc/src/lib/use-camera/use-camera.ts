@@ -30,7 +30,7 @@ export function useCamera(
 }
 
 @Pipe({
-  name: 'use-camera',
+  name: 'useCamera',
   standalone: true,
 })
 export class NgtSobaUseCamera implements PipeTransform {

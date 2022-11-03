@@ -1,5 +1,5 @@
 import { Directive, inject, Input } from '@angular/core';
-import { NgtObject, NgtObjectInputs } from '../abstracts/object';
+import { NgtObject } from '../abstracts/object';
 import {
   createPassThroughInput,
   createPassThroughOutput,
@@ -34,6 +34,8 @@ export class NgtObjectPassThrough {
     passThroughOutput('pointercancel');
     passThroughOutput('wheel');
     passThroughOutput('ready');
+    passThroughOutput('beforeRender');
+    passThroughOutput('appended');
 
     if (wrapper.shouldPassThroughRef) {
       this.#host.ref = wrapper.instance;
@@ -59,10 +61,8 @@ export class NgtObjectPassThrough {
     passThroughInput('appendTo', true);
   }
 
-  private static assertWrapper(
-    wrapper: unknown
-  ): asserts wrapper is NgtObjectInputs {
-    if (!(wrapper instanceof NgtObjectInputs)) {
+  private static assertWrapper(wrapper: unknown): asserts wrapper is NgtObject {
+    if (!(wrapper instanceof NgtObject)) {
       throw new Error(`[NgtObjectPassThrough] wrapper is not an NgtObject`);
     }
   }

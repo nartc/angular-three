@@ -18,4 +18,16 @@ export const routes: Route[] = [
         'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/cubes',
     },
   },
+  {
+    path: 'view-cube',
+    loadComponent: () => import('./view-cube/view-cube.component'),
+    data: {
+      title: 'View Cube',
+      description: 'Heads-up-displays using NgtPortal',
+      link: '/view-cube',
+      asset: 'assets/examples/cubes',
+      source:
+        'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/view-cube',
+    },
+  },
 ];

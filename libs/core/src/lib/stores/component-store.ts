@@ -32,7 +32,6 @@ import { debounceSync } from './debounce-sync';
 
 type SelectConfig = {
   debounce?: boolean;
-  startWithUndefined?: boolean;
 };
 
 export type SelectorResults<TSelectors extends Observable<unknown>[]> = {
@@ -179,16 +178,14 @@ export abstract class NgtComponentStore<
     if (observables.length === 0) {
       observable$ = this.#stateSubject$.pipe(
         config.debounce ? debounceSync() : (source$) => source$,
-        map((state) => projector(state)),
-        config.startWithUndefined ? startWithUndefined() : (source$) => source$
+        map((state) => projector(state))
       );
     } else {
       // If there are multiple arguments, then we're aggregating selectors, so we need
       // to take the combineLatest of them before calling the map function.
       observable$ = combineLatest(observables).pipe(
         config.debounce ? debounceSync() : (source$) => source$,
-        map((projectorArgs) => projector(...projectorArgs)),
-        config.startWithUndefined ? startWithUndefined() : (source$) => source$
+        map((projectorArgs) => projector(...projectorArgs))
       );
     }
 
@@ -408,7 +405,6 @@ function processSelectorArgs<
   // Assign default values.
   let config: Required<SelectConfig> = {
     debounce: false,
-    startWithUndefined: false,
   };
   let projector: ProjectorFn;
   // Last argument is either projector or config

@@ -3,12 +3,12 @@ import {
   BooleanInput,
   coerceBooleanProperty,
   coerceNumberProperty,
-  NgtCommonCamera,
+  NgtObjectPassThrough,
   NgtRef,
-  NgtSize,
   NumberInput,
   provideCommonCameraRef,
   provideNgtCommonCamera,
+  startWithUndefined,
   tapEffect,
 } from '@angular-three/core';
 import { NgtOrthographicCamera } from '@angular-three/core/cameras';
@@ -57,13 +57,8 @@ export class NgtSobaOrthographicCameraContent {
   template: `
     <ng-container *ngIf="orthographicCameraVm$ | async as vm">
       <ngt-orthographic-camera
-        [ref]="instance"
-        [left]="vm.left ?? vm.size.width / -2"
-        [right]="vm.right ?? vm.size.width / 2"
-        [top]="vm.top ?? vm.size.height / 2"
-        [bottom]="vm.bottom ?? vm.size.height / -2"
-        [near]="vm.near"
-        [far]="vm.far"
+        [ngtObjectPassThrough]="this"
+        [args]="[vm.left, vm.right, vm.top, vm.bottom, vm.near, vm.far]"
         #orthographicCamera
       >
         <ng-container
@@ -91,13 +86,22 @@ export class NgtSobaOrthographicCameraContent {
     provideNgtCommonCamera(NgtSobaOrthographicCamera),
     provideCommonCameraRef(NgtSobaOrthographicCamera),
   ],
-  imports: [NgtOrthographicCamera, NgIf, NgTemplateOutlet, AsyncPipe, NgtGroup],
+  imports: [
+    NgtOrthographicCamera,
+    NgIf,
+    NgTemplateOutlet,
+    AsyncPipe,
+    NgtGroup,
+    NgtObjectPassThrough,
+  ],
 })
-export class NgtSobaOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCamera> {
+export class NgtSobaOrthographicCamera extends NgtOrthographicCamera {
   readonly #sobaFbo = inject(NgtSobaFBO);
 
+  override shouldPassThroughRef = true;
+  override isWrapper = true;
+
   readonly orthographicCameraVm$: Observable<{
-    size: NgtSize;
     left: number;
     right: number;
     top: number;
@@ -106,18 +110,17 @@ export class NgtSobaOrthographicCamera extends NgtCommonCamera<THREE.Orthographi
     far?: number;
   }> = this.select(
     this.store.select((s) => s.size),
-    this.select((s) => s['left'], { startWithUndefined: true }),
-    this.select((s) => s['right'], { startWithUndefined: true }),
-    this.select((s) => s['top'], { startWithUndefined: true }),
-    this.select((s) => s['bottom'], { startWithUndefined: true }),
-    this.select((s) => s['near'], { startWithUndefined: true }),
-    this.select((s) => s['far'], { startWithUndefined: true }),
+    this.select((s) => s['left']).pipe(startWithUndefined()),
+    this.select((s) => s['right']).pipe(startWithUndefined()),
+    this.select((s) => s['top']).pipe(startWithUndefined()),
+    this.select((s) => s['bottom']).pipe(startWithUndefined()),
+    this.select((s) => s['near']).pipe(startWithUndefined()),
+    this.select((s) => s['far']).pipe(startWithUndefined()),
     (size, left, right, top, bottom, near, far) => ({
-      size,
-      left,
-      right,
-      top,
-      bottom,
+      left: left || size.width / -2,
+      right: right || size.width / 2,
+      top: top || size.height / 2,
+      bottom: bottom || size.height / -2,
       near,
       far,
     }),
@@ -138,30 +141,6 @@ export class NgtSobaOrthographicCamera extends NgtCommonCamera<THREE.Orthographi
 
   @Input() set manual(manual: BooleanInput) {
     this.set({ manual: coerceBooleanProperty(manual) });
-  }
-
-  @Input() set left(left: NumberInput) {
-    this.set({ left: coerceNumberProperty(left) });
-  }
-
-  @Input() set right(right: NumberInput) {
-    this.set({ right: coerceNumberProperty(right) });
-  }
-
-  @Input() set top(top: NumberInput) {
-    this.set({ top: coerceNumberProperty(top) });
-  }
-
-  @Input() set bottom(bottom: NumberInput) {
-    this.set({ bottom: coerceNumberProperty(bottom) });
-  }
-
-  @Input() set near(near: NumberInput) {
-    this.set({ near: coerceNumberProperty(near) });
-  }
-
-  @Input() set far(far: NumberInput) {
-    this.set({ far: coerceNumberProperty(far) });
   }
 
   @Input() set frames(frames: NumberInput) {
@@ -277,17 +256,5 @@ export class NgtSobaOrthographicCamera extends NgtCommonCamera<THREE.Orthographi
         )
       )();
     }
-  }
-
-  protected override get optionsFields(): Record<string, boolean> {
-    return {
-      ...super.optionsFields,
-      left: true,
-      right: true,
-      top: true,
-      bottom: true,
-      near: true,
-      far: true,
-    };
   }
 }

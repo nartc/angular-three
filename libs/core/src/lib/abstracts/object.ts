@@ -20,6 +20,7 @@ import type {
 import { applyProps } from '../utils/apply-props';
 import { coerceBooleanProperty, coerceNumberProperty } from '../utils/coercion';
 import { createNgtProvider } from '../utils/inject';
+import { getInstanceInternal } from '../utils/instance';
 import { is } from '../utils/is';
 import { make } from '../utils/make';
 import { NgtInstance, NgtInstanceState, provideNgtInstance } from './instance';
@@ -314,7 +315,9 @@ export abstract class NgtObject<
 
       // add as an interaction if there are events observed
       if (observedEvents.eventCount > 0) {
-        this.store.addInteraction(this.instanceValue);
+        getInstanceInternal(this.instanceValue)
+          ?.rootGetter()
+          .addInteraction(this.instanceValue);
       }
 
       // append to parent
@@ -356,7 +359,9 @@ export abstract class NgtObject<
     }
 
     if (this.__ngt__.eventCount > 0) {
-      this.store.removeInteraction(this.instanceValue.uuid);
+      getInstanceInternal(this.instanceValue)
+        ?.rootGetter()
+        .removeInteraction(this.instanceValue.uuid);
     }
 
     this.#remove();
@@ -468,7 +473,9 @@ export abstract class NgtObject<
 
       // remove interaction
       if (this.__ngt__.eventCount > 0) {
-        this.store.removeInteraction(this.instanceValue.uuid);
+        getInstanceInternal(this.instanceValue)
+          ?.rootGetter()
+          .removeInteraction(this.instanceValue.uuid);
       }
 
       this.#remove();

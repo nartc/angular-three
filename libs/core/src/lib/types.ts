@@ -347,6 +347,8 @@ export interface NgtState {
   ) => void;
   setDpr: (dpr: NgtDpr) => void;
   setCamera: (camera: NgtCamera) => void;
+  addInteraction(interaction: THREE.Object3D): void;
+  removeInteraction(uuid: string): void;
 }
 
 export type NgtStateGetter = () => NgtState;
@@ -382,6 +384,7 @@ export type NgtAttachFunction = (
 export interface NgtInstanceLocalState {
   /** the state getter of the canvas that the instance is being rendered to */
   stateGetter: NgtStateGetter;
+  rootGetter: NgtStateGetter;
   objects: NgtRef<NgtRef[]>;
   parent: NgtRef<NgtInstanceNode> | null;
   primitive?: boolean;
@@ -398,7 +401,11 @@ export type NgtInstanceNode<TNode = any> = TNode & {
 
 export type NgtPrepareInstanceFn<TInstance> = (
   instance: TInstance,
-  prepareOptions?: { uuid?: string; parentStateGetter?: NgtStateGetter }
+  prepareOptions?: {
+    uuid?: string;
+    parentStateGetter?: NgtStateGetter;
+    rootStateGetter?: NgtStateGetter;
+  }
 ) => NgtInstanceNode<TInstance>;
 
 export type NgtGLOptions =
