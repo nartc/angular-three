@@ -1,9 +1,6 @@
 import { map, Observable, of, pairwise, startWith } from 'rxjs';
 import { NgtRef } from '../ref';
-import {
-  NgtComponentStore,
-  startWithUndefined,
-} from '../stores/component-store';
+import { NgtComponentStore } from '../stores/component-store';
 import type {
   NgtInstanceLocalState,
   NgtInstanceNode,
@@ -64,12 +61,9 @@ export function optionsFieldsToOptions(
   return instance
     .select(
       ...optionEntries.map(([inputKey, shouldStartWithUndefined]) => {
-        const subInput$ = instance.select(
-          (s) => (s as UnknownRecord)[inputKey]
-        );
-        if (shouldStartWithUndefined)
-          return subInput$.pipe(startWithUndefined());
-        return subInput$;
+        return instance.select((s) => (s as UnknownRecord)[inputKey], {
+          startWithUndefined: shouldStartWithUndefined,
+        });
       }),
       (...args: any[]) =>
         args.reduce((record, arg, index) => {

@@ -3,6 +3,7 @@ import {
   Directive,
   EventEmitter,
   inject,
+  Injector,
   Input,
   NgZone,
   OnDestroy,
@@ -88,6 +89,7 @@ export abstract class NgtInstance<
   @Output() ready = new EventEmitter<TInstance>();
   @Output() update = new EventEmitter<TInstance>();
 
+  readonly injector = inject(Injector);
   protected readonly zone = inject(NgZone);
   protected readonly store = inject(NgtStore);
   protected readonly document = inject(DOCUMENT);

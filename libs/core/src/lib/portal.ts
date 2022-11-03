@@ -44,7 +44,7 @@ type PrivateKeys = typeof privateKeys[number];
   exportAs: 'ngtPortalContent',
 })
 export class NgtPortalContent {
-  readonly templateRef = inject(TemplateRef) as TemplateRef<unknown>;
+  readonly templateRef = inject(TemplateRef);
 }
 
 export interface NgtPortalState {

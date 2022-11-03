@@ -1,8 +1,5 @@
 import { merge, takeUntil } from 'rxjs';
-import {
-  NgtComponentStore,
-  startWithUndefined,
-} from '../stores/component-store';
+import { NgtComponentStore } from '../stores/component-store';
 import { is } from './is';
 
 export function createPassThroughOutput<TObject extends NgtComponentStore>(
@@ -33,13 +30,12 @@ export function createPassThroughInput<TObject extends NgtComponentStore>(
     shouldStartWithUndefined = false,
     useMergeValue = false
   ) => {
-    let wrapper$ = wrapper.select((s) => s[key]);
-    let host$ = host.select((s) => s[key]);
-
-    if (shouldStartWithUndefined) {
-      wrapper$ = wrapper$.pipe(startWithUndefined());
-      host$ = host$.pipe(startWithUndefined());
-    }
+    const wrapper$ = wrapper.select((s) => s[key], {
+      startWithUndefined: shouldStartWithUndefined,
+    });
+    const host$ = host.select((s) => s[key], {
+      startWithUndefined: shouldStartWithUndefined,
+    });
 
     merge(wrapper$, host$)
       .pipe(takeUntil(wrapper.destroy$))
