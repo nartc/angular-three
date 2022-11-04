@@ -81,7 +81,6 @@ export class ViewCube extends NgtComponentStore implements OnInit {
   hovered = -1;
 
   readonly #store = inject(NgtStore);
-  readonly #matrix = new THREE.Matrix4();
 
   readonly size$ = this.#store.select((s) => s.size);
 
@@ -106,19 +105,14 @@ export class ViewCube extends NgtComponentStore implements OnInit {
       });
 
       this.effect<void>(
-        tapEffect(() =>
-          this.#store.registerBeforeRender({
+        tapEffect(() => {
+          const matrix = new THREE.Matrix4();
+          return this.#store.registerBeforeRender({
             priority: 1,
-            callback: () => {
-              const scene = this.#store.get((s) => s.scene);
-              const camera = this.#store.get((s) => s.camera);
-              const gl = this.#store.get((s) => s.gl);
-
+            callback: ({ scene, camera, gl }) => {
               if (this.virtualCam.value) {
-                this.#matrix.copy(camera.matrix).invert();
-                this.meshRef.value.quaternion.setFromRotationMatrix(
-                  this.#matrix
-                );
+                matrix.copy(camera.matrix).invert();
+                this.meshRef.value.quaternion.setFromRotationMatrix(matrix);
                 gl.autoClear = true;
                 gl.render(scene, camera);
                 gl.autoClear = false;
@@ -126,8 +120,8 @@ export class ViewCube extends NgtComponentStore implements OnInit {
                 gl.render(this.virtualScene.value, this.virtualCam.value);
               }
             },
-          })
-        )
+          });
+        })
       )();
     });
   }
