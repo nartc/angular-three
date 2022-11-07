@@ -6,3 +6,4 @@ export * from './lib/line/line-geometry';
 export * from './lib/line/line-material';
 export * from './lib/cubic-bezier-line/cubic-bezier-line';
 export * from './lib/quadratic-bezier-line/quadratic-bezier-line';
+export * from './lib/gradient-texture/gradient-texture';
