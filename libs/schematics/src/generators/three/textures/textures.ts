@@ -24,12 +24,11 @@ export const textures = [
     name: THREE.CanvasTexture.name,
     defPath: 'node_modules/@types/three/src/textures/CanvasTexture.d.ts',
   },
-  // TODO: CompressedArrayTexture isn't available in @types/three yet
-  // {
-  //   name: THREE.CompressedArrayTexture.name,
-  //   defPath:
-  //     'node_modules/@types/three/src/textures/CompressedArrayTexture.d.ts',
-  // },
+  {
+    name: THREE.CompressedArrayTexture.name,
+    defPath:
+      'node_modules/@types/three/src/textures/CompressedArrayTexture.d.ts',
+  },
   {
     name: THREE.CompressedTexture.name,
     defPath: 'node_modules/@types/three/src/textures/CompressedTexture.d.ts',

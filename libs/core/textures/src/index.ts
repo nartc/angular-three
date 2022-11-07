@@ -1,5 +1,6 @@
 // GENERATED
 export * from './lib/canvas-texture/canvas-texture';
+export * from './lib/compressed-array-texture/compressed-array-texture';
 export * from './lib/compressed-texture/compressed-texture';
 export * from './lib/cube-texture/cube-texture';
 export * from './lib/data3-dtexture/data3-dtexture';

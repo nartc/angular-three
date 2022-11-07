@@ -44,14 +44,14 @@
     "@swc/core": "^1.3.14",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",
-    "@types/three": "0.144.0",
-    "@typescript-eslint/eslint-plugin": "~5.42.0",
-    "@typescript-eslint/parser": "~5.42.0",
+    "@types/three": "0.146.0",
+    "@typescript-eslint/eslint-plugin": "~5.42.1",
+    "@typescript-eslint/parser": "~5.42.1",
     "all-contributors-cli": "6.24.0",
     "commitizen": "4.2.5",
     "cz-customizable": "7.0.0",
     "dotenv-cli": "6.0.0",
-    "eslint": "~8.26.0",
+    "eslint": "~8.27.0",
     "eslint-config-prettier": "8.5.0",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
@@ -86,7 +86,7 @@
     "three-stdlib": "^2.17.3",
     "troika-three-text": "^0.46.4",
     "tslib": "^2.4.1",
-    "zone.js": "~0.11.8"
+    "zone.js": "~0.12.0"
   },
   "config": {
     "commitizen": {
@@ -94,4 +94,3 @@
     }
   }
 }
-

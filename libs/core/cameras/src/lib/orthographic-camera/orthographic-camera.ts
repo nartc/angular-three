@@ -1,11 +1,11 @@
 // GENERATED
 import {
   AnyConstructor,
-  coerceNumberProperty,
   NgtCommonCamera,
-  NumberInput,
-  provideCommonCameraRef,
   provideNgtCommonCamera,
+  provideCommonCameraRef,
+  coerceNumberProperty,
+  NumberInput,
 } from '@angular-three/core';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import * as THREE from 'three';
