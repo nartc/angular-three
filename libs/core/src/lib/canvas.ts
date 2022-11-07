@@ -206,12 +206,14 @@ export class NgtCanvas
         invalidate,
         advance
       );
+
       this.#store.configure(
         this.get(),
         this.rendererCanvas.nativeElement,
         invalidate,
         advance
       );
+
       this.#store.onReady(() => {
         const state = this.#store.get();
         const inputs = this.get();
@@ -247,6 +249,8 @@ export class NgtCanvas
         }
 
         this.created.emit(this.#store.get());
+
+        // start the rendering loop (animation frame)
         this.#store.startLoop();
       });
     });

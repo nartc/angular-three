@@ -9,12 +9,12 @@ import {
   provideObjectRef,
   startWithUndefined,
 } from '@angular-three/core';
-import { NgtSobaLinePassThrough } from '@angular-three/soba/abstractions';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { filter, Observable, tap } from 'rxjs';
 import * as THREE from 'three';
 import { NgtSobaLine } from '../line/line';
+import { NgtSobaLinePassThrough } from '../line/line-pass-through';
 
 @Component({
   selector: 'ngt-soba-quadratic-bezier-line[start][end]',

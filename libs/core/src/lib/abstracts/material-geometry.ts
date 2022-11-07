@@ -1,7 +1,7 @@
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import { NgtRef } from '../ref';
-import { AnyConstructor, UnknownRecord } from '../types';
+import { AnyConstructor } from '../types';
 import { createNgtProvider } from '../utils/inject';
 import { is } from '../utils/is';
 import { NgtObject, NgtObjectInputsState, provideNgtObject } from './object';
@@ -69,20 +69,6 @@ export abstract class NgtMaterialGeometry<
         : state.material,
       ...objectArgs
     );
-  }
-
-  protected override postPrepare(object: TMaterialGeometryObject) {
-    const state = this.get();
-
-    if (state.morphTargetDictionary && 'morphTargetDictionary' in object) {
-      (object as UnknownRecord)['morphTargetDictionary'] =
-        state.morphTargetDictionary;
-    }
-
-    if (state.morphTargetInfluences && 'morphTargetInfluences' in object) {
-      (object as UnknownRecord)['morphTargetInfluences'] =
-        state.morphTargetInfluences;
-    }
   }
 
   protected override get optionsFields(): Record<string, boolean> {

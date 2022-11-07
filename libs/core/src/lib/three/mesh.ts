@@ -16,6 +16,18 @@ export abstract class NgtCommonMesh<
   override get objectType(): AnyConstructor<TMesh> {
     return this.meshType;
   }
+
+  override postPrepare(object: TMesh) {
+    const state = this.get();
+
+    if (state.morphTargetDictionary && 'morphTargetDictionary' in object) {
+      object.morphTargetDictionary = state.morphTargetDictionary;
+    }
+
+    if (state.morphTargetInfluences && 'morphTargetInfluences' in object) {
+      object.morphTargetInfluences = state.morphTargetInfluences;
+    }
+  }
 }
 
 export const provideNgtCommonMesh = createNgtProvider(

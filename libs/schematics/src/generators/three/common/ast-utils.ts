@@ -188,6 +188,7 @@ export function getThreeType(type: string): string {
     'HTMLImageElement',
     'HTMLCanvasElement',
     'HTMLVideoElement',
+    'TexImageSource',
     'ImageBitmap',
     'ImageData',
     'BufferSource',

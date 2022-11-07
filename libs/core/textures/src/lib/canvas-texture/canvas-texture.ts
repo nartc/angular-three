@@ -29,7 +29,7 @@ export class NgtCanvasTexture extends NgtCommonTexture<THREE.CanvasTexture> {
     | ConstructorParameters<typeof THREE.CanvasTexture>
     | undefined;
 
-  @Input() set canvas(canvas: THREE.TexImageSource | THREE.OffscreenCanvas) {
+  @Input() set canvas(canvas: TexImageSource | THREE.OffscreenCanvas) {
     this.set({ canvas });
   }
 

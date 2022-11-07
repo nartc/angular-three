@@ -48,17 +48,13 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     tap(({ width, height, top, left, dpr }) => {
       const state = this.get();
 
-      const sizeChanged =
-        state.size.width !== width || state.size.height !== height;
       const dprChanged = state.viewport.dpr !== dpr;
 
       if (dprChanged) {
         this.#setDpr(dpr);
       }
 
-      if (sizeChanged) {
-        this.#setSize(width, height, top, left, state.size.updateStyle);
-      }
+      this.#setSize(width, height, top, left, state.size.updateStyle);
     })
   );
 
@@ -217,12 +213,14 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     });
 
     this.#onResize(this.#resizeResult);
+
     this.#updateDimensions(
       this.select(
         this.select((s) => s.size),
         this.select((s) => s.viewport)
       )
     );
+
     this.#updateSubscribers(
       this.select(
         this.select((s) => s.internal.animations),

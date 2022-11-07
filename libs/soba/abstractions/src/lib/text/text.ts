@@ -5,10 +5,10 @@ import {
   coerceNumberProperty,
   is,
   NgtColor,
-  NgtMaterialGeometry,
+  NgtCommonMesh,
   NumberInput,
-  provideMaterialGeometryRef,
-  provideNgtMaterialGeometry,
+  provideCommonMeshRef,
+  provideNgtCommonMesh,
   tapEffect,
 } from '@angular-three/core';
 import {
@@ -30,12 +30,12 @@ import { preloadFont, Text as TextMeshImpl } from 'troika-three-text';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    provideNgtMaterialGeometry(NgtSobaText),
-    provideMaterialGeometryRef(NgtSobaText),
+    provideNgtCommonMesh(NgtSobaText),
+    provideCommonMeshRef(NgtSobaText),
   ],
 })
-export class NgtSobaText extends NgtMaterialGeometry<TextMeshImpl> {
-  override get objectType(): AnyConstructor<TextMeshImpl> {
+export class NgtSobaText extends NgtCommonMesh<TextMeshImpl> {
+  override get meshType(): AnyConstructor<TextMeshImpl> {
     return TextMeshImpl;
   }
 
@@ -103,9 +103,7 @@ export class NgtSobaText extends NgtMaterialGeometry<TextMeshImpl> {
     this.set({ overflowWrap });
   }
 
-  @Input() set whiteSpace(
-    whiteSpace: 'normal' | 'overflowWrap' | 'overflowWrap'
-  ) {
+  @Input() set whiteSpace(whiteSpace: 'normal' | 'overflowWrap') {
     this.set({ whiteSpace });
   }
 
