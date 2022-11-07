@@ -15,11 +15,7 @@ import {
   moduleMetadata,
   Story,
 } from '@storybook/angular';
-import {
-  onCanvasCreated,
-  setupCanvas,
-  setupCanvasImports,
-} from '../setup-canvas';
+import { setupCanvas, setupCanvasImports } from '../setup-canvas';
 
 export default {
   title: 'Abstractions/Billboard',
@@ -49,7 +45,7 @@ export default {
 } as Meta;
 
 export const Planes: Story = (args) => ({
-  props: { ...args, onCanvasCreated },
+  props: args,
   template: `
 <ngt-soba-orbit-controls zoomSpeed="0.5" enablePan></ngt-soba-orbit-controls>
 
@@ -95,7 +91,7 @@ Planes.args = {
 };
 
 export const Text: Story = (args) => ({
-  props: { ...args, onCanvasCreated },
+  props: args,
   template: `
 <ngt-soba-orbit-controls zoomSpeed="0.5" enablePan></ngt-soba-orbit-controls>
 

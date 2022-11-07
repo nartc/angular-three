@@ -51,3 +51,4 @@ export * from './lib/utils/pass-through';
 export * from './lib/utils/loop';
 export * from './lib/utils/apply-props';
 export * from './lib/utils/is';
+export * from './lib/utils/check-needs-update';

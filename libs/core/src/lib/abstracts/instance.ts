@@ -44,6 +44,7 @@ export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
   attach: string[] | NgtAttachFunction;
   noAttach: boolean;
   skipParent: boolean;
+  skipInit: boolean;
 }
 
 @Directive()
@@ -64,6 +65,13 @@ export abstract class NgtInstance<
     this.set({
       skipParent: coerceBooleanProperty(skipParent),
       skipParentExplicit: true,
+    });
+  }
+
+  @Input() set skipInit(skipInit: BooleanInput) {
+    this.set({
+      skipInit: coerceBooleanProperty(skipInit),
+      skipInitExplicit: true,
     });
   }
 
@@ -359,8 +367,10 @@ export abstract class NgtInstance<
         attach: s.attach || [],
         noAttach: s.noAttach || false,
         skipParent: s.skipParent || false,
+        skipInit: s.skipInit || false,
         noAttachExplicit: s['noAttachExplicit'] || false,
         skipParentExplicit: s['skipParentExplicit'] || false,
+        skipInitExplicit: s['skipInitExplicit'] || false,
         attachExplicit: s['attachExplicit'] || false,
       }));
 
@@ -371,7 +381,7 @@ export abstract class NgtInstance<
         this.preInit();
 
         // run init
-        if (!this.isWrapper) {
+        if (!this.isWrapper && !this.get((s) => s.skipInit)) {
           this.#init(this.initTrigger$);
         }
 

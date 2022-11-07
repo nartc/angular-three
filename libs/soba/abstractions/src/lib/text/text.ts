@@ -18,7 +18,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { asapScheduler, observeOn, pipe, tap } from 'rxjs';
+import { animationFrameScheduler, observeOn, pipe, tap } from 'rxjs';
 // @ts-ignore
 import { preloadFont, Text as TextMeshImpl } from 'troika-three-text';
 
@@ -176,7 +176,7 @@ export class NgtSobaText extends NgtMaterialGeometry<TextMeshImpl> {
 
   readonly #textReady = this.effect<void>(
     pipe(
-      observeOn(asapScheduler),
+      observeOn(animationFrameScheduler),
       tapEffect(() => {
         // if material is an NgtInstance
         // then delete the default color
