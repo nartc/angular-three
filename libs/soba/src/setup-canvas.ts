@@ -3,6 +3,7 @@ import { NgtColorAttribute } from '@angular-three/core/attributes';
 import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
 import { NgtStats } from '@angular-three/core/stats';
 import { NgtSobaOrbitControls } from '@angular-three/soba/controls';
+import * as THREE from 'three';
 
 interface CanvasOptions {
   camera?: {
@@ -40,8 +41,7 @@ export function setupCanvas(canvasOptions?: CanvasOptions) {
       }
     : defaultCanvasOptions;
 
-  return {
-    decorator: (story: string) => `
+  return (story: string) => `
 <ngt-canvas
   shadows
   (created)="onCanvasCreated($event)"
@@ -72,18 +72,22 @@ export function setupCanvas(canvasOptions?: CanvasOptions) {
   ${story}
 </ngt-canvas>
 <ngt-stats></ngt-stats>
-    `,
-    imports: [
-      NgtCanvas,
-      NgtAmbientLight,
-      NgtPointLight,
-      NgtColorAttribute,
-      NgtSobaOrbitControls,
-      NgtStats,
-    ],
-  };
+    `;
 }
+
+export const setupCanvasImports = [
+  NgtCanvas,
+  NgtAmbientLight,
+  NgtPointLight,
+  NgtColorAttribute,
+  NgtSobaOrbitControls,
+  NgtStats,
+];
 
 export function onCanvasCreated($event: NgtState) {
   console.log($event);
+}
+
+export function turn(object: THREE.Object3D) {
+  object.rotation.y += 0.01;
 }

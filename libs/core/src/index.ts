@@ -50,3 +50,4 @@ export * from './lib/utils/make';
 export * from './lib/utils/pass-through';
 export * from './lib/utils/loop';
 export * from './lib/utils/apply-props';
+export * from './lib/utils/is';

@@ -119,12 +119,6 @@ export abstract class NgtInstance<
   }
 
   /**
-   * Can be used by subclasses to run additional logic after options are set
-   * @protected
-   */
-  protected postSetOptions: ((instance: TInstance) => void) | undefined;
-
-  /**
    * Subclasses can customize this to run setOptions on custom trigger
    * @protected
    */
@@ -215,9 +209,7 @@ export abstract class NgtInstance<
           applyProps(this.instanceValue, customOptions);
         }
 
-        if (this.postSetOptions) {
-          this.postSetOptions(this.instanceValue);
-        }
+        this.postSetOptions(this.instanceValue);
 
         checkUpdate(this.instanceValue);
 
@@ -338,6 +330,14 @@ export abstract class NgtInstance<
    * @protected
    */
   protected postPrepare(_: TInstance) {
+    return;
+  }
+
+  /**
+   * Can be used by subclasses to run additional logic after options are set
+   * @protected
+   */
+  protected postSetOptions(_: TInstance) {
     return;
   }
 

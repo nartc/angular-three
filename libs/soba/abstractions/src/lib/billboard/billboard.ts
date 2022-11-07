@@ -4,6 +4,7 @@ import {
   NgtBeforeRender,
   NgtObjectPassThrough,
   provideNgtObject,
+  provideObjectHostRef,
   provideObjectRef,
 } from '@angular-three/core';
 import { NgtGroup } from '@angular-three/core/objects';
@@ -27,6 +28,7 @@ import * as THREE from 'three';
   providers: [
     provideNgtObject(NgtSobaBillboard),
     provideObjectRef(NgtSobaBillboard),
+    provideObjectHostRef(NgtSobaBillboard),
   ],
 })
 export class NgtSobaBillboard extends NgtGroup {
