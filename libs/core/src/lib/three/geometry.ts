@@ -19,23 +19,23 @@ export abstract class NgtCommonGeometry<
     this.instanceArgs = v;
   }
 
-  protected override parentRef = injectObjectRef({
+  override parentRef = injectObjectRef({
     optional: true,
     skipSelf: true,
   });
 
-  protected override parentHostRef = injectObjectHostRef({
+  override parentHostRef = injectObjectHostRef({
     optional: true,
     skipSelf: true,
   });
 
-  protected override preInit() {
+  override preInit() {
     this.set((s) => ({
       attach: s.attach.length ? s.attach : ['geometry'],
     }));
   }
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<TGeometry>
   ): (() => void) | void | undefined {
     const instanceArgs = this.get((s) => s.instanceArgs);

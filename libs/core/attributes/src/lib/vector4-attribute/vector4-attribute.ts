@@ -26,7 +26,7 @@ export class NgtVector4Attribute extends NgtInstance<THREE.Vector4> {
 
   override initTrigger$ = this.select((s) => s['vector4']);
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<THREE.Vector4>
   ): (() => void) | void | undefined {
     prepareInstance(

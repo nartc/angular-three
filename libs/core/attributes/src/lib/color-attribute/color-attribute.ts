@@ -26,7 +26,7 @@ export class NgtColorAttribute extends NgtInstance<THREE.Color> {
 
   override initTrigger$ = this.select((s) => s['color']);
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<THREE.Color>
   ): (() => void) | void | undefined {
     prepareInstance(

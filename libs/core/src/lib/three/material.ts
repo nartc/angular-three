@@ -242,12 +242,12 @@ export abstract class NgtCommonMaterial<
 
   abstract get materialType(): AnyConstructor<TMaterial>;
 
-  protected override parentRef = injectObjectRef({
+  override parentRef = injectObjectRef({
     optional: true,
     skipSelf: true,
   });
 
-  protected override parentHostRef = injectObjectHostRef({
+  override parentHostRef = injectObjectHostRef({
     optional: true,
     skipSelf: true,
   });

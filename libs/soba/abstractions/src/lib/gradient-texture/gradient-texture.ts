@@ -44,7 +44,7 @@ export class NgtSobaGradientTexture extends NgtCommonTexture {
     this.instanceArgs$
   );
 
-  protected override initInstanceArgs(instanceArgs: unknown[]): unknown[] {
+  override initInstanceArgs(instanceArgs: unknown[]): unknown[] {
     const { stops, colors, size } = this.get();
     const canvas = this.document.createElement('canvas');
     const context = canvas.getContext('2d')!;

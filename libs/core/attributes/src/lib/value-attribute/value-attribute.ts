@@ -23,7 +23,7 @@ export class NgtValueAttribute extends NgtInstance {
 
   override initTrigger$ = this.select((s) => s['value']);
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<any>
   ): (() => void) | void | undefined {
     prepareInstance(this.get((s) => s['value']));

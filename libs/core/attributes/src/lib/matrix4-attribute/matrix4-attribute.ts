@@ -26,7 +26,7 @@ export class NgtMatrix4Attribute extends NgtInstance<THREE.Matrix4> {
 
   override initTrigger$ = this.select((s) => s['matrix4']);
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<THREE.Matrix4>
   ): (() => void) | void | undefined {
     prepareInstance(

@@ -14,7 +14,7 @@ import * as THREE from 'three';
   providers: [provideNgtObject(NgtGroup), provideObjectRef(NgtGroup)],
 })
 export class NgtGroup extends NgtObject<THREE.Group> {
-  protected override instanceInitFn(): THREE.Group {
+  override instanceInitFn(): THREE.Group {
     return new THREE.Group();
   }
 }

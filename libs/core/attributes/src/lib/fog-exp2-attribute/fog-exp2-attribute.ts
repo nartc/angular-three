@@ -26,7 +26,7 @@ export class NgtFogExp2Attribute extends NgtInstance<THREE.FogExp2> {
 
   override initTrigger$ = this.select((s) => s['fogExp2']);
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<THREE.FogExp2>
   ): (() => void) | void | undefined {
     prepareInstance(

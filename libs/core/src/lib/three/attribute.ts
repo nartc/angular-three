@@ -20,7 +20,7 @@ export abstract class NgtCommonAttribute<
     this.instanceArgs = v;
   }
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<TAttribute>
   ): (() => void) | void | undefined {
     const instanceArgs = this.get((s) => s.instanceArgs);

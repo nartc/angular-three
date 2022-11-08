@@ -26,7 +26,7 @@ export class NgtFogAttribute extends NgtInstance<THREE.Fog> {
 
   override initTrigger$ = this.select((s) => s['fog']);
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<THREE.Fog>
   ): (() => void) | void | undefined {
     prepareInstance(

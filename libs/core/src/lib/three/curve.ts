@@ -35,7 +35,7 @@ export abstract class NgtCommonCurve<
     });
   }
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<TCurve>
   ): (() => void) | void | undefined {
     prepareInstance(new this.curveType(...this.get((s) => s.instanceArgs)));

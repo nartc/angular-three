@@ -283,7 +283,7 @@ export abstract class NgtObject<
   @Output() appended = new EventEmitter<TObject>();
   @Output() beforeRender = new EventEmitter<NgtBeforeRender<TObject>>();
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<TObject>
   ): (() => void) | void | undefined {
     if (this.instanceValue && this.__ngt__) {
@@ -471,7 +471,7 @@ export abstract class NgtObject<
     };
   }
 
-  protected override destroy() {
+  override destroy() {
     if (this.instance.value) {
       // remove beforeRender callback
       this.store.unregisterBeforeRender(this.instanceValue.uuid);
