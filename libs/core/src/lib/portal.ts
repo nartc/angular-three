@@ -130,14 +130,10 @@ export class NgtPortal
     let container = containerRef.value;
 
     if (!container) {
-      let previousRoot = this.#portalStore.get((s) => s.previousRoot);
-      while (previousRoot && previousRoot().previousRoot) {
-        previousRoot = previousRoot().previousRoot;
-      }
       container = prepare(
         new THREE.Scene(),
         this.#portalStore.get.bind(this.#portalStore),
-        previousRoot || this.#portalStore.get.bind(this.#portalStore),
+        this.#portalStore.rootStateGetter,
         this.#parentStore?.get((s) => s.sceneRef)
       );
       containerRef.set(container);

@@ -102,7 +102,7 @@ export class Scene {}
   selector: 'sandbox-cubes',
   standalone: true,
   template: `
-    <ngt-canvas (created)="onCreated($event.scene)">
+    <ngt-canvas>
       <ngt-color color="lightblue" attach="background"></ngt-color>
       <scene></scene>
     </ngt-canvas>
@@ -111,8 +111,4 @@ export class Scene {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgtCanvas, NgtColorAttribute, NgtStats, Scene],
 })
-export default class SandboxCubes {
-  onCreated(scene: THREE.Scene) {
-    console.log(scene);
-  }
-}
+export default class SandboxCubes {}

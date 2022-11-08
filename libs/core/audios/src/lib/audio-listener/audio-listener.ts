@@ -53,7 +53,7 @@ export class NgtAudioListener extends NgtObject<
     }
   }
 
-  protected override destroy() {
+  override destroy() {
     const camera = this.store.get((s) => s.camera);
     if (camera) {
       camera.remove(this.instanceValue);
@@ -61,7 +61,7 @@ export class NgtAudioListener extends NgtObject<
     super.destroy();
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return { ...super.optionsFields, filter: true, timeDelta: true };
   }
 }

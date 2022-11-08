@@ -400,7 +400,7 @@ export class NgtSobaGizmoEdgeCube extends NgtSobaGizmoViewCubeGeneric<THREE.Mesh
   selector: 'ngt-soba-gizmo-viewcube',
   standalone: true,
   template: `
-    <ngt-group [scale]="60">
+    <ngt-group name="view-cube" [scale]="60">
       <ngt-soba-gizmo-face-cube [ngtSobaGizmoViewCubeGenericPassThrough]="this"></ngt-soba-gizmo-face-cube>
 
       <ngt-soba-gizmo-edge-cube

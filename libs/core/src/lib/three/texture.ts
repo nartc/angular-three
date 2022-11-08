@@ -66,7 +66,7 @@ export abstract class NgtCommonTexture<
     this.set({ encoding });
   }
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<TTexture>
   ): (() => void) | void | undefined {
     const instanceArgs = this.get((s) => s.instanceArgs);
@@ -83,7 +83,7 @@ export abstract class NgtCommonTexture<
     };
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       image: true,

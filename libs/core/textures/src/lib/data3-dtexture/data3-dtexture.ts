@@ -45,7 +45,7 @@ export class NgtData3DTexture extends NgtCommonTexture<THREE.Data3DTexture> {
     this.set({ depth: coerceNumberProperty(depth) });
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       data: false,

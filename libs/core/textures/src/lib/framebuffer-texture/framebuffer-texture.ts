@@ -41,7 +41,7 @@ export class NgtFramebufferTexture extends NgtCommonTexture<THREE.FramebufferTex
     this.set({ format });
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       width: false,

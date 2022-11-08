@@ -45,7 +45,7 @@ export abstract class NgtCommonLight<
     return light;
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return { ...super.optionsFields, intensity: false };
   }
 }

@@ -25,6 +25,7 @@
       "@angular-three/core/lights": ["libs/core/lights/src/index.ts"],
       "@angular-three/core/materials": ["libs/core/materials/src/index.ts"],
       "@angular-three/core/objects": ["libs/core/objects/src/index.ts"],
+      "@angular-three/core/primitives": ["libs/core/primitives/src/index.ts"],
       "@angular-three/core/stats": ["libs/core/stats/src/index.ts"],
       "@angular-three/core/textures": ["libs/core/textures/src/index.ts"],
       "@angular-three/schematics": ["libs/schematics/src/index.ts"],
@@ -34,6 +35,7 @@
       ],
       "@angular-three/soba/cameras": ["libs/soba/cameras/src/index.ts"],
       "@angular-three/soba/controls": ["libs/soba/controls/src/index.ts"],
+      "@angular-three/soba/loaders": ["libs/soba/loaders/src/index.ts"],
       "@angular-three/soba/misc": ["libs/soba/misc/src/index.ts"]
     }
   },

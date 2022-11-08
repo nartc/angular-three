@@ -53,7 +53,7 @@ export class NgtOrthographicCamera extends NgtCommonCamera<THREE.OrthographicCam
     return THREE.OrthographicCamera;
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       left: true,

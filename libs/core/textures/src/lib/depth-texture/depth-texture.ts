@@ -65,7 +65,7 @@ export class NgtDepthTexture extends NgtCommonTexture<THREE.DepthTexture> {
     this.set({ anisotropy: coerceNumberProperty(anisotropy) });
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       width: false,

@@ -37,7 +37,7 @@ export class Ngt<%= name %> extends NgtCommonCamera<THREE.<%= name %>> {
         return THREE.<%= name %>;
     }
     <% if (hasInput) { %>
-    protected override get optionsFields(): Record<string, boolean> {
+    override get optionsFields(): Record<string, boolean> {
         return {
             ...super.optionsFields,<% for (const input of inputs) { %>
            <%= input.name %>: <%= input.isOptional %>,<% } %>

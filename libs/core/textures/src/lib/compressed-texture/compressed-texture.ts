@@ -77,7 +77,7 @@ export class NgtCompressedTexture extends NgtCommonTexture<THREE.CompressedTextu
     this.set({ encoding });
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       mipmaps: false,

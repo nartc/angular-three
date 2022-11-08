@@ -45,7 +45,7 @@ export class NgtDataArrayTexture extends NgtCommonTexture<THREE.DataArrayTexture
     this.set({ depth: coerceNumberProperty(depth) });
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       data: true,

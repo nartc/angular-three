@@ -6,6 +6,7 @@
  * chore(docs): add Vercel prism example
  */
 
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -52,11 +53,19 @@ const { invalidate, advance } = createLoop(rootStateMap);
     <div #rendererContainer>
       <canvas #rendererCanvas></canvas>
     </div>
+    <ng-container
+      *ngIf="projectContent"
+      [ngTemplateOutlet]="contentTemplate"
+    ></ng-container>
+    <ng-template #contentTemplate>
+      <ng-content></ng-content>
+    </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.ngt-canvas]': 'true',
   },
+  imports: [NgIf, NgTemplateOutlet],
   providers: [
     NgtStore,
     NgtResize,
@@ -145,6 +154,22 @@ export class NgtCanvas
   @Input() set lookAt(lookAt: NgtVector3) {
     this.set({ lookAt: make(THREE.Vector3, lookAt) });
   }
+
+  @Input() set initialLog(value: BooleanInput) {
+    this.#initialLog = coerceBooleanProperty(value);
+  }
+  get initialLog(): boolean {
+    return this.#initialLog;
+  }
+  #initialLog = false;
+
+  @Input() set projectContent(value: BooleanInput) {
+    this.#projectContent = coerceBooleanProperty(value);
+  }
+  get projectContent(): boolean {
+    return this.#projectContent;
+  }
+  #projectContent = false;
 
   @ViewChild('rendererContainer', { static: true })
   rendererContainer!: ElementRef<HTMLDivElement>;
@@ -249,6 +274,12 @@ export class NgtCanvas
         }
 
         this.created.emit(this.#store.get());
+
+        if (this.initialLog) {
+          console.group('[NgtCanvas] Initialized');
+          console.log(this.#store.get());
+          console.groupEnd();
+        }
 
         // start the rendering loop (animation frame)
         this.#store.startLoop();

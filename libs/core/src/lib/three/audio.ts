@@ -135,7 +135,7 @@ export abstract class NgtCommonAudio<
     }));
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       autoplay: true,

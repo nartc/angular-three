@@ -226,8 +226,9 @@ export abstract class NgtObjectInputs<
 
   shouldPassThroughRef = true;
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
+      ...super.optionsFields,
       name: false,
       position: false,
       rotation: false,
@@ -244,16 +245,17 @@ export abstract class NgtObjectInputs<
     };
   }
 
-  protected override parentRef = injectObjectRef({
+  override parentRef = injectObjectRef({
     optional: true,
     skipSelf: true,
   });
-  protected override parentHostRef = injectObjectHostRef({
+  override parentHostRef = injectObjectHostRef({
     optional: true,
     skipSelf: true,
   });
 
   override preInit() {
+    super.preInit();
     this.set((s) => ({
       name: s.name || '',
       position: s.position || new THREE.Vector3(),
@@ -370,7 +372,6 @@ export abstract class NgtObject<
 
   #appendToParent(): void {
     // appendToParent is late a frame due to appendTo
-    // only emit the object is ready after it's been added to the scene
     const callback = () => {
       const appendToRef = this.get((s) => s.appendTo);
       if (appendToRef && appendToRef.value) {
@@ -444,8 +445,12 @@ export abstract class NgtObject<
   }
 
   #shouldUseParent(parent: NgtRef<NgtInstanceNode<THREE.Object3D>>) {
+    const rootScene = this.store.rootStateGetter().scene;
     return (
-      parent && parent.value && parent.value.uuid !== this.instanceValue.uuid
+      parent &&
+      parent.value &&
+      parent.value.uuid !== this.instanceValue.uuid &&
+      parent.value.uuid !== rootScene.uuid
     );
   }
 

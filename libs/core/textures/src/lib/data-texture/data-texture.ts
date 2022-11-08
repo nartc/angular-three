@@ -77,7 +77,7 @@ export class NgtDataTexture extends NgtCommonTexture<THREE.DataTexture> {
     this.set({ encoding });
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       data: true,

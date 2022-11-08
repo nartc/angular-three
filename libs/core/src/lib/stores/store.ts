@@ -103,6 +103,15 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     })
   );
 
+  get rootStateGetter(): NgtStateGetter {
+    let root = this.get((s) => s.previousRoot);
+    while (root && root().previousRoot) {
+      root = root().previousRoot;
+    }
+
+    return root || this.get.bind(this);
+  }
+
   init(
     containerElement: HTMLElement,
     invalidate: (stateGetter?: NgtStateGetter, frames?: number) => void,

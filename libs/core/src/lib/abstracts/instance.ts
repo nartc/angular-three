@@ -134,9 +134,7 @@ export abstract class NgtInstance<
 
   readonly #init = this.effect(
     tapEffect(() => {
-      const initFnReturn = this.initFn(this.#prepareInstance.bind(this));
-      this.postInit();
-      return initFnReturn;
+      return this.initFn(this.#prepareInstance.bind(this));
     })
   );
 
@@ -148,6 +146,9 @@ export abstract class NgtInstance<
 
   readonly #instanceReady = this.effect(
     tapEffect(() => {
+      // run postInit right after instanceReady
+      this.postInit();
+
       // assigning
       const setOptionsSub = this.#setOptions(
         this.select(
@@ -187,12 +188,12 @@ export abstract class NgtInstance<
         const state = this.get();
         const customOptions = {} as UnknownRecord;
 
-        const { rotation, quarternion, ...restOptions } = options;
+        const { rotation, quaternion, ...restOptions } = options;
 
         if (rotation) {
           customOptions['rotation'] = state['rotation'];
-        } else if (quarternion) {
-          customOptions['quarternion'] = state['quarternion'];
+        } else if (quaternion) {
+          customOptions['quaternion'] = state['quaternion'];
         }
 
         for (const option of Object.keys(restOptions)) {
@@ -208,7 +209,9 @@ export abstract class NgtInstance<
           // customOptions['uniforms'] = {};
           if ('uniforms' in this.instanceValue && 'uniforms' in restOptions) {
             customOptions['uniforms'] = {
-              ...(this.instanceValue as THREE.ShaderMaterial)['uniforms'],
+              ...(this.instanceValue as unknown as THREE.ShaderMaterial)[
+                'uniforms'
+              ],
               ...(restOptions as THREE.ShaderMaterialParameters)['uniforms'],
             };
           }
@@ -271,14 +274,15 @@ export abstract class NgtInstance<
             }
           }
 
+          // TODO: reevaluate this case
           // return early if instance is material or geometry but parent isn't a Mesh
-          if (
-            (propertyToAttach[0] === 'material' ||
-              propertyToAttach[0] === 'geometry') &&
-            !is.mesh(parentInstanceRef.value)
-          ) {
-            return;
-          }
+          // if (
+          //   (propertyToAttach[0] === 'material' ||
+          //     propertyToAttach[0] === 'geometry') &&
+          //   !is.mesh(parentInstanceRef.value)
+          // ) {
+          //   return;
+          // }
 
           // retrieve the current value on the parentInstance, so we can reset it later
           this.__ngt__.previousAttachValue = propertyToAttach.reduce(
@@ -460,12 +464,7 @@ export abstract class NgtInstance<
     }
 
     if (!prepareOptions.rootStateGetter) {
-      let previousRoot = this.store.get((s) => s.previousRoot);
-      while (previousRoot && previousRoot().previousRoot) {
-        previousRoot = previousRoot().previousRoot;
-      }
-      prepareOptions.rootStateGetter =
-        previousRoot || this.store.get.bind(this.store);
+      prepareOptions.rootStateGetter = this.store.rootStateGetter;
     }
 
     if (prepareOptions.uuid && 'uuid' in instance) {

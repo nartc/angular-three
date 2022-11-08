@@ -13,8 +13,6 @@ export interface NgtMaterialGeometryState<
 > extends NgtObjectInputsState<TObject> {
   material: TMaterial | TMaterial[] | NgtRef<TMaterial> | NgtRef<TMaterial>[];
   geometry: TGeometry | NgtRef<TGeometry>;
-  morphTargetInfluences?: number[];
-  morphTargetDictionary?: Record<string, number>;
 }
 
 @Directive()
@@ -36,21 +34,11 @@ export abstract class NgtMaterialGeometry<
     this.set({ geometry });
   }
 
-  @Input() set morphTargetInfluences(morphTargetInfluences: number[]) {
-    this.set({ morphTargetInfluences });
-  }
-
-  @Input() set morphTargetDictionary(
-    morphTargetDictionary: Record<string, number>
-  ) {
-    this.set({ morphTargetDictionary });
-  }
-
   abstract get objectType(): AnyConstructor<TMaterialGeometryObject>;
 
   protected argsKeys: string[] = [];
 
-  protected override instanceInitFn(): TMaterialGeometryObject {
+  override instanceInitFn(): TMaterialGeometryObject {
     const state = this.get();
 
     // this is the additional arguments to pass into the object constructor
@@ -71,13 +59,11 @@ export abstract class NgtMaterialGeometry<
     );
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       material: true,
       geometry: true,
-      morphTargetInfluences: true,
-      morphTargetDictionary: true,
     };
   }
 }

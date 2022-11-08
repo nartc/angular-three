@@ -24,16 +24,17 @@ export abstract class NgtCommonObjectHelper<
     this.set({ visible: coerceBooleanProperty(helperVisible) });
   }
 
-  protected override parentRef = injectObjectRef({ optional: true });
-  protected override parentHostRef = injectObjectHostRef({ optional: true });
+  override parentRef = injectObjectRef({ optional: true });
+  override parentHostRef = injectObjectHostRef({ optional: true });
 
   override preInit() {
+    super.preInit();
     this.set((s) => ({
       visible: s['visible'] ?? true,
     }));
   }
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<TObjectHelper>
   ): (() => void) | void | undefined {
     if (
@@ -75,7 +76,7 @@ export abstract class NgtCommonObjectHelper<
     }
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return { ...super.optionsFields, visible: false };
   }
 }

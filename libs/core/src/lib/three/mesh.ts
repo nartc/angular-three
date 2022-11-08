@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';
 import {
   NgtMaterialGeometry,
@@ -13,6 +13,16 @@ export abstract class NgtCommonMesh<
 > extends NgtMaterialGeometry<TMesh> {
   abstract get meshType(): AnyConstructor<TMesh>;
 
+  @Input() set morphTargetInfluences(morphTargetInfluences: number[]) {
+    this.set({ morphTargetInfluences });
+  }
+
+  @Input() set morphTargetDictionary(
+    morphTargetDictionary: Record<string, number>
+  ) {
+    this.set({ morphTargetDictionary });
+  }
+
   override get objectType(): AnyConstructor<TMesh> {
     return this.meshType;
   }
@@ -20,13 +30,21 @@ export abstract class NgtCommonMesh<
   override postPrepare(object: TMesh) {
     const state = this.get();
 
-    if (state.morphTargetDictionary && 'morphTargetDictionary' in object) {
-      object.morphTargetDictionary = state.morphTargetDictionary;
+    if (state['morphTargetDictionary'] && 'morphTargetDictionary' in object) {
+      object.morphTargetDictionary = state['morphTargetDictionary'];
     }
 
-    if (state.morphTargetInfluences && 'morphTargetInfluences' in object) {
-      object.morphTargetInfluences = state.morphTargetInfluences;
+    if (state['morphTargetInfluences'] && 'morphTargetInfluences' in object) {
+      object.morphTargetInfluences = state['morphTargetInfluences'];
     }
+  }
+
+  override get optionsFields(): Record<string, boolean> {
+    return {
+      ...super.optionsFields,
+      morphTargetInfluences: true,
+      morphTargetDictionary: true,
+    };
   }
 }
 

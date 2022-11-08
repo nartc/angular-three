@@ -69,7 +69,7 @@ export class NgtCubeTexture extends NgtCommonTexture<THREE.CubeTexture> {
     this.set({ encoding });
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       images: true,

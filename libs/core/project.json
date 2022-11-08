@@ -56,7 +56,9 @@
           "libs/core/textures/**/*.ts",
           "libs/core/textures/**/*.html",
           "libs/core/objects/**/*.ts",
-          "libs/core/objects/**/*.html"
+          "libs/core/objects/**/*.html",
+          "libs/core/primitives/**/*.ts",
+          "libs/core/primitives/**/*.html"
         ]
       }
     }

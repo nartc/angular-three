@@ -29,7 +29,7 @@ export class Ngt<%= name %><% if (typeDef) { %><<%= typeDefFactory(typeDef) %>><
         return THREE.<%= name %><% if (typeDef) { %> as AnyConstructor<<%= typeDef.generic %>><% } %>;
     }
     <% if (hasInput) { %>
-    protected override get optionsFields(): Record<string, boolean> {
+    override get optionsFields(): Record<string, boolean> {
         return {
             ...super.optionsFields,<% for (const input of inputs) { %>
             <%= input.name %>: <%= input.isOptional %>,<% } %>

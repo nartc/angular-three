@@ -252,13 +252,14 @@ export abstract class NgtCommonMaterial<
     skipSelf: true,
   });
 
-  protected override preInit() {
+  override preInit() {
+    super.preInit();
     this.set((s) => ({
       attach: s.attach.length ? s.attach : ['material'],
     }));
   }
 
-  protected override initFn(
+  override initFn(
     prepareInstance: NgtPrepareInstanceFn<TMaterial>
   ): (() => void) | void | undefined {
     const material = prepareInstance(new this.materialType());
@@ -267,7 +268,7 @@ export abstract class NgtCommonMaterial<
     };
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       alphaTest: true,

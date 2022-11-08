@@ -65,7 +65,7 @@ export class NgtCanvasTexture extends NgtCommonTexture<THREE.CanvasTexture> {
     this.set({ anisotropy: coerceNumberProperty(anisotropy) });
   }
 
-  protected override get optionsFields(): Record<string, boolean> {
+  override get optionsFields(): Record<string, boolean> {
     return {
       ...super.optionsFields,
       canvas: false,

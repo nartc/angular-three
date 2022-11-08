@@ -80,7 +80,7 @@ export function createRefInjection<
     return inject(injectionToken, options) as AnyFunction<NgtRef>;
   }
 
-  function providedFn<TProvideCtor extends TCtor = TCtor>(
+  function providerFn<TProvideCtor extends TCtor = TCtor>(
     sub: TProvideCtor,
     factory?: (instance: InstanceType<TProvideCtor>) => NgtRef
   ) {
@@ -104,5 +104,5 @@ export function createRefInjection<
     ];
   }
 
-  return [injectFn, providedFn, injectionToken];
+  return [injectFn, providerFn, injectionToken];
 }

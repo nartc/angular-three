@@ -42,7 +42,9 @@
           "libs/soba/cameras/**/*.ts",
           "libs/soba/cameras/**/*.html",
           "libs/soba/abstractions/**/*.ts",
-          "libs/soba/abstractions/**/*.html"
+          "libs/soba/abstractions/**/*.html",
+          "libs/soba/loaders/**/*.ts",
+          "libs/soba/loaders/**/*.html"
         ]
       }
     },
