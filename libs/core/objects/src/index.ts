@@ -1,4 +1,5 @@
 export * from './lib/mesh/mesh';
+export * from './lib/instanced-mesh/instanced-mesh';
 export * from './lib/sprite/sprite';
 export * from './lib/line/line';
 export * from './lib/line-loop/line-loop';

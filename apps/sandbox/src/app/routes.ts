@@ -30,4 +30,17 @@ export const routes: Route[] = [
         'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/view-cube',
     },
   },
+  {
+    path: 'vertex-colors-instances',
+    loadComponent: () =>
+      import('./vertex-colors-instances/vertex-colors-instances.component'),
+    data: {
+      title: 'Vertex Colors Instances',
+      description: 'THREE.InstancedMesh with Vertex Colors',
+      link: '/vertex-colors-instances',
+      asset: 'assets/examples/vertex-colors-instances',
+      source:
+        'https://github.com/nartc/angular-three/tree/main/apps/sandbox/src/app/vertex-colors-instances',
+    },
+  },
 ];

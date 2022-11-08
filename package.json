@@ -58,6 +58,7 @@
     "jest-preset-angular": "~12.2.2",
     "jsonc-eslint-parser": "^2.1.0",
     "ng-packagr": "~15.0.0-rc.0",
+    "nice-color-palettes": "^3.0.0",
     "nx": "15.0.10",
     "postcss": "^8.4.18",
     "postcss-import": "~15.0.0",
