@@ -164,7 +164,7 @@ export abstract class NgtInstance<
 
       // attaching
       if (!this.get((s) => s.noAttach)) {
-        this.#attachToParent();
+        this.#attachToParent(this.parent);
       }
 
       // emitting
@@ -231,7 +231,7 @@ export abstract class NgtInstance<
     })
   );
 
-  readonly #attachToParent = this.effect<void>(
+  readonly #attachToParent = this.effect(
     pipe(
       withLatestFrom(this.select((s) => s.attach)),
       tap(([, attach]) => {

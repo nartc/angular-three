@@ -17,6 +17,7 @@ interface CanvasOptions {
         makeDefault?: boolean;
       };
   lights?: boolean;
+  log?: boolean;
 }
 
 const defaultCanvasOptions: CanvasOptions = {
@@ -27,6 +28,7 @@ const defaultCanvasOptions: CanvasOptions = {
   background: 'black',
   controls: true,
   lights: true,
+  log: true,
 };
 
 export function setupCanvas(canvasOptions?: CanvasOptions) {
@@ -44,6 +46,7 @@ export function setupCanvas(canvasOptions?: CanvasOptions) {
   return (story: string) => `
 <ngt-canvas
   shadows
+  [initialLog]="${mergedOptions.log}"
   [camera]="{
     position: [${mergedOptions.camera!.position}],
     fov: ${mergedOptions.camera!.fov}

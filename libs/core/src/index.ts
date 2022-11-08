@@ -1,8 +1,13 @@
+export * from './lib/portal';
+export * from './lib/canvas';
+export * from './lib/ref';
+export * from './lib/types';
+
 export * from './lib/abstracts/instance';
 export * from './lib/abstracts/material-geometry';
 export * from './lib/abstracts/object';
+
 export * from './lib/abstracts/object-pass-through';
-export * from './lib/canvas';
 export * from './lib/di/attribute';
 export * from './lib/di/audio';
 export * from './lib/di/camera';
@@ -17,17 +22,20 @@ export * from './lib/di/mesh';
 export * from './lib/di/skinned-mesh';
 export * from './lib/di/object';
 export * from './lib/di/texture';
+
 export * from './lib/directives/cursor';
 export * from './lib/directives/repeat';
+
 export * from './lib/pipes/math';
 export * from './lib/pipes/pi';
 export * from './lib/pipes/radian';
 export * from './lib/pipes/side';
-export * from './lib/portal';
-export * from './lib/ref';
+
 export * from './lib/services/loader';
+
 export * from './lib/stores/component-store';
 export * from './lib/stores/store';
+
 export * from './lib/three/attribute';
 export * from './lib/three/audio';
 export * from './lib/three/camera';
@@ -39,7 +47,7 @@ export * from './lib/three/material';
 export * from './lib/three/mesh';
 export * from './lib/three/object-helper';
 export * from './lib/three/texture';
-export * from './lib/types';
+
 export * from './lib/utils/apply-props';
 export * from './lib/utils/check-needs-update';
 export * from './lib/utils/coercion';
@@ -49,3 +57,4 @@ export * from './lib/utils/is';
 export * from './lib/utils/loop';
 export * from './lib/utils/make';
 export * from './lib/utils/pass-through';
+export * from './lib/utils/shader-material';

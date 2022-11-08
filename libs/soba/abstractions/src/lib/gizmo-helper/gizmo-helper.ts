@@ -22,7 +22,6 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { map, timer } from 'rxjs';
 import * as THREE from 'three';
 
 type ControlsProto = { update(): void; target: THREE.Vector3 };
@@ -66,8 +65,6 @@ const targetPosition = new THREE.Vector3();
   ],
 })
 export class NgtSobaGizmoHelper extends NgtGroup {
-  ready$ = timer(250).pipe(map(() => true));
-
   override isWrapper = true;
   override shouldPassThroughRef = true;
 

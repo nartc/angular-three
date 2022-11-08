@@ -10,3 +10,6 @@ export * from './lib/line/line-material';
 export * from './lib/line/line-pass-through';
 export * from './lib/quadratic-bezier-line/quadratic-bezier-line';
 export * from './lib/text/text';
+export * from './lib/text-3d/text-3d';
+export * from './lib/text-3d/text-geometry';
+export * from './lib/image/image';

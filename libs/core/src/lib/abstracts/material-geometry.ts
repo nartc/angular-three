@@ -29,6 +29,9 @@ export abstract class NgtMaterialGeometry<
   ) {
     this.set({ material });
   }
+  get material() {
+    return this.get((s) => s.material);
+  }
 
   @Input() set geometry(geometry: TGeometry | NgtRef<TGeometry>) {
     this.set({ geometry });
