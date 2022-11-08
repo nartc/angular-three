@@ -14,6 +14,7 @@ export * from './lib/di/light';
 export * from './lib/di/material';
 export * from './lib/di/material-geometry';
 export * from './lib/di/mesh';
+export * from './lib/di/skinned-mesh';
 export * from './lib/di/object';
 export * from './lib/di/texture';
 export * from './lib/directives/cursor';
