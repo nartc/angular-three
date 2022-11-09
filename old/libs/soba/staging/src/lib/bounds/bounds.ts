@@ -141,14 +141,14 @@ export class NgtSobaBounds extends NgtObjectProps<THREE.Group, NgtSobaBoundsStat
 
   @ContentChild(NgtSobaBoundsContent) content?: NgtSobaBoundsContent;
 
-  private readonly current = {
+  readonly #current = {
     animating: false,
     focus: new THREE.Vector3(),
     camera: new THREE.Vector3(),
     zoom: 1,
   };
 
-  private readonly goal = {
+  readonly #goal = {
     focus: new THREE.Vector3(),
     camera: new THREE.Vector3(),
     zoom: 1,
