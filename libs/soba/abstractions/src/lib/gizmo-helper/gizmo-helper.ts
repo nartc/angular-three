@@ -50,7 +50,7 @@ const targetPosition = new THREE.Vector3();
       </ngt-group>
     </ngt-portal>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtPortal,
     NgtGroup,

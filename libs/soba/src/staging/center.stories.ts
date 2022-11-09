@@ -38,7 +38,7 @@ import { setupCanvas, setupCanvasImports } from '../setup-canvas';
       </ngt-soba-center>
     </ng-container>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtSobaCenter,
     NgIf,

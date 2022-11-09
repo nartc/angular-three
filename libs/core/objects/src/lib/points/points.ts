@@ -11,7 +11,7 @@ import * as THREE from 'three';
   selector: 'ngt-points',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtMaterialGeometry(NgtPoints),
     provideMaterialGeometryRef(NgtPoints),

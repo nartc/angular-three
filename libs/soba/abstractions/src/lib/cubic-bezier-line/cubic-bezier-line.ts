@@ -29,7 +29,7 @@ import { NgtSobaLinePassThrough } from '../line/line-pass-through';
       <ng-content></ng-content>
     </ngt-soba-line>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtSobaLine,
     NgtObjectPassThrough,

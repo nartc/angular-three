@@ -10,7 +10,7 @@ import * as THREE from 'three';
   selector: 'ngt-lod',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [provideNgtObject(NgtLOD), provideObjectRef(NgtLOD)],
 })
 export class NgtLOD extends NgtObject<THREE.LOD> {

@@ -13,7 +13,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'ngt-fog-exp2[fogExp2]',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtInstance(NgtFogExp2Attribute),
     provideInstanceRef(NgtFogExp2Attribute),

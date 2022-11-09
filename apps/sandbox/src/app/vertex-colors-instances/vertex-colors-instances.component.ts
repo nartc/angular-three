@@ -32,7 +32,7 @@ const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
       ></ngt-mesh-lambert-material>
     </ngt-instanced-mesh>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtInstancedMesh,
     NgtBoxGeometry,
@@ -89,7 +89,7 @@ export class Instances {
       autoRotate
     ></ngt-soba-orbit-controls>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtAmbientLight,
     NgtDirectionalLight,
@@ -107,7 +107,7 @@ export class Scene {}
       <scene></scene>
     </ngt-canvas>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [NgtCanvas, Scene],
 })
 export default class SandboxVertexColorsInstances {}

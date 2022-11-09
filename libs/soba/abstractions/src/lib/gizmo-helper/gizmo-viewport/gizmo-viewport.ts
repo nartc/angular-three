@@ -107,7 +107,6 @@ import {
     NgtPointLight,
     NgIf,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgtSobaGizmoViewport extends NgtGroup {
   override isWrapper = true;

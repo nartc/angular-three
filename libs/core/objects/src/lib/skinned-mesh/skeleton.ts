@@ -26,7 +26,7 @@ import { NgtSkinnedMesh } from './skinned-mesh';
   template: `
     <ng-content></ng-content>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [provideNgtInstance(NgtSkeleton), provideInstanceRef(NgtSkeleton)],
 })
 export class NgtSkeleton extends NgtInstance<THREE.Skeleton> {

@@ -58,7 +58,7 @@ import { setupCanvas, setupCanvasImports } from '../setup-canvas';
       <ngt-soba-orbit-controls makeDefault></ngt-soba-orbit-controls>
     </ng-container>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtSobaGizmoHelper,
     NgtSobaGizmoViewcube,

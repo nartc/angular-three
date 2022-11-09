@@ -14,7 +14,7 @@ import { NgtMeshStandardMaterial } from '../mesh-standard-material/mesh-standard
   selector: 'ngt-mesh-physical-material',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonMaterial(NgtMeshPhysicalMaterial),
     provideCommonMaterialRef(NgtMeshPhysicalMaterial),

@@ -11,7 +11,7 @@ import * as THREE from 'three';
   selector: 'ngt-mesh',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [provideNgtCommonMesh(NgtMesh), provideCommonMeshRef(NgtMesh)],
 })
 export class NgtMesh extends NgtCommonMesh {

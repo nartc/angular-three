@@ -28,7 +28,7 @@ import { preloadFont, Text as TextMeshImpl } from 'troika-three-text';
   template: `
     <ng-content></ng-content>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonMesh(NgtSobaText),
     provideCommonMeshRef(NgtSobaText),

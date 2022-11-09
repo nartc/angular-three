@@ -55,7 +55,7 @@ export class Cube {
       ></ngt-mesh-standard-material>
     </ngt-mesh>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [NgtMesh, NgtMeshStandardMaterial, NgForOf, NgtBoxGeometry],
 })
 export class CubeWithMaterials {
@@ -87,7 +87,7 @@ export class CubeWithMaterials {
 
     <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtAmbientLight,
     NgtPointLight,
@@ -108,7 +108,7 @@ export class Scene {}
     </ngt-canvas>
     <ngt-stats></ngt-stats>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [NgtCanvas, NgtColorAttribute, NgtStats, Scene],
 })
 export default class SandboxCubes {}

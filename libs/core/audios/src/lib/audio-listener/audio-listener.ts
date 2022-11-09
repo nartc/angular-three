@@ -17,7 +17,7 @@ export interface NgtAudioListenerState
   selector: 'ngt-audio-listener',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtObject(NgtAudioListener),
     provideObjectRef(NgtAudioListener),

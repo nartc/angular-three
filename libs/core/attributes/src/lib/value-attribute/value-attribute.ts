@@ -10,7 +10,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'ngt-value[value]',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtInstance(NgtValueAttribute),
     provideInstanceRef(NgtValueAttribute),

@@ -13,7 +13,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'ngt-vector4[vector4]',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtInstance(NgtVector4Attribute),
     provideInstanceRef(NgtVector4Attribute),

@@ -10,7 +10,7 @@ import * as THREE from 'three';
   selector: 'ngt-group',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [provideNgtObject(NgtGroup), provideObjectRef(NgtGroup)],
 })
 export class NgtGroup extends NgtObject<THREE.Group> {

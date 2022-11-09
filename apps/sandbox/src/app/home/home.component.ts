@@ -127,7 +127,7 @@ export interface Example {
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   styles: [
     `
       .header-background {

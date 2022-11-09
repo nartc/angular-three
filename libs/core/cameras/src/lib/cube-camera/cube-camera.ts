@@ -12,7 +12,7 @@ import * as THREE from 'three';
   selector: 'ngt-cube-camera',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [provideNgtObject(NgtCubeCamera), provideObjectRef(NgtCubeCamera)],
 })
 export class NgtCubeCamera extends NgtObject<THREE.CubeCamera> {

@@ -16,7 +16,7 @@ import * as THREE from 'three';
   selector: 'ngt-sprite-material',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonMaterial(NgtSpriteMaterial),
     provideCommonMaterialRef(NgtSpriteMaterial),

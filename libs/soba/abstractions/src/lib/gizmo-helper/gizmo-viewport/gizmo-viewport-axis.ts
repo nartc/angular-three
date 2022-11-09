@@ -39,7 +39,6 @@ import { NgtSobaGizmoHelper } from '../gizmo-helper';
     </ngt-group>
   `,
   imports: [NgtGroup, NgtMesh, NgtBoxGeometry, NgtMeshBasicMaterial],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgtSobaGizmoViewportAxis {
   @Input() color?: THREE.ColorRepresentation;
@@ -74,7 +73,6 @@ export class NgtSobaGizmoViewportAxis {
     AsyncPipe,
     NgIf,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgtSobaGizmoViewportAxisHead extends NgtSprite {
   override isWrapper = true;

@@ -11,7 +11,7 @@ import * as THREE from 'three';
   selector: 'ngt-line',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtMaterialGeometry(NgtLine),
     provideMaterialGeometryRef(NgtLine),

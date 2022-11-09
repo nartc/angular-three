@@ -31,7 +31,7 @@ import {
       [opacity]="opacity"
     ></ngt-mesh-lambert-material>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [NgtMeshLambertMaterial, AsyncPipe],
   providers: [provideNgtSobaViewCubeInputs(NgtSobaGizmoViewcubeFaceMaterial)],
 })
@@ -102,7 +102,7 @@ export class NgtSobaGizmoViewcubeFaceMaterial extends NgtSobaGizmoViewcubeInputs
       ></ngt-soba-gizmo-viewcube-face-material>
     </ngt-mesh>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtMesh,
     NgtBoxGeometry,

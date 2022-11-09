@@ -36,7 +36,7 @@ export interface NgtSobaOrbitControlsState
   selector: 'ngt-soba-orbit-controls',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtInstance(NgtSobaOrbitControls),
     provideInstanceRef(NgtSobaOrbitControls),

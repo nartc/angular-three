@@ -25,7 +25,7 @@ import * as THREE from 'three';
       </ngt-group>
     </ngt-group>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [NgtGroup, NgtObjectPassThrough],
   providers: [
     provideNgtObject(NgtSobaCenter),

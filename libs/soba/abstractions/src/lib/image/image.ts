@@ -44,7 +44,7 @@ import { map, switchMap } from 'rxjs';
       <ng-content></ng-content>
     </ngt-mesh>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtMesh,
     NgtObjectPassThrough,

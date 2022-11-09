@@ -17,7 +17,7 @@ import { NgtSkinnedMesh } from './skinned-mesh';
   template: `
     <ng-content></ng-content>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [provideNgtObject(NgtBone), provideObjectRef(NgtBone)],
 })
 export class NgtBone extends NgtObject<THREE.Bone> {

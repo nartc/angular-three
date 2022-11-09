@@ -24,7 +24,7 @@ import * as THREE from 'three';
     </ngt-group>
   `,
   imports: [NgtGroup, NgtObjectPassThrough, NgIf, NgTemplateOutlet],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtObject(NgtSobaBillboard),
     provideObjectRef(NgtSobaBillboard),

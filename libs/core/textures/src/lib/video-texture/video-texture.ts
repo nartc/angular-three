@@ -14,7 +14,7 @@ import * as THREE from 'three';
   selector: 'ngt-video-texture',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonTexture(NgtVideoTexture),
     provideCommonTextureRef(NgtVideoTexture),

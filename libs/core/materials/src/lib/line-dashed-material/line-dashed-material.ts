@@ -14,7 +14,7 @@ import { NgtLineBasicMaterial } from '../line-basic-material/line-basic-material
   selector: 'ngt-line-dashed-material',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonMaterial(NgtLineDashedMaterial),
     provideCommonMaterialRef(NgtLineDashedMaterial),

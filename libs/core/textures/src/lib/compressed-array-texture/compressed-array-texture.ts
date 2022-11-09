@@ -14,7 +14,7 @@ import * as THREE from 'three';
   selector: 'ngt-compressed-array-texture',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonTexture(NgtCompressedArrayTexture),
     provideCommonTextureRef(NgtCompressedArrayTexture),

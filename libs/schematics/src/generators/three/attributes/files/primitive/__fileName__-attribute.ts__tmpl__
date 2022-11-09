@@ -13,7 +13,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'ngt-<%= fileName %>[<%= propertyName %>]',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
       provideNgtInstance(Ngt<%= name %>Attribute),
       provideInstanceRef(Ngt<%= name %>Attribute)

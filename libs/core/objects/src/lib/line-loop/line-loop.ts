@@ -11,7 +11,7 @@ import * as THREE from 'three';
   selector: 'ngt-line-loop',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtMaterialGeometry(NgtLineLoop),
     provideMaterialGeometryRef(NgtLineLoop),

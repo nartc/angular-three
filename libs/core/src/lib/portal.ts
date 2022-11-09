@@ -48,7 +48,7 @@ export interface NgtPortalState {
   selector: 'ngt-portal',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     NgtResize,
     NgtStore,

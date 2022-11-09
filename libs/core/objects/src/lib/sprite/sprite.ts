@@ -12,7 +12,7 @@ import * as THREE from 'three';
   selector: 'ngt-sprite',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtMaterialGeometry(NgtSprite),
     provideMaterialGeometryRef(NgtSprite),

@@ -14,7 +14,7 @@ import * as THREE from 'three';
   selector: 'ngt-shadow-material',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonMaterial(NgtShadowMaterial),
     provideCommonMaterialRef(NgtShadowMaterial),

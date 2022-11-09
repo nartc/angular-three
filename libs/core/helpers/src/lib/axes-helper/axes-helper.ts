@@ -14,7 +14,7 @@ import * as THREE from 'three';
   selector: 'ngt-axes-helper',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonHelper(NgtAxesHelper),
     provideCommonHelperRef(NgtAxesHelper),

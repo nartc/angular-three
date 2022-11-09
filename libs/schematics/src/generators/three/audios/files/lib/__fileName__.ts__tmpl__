@@ -12,7 +12,7 @@ import * as THREE from 'three';
     selector: 'ngt-<%= fileName %>',
     standalone: true,
     template: '<ng-content></ng-content>',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+
     providers: [
         provideNgtCommonAudio(Ngt<%= name %>),
         provideCommonAudioRef(Ngt<%= name %>)

@@ -12,7 +12,7 @@ import * as THREE from 'three';
   selector: 'ngt-hemisphere-light',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonLight(NgtHemisphereLight),
     provideCommonLightRef(NgtHemisphereLight),

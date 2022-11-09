@@ -43,7 +43,7 @@ import {
       <ngt-point-light [position]="10" intensity="0.5"></ngt-point-light>
     </ngt-group>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtGroup,
     NgtSobaGizmoViewcubeFaceCube,

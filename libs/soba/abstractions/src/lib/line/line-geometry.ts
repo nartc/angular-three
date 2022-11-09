@@ -16,7 +16,7 @@ import { LineGeometry } from 'three-stdlib';
   template: `
     <ng-content></ng-content>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonGeometry(NgtSobaLineGeometry),
     provideCommonGeometryRef(NgtSobaLineGeometry),

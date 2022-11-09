@@ -14,7 +14,7 @@ import * as THREE from 'three';
   selector: 'ngt-data3-dtexture',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonTexture(NgtData3DTexture),
     provideCommonTextureRef(NgtData3DTexture),

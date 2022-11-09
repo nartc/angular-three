@@ -14,7 +14,7 @@ import * as THREE from 'three';
   selector: 'ngt-arrow-helper',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonHelper(NgtArrowHelper),
     provideCommonHelperRef(NgtArrowHelper),

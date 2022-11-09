@@ -13,7 +13,7 @@ import * as THREE from 'three';
   selector: 'ngt-instanced-mesh[count]',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonMesh(NgtInstancedMesh),
     provideCommonMeshRef(NgtInstancedMesh),

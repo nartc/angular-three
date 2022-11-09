@@ -58,7 +58,7 @@ export interface NgtSobaLineState extends NgtObjectInputsState<Line2> {
       <ng-content></ng-content>
     </ngt-mesh>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtMesh,
     NgtObjectPassThrough,

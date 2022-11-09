@@ -14,7 +14,7 @@ import * as THREE from 'three';
   selector: 'ngt-rect-area-light',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonLight(NgtRectAreaLight),
     provideCommonLightRef(NgtRectAreaLight),

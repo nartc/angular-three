@@ -14,7 +14,7 @@ import * as THREE from 'three';
   selector: 'ngt-orthographic-camera',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonCamera(NgtOrthographicCamera),
     provideCommonCameraRef(NgtOrthographicCamera),

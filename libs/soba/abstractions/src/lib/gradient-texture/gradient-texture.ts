@@ -15,7 +15,7 @@ import * as THREE from 'three';
   template: `
     <ng-content></ng-content>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonTexture(NgtSobaGradientTexture),
     provideCommonTextureRef(NgtSobaGradientTexture),

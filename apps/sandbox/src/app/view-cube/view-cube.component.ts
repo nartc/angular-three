@@ -62,7 +62,7 @@ import * as THREE from 'three';
       ></ngt-point-light>
     </ngt-portal>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtPortal,
     NgtSobaOrthographicCamera,
@@ -142,7 +142,7 @@ export class ViewCube extends NgtComponentStore implements OnInit {
     <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
     <view-cube></view-cube>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     NgtMesh,
     NgtTorusGeometry,
@@ -161,7 +161,7 @@ export class Scene {}
       <scene></scene>
     </ngt-canvas>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [NgtCanvas, Scene, NgtColorAttribute],
 })
 export default class ViewCubeComponent {}

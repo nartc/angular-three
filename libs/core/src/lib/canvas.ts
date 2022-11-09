@@ -61,11 +61,12 @@ const { invalidate, advance } = createLoop(rootStateMap);
       <ng-content></ng-content>
     </ng-template>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   host: {
     '[class.ngt-canvas]': 'true',
   },
   imports: [NgIf, NgTemplateOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     NgtStore,
     NgtResize,

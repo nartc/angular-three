@@ -14,7 +14,7 @@ import * as THREE from 'three';
   selector: 'ngt-mesh-distance-material',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonMaterial(NgtMeshDistanceMaterial),
     provideCommonMaterialRef(NgtMeshDistanceMaterial),

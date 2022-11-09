@@ -80,7 +80,7 @@ export class NgtSobaOrthographicCameraContent {
       ></ng-container>
     </ngt-group>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     NgtSobaFBO,
     provideNgtCommonCamera(NgtSobaOrthographicCamera),

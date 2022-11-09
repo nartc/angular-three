@@ -12,7 +12,7 @@ import * as THREE from 'three';
   selector: 'ngt-ambient-light',
   standalone: true,
   template: '<ng-content></ng-content>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonLight(NgtAmbientLight),
     provideCommonLightRef(NgtAmbientLight),

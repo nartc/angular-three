@@ -17,7 +17,7 @@ import * as THREE from 'three';
   template: `
     <ng-content></ng-content>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonMesh(NgtSkinnedMesh),
     provideCommonMeshRef(NgtSkinnedMesh),

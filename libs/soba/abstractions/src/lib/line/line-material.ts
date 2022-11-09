@@ -22,7 +22,7 @@ import { LineMaterial } from 'three-stdlib';
   template: `
     <ng-content></ng-content>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     provideNgtCommonMaterial(NgtSobaLineMaterial),
     provideCommonMaterialRef(NgtSobaLineMaterial),

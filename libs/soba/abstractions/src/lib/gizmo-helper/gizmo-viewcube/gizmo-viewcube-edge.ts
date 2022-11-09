@@ -35,7 +35,7 @@ import {
       ></ngt-mesh-basic-material>
     </ngt-mesh>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [NgtMesh, NgtBoxGeometry, NgtMeshBasicMaterial],
   providers: [provideNgtSobaViewCubeInputs(NgtSobaGizmoViewcubeEdgeCube)],
 })
