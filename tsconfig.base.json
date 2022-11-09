@@ -38,7 +38,8 @@
       "@angular-three/soba/loaders": ["libs/soba/loaders/src/index.ts"],
       "@angular-three/soba/materials": ["libs/soba/materials/src/index.ts"],
       "@angular-three/soba/misc": ["libs/soba/misc/src/index.ts"],
-      "@angular-three/soba/shaders": ["libs/soba/shaders/src/index.ts"]
+      "@angular-three/soba/shaders": ["libs/soba/shaders/src/index.ts"],
+      "@angular-three/soba/staging": ["libs/soba/staging/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

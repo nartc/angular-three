@@ -1,5 +1,6 @@
 import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
 import { NgtSobaText3D } from '@angular-three/soba/abstractions';
+import { NgtSobaCenter } from '@angular-three/soba/staging';
 import {
   componentWrapperDecorator,
   Meta,
@@ -16,7 +17,12 @@ export default {
       setupCanvas({ camera: { position: [0, 0, 10] } })
     ),
     moduleMetadata({
-      imports: [setupCanvasImports, NgtSobaText3D, NgtMeshStandardMaterial],
+      imports: [
+        setupCanvasImports,
+        NgtSobaText3D,
+        NgtMeshStandardMaterial,
+        NgtSobaCenter,
+      ],
     }),
   ],
 } as Meta;
@@ -24,20 +30,22 @@ export default {
 export const Default: Story = (args) => ({
   props: args,
   template: `
-<ngt-soba-text-3d
-  font="soba/helvetiker_regular.typeface.json"
-  [text]="text"
-  [size]="size"
-  [height]="height"
-  [curveSegments]="curveSegments"
-  [bevelEnabled]="bevelEnabled"
-  [bevelThickness]="bevelThickness"
-  [bevelSize]="bevelSize"
-  [bevelOffset]="bevelOffset"
->
-  <ngt-mesh-standard-material [attach]="['material', 0]" color="#b00000"></ngt-mesh-standard-material>
-  <ngt-mesh-standard-material [attach]="['material', 1]" color="#ff8000"></ngt-mesh-standard-material>
-</ngt-soba-text-3d>
+<ngt-soba-center [position]="[-15, 0, 0]">
+  <ngt-soba-text-3d
+    font="soba/helvetiker_regular.typeface.json"
+    [text]="text"
+    [size]="size"
+    [height]="height"
+    [curveSegments]="curveSegments"
+    [bevelEnabled]="bevelEnabled"
+    [bevelThickness]="bevelThickness"
+    [bevelSize]="bevelSize"
+    [bevelOffset]="bevelOffset"
+  >
+    <ngt-mesh-standard-material [attach]="['material', 0]" color="#b00000"></ngt-mesh-standard-material>
+    <ngt-mesh-standard-material [attach]="['material', 1]" color="#ff8000"></ngt-mesh-standard-material>
+  </ngt-soba-text-3d>
+</ngt-soba-center>
 `,
 });
 

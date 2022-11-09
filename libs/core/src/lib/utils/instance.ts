@@ -50,6 +50,8 @@ export function prepare<TInstance extends object = UnknownRecord>(
         : isPrimitive,
       eventCount: previousInstanceInternal?.eventCount ?? 0,
       handlers: previousInstanceInternal?.handlers ?? {},
+      instances:
+        previousInstanceInternal?.instances ?? new NgtRef([] as NgtRef[]),
       objects: previousInstanceInternal?.objects ?? new NgtRef([] as NgtRef[]),
       parent: parent ? (parent === instance ? null : parent) : null,
     },

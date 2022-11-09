@@ -43,7 +43,7 @@ export interface NgtInstanceState<TInstance extends object = UnknownRecord> {
   instanceArgs: unknown[];
   attach: string[] | NgtAttachFunction;
   noAttach: boolean;
-  skipParent: boolean;
+  skipWrapper: boolean;
   skipInit: boolean;
 }
 
@@ -61,10 +61,10 @@ export abstract class NgtInstance<
     });
   }
 
-  @Input() set skipParent(skipParent: BooleanInput) {
+  @Input() set skipWrapper(skipWrapper: BooleanInput) {
     this.set({
-      skipParent: coerceBooleanProperty(skipParent),
-      skipParentExplicit: true,
+      skipWrapper: coerceBooleanProperty(skipWrapper),
+      skipWrapperExplicit: true,
     });
   }
 
@@ -370,10 +370,10 @@ export abstract class NgtInstance<
         instanceArgs: s.instanceArgs || [],
         attach: s.attach || [],
         noAttach: s.noAttach || false,
-        skipParent: s.skipParent || false,
+        skipWrapper: s.skipWrapper || false,
         skipInit: s.skipInit || false,
         noAttachExplicit: s['noAttachExplicit'] || false,
-        skipParentExplicit: s['skipParentExplicit'] || false,
+        skipWrapperExplicit: s['skipWrapperExplicit'] || false,
         skipInitExplicit: s['skipInitExplicit'] || false,
         attachExplicit: s['attachExplicit'] || false,
       }));
@@ -484,12 +484,20 @@ export abstract class NgtInstance<
 
     this.instance.set(prepInstance);
 
-    if (!is.object3d(prepInstance) && !this.noAttach && !this.skipParent) {
-      const parentObjects =
-        prepInstance.__ngt__.parent?.value?.__ngt__?.objects;
-      parentObjects &&
-        parentObjects.set([...parentObjects.value, this.instance]);
-    }
+    requestAnimationFrame(() => {
+      if (!this.noAttach && !this.skipWrapper) {
+        const parentInstanceNode = getInstanceInternal(
+          getInstanceInternal(prepInstance)?.parent?.value
+        );
+
+        if (parentInstanceNode) {
+          const collections = is.object3d(prepInstance)
+            ? parentInstanceNode.objects
+            : parentInstanceNode.instances;
+          collections.set((s) => [...s, this.instance]);
+        }
+      }
+    });
 
     return prepInstance;
   }
@@ -521,7 +529,7 @@ export abstract class NgtInstance<
   }
 
   get parent(): NgtRef {
-    if (!this.get((s) => s.skipParent)) return this.parentRef?.();
+    if (!this.get((s) => s.skipWrapper)) return this.parentRef?.();
     return this.parentHostRef?.() || this.parentRef?.();
   }
 }

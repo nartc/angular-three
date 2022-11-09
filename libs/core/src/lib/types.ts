@@ -385,6 +385,9 @@ export interface NgtInstanceLocalState {
   /** the state getter of the canvas that the instance is being rendered to */
   stateGetter: NgtStateGetter;
   rootGetter: NgtStateGetter;
+  // non-object 3d
+  instances: NgtRef<NgtRef[]>;
+  // object-3d
   objects: NgtRef<NgtRef[]>;
   parent: NgtRef<NgtInstanceNode> | null;
   primitive?: boolean;

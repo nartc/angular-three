@@ -42,7 +42,7 @@ export class NgtObjectPassThrough {
     }
 
     passThroughInput('attach');
-    passThroughInput('skipParent');
+    passThroughInput('skipWrapper', false, true);
     passThroughInput('noAttach');
     passThroughInput('name');
     passThroughInput('position');
