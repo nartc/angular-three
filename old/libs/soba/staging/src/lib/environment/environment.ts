@@ -377,6 +377,8 @@ export class NgtSobaEnvironmentResolver extends NgtComponentStore<NgtSobaEnviron
       const { textureRef, extensions, preset } = this.get();
       let { files, path } = this.get();
 
+      console.log(preset);
+
       if (preset) {
         if (!(preset in presetsObj)) throw new Error('Preset must be one of: ' + Object.keys(presetsObj).join(', '));
         files = presetsObj[preset];
