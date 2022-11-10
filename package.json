@@ -1,0 +1,15 @@
+{
+    "name": "angular-three",
+    "version": "0.0.0",
+    "license": "MIT",
+    "scripts": {},
+    "private": true,
+    "devDependencies": {
+        "@nrwl/angular": "15.2.1",
+        "@nrwl/cli": "15.2.1",
+        "@nrwl/workspace": "15.2.1",
+        "nx": "15.2.1",
+        "prettier": "^2.6.2",
+        "typescript": "~4.8.2"
+    }
+}

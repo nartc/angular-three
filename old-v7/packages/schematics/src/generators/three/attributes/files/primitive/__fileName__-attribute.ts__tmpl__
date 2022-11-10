@@ -1,0 +1,41 @@
+// GENERATED - AngularThree v<%= ngtVersion %>
+import * as THREE from 'three';
+import {
+  make,
+  NgtInstance,
+  NgtPrepareInstanceFn,
+  provideInstanceRef,
+  provideNgtInstance,
+  NgtObservableInput,
+  skipFirstUndefined,
+  <%= inputType %>
+} from '@angular-three/core';
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'ngt-<%= fileName %>[<%= propertyName %>]',
+  standalone: true,
+  template: '<ng-content></ng-content>',
+  providers: [
+      provideNgtInstance(Ngt<%= name %>Attribute),
+      provideInstanceRef(Ngt<%= name %>Attribute)
+  ],
+})
+export class Ngt<%= name %>Attribute extends NgtInstance<THREE.<%= name %>> {
+  @Input() set <%= propertyName %>(<%= propertyName %>: NgtObservableInput<<%= inputType %>>) {
+    this.set({ <%= propertyName %> })
+  }
+
+  override initTrigger$ = this.select((s) => s['<%= propertyName %>'], { debounce: true }).pipe(skipFirstUndefined());
+
+  override initFn(
+    prepareInstance: NgtPrepareInstanceFn<THREE.<%= name %>>
+  ): (() => void) | void | undefined {
+    prepareInstance(
+      make(
+        THREE.<%= name %>,
+        this.getState((s) => s['<%= propertyName %>'])
+      )
+    );
+  }
+}
