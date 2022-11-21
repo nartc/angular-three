@@ -337,7 +337,11 @@ export interface NgtEventManager<TTarget> {
     disconnect?: () => void;
 }
 
-export type NgtAttachFunction = (parent: NgtRef, child: NgtRef) => void | (() => void);
+export type NgtAttachFunction<TChild = any, TParent = any> = (
+    parent: NgtRef<TParent>,
+    child: NgtRef<TChild>,
+    stateFactory: NgtStateFactory
+) => void | (() => void);
 
 export interface NgtInstanceLocalState {
     /** the state getter of the canvas that the instance is being rendered to */

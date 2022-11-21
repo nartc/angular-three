@@ -16,7 +16,6 @@ export class NgtMeshLambertMaterial extends THREE.MeshLambertMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_bumpMap: THREE.Texture| undefined;
     static ngAcceptInputType_bumpScale: number| undefined;

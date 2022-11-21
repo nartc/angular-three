@@ -250,7 +250,7 @@ export class NgtInstance<
             }
 
             if (typeof attach === 'function') {
-                const attachCleanUp = attach(parentInstanceRef, this.instanceRef);
+                const attachCleanUp = attach(parentInstanceRef, this.instanceRef, this.store.read);
                 if (attachCleanUp) {
                     this.__ngt__.attach = attachCleanUp;
                 }

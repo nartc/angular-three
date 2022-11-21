@@ -16,7 +16,6 @@ export class NgtRawShaderMaterial extends THREE.RawShaderMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_uniforms: {[uniform: string]: THREE.IUniform}| undefined;
     static ngAcceptInputType_vertexShader: string| undefined;

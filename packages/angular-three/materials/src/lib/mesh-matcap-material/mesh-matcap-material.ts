@@ -16,7 +16,6 @@ export class NgtMeshMatcapMaterial extends THREE.MeshMatcapMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
     static ngAcceptInputType_matcap: THREE.Texture | null| undefined;

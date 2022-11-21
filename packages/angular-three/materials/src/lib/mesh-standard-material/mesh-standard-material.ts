@@ -16,7 +16,6 @@ export class NgtMeshStandardMaterial extends THREE.MeshStandardMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
     static ngAcceptInputType_roughness: number| undefined;

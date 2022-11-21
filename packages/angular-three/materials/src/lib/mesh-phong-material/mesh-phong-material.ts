@@ -16,7 +16,6 @@ export class NgtMeshPhongMaterial extends THREE.MeshPhongMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
     static ngAcceptInputType_specular: THREE.ColorRepresentation| undefined;

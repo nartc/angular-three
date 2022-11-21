@@ -42,7 +42,9 @@
                     "packages/angular-three/geometries/**/*.ts",
                     "packages/angular-three/geometries/**/*.html",
                     "packages/angular-three/materials/**/*.ts",
-                    "packages/angular-three/materials/**/*.html"
+                    "packages/angular-three/materials/**/*.html",
+                    "packages/angular-three/audios/**/*.ts",
+                    "packages/angular-three/audios/**/*.html"
                 ]
             }
         }

@@ -16,7 +16,6 @@ export class NgtSpriteMaterial extends THREE.SpriteMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
     static ngAcceptInputType_map: THREE.Texture | null| undefined;

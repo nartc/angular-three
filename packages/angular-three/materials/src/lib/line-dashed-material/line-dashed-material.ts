@@ -16,7 +16,6 @@ export class NgtLineDashedMaterial extends THREE.LineDashedMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_scale: number| undefined;
     static ngAcceptInputType_dashSize: number| undefined;

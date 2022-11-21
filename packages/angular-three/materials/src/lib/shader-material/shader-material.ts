@@ -16,7 +16,6 @@ export class NgtShaderMaterial extends THREE.ShaderMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_uniforms: {[uniform: string]: THREE.IUniform}| undefined;
     static ngAcceptInputType_vertexShader: string| undefined;

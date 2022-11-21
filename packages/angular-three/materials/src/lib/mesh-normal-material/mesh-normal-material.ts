@@ -16,7 +16,6 @@ export class NgtMeshNormalMaterial extends THREE.MeshNormalMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_bumpMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_bumpScale: number| undefined;

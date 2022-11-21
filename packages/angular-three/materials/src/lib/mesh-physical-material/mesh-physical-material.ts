@@ -16,7 +16,6 @@ export class NgtMeshPhysicalMaterial extends THREE.MeshPhysicalMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_clearcoat: number| undefined;
     static ngAcceptInputType_clearcoatMap: THREE.Texture | null| undefined;

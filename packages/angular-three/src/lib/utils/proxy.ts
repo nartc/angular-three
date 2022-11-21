@@ -3,14 +3,15 @@ import { isObservable, Subscription } from 'rxjs';
 import { injectInstance } from '../instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import { NgtStateFactory } from '../types';
+import { NgtAnyFunction, NgtAttachFunction, NgtStateFactory } from '../types';
 import { applyProps } from './apply-props';
+import { capitalize } from './capitalize';
 import { prepare } from './instance';
 
 export function proxify<T extends object>(
     instance: T,
     proxifyOptions: {
-        attach?: string | string[];
+        attach?: string | string[] | NgtAttachFunction<T>;
         created?: (instance: T, stateFactory: NgtStateFactory) => void;
     } = {}
 ): T {
@@ -26,12 +27,24 @@ export function proxify<T extends object>(
         const newValueSubscriptionMap = new Map<string, () => void>();
 
         function setProp(obj: T, prop: string, newValue: any): (() => void) | undefined {
+            const capitalizedProp = `set${capitalize(prop)}` as keyof T;
+
             if (isObservable(newValue)) {
-                const sub = newValue.subscribe((val) => applyProps(obj, { [prop]: val }));
+                const sub = newValue.subscribe((val) => {
+                    if (obj[capitalizedProp] && typeof obj[capitalizedProp] === 'function') {
+                        (obj[capitalizedProp] as NgtAnyFunction)(val);
+                    } else {
+                        applyProps(obj, { [prop]: val });
+                    }
+                });
                 return () => sub.unsubscribe();
             }
 
-            applyProps(obj, { [prop]: newValue });
+            if (obj[capitalizedProp] && typeof obj[capitalizedProp] === 'function') {
+                (obj[capitalizedProp] as NgtAnyFunction)(newValue);
+            } else {
+                applyProps(obj, { [prop]: newValue });
+            }
             return;
         }
 
@@ -39,6 +52,12 @@ export function proxify<T extends object>(
             get(target: T, p: string | symbol, receiver: any): any {
                 if (p === 'instanceRef') return ngtInstance.instanceRef;
                 if (p === 'instance') return ngtInstance;
+
+                const capitalizedProp = `get${capitalize(p as string)}`;
+                if (target[capitalizedProp as keyof T] && typeof target[capitalizedProp as keyof T] === 'function') {
+                    return (target[capitalizedProp as keyof T] as Function)();
+                }
+
                 return Reflect.get(target, p, receiver);
             },
             set(target: T, p: string | symbol, newValue: any, receiver: any): boolean {
@@ -60,7 +79,10 @@ export function proxify<T extends object>(
                     storeReadySubscription = store.onReady(() => setProp(instance, prop, newValue));
                 }
 
-                if (ngtInstance.updateCallback) ngtInstance.updateCallback(instance);
+                // schedule updateCallback on next event loop
+                queueMicrotask(() => {
+                    if (ngtInstance.updateCallback) ngtInstance.updateCallback(instance);
+                });
 
                 return true;
             },

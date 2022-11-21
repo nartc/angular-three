@@ -50,6 +50,7 @@ export function astFromPath(
     const { properties, bases = new Map<string, Base>() } = propertiesFactory(sourceFile);
 
     const basesNames = [...bases.keys()];
+
     while (basesNames.length) {
         const baseName = basesNames.shift();
         const { sourceFile: baseSourceFile, properties: baseProperties = new Map<string, Property>() } =
@@ -135,6 +136,9 @@ export function getThreeType(type: string): string {
         'KernelSize',
         'ToneMappingMode',
         'VignetteTechnique',
+        'AudioNode',
+        'AudioBufferSourceNode',
+        'AudioBuffer',
     ].includes(type)
         ? type
         : `THREE.${type}`;

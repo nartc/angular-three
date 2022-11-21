@@ -16,7 +16,6 @@ export class NgtPointsMaterial extends THREE.PointsMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
     static ngAcceptInputType_map: THREE.Texture | null| undefined;

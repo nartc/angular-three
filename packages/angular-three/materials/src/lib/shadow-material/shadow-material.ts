@@ -16,7 +16,6 @@ export class NgtShadowMaterial extends THREE.ShadowMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
     static ngAcceptInputType_fog: boolean| undefined;

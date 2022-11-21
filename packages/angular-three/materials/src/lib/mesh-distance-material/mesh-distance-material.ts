@@ -16,7 +16,6 @@ export class NgtMeshDistanceMaterial extends THREE.MeshDistanceMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_map: THREE.Texture | null| undefined;
     static ngAcceptInputType_alphaMap: THREE.Texture | null| undefined;

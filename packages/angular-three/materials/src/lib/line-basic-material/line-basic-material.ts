@@ -16,7 +16,6 @@ export class NgtLineBasicMaterial extends THREE.LineBasicMaterial {
         super();
         return proxify(this, { attach: 'material' });
     }
-
     
     static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
     static ngAcceptInputType_fog: boolean| undefined;

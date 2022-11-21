@@ -17,6 +17,7 @@
         "paths": {
             "angular-three": ["packages/angular-three/src/index.ts"],
             "angular-three/attributes": ["packages/angular-three/attributes/src/index.ts"],
+            "angular-three/audios": ["packages/angular-three/audios/src/index.ts"],
             "angular-three/geometries": ["packages/angular-three/geometries/src/index.ts"],
             "angular-three/materials": ["packages/angular-three/materials/src/index.ts"],
             "angular-three/objects": ["packages/angular-three/objects/src/index.ts"]
