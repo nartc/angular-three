@@ -1,0 +1,17 @@
+{
+    "name": "angular-three-schematics-e2e",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "packages/angular-three/schematics-e2e/src",
+    "targets": {
+        "e2e": {
+            "executor": "@nrwl/nx-plugin:e2e",
+            "options": {
+                "target": "angular-three-schematics:build",
+                "jestConfig": "packages/angular-three/schematics-e2e/jest.config.ts"
+            }
+        }
+    },
+    "tags": [],
+    "implicitDependencies": ["angular-three-schematics"]
+}
