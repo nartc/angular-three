@@ -24,6 +24,7 @@ import { NgtStore, rootStateMap } from './stores/store';
 import type { NgtBooleanInput, NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtObservableInput, NgtVector3 } from './types';
 import { coerceBoolean } from './utils/coercion';
 import { make } from './utils/make';
+import { NgtLoader } from './services/loader';
 
 @Component({
     selector: 'ngt-canvas-container',
@@ -145,6 +146,7 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
     canvasContent!: TemplateRef<unknown>;
 
     private readonly zone = inject(NgZone);
+    private readonly loader = inject(NgtLoader);
     private readonly store = inject(NgtStore, { self: true });
 
     private readonly host = inject(ElementRef) as ElementRef<HTMLElement>;
@@ -242,5 +244,10 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
                 this.store.configure(this.read(), this.glCanvas.nativeElement);
             }
         });
+    }
+
+    override ngOnDestroy() {
+        this.loader.destroy();
+        super.ngOnDestroy();
     }
 }
