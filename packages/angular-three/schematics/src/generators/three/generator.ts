@@ -1,5 +1,6 @@
 import { logger, readJson, Tree } from '@nrwl/devkit';
 import attributesGenerator from './attributes/attributes';
+import geometriesGenerator from './geometries/geometries';
 
 export default async function (tree: Tree) {
     const packageJson = readJson(tree, 'package.json');
@@ -18,7 +19,7 @@ export default async function (tree: Tree) {
     const ngtVersion: string = readJson(tree, 'version.json')?.version || 'latest';
 
     await Promise.all([
-        // geometriesGenerator(tree, ngtVersion),
+        geometriesGenerator(tree, ngtVersion),
         // materialsGenerator(tree, ngtVersion),
         attributesGenerator(tree, ngtVersion),
         // audiosGenerator(tree, ngtVersion),

@@ -1,10 +1,5 @@
 // GENERATED - AngularThree v<%= ngtVersion %>
-import {
-    NgtAnyConstructor,
-    NgtCommonGeometry,
-    provideNgtCommonGeometry,
-    provideCommonGeometryRef,
-} from '@angular-three/core';
+import { injectArgs, NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 
@@ -12,17 +7,12 @@ import * as THREE from 'three';
     selector: 'ngt-<%= fileName %>',
     standalone: true,
     template: '<ng-content></ng-content>',
-    providers: [
-        provideNgtCommonGeometry(Ngt<%= name %>),
-        provideCommonGeometryRef(Ngt<%= name %>)
-    ],
+    hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
+    providers: [provideInstanceRef(Ngt<%= name %>)],
 })
-export class Ngt<%= name %> extends NgtCommonGeometry<THREE.<%= name %>> {
-    static ngAcceptInputType_args:
-        | ConstructorParameters<typeof THREE.<%= name %>>
-        | undefined;
-
-    override get geometryType(): NgtAnyConstructor<THREE.<%= name %>> {
-        return THREE.<%= name %>;
+export class Ngt<%= name %> extends THREE.<%= name %> {
+    constructor() {
+        super(...(injectArgs<typeof THREE.<%= name %>>({ optional: true }) || []));
+        return proxify(this, { attach: 'geometry' });
     }
 }
