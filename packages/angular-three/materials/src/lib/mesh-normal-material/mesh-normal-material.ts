@@ -4,38 +4,31 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-mesh-basic-material',
+    selector: 'ngt-mesh-normal-material',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtMeshBasicMaterial)],
+    providers: [provideInstanceRef(NgtMeshNormalMaterial)],
     inputs: [...getInputs()],
 })
-export class NgtMeshBasicMaterial extends THREE.MeshBasicMaterial {
+export class NgtMeshNormalMaterial extends THREE.MeshNormalMaterial {
     constructor() {
         super();
         return proxify(this, { attach: 'material' });
     }
 
     
-    static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
-    static ngAcceptInputType_opacity: number| undefined;
-    static ngAcceptInputType_map: THREE.Texture | null| undefined;
-    static ngAcceptInputType_lightMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_lightMapIntensity: number| undefined;
-    static ngAcceptInputType_aoMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_aoMapIntensity: number| undefined;
-    static ngAcceptInputType_specularMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_alphaMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_fog: boolean| undefined;
-    static ngAcceptInputType_envMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_combine: THREE.Combine| undefined;
-    static ngAcceptInputType_reflectivity: number| undefined;
-    static ngAcceptInputType_refractionRatio: number| undefined;
+    static ngAcceptInputType_bumpMap: THREE.Texture | null| undefined;
+    static ngAcceptInputType_bumpScale: number| undefined;
+    static ngAcceptInputType_normalMap: THREE.Texture | null| undefined;
+    static ngAcceptInputType_normalMapType: THREE.NormalMapTypes| undefined;
+    static ngAcceptInputType_normalScale: THREE.Vector2| undefined;
+    static ngAcceptInputType_displacementMap: THREE.Texture | null| undefined;
+    static ngAcceptInputType_displacementScale: number| undefined;
+    static ngAcceptInputType_displacementBias: number| undefined;
     static ngAcceptInputType_wireframe: boolean| undefined;
     static ngAcceptInputType_wireframeLinewidth: number| undefined;
-    static ngAcceptInputType_wireframeLinecap: string| undefined;
-    static ngAcceptInputType_wireframeLinejoin: string| undefined;
+    static ngAcceptInputType_flatShading: boolean| undefined;
     static ngAcceptInputType_alphaTest: number| undefined;
     static ngAcceptInputType_alphaToCoverage: boolean| undefined;
     static ngAcceptInputType_blendDst: THREE.BlendingDstFactor| undefined;
@@ -54,6 +47,7 @@ export class NgtMeshBasicMaterial extends THREE.MeshBasicMaterial {
     static ngAcceptInputType_depthTest: boolean| undefined;
     static ngAcceptInputType_depthWrite: boolean| undefined;
     static ngAcceptInputType_name: string| undefined;
+    static ngAcceptInputType_opacity: number| undefined;
     static ngAcceptInputType_polygonOffset: boolean| undefined;
     static ngAcceptInputType_polygonOffsetFactor: number| undefined;
     static ngAcceptInputType_polygonOffsetUnits: number| undefined;
@@ -80,24 +74,17 @@ export class NgtMeshBasicMaterial extends THREE.MeshBasicMaterial {
 
 function getInputs() {
     return [
-        'color',
-        'opacity',
-        'map',
-        'lightMap',
-        'lightMapIntensity',
-        'aoMap',
-        'aoMapIntensity',
-        'specularMap',
-        'alphaMap',
-        'fog',
-        'envMap',
-        'combine',
-        'reflectivity',
-        'refractionRatio',
+        'bumpMap',
+        'bumpScale',
+        'normalMap',
+        'normalMapType',
+        'normalScale',
+        'displacementMap',
+        'displacementScale',
+        'displacementBias',
         'wireframe',
         'wireframeLinewidth',
-        'wireframeLinecap',
-        'wireframeLinejoin',
+        'flatShading',
         'alphaTest',
         'alphaToCoverage',
         'blendDst',
@@ -116,6 +103,7 @@ function getInputs() {
         'depthTest',
         'depthWrite',
         'name',
+        'opacity',
         'polygonOffset',
         'polygonOffsetFactor',
         'polygonOffsetUnits',

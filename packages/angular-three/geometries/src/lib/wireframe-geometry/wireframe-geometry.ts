@@ -4,15 +4,15 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-fog',
+    selector: 'ngt-wireframe-geometry',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtFogAttribute)],
+    providers: [provideInstanceRef(NgtWireframeGeometry)],
 })
-export class NgtFogAttribute extends THREE.Fog {
+export class NgtWireframeGeometry extends THREE.WireframeGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.Fog>({ optional: true }) || ["white"]));
-        return proxify(this);
+        super(...(injectArgs<typeof THREE.WireframeGeometry>({ optional: true }) || []));
+        return proxify(this, { attach: 'geometry' });
     }
 }

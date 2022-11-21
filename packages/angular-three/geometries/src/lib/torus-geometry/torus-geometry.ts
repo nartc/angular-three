@@ -4,15 +4,15 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-fog',
+    selector: 'ngt-torus-geometry',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtFogAttribute)],
+    providers: [provideInstanceRef(NgtTorusGeometry)],
 })
-export class NgtFogAttribute extends THREE.Fog {
+export class NgtTorusGeometry extends THREE.TorusGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.Fog>({ optional: true }) || ["white"]));
-        return proxify(this);
+        super(...(injectArgs<typeof THREE.TorusGeometry>({ optional: true }) || []));
+        return proxify(this, { attach: 'geometry' });
     }
 }

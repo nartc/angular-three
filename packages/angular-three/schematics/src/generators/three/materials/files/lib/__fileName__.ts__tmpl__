@@ -1,39 +1,27 @@
 // GENERATED - AngularThree v<%= ngtVersion %>
-import {
-    NgtAnyConstructor,
-    NgtCommonMaterial,
-    provideNgtCommonMaterial,
-    provideCommonMaterialRef,
-    NgtObservableInput,<% if (hasBooleanInput) { %>coerceBoolean, NgtBooleanInput,<% } %><% if (hasNumberInput) { %> coerceNumber, NgtNumberInput,<% } %>
-} from '@angular-three/core';
-import { Component<% if (hasInput) { %>, Input<% } %> } from '@angular/core';<% if (hasBooleanInput || hasNumberInput) { %>
-import { isObservable, map } from 'rxjs';<% } %>
+import { NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify } from 'angular-three';
+import { Component } from '@angular/core';
 import * as THREE from 'three';
-<% if (extend && extend.path) { %>import { <%= extend.material %> } from '<%= extend.path %>'<% } %>
+
 @Component({
     selector: 'ngt-<%= fileName %>',
     standalone: true,
     template: '<ng-content></ng-content>',
-    providers: [
-        provideNgtCommonMaterial(Ngt<%= name %>),
-        provideCommonMaterialRef(Ngt<%= name %>)
-    ]
+    hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
+    providers: [provideInstanceRef(Ngt<%= name %>)],<% if (hasInput) { %>
+    inputs: [...getInputs()],<% } %>
 })
-export class Ngt<%= name %><% if (typeDef) { %><<%= typeDefFactory(typeDef) %>><% } %> extends <% if (extend && extend.material) { %><%= extend.material %><% } else { %>NgtCommonMaterial<% } %><<% if (typeDef) { %><%= typeDef.generic %><% } else { %>THREE.<%= name %><% } %>> {
+export class Ngt<%= name %> extends THREE.<%= name %> {
+    constructor() {
+        super();
+        return proxify(this, { attach: 'material' });
+    }
     <% for (const input of inputs) { %>
-    @Input() <% if (input.shouldOverride) { %>override <% } %>set <%= input.name %>(<%= input.name %>: NgtObservableInput<<% if (input.isBooleanInput) { %>NgtBooleanInput<% } else if (input.isNumberInput) { %>NgtNumberInput<% } else { %><%= input.type %><% } %>>) {
-        this.set({ <% if (input.isBooleanInput || input.isNumberInput) { %><%= input.name %>: <% if (input.isNumberInput) { %>isObservable(<%= input.name %>) ? <%= input.name %>.pipe(map(coerceNumber)) : coerceNumber(<%= input.name %>)<% } else { %>isObservable(<%= input.name %>) ? <%= input.name %>.pipe(map(coerceBoolean)) : coerceBoolean(<%= input.name %>)<% } %><% } else { %><%= input.name %><% } %> });
-    }
-    <% } %>
-
-    override get materialType(): NgtAnyConstructor<<% if (typeDef) { %><%= typeDef.generic %><% } else { %>THREE.<%= name %><% } %>> {
-        return THREE.<%= name %><% if (typeDef) { %> as NgtAnyConstructor<<%= typeDef.generic %>><% } %>;
-    }
-    <% if (hasInput) { %>
-    override get optionsFields() {
-        return [
-            ...super.optionsFields,<% for (const input of inputs) { %>
-            '<%= input.name %>',<% } %>
-        ];
-    }<% } %>
+    static ngAcceptInputType_<%= input.name %>: <%= input.type %><% if (input.isOptional) { %>| undefined<% } %>;<% } %>
 }
+<% if (hasInput) { %>
+function getInputs() {
+    return [<% for (const input of inputs) { %>
+        '<%= input.name %>',<% } %>
+    ];
+}<% } %>

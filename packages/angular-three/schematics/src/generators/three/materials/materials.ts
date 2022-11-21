@@ -3,201 +3,199 @@ import { generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/de
 import { join } from 'path';
 import * as THREE from 'three';
 import {
-  Identifier,
-  isInterfaceDeclaration,
-  isPropertySignature,
-  PropertySignature,
-  SourceFile,
+    Identifier,
+    isClassDeclaration,
+    isConstructorDeclaration,
+    isInterfaceDeclaration,
+    isPropertySignature,
+    isTypeReferenceNode,
+    PropertySignature,
+    SourceFile,
 } from 'typescript/lib/tsserverlibrary';
 import { astFromPath, pathToSourceFile } from '../common/ast-utils';
-import { typeDefFactory } from '../common/type-def-factory';
 
 const baseMaterialPath = 'node_modules/@types/three/src/materials/Material.d.ts';
 
 const materials = [
-  {
-    name: THREE.LineBasicMaterial.name,
-    parameters: 'LineBasicMaterialParameters',
-    typeDef: {
-      generic: 'TLineBasicMaterial',
-      extends: 'THREE.LineBasicMaterial',
-      default: 'THREE.LineBasicMaterial',
+    {
+        name: THREE.LineBasicMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/LineBasicMaterial.d.ts',
     },
-    defPath: 'node_modules/@types/three/src/materials/LineBasicMaterial.d.ts',
-  },
-  {
-    name: THREE.LineDashedMaterial.name,
-    parameters: 'LineDashedMaterialParameters',
-    extend: {
-      material: 'NgtLineBasicMaterial',
-      path: '../line-basic-material/line-basic-material',
+    {
+        name: THREE.LineDashedMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/LineDashedMaterial.d.ts',
     },
-    defPath: 'node_modules/@types/three/src/materials/LineDashedMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshBasicMaterial.name,
-    parameters: 'MeshBasicMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/MeshBasicMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshDepthMaterial.name,
-    parameters: 'MeshDepthMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/MeshDepthMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshDistanceMaterial.name,
-    parameters: 'MeshDistanceMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/MeshDistanceMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshLambertMaterial.name,
-    parameters: 'MeshLambertMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/MeshLambertMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshMatcapMaterial.name,
-    parameters: 'MeshMatcapMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/MeshMatcapMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshNormalMaterial.name,
-    parameters: 'MeshNormalMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/MeshNormalMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshPhongMaterial.name,
-    parameters: 'MeshPhongMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/MeshPhongMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshPhysicalMaterial.name,
-    parameters: 'MeshPhysicalMaterialParameters',
-    extend: {
-      material: 'NgtMeshStandardMaterial',
-      path: '../mesh-standard-material/mesh-standard-material',
+    {
+        name: THREE.MeshBasicMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/MeshBasicMaterial.d.ts',
     },
-    defPath: 'node_modules/@types/three/src/materials/MeshPhysicalMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshStandardMaterial.name,
-    parameters: 'MeshStandardMaterialParameters',
-    typeDef: {
-      generic: 'TStandardMaterial',
-      extends: 'THREE.MeshStandardMaterial',
-      default: 'THREE.MeshStandardMaterial',
+    {
+        name: THREE.MeshDepthMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/MeshDepthMaterial.d.ts',
     },
-    defPath: 'node_modules/@types/three/src/materials/MeshStandardMaterial.d.ts',
-  },
-  {
-    name: THREE.MeshToonMaterial.name,
-    parameters: 'MeshToonMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/MeshToonMaterial.d.ts',
-  },
-  {
-    name: THREE.PointsMaterial.name,
-    parameters: 'PointsMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/PointsMaterial.d.ts',
-  },
-  {
-    name: THREE.RawShaderMaterial.name,
-    parameters: 'ShaderMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/RawShaderMaterial.d.ts',
-  },
-  {
-    name: THREE.ShaderMaterial.name,
-    parameters: 'ShaderMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/ShaderMaterial.d.ts',
-  },
-  {
-    name: THREE.ShadowMaterial.name,
-    parameters: 'ShadowMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/ShadowMaterial.d.ts',
-  },
-  {
-    name: THREE.SpriteMaterial.name,
-    parameters: 'SpriteMaterialParameters',
-    defPath: 'node_modules/@types/three/src/materials/SpriteMaterial.d.ts',
-  },
+    {
+        name: THREE.MeshDistanceMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/MeshDistanceMaterial.d.ts',
+    },
+    {
+        name: THREE.MeshLambertMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/MeshLambertMaterial.d.ts',
+    },
+    {
+        name: THREE.MeshMatcapMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/MeshMatcapMaterial.d.ts',
+    },
+    {
+        name: THREE.MeshNormalMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/MeshNormalMaterial.d.ts',
+    },
+    {
+        name: THREE.MeshPhongMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/MeshPhongMaterial.d.ts',
+    },
+    {
+        name: THREE.MeshPhysicalMaterial.name,
+        parameters: 'MeshPhysicalMaterialParameters',
+        defPath: 'node_modules/@types/three/src/materials/MeshPhysicalMaterial.d.ts',
+    },
+    {
+        name: THREE.MeshStandardMaterial.name,
+        parameters: 'MeshStandardMaterialParameters',
+        defPath: 'node_modules/@types/three/src/materials/MeshStandardMaterial.d.ts',
+    },
+    {
+        name: THREE.MeshToonMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/MeshToonMaterial.d.ts',
+    },
+    {
+        name: THREE.PointsMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/PointsMaterial.d.ts',
+    },
+    {
+        name: THREE.RawShaderMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/RawShaderMaterial.d.ts',
+    },
+    {
+        name: THREE.ShaderMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/ShaderMaterial.d.ts',
+    },
+    {
+        name: THREE.ShadowMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/ShadowMaterial.d.ts',
+    },
+    {
+        name: THREE.SpriteMaterial.name,
+        defPath: 'node_modules/@types/three/src/materials/SpriteMaterial.d.ts',
+    },
 ];
 
-const parameterInheritanceMap = new Map();
-
 export default async function materialsGenerator(tree: Tree, ngtVersion: string) {
-  const { libsDir } = getWorkspaceLayout(tree);
-  const materialDir = join(libsDir, 'core', 'materials');
+    const { libsDir } = getWorkspaceLayout(tree);
+    const materialDir = join(libsDir, 'angular-three', 'materials');
 
-  logger.log('Generating materials...');
+    logger.log('Generating materials...');
 
-  if (!tree.exists(materialDir)) {
-    await librarySecondaryEntryPointGenerator(tree, {
-      name: 'materials',
-      library: 'core',
-      skipModule: true,
-    });
-  }
+    if (!tree.exists(materialDir)) {
+        await librarySecondaryEntryPointGenerator(tree, {
+            name: 'materials',
+            library: 'angular-three',
+            skipModule: true,
+        });
+    }
 
-  const generatedMaterials = [];
-  for (const { name, parameters, typeDef, extend, defPath } of materials) {
-    const normalizedNames = names(name);
+    const generatedMaterials = [];
+    for (const { name, defPath } of materials) {
+        const normalizedNames = names(name);
 
-    const inputRecord = astFromPath(tree, defPath, (sourceFile) => {
-      const mainProperties = [];
-      const base: [string, SourceFile, PropertySignature[]] = ['', null, []];
+        const inputRecord = astFromPath(tree, defPath, (sourceFile) => {
+            const properties = new Map();
+            const bases = new Map();
 
-      sourceFile.forEachChild((node) => {
-        if (isInterfaceDeclaration(node)) {
-          if (node.heritageClauses?.length) {
-            const baseParameter = (node.heritageClauses[0].types[0].expression as Identifier).getText(sourceFile);
-            const baseDtsPath =
-              baseParameter === 'MaterialParameters'
-                ? baseMaterialPath
-                : materials.find((material) => material.parameters === baseParameter)?.defPath;
-            if (baseDtsPath) {
-              const baseSourceFile = pathToSourceFile(tree, baseDtsPath);
-              base[0] = baseParameter;
-              base[1] = baseSourceFile;
+            let hasInterface = false;
+            function runMaterialSourceFile(sF: SourceFile, props: Map<string, PropertySignature>) {
+                sF.forEachChild((node) => {
+                    if (isInterfaceDeclaration(node)) {
+                        hasInterface = true;
+                        if (node.heritageClauses?.length) {
+                            const baseParameterName = (
+                                node.heritageClauses[0].types[0].expression as Identifier
+                            ).getText(sF);
 
-              baseSourceFile.forEachChild((baseNode) => {
-                if (isInterfaceDeclaration(baseNode)) {
-                  baseNode.forEachChild((baseChildNode) => {
-                    if (isPropertySignature(baseChildNode)) {
-                      base[2].push(baseChildNode);
+                            const baseDtsPath =
+                                baseParameterName === 'MaterialParameters'
+                                    ? baseMaterialPath
+                                    : materials.find((material) => baseParameterName.includes(material.name))?.defPath;
+
+                            if (baseDtsPath) {
+                                const baseSourceFile = pathToSourceFile(tree, baseDtsPath);
+                                if (!bases.has(baseParameterName)) {
+                                    bases.set(baseParameterName, {
+                                        sourceFile: baseSourceFile,
+                                        properties: new Map(),
+                                    });
+                                }
+
+                                runMaterialSourceFile(baseSourceFile, bases.get(baseParameterName).properties);
+                            }
+                        }
+
+                        node.forEachChild((childNode) => {
+                            if (isPropertySignature(childNode)) {
+                                props.set(childNode.name.getText(sF), childNode);
+                            }
+                        });
                     }
-                  });
-                }
-              });
+
+                    if (!hasInterface && isClassDeclaration(node)) {
+                        const member = node.members[0];
+                        if (member && isConstructorDeclaration(member)) {
+                            const parameters = member.parameters;
+                            if (parameters && parameters.length) {
+                                const parameterType = parameters[0].type;
+                                if (isTypeReferenceNode(parameterType)) {
+                                    const baseParameterName = parameterType.typeName.getText(sF);
+                                    const baseDtsPath =
+                                        baseParameterName === 'MaterialParameters'
+                                            ? baseMaterialPath
+                                            : materials.find((material) => baseParameterName.includes(material.name))
+                                                  ?.defPath;
+                                    if (baseDtsPath) {
+                                        const baseSourceFile = pathToSourceFile(tree, baseDtsPath);
+                                        if (!bases.has(baseParameterName)) {
+                                            bases.set(baseParameterName, {
+                                                sourceFile: baseSourceFile,
+                                                properties: new Map(),
+                                            });
+                                        }
+
+                                        runMaterialSourceFile(baseSourceFile, bases.get(baseParameterName).properties);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
             }
-          }
 
-          node.forEachChild((childNode) => {
-            if (isPropertySignature(childNode)) {
-              mainProperties.push(childNode);
-            }
-          });
-        }
-      });
+            runMaterialSourceFile(sourceFile, properties);
 
-      return { mainProperties, base };
+            return { properties, bases };
+        });
+
+        generateFiles(tree, join(__dirname, 'files/lib'), join(materialDir, 'src', 'lib', normalizedNames.fileName), {
+            ...normalizedNames,
+            material: name,
+            tmpl: '',
+            ...inputRecord,
+            ngtVersion,
+        });
+
+        generatedMaterials.push(normalizedNames.fileName);
+    }
+
+    generateFiles(tree, join(__dirname, '../common/files/index'), join(materialDir, 'src'), {
+        items: generatedMaterials,
+        tmpl: '',
+        ngtVersion,
     });
-
-    generateFiles(tree, join(__dirname, 'files/lib'), join(materialDir, 'src', 'lib', normalizedNames.fileName), {
-      ...normalizedNames,
-      material: name,
-      parameters,
-      tmpl: '',
-      typeDef,
-      typeDefFactory,
-      extend,
-      ...inputRecord,
-      ngtVersion,
-    });
-
-    generatedMaterials.push(normalizedNames.fileName);
-  }
-
-  generateFiles(tree, join(__dirname, '../common/files/index'), join(materialDir, 'src'), {
-    items: generatedMaterials,
-    tmpl: '',
-    ngtVersion,
-  });
 }

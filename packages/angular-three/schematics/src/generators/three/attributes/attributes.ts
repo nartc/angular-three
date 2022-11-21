@@ -61,9 +61,11 @@ export const attributes = [
     },
     {
         name: THREE.Fog.name,
+        defaultArgs: '["white"]',
     },
     {
         name: THREE.FogExp2.name,
+        defaultArgs: '["#fff"]',
     },
     {
         name: THREE.Vector2.name,

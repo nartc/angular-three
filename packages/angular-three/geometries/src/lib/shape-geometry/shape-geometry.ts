@@ -4,15 +4,15 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-fog',
+    selector: 'ngt-shape-geometry',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtFogAttribute)],
+    providers: [provideInstanceRef(NgtShapeGeometry)],
 })
-export class NgtFogAttribute extends THREE.Fog {
+export class NgtShapeGeometry extends THREE.ShapeGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.Fog>({ optional: true }) || ["white"]));
-        return proxify(this);
+        super(...(injectArgs<typeof THREE.ShapeGeometry>({ optional: true }) || []));
+        return proxify(this, { attach: 'geometry' });
     }
 }

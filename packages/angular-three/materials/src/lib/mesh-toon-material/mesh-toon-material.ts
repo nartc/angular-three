@@ -4,14 +4,14 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-mesh-basic-material',
+    selector: 'ngt-mesh-toon-material',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtMeshBasicMaterial)],
+    providers: [provideInstanceRef(NgtMeshToonMaterial)],
     inputs: [...getInputs()],
 })
-export class NgtMeshBasicMaterial extends THREE.MeshBasicMaterial {
+export class NgtMeshToonMaterial extends THREE.MeshToonMaterial {
     constructor() {
         super();
         return proxify(this, { attach: 'material' });
@@ -20,22 +20,29 @@ export class NgtMeshBasicMaterial extends THREE.MeshBasicMaterial {
     
     static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
     static ngAcceptInputType_opacity: number| undefined;
+    static ngAcceptInputType_gradientMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_map: THREE.Texture | null| undefined;
     static ngAcceptInputType_lightMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_lightMapIntensity: number| undefined;
     static ngAcceptInputType_aoMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_aoMapIntensity: number| undefined;
-    static ngAcceptInputType_specularMap: THREE.Texture | null| undefined;
+    static ngAcceptInputType_emissive: THREE.ColorRepresentation| undefined;
+    static ngAcceptInputType_emissiveIntensity: number| undefined;
+    static ngAcceptInputType_emissiveMap: THREE.Texture | null| undefined;
+    static ngAcceptInputType_bumpMap: THREE.Texture | null| undefined;
+    static ngAcceptInputType_bumpScale: number| undefined;
+    static ngAcceptInputType_normalMap: THREE.Texture | null| undefined;
+    static ngAcceptInputType_normalMapType: THREE.NormalMapTypes| undefined;
+    static ngAcceptInputType_normalScale: THREE.Vector2| undefined;
+    static ngAcceptInputType_displacementMap: THREE.Texture | null| undefined;
+    static ngAcceptInputType_displacementScale: number| undefined;
+    static ngAcceptInputType_displacementBias: number| undefined;
     static ngAcceptInputType_alphaMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_fog: boolean| undefined;
-    static ngAcceptInputType_envMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_combine: THREE.Combine| undefined;
-    static ngAcceptInputType_reflectivity: number| undefined;
-    static ngAcceptInputType_refractionRatio: number| undefined;
     static ngAcceptInputType_wireframe: boolean| undefined;
     static ngAcceptInputType_wireframeLinewidth: number| undefined;
     static ngAcceptInputType_wireframeLinecap: string| undefined;
     static ngAcceptInputType_wireframeLinejoin: string| undefined;
+    static ngAcceptInputType_fog: boolean| undefined;
     static ngAcceptInputType_alphaTest: number| undefined;
     static ngAcceptInputType_alphaToCoverage: boolean| undefined;
     static ngAcceptInputType_blendDst: THREE.BlendingDstFactor| undefined;
@@ -82,22 +89,29 @@ function getInputs() {
     return [
         'color',
         'opacity',
+        'gradientMap',
         'map',
         'lightMap',
         'lightMapIntensity',
         'aoMap',
         'aoMapIntensity',
-        'specularMap',
+        'emissive',
+        'emissiveIntensity',
+        'emissiveMap',
+        'bumpMap',
+        'bumpScale',
+        'normalMap',
+        'normalMapType',
+        'normalScale',
+        'displacementMap',
+        'displacementScale',
+        'displacementBias',
         'alphaMap',
-        'fog',
-        'envMap',
-        'combine',
-        'reflectivity',
-        'refractionRatio',
         'wireframe',
         'wireframeLinewidth',
         'wireframeLinecap',
         'wireframeLinejoin',
+        'fog',
         'alphaTest',
         'alphaToCoverage',
         'blendDst',

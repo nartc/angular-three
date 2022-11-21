@@ -1,232 +1,189 @@
 import { Tree } from '@nrwl/devkit';
 import {
-  createSourceFile,
-  isArrayTypeNode,
-  isIndexSignatureDeclaration,
-  isLiteralTypeNode,
-  isPropertySignature,
-  isTypeLiteralNode,
-  isTypeReferenceNode,
-  isUnionTypeNode,
-  ParameterDeclaration,
-  PropertySignature,
-  ScriptKind,
-  ScriptTarget,
-  SourceFile,
-  SyntaxKind,
-  TypeLiteralNode,
-  TypeNode,
-  UnionTypeNode,
+    createSourceFile,
+    isArrayTypeNode,
+    isIndexSignatureDeclaration,
+    isLiteralTypeNode,
+    isPropertySignature,
+    isTypeLiteralNode,
+    isTypeReferenceNode,
+    isUnionTypeNode,
+    ParameterDeclaration,
+    PropertySignature,
+    ScriptKind,
+    ScriptTarget,
+    SourceFile,
+    SyntaxKind,
+    TypeLiteralNode,
+    TypeNode,
+    UnionTypeNode,
 } from 'typescript/lib/tsserverlibrary';
 
-const cached = new Map();
 const sourceFileCached = new Map();
 
 export function pathToSourceFile(tree: Tree, dtsPath: string): SourceFile {
-  if (!sourceFileCached.has(dtsPath)) {
-    const dtsContent = tree.read(dtsPath, 'utf-8');
+    if (!sourceFileCached.has(dtsPath)) {
+        const dtsContent = tree.read(dtsPath, 'utf-8');
 
-    sourceFileCached.set(
-      dtsPath,
-      createSourceFile('sourceFile.d.ts', dtsContent, ScriptTarget.Latest, true, ScriptKind.TS)
-    );
-  }
+        sourceFileCached.set(
+            dtsPath,
+            createSourceFile('sourceFile.d.ts', dtsContent, ScriptTarget.Latest, true, ScriptKind.TS)
+        );
+    }
 
-  return sourceFileCached.get(dtsPath);
+    return sourceFileCached.get(dtsPath);
 }
 
+type PropertyInfo = { propertyName: string; type: string; isOptional: boolean };
+type Property = PropertySignature | ParameterDeclaration | PropertyInfo;
+type Base = { sourceFile: SourceFile; properties: Map<string, Property> };
+
 export function astFromPath(
-  tree: Tree,
-  dtsPath: string,
-  propertiesFactory: (sourceFile: SourceFile) => {
-    mainProperties: PropertySignature[] | ParameterDeclaration[];
-    overrideOptional?: Record<string, boolean>;
-    base?: [string, SourceFile, (PropertySignature | ParameterDeclaration)[]];
-  }
-): {
-  inputs: {
-    name: string;
-    isNumberInput: boolean;
-    isBooleanInput: boolean;
-    propertyName: string;
-    type: string;
-    isOptional: boolean;
-    shouldOverride: boolean;
-  }[];
-  hasInput: boolean;
-  hasBooleanInput: boolean;
-  hasNumberInput: boolean;
-} {
-  const record: Record<
-    string,
-    {
-      propertyName: string;
-      type: string;
-      isOptional: boolean;
-      shouldOverride: boolean;
+    tree: Tree,
+    dtsPath: string,
+    propertiesFactory: (sourceFile: SourceFile) => {
+        properties: Map<string, Property>;
+        bases?: Map<string, Base>;
     }
-  > = {};
-  const sourceFile = pathToSourceFile(tree, dtsPath);
+) {
+    const sourceFile = pathToSourceFile(tree, dtsPath);
+    const { properties, bases = new Map<string, Base>() } = propertiesFactory(sourceFile);
 
-  const { mainProperties, base, overrideOptional = {} } = propertiesFactory(sourceFile);
+    const basesNames = [...bases.keys()];
+    while (basesNames.length) {
+        const baseName = basesNames.shift();
+        const { sourceFile: baseSourceFile, properties: baseProperties = new Map<string, Property>() } =
+            bases.get(baseName);
+        baseProperties.forEach((property) => {
+            const propertyTypeInfo = propertySignatureToType(baseSourceFile, property as PropertySignature);
 
-  let baseRecord = {};
-  if (base) {
-    const [baseName, baseSourceFile, baseProperties] = base;
-    if (baseName !== '') {
-      if (!cached.has(baseName)) {
-        cached.set(
-          baseName,
-          baseProperties.reduce((baseRecord, baseProperty) => {
-            const typeInfo = propertySignatureToType(baseSourceFile, baseProperty as PropertySignature);
-            baseRecord[typeInfo.propertyName] = {
-              ...typeInfo,
-              shouldOverride: false,
-            };
-            return baseRecord;
-          }, {})
-        );
-      }
-    }
-    baseRecord = cached.get(baseName) || {};
-  }
-
-  mainProperties.forEach((mainProperty) => {
-    const typeInfo = propertySignatureToType(sourceFile, mainProperty);
-
-    if (overrideOptional[typeInfo.propertyName] != undefined) {
-      typeInfo.isOptional = overrideOptional[typeInfo.propertyName];
+            if (!properties.has(propertyTypeInfo.propertyName)) {
+                properties.set(propertyTypeInfo.propertyName, propertyTypeInfo);
+            }
+        });
     }
 
-    record[typeInfo.propertyName] = {
-      ...typeInfo,
-      shouldOverride: !!baseRecord[typeInfo.propertyName],
+    const inputs = [];
+    properties.forEach((property, propertyName) => {
+        if (property['propertyName']) {
+            inputs.push({ name: propertyName, ...property });
+        } else {
+            const typeInfo = propertySignatureToType(sourceFile, property as PropertySignature);
+            inputs.push({ name: propertyName, ...typeInfo });
+        }
+    });
+
+    return {
+        inputs,
+        hasInput: inputs.length > 0,
     };
-  });
-
-  const inputs = Object.entries(record).map(([inputName, inputInfo]) => ({
-    name: inputName,
-    ...inputInfo,
-    isNumberInput: inputInfo.type.includes('number'),
-    isBooleanInput: inputInfo.type.includes('boolean'),
-  }));
-
-  return {
-    inputs,
-    hasInput: inputs.length > 0,
-    hasBooleanInput: inputs.some((input) => input.isBooleanInput),
-    hasNumberInput: inputs.some((input) => input.isNumberInput),
-  };
 }
 
 export function getType(sourceFile: SourceFile, type: TypeNode, isArray = false) {
-  if (isArrayTypeNode(type)) {
-    return getType(sourceFile, type.elementType, true);
-  }
-
-  if (type.kind === SyntaxKind.NumberKeyword) {
-    return concatArraySymbol(isArray, 'number');
-  }
-
-  if (type.kind === SyntaxKind.StringKeyword) {
-    return concatArraySymbol(isArray, 'string');
-  }
-
-  if (type.kind === SyntaxKind.BooleanKeyword) {
-    return concatArraySymbol(isArray, 'boolean');
-  }
-
-  if (isLiteralTypeNode(type)) {
-    if (type.literal.kind === SyntaxKind.NullKeyword) {
-      return 'null';
+    if (isArrayTypeNode(type)) {
+        return getType(sourceFile, type.elementType, true);
     }
 
-    if (type.literal.kind === SyntaxKind.StringKeyword) {
-      return type.literal.getText(sourceFile);
+    if (type.kind === SyntaxKind.NumberKeyword) {
+        return concatArraySymbol(isArray, 'number');
     }
-  }
 
-  if (isTypeLiteralNode(type)) {
-    return concatArraySymbol(isArray, getTypeLiteral(sourceFile, type));
-  }
+    if (type.kind === SyntaxKind.StringKeyword) {
+        return concatArraySymbol(isArray, 'string');
+    }
 
-  if (type.kind === SyntaxKind.NullKeyword) {
-    return 'null';
-  }
+    if (type.kind === SyntaxKind.BooleanKeyword) {
+        return concatArraySymbol(isArray, 'boolean');
+    }
 
-  if (type.kind === SyntaxKind.AnyKeyword) {
-    return concatArraySymbol(isArray, 'any');
-  }
+    if (isLiteralTypeNode(type)) {
+        if (type.literal.kind === SyntaxKind.NullKeyword) {
+            return 'null';
+        }
 
-  if (isTypeReferenceNode(type)) {
-    return concatArraySymbol(isArray, getThreeType(type.typeName.getText(sourceFile)));
-  }
+        if (type.literal.kind === SyntaxKind.StringKeyword) {
+            return type.literal.getText(sourceFile);
+        }
+    }
+
+    if (isTypeLiteralNode(type)) {
+        return concatArraySymbol(isArray, getTypeLiteral(sourceFile, type));
+    }
+
+    if (type.kind === SyntaxKind.NullKeyword) {
+        return 'null';
+    }
+
+    if (type.kind === SyntaxKind.AnyKeyword) {
+        return concatArraySymbol(isArray, 'any');
+    }
+
+    if (isTypeReferenceNode(type)) {
+        return concatArraySymbol(isArray, getThreeType(type.typeName.getText(sourceFile)));
+    }
 }
 
 export function getThreeType(type: string): string {
-  return [
-    'HTMLImageElement',
-    'HTMLCanvasElement',
-    'HTMLVideoElement',
-    'TexImageSource',
-    'ImageBitmap',
-    'ImageData',
-    'BufferSource',
-    'KernelSize',
-    'ToneMappingMode',
-    'VignetteTechnique',
-  ].includes(type)
-    ? type
-    : `THREE.${type}`;
+    return [
+        'HTMLImageElement',
+        'HTMLCanvasElement',
+        'HTMLVideoElement',
+        'TexImageSource',
+        'ImageBitmap',
+        'ImageData',
+        'BufferSource',
+        'KernelSize',
+        'ToneMappingMode',
+        'VignetteTechnique',
+    ].includes(type)
+        ? type
+        : `THREE.${type}`;
 }
 
 export function concatArraySymbol(isArray: boolean, type: string) {
-  return isArray ? `${type}[]` : type;
+    return isArray ? `${type}[]` : type;
 }
 
-export function propertySignatureToType(
-  sourceFile: SourceFile,
-  propertySignature: PropertySignature
-): { propertyName: string; type: string; isOptional: boolean } {
-  const propertyName = propertySignature.name.getText(sourceFile);
-  const isOptional = !!propertySignature.questionToken;
-  if (isUnionTypeNode(propertySignature.type)) {
-    return {
-      propertyName,
-      type: (propertySignature.type as UnionTypeNode).types
-        .filter((typeNode) => typeNode.kind !== SyntaxKind.UndefinedKeyword)
-        .map((type) => getType(sourceFile, type))
-        .filter(Boolean)
-        .join(' | '),
-      isOptional,
-    };
-  }
+export function propertySignatureToType(sourceFile: SourceFile, propertySignature: PropertySignature): PropertyInfo {
+    const propertyName = propertySignature.name.getText(sourceFile);
+    const isOptional = !!propertySignature.questionToken;
+    if (isUnionTypeNode(propertySignature.type)) {
+        return {
+            propertyName,
+            type: (propertySignature.type as UnionTypeNode).types
+                .filter((typeNode) => typeNode.kind !== SyntaxKind.UndefinedKeyword)
+                .map((type) => getType(sourceFile, type))
+                .filter(Boolean)
+                .join(' | '),
+            isOptional,
+        };
+    }
 
-  return {
-    propertyName,
-    type: getType(sourceFile, propertySignature.type),
-    isOptional,
-  };
+    return {
+        propertyName,
+        type: getType(sourceFile, propertySignature.type),
+        isOptional,
+    };
 }
 
 export function getTypeLiteral(sourceFile: SourceFile, typeLiteral: TypeLiteralNode): string {
-  const firstMember = typeLiteral.members[0];
-  if (isIndexSignatureDeclaration(firstMember)) {
-    const firstParameter = firstMember.parameters[0];
-    return `{[${firstParameter.name.getText(sourceFile)}: ${getType(sourceFile, firstParameter.type)}]: ${getType(
-      sourceFile,
-      firstMember.type
-    )}}`;
-  }
+    const firstMember = typeLiteral.members[0];
+    if (isIndexSignatureDeclaration(firstMember)) {
+        const firstParameter = firstMember.parameters[0];
+        return `{[${firstParameter.name.getText(sourceFile)}: ${getType(sourceFile, firstParameter.type)}]: ${getType(
+            sourceFile,
+            firstMember.type
+        )}}`;
+    }
 
-  return typeLiteral.members
-    .reduce((typeString, member) => {
-      if (isPropertySignature(member)) {
-        const { propertyName, type, isOptional } = propertySignatureToType(sourceFile, member);
-        typeString = typeString.concat(propertyName, isOptional ? '?:' : ':', type, ';');
-      }
+    return typeLiteral.members
+        .reduce((typeString, member) => {
+            if (isPropertySignature(member)) {
+                const { propertyName, type, isOptional } = propertySignatureToType(sourceFile, member);
+                typeString = typeString.concat(propertyName, isOptional ? '?:' : ':', type, ';');
+            }
 
-      return typeString;
-    }, '{')
-    .concat('}');
+            return typeString;
+        }, '{')
+        .concat('}');
 }

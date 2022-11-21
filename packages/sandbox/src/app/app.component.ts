@@ -14,7 +14,7 @@ import { NgtColorAttribute } from 'angular-three/attributes';
                 <ngt-color *args="['lightblue']" attach="background"></ngt-color>
                 <ngt-mesh>
                     <ngt-box-geometry></ngt-box-geometry>
-                    <ngt-mesh-basic-material></ngt-mesh-basic-material>
+                    <ngt-mesh-basic-material color="hotpink"></ngt-mesh-basic-material>
                 </ngt-mesh>
             </ng-template>
         </ngt-canvas>

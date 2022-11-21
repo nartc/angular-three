@@ -1,3 +1,4 @@
+// GENERATED - AngularThree v1.0.0
 import { injectArgs, NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';

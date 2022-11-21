@@ -12,7 +12,7 @@ import * as THREE from 'three';
 })
 export class Ngt<%= name %><% if (!name.endsWith('Attribute')) { %>Attribute<% } %> extends THREE.<%= threeClass %> {
     constructor() {
-        super(...(injectArgs<typeof THREE.<%= threeClass %>>({ optional: true }) || <%= defaultArgs %>));
+        super(...(injectArgs<typeof THREE.<%= threeClass %>>({ optional: true }) || <%- defaultArgs %>));
         return proxify(this);
     }
 }

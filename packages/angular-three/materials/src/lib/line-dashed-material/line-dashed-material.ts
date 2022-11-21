@@ -4,38 +4,28 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-mesh-basic-material',
+    selector: 'ngt-line-dashed-material',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtMeshBasicMaterial)],
+    providers: [provideInstanceRef(NgtLineDashedMaterial)],
     inputs: [...getInputs()],
 })
-export class NgtMeshBasicMaterial extends THREE.MeshBasicMaterial {
+export class NgtLineDashedMaterial extends THREE.LineDashedMaterial {
     constructor() {
         super();
         return proxify(this, { attach: 'material' });
     }
 
     
+    static ngAcceptInputType_scale: number| undefined;
+    static ngAcceptInputType_dashSize: number| undefined;
+    static ngAcceptInputType_gapSize: number| undefined;
     static ngAcceptInputType_color: THREE.ColorRepresentation| undefined;
-    static ngAcceptInputType_opacity: number| undefined;
-    static ngAcceptInputType_map: THREE.Texture | null| undefined;
-    static ngAcceptInputType_lightMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_lightMapIntensity: number| undefined;
-    static ngAcceptInputType_aoMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_aoMapIntensity: number| undefined;
-    static ngAcceptInputType_specularMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_alphaMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_fog: boolean| undefined;
-    static ngAcceptInputType_envMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_combine: THREE.Combine| undefined;
-    static ngAcceptInputType_reflectivity: number| undefined;
-    static ngAcceptInputType_refractionRatio: number| undefined;
-    static ngAcceptInputType_wireframe: boolean| undefined;
-    static ngAcceptInputType_wireframeLinewidth: number| undefined;
-    static ngAcceptInputType_wireframeLinecap: string| undefined;
-    static ngAcceptInputType_wireframeLinejoin: string| undefined;
+    static ngAcceptInputType_linewidth: number| undefined;
+    static ngAcceptInputType_linecap: string| undefined;
+    static ngAcceptInputType_linejoin: string| undefined;
     static ngAcceptInputType_alphaTest: number| undefined;
     static ngAcceptInputType_alphaToCoverage: boolean| undefined;
     static ngAcceptInputType_blendDst: THREE.BlendingDstFactor| undefined;
@@ -54,6 +44,7 @@ export class NgtMeshBasicMaterial extends THREE.MeshBasicMaterial {
     static ngAcceptInputType_depthTest: boolean| undefined;
     static ngAcceptInputType_depthWrite: boolean| undefined;
     static ngAcceptInputType_name: string| undefined;
+    static ngAcceptInputType_opacity: number| undefined;
     static ngAcceptInputType_polygonOffset: boolean| undefined;
     static ngAcceptInputType_polygonOffsetFactor: number| undefined;
     static ngAcceptInputType_polygonOffsetUnits: number| undefined;
@@ -80,24 +71,14 @@ export class NgtMeshBasicMaterial extends THREE.MeshBasicMaterial {
 
 function getInputs() {
     return [
+        'scale',
+        'dashSize',
+        'gapSize',
         'color',
-        'opacity',
-        'map',
-        'lightMap',
-        'lightMapIntensity',
-        'aoMap',
-        'aoMapIntensity',
-        'specularMap',
-        'alphaMap',
         'fog',
-        'envMap',
-        'combine',
-        'reflectivity',
-        'refractionRatio',
-        'wireframe',
-        'wireframeLinewidth',
-        'wireframeLinecap',
-        'wireframeLinejoin',
+        'linewidth',
+        'linecap',
+        'linejoin',
         'alphaTest',
         'alphaToCoverage',
         'blendDst',
@@ -116,6 +97,7 @@ function getInputs() {
         'depthTest',
         'depthWrite',
         'name',
+        'opacity',
         'polygonOffset',
         'polygonOffsetFactor',
         'polygonOffsetUnits',
