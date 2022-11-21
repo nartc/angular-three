@@ -4,15 +4,15 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-instanced-buffer-attribute',
+    selector: 'ngt-float32-buffer-attribute',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtInstancedBufferAttribute)],
+    providers: [provideInstanceRef(NgtFloat32BufferAttribute)],
 })
-export class NgtInstancedBufferAttribute extends THREE.InstancedBufferAttribute {
+export class NgtFloat32BufferAttribute extends THREE.Float32BufferAttribute {
     constructor() {
-        super(...(injectArgs<typeof THREE.InstancedBufferAttribute>({ optional: true }) || [[], 0]));
+        super(...(injectArgs<typeof THREE.Float32BufferAttribute>({ optional: true }) || [[], 0]));
         return proxify(this);
     }
 }

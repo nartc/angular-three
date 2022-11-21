@@ -7,6 +7,11 @@
             "factory": "./src/generators/init/generator",
             "schema": "./src/generators/init/schema.json",
             "description": "Init Angular Three with proper packages and config"
+        },
+        "three": {
+            "factory": "./src/generators/three/generator",
+            "schema": "./src/generators/three/schema.json",
+            "description": "(internal) Generate THREE entities"
         }
     },
     "schematics": {
@@ -14,6 +19,11 @@
             "factory": "./src/generators/init/compat",
             "schema": "./src/generators/init/schema.json",
             "description": "Add Angular Three with proper packages and config"
+        },
+        "three": {
+            "factory": "./src/generators/three/generator",
+            "schema": "./src/generators/three/schema.json",
+            "description": "(internal) Generate THREE entities"
         }
     }
 }

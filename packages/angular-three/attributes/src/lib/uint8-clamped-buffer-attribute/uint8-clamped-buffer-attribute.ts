@@ -4,15 +4,15 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-instanced-buffer-attribute',
+    selector: 'ngt-uint8-clamped-buffer-attribute',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtInstancedBufferAttribute)],
+    providers: [provideInstanceRef(NgtUint8ClampedBufferAttribute)],
 })
-export class NgtInstancedBufferAttribute extends THREE.InstancedBufferAttribute {
+export class NgtUint8ClampedBufferAttribute extends THREE.Uint8ClampedBufferAttribute {
     constructor() {
-        super(...(injectArgs<typeof THREE.InstancedBufferAttribute>({ optional: true }) || [[], 0]));
+        super(...(injectArgs<typeof THREE.Uint8ClampedBufferAttribute>({ optional: true }) || [[], 0]));
         return proxify(this);
     }
 }

@@ -4,15 +4,15 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-instanced-buffer-attribute',
+    selector: 'ngt-vector2-attribute',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtInstancedBufferAttribute)],
+    providers: [provideInstanceRef(NgtVector2Attribute)],
 })
-export class NgtInstancedBufferAttribute extends THREE.InstancedBufferAttribute {
+export class NgtVector2Attribute extends THREE.Vector2 {
     constructor() {
-        super(...(injectArgs<typeof THREE.InstancedBufferAttribute>({ optional: true }) || [[], 0]));
+        super(...(injectArgs<typeof THREE.Vector2>({ optional: true }) || []));
         return proxify(this);
     }
 }

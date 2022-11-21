@@ -4,15 +4,15 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-instanced-buffer-attribute',
+    selector: 'ngt-fog-exp2-attribute',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtInstancedBufferAttribute)],
+    providers: [provideInstanceRef(NgtFogExp2Attribute)],
 })
-export class NgtInstancedBufferAttribute extends THREE.InstancedBufferAttribute {
+export class NgtFogExp2Attribute extends THREE.FogExp2 {
     constructor() {
-        super(...(injectArgs<typeof THREE.InstancedBufferAttribute>({ optional: true }) || [[], 0]));
+        super(...(injectArgs<typeof THREE.FogExp2>({ optional: true }) || []));
         return proxify(this);
     }
 }

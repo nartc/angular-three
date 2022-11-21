@@ -1,0 +1,18 @@
+// GENERATED - AngularThree v<%= ngtVersion %>
+import { injectArgs, NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify } from 'angular-three';
+import { Component } from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+    selector: 'ngt-<%= selector %>',
+    standalone: true,
+    template: '<ng-content></ng-content>',
+    hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
+    providers: [provideInstanceRef(Ngt<%= name %><% if (!name.endsWith('Attribute')) { %>Attribute<% } %>)],
+})
+export class Ngt<%= name %><% if (!name.endsWith('Attribute')) { %>Attribute<% } %> extends THREE.<%= threeClass %> {
+    constructor() {
+        super(...(injectArgs<typeof THREE.<%= threeClass %>>({ optional: true }) || <%= defaultArgs %>));
+        return proxify(this);
+    }
+}

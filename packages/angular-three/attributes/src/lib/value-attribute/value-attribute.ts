@@ -12,6 +12,6 @@ export class NgtValueAttribute {
     private readonly instance = injectInstance({ host: true });
 
     @Input() set value(value: any) {
-        this.instance.instanceRef.next(value);
+        this.instance.instanceRef.set(value);
     }
 }

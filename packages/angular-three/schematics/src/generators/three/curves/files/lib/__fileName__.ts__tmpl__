@@ -1,0 +1,28 @@
+// GENERATED - AngularThree v<%= ngtVersion %>
+import {
+    NgtAnyConstructor,
+    NgtCommonCurve,
+    provideNgtCommonCurve,
+    provideCommonCurveRef,
+} from '@angular-three/core';
+import { Component } from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    standalone: true,
+    template: '<ng-content></ng-content>',
+    providers: [
+        provideNgtCommonCurve(Ngt<%= name %>),
+        provideCommonCurveRef(Ngt<%= name %>)
+    ],
+})
+export class Ngt<%= name %> extends NgtCommonCurve<THREE.<%= name %>> {
+    static ngAcceptInputType_args:
+        | ConstructorParameters<typeof THREE.<%= name %>>
+        | undefined;
+
+    override get curveType(): NgtAnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+}

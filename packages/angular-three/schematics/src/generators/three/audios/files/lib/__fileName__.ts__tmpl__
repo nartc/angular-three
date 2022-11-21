@@ -1,0 +1,24 @@
+// GENERATED - AngularThree v<%= ngtVersion %>
+import {
+    NgtAnyConstructor,
+    NgtCommonAudio,
+    provideNgtCommonAudio,
+    provideCommonAudioRef,
+} from '@angular-three/core';
+import { Component } from '@angular/core';
+import * as THREE from 'three';
+
+@Component({
+    selector: 'ngt-<%= fileName %>',
+    standalone: true,
+    template: '<ng-content></ng-content>',
+    providers: [
+        provideNgtCommonAudio(Ngt<%= name %>),
+        provideCommonAudioRef(Ngt<%= name %>)
+    ],
+})
+export class Ngt<%= name %> extends NgtCommonAudio<<%= audioNode %>, THREE.<%= name %>> {
+    override get audioType(): NgtAnyConstructor<THREE.<%= name %>> {
+        return THREE.<%= name %>;
+    }
+}
