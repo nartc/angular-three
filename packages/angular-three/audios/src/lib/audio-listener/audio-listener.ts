@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 import { Component } from '@angular/core';
-import { NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify } from 'angular-three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NgtInstance, provideInstanceRef, proxify } from 'angular-three';
 
 @Component({
     selector: 'ngt-audio-listener',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtAudioListener)],
 })
 export class NgtAudioListener extends THREE.AudioListener {

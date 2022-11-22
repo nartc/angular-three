@@ -1,5 +1,12 @@
 // GENERATED - AngularThree v1.0.0
-import { injectArgs, NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify } from 'angular-three';
+import {
+    injectArgs,
+    NGT_INSTANCE_INPUTS,
+    NGT_INSTANCE_OUTPUTS,
+    NgtInstance,
+    provideInstanceRef,
+    proxify,
+} from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,12 +14,12 @@ import * as THREE from 'three';
     selector: 'ngt-fog-exp2',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtFogExp2Attribute)],
 })
 export class NgtFogExp2Attribute extends THREE.FogExp2 {
     constructor() {
-        super(...(injectArgs<typeof THREE.FogExp2>({ optional: true }) || ["#fff"]));
+        super(...(injectArgs<typeof THREE.FogExp2>({ optional: true }) || ['#fff']));
         return proxify(this);
     }
 }

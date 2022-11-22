@@ -1,6 +1,8 @@
 // GENERATED - AngularThree v1.0.0
 import {
-    NGT_INSTANCE_HOST_DIRECTIVE,
+    NGT_INSTANCE_INPUTS,
+    NGT_INSTANCE_OUTPUTS,
+    NgtInstance,
     provideInstanceRef,
     proxify,
     NgtVector2,
@@ -13,7 +15,7 @@ import * as THREE from 'three';
     selector: 'ngt-mesh-matcap-material',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtMeshMatcapMaterial)],
     inputs: [...getInputs()],
 })

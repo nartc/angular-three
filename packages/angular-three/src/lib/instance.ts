@@ -785,18 +785,16 @@ export class NgtInstance<
     // }
 }
 
-export const NGT_INSTANCE_HOST_DIRECTIVE = {
-    directive: NgtInstance,
-    inputs: [
-        'ref',
-        'attach',
-        'skipWrapper',
-        'skipInit',
-        'noAttach',
-        'beforeRender',
-        'priority',
-        'updateCallback',
-        'readyCallback',
-    ],
-    outputs: [...supportedEvents],
-};
+export const NGT_INSTANCE_INPUTS = [
+    'ref',
+    'attach',
+    'skipWrapper',
+    'skipInit',
+    'noAttach',
+    'beforeRender',
+    'priority',
+    'updateCallback',
+    'readyCallback',
+];
+
+export const NGT_INSTANCE_OUTPUTS = [...supportedEvents];

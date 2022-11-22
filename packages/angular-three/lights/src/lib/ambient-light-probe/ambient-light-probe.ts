@@ -3,7 +3,9 @@ import * as THREE from 'three';
 import { Component } from '@angular/core';
 import {
     injectArgs,
-    NGT_INSTANCE_HOST_DIRECTIVE,
+    NGT_INSTANCE_INPUTS,
+    NGT_INSTANCE_OUTPUTS,
+    NgtInstance,
     provideInstanceRef,
     proxify,
     NgtVector3,
@@ -18,7 +20,7 @@ import {
     selector: 'ngt-ambient-light-probe',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtAmbientLightProbe)],
     inputs: [...getInputs()],
 })

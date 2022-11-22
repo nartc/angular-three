@@ -1,5 +1,12 @@
 // GENERATED - AngularThree v1.0.0
-import { NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify, NgtObservableInput } from 'angular-three';
+import {
+    NGT_INSTANCE_INPUTS,
+    NGT_INSTANCE_OUTPUTS,
+    NgtInstance,
+    provideInstanceRef,
+    proxify,
+    NgtObservableInput,
+} from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,7 +14,7 @@ import * as THREE from 'three';
     selector: 'ngt-raw-shader-material',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtRawShaderMaterial)],
     inputs: [...getInputs()],
 })

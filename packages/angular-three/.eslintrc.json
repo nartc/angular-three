@@ -9,6 +9,7 @@
                 "@angular-eslint/component-class-suffix": "off",
                 "@angular-eslint/directive-class-suffix": "off",
                 "@angular-eslint/no-inputs-metadata-property": "off",
+                "@angular-eslint/no-outputs-metadata-property": "off",
                 "@angular-eslint/no-output-native": "off",
                 "@typescript-eslint/no-explicit-any": "off",
                 "@typescript-eslint/ban-types": "off",
