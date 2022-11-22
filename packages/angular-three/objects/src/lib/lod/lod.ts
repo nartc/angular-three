@@ -14,23 +14,22 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-mesh',
+    selector: 'ngt-lod',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtMesh)],
+    providers: [provideInstanceRef(NgtLOD)],
     inputs: [...getInputs()],
 })
-export class NgtMesh extends THREE.Mesh {
+export class NgtLOD extends THREE.LOD {
     constructor() {
         super();
         return proxify(this);
     }
 
-    static ngAcceptInputType_geometry: NgtObservableInput<THREE.BufferGeometry>;
-    static ngAcceptInputType_material: NgtObservableInput<THREE.Material | THREE.Material[]>;
-    static ngAcceptInputType_morphTargetInfluences: NgtObservableInput<number[]> | undefined;
-    static ngAcceptInputType_morphTargetDictionary: NgtObservableInput<{ [key: string]: number }> | undefined;
+    static ngAcceptInputType_levels: NgtObservableInput<{ distance: number; object: THREE.Object3D }[]>;
+    static ngAcceptInputType_autoUpdate: NgtObservableInput<boolean>;
+    static ngAcceptInputType_objects: NgtObservableInput<any[]>;
     static ngAcceptInputType_name: NgtObservableInput<string>;
     static ngAcceptInputType_position: NgtObservableInput<NgtVector3>;
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
@@ -77,10 +76,9 @@ export class NgtMesh extends THREE.Mesh {
 
 function getInputs() {
     return [
-        'geometry',
-        'material',
-        'morphTargetInfluences',
-        'morphTargetDictionary',
+        'levels',
+        'autoUpdate',
+        'objects',
         'name',
         'position',
         'rotation',

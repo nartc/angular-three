@@ -4,7 +4,7 @@ import { NgtColorAttribute } from 'angular-three/attributes';
 import { NgtBoxGeometry } from 'angular-three/geometries';
 import { NgtBoxHelper, NgtGridHelper } from 'angular-three/helpers';
 import { NgtMeshBasicMaterial, NgtMeshStandardMaterial } from 'angular-three/materials';
-import { NgtMesh } from 'angular-three/objects';
+import { NgtGroup, NgtMesh } from 'angular-three/objects';
 import { NgtAmbientLight, NgtPointLight } from 'angular-three/lights';
 
 @Component({
@@ -18,11 +18,19 @@ import { NgtAmbientLight, NgtPointLight } from 'angular-three/lights';
                 <ngt-ambient-light></ngt-ambient-light>
                 <ngt-point-light [intensity]="2" [position]="[2, 2, 2]"></ngt-point-light>
 
-                <ngt-mesh #cube [beforeRender]="onBeforeRender">
-                    <ngt-box-helper *args="[cube, 'red']"></ngt-box-helper>
-                    <ngt-box-geometry></ngt-box-geometry>
-                    <ngt-mesh-standard-material color="hotpink"></ngt-mesh-standard-material>
-                </ngt-mesh>
+                <ngt-group [beforeRender]="onGroupBeforeRender">
+                    <ngt-mesh #cubeOne [beforeRender]="onBeforeRender" [position]="[1.5, 0, 0]">
+                        <ngt-box-helper *args="[cubeOne, 'red']"></ngt-box-helper>
+                        <ngt-box-geometry></ngt-box-geometry>
+                        <ngt-mesh-standard-material color="hotpink"></ngt-mesh-standard-material>
+                    </ngt-mesh>
+
+                    <ngt-mesh #cubeTwo [beforeRender]="onBeforeRender" [position]="[-1.5, 0, 0]">
+                        <ngt-box-helper *args="[cubeTwo, 'orange']"></ngt-box-helper>
+                        <ngt-box-geometry></ngt-box-geometry>
+                        <ngt-mesh-standard-material color="hotpink"></ngt-mesh-standard-material>
+                    </ngt-mesh>
+                </ngt-group>
                 <ngt-grid-helper *args="[20, 20]"></ngt-grid-helper>
             </ng-template>
         </ngt-canvas>
@@ -39,11 +47,16 @@ import { NgtAmbientLight, NgtPointLight } from 'angular-three/lights';
         NgtMeshStandardMaterial,
         NgtAmbientLight,
         NgtPointLight,
+        NgtGroup,
     ],
 })
 export class AppComponent {
     onBeforeRender(_: NgtRenderState, cube: THREE.Mesh) {
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
+    }
+
+    onGroupBeforeRender(_: NgtRenderState, group: THREE.Group) {
+        group.rotation.z += 0.01;
     }
 }

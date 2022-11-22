@@ -60,10 +60,6 @@ export default async function lightsGenerator(tree: Tree, ngtVersion: string) {
     }
 
     const generatedLights = [];
-    const passThroughs = [
-        // 'spot-light-pass-through'
-    ];
-
     for (const light of lights) {
         const normalizedNames = names(light.name);
 
@@ -156,7 +152,7 @@ export default async function lightsGenerator(tree: Tree, ngtVersion: string) {
     }
 
     generateFiles(tree, join(__dirname, '../common/files/index'), join(lightDir, 'src'), {
-        items: [...generatedLights, ...passThroughs],
+        items: generatedLights,
         tmpl: '',
         ngtVersion,
     });

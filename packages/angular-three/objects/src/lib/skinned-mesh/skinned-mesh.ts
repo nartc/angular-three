@@ -3,10 +3,10 @@ import {
     NGT_INSTANCE_HOST_DIRECTIVE,
     provideInstanceRef,
     proxify,
+    NgtMatrix4,
     NgtVector3,
     NgtEuler,
     NgtQuaternion,
-    NgtMatrix4,
     NgtLayers,
     NgtObservableInput,
 } from 'angular-three';
@@ -14,19 +14,23 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-mesh',
+    selector: 'ngt-skinned-mesh',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtMesh)],
+    providers: [provideInstanceRef(NgtSkinnedMesh)],
     inputs: [...getInputs()],
 })
-export class NgtMesh extends THREE.Mesh {
+export class NgtSkinnedMesh extends THREE.SkinnedMesh {
     constructor() {
         super();
         return proxify(this);
     }
 
+    static ngAcceptInputType_bindMode: NgtObservableInput<string>;
+    static ngAcceptInputType_bindMatrix: NgtObservableInput<NgtMatrix4>;
+    static ngAcceptInputType_bindMatrixInverse: NgtObservableInput<NgtMatrix4>;
+    static ngAcceptInputType_skeleton: NgtObservableInput<THREE.Skeleton>;
     static ngAcceptInputType_geometry: NgtObservableInput<THREE.BufferGeometry>;
     static ngAcceptInputType_material: NgtObservableInput<THREE.Material | THREE.Material[]>;
     static ngAcceptInputType_morphTargetInfluences: NgtObservableInput<number[]> | undefined;
@@ -77,6 +81,10 @@ export class NgtMesh extends THREE.Mesh {
 
 function getInputs() {
     return [
+        'bindMode',
+        'bindMatrix',
+        'bindMatrixInverse',
+        'skeleton',
         'geometry',
         'material',
         'morphTargetInfluences',

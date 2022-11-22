@@ -14,14 +14,14 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-mesh',
+    selector: 'ngt-line-loop',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtMesh)],
+    providers: [provideInstanceRef(NgtLineLoop)],
     inputs: [...getInputs()],
 })
-export class NgtMesh extends THREE.Mesh {
+export class NgtLineLoop extends THREE.LineLoop {
     constructor() {
         super();
         return proxify(this);

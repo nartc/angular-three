@@ -7,6 +7,7 @@ import helpersGenerator from './helpers/helpers';
 import lightsGenerator from './lights/lights';
 import materialsGenerator from './materials/materials';
 import texturesGenerator from './textures/textures';
+import objectsGenerator from './objects/objects';
 
 export default async function (tree: Tree) {
     const packageJson = readJson(tree, 'package.json');
@@ -30,14 +31,12 @@ export default async function (tree: Tree) {
         attributesGenerator(tree, ngtVersion),
         audiosGenerator(tree, ngtVersion),
         camerasGenerator(tree, ngtVersion),
-        // curvesGenerator(tree, ngtVersion),
         helpersGenerator(tree, ngtVersion),
         lightsGenerator(tree, ngtVersion),
         texturesGenerator(tree, ngtVersion),
+        objectsGenerator(tree, ngtVersion),
         // simpleEffectsGenerator(tree, ngtVersion),
     ]);
 
-    return () => {
-        formatFiles(tree);
-    };
+    await formatFiles(tree);
 }

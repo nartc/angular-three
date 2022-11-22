@@ -14,23 +14,23 @@ import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
-    selector: 'ngt-mesh',
+    selector: 'ngt-points',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtMesh)],
+    providers: [provideInstanceRef(NgtPoints)],
     inputs: [...getInputs()],
 })
-export class NgtMesh extends THREE.Mesh {
+export class NgtPoints extends THREE.Points {
     constructor() {
         super();
         return proxify(this);
     }
 
-    static ngAcceptInputType_geometry: NgtObservableInput<THREE.BufferGeometry>;
-    static ngAcceptInputType_material: NgtObservableInput<THREE.Material | THREE.Material[]>;
     static ngAcceptInputType_morphTargetInfluences: NgtObservableInput<number[]> | undefined;
     static ngAcceptInputType_morphTargetDictionary: NgtObservableInput<{ [key: string]: number }> | undefined;
+    static ngAcceptInputType_geometry: NgtObservableInput<THREE.BufferGeometry>;
+    static ngAcceptInputType_material: NgtObservableInput<THREE.Material | THREE.Material[]>;
     static ngAcceptInputType_name: NgtObservableInput<string>;
     static ngAcceptInputType_position: NgtObservableInput<NgtVector3>;
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
@@ -77,10 +77,10 @@ export class NgtMesh extends THREE.Mesh {
 
 function getInputs() {
     return [
-        'geometry',
-        'material',
         'morphTargetInfluences',
         'morphTargetDictionary',
+        'geometry',
+        'material',
         'name',
         'position',
         'rotation',

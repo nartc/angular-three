@@ -170,7 +170,7 @@ export function astFromPath(
     inputs.forEach(({ propertyName, type }) => {
         try {
             if (type.startsWith('Ngt')) {
-                ngtTypes.add(type);
+                ngtTypes.add(type.endsWith('[]') ? type.slice(0, -2) : type);
             }
         } catch (e) {
             console.log('wtf is this', propertyName, dtsPath);
@@ -189,6 +189,10 @@ export function astFromPath(
 export function getType(sourceFile: SourceFile, type: TypeNode, isArray = false) {
     if (isArrayTypeNode(type)) {
         return getType(sourceFile, type.elementType, true);
+    }
+
+    if (isTypeReferenceNode(type) && type.typeName.getText(sourceFile) === 'Array') {
+        return getType(sourceFile, type.typeArguments[0], true);
     }
 
     if (isFunctionTypeNode(type)) {
@@ -253,6 +257,15 @@ export function getThreeType(type: string): string {
         return `Ngt${type}`;
     }
 
+    // generics
+    if (['TGeometry'].includes(type)) {
+        return `THREE.BufferGeometry`;
+    }
+
+    if (['TMaterial'].includes(type)) {
+        return `THREE.Material | THREE.Material[]`;
+    }
+
     return [
         'HTMLImageElement',
         'HTMLCanvasElement',
@@ -267,6 +280,7 @@ export function getThreeType(type: string): string {
         'AudioNode',
         'AudioBufferSourceNode',
         'AudioBuffer',
+        'Float32Array',
     ].includes(type)
         ? type
         : `THREE.${type}`;
