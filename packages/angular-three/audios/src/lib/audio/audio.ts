@@ -1,7 +1,7 @@
 // GENERATED - AngularThree v1.0.0
 import * as THREE from 'three';
 import { Component } from '@angular/core';
-import { injectArgs, NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify, NgtEuler, NgtQuaternion, NgtMatrix4, NgtLayers } from 'angular-three';
+import { injectArgs, NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify, NgtVector3, NgtEuler, NgtQuaternion, NgtMatrix4, NgtLayers } from 'angular-three';
 
 @Component({
     selector: 'ngt-audio',
@@ -32,10 +32,10 @@ export class NgtAudio extends THREE.Audio {
     static ngAcceptInputType_source: null | AudioBufferSourceNode;
     static ngAcceptInputType_filters: AudioNode[];
     static ngAcceptInputType_name: string;
-    static ngAcceptInputType_position: THREE.Vector3;
+    static ngAcceptInputType_position: NgtVector3;
     static ngAcceptInputType_rotation: NgtEuler;
     static ngAcceptInputType_quaternion: NgtQuaternion;
-    static ngAcceptInputType_scale: THREE.Vector3;
+    static ngAcceptInputType_scale: NgtVector3;
     static ngAcceptInputType_modelViewMatrix: NgtMatrix4;
     static ngAcceptInputType_normalMatrix: THREE.Matrix3;
     static ngAcceptInputType_matrix: NgtMatrix4;
@@ -55,7 +55,7 @@ export class NgtAudio extends THREE.Audio {
     static ngAcceptInputType_customDistanceMaterial: THREE.Material;
     static ngAcceptInputType_onBeforeRender: (renderer:THREE.WebGLRenderer, scene:THREE.Scene, camera:THREE.Camera, geometry:THREE.BufferGeometry, material:THREE.Material, group:THREE.Group) => void;
     static ngAcceptInputType_onAfterRender: (renderer:THREE.WebGLRenderer, scene:THREE.Scene, camera:THREE.Camera, geometry:THREE.BufferGeometry, material:THREE.Material, group:THREE.Group) => void;
-    static ngAcceptInputType_DefaultUp: THREE.Vector3;
+    static ngAcceptInputType_DefaultUp: NgtVector3;
     static ngAcceptInputType_DefaultMatrixAutoUpdate: boolean;
     static ngAcceptInputType_DefaultMatrixWorldAutoUpdate: boolean;
 }

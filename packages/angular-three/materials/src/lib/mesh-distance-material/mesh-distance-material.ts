@@ -1,5 +1,5 @@
 // GENERATED - AngularThree v1.0.0
-import { NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify } from 'angular-three';
+import { NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify, NgtVector3 } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 
@@ -24,7 +24,7 @@ export class NgtMeshDistanceMaterial extends THREE.MeshDistanceMaterial {
     static ngAcceptInputType_displacementBias: number| undefined;
     static ngAcceptInputType_farDistance: number| undefined;
     static ngAcceptInputType_nearDistance: number| undefined;
-    static ngAcceptInputType_referencePosition: THREE.Vector3| undefined;
+    static ngAcceptInputType_referencePosition: NgtVector3| undefined;
     static ngAcceptInputType_alphaTest: number| undefined;
     static ngAcceptInputType_alphaToCoverage: boolean| undefined;
     static ngAcceptInputType_blendDst: THREE.BlendingDstFactor| undefined;
