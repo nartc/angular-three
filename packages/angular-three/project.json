@@ -54,7 +54,9 @@
                     "packages/angular-three/textures/**/*.ts",
                     "packages/angular-three/textures/**/*.html",
                     "packages/angular-three/primitives/**/*.ts",
-                    "packages/angular-three/primitives/**/*.html"
+                    "packages/angular-three/primitives/**/*.html",
+                    "packages/angular-three/stats/**/*.ts",
+                    "packages/angular-three/stats/**/*.html"
                 ]
             }
         }

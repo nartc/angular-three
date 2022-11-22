@@ -11,5 +11,6 @@ export * from './lib/stores/component-store';
 export * from './lib/directives/args';
 
 export * from './lib/utils/proxy';
+export * from './lib/utils/loop';
 
 export * from './lib/di/resize';

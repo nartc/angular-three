@@ -1,6 +1,6 @@
 import { inject, NgZone } from '@angular/core';
 import { isObservable, Subscription } from 'rxjs';
-import { injectInstance, injectInstanceRef, NgtInstance } from '../instance';
+import { injectInstance, injectInstanceRef, NGT_PROXY_INSTANCE, NgtInstance } from '../instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NgtAnyFunction, NgtAttachFunction, NgtStateFactory } from '../types';
@@ -61,6 +61,7 @@ export function proxify<T extends object>(
             get(target: T, p: string | symbol, receiver: any): any {
                 if (p === 'instanceRef') return ngtInstance.instanceRef;
                 if (p === 'instance') return ngtInstance;
+                if (p === NGT_PROXY_INSTANCE) return target;
 
                 const capitalizedProp = `get${capitalize(p as string)}`;
                 if (target[capitalizedProp as keyof T] && typeof target[capitalizedProp as keyof T] === 'function') {
@@ -88,8 +89,10 @@ export function proxify<T extends object>(
                 }
 
                 // schedule updateCallback on next event loop
-                queueMicrotask(() => {
-                    if (ngtInstance.updateCallback) ngtInstance.updateCallback(instance);
+                zone.runOutsideAngular(() => {
+                    queueMicrotask(() => {
+                        if (ngtInstance.updateCallback) ngtInstance.updateCallback(instance);
+                    });
                 });
 
                 return true;

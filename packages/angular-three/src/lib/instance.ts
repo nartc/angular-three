@@ -32,6 +32,8 @@ import { invalidateInstance } from './utils/instance';
 import { is } from './utils/is';
 import { mutate } from './utils/mutate';
 
+export const NGT_PROXY_INSTANCE = Symbol.for('__ngt__proxy__instance__');
+
 export const NGT_INSTANCE_REF_FACTORY = new InjectionToken<NgtAnyFunction<NgtRef>>('NgtInstance[instanceRef] factory');
 export function provideInstanceRef<
     TInstanceType extends object = any,
@@ -50,7 +52,6 @@ export function provideInstanceRef<
         deps: [ctor],
     };
 }
-
 export function injectInstanceRef(): NgtAnyFunction<NgtRef>;
 export function injectInstanceRef(options: InjectOptions & { optional?: false }): NgtAnyFunction<NgtRef>;
 export function injectInstanceRef(options: InjectOptions & { optional?: true }): NgtAnyFunction<NgtRef> | null;
@@ -66,7 +67,6 @@ export interface NgtInstanceState<TInstance extends object = NgtAnyRecord> {
     skipWrapper: boolean;
     skipInit: boolean;
 }
-
 export function injectInstance<T extends object>(): NgtInstance<T>;
 export function injectInstance<T extends object>(options: InjectOptions & { optional?: false }): NgtInstance<T>;
 export function injectInstance<T extends object>(options: InjectOptions & { optional?: true }): NgtInstance<T> | null;
@@ -176,14 +176,14 @@ export class NgtInstance<
             }
 
             let beforeRenderCleanUp: () => void;
-            if (this.beforeRender && is.object3d(this.instanceValue)) {
+            if (this.beforeRender && is.object3d(this.instanceValue) && is.object3d(this.proxyInstance)) {
                 beforeRenderCleanUp = this.store
                     .read((s) => s.internal)
                     .subscribe(
                         (state, object) => this.beforeRender!(state, object),
                         this.priority,
                         this.store.read,
-                        this.instanceValue
+                        this.proxyInstance
                     );
             }
 
@@ -261,8 +261,12 @@ export class NgtInstance<
                 // if propertyToAttach is empty
                 if (propertyToAttach.length === 0) {
                     // this might be the case where we are attaching an object3D to the parent object3D
-                    if (is.object3d(this.instanceValue) && is.object3d(this.parent?.value)) {
-                        this.parent?.value.add(this.instanceValue);
+                    if (
+                        is.object3d(this.instanceValue) &&
+                        is.object3d(this.proxyInstance) &&
+                        is.object3d(this.parent?.value)
+                    ) {
+                        this.parent?.value.add(this.proxyInstance);
                     }
                 } else {
                     // array material handling
@@ -286,7 +290,7 @@ export class NgtInstance<
                     }
 
                     // attach the instance value on the parent
-                    mutate(parentInstanceRef.value, this.instanceValue, propertyToAttach);
+                    mutate(parentInstanceRef.value, this.proxyInstance, propertyToAttach);
                 }
 
                 // validate on the instance
@@ -334,6 +338,10 @@ export class NgtInstance<
         return this._isRaw ? (this.instanceRef.value?.valueOf() as TInstance) : this.instanceRef.value;
     }
 
+    get proxyInstance(): TInstance {
+        return (this.instanceValue as any)?.[NGT_PROXY_INSTANCE];
+    }
+
     get __ngt__(): NgtInstanceLocalState {
         return getInstanceLocalState(
             this._isRaw ? this.instanceRef.value : this.instanceValue
@@ -342,8 +350,6 @@ export class NgtInstance<
 
     get parent(): NgtRef | undefined {
         return this.parentRef?.();
-        // if (!this.getState((s) => s.skipWrapper)) return this.parentRef?.();
-        // return this.parentHostRef?.() || this.parentRef?.();
     }
 
     override ngOnDestroy() {

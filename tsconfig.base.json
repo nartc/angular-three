@@ -25,6 +25,7 @@
             "angular-three/materials": ["packages/angular-three/materials/src/index.ts"],
             "angular-three/objects": ["packages/angular-three/objects/src/index.ts"],
             "angular-three/primitives": ["packages/angular-three/primitives/src/index.ts"],
+            "angular-three/stats": ["packages/angular-three/stats/src/index.ts"],
             "angular-three/textures": ["packages/angular-three/textures/src/index.ts"],
             "three-generator": ["packages/three-generator/src/index.ts"]
         }
