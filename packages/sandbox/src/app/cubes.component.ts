@@ -8,6 +8,7 @@ import { NgtBoxGeometry } from 'angular-three/geometries';
 import { NgtMeshStandardMaterial } from 'angular-three/materials';
 import { NgForOf } from '@angular/common';
 import { NgtStats } from 'angular-three/stats';
+import { DreiOrbitControls } from 'angular-drei/controls';
 
 @Component({
     selector: 'cube',
@@ -73,9 +74,9 @@ class CubeWithMaterials {
 
         <cube-with-materials></cube-with-materials>
 
-        <!--        <ngt-soba-orbit-controls></ngt-soba-orbit-controls>-->
+        <drei-orbit-controls></drei-orbit-controls>
     `,
-    imports: [Cube, CubeWithMaterials, NgtAmbientLight, NgtPointLight],
+    imports: [Cube, CubeWithMaterials, NgtAmbientLight, NgtPointLight, DreiOrbitControls],
 })
 class Scene {}
 
@@ -83,7 +84,7 @@ class Scene {}
     selector: 'angular-three-cubes',
     standalone: true,
     template: `
-        <ngt-canvas [camera]="{ position: [5, 5, 5] }">
+        <ngt-canvas>
             <ng-template>
                 <ngt-color *args="['lightblue']" attach="background"></ngt-color>
                 <scene></scene>

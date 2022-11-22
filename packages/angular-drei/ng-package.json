@@ -3,5 +3,6 @@
     "dest": "../../dist/packages/angular-drei",
     "lib": {
         "entryFile": "src/index.ts"
-    }
+    },
+    "allowedNonPeerDependencies": ["three-stdlib"]
 }

@@ -32,7 +32,12 @@
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "options": {
-                "lintFilePatterns": ["packages/angular-drei/**/*.ts", "packages/angular-drei/**/*.html"]
+                "lintFilePatterns": [
+                    "packages/angular-drei/**/*.ts",
+                    "packages/angular-drei/**/*.html",
+                    "packages/angular-drei/controls/**/*.ts",
+                    "packages/angular-drei/controls/**/*.html"
+                ]
             }
         }
     },

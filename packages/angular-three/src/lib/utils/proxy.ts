@@ -45,6 +45,8 @@ export function proxify<T extends object>(
                     } else {
                         applyProps(obj, { [prop]: val });
                     }
+
+                    ngtInstance.write({ [prop]: val });
                 });
                 return () => sub.unsubscribe();
             }
@@ -54,6 +56,7 @@ export function proxify<T extends object>(
             } else {
                 applyProps(obj, { [prop]: newValue });
             }
+            ngtInstance.write({ [prop]: newValue });
             return;
         }
 
@@ -79,23 +82,23 @@ export function proxify<T extends object>(
                 // Angular sets this property
                 if (p === '__ngContext__') return Reflect.set(target, p, newValue, receiver);
 
-                // TODO: figure out what else we need to handle
-                // we should handle if newValue is an Observable as well
-                if (store.read((s) => s.ready)) {
-                    const cleanUp = setProp(instance, prop, newValue);
-                    if (cleanUp) newValueSubscriptionMap.set(prop, cleanUp);
-                } else {
-                    storeReadySubscription = store.onReady(() => setProp(instance, prop, newValue));
-                }
+                return zone.runOutsideAngular(() => {
+                    // TODO: figure out what else we need to handle
+                    // we should handle if newValue is an Observable as well
+                    if (store.read((s) => s.ready)) {
+                        const cleanUp = setProp(instance, prop, newValue);
+                        if (cleanUp) newValueSubscriptionMap.set(prop, cleanUp);
+                    } else {
+                        storeReadySubscription = store.onReady(() => setProp(instance, prop, newValue));
+                    }
 
-                // schedule updateCallback on next event loop
-                zone.runOutsideAngular(() => {
+                    // schedule updateCallback on next event loop
                     queueMicrotask(() => {
                         if (ngtInstance.updateCallback) ngtInstance.updateCallback(instance);
                     });
-                });
 
-                return true;
+                    return true;
+                });
             },
         };
 

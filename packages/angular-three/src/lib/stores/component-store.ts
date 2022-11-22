@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import {
     combineLatest,
@@ -88,8 +88,8 @@ export function tapEffect<TValue>(effectFn: EffectFn<TValue>): MonoTypeOperatorF
     });
 }
 
-@Directive()
-export abstract class NgtComponentStore<
+@Injectable()
+export class NgtComponentStore<
     TState extends object = any,
     TInternalState extends object = TState & NgtAnyRecord
 > extends ComponentStore<TInternalState> {

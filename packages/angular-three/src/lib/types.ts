@@ -221,8 +221,8 @@ export interface NgtInternalState {
     initialHits: THREE.Object3D[];
     subscribe: (
         callback: NgtBeforeRenderCallback,
-        priority: number,
-        stateFactory: NgtStateFactory,
+        priority?: number,
+        stateFactory?: NgtStateFactory,
         obj?: THREE.Object3D | NgtRef
     ) => () => void;
 }

@@ -61,6 +61,7 @@
         "@swc/helpers": "~0.4.11",
         "rxjs": "~7.5.0",
         "three": "0.146.0",
+        "three-stdlib": "2.19.0",
         "tslib": "^2.3.0",
         "zone.js": "~0.11.4"
     }
