@@ -4,16 +4,16 @@ import { Component } from '@angular/core';
 import { injectArgs, NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify, NgtEuler, NgtQuaternion, NgtMatrix4, NgtLayers } from 'angular-three';
 
 @Component({
-    selector: 'ngt-audio',
+    selector: 'ngt-positional-audio',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [NGT_INSTANCE_HOST_DIRECTIVE],
-    providers: [provideInstanceRef(NgtAudio)],
+    providers: [provideInstanceRef(NgtPositionalAudio)],
     inputs: [...getInputs()]
 })
-export class NgtAudio extends THREE.Audio {
+export class NgtPositionalAudio extends THREE.PositionalAudio {
     constructor() {
-        super(...injectArgs<typeof THREE.Audio>());
+        super(...injectArgs<typeof THREE.PositionalAudio>());
         return proxify(this);
     }
     

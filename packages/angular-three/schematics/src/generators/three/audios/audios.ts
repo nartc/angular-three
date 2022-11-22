@@ -2,14 +2,8 @@ import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
 import { generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/devkit';
 import { join } from 'path';
 import * as THREE from 'three';
-import { astFromPath, pathToSourceFile } from '../common/ast-utils';
-import {
-    isClassDeclaration,
-    isConstructorDeclaration,
-    isPropertyDeclaration,
-    PropertyDeclaration,
-    SourceFile,
-} from 'typescript/lib/tsserverlibrary';
+import { astFromPath, handleClassMembers, handleHeritage } from '../common/ast-utils';
+import { isClassDeclaration, PropertyDeclaration, SourceFile } from 'typescript/lib/tsserverlibrary';
 
 export const audios = [
     {
@@ -48,29 +42,17 @@ export default async function audiosGenerator(tree: Tree, ngtVersion: string) {
                 sF.forEachChild((node) => {
                     if (isClassDeclaration(node)) {
                         if (node.heritageClauses?.length) {
-                            const baseName = node.heritageClauses[0].types[0].expression.getText(sF);
-                            const baseDtsPath = audios.find((audio) => audio.name === baseName)?.defPath;
-                            if (baseDtsPath) {
-                                const baseSourceFile = pathToSourceFile(tree, baseDtsPath);
-                                if (!bases.has(baseName)) {
-                                    bases.set(baseName, { sourceFile: baseSourceFile, properties: new Map() });
-                                }
-
-                                runAudioSourceFile(baseSourceFile, bases.get(baseName).properties);
-                            }
+                            handleHeritage(
+                                tree,
+                                sF,
+                                node,
+                                (heritageName) => audios.find((audio) => audio.name === heritageName)?.defPath,
+                                bases,
+                                runAudioSourceFile
+                            );
                         }
 
-                        for (const member of node.members) {
-                            // skip constructor
-                            if (isConstructorDeclaration(member)) continue;
-                            if (isPropertyDeclaration(member)) {
-                                const propertyName = member.name.getText(sF);
-                                // skip these properties
-                                if (['type', 'listener', 'context', 'gain', 'panner'].includes(propertyName)) continue;
-
-                                props.set(propertyName, member);
-                            }
-                        }
+                        handleClassMembers(sF, node, props, true, ['type', 'listener', 'context', 'gain', 'panner']);
                     }
                 });
             }

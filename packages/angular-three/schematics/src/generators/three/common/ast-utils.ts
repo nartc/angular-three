@@ -1,13 +1,20 @@
 import { Tree } from '@nrwl/devkit';
 import {
+    ClassDeclaration,
+    ClassElement,
     createSourceFile,
+    InterfaceDeclaration,
     isArrayTypeNode,
+    isConstructorDeclaration,
+    isFunctionTypeNode,
     isIndexSignatureDeclaration,
     isLiteralTypeNode,
+    isPropertyDeclaration,
     isPropertySignature,
     isTypeLiteralNode,
     isTypeReferenceNode,
     isUnionTypeNode,
+    NodeArray,
     ParameterDeclaration,
     PropertySignature,
     ScriptKind,
@@ -16,10 +23,84 @@ import {
     SyntaxKind,
     TypeLiteralNode,
     TypeNode,
+    TypeReferenceNode,
     UnionTypeNode,
 } from 'typescript/lib/tsserverlibrary';
 
+type PropertyInfo = { propertyName: string; type: string; isOptional: boolean };
+type Property = PropertySignature | ParameterDeclaration | PropertyInfo;
+type Base = { sourceFile: SourceFile; properties: Map<string, Property> };
+
 const sourceFileCached = new Map();
+const object3dDtsPath = 'node_modules/@types/three/src/core/Object3D.d.ts';
+
+export function handleHeritage(
+    tree: Tree,
+    sourceFile: SourceFile,
+    child: ClassDeclaration | InterfaceDeclaration | TypeReferenceNode,
+    heritageDtsPathFinder: (baseName: string) => string | undefined,
+    basesMap: Map<string, Base>,
+    sourceFileRunner: (sF: SourceFile, props: Map<string, any>) => void
+) {
+    const heritageName = isTypeReferenceNode(child)
+        ? child.typeName.getText(sourceFile)
+        : child.heritageClauses[0].types[0].expression.getText(sourceFile);
+
+    if (heritageName === 'EventDispatcher') return;
+
+    const heritageDtsPath = heritageName === 'Object3D' ? object3dDtsPath : heritageDtsPathFinder(heritageName);
+    if (heritageDtsPath) {
+        const heritageSourceFile = pathToSourceFile(tree, heritageDtsPath);
+        if (!basesMap.has(heritageName)) {
+            basesMap.set(heritageName, { sourceFile: heritageSourceFile, properties: new Map() });
+        }
+
+        sourceFileRunner(heritageSourceFile, basesMap.get(heritageName).properties);
+    }
+}
+
+export function handleClassMember(
+    sourceFile: SourceFile,
+    members: NodeArray<ClassElement>,
+    properties: Map<string, any>,
+    skipConstructor: boolean = false,
+    exclude = []
+) {
+    for (const member of members) {
+        if (isConstructorDeclaration(member)) continue;
+        if (isPropertyDeclaration(member)) {
+            const propertyName = member.name.getText(sourceFile);
+            // skip these properties
+            if (exclude.includes(propertyName)) continue;
+            properties.set(propertyName, member);
+        }
+    }
+}
+
+export function handleClassMembers(
+    sourceFile: SourceFile,
+    node: ClassDeclaration,
+    properties: Map<string, any>,
+    skipConstructor: boolean = false,
+    exclude = []
+) {
+    const className = node.name.getText(sourceFile);
+    exclude.push(`is${className}`);
+
+    if (className === 'Object3D') {
+        handleClassMember(sourceFile, node.members, properties, true, [
+            'id',
+            'uuid',
+            'type',
+            'parent',
+            'children',
+            'up',
+            'isObject3D',
+        ]);
+    } else {
+        handleClassMember(sourceFile, node.members, properties, skipConstructor, exclude);
+    }
+}
 
 export function pathToSourceFile(tree: Tree, dtsPath: string): SourceFile {
     if (!sourceFileCached.has(dtsPath)) {
@@ -33,10 +114,6 @@ export function pathToSourceFile(tree: Tree, dtsPath: string): SourceFile {
 
     return sourceFileCached.get(dtsPath);
 }
-
-type PropertyInfo = { propertyName: string; type: string; isOptional: boolean };
-type Property = PropertySignature | ParameterDeclaration | PropertyInfo;
-type Base = { sourceFile: SourceFile; properties: Map<string, Property> };
 
 export function astFromPath(
     tree: Tree,
@@ -74,8 +151,22 @@ export function astFromPath(
         }
     });
 
+    const ngtTypes = new Set();
+    inputs.forEach(({ propertyName, type }) => {
+        try {
+            if (type.startsWith('Ngt')) {
+                ngtTypes.add(type);
+            }
+        } catch (e) {
+            console.log('wtf is this', propertyName, dtsPath);
+            throw e;
+        }
+    });
+
     return {
         inputs,
+        ngtTypes: [...ngtTypes.values()],
+        hasNgtType: ngtTypes.size > 0,
         hasInput: inputs.length > 0,
     };
 }
@@ -83,6 +174,23 @@ export function astFromPath(
 export function getType(sourceFile: SourceFile, type: TypeNode, isArray = false) {
     if (isArrayTypeNode(type)) {
         return getType(sourceFile, type.elementType, true);
+    }
+
+    if (isFunctionTypeNode(type)) {
+        const returnType = getType(sourceFile, type.type);
+        return (
+            type.parameters.length === 0
+                ? '()'
+                : `(${type.parameters
+                      .map(
+                          (parameter) => `${parameter.name.getText(sourceFile)}:${getType(sourceFile, parameter.type)}`
+                      )
+                      .join(', ')})`
+        ).concat(` => ${returnType}`);
+    }
+
+    if (type.kind === SyntaxKind.VoidKeyword) {
+        return 'void';
     }
 
     if (type.kind === SyntaxKind.NumberKeyword) {
@@ -125,6 +233,11 @@ export function getType(sourceFile: SourceFile, type: TypeNode, isArray = false)
 }
 
 export function getThreeType(type: string): string {
+    // custom Ngt types
+    if (['Matrix4', 'Vector2', 'Vector3', 'Vector4', 'Layers', 'Quaternion', 'Euler'].includes(type)) {
+        return `Ngt${type}`;
+    }
+
     return [
         'HTMLImageElement',
         'HTMLCanvasElement',

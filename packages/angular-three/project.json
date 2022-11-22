@@ -44,7 +44,9 @@
                     "packages/angular-three/materials/**/*.ts",
                     "packages/angular-three/materials/**/*.html",
                     "packages/angular-three/audios/**/*.ts",
-                    "packages/angular-three/audios/**/*.html"
+                    "packages/angular-three/audios/**/*.html",
+                    "packages/angular-three/cameras/**/*.ts",
+                    "packages/angular-three/cameras/**/*.html"
                 ]
             }
         }

@@ -1,5 +1,5 @@
 // GENERATED - AngularThree v1.0.0
-import { NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify } from 'angular-three';
+import { NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify, NgtVector2 } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 
@@ -21,7 +21,7 @@ export class NgtMeshPhysicalMaterial extends THREE.MeshPhysicalMaterial {
     static ngAcceptInputType_clearcoatMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_clearcoatRoughness: number| undefined;
     static ngAcceptInputType_clearcoatRoughnessMap: THREE.Texture | null| undefined;
-    static ngAcceptInputType_clearcoatNormalScale: THREE.Vector2| undefined;
+    static ngAcceptInputType_clearcoatNormalScale: NgtVector2| undefined;
     static ngAcceptInputType_clearcoatNormalMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_reflectivity: number| undefined;
     static ngAcceptInputType_ior: number| undefined;
@@ -51,7 +51,7 @@ export class NgtMeshPhysicalMaterial extends THREE.MeshPhysicalMaterial {
     static ngAcceptInputType_bumpScale: number| undefined;
     static ngAcceptInputType_normalMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_normalMapType: THREE.NormalMapTypes| undefined;
-    static ngAcceptInputType_normalScale: THREE.Vector2| undefined;
+    static ngAcceptInputType_normalScale: NgtVector2| undefined;
     static ngAcceptInputType_displacementMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_displacementScale: number| undefined;
     static ngAcceptInputType_displacementBias: number| undefined;

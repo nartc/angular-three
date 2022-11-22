@@ -3,7 +3,6 @@ import { generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/de
 import { join } from 'path';
 import * as THREE from 'three';
 import {
-    Identifier,
     isClassDeclaration,
     isConstructorDeclaration,
     isInterfaceDeclaration,
@@ -12,7 +11,7 @@ import {
     PropertySignature,
     SourceFile,
 } from 'typescript/lib/tsserverlibrary';
-import { astFromPath, pathToSourceFile } from '../common/ast-utils';
+import { astFromPath, handleHeritage } from '../common/ast-utils';
 
 const baseMaterialPath = 'node_modules/@types/three/src/materials/Material.d.ts';
 
@@ -117,26 +116,17 @@ export default async function materialsGenerator(tree: Tree, ngtVersion: string)
                     if (isInterfaceDeclaration(node)) {
                         hasInterface = true;
                         if (node.heritageClauses?.length) {
-                            const baseParameterName = (
-                                node.heritageClauses[0].types[0].expression as Identifier
-                            ).getText(sF);
-
-                            const baseDtsPath =
-                                baseParameterName === 'MaterialParameters'
-                                    ? baseMaterialPath
-                                    : materials.find((material) => baseParameterName.includes(material.name))?.defPath;
-
-                            if (baseDtsPath) {
-                                const baseSourceFile = pathToSourceFile(tree, baseDtsPath);
-                                if (!bases.has(baseParameterName)) {
-                                    bases.set(baseParameterName, {
-                                        sourceFile: baseSourceFile,
-                                        properties: new Map(),
-                                    });
-                                }
-
-                                runMaterialSourceFile(baseSourceFile, bases.get(baseParameterName).properties);
-                            }
+                            handleHeritage(
+                                tree,
+                                sF,
+                                node,
+                                (heritageName) =>
+                                    heritageName === 'MaterialParameters'
+                                        ? baseMaterialPath
+                                        : materials.find((material) => heritageName.includes(material.name))?.defPath,
+                                bases,
+                                runMaterialSourceFile
+                            );
                         }
 
                         node.forEachChild((childNode) => {
@@ -153,23 +143,18 @@ export default async function materialsGenerator(tree: Tree, ngtVersion: string)
                             if (parameters && parameters.length) {
                                 const parameterType = parameters[0].type;
                                 if (isTypeReferenceNode(parameterType)) {
-                                    const baseParameterName = parameterType.typeName.getText(sF);
-                                    const baseDtsPath =
-                                        baseParameterName === 'MaterialParameters'
-                                            ? baseMaterialPath
-                                            : materials.find((material) => baseParameterName.includes(material.name))
-                                                  ?.defPath;
-                                    if (baseDtsPath) {
-                                        const baseSourceFile = pathToSourceFile(tree, baseDtsPath);
-                                        if (!bases.has(baseParameterName)) {
-                                            bases.set(baseParameterName, {
-                                                sourceFile: baseSourceFile,
-                                                properties: new Map(),
-                                            });
-                                        }
-
-                                        runMaterialSourceFile(baseSourceFile, bases.get(baseParameterName).properties);
-                                    }
+                                    handleHeritage(
+                                        tree,
+                                        sF,
+                                        parameterType,
+                                        (heritageName) =>
+                                            heritageName === 'MaterialParameters'
+                                                ? baseMaterialPath
+                                                : materials.find((material) => heritageName.includes(material.name))
+                                                      ?.defPath,
+                                        bases,
+                                        runMaterialSourceFile
+                                    );
                                 }
                             }
                         }

@@ -1,5 +1,5 @@
 // GENERATED - AngularThree v1.0.0
-import { NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify } from 'angular-three';
+import { NGT_INSTANCE_HOST_DIRECTIVE, provideInstanceRef, proxify, NgtVector2 } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 
@@ -31,7 +31,7 @@ export class NgtMeshLambertMaterial extends THREE.MeshLambertMaterial {
     static ngAcceptInputType_lightMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_lightMapIntensity: number| undefined;
     static ngAcceptInputType_normalMap: THREE.Texture| undefined;
-    static ngAcceptInputType_normalScale: THREE.Vector2| undefined;
+    static ngAcceptInputType_normalScale: NgtVector2| undefined;
     static ngAcceptInputType_aoMap: THREE.Texture | null| undefined;
     static ngAcceptInputType_aoMapIntensity: number| undefined;
     static ngAcceptInputType_specularMap: THREE.Texture | null| undefined;
