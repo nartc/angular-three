@@ -3,7 +3,7 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "projectType": "library",
     "sourceRoot": "packages/angular-three/src",
-    "prefix": "angular-three",
+    "prefix": "ngt",
     "targets": {
         "build": {
             "executor": "@nrwl/angular:package",

@@ -15,6 +15,7 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
+            "angular-drei": ["packages/angular-drei/src/index.ts"],
             "angular-three": ["packages/angular-three/src/index.ts"],
             "angular-three/attributes": ["packages/angular-three/attributes/src/index.ts"],
             "angular-three/audios": ["packages/angular-three/audios/src/index.ts"],
