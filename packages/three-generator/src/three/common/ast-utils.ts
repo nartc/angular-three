@@ -77,6 +77,13 @@ export function handleClassMember(
         }
 
         if (isPropertyDeclaration(member)) {
+            // skip static members
+            if (
+                member.modifiers?.length &&
+                member.modifiers.some((modifier) => modifier.kind === SyntaxKind.StaticKeyword)
+            )
+                continue;
+
             const propertyName = member.name.getText(sourceFile);
             // skip these properties
             if (exclude.includes(propertyName)) continue;

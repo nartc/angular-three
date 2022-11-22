@@ -77,9 +77,6 @@ export class NgtStereoCamera extends THREE.StereoCamera {
             group: THREE.Group
         ) => void
     >;
-    static ngAcceptInputType_DefaultUp: NgtObservableInput<NgtVector3>;
-    static ngAcceptInputType_DefaultMatrixAutoUpdate: NgtObservableInput<boolean>;
-    static ngAcceptInputType_DefaultMatrixWorldAutoUpdate: NgtObservableInput<boolean>;
 }
 
 function getInputs() {
@@ -115,8 +112,5 @@ function getInputs() {
         'customDistanceMaterial',
         'onBeforeRender',
         'onAfterRender',
-        'DefaultUp',
-        'DefaultMatrixAutoUpdate',
-        'DefaultMatrixWorldAutoUpdate',
     ];
 }

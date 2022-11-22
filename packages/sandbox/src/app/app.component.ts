@@ -5,17 +5,18 @@ import { NgtBoxGeometry } from 'angular-three/geometries';
 import { NgtBoxHelper, NgtGridHelper } from 'angular-three/helpers';
 import { NgtMeshBasicMaterial, NgtMeshStandardMaterial } from 'angular-three/materials';
 import { NgtMesh } from 'angular-three/objects';
-import { NgtAmbientLight } from 'angular-three/lights';
+import { NgtAmbientLight, NgtPointLight } from 'angular-three/lights';
 
 @Component({
     selector: 'angular-three-root',
     standalone: true,
     template: `
-        <ngt-canvas [camera]="{ position: [5, 5, 5] }">
+        <ngt-canvas [camera]="{ position: [2, 2, 2] }">
             <ng-template>
                 <ngt-color *args="['lightblue']" attach="background"></ngt-color>
 
                 <ngt-ambient-light></ngt-ambient-light>
+                <ngt-point-light [intensity]="2" [position]="[2, 2, 2]"></ngt-point-light>
 
                 <ngt-mesh #cube [beforeRender]="onBeforeRender">
                     <ngt-box-helper *args="[cube, 'red']"></ngt-box-helper>
@@ -37,6 +38,7 @@ import { NgtAmbientLight } from 'angular-three/lights';
         NgtGridHelper,
         NgtMeshStandardMaterial,
         NgtAmbientLight,
+        NgtPointLight,
     ],
 })
 export class AppComponent {
