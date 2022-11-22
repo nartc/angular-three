@@ -13,8 +13,6 @@ export type NgtEquConfig = {
     strict?: boolean;
 };
 
-export type NgtBooleanInput = string | boolean | null | undefined;
-export type NgtNumberInput = string | number | null | undefined;
 export type NgtObservableInput<T> = T | ObservableInput<T>;
 
 export type NgtAnyRecord = Record<string, any>;
@@ -199,11 +197,6 @@ export type NgtCameraWithManual = NgtCamera & { manual?: boolean };
 export interface NgtRenderState extends NgtState {
     delta: number;
     frame?: XRFrame;
-}
-
-export interface NgtBeforeRender<TObject extends THREE.Object3D = any> {
-    state: NgtRenderState;
-    object: TObject;
 }
 
 export type NgtBeforeRenderCallback<TObject = any> = (state: NgtRenderState, obj: TObject) => void;

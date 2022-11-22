@@ -5,7 +5,6 @@ import { injectWindow } from '../di/window';
 import { NgtRef } from '../ref';
 import type {
     NgtBeforeRenderCallback,
-    NgtBeforeRenderRecord,
     NgtCamera,
     NgtCanvasInputs,
     NgtDpr,
@@ -28,8 +27,6 @@ import { defaultProjector, NgtComponentStore, tapEffect } from './component-stor
 
 export const rootStateMap = new Map<Element, NgtStateFactory>();
 const { invalidate, advance } = createLoop(rootStateMap);
-
-type NgtAnimationRecordWithUuid = NgtBeforeRenderRecord & { uuid: string };
 
 const shallowLoose = { objects: 'shallow', strict: false } as NgtEquConfig;
 
@@ -163,7 +160,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                         callback: NgtBeforeRenderCallback,
                         priority: number,
                         stateFactory: NgtStateFactory,
-                        obj: THREE.Object3D | NgtRef<THREE.Object3D>
+                        obj?: THREE.Object3D | NgtRef<THREE.Object3D>
                     ) => {
                         const internal = this.read((s) => s.internal);
                         // If this subscription was given a priority, it takes rendering into its own hands
@@ -378,7 +375,13 @@ export class NgtStore extends NgtComponentStore<NgtState> {
 
                 // Always look at center or passed-in lookAt by default
                 if (!cameraOptions?.rotation) {
-                    camera.lookAt(lookAt ?? new THREE.Vector3());
+                    if (Array.isArray(lookAt)) {
+                        camera.lookAt(lookAt[0], lookAt[1], lookAt[2]);
+                    } else if (lookAt instanceof THREE.Vector3) {
+                        camera.lookAt(lookAt);
+                    } else {
+                        camera.lookAt(0, 0, 0);
+                    }
                 }
 
                 // Update projection matrix after applying props

@@ -21,7 +21,7 @@ export function injectArgs<TCtor extends NgtAnyCtor = NgtAnyCtor>(
     options: InjectOptions & { optional?: true }
 ): ConstructorParameters<TCtor> | null;
 export function injectArgs<TCtor extends NgtAnyCtor = NgtAnyCtor>(options: InjectOptions = {}) {
-    return inject(NGT_ARGS, options);
+    return inject<ConstructorParameters<TCtor>>(NGT_ARGS, options);
 }
 
 @Directive({

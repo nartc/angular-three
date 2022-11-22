@@ -11,7 +11,7 @@ import * as THREE from 'three';
 })
 export class NgtInstancedMesh extends THREE.InstancedMesh {
     constructor() {
-        super(...(injectArgs<typeof THREE.InstancedMesh>({ optional: true }) || [, , 0]));
+        super(...(injectArgs<typeof THREE.InstancedMesh>({ optional: true }) || [undefined, undefined, 0]));
         return proxify(this, {
             created: (instance) => instance.instanceMatrix.setUsage(THREE.DynamicDrawUsage),
         });

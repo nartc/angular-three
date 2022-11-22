@@ -6,6 +6,7 @@ import {
     InjectOptions,
     Input,
     NgZone,
+    OnDestroy,
     OnInit,
     Output,
 } from '@angular/core';
@@ -101,7 +102,7 @@ export class NgtInstance<
         TInstanceState extends NgtInstanceState<TInstance> = NgtInstanceState<TInstance>
     >
     extends NgtComponentStore<TInstanceState>
-    implements OnInit
+    implements OnInit, OnDestroy
 {
     @Input() set ref(instance: TInstance | NgtRef<TInstance>) {
         this.write({ instanceRef: is.ref(instance) ? instance : new NgtRef(instance) });

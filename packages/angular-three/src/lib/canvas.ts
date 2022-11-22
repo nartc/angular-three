@@ -9,6 +9,7 @@ import {
     inject,
     Input,
     NgZone,
+    OnDestroy,
     OnInit,
     Output,
     TemplateRef,
@@ -21,9 +22,8 @@ import { provideInstanceRef } from './instance';
 import { NgtResize, NgtResizeResult } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore, rootStateMap } from './stores/store';
-import type { NgtBooleanInput, NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtObservableInput, NgtVector3 } from './types';
+import type { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtObservableInput, NgtVector3 } from './types';
 import { coerceBoolean } from './utils/coercion';
-import { make } from './utils/make';
 import { NgtLoader } from './services/loader';
 
 @Component({
@@ -71,27 +71,27 @@ export class NgtCanvasContainer {
     imports: [NgtCanvasContainer, NgIf, NgTemplateOutlet, AsyncPipe],
     providers: [NgtStore, provideInstanceRef(NgtCanvas, (canvas) => canvas.sceneRef)],
 })
-export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnInit {
+export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnInit, OnDestroy {
     @HostBinding('class.ngt-canvas') readonly hostClass = true;
 
     @HostBinding('style.pointerEvents') get pointerEvents() {
         return this.read((s) => s.eventSource) !== this.host.nativeElement ? 'none' : 'auto';
     }
 
-    @Input() set linear(linear: NgtObservableInput<NgtBooleanInput>) {
-        this.write({ linear }, coerceBoolean);
+    @Input() set linear(linear: NgtObservableInput<boolean>) {
+        this.write({ linear });
     }
 
-    @Input() set legacy(legacy: NgtObservableInput<NgtBooleanInput>) {
-        this.write({ legacy }, coerceBoolean);
+    @Input() set legacy(legacy: NgtObservableInput<boolean>) {
+        this.write({ legacy });
     }
 
-    @Input() set flat(flat: NgtObservableInput<NgtBooleanInput>) {
-        this.write({ flat }, coerceBoolean);
+    @Input() set flat(flat: NgtObservableInput<boolean>) {
+        this.write({ flat });
     }
 
-    @Input() set orthographic(orthographic: NgtObservableInput<NgtBooleanInput>) {
-        this.write({ orthographic }, coerceBoolean);
+    @Input() set orthographic(orthographic: NgtObservableInput<boolean>) {
+        this.write({ orthographic });
     }
 
     @Input() set frameloop(frameloop: NgtObservableInput<'always' | 'demand' | 'never'>) {
@@ -106,7 +106,7 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
         this.write({ raycaster });
     }
 
-    @Input() set shadows(shadows: NgtBooleanInput | Partial<THREE.WebGLShadowMap>) {
+    @Input() set shadows(shadows: boolean | Partial<THREE.WebGLShadowMap>) {
         this.write({
             shadows: typeof shadows === 'object' ? (shadows as Partial<THREE.WebGLShadowMap>) : coerceBoolean(shadows),
         });
@@ -129,7 +129,7 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
     }
 
     @Input() set lookAt(lookAt: NgtObservableInput<NgtVector3>) {
-        this.write({ lookAt }, make.bind(null, THREE.Vector3));
+        this.write({ lookAt });
     }
 
     @Input() set performance(performance: NgtCanvasInputs['performance']) {

@@ -4,14 +4,13 @@ import {
     combineLatest,
     filter,
     isObservable,
-    map,
     MonoTypeOperatorFunction,
     noop,
     Observable,
     ObservableInput,
     tap,
 } from 'rxjs';
-import type { NgtAnyFunction, NgtAnyRecord } from '../types';
+import type { NgtAnyRecord } from '../types';
 import { is } from '../utils/is';
 
 /**
@@ -115,11 +114,10 @@ export abstract class NgtComponentStore<
             | ((state: TInternalState) => Record<string, any>)
             | ((state: TInternalState) => Observable<Partial<TInternalState>>)
             | Observable<Partial<TInternalState>>
-            | Record<string, any>,
-        coerce?: NgtAnyFunction
+            | Record<string, any>
     ): void {
         if (typeof partialStateOrFactory === 'function') {
-            return this.write(partialStateOrFactory(this.read()), coerce);
+            return this.write(partialStateOrFactory(this.read()));
         }
 
         const partialState = partialStateOrFactory;
@@ -128,9 +126,6 @@ export abstract class NgtComponentStore<
         }
 
         if (isObservable(partialState)) {
-            if (coerce) {
-                console.warn('coercion skipped because Store cannot determine which property to coerce');
-            }
             return this.patchState(partialState as Observable<Partial<TInternalState>>);
         }
 
@@ -138,20 +133,15 @@ export abstract class NgtComponentStore<
         const hasObservable = entries.some(([_, value]) => isObservable(value) && !is.ref(value));
 
         if (!hasObservable) {
-            if (entries.length > 1 && coerce) {
-                console.warn('coercion skipped because Store cannot determine which property to coerce');
-            }
             return this.patchState(partialState as Partial<TInternalState>);
         }
 
         const [rawValues, observableValues] = entries.reduce(
             (result, [key, value]) => {
                 if (isObservable(value)) {
-                    result[1][key as keyof TInternalState] = coerce ? value.pipe(map(coerce)) : value;
+                    result[1][key as keyof TInternalState] = value;
                 } else {
-                    result[0][key as keyof TInternalState] = coerce
-                        ? coerce(value)
-                        : (value as TInternalState[keyof TInternalState]);
+                    result[0][key as keyof TInternalState] = value as TInternalState[keyof TInternalState];
                 }
                 return result;
             },
