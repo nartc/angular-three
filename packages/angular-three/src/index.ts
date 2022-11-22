@@ -6,6 +6,7 @@ export * from './lib/services/loader';
 export * from './lib/services/resize';
 
 export * from './lib/stores/store';
+export * from './lib/stores/component-store';
 
 export * from './lib/directives/args';
 

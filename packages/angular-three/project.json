@@ -52,7 +52,9 @@
                     "packages/angular-three/lights/**/*.ts",
                     "packages/angular-three/lights/**/*.html",
                     "packages/angular-three/textures/**/*.ts",
-                    "packages/angular-three/textures/**/*.html"
+                    "packages/angular-three/textures/**/*.html",
+                    "packages/angular-three/primitives/**/*.ts",
+                    "packages/angular-three/primitives/**/*.html"
                 ]
             }
         }

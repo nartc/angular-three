@@ -1,6 +1,6 @@
 import { inject, NgZone } from '@angular/core';
 import { isObservable, Subscription } from 'rxjs';
-import { injectInstance } from '../instance';
+import { injectInstance, injectInstanceRef, NgtInstance } from '../instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NgtAnyFunction, NgtAttachFunction, NgtStateFactory } from '../types';
@@ -12,16 +12,25 @@ export function proxify<T extends object>(
     instance: T,
     proxifyOptions: {
         attach?: string | string[] | NgtAttachFunction<T>;
-        created?: (instance: T, stateFactory: NgtStateFactory) => void;
+        created?: (instance: T, stateFactory: NgtStateFactory, ngtInstance: NgtInstance) => void;
+        primitive?: boolean;
     } = {}
 ): T {
     const ngtInstance = injectInstance<T>({ host: true });
     const store = inject(NgtStore);
     const zone = inject(NgZone);
+    const parentInstance = injectInstanceRef({ skipSelf: true, optional: true });
 
     return zone.runOutsideAngular(() => {
         // prep the instance w/ local state
-        instance = prepare(instance, store.read, store.rootStateFactory);
+        instance = prepare(
+            instance,
+            store.read,
+            store.rootStateFactory,
+            parentInstance?.(),
+            ngtInstance.instanceValue ? ngtInstance.instanceRef : undefined,
+            !!proxifyOptions.primitive
+        );
 
         let storeReadySubscription: Subscription;
         const newValueSubscriptionMap = new Map<string, () => void>();
@@ -97,7 +106,7 @@ export function proxify<T extends object>(
         const proxied = new Proxy(instance, handler);
 
         if (proxifyOptions.attach) ngtInstance.attach = proxifyOptions.attach;
-        if (proxifyOptions.created) proxifyOptions.created(proxied, store.read);
+        if (proxifyOptions.created) proxifyOptions.created(proxied, store.read, ngtInstance);
 
         ngtInstance.instanceRef.set(proxied);
 
