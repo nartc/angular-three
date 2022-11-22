@@ -13,7 +13,6 @@ export function proxify<T extends object>(
     proxifyOptions: {
         attach?: string | string[] | NgtAttachFunction<T>;
         created?: (instance: T, stateFactory: NgtStateFactory) => void;
-        isObjectHelper?: boolean;
     } = {}
 ): T {
     const ngtInstance = injectInstance<T>({ host: true });

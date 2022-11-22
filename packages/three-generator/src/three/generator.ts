@@ -6,6 +6,7 @@ import geometriesGenerator from './geometries/geometries';
 import helpersGenerator from './helpers/helpers';
 import lightsGenerator from './lights/lights';
 import materialsGenerator from './materials/materials';
+import texturesGenerator from './textures/textures';
 
 export default async function (tree: Tree) {
     const packageJson = readJson(tree, 'package.json');
@@ -32,7 +33,7 @@ export default async function (tree: Tree) {
         // curvesGenerator(tree, ngtVersion),
         helpersGenerator(tree, ngtVersion),
         lightsGenerator(tree, ngtVersion),
-        // texturesGenerator(tree, ngtVersion),
+        texturesGenerator(tree, ngtVersion),
         // simpleEffectsGenerator(tree, ngtVersion),
     ]);
 
