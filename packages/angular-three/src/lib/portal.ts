@@ -1,11 +1,13 @@
 import { Component, inject, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { NgtEventManager, NgtSize, NgtState, NgtStore, provideInstanceRef } from 'angular-three';
 import * as THREE from 'three';
 import { NgtRef } from './ref';
 import { NgtComponentStore, tapEffect } from './stores/component-store';
 import { is } from './utils/is';
 import { prepare } from './utils/instance';
 import { updateCamera } from './utils/camera';
+import { provideInstanceRef } from './instance';
+import type { NgtEventManager, NgtSize, NgtState } from './types';
+import { NgtStore } from './stores/store';
 
 const privateKeys = [
     'setSize',

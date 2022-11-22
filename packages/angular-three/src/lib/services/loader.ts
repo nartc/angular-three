@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import {
+import { catchError, forkJoin, from, map, Observable, of, ReplaySubject, retry, share, tap } from 'rxjs';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import type {
     NgtAnyConstructor,
     NgtBranchingReturn,
     NgtLoaderExtensions,
     NgtLoaderResult,
     NgtObjectMap,
-} from 'angular-three';
-import { catchError, forkJoin, from, map, Observable, of, ReplaySubject, retry, share, tap } from 'rxjs';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+} from '../types';
 import { buildGraph } from '../utils/build-graph';
 
 @Injectable({ providedIn: 'root' })

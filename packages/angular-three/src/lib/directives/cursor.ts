@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Directive, Inject, Optional, Self } from '@angular/core';
 import { map, merge, takeUntil } from 'rxjs';
-import { NgtInstance } from 'angular-three';
+import { NgtInstance } from '../instance';
 
 @Directive({
     selector: '[ngtCursor]',
