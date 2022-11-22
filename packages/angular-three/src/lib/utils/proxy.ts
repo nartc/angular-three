@@ -13,6 +13,7 @@ export function proxify<T extends object>(
     proxifyOptions: {
         attach?: string | string[] | NgtAttachFunction<T>;
         created?: (instance: T, stateFactory: NgtStateFactory) => void;
+        isObjectHelper?: boolean;
     } = {}
 ): T {
     const ngtInstance = injectInstance<T>({ host: true });
@@ -71,7 +72,6 @@ export function proxify<T extends object>(
 
                 // TODO: figure out what else we need to handle
                 // we should handle if newValue is an Observable as well
-                // coercion is trickier now. How can we tell "castShadow" is subject to be coerced to a boolean
                 if (store.read((s) => s.ready)) {
                     const cleanUp = setProp(instance, prop, newValue);
                     if (cleanUp) newValueSubscriptionMap.set(prop, cleanUp);

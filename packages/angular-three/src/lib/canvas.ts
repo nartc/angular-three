@@ -23,7 +23,6 @@ import { NgtResize, NgtResizeResult } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore, rootStateMap } from './stores/store';
 import type { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtObservableInput, NgtVector3 } from './types';
-import { coerceBoolean } from './utils/coercion';
 import { NgtLoader } from './services/loader';
 
 @Component({
@@ -108,7 +107,7 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
 
     @Input() set shadows(shadows: boolean | Partial<THREE.WebGLShadowMap>) {
         this.write({
-            shadows: typeof shadows === 'object' ? (shadows as Partial<THREE.WebGLShadowMap>) : coerceBoolean(shadows),
+            shadows: typeof shadows === 'object' ? (shadows as Partial<THREE.WebGLShadowMap>) : shadows,
         });
     }
 

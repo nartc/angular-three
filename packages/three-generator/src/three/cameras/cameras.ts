@@ -69,7 +69,7 @@ export default async function camerasGenerator(tree: Tree, ngtVersion: string) {
                             );
                         }
 
-                        handleClassMembers(sF, node, props, true, ['type']);
+                        handleClassMembers(sF, node, props, true);
                     }
                 });
             }

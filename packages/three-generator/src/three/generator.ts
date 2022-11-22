@@ -1,8 +1,10 @@
-import { logger, readJson, Tree } from '@nrwl/devkit';
+import { formatFiles, logger, readJson, Tree } from '@nrwl/devkit';
 import attributesGenerator from './attributes/attributes';
 import audiosGenerator from './audios/audios';
 import camerasGenerator from './cameras/cameras';
 import geometriesGenerator from './geometries/geometries';
+import helpersGenerator from './helpers/helpers';
+import lightsGenerator from './lights/lights';
 import materialsGenerator from './materials/materials';
 
 export default async function (tree: Tree) {
@@ -28,9 +30,13 @@ export default async function (tree: Tree) {
         audiosGenerator(tree, ngtVersion),
         camerasGenerator(tree, ngtVersion),
         // curvesGenerator(tree, ngtVersion),
-        // helpersGenerator(tree, ngtVersion),
-        // lightsGenerator(tree, ngtVersion),
+        helpersGenerator(tree, ngtVersion),
+        lightsGenerator(tree, ngtVersion),
         // texturesGenerator(tree, ngtVersion),
         // simpleEffectsGenerator(tree, ngtVersion),
     ]);
+
+    return () => {
+        formatFiles(tree);
+    };
 }

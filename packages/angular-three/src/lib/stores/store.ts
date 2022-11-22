@@ -158,8 +158,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                     initialHits: [],
                     subscribe: (
                         callback: NgtBeforeRenderCallback,
-                        priority: number,
-                        stateFactory: NgtStateFactory,
+                        priority: number = 0,
+                        stateFactory: NgtStateFactory = this.read,
                         obj?: THREE.Object3D | NgtRef<THREE.Object3D>
                     ) => {
                         const internal = this.read((s) => s.internal);

@@ -3,10 +3,10 @@
     "name": "three-generator",
     "version": "0.0.1",
     "generators": {
-      "three": {
-        "factory": "./src/three/generator",
-        "schema": "./src/three/schema.json",
-        "description": "(internal) Generate THREE entities"
-      }
+        "three": {
+            "factory": "./src/three/generator",
+            "schema": "./src/three/schema.json",
+            "description": "(internal) Generate THREE entities"
+        }
     }
 }

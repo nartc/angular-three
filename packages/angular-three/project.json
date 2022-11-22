@@ -46,7 +46,11 @@
                     "packages/angular-three/audios/**/*.ts",
                     "packages/angular-three/audios/**/*.html",
                     "packages/angular-three/cameras/**/*.ts",
-                    "packages/angular-three/cameras/**/*.html"
+                    "packages/angular-three/cameras/**/*.html",
+                    "packages/angular-three/helpers/**/*.ts",
+                    "packages/angular-three/helpers/**/*.html",
+                    "packages/angular-three/lights/**/*.ts",
+                    "packages/angular-three/lights/**/*.html"
                 ]
             }
         }

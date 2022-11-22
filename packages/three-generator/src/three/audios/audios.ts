@@ -52,7 +52,7 @@ export default async function audiosGenerator(tree: Tree, ngtVersion: string) {
                             );
                         }
 
-                        handleClassMembers(sF, node, props, true, ['type', 'listener', 'context', 'gain', 'panner']);
+                        handleClassMembers(sF, node, props, true, ['listener', 'context', 'gain', 'panner']);
                     }
                 });
             }

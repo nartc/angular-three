@@ -4,48 +4,48 @@ import { join } from 'path';
 import * as THREE from 'three';
 
 export const curves = [
-  THREE.ArcCurve.name,
-  THREE.CatmullRomCurve3.name,
-  THREE.CubicBezierCurve.name,
-  THREE.CubicBezierCurve3.name,
-  THREE.EllipseCurve.name,
-  THREE.LineCurve.name,
-  THREE.LineCurve3.name,
-  THREE.QuadraticBezierCurve.name,
-  THREE.QuadraticBezierCurve3.name,
-  THREE.SplineCurve.name,
+    THREE.ArcCurve.name,
+    THREE.CatmullRomCurve3.name,
+    THREE.CubicBezierCurve.name,
+    THREE.CubicBezierCurve3.name,
+    THREE.EllipseCurve.name,
+    THREE.LineCurve.name,
+    THREE.LineCurve3.name,
+    THREE.QuadraticBezierCurve.name,
+    THREE.QuadraticBezierCurve3.name,
+    THREE.SplineCurve.name,
 ];
 
 export default async function curvesGenerator(tree: Tree, ngtVersion: string) {
-  const { libsDir } = getWorkspaceLayout(tree);
-  const curveDir = join(libsDir, 'core', 'curves');
+    const { libsDir } = getWorkspaceLayout(tree);
+    const curveDir = join(libsDir, 'core', 'curves');
 
-  logger.log('Generating curves...');
+    logger.log('Generating curves...');
 
-  if (!tree.exists(curveDir)) {
-    await librarySecondaryEntryPointGenerator(tree, {
-      name: 'curves',
-      library: 'core',
-      skipModule: true,
+    if (!tree.exists(curveDir)) {
+        await librarySecondaryEntryPointGenerator(tree, {
+            name: 'curves',
+            library: 'core',
+            skipModule: true,
+        });
+    }
+
+    const generatedCurves = [];
+    for (const curve of curves) {
+        const normalizedNames = names(curve);
+
+        generateFiles(tree, join(__dirname, 'files/lib'), join(curveDir, 'src', 'lib', normalizedNames.fileName), {
+            ...normalizedNames,
+            tmpl: '',
+            ngtVersion,
+        });
+
+        generatedCurves.push(normalizedNames.fileName);
+    }
+
+    generateFiles(tree, join(__dirname, '../common/files/index'), join(curveDir, 'src'), {
+        items: generatedCurves,
+        tmpl: '',
+        ngtVersion,
     });
-  }
-
-  const generatedCurves = [];
-  for (const curve of curves) {
-    const normalizedNames = names(curve);
-
-    generateFiles(tree, join(__dirname, 'files/lib'), join(curveDir, 'src', 'lib', normalizedNames.fileName), {
-      ...normalizedNames,
-      tmpl: '',
-      ngtVersion,
-    });
-
-    generatedCurves.push(normalizedNames.fileName);
-  }
-
-  generateFiles(tree, join(__dirname, '../common/files/index'), join(curveDir, 'src'), {
-    items: generatedCurves,
-    tmpl: '',
-    ngtVersion,
-  });
 }

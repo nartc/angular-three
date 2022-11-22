@@ -63,11 +63,19 @@ export function handleClassMember(
     sourceFile: SourceFile,
     members: NodeArray<ClassElement>,
     properties: Map<string, any>,
-    skipConstructor: boolean = false,
+    skipConstructor = false,
     exclude = []
 ) {
     for (const member of members) {
-        if (isConstructorDeclaration(member)) continue;
+        if (isConstructorDeclaration(member)) {
+            if (skipConstructor) continue;
+            for (const constructorParameter of member.parameters) {
+                const parameterName = constructorParameter.name.getText(sourceFile);
+                if (exclude.includes(parameterName)) continue;
+                properties.set(parameterName, constructorParameter);
+            }
+        }
+
         if (isPropertyDeclaration(member)) {
             const propertyName = member.name.getText(sourceFile);
             // skip these properties
@@ -81,11 +89,11 @@ export function handleClassMembers(
     sourceFile: SourceFile,
     node: ClassDeclaration,
     properties: Map<string, any>,
-    skipConstructor: boolean = false,
+    skipConstructor = false,
     exclude = []
 ) {
     const className = node.name.getText(sourceFile);
-    exclude.push(`is${className}`);
+    exclude.push(`is${className}`, 'type');
 
     if (className === 'Object3D') {
         handleClassMember(sourceFile, node.members, properties, true, [

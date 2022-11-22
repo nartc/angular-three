@@ -20,14 +20,12 @@ import type {
     NgtAnyRecord,
     NgtAttachFunction,
     NgtBeforeRenderCallback,
-    NgtBooleanInput,
     NgtEventHandlers,
     NgtInstanceLocalState,
     NgtObservableInput,
     NgtThreeEvent,
 } from './types';
 import { applyProps } from './utils/apply-props';
-import { coerceBoolean } from './utils/coercion';
 import { removeInteractivity } from './utils/events';
 import { getInstanceLocalState } from './utils/get-instance-local-state';
 import { invalidateInstance } from './utils/instance';
@@ -108,18 +106,18 @@ export class NgtInstance<
         this.write({ instanceRef: is.ref(instance) ? instance : new NgtRef(instance) });
     }
 
-    @Input() set skipWrapper(skipWrapper: NgtObservableInput<NgtBooleanInput>) {
-        this.write({ skipWrapper }, coerceBoolean);
+    @Input() set skipWrapper(skipWrapper: NgtObservableInput<boolean>) {
+        this.write({ skipWrapper });
         this.write({ skipWrapperExplicit: true });
     }
 
-    @Input() set skipInit(skipInit: NgtObservableInput<NgtBooleanInput>) {
-        this.write({ skipInit }, coerceBoolean);
+    @Input() set skipInit(skipInit: NgtObservableInput<boolean>) {
+        this.write({ skipInit });
         this.write({ skipInitExplicit: true });
     }
 
-    @Input() set noAttach(noAttach: NgtObservableInput<NgtBooleanInput>) {
-        this.write({ noAttach }, coerceBoolean);
+    @Input() set noAttach(noAttach: NgtObservableInput<boolean>) {
+        this.write({ noAttach });
         this.write({ noAttachExplicit: true });
     }
 
@@ -156,13 +154,15 @@ export class NgtInstance<
     @Output() pointercancel = new EventEmitter<NgtThreeEvent<PointerEvent>>();
     @Output() wheel = new EventEmitter<NgtThreeEvent<WheelEvent>>();
 
-    protected readonly zone = inject(NgZone);
-    protected readonly store = inject(NgtStore);
+    private readonly zone = inject(NgZone);
+    private readonly store = inject(NgtStore);
 
-    protected parentRef = injectInstanceRef({ skipSelf: true, optional: true });
-    protected isPrimitive = false;
-    protected isWrapper = false;
-    protected isRaw = false;
+    private readonly parentRef = injectInstanceRef({ skipSelf: true, optional: true });
+    private _isRaw = false;
+
+    set isRaw(val: boolean) {
+        this._isRaw = val;
+    }
 
     private hasEmittedAlready = false;
 
@@ -331,11 +331,13 @@ export class NgtInstance<
 
     get instanceValue(): TInstance {
         if (!this.instanceRef.value) return this.instanceRef.value;
-        return this.isRaw ? (this.instanceRef.value?.valueOf() as TInstance) : this.instanceRef.value;
+        return this._isRaw ? (this.instanceRef.value?.valueOf() as TInstance) : this.instanceRef.value;
     }
 
     get __ngt__(): NgtInstanceLocalState {
-        return getInstanceLocalState(this.isRaw ? this.instanceRef.value : this.instanceValue) as NgtInstanceLocalState;
+        return getInstanceLocalState(
+            this._isRaw ? this.instanceRef.value : this.instanceValue
+        ) as NgtInstanceLocalState;
     }
 
     get parent(): NgtRef | undefined {
