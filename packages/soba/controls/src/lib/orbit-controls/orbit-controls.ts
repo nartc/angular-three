@@ -16,14 +16,14 @@ import { MOUSE, TOUCH } from 'three';
 import { NGT_INSTANCE_INPUTS } from '../common';
 
 @Component({
-    selector: 'drei-orbit-controls',
+    selector: 'ngt-soba-orbit-controls',
     standalone: true,
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS }],
-    providers: [provideInstanceRef(DreiOrbitControls)],
+    providers: [provideInstanceRef(SobaOrbitControls)],
     inputs: [...getInputs()],
 })
-export class DreiOrbitControls extends OrbitControls implements OnInit {
+export class SobaOrbitControls extends OrbitControls implements OnInit {
     private readonly zone = inject(NgZone);
     private readonly store = inject(NgtStore);
     private readonly instance = injectInstance({ self: true });

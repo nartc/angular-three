@@ -1,6 +1,5 @@
 import { NgForOf } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { DreiOrbitControls } from 'angular-drei/controls';
 import { NgtArgs, NgtCanvas, NgtRenderState, NgtState, NgtVector3 } from '@angular-three/core';
 import { NgtColorAttribute } from '@angular-three/core/attributes';
 import { NgtBoxGeometry } from '@angular-three/core/geometries';
@@ -9,6 +8,7 @@ import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
 import { NgtMesh } from '@angular-three/core/objects';
 import { NgtStats } from '@angular-three/core/stats';
 import * as THREE from 'three';
+import { SobaOrbitControls } from '@angular-three/soba/controls';
 
 @Component({
     selector: 'cube',
@@ -74,9 +74,9 @@ export class CubeWithMaterials {
 
         <cube-with-materials></cube-with-materials>
 
-        <drei-orbit-controls></drei-orbit-controls>
+        <ngt-soba-orbit-controls></ngt-soba-orbit-controls>
     `,
-    imports: [Cube, CubeWithMaterials, NgtAmbientLight, NgtPointLight, DreiOrbitControls],
+    imports: [Cube, CubeWithMaterials, NgtAmbientLight, NgtPointLight, SobaOrbitControls, SobaOrbitControls],
 })
 export class Scene {}
 
