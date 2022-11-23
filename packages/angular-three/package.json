@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "@ngrx/component-store": "^15.0.0-beta.1",
+        "@nrwl/devkit": "^15.0.0",
         "tslib": "^2.3.0"
     },
     "generators": "./schematics/generators.json",
