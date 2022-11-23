@@ -173,6 +173,19 @@ export class NgtInstance<
             let attachToParentSubscription: Subscription;
             if (this.parentRef) {
                 attachToParentSubscription = this.attachToParent(this.parent!.pipe(filter((parent) => !!parent)));
+                const { noAttach, skipWrapper } = this.read();
+                if (!noAttach && !skipWrapper) {
+                    const parentInstanceNode = getInstanceLocalState(
+                        getInstanceLocalState(this.instanceValue)?.parentRef?.value
+                    );
+
+                    if (parentInstanceNode) {
+                        const collections = is.object3d(this.instanceValue)
+                            ? parentInstanceNode.objectsRefs
+                            : parentInstanceNode.instancesRefs;
+                        collections.set((s) => [...s, this.instanceRef]);
+                    }
+                }
             }
 
             let beforeRenderCleanUp: () => void;

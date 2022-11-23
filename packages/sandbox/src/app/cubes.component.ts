@@ -1,7 +1,7 @@
 import { NgForOf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { DreiOrbitControls } from 'angular-drei/controls';
-import { NgtArgs, NgtCanvas, NgtRenderState, NgtVector3 } from 'angular-three';
+import { NgtArgs, NgtCanvas, NgtRenderState, NgtState, NgtVector3 } from 'angular-three';
 import { NgtColorAttribute } from 'angular-three/attributes';
 import { NgtBoxGeometry } from 'angular-three/geometries';
 import { NgtAmbientLight, NgtPointLight } from 'angular-three/lights';
@@ -84,7 +84,7 @@ export class Scene {}
     selector: 'angular-three-cubes',
     standalone: true,
     template: `
-        <ngt-canvas>
+        <ngt-canvas (created)="onCreated($event)">
             <ng-template>
                 <ngt-color *args="['lightblue']" attach="background"></ngt-color>
                 <scene></scene>
@@ -95,4 +95,8 @@ export class Scene {}
 
     imports: [Scene, NgtCanvas, NgtColorAttribute, NgtArgs, NgtStats],
 })
-export class Cubes {}
+export class Cubes {
+    onCreated($event: NgtState) {
+        console.log($event);
+    }
+}

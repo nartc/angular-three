@@ -22,7 +22,7 @@ import { provideInstanceRef } from './instance';
 import { NgtResize, NgtResizeResult } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore, rootStateMap } from './stores/store';
-import type { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtObservableInput, NgtVector3 } from './types';
+import type { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtObservableInput, NgtState, NgtVector3 } from './types';
 import { NgtLoader } from './services/loader';
 
 @Component({
@@ -135,7 +135,7 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
         this.write({ performance });
     }
 
-    @Output() created = new EventEmitter();
+    @Output() created = new EventEmitter<NgtState>();
     @Output() canvasPointerMissed = new EventEmitter();
 
     @ViewChild('glCanvas', { static: true })
@@ -226,7 +226,9 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
 
                 if (this.created.observed) {
                     this.zone.run(() => {
-                        this.created.emit(this.store.read());
+                        requestAnimationFrame(() => {
+                            this.created.emit(this.store.read());
+                        });
                     });
                 }
             });
