@@ -1,14 +1,14 @@
+import { NgForOf } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import * as THREE from 'three';
+import { DreiOrbitControls } from 'angular-drei/controls';
 import { NgtArgs, NgtCanvas, NgtRenderState, NgtVector3 } from 'angular-three';
 import { NgtColorAttribute } from 'angular-three/attributes';
-import { NgtAmbientLight, NgtPointLight } from 'angular-three/lights';
-import { NgtMesh } from 'angular-three/objects';
 import { NgtBoxGeometry } from 'angular-three/geometries';
+import { NgtAmbientLight, NgtPointLight } from 'angular-three/lights';
 import { NgtMeshStandardMaterial } from 'angular-three/materials';
-import { NgForOf } from '@angular/common';
+import { NgtMesh } from 'angular-three/objects';
 import { NgtStats } from 'angular-three/stats';
-import { DreiOrbitControls } from 'angular-drei/controls';
+import * as THREE from 'three';
 
 @Component({
     selector: 'cube',
@@ -28,7 +28,7 @@ import { DreiOrbitControls } from 'angular-drei/controls';
     `,
     imports: [NgtMesh, NgtBoxGeometry, NgtMeshStandardMaterial],
 })
-class Cube {
+export class Cube {
     @Input() position: NgtVector3 = [0, 0, 0];
 
     hovered = false;
@@ -54,7 +54,7 @@ class Cube {
     `,
     imports: [NgtMesh, NgtBoxGeometry, NgtMeshStandardMaterial, NgForOf],
 })
-class CubeWithMaterials {
+export class CubeWithMaterials {
     readonly colors = ['red', 'green', 'blue', 'hotpink', 'orange', 'teal'] as const;
 
     onBeforeRender(_: NgtRenderState, cube: THREE.Mesh) {
@@ -78,7 +78,7 @@ class CubeWithMaterials {
     `,
     imports: [Cube, CubeWithMaterials, NgtAmbientLight, NgtPointLight, DreiOrbitControls],
 })
-class Scene {}
+export class Scene {}
 
 @Component({
     selector: 'angular-three-cubes',

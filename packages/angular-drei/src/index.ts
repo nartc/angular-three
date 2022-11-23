@@ -1,1 +1,1 @@
-export * from './lib/angular-drei.module';
+export default void 0;
