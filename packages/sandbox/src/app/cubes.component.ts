@@ -9,6 +9,7 @@ import { NgtMesh } from '@angular-three/core/objects';
 import { NgtStats } from '@angular-three/core/stats';
 import * as THREE from 'three';
 import { SobaOrbitControls } from '@angular-three/soba/controls';
+import { SobaBillboard } from '@angular-three/soba/abstractions';
 
 @Component({
     selector: 'cube',
@@ -87,13 +88,16 @@ export class Scene {}
         <ngt-canvas (created)="onCreated($event)">
             <ng-template>
                 <ngt-color *args="['lightblue']" attach="background"></ngt-color>
-                <scene></scene>
+                <!--                <scene></scene>-->
+                <ngt-soba-billboard [position]="[1, 1, 1]">
+                    <scene></scene>
+                </ngt-soba-billboard>
             </ng-template>
         </ngt-canvas>
         <ngt-stats></ngt-stats>
     `,
 
-    imports: [Scene, NgtCanvas, NgtColorAttribute, NgtArgs, NgtStats],
+    imports: [Scene, NgtCanvas, NgtColorAttribute, NgtArgs, NgtStats, SobaBillboard],
 })
 export class Cubes {
     onCreated($event: NgtState) {

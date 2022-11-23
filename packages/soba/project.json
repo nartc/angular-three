@@ -3,7 +3,7 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "projectType": "library",
     "sourceRoot": "packages/soba/src",
-    "prefix": "drei",
+    "prefix": "soba",
     "targets": {
         "build": {
             "executor": "@nrwl/angular:package",
@@ -36,7 +36,9 @@
                     "packages/soba/**/*.ts",
                     "packages/soba/**/*.html",
                     "packages/soba/controls/**/*.ts",
-                    "packages/soba/controls/**/*.html"
+                    "packages/soba/controls/**/*.html",
+                    "packages/soba/abstractions/**/*.ts",
+                    "packages/soba/abstractions/**/*.html"
                 ]
             }
         },

@@ -1,4 +1,5 @@
 import type { NgtState, NgtStateFactory } from '../types';
+import { NgtBeforeRenderCallback, NgtRenderState } from '../types';
 import { is } from './is';
 
 export type NgtGlobalRenderCallback = (timeStamp: number) => void;
@@ -159,5 +160,13 @@ export function createLoop<TCanvas>(roots: Map<TCanvas, NgtStateFactory>) {
          * @see https://docs.pmnd.rs/react-three-fiber/api/additional-exports#advance
          */
         advance,
+    };
+}
+
+export function createBeforeRenderCallback<TObject extends THREE.Object3D = THREE.Object3D>(
+    cb: (beforeRenderState: { state: NgtRenderState; object: TObject }) => void
+): NgtBeforeRenderCallback {
+    return (state: NgtRenderState, object: TObject) => {
+        cb({ state, object });
     };
 }

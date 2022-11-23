@@ -7,6 +7,7 @@ import { NgtAnyFunction, NgtAttachFunction, NgtStateFactory } from '../types';
 import { applyProps } from './apply-props';
 import { capitalize } from './capitalize';
 import { prepare } from './instance';
+import { injectWrapper } from '../directives/wrapper';
 
 export function proxify<T extends object>(
     instance: T,
@@ -16,12 +17,17 @@ export function proxify<T extends object>(
         primitive?: boolean;
     } = {}
 ): T {
+    const ngtWrapper = injectWrapper({ host: true, optional: true });
     const ngtInstance = injectInstance<T>({ host: true });
     const store = inject(NgtStore);
     const zone = inject(NgZone);
     const parentInstance = injectInstanceRef({ skipSelf: true, optional: true });
 
     return zone.runOutsideAngular(() => {
+        if (ngtWrapper) {
+            return ngtWrapper;
+        }
+
         // prep the instance w/ local state
         instance = prepare(
             instance,

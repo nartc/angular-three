@@ -1,5 +1,5 @@
 {
-    "name": "soba",
+    "name": "@angular-three/soba",
     "version": "7.0.0",
     "peerDependencies": {
         "@angular/common": "^15.0.0",

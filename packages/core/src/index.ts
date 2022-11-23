@@ -18,6 +18,7 @@ export * from './lib/stores/component-store';
  * directives
  */
 export * from './lib/directives/args';
+export * from './lib/directives/wrapper';
 export * from './lib/directives/cursor';
 export * from './lib/directives/repeat';
 /**

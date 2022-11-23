@@ -29,6 +29,7 @@
             "@angular-three/core/textures": ["packages/core/textures/src/index.ts"],
             "@angular-three/soba": ["packages/soba/src/index.ts"],
             "@angular-three/soba/controls": ["packages/soba/controls/src/index.ts"],
+            "@angular-three/soba/abstractions": ["packages/soba/abstractions/src/index.ts"],
             "three-generator": ["packages/three-generator/src/index.ts"]
         }
     },

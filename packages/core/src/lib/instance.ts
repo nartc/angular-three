@@ -211,7 +211,7 @@ export class NgtInstance<
 
     private handleEvents = this.effect<void>(
         tapEffect(() => {
-            if (this.instanceValue && is.object3d(this.instanceValue)) {
+            if (this.instanceValue && is.object3d(this.instanceValue) && is.object3d(this.proxyInstance)) {
                 const observedEvents = supportedEvents.reduce(
                     (result, event) => {
                         const controllerEvent = this[event].observed ? this[event] : null;
@@ -427,17 +427,3 @@ export class NgtInstance<
         };
     }
 }
-
-export const NGT_INSTANCE_INPUTS = [
-    'ref',
-    'attach',
-    'skipWrapper',
-    'skipInit',
-    'noAttach',
-    'beforeRender',
-    'priority',
-    'updateCallback',
-    'readyCallback',
-];
-
-export const NGT_INSTANCE_OUTPUTS = [...supportedEvents];
