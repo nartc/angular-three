@@ -30,6 +30,7 @@ export default async function audiosGenerator(tree: Tree, ngtVersion: string) {
         });
     }
 
+    let hasObject3D = false;
     const generatedAudios = [];
     for (const { name, defPath } of audios) {
         const normalizedNames = names(name);
@@ -62,6 +63,10 @@ export default async function audiosGenerator(tree: Tree, ngtVersion: string) {
             return { properties, bases };
         });
 
+        if (!hasObject3D) {
+            hasObject3D = inputRecord.hasObject3D;
+        }
+
         generateFiles(tree, join(__dirname, 'files/lib'), join(audioDir, 'src', 'lib', normalizedNames.fileName), {
             ...normalizedNames,
             ...inputRecord,
@@ -76,5 +81,11 @@ export default async function audiosGenerator(tree: Tree, ngtVersion: string) {
         items: [...generatedAudios, 'audio-listener'],
         tmpl: '',
         ngtVersion,
+    });
+
+    generateFiles(tree, join(__dirname, '../common/files/inputs-outputs'), join(audioDir, 'src/lib'), {
+        tmpl: '',
+        ngtVersion,
+        hasObject3D,
     });
 }

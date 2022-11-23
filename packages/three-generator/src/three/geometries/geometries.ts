@@ -62,4 +62,10 @@ export default async function geometriesGenerator(tree: Tree, ngtVersion: string
         tmpl: '',
         ngtVersion,
     });
+
+    generateFiles(tree, join(__dirname, '../common/files/inputs-outputs'), join(geometryDir, 'src/lib'), {
+        tmpl: '',
+        ngtVersion,
+        hasObject3D: false,
+    });
 }

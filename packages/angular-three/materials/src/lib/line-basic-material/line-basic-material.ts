@@ -1,14 +1,8 @@
 // GENERATED - AngularThree v1.0.0
-import {
-    NGT_INSTANCE_INPUTS,
-    NGT_INSTANCE_OUTPUTS,
-    NgtInstance,
-    provideInstanceRef,
-    proxify,
-    NgtObservableInput,
-} from 'angular-three';
+import { NgtInstance, provideInstanceRef, proxify, NgtObservableInput } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
 
 @Component({
     selector: 'ngt-line-basic-material',

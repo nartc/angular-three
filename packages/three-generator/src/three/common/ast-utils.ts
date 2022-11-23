@@ -27,9 +27,9 @@ import {
     UnionTypeNode,
 } from 'typescript/lib/tsserverlibrary';
 
-type PropertyInfo = { propertyName: string; type: string; isOptional: boolean };
+type PropertyInfo = { propertyName: string; type: string; isOptional: boolean; object3D?: boolean };
 type Property = PropertySignature | ParameterDeclaration | PropertyInfo;
-type Base = { sourceFile: SourceFile; properties: Map<string, Property> };
+type Base = { sourceFile: SourceFile; properties: Map<string, Property>; object3D: boolean };
 
 const sourceFileCached = new Map();
 const object3dDtsPath = 'node_modules/@types/three/src/core/Object3D.d.ts';
@@ -48,11 +48,13 @@ export function handleHeritage(
 
     if (heritageName === 'EventDispatcher') return;
 
-    const heritageDtsPath = heritageName === 'Object3D' ? object3dDtsPath : heritageDtsPathFinder(heritageName);
+    const isObject3d = heritageName === 'Object3D';
+
+    const heritageDtsPath = isObject3d ? object3dDtsPath : heritageDtsPathFinder(heritageName);
     if (heritageDtsPath) {
         const heritageSourceFile = pathToSourceFile(tree, heritageDtsPath);
         if (!basesMap.has(heritageName)) {
-            basesMap.set(heritageName, { sourceFile: heritageSourceFile, properties: new Map() });
+            basesMap.set(heritageName, { sourceFile: heritageSourceFile, properties: new Map(), object3D: isObject3d });
         }
 
         sourceFileRunner(heritageSourceFile, basesMap.get(heritageName).properties);
@@ -84,6 +86,7 @@ export function handleClassMember(
             )
                 continue;
 
+            // skip @deprecated
             if (member['jsDoc']?.length) {
                 let isDeprecated = false;
                 for (const tag of member['jsDoc'][0].tags || []) {
@@ -157,31 +160,43 @@ export function astFromPath(
 
     const basesNames = [...bases.keys()];
 
+    const hasObject3D = basesNames.includes('Object3D');
+
     while (basesNames.length) {
         const baseName = basesNames.shift();
-        const { sourceFile: baseSourceFile, properties: baseProperties = new Map<string, Property>() } =
-            bases.get(baseName);
+        const {
+            sourceFile: baseSourceFile,
+            properties: baseProperties = new Map<string, Property>(),
+            object3D,
+        } = bases.get(baseName);
         baseProperties.forEach((property) => {
             const propertyTypeInfo = propertySignatureToType(baseSourceFile, property as PropertySignature);
 
             if (!properties.has(propertyTypeInfo.propertyName)) {
-                properties.set(propertyTypeInfo.propertyName, propertyTypeInfo);
+                properties.set(propertyTypeInfo.propertyName, { ...propertyTypeInfo, object3D });
             }
         });
     }
 
     const inputs = [];
+    const staticInputs = [];
     properties.forEach((property, propertyName) => {
         if (property['propertyName']) {
-            inputs.push({ name: propertyName, ...property });
+            const input = { name: propertyName, ...property };
+            if (!property['object3D']) {
+                inputs.push(input);
+            }
+            staticInputs.push(input);
         } else {
             const typeInfo = propertySignatureToType(sourceFile, property as PropertySignature);
-            inputs.push({ name: propertyName, ...typeInfo });
+            const input = { name: propertyName, ...typeInfo };
+            inputs.push(input);
+            staticInputs.push(input);
         }
     });
 
     const ngtTypes = new Set();
-    inputs.forEach(({ propertyName, type }) => {
+    staticInputs.forEach(({ propertyName, type }) => {
         try {
             if (type.startsWith('Ngt')) {
                 ngtTypes.add(type.endsWith('[]') ? type.slice(0, -2) : type);
@@ -194,9 +209,11 @@ export function astFromPath(
 
     return {
         inputs,
+        staticInputs,
         ngtTypes: [...ngtTypes.values()],
         hasNgtType: ngtTypes.size > 0,
         hasInput: inputs.length > 0,
+        hasObject3D,
     };
 }
 

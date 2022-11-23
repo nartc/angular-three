@@ -183,4 +183,10 @@ export default async function materialsGenerator(tree: Tree, ngtVersion: string)
         tmpl: '',
         ngtVersion,
     });
+
+    generateFiles(tree, join(__dirname, '../common/files/inputs-outputs'), join(materialDir, 'src/lib'), {
+        tmpl: '',
+        ngtVersion,
+        hasObject3D: false,
+    });
 }

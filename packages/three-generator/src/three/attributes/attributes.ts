@@ -124,4 +124,10 @@ export default async function attributesGenerator(tree: Tree, ngtVersion: string
         tmpl: '',
         ngtVersion,
     });
+
+    generateFiles(tree, join(__dirname, '../common/files/inputs-outputs'), join(attributeDir, 'src/lib'), {
+        tmpl: '',
+        ngtVersion,
+        hasObject3D: false,
+    });
 }

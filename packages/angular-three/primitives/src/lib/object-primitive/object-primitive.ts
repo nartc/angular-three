@@ -2,8 +2,6 @@ import * as THREE from 'three';
 import { Component } from '@angular/core';
 import {
     injectArgs,
-    NGT_INSTANCE_INPUTS,
-    NGT_INSTANCE_OUTPUTS,
     NgtEuler,
     NgtInstance,
     NgtLayers,
@@ -14,6 +12,7 @@ import {
     provideInstanceRef,
     proxify,
 } from 'angular-three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 @Component({
     selector: 'ngt-object-primitive',
@@ -21,7 +20,7 @@ import {
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtObjectPrimitive)],
-    inputs: [...getInputs()],
+    inputs: NGT_OBJECT3D_INPUTS,
 })
 export class NgtObjectPrimitive extends THREE.Object3D {
     constructor() {
@@ -72,33 +71,4 @@ export class NgtObjectPrimitive extends THREE.Object3D {
             group: THREE.Group
         ) => void
     >;
-}
-
-function getInputs() {
-    return [
-        'name',
-        'position',
-        'rotation',
-        'quaternion',
-        'scale',
-        'modelViewMatrix',
-        'normalMatrix',
-        'matrix',
-        'matrixWorld',
-        'matrixAutoUpdate',
-        'matrixWorldAutoUpdate',
-        'matrixWorldNeedsUpdate',
-        'layers',
-        'visible',
-        'castShadow',
-        'receiveShadow',
-        'frustumCulled',
-        'renderOrder',
-        'animations',
-        'userData',
-        'customDepthMaterial',
-        'customDistanceMaterial',
-        'onBeforeRender',
-        'onAfterRender',
-    ];
 }

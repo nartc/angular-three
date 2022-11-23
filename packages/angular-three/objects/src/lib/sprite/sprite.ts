@@ -1,7 +1,5 @@
 // GENERATED - AngularThree v1.0.0
 import {
-    NGT_INSTANCE_INPUTS,
-    NGT_INSTANCE_OUTPUTS,
     NgtInstance,
     provideInstanceRef,
     proxify,
@@ -15,6 +13,7 @@ import {
 } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 @Component({
     selector: 'ngt-sprite',
@@ -22,7 +21,7 @@ import * as THREE from 'three';
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtSprite)],
-    inputs: [...getInputs()],
+    inputs: [...getInputs(), ...NGT_OBJECT3D_INPUTS],
 })
 export class NgtSprite extends THREE.Sprite {
     constructor() {
@@ -78,33 +77,5 @@ export class NgtSprite extends THREE.Sprite {
 }
 
 function getInputs() {
-    return [
-        'geometry',
-        'material',
-        'center',
-        'name',
-        'position',
-        'rotation',
-        'quaternion',
-        'scale',
-        'modelViewMatrix',
-        'normalMatrix',
-        'matrix',
-        'matrixWorld',
-        'matrixAutoUpdate',
-        'matrixWorldAutoUpdate',
-        'matrixWorldNeedsUpdate',
-        'layers',
-        'visible',
-        'castShadow',
-        'receiveShadow',
-        'frustumCulled',
-        'renderOrder',
-        'animations',
-        'userData',
-        'customDepthMaterial',
-        'customDistanceMaterial',
-        'onBeforeRender',
-        'onAfterRender',
-    ];
+    return ['geometry', 'material', 'center'];
 }

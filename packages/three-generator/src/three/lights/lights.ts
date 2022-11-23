@@ -59,6 +59,7 @@ export default async function lightsGenerator(tree: Tree, ngtVersion: string) {
         });
     }
 
+    let hasObject3D = false;
     const generatedLights = [];
     for (const light of lights) {
         const normalizedNames = names(light.name);
@@ -94,52 +95,9 @@ export default async function lightsGenerator(tree: Tree, ngtVersion: string) {
             return { properties, bases };
         });
 
-        // const inputRecord = astFromPath(tree, light.defPath, (sourceFile) => {
-        //     const mainParameters = [];
-        //     const overrideOptional = {};
-        //     sourceFile.forEachChild((node) => {
-        //         if (isClassDeclaration(node)) {
-        //             const nodeName = node.name.getText(sourceFile);
-        //             for (const member of node.members) {
-        //                 if (isConstructorDeclaration(member)) {
-        //                     for (const parameter of member.parameters) {
-        //                         const parameterName = parameter.name.getText(sourceFile);
-        //                         if (['intensity', 'color', 'shadow'].includes(parameterName)) {
-        //                             continue;
-        //                         }
-        //                         mainParameters.push(parameter);
-        //                     }
-        //                     continue;
-        //                 }
-        //
-        //                 if (isPropertyDeclaration(member)) {
-        //                     const memberName = member.name.getText(sourceFile);
-        //                     if (
-        //                         ['position', 'type', 'color', 'intensity', 'shadow', `is${nodeName}`].includes(
-        //                             memberName
-        //                         )
-        //                     ) {
-        //                         continue;
-        //                     }
-        //
-        //                     if (
-        //                         mainParameters.some(
-        //                             (parameter: ParameterDeclaration) =>
-        //                                 parameter.name.getText(sourceFile) === memberName
-        //                         )
-        //                     ) {
-        //                         continue;
-        //                     }
-        //
-        //                     mainParameters.push(member);
-        //                     overrideOptional[memberName] = true;
-        //                 }
-        //             }
-        //         }
-        //     });
-        //
-        //     return { mainProperties: mainParameters, overrideOptional };
-        // });
+        if (!hasObject3D) {
+            hasObject3D = inputRecord.hasObject3D;
+        }
 
         generateFiles(tree, join(__dirname, 'files/lib'), join(lightDir, 'src', 'lib', normalizedNames.fileName), {
             ...normalizedNames,
@@ -155,5 +113,11 @@ export default async function lightsGenerator(tree: Tree, ngtVersion: string) {
         items: generatedLights,
         tmpl: '',
         ngtVersion,
+    });
+
+    generateFiles(tree, join(__dirname, '../common/files/inputs-outputs'), join(lightDir, 'src/lib'), {
+        tmpl: '',
+        ngtVersion,
+        hasObject3D,
     });
 }

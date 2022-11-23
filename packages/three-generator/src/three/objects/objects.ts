@@ -92,6 +92,7 @@ export default async function objectsGenerator(tree: Tree, ngtVersion: string) {
         });
     }
 
+    let hasObject3D = false;
     const generatedObjects = [];
     for (const { name, defPath, proxyOptions = undefined, args = undefined } of objects) {
         const normalizedNames = names(name);
@@ -124,6 +125,10 @@ export default async function objectsGenerator(tree: Tree, ngtVersion: string) {
             return { properties, bases };
         });
 
+        if (!hasObject3D) {
+            hasObject3D = inputRecord.hasObject3D;
+        }
+
         generateFiles(tree, join(__dirname, 'files/lib'), join(objectDir, 'src', 'lib', normalizedNames.fileName), {
             ...normalizedNames,
             tmpl: '',
@@ -140,5 +145,11 @@ export default async function objectsGenerator(tree: Tree, ngtVersion: string) {
         items: generatedObjects,
         tmpl: '',
         ngtVersion,
+    });
+
+    generateFiles(tree, join(__dirname, '../common/files/inputs-outputs'), join(objectDir, 'src/lib'), {
+        tmpl: '',
+        ngtVersion,
+        hasObject3D,
     });
 }

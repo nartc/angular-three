@@ -1,8 +1,6 @@
 import { Component, Input } from '@angular/core';
 import {
     injectArgs,
-    NGT_INSTANCE_INPUTS,
-    NGT_INSTANCE_OUTPUTS,
     NgtAnyRecord,
     NgtComponentStore,
     NgtInstance,
@@ -11,6 +9,7 @@ import {
     proxify,
 } from 'angular-three';
 import { Subscription, tap } from 'rxjs';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
 
 @Component({
     selector: 'ngt-primitive',

@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 import { Component } from '@angular/core';
 import {
-    NGT_INSTANCE_INPUTS,
-    NGT_INSTANCE_OUTPUTS,
     NgtEuler,
     NgtInstance,
     NgtLayers,
@@ -13,6 +11,7 @@ import {
     provideInstanceRef,
     proxify,
 } from 'angular-three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 @Component({
     selector: 'ngt-audio-listener',
@@ -20,7 +19,7 @@ import {
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtAudioListener)],
-    inputs: [...getInputs()],
+    inputs: NGT_OBJECT3D_INPUTS,
 })
 export class NgtAudioListener extends THREE.AudioListener {
     constructor() {
@@ -82,33 +81,4 @@ export class NgtAudioListener extends THREE.AudioListener {
             group: THREE.Group
         ) => void
     >;
-}
-
-function getInputs() {
-    return [
-        'name',
-        'position',
-        'rotation',
-        'quaternion',
-        'scale',
-        'modelViewMatrix',
-        'normalMatrix',
-        'matrix',
-        'matrixWorld',
-        'matrixAutoUpdate',
-        'matrixWorldAutoUpdate',
-        'matrixWorldNeedsUpdate',
-        'layers',
-        'visible',
-        'castShadow',
-        'receiveShadow',
-        'frustumCulled',
-        'renderOrder',
-        'animations',
-        'userData',
-        'customDepthMaterial',
-        'customDistanceMaterial',
-        'onBeforeRender',
-        'onAfterRender',
-    ];
 }

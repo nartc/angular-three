@@ -44,6 +44,7 @@ export default async function camerasGenerator(tree: Tree, ngtVersion: string) {
         });
     }
 
+    let hasObject3D = false;
     const generatedCameras = [];
     for (const { name, defPath, isArgsRequired } of cameras) {
         const normalizedNames = names(name);
@@ -79,6 +80,10 @@ export default async function camerasGenerator(tree: Tree, ngtVersion: string) {
             return { properties, bases };
         });
 
+        if (!hasObject3D) {
+            hasObject3D = inputRecord.hasObject3D;
+        }
+
         generateFiles(tree, join(__dirname, 'files/lib'), join(cameraDir, 'src', 'lib', normalizedNames.fileName), {
             ...normalizedNames,
             tmpl: '',
@@ -94,5 +99,11 @@ export default async function camerasGenerator(tree: Tree, ngtVersion: string) {
         items: generatedCameras,
         tmpl: '',
         ngtVersion,
+    });
+
+    generateFiles(tree, join(__dirname, '../common/files/inputs-outputs'), join(cameraDir, 'src/lib'), {
+        tmpl: '',
+        ngtVersion,
+        hasObject3D,
     });
 }

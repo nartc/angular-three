@@ -1,7 +1,8 @@
 // GENERATED - AngularThree v<%= ngtVersion %>
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NgtInstance, provideInstanceRef, proxify<% for (const ngtType of ngtTypes) { %>, <%= ngtType %><% } %><% if (hasInput) { %>, NgtObservableInput<% } %> } from 'angular-three';
+import { NgtInstance, provideInstanceRef, proxify<% for (const ngtType of ngtTypes) { %>, <%= ngtType %><% } %><% if (hasInput) { %>, NgtObservableInput<% } %> } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
 
 @Component({
     selector: 'ngt-<%= fileName %>',
@@ -9,14 +10,14 @@ import * as THREE from 'three';
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(Ngt<%= name %>)],<% if (hasInput) { %>
-    inputs: [...getInputs()],<% } %>
+    inputs: [...getInputs()]<% } %>
 })
 export class Ngt<%= name %> extends THREE.<%= name %> {
     constructor() {
         super();
         return proxify(this, { attach: 'material' });
     }
-    <% for (const input of inputs) { %>
+    <% for (const input of staticInputs) { %>
     static ngAcceptInputType_<%= input.name %>: NgtObservableInput<<%- input.type %>><% if (input.isOptional) { %>| undefined<% } %>;<% } %>
 }
 <% if (hasInput) { %>

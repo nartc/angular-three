@@ -3,8 +3,6 @@ import * as THREE from 'three';
 import { Component } from '@angular/core';
 import {
     injectArgs,
-    NGT_INSTANCE_INPUTS,
-    NGT_INSTANCE_OUTPUTS,
     NgtInstance,
     provideInstanceRef,
     proxify,
@@ -15,6 +13,7 @@ import {
     NgtLayers,
     NgtObservableInput,
 } from 'angular-three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 @Component({
     selector: 'ngt-array-camera',
@@ -22,7 +21,7 @@ import {
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtArrayCamera)],
-    inputs: [...getInputs()],
+    inputs: [...getInputs(), ...NGT_OBJECT3D_INPUTS],
 })
 export class NgtArrayCamera extends THREE.ArrayCamera {
     constructor() {
@@ -110,29 +109,5 @@ function getInputs() {
         'matrixWorldInverse',
         'projectionMatrix',
         'projectionMatrixInverse',
-        'name',
-        'position',
-        'rotation',
-        'quaternion',
-        'scale',
-        'modelViewMatrix',
-        'normalMatrix',
-        'matrix',
-        'matrixWorld',
-        'matrixAutoUpdate',
-        'matrixWorldAutoUpdate',
-        'matrixWorldNeedsUpdate',
-        'layers',
-        'visible',
-        'castShadow',
-        'receiveShadow',
-        'frustumCulled',
-        'renderOrder',
-        'animations',
-        'userData',
-        'customDepthMaterial',
-        'customDistanceMaterial',
-        'onBeforeRender',
-        'onAfterRender',
     ];
 }

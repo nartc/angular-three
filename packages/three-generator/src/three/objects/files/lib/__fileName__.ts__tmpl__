@@ -1,14 +1,15 @@
 // GENERATED - AngularThree v<%= ngtVersion %>
 import {
-    NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NgtInstance,
+    NgtInstance,
     provideInstanceRef,
     proxify<% for (const ngtType of ngtTypes) { %>
-    , <%= ngtType %><% } %><% if (hasInput) { %>
+    , <%= ngtType %><% } %><% if (hasInput || hasObject3D) { %>
     , NgtObservableInput<% } %><% if (args) { %>
     , injectArgs<% } %>
 } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS<% if (hasObject3D) { %>, NGT_OBJECT3D_INPUTS<% } %> } from '../common';
 
 @Component({
     selector: 'ngt-<%= fileName %>',
@@ -16,7 +17,8 @@ import * as THREE from 'three';
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(Ngt<%= name %>)],<% if (hasInput) { %>
-    inputs: [...getInputs()],<% } %>
+    inputs: [...getInputs()<% if (hasObject3D) { %>, ...NGT_OBJECT3D_INPUTS <% } %>]<% } else if (hasObject3D) {%>
+    inputs: NGT_OBJECT3D_INPUTS<% } %>
 })
 export class Ngt<%= name %> extends THREE.<%= name %> {
     constructor() {<% if (!args) { %>
@@ -27,7 +29,7 @@ export class Ngt<%= name %> extends THREE.<%= name %> {
             <% if (proxyOptions.attach) { %>attach: <%- proxyOptions.attach %>,<% } %>
         });<% } %>
     }
-    <% for (const input of inputs) { %>
+    <% for (const input of staticInputs) { %>
     static ngAcceptInputType_<%= input.name %>: NgtObservableInput<<%- input.type %>><% if (input.isOptional) { %>| undefined<% } %>;<% } %>
 }
 <% if (hasInput) { %>

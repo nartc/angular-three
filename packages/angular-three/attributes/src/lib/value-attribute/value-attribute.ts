@@ -1,11 +1,6 @@
 import { Component, Input } from '@angular/core';
-import {
-    injectInstance,
-    NGT_INSTANCE_INPUTS,
-    NGT_INSTANCE_OUTPUTS,
-    NgtInstance,
-    provideInstanceRef,
-} from 'angular-three';
+import { injectInstance, NgtInstance, provideInstanceRef } from 'angular-three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
 
 @Component({
     selector: 'ngt-value',

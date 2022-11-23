@@ -3,8 +3,6 @@ import {
     defaultProjector,
     injectArgs,
     injectInstance,
-    NGT_INSTANCE_INPUTS,
-    NGT_INSTANCE_OUTPUTS,
     NgtInstance,
     NgtObservableInput,
     NgtStore,
@@ -15,6 +13,7 @@ import {
 } from 'angular-three';
 import { OrbitControls } from 'three-stdlib';
 import { MOUSE, TOUCH } from 'three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
 
 @Component({
     selector: 'drei-orbit-controls',

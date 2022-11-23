@@ -1,7 +1,8 @@
 // GENERATED - AngularThree v<%= ngtVersion %>
-import { injectArgs, NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NgtInstance, provideInstanceRef, proxify } from 'angular-three';
+import { injectArgs, NgtInstance, provideInstanceRef, proxify } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
 
 @Component({
     selector: 'ngt-<%= selector %>',

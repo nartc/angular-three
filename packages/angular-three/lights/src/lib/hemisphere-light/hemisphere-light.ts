@@ -3,8 +3,6 @@ import * as THREE from 'three';
 import { Component } from '@angular/core';
 import {
     injectArgs,
-    NGT_INSTANCE_INPUTS,
-    NGT_INSTANCE_OUTPUTS,
     NgtInstance,
     provideInstanceRef,
     proxify,
@@ -15,6 +13,7 @@ import {
     NgtLayers,
     NgtObservableInput,
 } from 'angular-three';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 @Component({
     selector: 'ngt-hemisphere-light',
@@ -22,7 +21,7 @@ import {
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtHemisphereLight)],
-    inputs: [...getInputs()],
+    inputs: [...getInputs(), ...NGT_OBJECT3D_INPUTS],
 })
 export class NgtHemisphereLight extends THREE.HemisphereLight {
     constructor() {
@@ -81,36 +80,5 @@ export class NgtHemisphereLight extends THREE.HemisphereLight {
 }
 
 function getInputs() {
-    return [
-        'skyColor',
-        'groundColor',
-        'intensity',
-        'position',
-        'hex',
-        'color',
-        'shadow',
-        'name',
-        'rotation',
-        'quaternion',
-        'scale',
-        'modelViewMatrix',
-        'normalMatrix',
-        'matrix',
-        'matrixWorld',
-        'matrixAutoUpdate',
-        'matrixWorldAutoUpdate',
-        'matrixWorldNeedsUpdate',
-        'layers',
-        'visible',
-        'castShadow',
-        'receiveShadow',
-        'frustumCulled',
-        'renderOrder',
-        'animations',
-        'userData',
-        'customDepthMaterial',
-        'customDistanceMaterial',
-        'onBeforeRender',
-        'onAfterRender',
-    ];
+    return ['skyColor', 'groundColor', 'intensity', 'position', 'hex', 'color', 'shadow'];
 }

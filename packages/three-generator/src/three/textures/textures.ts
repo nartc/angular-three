@@ -49,4 +49,10 @@ export default async function texturesGenerator(tree: Tree, ngtVersion: string) 
         tmpl: '',
         ngtVersion,
     });
+
+    generateFiles(tree, join(__dirname, '../common/files/inputs-outputs'), join(textureDir, 'src/lib'), {
+        tmpl: '',
+        ngtVersion,
+        hasObject3D: false,
+    });
 }
