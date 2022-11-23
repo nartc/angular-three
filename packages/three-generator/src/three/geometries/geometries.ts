@@ -52,6 +52,7 @@ export default async function geometriesGenerator(tree: Tree, ngtVersion: string
             ...normalizedNames,
             tmpl: '',
             ngtVersion,
+            hasObject3D: false,
         });
 
         generatedGeometries.push(normalizedNames.fileName);

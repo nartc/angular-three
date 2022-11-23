@@ -39,6 +39,7 @@ export default async function texturesGenerator(tree: Tree, ngtVersion: string) 
             ...normalizedNames,
             tmpl: '',
             ngtVersion,
+            hasObject3D: false,
         });
 
         generatedTextures.push(normalizedNames.fileName);

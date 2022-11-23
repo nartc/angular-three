@@ -2,13 +2,13 @@
 import { injectArgs, NgtInstance, provideInstanceRef, proxify } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
+import { NGT_INSTANCE_INPUTS } from '../common';
 
 @Component({
     selector: 'ngt-vector4',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS }],
     providers: [provideInstanceRef(NgtVector4Attribute)],
 })
 export class NgtVector4Attribute extends THREE.Vector4 {

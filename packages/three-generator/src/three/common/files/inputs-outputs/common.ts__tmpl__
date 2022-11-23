@@ -10,7 +10,7 @@ export const NGT_INSTANCE_INPUTS = [
     'updateCallback',
     'readyCallback',
 ];
-
+<% if (hasObject3D) { %>
 export const NGT_INSTANCE_OUTPUTS = [
     'click',
     'contextmenu',
@@ -26,7 +26,7 @@ export const NGT_INSTANCE_OUTPUTS = [
     'pointercancel',
     'wheel',
 ];
-<% if (hasObject3D) { %>
+
 export const NGT_OBJECT3D_INPUTS = [
     'name',
     'position',
@@ -52,4 +52,4 @@ export const NGT_OBJECT3D_INPUTS = [
     'customDistanceMaterial',
     'onBeforeRender',
     'onAfterRender',
-]<% } %>
+];<% } %>

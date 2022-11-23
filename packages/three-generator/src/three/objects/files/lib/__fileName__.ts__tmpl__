@@ -9,13 +9,13 @@ import {
 } from 'angular-three';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS<% if (hasObject3D) { %>, NGT_OBJECT3D_INPUTS<% } %> } from '../common';
+import { NGT_INSTANCE_INPUTS<% if (hasObject3D) { %>, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS<% } %> } from '../common';
 
 @Component({
     selector: 'ngt-<%= fileName %>',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS<% if (hasObject3D) { %>, outputs: NGT_INSTANCE_OUTPUTS<% } %> }],
     providers: [provideInstanceRef(Ngt<%= name %>)],<% if (hasInput) { %>
     inputs: [...getInputs()<% if (hasObject3D) { %>, ...NGT_OBJECT3D_INPUTS <% } %>]<% } else if (hasObject3D) {%>
     inputs: NGT_OBJECT3D_INPUTS<% } %>

@@ -10,19 +10,3 @@ export const NGT_INSTANCE_INPUTS = [
     'updateCallback',
     'readyCallback',
 ];
-
-export const NGT_INSTANCE_OUTPUTS = [
-    'click',
-    'contextmenu',
-    'dblclick',
-    'pointerup',
-    'pointerdown',
-    'pointerover',
-    'pointerout',
-    'pointerenter',
-    'pointerleave',
-    'pointermove',
-    'pointermissed',
-    'pointercancel',
-    'wheel',
-];

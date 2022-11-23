@@ -72,6 +72,7 @@ export default async function helpersGenerator(tree: Tree, ngtVersion: string) {
             ...normalizedNames,
             tmpl: '',
             ngtVersion,
+            hasObject3D: false,
         });
 
         generatedHelpers.push(normalizedNames.fileName);
@@ -91,6 +92,7 @@ export default async function helpersGenerator(tree: Tree, ngtVersion: string) {
                 ...normalizedNames,
                 tmpl: '',
                 ngtVersion,
+                hasObject3D: false,
             }
         );
 

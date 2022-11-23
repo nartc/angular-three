@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { injectInstance, NgtInstance, provideInstanceRef } from 'angular-three';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
+import { NGT_INSTANCE_INPUTS } from '../common';
 
 @Component({
     selector: 'ngt-value',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS }],
     providers: [provideInstanceRef(NgtValueAttribute)],
 })
 export class NgtValueAttribute {

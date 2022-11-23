@@ -114,6 +114,7 @@ export default async function attributesGenerator(tree: Tree, ngtVersion: string
             defaultArgs: attribute.defaultArgs || '[]',
             tmpl: '',
             ngtVersion,
+            hasObject3D: false,
         });
 
         generatedAttributes.push(normalizedNames.fileName);

@@ -173,6 +173,7 @@ export default async function materialsGenerator(tree: Tree, ngtVersion: string)
             tmpl: '',
             ...inputRecord,
             ngtVersion,
+            hasObject3D: false,
         });
 
         generatedMaterials.push(normalizedNames.fileName);
