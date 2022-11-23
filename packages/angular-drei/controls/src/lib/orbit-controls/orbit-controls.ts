@@ -10,16 +10,16 @@ import {
     provideInstanceRef,
     proxify,
     tapEffect,
-} from 'angular-three';
+} from '@angular-three/core';
 import { OrbitControls } from 'three-stdlib';
 import { MOUSE, TOUCH } from 'three';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
+import { NGT_INSTANCE_INPUTS } from '../common';
 
 @Component({
     selector: 'drei-orbit-controls',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS }],
     providers: [provideInstanceRef(DreiOrbitControls)],
     inputs: [...getInputs()],
 })

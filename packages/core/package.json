@@ -1,0 +1,16 @@
+{
+    "name": "@angular-three/core",
+    "version": "7.0.0",
+    "peerDependencies": {
+        "@angular/common": "^15.0.0",
+        "@angular/core": "^15.0.0",
+        "three": "0.146.0"
+    },
+    "dependencies": {
+        "@ngrx/component-store": "^15.0.0-beta.1",
+        "@nrwl/devkit": "^15.0.0",
+        "tslib": "^2.3.0"
+    },
+    "generators": "./schematics/generators.json",
+    "schematics": "./schematics/generators.json"
+}

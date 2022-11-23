@@ -1,13 +1,13 @@
 import { NgForOf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { DreiOrbitControls } from 'angular-drei/controls';
-import { NgtArgs, NgtCanvas, NgtRenderState, NgtState, NgtVector3 } from 'angular-three';
-import { NgtColorAttribute } from 'angular-three/attributes';
-import { NgtBoxGeometry } from 'angular-three/geometries';
-import { NgtAmbientLight, NgtPointLight } from 'angular-three/lights';
-import { NgtMeshStandardMaterial } from 'angular-three/materials';
-import { NgtMesh } from 'angular-three/objects';
-import { NgtStats } from 'angular-three/stats';
+import { NgtArgs, NgtCanvas, NgtRenderState, NgtState, NgtVector3 } from '@angular-three/core';
+import { NgtColorAttribute } from '@angular-three/core/attributes';
+import { NgtBoxGeometry } from '@angular-three/core/geometries';
+import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
+import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
+import { NgtMesh } from '@angular-three/core/objects';
+import { NgtStats } from '@angular-three/core/stats';
 import * as THREE from 'three';
 
 @Component({
