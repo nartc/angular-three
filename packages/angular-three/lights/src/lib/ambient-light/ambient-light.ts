@@ -34,16 +34,6 @@ export class NgtAmbientLight extends THREE.AmbientLight {
     static ngAcceptInputType_intensity: NgtObservableInput<number> | undefined;
     static ngAcceptInputType_hex: NgtObservableInput<number | string> | undefined;
     static ngAcceptInputType_shadow: NgtObservableInput<THREE.LightShadow>;
-    static ngAcceptInputType_shadowCameraFov: NgtObservableInput<any>;
-    static ngAcceptInputType_shadowCameraLeft: NgtObservableInput<any>;
-    static ngAcceptInputType_shadowCameraRight: NgtObservableInput<any>;
-    static ngAcceptInputType_shadowCameraTop: NgtObservableInput<any>;
-    static ngAcceptInputType_shadowCameraBottom: NgtObservableInput<any>;
-    static ngAcceptInputType_shadowCameraNear: NgtObservableInput<any>;
-    static ngAcceptInputType_shadowCameraFar: NgtObservableInput<any>;
-    static ngAcceptInputType_shadowBias: NgtObservableInput<any>;
-    static ngAcceptInputType_shadowMapWidth: NgtObservableInput<any>;
-    static ngAcceptInputType_shadowMapHeight: NgtObservableInput<any>;
     static ngAcceptInputType_name: NgtObservableInput<string>;
     static ngAcceptInputType_position: NgtObservableInput<NgtVector3>;
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
@@ -94,16 +84,6 @@ function getInputs() {
         'intensity',
         'hex',
         'shadow',
-        'shadowCameraFov',
-        'shadowCameraLeft',
-        'shadowCameraRight',
-        'shadowCameraTop',
-        'shadowCameraBottom',
-        'shadowCameraNear',
-        'shadowCameraFar',
-        'shadowBias',
-        'shadowMapWidth',
-        'shadowMapHeight',
         'name',
         'position',
         'rotation',

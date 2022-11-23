@@ -46,18 +46,8 @@ export class NgtSkeleton extends THREE.Skeleton {
     static ngAcceptInputType_boneTexture: NgtObservableInput<null | THREE.DataTexture>;
     static ngAcceptInputType_boneTextureSize: NgtObservableInput<number>;
     static ngAcceptInputType_frame: NgtObservableInput<number>;
-    static ngAcceptInputType_useVertexTexture: NgtObservableInput<boolean>;
 }
 
 function getInputs() {
-    return [
-        'uuid',
-        'bones',
-        'boneInverses',
-        'boneMatrices',
-        'boneTexture',
-        'boneTextureSize',
-        'frame',
-        'useVertexTexture',
-    ];
+    return ['uuid', 'bones', 'boneInverses', 'boneMatrices', 'boneTexture', 'boneTextureSize', 'frame'];
 }

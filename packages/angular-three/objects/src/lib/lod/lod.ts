@@ -31,7 +31,6 @@ export class NgtLOD extends THREE.LOD {
 
     static ngAcceptInputType_levels: NgtObservableInput<{ distance: number; object: THREE.Object3D }[]>;
     static ngAcceptInputType_autoUpdate: NgtObservableInput<boolean>;
-    static ngAcceptInputType_objects: NgtObservableInput<any[]>;
     static ngAcceptInputType_name: NgtObservableInput<string>;
     static ngAcceptInputType_position: NgtObservableInput<NgtVector3>;
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
@@ -80,7 +79,6 @@ function getInputs() {
     return [
         'levels',
         'autoUpdate',
-        'objects',
         'name',
         'position',
         'rotation',

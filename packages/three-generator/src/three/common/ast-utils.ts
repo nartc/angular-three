@@ -84,6 +84,20 @@ export function handleClassMember(
             )
                 continue;
 
+            if (member['jsDoc']?.length) {
+                let isDeprecated = false;
+                for (const tag of member['jsDoc'][0].tags || []) {
+                    if (tag.tagName.getText(sourceFile) === 'deprecated') {
+                        isDeprecated = true;
+                        break;
+                    }
+                }
+
+                if (isDeprecated) {
+                    continue;
+                }
+            }
+
             const propertyName = member.name.getText(sourceFile);
             // skip these properties
             if (exclude.includes(propertyName)) continue;
