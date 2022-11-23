@@ -9,13 +9,13 @@ import {
     proxify,
 } from 'angular-three';
 import { Subscription, tap } from 'rxjs';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
+import { NGT_INSTANCE_INPUTS } from '../common';
 
 @Component({
     selector: 'ngt-primitive',
     standalone: true,
     template: '<ng-content></ng-content>',
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
+    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS }],
     providers: [provideInstanceRef(NgtPrimitive)],
 })
 export class NgtPrimitive extends NgtComponentStore {
