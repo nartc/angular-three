@@ -84,7 +84,6 @@ export function proxify<T extends object>(
 
                 return zone.runOutsideAngular(() => {
                     // TODO: figure out what else we need to handle
-                    // we should handle if newValue is an Observable as well
                     if (store.read((s) => s.ready)) {
                         const cleanUp = setProp(instance, prop, newValue);
                         if (cleanUp) newValueSubscriptionMap.set(prop, cleanUp);
