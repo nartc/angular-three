@@ -14,6 +14,7 @@ export function proxify<T extends object>(
     proxifyOptions: {
         attach?: string | string[] | NgtAttachFunction<T>;
         created?: (instance: T, stateFactory: NgtStateFactory, ngtInstance: NgtInstance) => void;
+        updated?: (instance: T, stateFactory: NgtStateFactory, ngtInstance: NgtInstance) => void;
         primitive?: boolean;
     } = {}
 ): T {
@@ -100,6 +101,7 @@ export function proxify<T extends object>(
                     // schedule updateCallback on next event loop
                     queueMicrotask(() => {
                         if (ngtInstance.updateCallback) ngtInstance.updateCallback(instance);
+                        if (proxifyOptions.updated) proxifyOptions.updated(instance, store.read, ngtInstance);
                     });
 
                     return true;

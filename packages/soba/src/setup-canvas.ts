@@ -1,5 +1,4 @@
-import { NgtCanvas, NgtPerformance } from '@angular-three/core';
-import * as THREE from 'three';
+import { createBeforeRenderCallback, NgtCanvas, NgtPerformance } from '@angular-three/core';
 import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
 import { NgtColorAttribute } from '@angular-three/core/attributes';
 import { NgtStats } from '@angular-three/core/stats';
@@ -98,6 +97,6 @@ export const setupCanvasImports = [
     NgtStats,
 ];
 
-export function turn(object: THREE.Object3D) {
+export const turnAnimation = createBeforeRenderCallback(({ object }) => {
     object.rotation.y += 0.01;
-}
+});
