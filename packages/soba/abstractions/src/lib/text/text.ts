@@ -1,6 +1,3 @@
-// @ts-ignore
-import { preloadFont, Text } from 'troika-three-text';
-import { Component, Input } from '@angular/core';
 import {
     defaultProjector,
     injectInstance,
@@ -15,9 +12,12 @@ import {
     provideInstanceRef,
     proxify,
 } from '@angular-three/core';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
-import * as THREE from 'three';
+import { Component, Input } from '@angular/core';
 import { tap } from 'rxjs';
+import * as THREE from 'three';
+// @ts-ignore
+import { preloadFont, Text } from 'troika-three-text';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 @Component({
     selector: 'ngt-soba-text',

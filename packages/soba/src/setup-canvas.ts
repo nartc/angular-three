@@ -1,6 +1,6 @@
 import { createBeforeRenderCallback, NgtCanvas, NgtPerformance } from '@angular-three/core';
-import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
 import { NgtColorAttribute } from '@angular-three/core/attributes';
+import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
 import { NgtStats } from '@angular-three/core/stats';
 import { SobaOrbitControls } from '@angular-three/soba/controls';
 

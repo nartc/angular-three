@@ -1,4 +1,3 @@
-import { Component, inject, Input, NgZone, OnInit } from '@angular/core';
 import {
     defaultProjector,
     injectArgs,
@@ -11,8 +10,9 @@ import {
     proxify,
     tapEffect,
 } from '@angular-three/core';
-import { OrbitControls } from 'three-stdlib';
+import { Component, inject, Input, NgZone, OnInit } from '@angular/core';
 import { MOUSE, TOUCH } from 'three';
+import { OrbitControls } from 'three-stdlib';
 import { NGT_INSTANCE_INPUTS } from '../common';
 
 @Component({

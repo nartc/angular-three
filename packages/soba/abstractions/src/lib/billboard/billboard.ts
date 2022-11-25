@@ -1,5 +1,3 @@
-import { NgtGroup } from '@angular-three/core/objects';
-import { Component, Input } from '@angular/core';
 import {
     createBeforeRenderCallback,
     injectInstance,
@@ -8,6 +6,8 @@ import {
     NgtWrapper,
     provideInstanceRef,
 } from '@angular-three/core';
+import { NgtGroup } from '@angular-three/core/objects';
+import { Component, Input } from '@angular/core';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
 
 @Component({

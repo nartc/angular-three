@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
 import { injectInstance, NgtInstance, provideInstanceRef } from '@angular-three/core';
+import { Component, Input } from '@angular/core';
 import { NGT_INSTANCE_INPUTS } from '../common';
 
 @Component({

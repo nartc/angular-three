@@ -15,20 +15,20 @@ export default {
 export const Default: Story = (args) => ({
     props: { ...args, beforeRender: turnAnimation },
     template: `
-    <ngt-soba-text
-      [text]="text"
-      color="#EC2D2D"
-      [fontSize]="12"
-      [maxWidth]="200"
-      [lineHeight]="1"
-      [letterSpacing]="0.02"
-      textAlign="left"
-      font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
-      anchorX="center"
-      anchorY="middle"
-      [beforeRender]="beforeRender"
-    >
-    </ngt-soba-text>
+<ngt-soba-text
+    [text]="text"
+    color="#EC2D2D"
+    [fontSize]="12"
+    [maxWidth]="200"
+    [lineHeight]="1"
+    [letterSpacing]="0.02"
+    textAlign="left"
+    font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
+    anchorX="center"
+    anchorY="middle"
+    [beforeRender]="beforeRender"
+>
+</ngt-soba-text>
   `,
 });
 
@@ -46,24 +46,24 @@ export const CustomMaterial: Story = (args) => ({
         DoubleSide: THREE.DoubleSide,
     },
     template: `
-    <ngt-soba-text
-      [text]="text"
-      [fontSize]="12"
-      [maxWidth]="200"
-      [lineHeight]="1"
-      [letterSpacing]="0.02"
-      textAlign="left"
-      font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
-      anchorX="center"
-      anchorY="middle"
-      [beforeRender]="beforeRender"
-    >
-        <ngt-mesh-basic-material
-            [side]="DoubleSide"
-            color="orange"
-            [transparent]="true"
-        ></ngt-mesh-basic-material>
-    </ngt-soba-text>
+<ngt-soba-text
+    [text]="text"
+    [fontSize]="12"
+    [maxWidth]="200"
+    [lineHeight]="1"
+    [letterSpacing]="0.02"
+    textAlign="left"
+    font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
+    anchorX="center"
+    anchorY="middle"
+    [beforeRender]="beforeRender"
+>
+    <ngt-mesh-basic-material
+        [side]="DoubleSide"
+        color="orange"
+        [transparent]="true"
+    ></ngt-mesh-basic-material>
+</ngt-soba-text>
   `,
 });
 

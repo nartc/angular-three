@@ -1,3 +1,3 @@
 export function createRangeControl(min: number, max: number, step: number) {
-  return { type: 'range', min, max, step };
+    return { type: 'range', min, max, step };
 }

@@ -1,4 +1,3 @@
-import { Component, Input } from '@angular/core';
 import {
     injectArgs,
     NgtAnyRecord,
@@ -8,6 +7,7 @@ import {
     provideInstanceRef,
     proxify,
 } from '@angular-three/core';
+import { Component, Input } from '@angular/core';
 import { Subscription, tap } from 'rxjs';
 import { NGT_INSTANCE_INPUTS } from '../common';
 

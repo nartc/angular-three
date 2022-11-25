@@ -1,5 +1,6 @@
 import { inject, NgZone } from '@angular/core';
 import { isObservable, Subscription } from 'rxjs';
+import { injectWrapper } from '../directives/wrapper';
 import { injectInstance, injectInstanceRef, NGT_PROXY_INSTANCE, NgtInstance } from '../instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
@@ -7,7 +8,6 @@ import { NgtAnyFunction, NgtAttachFunction, NgtStateFactory } from '../types';
 import { applyProps } from './apply-props';
 import { capitalize } from './capitalize';
 import { prepare } from './instance';
-import { injectWrapper } from '../directives/wrapper';
 
 export function proxify<T extends object>(
     instance: T,

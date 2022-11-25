@@ -19,11 +19,11 @@ import { Observable } from 'rxjs';
 import * as THREE from 'three';
 import { createPointerEvents } from './events';
 import { provideInstanceRef } from './instance';
+import { NgtLoader } from './services/loader';
 import { NgtResize, NgtResizeResult } from './services/resize';
 import { NgtComponentStore } from './stores/component-store';
 import { NgtStore, rootStateMap } from './stores/store';
 import type { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtObservableInput, NgtState, NgtVector3 } from './types';
-import { NgtLoader } from './services/loader';
 
 @Component({
     selector: 'ngt-canvas-container',

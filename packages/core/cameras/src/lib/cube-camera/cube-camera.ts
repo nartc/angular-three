@@ -1,6 +1,4 @@
 // GENERATED - AngularThree v1.0.0
-import * as THREE from 'three';
-import { Component } from '@angular/core';
 import {
     injectArgs,
     NgtEuler,
@@ -13,6 +11,8 @@ import {
     provideInstanceRef,
     proxify,
 } from '@angular-three/core';
+import { Component } from '@angular/core';
+import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 @Component({

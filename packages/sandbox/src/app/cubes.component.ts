@@ -1,15 +1,14 @@
-import { NgForOf } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { NgtArgs, NgtCanvas, NgtRenderState, NgtState, NgtVector3 } from '@angular-three/core';
+import { createBeforeRenderCallback, NgtArgs, NgtCanvas, NgtState, NgtVector3 } from '@angular-three/core';
 import { NgtColorAttribute } from '@angular-three/core/attributes';
 import { NgtBoxGeometry } from '@angular-three/core/geometries';
 import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
 import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
 import { NgtMesh } from '@angular-three/core/objects';
 import { NgtStats } from '@angular-three/core/stats';
-import * as THREE from 'three';
 import { SobaOrbitControls } from '@angular-three/soba/controls';
-import { SobaBillboard } from '@angular-three/soba/abstractions';
+import { NgForOf } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import * as THREE from 'three';
 
 @Component({
     selector: 'cube',
@@ -35,9 +34,9 @@ export class Cube {
     hovered = false;
     active = false;
 
-    onBeforeRender(_: NgtRenderState, cube: THREE.Mesh) {
+    readonly onBeforeRender = createBeforeRenderCallback<THREE.Mesh>(({ object: cube }) => {
         cube.rotation.x = cube.rotation.y += 0.01;
-    }
+    });
 }
 
 @Component({
@@ -58,9 +57,9 @@ export class Cube {
 export class CubeWithMaterials {
     readonly colors = ['red', 'green', 'blue', 'hotpink', 'orange', 'teal'] as const;
 
-    onBeforeRender(_: NgtRenderState, cube: THREE.Mesh) {
+    readonly onBeforeRender = createBeforeRenderCallback<THREE.Mesh>(({ object: cube }) => {
         cube.rotation.x = cube.rotation.y += 0.01;
-    }
+    });
 }
 
 @Component({
@@ -88,16 +87,13 @@ export class Scene {}
         <ngt-canvas (created)="onCreated($event)">
             <ng-template>
                 <ngt-color *args="['lightblue']" attach="background"></ngt-color>
-                <!--                <scene></scene>-->
-                <ngt-soba-billboard [position]="[1, 1, 1]">
-                    <scene></scene>
-                </ngt-soba-billboard>
+                <scene></scene>
             </ng-template>
         </ngt-canvas>
         <ngt-stats></ngt-stats>
     `,
 
-    imports: [Scene, NgtCanvas, NgtColorAttribute, NgtArgs, NgtStats, SobaBillboard],
+    imports: [Scene, NgtCanvas, NgtColorAttribute, NgtArgs, NgtStats],
 })
 export class Cubes {
     onCreated($event: NgtState) {
