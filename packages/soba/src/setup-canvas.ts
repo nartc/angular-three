@@ -55,17 +55,17 @@ export function setupCanvas(canvasOptions?: CanvasOptions) {
 
     return (story: string) => `
 <ngt-canvas
-  [shadows]="true"
-  [performance]="{
-    current: ${mergedOptions.performance.current},
-    min: ${mergedOptions.performance.min},
-    max: ${mergedOptions.performance.max},
-    debounce: ${mergedOptions.performance.debounce}
-  }"
-  [camera]="{
-    position: [${mergedOptions.camera.position}],
-    fov: ${mergedOptions.camera.fov}
-  }"
+    [shadows]="true"
+    [performance]="{
+        current: ${mergedOptions.performance.current},
+        min: ${mergedOptions.performance.min},
+        max: ${mergedOptions.performance.max},
+        debounce: ${mergedOptions.performance.debounce}
+    }"
+    [camera]="{
+        position: [${mergedOptions.camera.position}],
+        fov: ${mergedOptions.camera.fov}
+    }"
 >
     <ng-template>
         <ngt-color *ngIf="${mergedOptions.whiteBackground}" color="white" attach="background"></ngt-color>
@@ -77,7 +77,7 @@ export function setupCanvas(canvasOptions?: CanvasOptions) {
 
         <ng-container *ngIf="${mergedOptions.controls}">
             <ngt-soba-orbit-controls
-              [makeDefault]="${typeof mergedOptions.controls === 'object' && mergedOptions.controls.makeDefault}"
+                [makeDefault]="${typeof mergedOptions.controls === 'object' && mergedOptions.controls.makeDefault}"
             ></ngt-soba-orbit-controls>
         </ng-container>
 

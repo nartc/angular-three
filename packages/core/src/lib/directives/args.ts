@@ -34,7 +34,9 @@ export class NgtArgs {
 
     private view?: EmbeddedViewRef<any>;
 
-    @Input() set args(args: unknown[]) {
+    @Input() set args(args: unknown[] | null) {
+        if (!args) return;
+
         if (this.view) {
             this.view.destroy();
         }

@@ -25,7 +25,7 @@ export function proxify<T extends object>(
     const parentInstance = injectInstanceRef({ skipSelf: true, optional: true });
 
     return zone.runOutsideAngular(() => {
-        if (ngtWrapper) {
+        if (ngtWrapper && ngtWrapper['type'] === instance['type' as keyof typeof instance]) {
             return ngtWrapper;
         }
 
@@ -88,6 +88,8 @@ export function proxify<T extends object>(
 
                 // Angular sets this property
                 if (p === '__ngContext__') return Reflect.set(target, p, newValue, receiver);
+                // observables in the components
+                if ((p as string).endsWith('$')) return Reflect.set(target, p, newValue, receiver);
 
                 return zone.runOutsideAngular(() => {
                     // TODO: figure out what else we need to handle
