@@ -1,15 +1,15 @@
 // GENERATED - AngularThree v1.0.0
 import {
-    NgtEuler,
     NgtInstance,
-    NgtLayers,
-    NgtMatrix4,
-    NgtObservableInput,
-    NgtQuaternion,
-    NgtVector2,
-    NgtVector3,
     provideInstanceRef,
     proxify,
+    NgtVector2,
+    NgtVector3,
+    NgtEuler,
+    NgtQuaternion,
+    NgtMatrix4,
+    NgtLayers,
+    NgtObservableInput,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
@@ -32,6 +32,7 @@ export class NgtSprite extends THREE.Sprite {
     static ngAcceptInputType_geometry: NgtObservableInput<THREE.BufferGeometry>;
     static ngAcceptInputType_material: NgtObservableInput<THREE.SpriteMaterial>;
     static ngAcceptInputType_center: NgtObservableInput<NgtVector2>;
+    static ngAcceptInputType_raycast: NgtObservableInput<THREE.Object3D['raycast']> | undefined;
     static ngAcceptInputType_name: NgtObservableInput<string>;
     static ngAcceptInputType_position: NgtObservableInput<NgtVector3>;
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
@@ -77,5 +78,5 @@ export class NgtSprite extends THREE.Sprite {
 }
 
 function getInputs() {
-    return ['geometry', 'material', 'center'];
+    return ['geometry', 'material', 'center', 'raycast'];
 }

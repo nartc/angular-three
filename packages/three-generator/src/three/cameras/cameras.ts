@@ -2,8 +2,8 @@ import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
 import { generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/devkit';
 import { join } from 'path';
 import * as THREE from 'three';
-import { astFromPath, handleClassMembers, handleHeritage } from '../common/ast-utils';
 import { isClassDeclaration, PropertyDeclaration, SourceFile } from 'typescript/lib/tsserverlibrary';
+import { astFromPath, handleClassMembers, handleHeritage } from '../common/ast-utils';
 
 const baseCameraDtsPath = 'node_modules/@types/three/src/cameras/Camera.d.ts';
 export const cameras = [
@@ -32,14 +32,14 @@ export const cameras = [
 
 export default async function camerasGenerator(tree: Tree, ngtVersion: string) {
     const { libsDir } = getWorkspaceLayout(tree);
-    const cameraDir = join(libsDir, 'angular-three', 'cameras');
+    const cameraDir = join(libsDir, 'core', 'cameras');
 
     logger.log('Generating cameras...');
 
     if (!tree.exists(cameraDir)) {
         await librarySecondaryEntryPointGenerator(tree, {
             name: 'cameras',
-            library: 'angular-three',
+            library: 'core',
             skipModule: true,
         });
     }

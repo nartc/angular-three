@@ -52,14 +52,14 @@ export const objectHelpers = [
 
 export default async function helpersGenerator(tree: Tree, ngtVersion: string) {
     const { libsDir } = getWorkspaceLayout(tree);
-    const helperDir = join(libsDir, 'angular-three', 'helpers');
+    const helperDir = join(libsDir, 'core', 'helpers');
 
     logger.log('Generating helpers...');
 
     if (!tree.exists(helperDir)) {
         await librarySecondaryEntryPointGenerator(tree, {
             name: 'helpers',
-            library: 'angular-three',
+            library: 'core',
             skipModule: true,
         });
     }

@@ -1,18 +1,18 @@
 // GENERATED - AngularThree v1.0.0
+import * as THREE from 'three';
+import { Component } from '@angular/core';
 import {
     injectArgs,
-    NgtEuler,
     NgtInstance,
-    NgtLayers,
-    NgtMatrix4,
-    NgtObservableInput,
-    NgtQuaternion,
-    NgtVector3,
     provideInstanceRef,
     proxify,
+    NgtMatrix4,
+    NgtVector3,
+    NgtEuler,
+    NgtQuaternion,
+    NgtLayers,
+    NgtObservableInput,
 } from '@angular-three/core';
-import { Component } from '@angular/core';
-import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 @Component({
@@ -90,6 +90,7 @@ export class NgtOrthographicCamera extends THREE.OrthographicCamera {
             group: THREE.Group
         ) => void
     >;
+    static ngAcceptInputType_raycast: NgtObservableInput<THREE.Object3D['raycast']> | undefined;
 }
 
 function getInputs() {

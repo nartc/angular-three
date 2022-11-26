@@ -90,14 +90,14 @@ const materials = [
 
 export default async function materialsGenerator(tree: Tree, ngtVersion: string) {
     const { libsDir } = getWorkspaceLayout(tree);
-    const materialDir = join(libsDir, 'angular-three', 'materials');
+    const materialDir = join(libsDir, 'core', 'materials');
 
     logger.log('Generating materials...');
 
     if (!tree.exists(materialDir)) {
         await librarySecondaryEntryPointGenerator(tree, {
             name: 'materials',
-            library: 'angular-three',
+            library: 'core',
             skipModule: true,
         });
     }

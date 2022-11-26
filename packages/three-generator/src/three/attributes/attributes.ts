@@ -86,14 +86,14 @@ export const attributes = [
 
 export default async function attributesGenerator(tree: Tree, ngtVersion: string) {
     const { libsDir } = getWorkspaceLayout(tree);
-    const attributeDir = join(libsDir, 'angular-three', 'attributes');
+    const attributeDir = join(libsDir, 'core', 'attributes');
 
     logger.log('Generating attributes...');
 
     if (!tree.exists(attributeDir)) {
         await librarySecondaryEntryPointGenerator(tree, {
             name: 'attributes',
-            library: 'angular-three',
+            library: 'core',
             skipModule: true,
         });
     }

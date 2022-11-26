@@ -9,6 +9,7 @@ import {
     isFunctionTypeNode,
     isIndexSignatureDeclaration,
     isLiteralTypeNode,
+    isMethodDeclaration,
     isPropertyDeclaration,
     isPropertySignature,
     isTypeLiteralNode,
@@ -105,6 +106,12 @@ export function handleClassMember(
             // skip these properties
             if (exclude.includes(propertyName)) continue;
             properties.set(propertyName, member);
+        }
+
+        if (isMethodDeclaration(member)) {
+            if (member.name.getText(sourceFile) === 'raycast') {
+                properties.set(member.name.getText(sourceFile), member);
+            }
         }
     }
 }
@@ -333,6 +340,15 @@ export function propertySignatureToType(sourceFile: SourceFile, propertySignatur
                 .filter(Boolean)
                 .join(' | '),
             isOptional,
+        };
+    }
+
+    if (propertyName === 'raycast') {
+        // special handle for raycast for now
+        return {
+            propertyName,
+            type: 'THREE.Object3D["raycast"]',
+            isOptional: true,
         };
     }
 

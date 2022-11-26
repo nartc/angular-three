@@ -18,14 +18,14 @@ export const textures = [
 
 export default async function texturesGenerator(tree: Tree, ngtVersion: string) {
     const { libsDir } = getWorkspaceLayout(tree);
-    const textureDir = join(libsDir, 'angular-three', 'textures');
+    const textureDir = join(libsDir, 'core', 'textures');
 
     logger.log('Generating textures...');
 
     if (!tree.exists(textureDir)) {
         await librarySecondaryEntryPointGenerator(tree, {
             name: 'textures',
-            library: 'angular-three',
+            library: 'core',
             skipModule: true,
         });
     }

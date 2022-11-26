@@ -2,8 +2,8 @@ import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
 import { generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/devkit';
 import { join } from 'path';
 import * as THREE from 'three';
-import { astFromPath, handleClassMembers, handleHeritage } from '../common/ast-utils';
 import { isClassDeclaration, PropertyDeclaration, SourceFile } from 'typescript/lib/tsserverlibrary';
+import { astFromPath, handleClassMembers, handleHeritage } from '../common/ast-utils';
 
 const baseLightDtsPath = 'node_modules/@types/three/src/lights/Light.d.ts';
 export const lights = [
@@ -47,14 +47,14 @@ export const lights = [
 
 export default async function lightsGenerator(tree: Tree, ngtVersion: string) {
     const { libsDir } = getWorkspaceLayout(tree);
-    const lightDir = join(libsDir, 'angular-three', 'lights');
+    const lightDir = join(libsDir, 'core', 'lights');
 
     logger.log('Generating lights...');
 
     if (!tree.exists(lightDir)) {
         await librarySecondaryEntryPointGenerator(tree, {
             name: 'lights',
-            library: 'angular-three',
+            library: 'core',
             skipModule: true,
         });
     }

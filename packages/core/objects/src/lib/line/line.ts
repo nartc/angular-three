@@ -1,14 +1,14 @@
 // GENERATED - AngularThree v1.0.0
 import {
-    NgtEuler,
     NgtInstance,
-    NgtLayers,
-    NgtMatrix4,
-    NgtObservableInput,
-    NgtQuaternion,
-    NgtVector3,
     provideInstanceRef,
     proxify,
+    NgtVector3,
+    NgtEuler,
+    NgtQuaternion,
+    NgtMatrix4,
+    NgtLayers,
+    NgtObservableInput,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
@@ -32,6 +32,7 @@ export class NgtLine extends THREE.Line {
     static ngAcceptInputType_material: NgtObservableInput<THREE.Material | THREE.Material[]>;
     static ngAcceptInputType_morphTargetInfluences: NgtObservableInput<number[]> | undefined;
     static ngAcceptInputType_morphTargetDictionary: NgtObservableInput<{ [key: string]: number }> | undefined;
+    static ngAcceptInputType_raycast: NgtObservableInput<THREE.Object3D['raycast']> | undefined;
     static ngAcceptInputType_name: NgtObservableInput<string>;
     static ngAcceptInputType_position: NgtObservableInput<NgtVector3>;
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
@@ -77,5 +78,5 @@ export class NgtLine extends THREE.Line {
 }
 
 function getInputs() {
-    return ['geometry', 'material', 'morphTargetInfluences', 'morphTargetDictionary'];
+    return ['geometry', 'material', 'morphTargetInfluences', 'morphTargetDictionary', 'raycast'];
 }

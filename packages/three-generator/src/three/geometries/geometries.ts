@@ -31,14 +31,14 @@ export const geometries = [
 
 export default async function geometriesGenerator(tree: Tree, ngtVersion: string) {
     const { libsDir } = getWorkspaceLayout(tree);
-    const geometryDir = join(libsDir, 'angular-three', 'geometries');
+    const geometryDir = join(libsDir, 'core', 'geometries');
 
     logger.log('Generating geometries...');
 
     if (!tree.exists(geometryDir)) {
         await librarySecondaryEntryPointGenerator(tree, {
             name: 'geometries',
-            library: 'angular-three',
+            library: 'core',
             skipModule: true,
         });
     }

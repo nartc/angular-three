@@ -6,7 +6,7 @@ import {
     , <%= ngtType %><% } %><% if (hasInput || hasObject3D) { %>
     , NgtObservableInput<% } %><% if (args) { %>
     , injectArgs<% } %>
-} from 'angular-three';
+} from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS<% if (hasObject3D) { %>, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS<% } %> } from '../common';

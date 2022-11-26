@@ -1,15 +1,15 @@
 // GENERATED - AngularThree v1.0.0
 import {
-    injectArgs,
-    NgtEuler,
     NgtInstance,
-    NgtLayers,
-    NgtMatrix4,
-    NgtObservableInput,
-    NgtQuaternion,
-    NgtVector3,
     provideInstanceRef,
     proxify,
+    NgtVector3,
+    NgtEuler,
+    NgtQuaternion,
+    NgtMatrix4,
+    NgtLayers,
+    NgtObservableInput,
+    injectArgs,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
@@ -38,6 +38,7 @@ export class NgtInstancedMesh extends THREE.InstancedMesh {
     static ngAcceptInputType_material: NgtObservableInput<THREE.Material | THREE.Material[]>;
     static ngAcceptInputType_morphTargetInfluences: NgtObservableInput<number[]> | undefined;
     static ngAcceptInputType_morphTargetDictionary: NgtObservableInput<{ [key: string]: number }> | undefined;
+    static ngAcceptInputType_raycast: NgtObservableInput<THREE.Object3D['raycast']> | undefined;
     static ngAcceptInputType_name: NgtObservableInput<string>;
     static ngAcceptInputType_position: NgtObservableInput<NgtVector3>;
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
@@ -91,5 +92,6 @@ function getInputs() {
         'material',
         'morphTargetInfluences',
         'morphTargetDictionary',
+        'raycast',
     ];
 }

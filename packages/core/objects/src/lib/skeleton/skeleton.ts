@@ -1,11 +1,11 @@
 // GENERATED - AngularThree v1.0.0
 import {
-    injectArgs,
     NgtInstance,
-    NgtMatrix4,
-    NgtObservableInput,
     provideInstanceRef,
     proxify,
+    NgtMatrix4,
+    NgtObservableInput,
+    injectArgs,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';

@@ -1,14 +1,14 @@
 // GENERATED - AngularThree v1.0.0
 import {
-    NgtEuler,
     NgtInstance,
-    NgtLayers,
-    NgtMatrix4,
-    NgtObservableInput,
-    NgtQuaternion,
-    NgtVector3,
     provideInstanceRef,
     proxify,
+    NgtVector3,
+    NgtEuler,
+    NgtQuaternion,
+    NgtMatrix4,
+    NgtLayers,
+    NgtObservableInput,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
@@ -30,6 +30,7 @@ export class NgtLOD extends THREE.LOD {
 
     static ngAcceptInputType_levels: NgtObservableInput<{ distance: number; object: THREE.Object3D }[]>;
     static ngAcceptInputType_autoUpdate: NgtObservableInput<boolean>;
+    static ngAcceptInputType_raycast: NgtObservableInput<THREE.Object3D['raycast']> | undefined;
     static ngAcceptInputType_name: NgtObservableInput<string>;
     static ngAcceptInputType_position: NgtObservableInput<NgtVector3>;
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
@@ -75,5 +76,5 @@ export class NgtLOD extends THREE.LOD {
 }
 
 function getInputs() {
-    return ['levels', 'autoUpdate'];
+    return ['levels', 'autoUpdate', 'raycast'];
 }

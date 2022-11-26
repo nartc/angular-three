@@ -1,9 +1,9 @@
-import * as THREE from 'three';
+import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
 import { generateFiles, getWorkspaceLayout, logger, names, Tree } from '@nrwl/devkit';
 import { join } from 'path';
-import { librarySecondaryEntryPointGenerator } from '@nrwl/angular/generators';
-import { astFromPath, handleClassMembers, handleHeritage } from '../common/ast-utils';
+import * as THREE from 'three';
 import { isClassDeclaration, PropertyDeclaration, SourceFile } from 'typescript/lib/tsserverlibrary';
+import { astFromPath, handleClassMembers, handleHeritage } from '../common/ast-utils';
 
 const objects = [
     {
@@ -80,14 +80,14 @@ const objects = [
 
 export default async function objectsGenerator(tree: Tree, ngtVersion: string) {
     const { libsDir } = getWorkspaceLayout(tree);
-    const objectDir = join(libsDir, 'angular-three', 'objects');
+    const objectDir = join(libsDir, 'core', 'objects');
 
     logger.log('Generating objects...');
 
     if (!tree.exists(objectDir)) {
         await librarySecondaryEntryPointGenerator(tree, {
             name: 'objects',
-            library: 'angular-three',
+            library: 'core',
             skipModule: true,
         });
     }
