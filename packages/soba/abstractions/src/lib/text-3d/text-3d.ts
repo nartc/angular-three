@@ -7,7 +7,6 @@ import {
     provideInstanceRef,
 } from '@angular-three/core';
 import { NgtMesh } from '@angular-three/core/objects';
-import { AsyncPipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { map, Observable, of, switchMap } from 'rxjs';
 import { FontLoader, TextGeometry } from 'three-stdlib';
@@ -44,7 +43,7 @@ interface FontData {
     `,
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(SobaText3D)],
-    imports: [NgtMesh, NgtWrapper, SobaTextGeometry, NgtArgs, AsyncPipe],
+    imports: [NgtMesh, NgtWrapper, SobaTextGeometry, NgtArgs],
 })
 export class SobaText3D extends NgtMesh {
     private readonly instance = injectInstance<THREE.Mesh>({ host: true });

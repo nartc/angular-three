@@ -88,8 +88,8 @@ export class SobaLine extends Line2 implements OnInit {
     }
 
     protected readonly instance = injectInstance({ host: true });
-    private readonly store = inject(NgtStore);
     private readonly zone = inject(NgZone);
+    private readonly store = inject(NgtStore);
 
     readonly lineGeometry$: Observable<LineGeometry> = this.instance.select(
         this.instance.select((s) => s['points']).pipe(filter((points) => !!points)),

@@ -1,4 +1,4 @@
-import { SobaCubicBezierLine, SobaLine } from '@angular-three/soba/abstractions';
+import { SobaCubicBezierLine, SobaLine, SobaQuadraticBezierLine } from '@angular-three/soba/abstractions';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import * as THREE from 'three';
 import { GeometryUtils } from 'three-stdlib/utils/GeometryUtils';
@@ -8,7 +8,7 @@ export default {
     title: 'Abstractions/Line',
     decorators: [
         componentWrapperDecorator(setupCanvas({ controls: false, camera: { position: [0, 0, 17] } })),
-        moduleMetadata({ imports: [setupCanvasImports, SobaLine, SobaCubicBezierLine] }),
+        moduleMetadata({ imports: [setupCanvasImports, SobaLine, SobaCubicBezierLine, SobaQuadraticBezierLine] }),
     ],
     argTypes: {
         color: { control: { type: 'color' } },
@@ -64,31 +64,31 @@ CubicBezierLine.args = {
     lineWidth: 2,
     dashed: true,
 };
-//
-// export const QuadraticBezierLine: Story = (args) => ({
-//     props: args,
-//     template: `
-// <ngt-soba-quadratic-bezier-line
-//   [start]="start"
-//   [end]="end"
-//   [segments]="segments"
-//   [lineWidth]="lineWidth"
-//   [dashed]="dashed"
-//   [color]="color"
-// ></ngt-soba-quadratic-bezier-line>
-// <ngt-soba-orbit-controls zoomSpeed="0.5"></ngt-soba-orbit-controls>
-//   `,
-// });
-//
-// QuadraticBezierLine.args = {
-//     start: [0, 0, 0],
-//     end: [4, 7, 5],
-//     segments: 10,
-//     color: 'red',
-//     dashed: true,
-//     lineWidth: 2,
-// };
-//
+
+export const QuadraticBezierLine: Story = (args) => ({
+    props: args,
+    template: `
+<ngt-soba-quadratic-bezier-line
+    [start]="start"
+    [end]="end"
+    [segments]="segments"
+    [linewidth]="lineWidth"
+    [dashed]="dashed"
+    [color]="color"
+></ngt-soba-quadratic-bezier-line>
+<ngt-soba-orbit-controls [zoomSpeed]="0.5"></ngt-soba-orbit-controls>
+  `,
+});
+
+QuadraticBezierLine.args = {
+    start: [0, 0, 0],
+    end: [4, 7, 5],
+    segments: 10,
+    color: 'red',
+    dashed: true,
+    lineWidth: 2,
+};
+
 const colors = new Array(points.length).fill(0).map(() => [Math.random(), Math.random(), Math.random()]) as [
     number,
     number,

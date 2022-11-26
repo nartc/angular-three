@@ -43,7 +43,7 @@ export class SobaText extends Text {
                 (instance as NgtAnyRecord)['anchorX'] = 'center';
                 (instance as NgtAnyRecord)['anchorY'] = 'middle';
                 (instance as NgtAnyRecord)['text'] = '';
-                this.preloadFont(
+                this.preloadFont_(
                     this.instance.select(
                         this.instance.select((s) => s['font']),
                         this.instance.select((s) => s['characters']),
@@ -61,7 +61,7 @@ export class SobaText extends Text {
         });
     }
 
-    private readonly preloadFont = this.instance.effect(
+    private readonly preloadFont_ = this.instance.effect(
         tap(() => {
             const { font, characters } = this.instance.read();
             if (font && characters) {
