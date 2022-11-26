@@ -44,26 +44,33 @@ export function proxify<T extends object>(
         const newValueSubscriptionMap = new Map<string, () => void>();
 
         function setProp(obj: T, prop: string, newValue: any): (() => void) | undefined {
-            const capitalizedProp = `set${capitalize(prop)}` as keyof T;
+            const setCapitalizedProp = `set${capitalize(prop)}` as keyof T;
+            // const onCapitalizedProp = `on${capitalize(prop)}` as keyof T;
 
             if (isObservable(newValue)) {
                 const sub = newValue.subscribe((val) => {
-                    if (obj[capitalizedProp] && typeof obj[capitalizedProp] === 'function') {
-                        (obj[capitalizedProp] as NgtAnyFunction)(val);
+                    if (obj[setCapitalizedProp] && typeof obj[setCapitalizedProp] === 'function') {
+                        (obj[setCapitalizedProp] as NgtAnyFunction)(val);
                     } else {
                         applyProps(obj, { [prop]: val });
                     }
 
+                    // if (obj[onCapitalizedProp] && typeof obj[onCapitalizedProp] === 'function') {
+                    //     (obj[onCapitalizedProp] as NgtAnyFunction)(val, ngtInstance, store.read);
+                    // }
                     ngtInstance.write({ [prop]: val });
                 });
                 return () => sub.unsubscribe();
             }
 
-            if (obj[capitalizedProp] && typeof obj[capitalizedProp] === 'function') {
-                (obj[capitalizedProp] as NgtAnyFunction)(newValue);
+            if (obj[setCapitalizedProp] && typeof obj[setCapitalizedProp] === 'function') {
+                (obj[setCapitalizedProp] as NgtAnyFunction)(newValue);
             } else {
                 applyProps(obj, { [prop]: newValue });
             }
+            // if (obj[onCapitalizedProp] && typeof obj[onCapitalizedProp] === 'function') {
+            //     (obj[onCapitalizedProp] as NgtAnyFunction)(newValue, ngtInstance, store.read);
+            // }
             ngtInstance.write({ [prop]: newValue });
             return;
         }
@@ -115,7 +122,8 @@ export function proxify<T extends object>(
                 // observables in the components
                 if ((p as string).endsWith('$')) return Reflect.set(target, p, newValue, receiver);
                 // class members that need to bypass applyProps
-                if ((p as string).endsWith('__')) return Reflect.set(target, p, newValue, receiver);
+                if ((p as string).endsWith('__') && (p as string).startsWith('__'))
+                    return Reflect.set(target, p, newValue, receiver);
 
                 return zone.runOutsideAngular(() => {
                     // TODO: figure out what else we need to handle

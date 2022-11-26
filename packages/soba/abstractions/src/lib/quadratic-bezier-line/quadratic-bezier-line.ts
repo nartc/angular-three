@@ -34,12 +34,12 @@ export class SobaQuadraticBezierLine extends SobaLine {
         this.instance.write({ segments });
     }
 
-    private readonly curve_ = new THREE.QuadraticBezierCurve3(
+    private readonly __curve__ = new THREE.QuadraticBezierCurve3(
         new THREE.Vector3(),
         new THREE.Vector3(),
         new THREE.Vector3()
     );
-    private readonly v_ = new THREE.Vector3();
+    private readonly __v__ = new THREE.Vector3();
 
     readonly quadraticBezierPoints$: Observable<THREE.Vector3[]> = this.instance.select(
         this.instance.select((s) => s['start']),
@@ -68,20 +68,20 @@ export class SobaQuadraticBezierLine extends SobaLine {
     }
 
     private getPoints_(start: NgtVector3, end: NgtVector3, mid?: NgtVector3, segments = 20) {
-        if (start instanceof THREE.Vector3) this.curve_.v0.copy(start);
-        else this.curve_.v0.set(...(start as [number, number, number]));
-        if (end instanceof THREE.Vector3) this.curve_.v2.copy(end);
-        else this.curve_.v2.set(...(end as [number, number, number]));
+        if (start instanceof THREE.Vector3) this.__curve__.v0.copy(start);
+        else this.__curve__.v0.set(...(start as [number, number, number]));
+        if (end instanceof THREE.Vector3) this.__curve__.v2.copy(end);
+        else this.__curve__.v2.set(...(end as [number, number, number]));
         if (mid instanceof THREE.Vector3) {
-            this.curve_.v1.copy(mid);
+            this.__curve__.v1.copy(mid);
         } else {
-            this.curve_.v1.copy(
-                this.curve_.v0
+            this.__curve__.v1.copy(
+                this.__curve__.v0
                     .clone()
-                    .add(this.curve_.v2.clone().sub(this.curve_.v0))
-                    .add(this.v_.set(0, this.curve_.v0.y - this.curve_.v2.y, 0))
+                    .add(this.__curve__.v2.clone().sub(this.__curve__.v0))
+                    .add(this.__v__.set(0, this.__curve__.v0.y - this.__curve__.v2.y, 0))
             );
         }
-        return this.curve_.getPoints(segments);
+        return this.__curve__.getPoints(segments);
     }
 }

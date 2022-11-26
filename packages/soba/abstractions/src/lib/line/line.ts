@@ -152,7 +152,7 @@ export class SobaLine extends Line2 implements OnInit {
         { debounce: true }
     );
 
-    private readonly computeLineDistances_ = this.instance.effect<LineGeometry>(
+    private readonly __computeLineDistances__ = this.instance.effect<LineGeometry>(
         pipe(
             tap((lineGeometry) => {
                 if (this.geometry.uuid !== lineGeometry.uuid) {
@@ -163,11 +163,11 @@ export class SobaLine extends Line2 implements OnInit {
         )
     );
 
-    private readonly disposeGeometry_ = this.instance.effect<LineGeometry>(
+    private readonly __disposeGeometry__ = this.instance.effect<LineGeometry>(
         tapEffect((lineGeometry) => () => lineGeometry.dispose())
     );
 
-    private readonly setDashed_ = this.instance.effect(
+    private readonly __setDashed__ = this.instance.effect(
         tap(() => {
             const dashed = this.instance.read((s) => s['dashed']);
             if (dashed) {
@@ -186,7 +186,7 @@ export class SobaLine extends Line2 implements OnInit {
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            this.computeLineDistances_(
+            this.__computeLineDistances__(
                 this.instance.select(
                     this.lineGeometry$,
                     this.instance.instanceRef.pipe(filter((instance) => !!instance)),
@@ -195,8 +195,8 @@ export class SobaLine extends Line2 implements OnInit {
                     { debounce: true }
                 )
             );
-            this.disposeGeometry_(this.lineGeometry$);
-            this.setDashed_(this.instance.select((s) => s['dashed']));
+            this.__disposeGeometry__(this.lineGeometry$);
+            this.__setDashed__(this.instance.select((s) => s['dashed']));
         });
     }
 

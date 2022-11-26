@@ -38,7 +38,11 @@
                     "packages/soba/controls/**/*.ts",
                     "packages/soba/controls/**/*.html",
                     "packages/soba/abstractions/**/*.ts",
-                    "packages/soba/abstractions/**/*.html"
+                    "packages/soba/abstractions/**/*.html",
+                    "packages/soba/cameras/**/*.ts",
+                    "packages/soba/cameras/**/*.html",
+                    "packages/soba/misc/**/*.ts",
+                    "packages/soba/misc/**/*.html"
                 ]
             }
         },
