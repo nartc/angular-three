@@ -38,7 +38,7 @@ interface FontData {
     standalone: true,
     template: `
         <ngt-mesh *wrapper="this">
-            <ngt-soba-text-geometry *args="geometryArgs$ | async"></ngt-soba-text-geometry>
+            <ngt-soba-text-geometry *args="geometryArgs$"></ngt-soba-text-geometry>
             <ng-content></ng-content>
         </ngt-mesh>
     `,

@@ -4,7 +4,7 @@ import { injectWrapper } from '../directives/wrapper';
 import { injectInstance, injectInstanceRef, NGT_PROXY_INSTANCE, NgtInstance } from '../instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
-import { NgtAnyFunction, NgtAttachFunction, NgtStateFactory } from '../types';
+import { NgtAnyFunction, NgtAnyRecord, NgtAttachFunction, NgtObservableInput, NgtStateFactory } from '../types';
 import { applyProps } from './apply-props';
 import { capitalize } from './capitalize';
 import { prepare } from './instance';
@@ -40,6 +40,7 @@ export function proxify<T extends object>(
         );
 
         let storeReadySubscription: Subscription;
+        let primitivePropsSubscription: Subscription;
         const newValueSubscriptionMap = new Map<string, () => void>();
 
         function setProp(obj: T, prop: string, newValue: any): (() => void) | undefined {
@@ -88,8 +89,33 @@ export function proxify<T extends object>(
 
                 // Angular sets this property
                 if (p === '__ngContext__') return Reflect.set(target, p, newValue, receiver);
+
+                // these are injected. the component might use this
+                if (newValue === zone || newValue === ngtInstance || newValue === store) {
+                    return Reflect.set(target, p, newValue, receiver);
+                }
+
+                // let's not assign props on primitive
+                if ((p as string) === 'props' && proxifyOptions.primitive) {
+                    if (primitivePropsSubscription) {
+                        primitivePropsSubscription.unsubscribe();
+                    }
+                    const props = newValue as NgtObservableInput<NgtAnyRecord>;
+                    if (isObservable(props)) {
+                        primitivePropsSubscription = props.subscribe((properties) => {
+                            applyProps(instance, properties as NgtAnyRecord);
+                        });
+                    } else {
+                        applyProps(instance, props);
+                    }
+
+                    return true;
+                }
+
                 // observables in the components
                 if ((p as string).endsWith('$')) return Reflect.set(target, p, newValue, receiver);
+                // class members that need to bypass applyProps
+                if ((p as string).endsWith('__')) return Reflect.set(target, p, newValue, receiver);
 
                 return zone.runOutsideAngular(() => {
                     // TODO: figure out what else we need to handle
@@ -114,6 +140,7 @@ export function proxify<T extends object>(
         ngtInstance.effect<void>(
             tapEffect(() => () => {
                 if (storeReadySubscription) storeReadySubscription.unsubscribe();
+                if (primitivePropsSubscription) primitivePropsSubscription.unsubscribe();
                 newValueSubscriptionMap.forEach((cleanUp) => cleanUp());
             })
         )();

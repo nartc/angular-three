@@ -369,7 +369,7 @@ export class NgtInstance<
         this.zone.runOutsideAngular(() => {
             this.destroy();
         });
-        super.ngOnDestroy();
+      super.ngOnDestroy();
     }
 
     private destroy() {

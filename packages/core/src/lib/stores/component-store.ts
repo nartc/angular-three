@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import {
     combineLatest,
@@ -89,10 +89,10 @@ export function tapEffect<TValue>(effectFn: EffectFn<TValue>): MonoTypeOperatorF
 }
 
 @Injectable()
-export class NgtComponentStore<
-    TState extends object = any,
-    TInternalState extends object = TState & NgtAnyRecord
-> extends ComponentStore<TInternalState> {
+export class NgtComponentStore<TState extends object = any, TInternalState extends object = TState & NgtAnyRecord>
+    extends ComponentStore<TInternalState>
+    implements OnDestroy
+{
     constructor() {
         super({} as TInternalState);
         this.initialize();
@@ -177,5 +177,15 @@ export class NgtComponentStore<
      */
     readKey<TKey extends keyof TInternalState & string>(key: TKey): TInternalState[TKey] {
         return this.read((s) => s[key]);
+    }
+
+    // TODO: find out why some components trigger ngOnDestroy w/ stateSubject$ being undefined
+    override ngOnDestroy() {
+        if (this['stateSubject$']) {
+            this['stateSubject$'].complete();
+        }
+        if (this['destroySubject$']) {
+            this['destroySubject$'].next();
+        }
     }
 }

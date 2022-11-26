@@ -7,8 +7,7 @@ import {
     provideInstanceRef,
     proxify,
 } from '@angular-three/core';
-import { Component, Input } from '@angular/core';
-import { Subscription, tap } from 'rxjs';
+import { Component } from '@angular/core';
 import { NGT_INSTANCE_INPUTS } from '../common';
 
 @Component({
@@ -17,26 +16,14 @@ import { NGT_INSTANCE_INPUTS } from '../common';
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS }],
     providers: [provideInstanceRef(NgtPrimitive)],
+    inputs: ['props'],
 })
 export class NgtPrimitive extends NgtComponentStore {
-    private propsSubscription?: Subscription;
-    @Input() set props(props: NgtObservableInput<NgtAnyRecord>) {
-        if (this.propsSubscription) {
-            this.propsSubscription.unsubscribe();
-        }
-
-        this.propsSubscription = this.effect<NgtAnyRecord>(
-            tap((properties) => {
-                for (const [key, value] of Object.entries(properties)) {
-                    this[key as keyof typeof this] = value;
-                }
-            })
-        )(props);
-    }
-
     constructor() {
         super();
         const [object] = injectArgs();
         return proxify(object, { primitive: true });
     }
+
+    static ngAcceptInputType_props: NgtObservableInput<NgtAnyRecord>;
 }
