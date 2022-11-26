@@ -87,12 +87,12 @@ export class SobaLine extends Line2 implements OnInit {
         this.instance.write({ worldUnits });
     }
 
-    private readonly instance = injectInstance({ host: true });
+    protected readonly instance = injectInstance({ host: true });
     private readonly store = inject(NgtStore);
     private readonly zone = inject(NgZone);
 
     readonly lineGeometry$: Observable<LineGeometry> = this.instance.select(
-        this.instance.select((s) => s['points']),
+        this.instance.select((s) => s['points']).pipe(filter((points) => !!points)),
         this.instance.select((s) => s['vertexColors']),
         (points, vertexColors) => {
             const geometry = new LineGeometry();

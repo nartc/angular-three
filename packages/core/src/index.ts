@@ -34,6 +34,8 @@ export * from './lib/pipes/side';
 export * from './lib/utils/proxy';
 export * from './lib/utils/loop';
 export * from './lib/utils/check-update';
+export * from './lib/utils/is';
+export * from './lib/utils/make';
 /**
  * resize
  */

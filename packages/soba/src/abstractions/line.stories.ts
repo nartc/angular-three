@@ -1,4 +1,4 @@
-import { SobaLine } from '@angular-three/soba/abstractions';
+import { SobaCubicBezierLine, SobaLine } from '@angular-three/soba/abstractions';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import * as THREE from 'three';
 import { GeometryUtils } from 'three-stdlib/utils/GeometryUtils';
@@ -8,7 +8,7 @@ export default {
     title: 'Abstractions/Line',
     decorators: [
         componentWrapperDecorator(setupCanvas({ controls: false, camera: { position: [0, 0, 17] } })),
-        moduleMetadata({ imports: [setupCanvasImports, SobaLine] }),
+        moduleMetadata({ imports: [setupCanvasImports, SobaLine, SobaCubicBezierLine] }),
     ],
     argTypes: {
         color: { control: { type: 'color' } },
@@ -37,33 +37,33 @@ Default.args = {
     lineWidth: 3,
 };
 
-// export const CubicBezierLine: Story = (args) => ({
-//     props: args,
-//     template: `
-// <ngt-soba-cubic-bezier-line
-//   [start]="start"
-//   [end]="end"
-//   [midA]="midA"
-//   [midB]="midB"
-//   [segments]="segments"
-//   [color]="color"
-//   [lineWidth]="lineWidth"
-//   [dashed]="dashed"
-// ></ngt-soba-cubic-bezier-line>
-// <ngt-soba-orbit-controls zoomSpeed="0.5"></ngt-soba-orbit-controls>
-//   `,
-// });
-//
-// CubicBezierLine.args = {
-//     start: [0, 0, 0],
-//     end: [10, 0, 10],
-//     midA: [5, 4, 0],
-//     midB: [0, 0, 5],
-//     segments: 10,
-//     color: 'red',
-//     lineWidth: 2,
-//     dashed: true,
-// };
+export const CubicBezierLine: Story = (args) => ({
+    props: args,
+    template: `
+<ngt-soba-cubic-bezier-line
+    [start]="start"
+    [end]="end"
+    [midA]="midA"
+    [midB]="midB"
+    [segments]="segments"
+    [color]="color"
+    [linewidth]="lineWidth"
+    [dashed]="dashed"
+></ngt-soba-cubic-bezier-line>
+<ngt-soba-orbit-controls [zoomSpeed]="0.5"></ngt-soba-orbit-controls>
+  `,
+});
+
+CubicBezierLine.args = {
+    start: [0, 0, 0],
+    end: [10, 0, 10],
+    midA: [5, 4, 0],
+    midB: [0, 0, 5],
+    segments: 10,
+    color: 'red',
+    lineWidth: 2,
+    dashed: true,
+};
 //
 // export const QuadraticBezierLine: Story = (args) => ({
 //     props: args,
