@@ -1,49 +1,67 @@
-import { make, NgtInstance, NgtObservableInput, NgtVector3, NgtWrapper, provideInstanceRef } from '@angular-three/core';
+import {
+    EventEmitterOf,
+    make,
+    NgtCompound,
+    NgtInstance,
+    NgtObjectCompound,
+    NgtObservableInput,
+    NgtVector3,
+    provideInstanceRef,
+} from '@angular-three/core';
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as THREE from 'three';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
-import { SobaLine } from '../line/line';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
+import { SobaLine, SOBA_LINE_INPUTS } from '../line/line';
 
 @Component({
     selector: 'ngt-soba-cubic-bezier-line[start][end][midA][midB]',
     standalone: true,
     template: `
-        <ngt-soba-line *wrapper="this" [points]="cubicBezierPoints$">
+        <ngt-soba-line [objectCompound]="this" [points]="cubicBezierPoints$">
             <ng-content></ng-content>
         </ngt-soba-line>
     `,
-    imports: [SobaLine, NgtWrapper],
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
-    providers: [provideInstanceRef(SobaCubicBezierLine)],
+    imports: [SobaLine, NgtObjectCompound],
+    providers: [provideInstanceRef(SobaCubicBezierLine, { compound: true })],
+    inputs: [...NGT_INSTANCE_INPUTS, ...SOBA_LINE_INPUTS, ...NGT_OBJECT3D_INPUTS],
+    outputs: NGT_INSTANCE_OUTPUTS,
 })
-export class SobaCubicBezierLine extends SobaLine {
+export class SobaCubicBezierLine extends NgtCompound<SobaLine> {
     @Input() set start(start: NgtObservableInput<NgtVector3>) {
-        this.instance.write({ start });
+        this.write({ start });
     }
 
     @Input() set end(end: NgtObservableInput<NgtVector3>) {
-        this.instance.write({ end });
+        this.write({ end });
     }
 
     @Input() set midA(midA: NgtObservableInput<NgtVector3>) {
-        this.instance.write({ midA });
+        this.write({ midA });
     }
 
     @Input() set midB(midB: NgtObservableInput<NgtVector3>) {
-        this.instance.write({ midB });
+        this.write({ midB });
     }
 
     @Input() set segments(segments: NgtObservableInput<number>) {
-        this.instance.write({ segments });
+        this.write({ segments });
     }
 
-    readonly cubicBezierPoints$: Observable<ReturnType<THREE.CubicBezierCurve3['getPoints']>> = this.instance.select(
-        this.instance.select((s) => s['start']),
-        this.instance.select((s) => s['end']),
-        this.instance.select((s) => s['midA']),
-        this.instance.select((s) => s['midB']),
-        this.instance.select((s) => s['segments']),
+    override get compoundInputs(): (keyof SobaLine | string)[] {
+        return [...super.compoundInputs, ...SOBA_LINE_INPUTS];
+    }
+
+    override get compoundOutputs(): EventEmitterOf<NgtInstance>[] {
+        return [...super.compoundOutputs, ...NGT_INSTANCE_OUTPUTS] as EventEmitterOf<NgtInstance>[];
+    }
+
+    readonly cubicBezierPoints$: Observable<ReturnType<THREE.CubicBezierCurve3['getPoints']>> = this.select(
+        this.select((s) => s['start']),
+        this.select((s) => s['end']),
+        this.select((s) => s['midA']),
+        this.select((s) => s['midB']),
+        this.select((s) => s['segments']),
         (start, end, midA, midB, segments) => {
             const startV = start instanceof THREE.Vector3 ? start : make(THREE.Vector3, start);
             const endV = end instanceof THREE.Vector3 ? end : make(THREE.Vector3, end);
@@ -55,8 +73,8 @@ export class SobaCubicBezierLine extends SobaLine {
         { debounce: true }
     );
 
-    constructor() {
-        super();
-        this.instance.write({ segments: 20 });
+    override initialize() {
+        super.initialize();
+        this.write({ segments: 20 });
     }
 }

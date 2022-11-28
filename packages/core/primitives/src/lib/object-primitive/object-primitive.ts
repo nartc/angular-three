@@ -51,6 +51,7 @@ export class NgtObjectPrimitive extends THREE.Object3D {
     static ngAcceptInputType_userData: NgtObservableInput<{ [key: string]: any }>;
     static ngAcceptInputType_customDepthMaterial: NgtObservableInput<THREE.Material>;
     static ngAcceptInputType_customDistanceMaterial: NgtObservableInput<THREE.Material>;
+    static ngAcceptInputType_raycast: NgtObservableInput<THREE.Object3D['raycast']> | undefined;
     static ngAcceptInputType_onBeforeRender: NgtObservableInput<
         (
             renderer: THREE.WebGLRenderer,

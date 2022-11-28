@@ -81,7 +81,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
             const scene = prepare(
                 new THREE.Scene(),
                 this.read,
-                this.rootStateFactory,
+                undefined,
                 this.parentStore?.get((s) => s.sceneRef)
             );
 
@@ -144,6 +144,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                 },
 
                 previousStateFactory: this.parentStore?.read.bind(this.parentStore),
+                rootStateFactory: this.rootStateFactory.bind(this),
                 internal: {
                     active: false,
                     priority: 0,
@@ -392,7 +393,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
                 camera = prepare(
                     camera,
                     this.read,
-                    this.rootStateFactory,
+                    undefined,
                     this.parentStore?.get((s) => s.cameraRef)
                 );
             }

@@ -87,7 +87,7 @@ export class SobaLine extends Line2 implements OnInit {
         this.instance.write({ worldUnits });
     }
 
-    protected readonly instance = injectInstance({ host: true });
+    private readonly instance = injectInstance({ host: true });
     private readonly zone = inject(NgZone);
     private readonly store = inject(NgtStore);
 
@@ -118,7 +118,6 @@ export class SobaLine extends Line2 implements OnInit {
                 );
                 geometry.setColors(cValues.flat());
             }
-
             return geometry;
         },
         { debounce: true }
@@ -247,3 +246,18 @@ export class SobaLine extends Line2 implements OnInit {
         ) => void
     >;
 }
+
+export const SOBA_LINE_INPUTS = [
+    'vertexColors',
+    'alphaToCoverage',
+    'color',
+    'dashed',
+    'dashScale',
+    'dashSize',
+    'dashOffset',
+    'gapSize',
+    'linewidth',
+    'resolution',
+    'wireframe',
+    'worldUnits',
+];

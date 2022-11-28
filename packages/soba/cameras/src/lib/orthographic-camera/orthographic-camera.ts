@@ -7,6 +7,7 @@ import {
     NgtStore,
     NgtWrapper,
     provideInstanceRef,
+    provideIsWrapper,
     tapEffect,
 } from '@angular-three/core';
 import { NgtOrthographicCamera } from '@angular-three/core/cameras';
@@ -39,7 +40,7 @@ import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
     `,
     imports: [NgtOrthographicCamera, NgtWrapper, NgtGroup, NgIf, NgTemplateOutlet],
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
-    providers: [provideInstanceRef(SobaOrthographicCamera), SobaFBO],
+    providers: [provideInstanceRef(SobaOrthographicCamera), provideIsWrapper(), SobaFBO],
 })
 export class SobaOrthographicCamera extends NgtOrthographicCamera implements OnInit {
     @Input() set makeDefault(makeDefault: NgtObservableInput<boolean>) {
@@ -67,7 +68,7 @@ export class SobaOrthographicCamera extends NgtOrthographicCamera implements OnI
     protected readonly instance = injectInstance({ host: true });
     private readonly store = inject(NgtStore);
     private readonly zone = inject(NgZone);
-    private readonly fbo = inject(SobaFBO);
+    private readonly __fbo__ = inject(SobaFBO);
 
     readonly left$ = this.instance.select(
         this.store.select((s) => s.size),
@@ -118,8 +119,9 @@ export class SobaOrthographicCamera extends NgtOrthographicCamera implements OnI
     private readonly __setFBO__ = this.instance.effect(
         tap(() => {
             const resolution = this.instance.read((s) => s['resolution']);
+            console.log(this.__fbo__);
             this.instance.write({
-                fboRef: this.fbo.use(() => ({ width: resolution })),
+                fboRef: this.__fbo__.use(() => ({ width: resolution })),
             });
         })
     );

@@ -124,7 +124,9 @@ export function handleClassMembers(
     exclude = []
 ) {
     const className = node.name.getText(sourceFile);
-    exclude.push(`is${className}`, 'type');
+    // skip isType, type as these should not change
+    // skip modelViewMatrix, and normalMatrix as these aren't writable
+    exclude.push(`is${className}`, 'type', 'modelViewMatrix', 'normalMatrix');
 
     if (className === 'Object3D') {
         handleClassMember(sourceFile, node.members, properties, true, [

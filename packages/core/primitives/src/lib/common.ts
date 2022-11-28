@@ -48,6 +48,7 @@ export const NGT_OBJECT3D_INPUTS = [
     'renderOrder',
     'animations',
     'userData',
+    'raycast',
     'customDepthMaterial',
     'customDistanceMaterial',
     'onBeforeRender',

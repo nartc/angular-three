@@ -9,6 +9,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    Provider,
 } from '@angular/core';
 import { filter, Subscription, tap } from 'rxjs';
 import { NgtRef } from './ref';
@@ -35,15 +36,63 @@ import { mutate } from './utils/mutate';
 export const NGT_PROXY_INSTANCE = Symbol.for('__ngt__proxy__instance__');
 
 export const NGT_INSTANCE_REF_FACTORY = new InjectionToken<NgtAnyFunction<NgtRef>>('NgtInstance[instanceRef] factory');
+export const NGT_COMPOUND_INSTANCE_REF_FACTORY = new InjectionToken<NgtAnyFunction<NgtRef>>(
+    'NgtCompound[instanceRef] factory'
+);
+
 export function provideInstanceRef<
     TInstanceType extends object = any,
     TCtor extends NgtAnyCtor<TInstanceType> = NgtAnyCtor<TInstanceType>
->(ctor: TCtor, factory?: (instance: InstanceType<TCtor>) => NgtRef) {
+>(ctor: TCtor): Provider;
+export function provideInstanceRef<
+    TInstanceType extends object = any,
+    TCtor extends NgtAnyCtor<TInstanceType> = NgtAnyCtor<TInstanceType>
+>(ctor: TCtor, factory: (instance: InstanceType<TCtor>) => NgtRef): Provider;
+export function provideInstanceRef<
+    TInstanceType extends object = any,
+    TCtor extends NgtAnyCtor<TInstanceType> = NgtAnyCtor<TInstanceType>
+>(ctor: TCtor, options: { factory?: (instance: InstanceType<TCtor>) => NgtRef; compound?: true }): Provider;
+export function provideInstanceRef<
+    TInstanceType extends object = any,
+    TCtor extends NgtAnyCtor<TInstanceType> = NgtAnyCtor<TInstanceType>
+>(
+    ctor: TCtor,
+    optionsOrFactory?:
+        | ((instance: InstanceType<TCtor>) => NgtRef)
+        | { factory?: (instance: InstanceType<TCtor>) => NgtRef; compound?: true }
+) {
+    let factory: ((instance: InstanceType<TCtor>) => NgtRef) | undefined = undefined;
+    let compound = false;
+
+    if (optionsOrFactory) {
+        if (typeof optionsOrFactory === 'object') {
+            factory = optionsOrFactory.factory;
+            compound = optionsOrFactory.compound ?? false;
+        } else {
+            factory = optionsOrFactory;
+        }
+    }
+
+    if (compound) {
+        return {
+            provide: NGT_COMPOUND_INSTANCE_REF_FACTORY,
+            useFactory: (instance: InstanceType<TCtor>) => {
+                if (factory) {
+                    return () => factory!(instance);
+                }
+
+                return () =>
+                    (instance as NgtAnyRecord)['instanceRef'] || (instance as NgtAnyRecord)['instance']['instanceRef'];
+            },
+            deps: [ctor],
+        };
+    }
+
     return {
         provide: NGT_INSTANCE_REF_FACTORY,
         useFactory: (instance: InstanceType<TCtor>) => {
             if (factory) {
-                return () => factory(instance);
+                return () => factory!(instance);
             }
 
             return () =>
@@ -52,11 +101,19 @@ export function provideInstanceRef<
         deps: [ctor],
     };
 }
+
 export function injectInstanceRef(): NgtAnyFunction<NgtRef>;
 export function injectInstanceRef(options: InjectOptions & { optional?: false }): NgtAnyFunction<NgtRef>;
 export function injectInstanceRef(options: InjectOptions & { optional?: true }): NgtAnyFunction<NgtRef> | null;
 export function injectInstanceRef(options: InjectOptions = {}) {
     return inject(NGT_INSTANCE_REF_FACTORY, options);
+}
+
+export function injectCompoundInstanceRef(): NgtAnyFunction<NgtRef>;
+export function injectCompoundInstanceRef(options: InjectOptions & { optional?: false }): NgtAnyFunction<NgtRef>;
+export function injectCompoundInstanceRef(options: InjectOptions & { optional?: true }): NgtAnyFunction<NgtRef> | null;
+export function injectCompoundInstanceRef(options: InjectOptions = {}) {
+    return inject(NGT_COMPOUND_INSTANCE_REF_FACTORY, options);
 }
 
 export interface NgtInstanceState<TInstance extends object = NgtAnyRecord> {
@@ -156,23 +213,21 @@ export class NgtInstance<
 
     private readonly zone = inject(NgZone);
     private readonly store = inject(NgtStore);
-
     private readonly parentRef = injectInstanceRef({ skipSelf: true, optional: true });
+    private readonly compoundParentRef = injectCompoundInstanceRef({ skipSelf: true, optional: true });
     private _isRaw = false;
 
     set isRaw(val: boolean) {
         this._isRaw = val;
     }
 
-    private hasEmittedAlready = false;
-
     private readonly instanceReady = this.effect(
         tapEffect(() => {
             this.handleEvents();
 
             let attachToParentSubscription: Subscription;
-            if (this.parentRef) {
-                attachToParentSubscription = this.attachToParent(this.parent!.pipe(filter((parent) => !!parent)));
+            if (this.parent) {
+                attachToParentSubscription = this.attachToParent(this.parent.pipe(filter((parent) => !!parent)));
                 const { noAttach, skipWrapper } = this.read();
                 if (!noAttach && !skipWrapper) {
                     const parentInstanceNode = getInstanceLocalState(
@@ -234,12 +289,18 @@ export class NgtInstance<
 
                 // add as an interaction if there are events observed
                 if (observedEvents.eventCount > 0) {
-                    getInstanceLocalState(this.instanceValue)?.rootFactory().addInteraction(this.instanceValue);
+                    getInstanceLocalState(this.instanceValue)
+                        ?.stateFactory()
+                        .rootStateFactory()
+                        .addInteraction(this.instanceValue);
                 }
             }
             return () => {
                 if (is.object3d(this.instanceValue) && this.__ngt__.eventCount > 0) {
-                    getInstanceLocalState(this.instanceValue)?.rootFactory().removeInteraction(this.instanceValue.uuid);
+                    getInstanceLocalState(this.instanceValue)
+                        ?.stateFactory()
+                        .rootStateFactory()
+                        .removeInteraction(this.instanceValue.uuid);
                 }
             };
         })
@@ -327,6 +388,7 @@ export class NgtInstance<
         super.initialize();
         this.write({
             instanceRef: new NgtRef(null),
+            wrappedRef: new NgtRef(null),
             attach: [],
             noAttach: false,
             skipWrapper: false,
@@ -362,14 +424,25 @@ export class NgtInstance<
     }
 
     get parent(): NgtRef | undefined {
-        return this.parentRef?.();
+        const compoundParentRef = this.compoundParentRef?.();
+        let parentRef = this.parentRef?.();
+
+        if (compoundParentRef && compoundParentRef.value !== this.instanceValue) {
+            return compoundParentRef;
+        }
+
+        if (parentRef && parentRef !== this.__ngt__.parentRef) {
+            parentRef = this.__ngt__.parentRef as NgtRef;
+        }
+
+        return parentRef;
     }
 
     override ngOnDestroy() {
         this.zone.runOutsideAngular(() => {
             this.destroy();
         });
-      super.ngOnDestroy();
+        super.ngOnDestroy();
     }
 
     private destroy() {

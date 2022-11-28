@@ -9,6 +9,7 @@ import {
     NgtWrapper,
     prepare,
     provideInstanceRef,
+    provideIsWrapper,
     tapEffect,
 } from '@angular-three/core';
 import { NgtGroup } from '@angular-three/core/objects';
@@ -42,7 +43,7 @@ const targetPosition = new THREE.Vector3();
         </ngt-portal>
     `,
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
-    providers: [provideInstanceRef(SobaGizmoHelper)],
+    providers: [provideInstanceRef(SobaGizmoHelper), provideIsWrapper()],
     imports: [NgtPortal, SobaOrthographicCamera, NgtGroup, NgtWrapper],
 })
 export class SobaGizmoHelper extends NgtGroup implements OnInit {
@@ -71,6 +72,10 @@ export class SobaGizmoHelper extends NgtGroup implements OnInit {
     private __animating__ = false;
     private __focusPoint__ = new THREE.Vector3();
     private __radius__ = 0;
+
+    get gizmoRaycast(): THREE.Object3D['raycast'] {
+        return this.instance.read((s) => s['gizmoRaycast']);
+    }
 
     readonly position$ = this.instance.select(
         this.instance.select((s) => s['margin']),
@@ -172,11 +177,18 @@ export class SobaGizmoHelper extends NgtGroup implements OnInit {
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.instance.write({
-                virtualScene: new NgtRef(prepare(new THREE.Scene(), this.store.read, this.store.rootStateFactory)),
+                virtualScene: new NgtRef(prepare(new THREE.Scene(), this.store.read)),
                 gizmoRaycast: useCamera(
                     this.instance.read((s) => s['virtualCamera']),
                     this.store.read((s) => s.pointer)
                 ),
+            });
+
+            setTimeout(() => {
+                console.log(
+                    this.store.read((s) => s.scene),
+                    this.instance.read((s) => s['virtualScene'])
+                );
             });
 
             this.__switchBackground__();

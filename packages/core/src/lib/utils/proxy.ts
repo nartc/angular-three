@@ -1,13 +1,14 @@
 import { inject, NgZone } from '@angular/core';
 import { isObservable, Subscription } from 'rxjs';
-import { injectWrapper } from '../directives/wrapper';
-import { injectInstance, injectInstanceRef, NGT_PROXY_INSTANCE, NgtInstance } from '../instance';
+import { injectInstance, injectInstanceRef, NgtInstance, NGT_PROXY_INSTANCE } from '../instance';
 import { tapEffect } from '../stores/component-store';
 import { NgtStore } from '../stores/store';
 import { NgtAnyFunction, NgtAnyRecord, NgtAttachFunction, NgtObservableInput, NgtStateFactory } from '../types';
 import { applyProps } from './apply-props';
 import { capitalize } from './capitalize';
 import { prepare } from './instance';
+
+const wrapperMap = new Map();
 
 export function proxify<T extends object>(
     instance: T,
@@ -18,30 +19,34 @@ export function proxify<T extends object>(
         primitive?: boolean;
     } = {}
 ): T {
-    const ngtWrapper = injectWrapper({ host: true, optional: true });
     const ngtInstance = injectInstance<T>({ host: true });
-    const store = inject(NgtStore);
-    const zone = inject(NgZone);
     const parentInstance = injectInstanceRef({ skipSelf: true, optional: true });
 
-    return zone.runOutsideAngular(() => {
-        if (ngtWrapper && ngtWrapper['type'] === instance['type' as keyof typeof instance]) {
-            return ngtWrapper;
-        }
+    const store = inject(NgtStore);
+    const zone = inject(NgZone);
 
+    return zone.runOutsideAngular(() => {
         // prep the instance w/ local state
+        let storeReadySubscription: Subscription;
+        let primitivePropsSubscription: Subscription;
+        const newValueSubscriptionMap = new Map<string, () => void>();
+
         instance = prepare(
             instance,
             store.read,
-            store.rootStateFactory,
+            ngtInstance,
             parentInstance?.(),
             ngtInstance.instanceValue ? ngtInstance.instanceRef : undefined,
             !!proxifyOptions.primitive
         );
 
-        let storeReadySubscription: Subscription;
-        let primitivePropsSubscription: Subscription;
-        const newValueSubscriptionMap = new Map<string, () => void>();
+        ngtInstance.effect<void>(
+            tapEffect(() => () => {
+                if (storeReadySubscription) storeReadySubscription.unsubscribe();
+                if (primitivePropsSubscription) primitivePropsSubscription.unsubscribe();
+                newValueSubscriptionMap.forEach((cleanUp) => cleanUp());
+            })
+        )();
 
         function setProp(obj: T, prop: string, newValue: any): (() => void) | undefined {
             const setCapitalizedProp = `set${capitalize(prop)}` as keyof T;
@@ -77,8 +82,18 @@ export function proxify<T extends object>(
 
         const handler: ProxyHandler<T> = {
             get(target: T, p: string | symbol, receiver: any): any {
-                if (p === 'instanceRef') return ngtInstance.instanceRef;
-                if (p === 'instance') return ngtInstance;
+                if (p === 'instanceRef')
+                    return (
+                        wrapperMap.get(target)?.wrappedInstance?.instanceRef ||
+                        wrapperMap.get(receiver)?.wrappedInstance?.instanceRef ||
+                        ngtInstance.instanceRef
+                    );
+                if (p === 'instance')
+                    return (
+                        wrapperMap.get(target)?.wrappedInstance ||
+                        wrapperMap.get(receiver)?.wrappedInstance ||
+                        ngtInstance
+                    );
                 if (p === NGT_PROXY_INSTANCE) return target;
 
                 const capitalizedProp = `get${capitalize(p as string)}`;
@@ -125,33 +140,23 @@ export function proxify<T extends object>(
                 if ((p as string).endsWith('__') && (p as string).startsWith('__'))
                     return Reflect.set(target, p, newValue, receiver);
 
-                return zone.runOutsideAngular(() => {
-                    // TODO: figure out what else we need to handle
-                    if (store.read((s) => s.ready)) {
-                        const cleanUp = setProp(instance, prop, newValue);
-                        if (cleanUp) newValueSubscriptionMap.set(prop, cleanUp);
-                    } else {
-                        storeReadySubscription = store.onReady(() => setProp(instance, prop, newValue));
-                    }
+                // TODO: figure out what else we need to handle
+                if (store.read((s) => s.ready)) {
+                    const cleanUp = setProp(instance, prop, newValue);
+                    if (cleanUp) newValueSubscriptionMap.set(prop, cleanUp);
+                } else {
+                    storeReadySubscription = store.onReady(() => setProp(instance, prop, newValue));
+                }
 
-                    // schedule updateCallback on next event loop
-                    queueMicrotask(() => {
-                        if (ngtInstance.updateCallback) ngtInstance.updateCallback(instance);
-                        if (proxifyOptions.updated) proxifyOptions.updated(instance, store.read, ngtInstance);
-                    });
-
-                    return true;
+                // schedule updateCallback on next event loop
+                queueMicrotask(() => {
+                    if (ngtInstance.updateCallback) ngtInstance.updateCallback(instance);
+                    if (proxifyOptions.updated) proxifyOptions.updated(instance, store.read, ngtInstance);
                 });
+
+                return true;
             },
         };
-
-        ngtInstance.effect<void>(
-            tapEffect(() => () => {
-                if (storeReadySubscription) storeReadySubscription.unsubscribe();
-                if (primitivePropsSubscription) primitivePropsSubscription.unsubscribe();
-                newValueSubscriptionMap.forEach((cleanUp) => cleanUp());
-            })
-        )();
 
         const proxied = new Proxy(instance, handler);
 

@@ -1,37 +1,55 @@
-import { NgtInstance, NgtObservableInput, NgtVector3, NgtWrapper, provideInstanceRef } from '@angular-three/core';
+import {
+    EventEmitterOf,
+    NgtCompound,
+    NgtInstance,
+    NgtObjectCompound,
+    NgtObservableInput,
+    NgtVector3,
+    NgtWrapper,
+    provideInstanceRef,
+} from '@angular-three/core';
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as THREE from 'three';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
-import { SobaLine } from '../line/line';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
+import { SobaLine, SOBA_LINE_INPUTS } from '../line/line';
 
 @Component({
     selector: 'ngt-soba-quadratic-bezier-line[start][end]',
     standalone: true,
     template: `
-        <ngt-soba-line *wrapper="this" [points]="quadraticBezierPoints$">
+        <ngt-soba-line [objectCompound]="this" [points]="quadraticBezierPoints$">
             <ng-content></ng-content>
         </ngt-soba-line>
     `,
-    imports: [SobaLine, NgtWrapper],
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
-    providers: [provideInstanceRef(SobaQuadraticBezierLine)],
+    imports: [SobaLine, NgtWrapper, NgtObjectCompound],
+    providers: [provideInstanceRef(SobaQuadraticBezierLine, { compound: true })],
+    inputs: [...NGT_INSTANCE_INPUTS, ...SOBA_LINE_INPUTS, ...NGT_OBJECT3D_INPUTS],
+    outputs: NGT_INSTANCE_OUTPUTS,
 })
-export class SobaQuadraticBezierLine extends SobaLine {
+export class SobaQuadraticBezierLine extends NgtCompound<SobaLine> {
     @Input() set start(start: NgtObservableInput<NgtVector3>) {
-        this.instance.write({ start });
+        this.write({ start });
     }
 
     @Input() set end(end: NgtObservableInput<NgtVector3>) {
-        this.instance.write({ end });
+        this.write({ end });
     }
 
     @Input() set mid(mid: NgtObservableInput<NgtVector3>) {
-        this.instance.write({ mid });
+        this.write({ mid });
     }
 
     @Input() set segments(segments: NgtObservableInput<number>) {
-        this.instance.write({ segments });
+        this.write({ segments });
+    }
+
+    override get compoundInputs(): (keyof SobaLine | string)[] {
+        return [...super.compoundInputs, ...SOBA_LINE_INPUTS];
+    }
+
+    override get compoundOutputs(): EventEmitterOf<NgtInstance>[] {
+        return [...super.compoundOutputs, ...NGT_INSTANCE_OUTPUTS] as EventEmitterOf<NgtInstance>[];
     }
 
     private readonly __curve__ = new THREE.QuadraticBezierCurve3(
@@ -41,27 +59,27 @@ export class SobaQuadraticBezierLine extends SobaLine {
     );
     private readonly __v__ = new THREE.Vector3();
 
-    readonly quadraticBezierPoints$: Observable<THREE.Vector3[]> = this.instance.select(
-        this.instance.select((s) => s['start']),
-        this.instance.select((s) => s['end']),
-        this.instance.select((s) => s['mid']),
-        this.instance.select((s) => s['segments']),
+    readonly quadraticBezierPoints$: Observable<THREE.Vector3[]> = this.select(
+        this.select((s) => s['start']),
+        this.select((s) => s['end']),
+        this.select((s) => s['mid']),
+        this.select((s) => s['segments']),
         (start, end, mid, segments) => this.getPoints_(start, end, mid, segments),
         { debounce: true }
     );
 
-    constructor() {
-        super();
-        this.instance.write({ start: [0, 0, 0], end: [0, 0, 0], segments: 20 });
+    override initialize() {
+        super.initialize();
+        this.write({ start: [0, 0, 0], end: [0, 0, 0], segments: 20 });
         requestAnimationFrame(() => {
             (
-                this as unknown as {
+                this.instanceRef.value as unknown as {
                     setPoints: (start: NgtVector3, end: NgtVector3, mid: NgtVector3) => void;
                 }
             ).setPoints = (start, end, mid) => {
                 const points = this.getPoints_(start, end, mid);
-                if (this.geometry) {
-                    this.geometry.setPositions(points.map((p) => p.toArray()).flat());
+                if (this.instanceRef.value) {
+                    this.instanceRef.value.setPositions(points.map((p) => p.toArray()).flat());
                 }
             };
         });

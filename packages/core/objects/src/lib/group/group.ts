@@ -1,15 +1,16 @@
 // GENERATED - AngularThree v1.0.0
 import {
+    NgtEuler,
     NgtInstance,
+    NgtLayers,
+    NgtMatrix4,
+    NgtObservableInput,
+    NgtQuaternion,
+    NgtVector3,
     provideInstanceRef,
     proxify,
-    NgtVector3,
-    NgtEuler,
-    NgtQuaternion,
-    NgtMatrix4,
-    NgtLayers,
-    NgtObservableInput,
 } from '@angular-three/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
@@ -21,6 +22,7 @@ import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtGroup)],
     inputs: NGT_OBJECT3D_INPUTS,
+    imports: [NgTemplateOutlet],
 })
 export class NgtGroup extends THREE.Group {
     constructor() {

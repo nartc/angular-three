@@ -20,6 +20,12 @@ export const is = {
     ref: (a: unknown): a is NgtRef => !!a && a instanceof NgtRef,
     supportColorManagement: (): boolean => 'ColorManagement' in THREE,
     canvas: (a: unknown): a is HTMLCanvasElement => a instanceof HTMLCanvasElement,
+    setter: <TObject extends object = object>(obj: TObject, property: keyof TObject): boolean => {
+        const descriptor =
+            Object.getOwnPropertyDescriptor(obj, property) ||
+            Object.getOwnPropertyDescriptor(Object.getPrototypeOf(obj), property);
+        return descriptor ? !descriptor.get && !!descriptor.set : false;
+    },
     equ(a: any, b: any, { arrays = 'shallow', objects = 'reference', strict = true }: NgtEquConfig = {}) {
         // Wrong type or one of the two undefined, doesn't match
         if (typeof a !== typeof b || !!a !== !!b) return false;

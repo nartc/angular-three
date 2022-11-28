@@ -300,6 +300,8 @@ export interface NgtState {
     internal: NgtInternalState;
     /** If this state model is layerd (via createPortal) then this contains the previous layer */
     previousStateFactory?: NgtStateFactory;
+    /** the very root state factory **/
+    rootStateFactory: NgtStateFactory;
 }
 
 export type NgtStateFactory = () => NgtState;
@@ -339,14 +341,13 @@ export type NgtAttachFunction<TChild = any, TParent = any> = (
 export interface NgtInstanceLocalState {
     /** the state getter of the canvas that the instance is being rendered to */
     stateFactory: NgtStateFactory;
-    rootFactory: NgtStateFactory;
+    hostInstance?: any;
     // non-object 3d
     instancesRefs: NgtRef<NgtRef[]>;
     // object-3d
     objectsRefs: NgtRef<NgtRef[]>;
     parentRef: NgtRef<NgtInstanceNode> | null;
     isPrimitive?: boolean;
-    isRaw?: boolean;
     eventCount: number;
     handlers: Partial<NgtEventHandlers>;
     args?: unknown[];

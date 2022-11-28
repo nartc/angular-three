@@ -118,7 +118,7 @@ export class NgtPortal extends NgtComponentStore<NgtPortalState> implements OnIn
             container = prepare(
                 new THREE.Scene(),
                 this.portalStore.read,
-                this.portalStore.rootStateFactory,
+                undefined,
                 this.parentStore.read((s) => s.sceneRef)
             );
             containerRef.set(container);

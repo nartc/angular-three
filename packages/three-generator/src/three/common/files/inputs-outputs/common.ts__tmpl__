@@ -33,8 +33,6 @@ export const NGT_OBJECT3D_INPUTS = [
     'rotation',
     'quaternion',
     'scale',
-    'modelViewMatrix',
-    'normalMatrix',
     'matrix',
     'matrixWorld',
     'matrixAutoUpdate',

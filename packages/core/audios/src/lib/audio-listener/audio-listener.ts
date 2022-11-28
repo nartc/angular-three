@@ -44,8 +44,6 @@ export class NgtAudioListener extends THREE.AudioListener {
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
     static ngAcceptInputType_quaternion: NgtObservableInput<NgtQuaternion>;
     static ngAcceptInputType_scale: NgtObservableInput<NgtVector3>;
-    static ngAcceptInputType_modelViewMatrix: NgtObservableInput<NgtMatrix4>;
-    static ngAcceptInputType_normalMatrix: NgtObservableInput<THREE.Matrix3>;
     static ngAcceptInputType_matrix: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixWorld: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixAutoUpdate: NgtObservableInput<boolean>;

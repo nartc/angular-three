@@ -1,3 +1,4 @@
+import { NgtInstance } from '../instance';
 import { NgtRef } from '../ref';
 import type { NgtAnyRecord, NgtInstanceNode, NgtStateFactory } from '../types';
 import { applyProps } from './apply-props';
@@ -7,22 +8,22 @@ import { is } from './is';
 
 export function invalidateInstance<TInstance extends object>(instance: TInstance) {
     const state = getInstanceLocalState(instance)?.stateFactory();
-    if (state && state.internal.frames === 0) state.invalidate();
+    if (state && state?.internal?.frames === 0) state.invalidate();
     checkUpdate(instance);
 }
 
 export function prepare<TInstance extends object = NgtAnyRecord>(
     instance: TInstance,
     parentStateFactory: NgtStateFactory,
-    rootStateFactory: NgtStateFactory,
-    parentInstance?: NgtRef,
-    previousInstance?: NgtRef,
+    hostInstance?: NgtInstance,
+    parentInstanceRef?: NgtRef,
+    previousInstanceRef?: NgtRef,
     isPrimitive = false
 ): NgtInstanceNode<TInstance> {
-    const previousInstanceInternal = getInstanceLocalState(previousInstance?.value);
+    const previousInstanceInternal = getInstanceLocalState(previousInstanceRef?.value);
 
-    const parent = parentInstance
-        ? parentInstance
+    const parent = parentInstanceRef
+        ? parentInstanceRef
         : previousInstanceInternal
         ? previousInstanceInternal.parentRef
         : undefined;
@@ -34,7 +35,7 @@ export function prepare<TInstance extends object = NgtAnyRecord>(
     return Object.assign(instance, {
         __ngt__: {
             stateFactory: parentStateFactory,
-            rootFactory: rootStateFactory,
+            hostInstance,
             isPrimitive: !isPrimitive ? previousInstanceInternal?.isPrimitive : isPrimitive,
             eventCount: previousInstanceInternal?.eventCount ?? 0,
             handlers: previousInstanceInternal?.handlers ?? {},
