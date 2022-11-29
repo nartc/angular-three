@@ -10,7 +10,6 @@ import {
     provideInstanceRef,
     proxify,
 } from '@angular-three/core';
-import { NgTemplateOutlet } from '@angular/common';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
@@ -22,7 +21,6 @@ import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
     providers: [provideInstanceRef(NgtGroup)],
     inputs: NGT_OBJECT3D_INPUTS,
-    imports: [NgTemplateOutlet],
 })
 export class NgtGroup extends THREE.Group {
     constructor() {
@@ -35,8 +33,6 @@ export class NgtGroup extends THREE.Group {
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
     static ngAcceptInputType_quaternion: NgtObservableInput<NgtQuaternion>;
     static ngAcceptInputType_scale: NgtObservableInput<NgtVector3>;
-    static ngAcceptInputType_modelViewMatrix: NgtObservableInput<NgtMatrix4>;
-    static ngAcceptInputType_normalMatrix: NgtObservableInput<THREE.Matrix3>;
     static ngAcceptInputType_matrix: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixWorld: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixAutoUpdate: NgtObservableInput<boolean>;

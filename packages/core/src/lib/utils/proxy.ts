@@ -82,18 +82,8 @@ export function proxify<T extends object>(
 
         const handler: ProxyHandler<T> = {
             get(target: T, p: string | symbol, receiver: any): any {
-                if (p === 'instanceRef')
-                    return (
-                        wrapperMap.get(target)?.wrappedInstance?.instanceRef ||
-                        wrapperMap.get(receiver)?.wrappedInstance?.instanceRef ||
-                        ngtInstance.instanceRef
-                    );
-                if (p === 'instance')
-                    return (
-                        wrapperMap.get(target)?.wrappedInstance ||
-                        wrapperMap.get(receiver)?.wrappedInstance ||
-                        ngtInstance
-                    );
+                if (p === 'instanceRef') return ngtInstance.instanceRef;
+                if (p === 'instance') return ngtInstance;
                 if (p === NGT_PROXY_INSTANCE) return target;
 
                 const capitalizedProp = `get${capitalize(p as string)}`;
@@ -136,9 +126,6 @@ export function proxify<T extends object>(
 
                 // observables in the components
                 if ((p as string).endsWith('$')) return Reflect.set(target, p, newValue, receiver);
-                // class members that need to bypass applyProps
-                if ((p as string).endsWith('__') && (p as string).startsWith('__'))
-                    return Reflect.set(target, p, newValue, receiver);
 
                 // TODO: figure out what else we need to handle
                 if (store.read((s) => s.ready)) {
@@ -150,7 +137,8 @@ export function proxify<T extends object>(
 
                 // schedule updateCallback on next event loop
                 queueMicrotask(() => {
-                    if (ngtInstance.updateCallback) ngtInstance.updateCallback(instance);
+                    const updateCallback = ngtInstance.read((s) => s['updateCallback']);
+                    if (updateCallback) updateCallback(instance);
                     if (proxifyOptions.updated) proxifyOptions.updated(instance, store.read, ngtInstance);
                 });
 

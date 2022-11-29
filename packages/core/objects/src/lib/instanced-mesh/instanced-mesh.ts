@@ -1,15 +1,15 @@
 // GENERATED - AngularThree v1.0.0
 import {
+    injectArgs,
+    NgtEuler,
     NgtInstance,
+    NgtLayers,
+    NgtMatrix4,
+    NgtObservableInput,
+    NgtQuaternion,
+    NgtVector3,
     provideInstanceRef,
     proxify,
-    NgtVector3,
-    NgtEuler,
-    NgtQuaternion,
-    NgtMatrix4,
-    NgtLayers,
-    NgtObservableInput,
-    injectArgs,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
@@ -25,7 +25,7 @@ import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '
 })
 export class NgtInstancedMesh extends THREE.InstancedMesh {
     constructor() {
-        super(...(injectArgs<typeof THREE.InstancedMesh>({ optional: true }) || [undefined, undefined, 0]));
+        super(...(injectArgs<typeof THREE.InstancedMesh>({ optional: true })?.() || [undefined, undefined, 0]));
         return proxify(this, {
             created: (instance) => instance.instanceMatrix.setUsage(THREE.DynamicDrawUsage),
         });
@@ -44,8 +44,6 @@ export class NgtInstancedMesh extends THREE.InstancedMesh {
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
     static ngAcceptInputType_quaternion: NgtObservableInput<NgtQuaternion>;
     static ngAcceptInputType_scale: NgtObservableInput<NgtVector3>;
-    static ngAcceptInputType_modelViewMatrix: NgtObservableInput<NgtMatrix4>;
-    static ngAcceptInputType_normalMatrix: NgtObservableInput<THREE.Matrix3>;
     static ngAcceptInputType_matrix: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixWorld: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixAutoUpdate: NgtObservableInput<boolean>;

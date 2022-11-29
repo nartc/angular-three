@@ -25,7 +25,7 @@ import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '
 export class NgtObjectPrimitive extends THREE.Object3D {
     constructor() {
         super();
-        const [object] = injectArgs();
+        const [object] = injectArgs()();
         return proxify<THREE.Object3D>(object, { primitive: true });
     }
 

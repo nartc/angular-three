@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtInstancedBufferAttribute extends THREE.InstancedBufferAttribute {
     constructor() {
-        super(...(injectArgs<typeof THREE.InstancedBufferAttribute>({ optional: true }) || [[], 0]));
+        super(...(injectArgs<typeof THREE.InstancedBufferAttribute>({ optional: true })?.() || [[], 0]));
         return proxify(this);
     }
 }

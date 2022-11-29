@@ -1,91 +1,90 @@
 import {
-    injectInstance,
-    NgtInstance,
+    NgtCompound,
+    NgtObjectCompound,
     NgtObservableInput,
     NgtRadianPipe,
-    NgtWrapper,
     provideInstanceRef,
 } from '@angular-three/core';
 import { NgtAmbientLight, NgtPointLight } from '@angular-three/core/lights';
 import { NgtGroup } from '@angular-three/core/objects';
 import { NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../../common';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../../common';
 import { SobaGizmoViewportAxis, SobaGizmoViewportAxisHead } from './gizmo-viewport-axis';
 
 @Component({
     selector: 'ngt-soba-gizmo-viewport',
     standalone: true,
     template: `
-        <ngt-group *wrapper="this" [scale]="40">
+        <ngt-group [objectCompound]="this" [scale]="40">
             <ngt-soba-gizmo-viewport-axis
-                [color]="instance.readKey('axisColors')[0]"
+                [color]="readKey('axisColors')[0]"
                 [rotation]="[0, 0, 0]"
-                [scale]="instance.readKey('axisScale')"
+                [scale]="readKey('axisScale')"
             ></ngt-soba-gizmo-viewport-axis>
             <ngt-soba-gizmo-viewport-axis
-                [color]="instance.readKey('axisColors')[1]"
+                [color]="readKey('axisColors')[1]"
                 [rotation]="[0, 0, 90 | radian]"
-                [scale]="instance.readKey('axisScale')"
+                [scale]="readKey('axisScale')"
             ></ngt-soba-gizmo-viewport-axis>
             <ngt-soba-gizmo-viewport-axis
-                [color]="instance.readKey('axisColors')[2]"
+                [color]="readKey('axisColors')[2]"
                 [rotation]="[0, -90 | radian, 0]"
-                [scale]="instance.readKey('axisScale')"
+                [scale]="readKey('axisScale')"
             ></ngt-soba-gizmo-viewport-axis>
 
-            <ng-container *ngIf="!instance.readKey('hideAxisHeads')">
+            <ng-container *ngIf="!readKey('hideAxisHeads')">
                 <ngt-soba-gizmo-viewport-axis-head
-                    [arcStyle]="instance.readKey('axisColors')[0]"
+                    [arcStyle]="readKey('axisColors')[0]"
                     [position]="[1, 0, 0]"
-                    [label]="instance.readKey('labels')[0]"
-                    [labelColor]="instance.readKey('labelColor')"
-                    [font]="instance.readKey('font')"
-                    [disabled]="instance.readKey('disabled')"
-                    [axisHeadScale]="instance.readKey('axisHeadScale')"
+                    [label]="readKey('labels')[0]"
+                    [labelColor]="readKey('labelColor')"
+                    [font]="readKey('font')"
+                    [disabled]="readKey('disabled')"
+                    [axisHeadScale]="readKey('axisHeadScale')"
                 ></ngt-soba-gizmo-viewport-axis-head>
                 <ngt-soba-gizmo-viewport-axis-head
-                    [arcStyle]="instance.readKey('axisColors')[1]"
+                    [arcStyle]="readKey('axisColors')[1]"
                     [position]="[0, 1, 0]"
-                    [label]="instance.readKey('labels')[1]"
-                    [labelColor]="instance.readKey('labelColor')"
-                    [font]="instance.readKey('font')"
-                    [disabled]="instance.readKey('disabled')"
-                    [axisHeadScale]="instance.readKey('axisHeadScale')"
+                    [label]="readKey('labels')[1]"
+                    [labelColor]="readKey('labelColor')"
+                    [font]="readKey('font')"
+                    [disabled]="readKey('disabled')"
+                    [axisHeadScale]="readKey('axisHeadScale')"
                 ></ngt-soba-gizmo-viewport-axis-head>
                 <ngt-soba-gizmo-viewport-axis-head
-                    [arcStyle]="instance.readKey('axisColors')[2]"
+                    [arcStyle]="readKey('axisColors')[2]"
                     [position]="[0, 0, 1]"
-                    [label]="instance.readKey('labels')[2]"
-                    [labelColor]="instance.readKey('labelColor')"
-                    [font]="instance.readKey('font')"
-                    [disabled]="instance.readKey('disabled')"
-                    [axisHeadScale]="instance.readKey('axisHeadScale')"
+                    [label]="readKey('labels')[2]"
+                    [labelColor]="readKey('labelColor')"
+                    [font]="readKey('font')"
+                    [disabled]="readKey('disabled')"
+                    [axisHeadScale]="readKey('axisHeadScale')"
                 ></ngt-soba-gizmo-viewport-axis-head>
-                <ng-container *ngIf="!instance.readKey('hideNegativeAxes')">
+                <ng-container *ngIf="!readKey('hideNegativeAxes')">
                     <ngt-soba-gizmo-viewport-axis-head
-                        [arcStyle]="instance.readKey('axisColors')[0]"
+                        [arcStyle]="readKey('axisColors')[0]"
                         [position]="[-1, 0, 0]"
-                        [labelColor]="instance.readKey('labelColor')"
-                        [font]="instance.readKey('font')"
-                        [disabled]="instance.readKey('disabled')"
-                        [axisHeadScale]="instance.readKey('axisHeadScale')"
+                        [labelColor]="readKey('labelColor')"
+                        [font]="readKey('font')"
+                        [disabled]="readKey('disabled')"
+                        [axisHeadScale]="readKey('axisHeadScale')"
                     ></ngt-soba-gizmo-viewport-axis-head>
                     <ngt-soba-gizmo-viewport-axis-head
-                        [arcStyle]="instance.readKey('axisColors')[1]"
+                        [arcStyle]="readKey('axisColors')[1]"
                         [position]="[0, -1, 0]"
-                        [labelColor]="instance.readKey('labelColor')"
-                        [font]="instance.readKey('font')"
-                        [disabled]="instance.readKey('disabled')"
-                        [axisHeadScale]="instance.readKey('axisHeadScale')"
+                        [labelColor]="readKey('labelColor')"
+                        [font]="readKey('font')"
+                        [disabled]="readKey('disabled')"
+                        [axisHeadScale]="readKey('axisHeadScale')"
                     ></ngt-soba-gizmo-viewport-axis-head>
                     <ngt-soba-gizmo-viewport-axis-head
-                        [arcStyle]="instance.readKey('axisColors')[2]"
+                        [arcStyle]="readKey('axisColors')[2]"
                         [position]="[0, 0, -1]"
-                        [labelColor]="instance.readKey('labelColor')"
-                        [font]="instance.readKey('font')"
-                        [disabled]="instance.readKey('disabled')"
-                        [axisHeadScale]="instance.readKey('axisHeadScale')"
+                        [labelColor]="readKey('labelColor')"
+                        [font]="readKey('font')"
+                        [disabled]="readKey('disabled')"
+                        [axisHeadScale]="readKey('axisHeadScale')"
                     ></ngt-soba-gizmo-viewport-axis-head>
                 </ng-container>
             </ng-container>
@@ -102,53 +101,56 @@ import { SobaGizmoViewportAxis, SobaGizmoViewportAxisHead } from './gizmo-viewpo
         NgtAmbientLight,
         NgtPointLight,
         NgIf,
-        NgtWrapper,
+        NgtObjectCompound,
     ],
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
-    providers: [provideInstanceRef(SobaGizmoViewport)],
+    providers: [provideInstanceRef(SobaGizmoViewport, { compound: true })],
+    inputs: [...NGT_INSTANCE_INPUTS, ...NGT_OBJECT3D_INPUTS],
+    outputs: NGT_INSTANCE_OUTPUTS,
 })
-export class SobaGizmoViewport extends NgtGroup {
+export class SobaGizmoViewport extends NgtCompound<NgtGroup> {
     @Input() set axisColors(axisColors: NgtObservableInput<[string, string, string]>) {
-        this.instance.write({ axisColors });
+        this.write({ axisColors });
     }
 
     @Input() set axisScale(axisScale: NgtObservableInput<[number, number, number]>) {
-        this.instance.write({ axisScale });
+        this.write({ axisScale });
     }
 
     @Input() set labels(labels: NgtObservableInput<[string, string, string]>) {
-        this.instance.write({ labels });
+        this.write({ labels });
     }
 
     @Input() set axisHeadScale(axisHeadScale: NgtObservableInput<number>) {
-        this.instance.write({ axisHeadScale });
+        this.write({ axisHeadScale });
     }
 
     @Input() set labelColor(labelColor: NgtObservableInput<string>) {
-        this.instance.write({ labelColor });
+        this.write({ labelColor });
     }
 
     @Input() set hideNegativeAxes(hideNegativeAxes: NgtObservableInput<boolean>) {
-        this.instance.write({ hideNegativeAxes });
+        this.write({ hideNegativeAxes });
     }
 
     @Input() set hideAxisHeads(hideAxisHeads: NgtObservableInput<boolean>) {
-        this.instance.write({ hideAxisHeads });
+        this.write({ hideAxisHeads });
     }
 
     @Input() set disabled(disabled: NgtObservableInput<boolean>) {
-        this.instance.write({ disabled });
+        this.write({ disabled });
     }
 
     @Input() set font(font: NgtObservableInput<string>) {
-        this.instance.write({ font });
+        this.write({ font });
     }
 
-    protected readonly instance = injectInstance({ host: true });
+    override get useOnHost(): (keyof NgtGroup | string)[] {
+        return [...super.useOnHost, 'scale'];
+    }
 
-    constructor() {
-        super();
-        this.instance.write({
+    override initialize() {
+        super.initialize();
+        this.write({
             font: '18px Inter var, Arial, sans-serif',
             axisColors: ['#ff3653', '#0adb50', '#2c8fdf'],
             axisScale: [0.8, 0.05, 0.05],

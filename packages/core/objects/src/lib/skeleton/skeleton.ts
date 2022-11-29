@@ -1,11 +1,11 @@
 // GENERATED - AngularThree v1.0.0
 import {
+    injectArgs,
     NgtInstance,
-    provideInstanceRef,
-    proxify,
     NgtMatrix4,
     NgtObservableInput,
-    injectArgs,
+    provideInstanceRef,
+    proxify,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
@@ -21,7 +21,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtSkeleton extends THREE.Skeleton {
     constructor() {
-        super(...injectArgs<typeof THREE.Skeleton>());
+        super(...injectArgs<typeof THREE.Skeleton>()());
         return proxify(this, {
             attach: (parent, child) => {
                 if (!(parent.value instanceof THREE.SkinnedMesh)) {

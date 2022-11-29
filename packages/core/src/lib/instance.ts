@@ -11,9 +11,9 @@ import {
     Output,
     Provider,
 } from '@angular/core';
-import { filter, Subscription, tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { NgtRef } from './ref';
-import { NgtComponentStore, tapEffect } from './stores/component-store';
+import { filterFalsy, NgtComponentStore, tapEffect } from './stores/component-store';
 import { NgtStore } from './stores/store';
 import type {
     NgtAnyCtor,
@@ -160,7 +160,13 @@ export class NgtInstance<
     implements OnInit, OnDestroy
 {
     @Input() set ref(instance: TInstance | NgtRef<TInstance>) {
-        this.write({ instanceRef: is.ref(instance) ? instance : new NgtRef(instance) });
+        // this.write({ instanceRef: is.ref(instance) ? instance : new NgtRef(instance) });
+        if (is.ref(instance) && instance.value === null) {
+            instance.set(this.instanceValue);
+            this.write({ instanceRef: instance });
+        } else if (!is.ref(instance) && instance !== null) {
+            this.instanceRef.set(instance as TInstance);
+        }
     }
 
     @Input() set skipWrapper(skipWrapper: NgtObservableInput<boolean>) {
@@ -191,11 +197,21 @@ export class NgtInstance<
         }
     }
 
-    @Input() priority = 0;
-    @Input() beforeRender?: NgtBeforeRenderCallback<TInstance>;
+    @Input() set priority(priority: number) {
+        this.write({ priority });
+    }
 
-    @Input() readyCallback?: ((instance: TInstance) => void) | (() => void);
-    @Input() updateCallback?: ((instance: TInstance) => void) | (() => void);
+    @Input() set beforeRender(beforeRender: NgtBeforeRenderCallback<TInstance>) {
+        this.write({ beforeRender });
+    }
+
+    @Input() set readyCallback(readyCallback: ((instance: TInstance) => void) | (() => void)) {
+        this.write({ readyCallback });
+    }
+
+    @Input() set updateCallback(updateCallback: ((instance: TInstance) => void) | (() => void)) {
+        this.write({ updateCallback });
+    }
 
     @Output() click = new EventEmitter<NgtThreeEvent<MouseEvent>>();
     @Output() contextmenu = new EventEmitter<NgtThreeEvent<MouseEvent>>();
@@ -213,13 +229,15 @@ export class NgtInstance<
 
     private readonly zone = inject(NgZone);
     private readonly store = inject(NgtStore);
-    private readonly parentRef = injectInstanceRef({ skipSelf: true, optional: true });
-    private readonly compoundParentRef = injectCompoundInstanceRef({ skipSelf: true, optional: true });
     private _isRaw = false;
-
     set isRaw(val: boolean) {
         this._isRaw = val;
     }
+
+    private readonly parentInstanceRef = injectInstanceRef({ skipSelf: true, optional: true });
+    private readonly compoundInstanceRef = injectCompoundInstanceRef({ skipSelf: true, optional: true });
+
+    private compoundParentRef?: NgtAnyFunction<NgtRef>;
 
     private readonly instanceReady = this.effect(
         tapEffect(() => {
@@ -227,7 +245,7 @@ export class NgtInstance<
 
             let attachToParentSubscription: Subscription;
             if (this.parent) {
-                attachToParentSubscription = this.attachToParent(this.parent.pipe(filter((parent) => !!parent)));
+                attachToParentSubscription = this.attachToParent(this.parent.pipe(filterFalsy()));
                 const { noAttach, skipWrapper } = this.read();
                 if (!noAttach && !skipWrapper) {
                     const parentInstanceNode = getInstanceLocalState(
@@ -243,24 +261,35 @@ export class NgtInstance<
                 }
             }
 
-            let beforeRenderCleanUp: () => void;
-            if (this.beforeRender && is.object3d(this.instanceValue) && is.object3d(this.proxyInstance)) {
-                beforeRenderCleanUp = this.store
-                    .read((s) => s.internal)
-                    .subscribe(
-                        (state, object) => this.beforeRender!(state, object),
-                        this.priority,
-                        this.store.read,
-                        this.proxyInstance
-                    );
+            if (is.object3d(this.instanceValue) && is.object3d(this.proxyInstance)) {
+                this.setupBeforeRender(this.select((s) => s['beforeRender']).pipe(filterFalsy()));
             }
 
-            if (this.readyCallback) this.readyCallback(this.instanceValue);
+            this.callReadyCallback(this.select((s) => s['readyCallback']).pipe(filterFalsy()));
 
             return () => {
-                beforeRenderCleanUp?.();
                 attachToParentSubscription?.unsubscribe();
             };
+        })
+    );
+
+    private setupBeforeRender = this.effect(
+        tapEffect(() => {
+            const beforeRender = this.read((s) => s['beforeRender']);
+            const internal = this.store.read((s) => s.internal);
+            return internal.subscribe(
+                (state, object) => beforeRender!(state, object),
+                this.read((s) => s['priority']),
+                this.store.read,
+                this.proxyInstance as THREE.Object3D
+            );
+        })
+    );
+
+    private callReadyCallback = this.effect(
+        tap(() => {
+            const readyCallback = this.read((s) => s['readyCallback']);
+            readyCallback(this.instanceValue);
         })
     );
 
@@ -310,22 +339,76 @@ export class NgtInstance<
         tap(() => {
             const attach = this.read((s) => s.attach);
 
-            let parentInstanceRef = this.__ngt__?.parentRef;
+            let parent = this.parent;
+            const parentInstanceRef = this.parentInstanceRef?.();
 
-            // if no parentInstance, try re-run the factory due to late init
-            if (!parentInstanceRef || !parentInstanceRef.value) {
-                // return early if failed to retrieve
+            if (parentInstanceRef && parent && is.object3d(parent.value) && is.object3d(parentInstanceRef.value)) {
+                if (
+                    (is.scene(parentInstanceRef.value) && parent.value.parent === parentInstanceRef.value) ||
+                    parentInstanceRef.value.parent === parent.value ||
+                    parentInstanceRef.value.parent?.parent === parent.value
+                ) {
+                    parent = this.__ngt__.parentRef = parentInstanceRef;
+                }
+            }
+
+            // the instance is the compound parent
+            // this is the component we're compounding
+            // if (this.compoundInstanceRef && this.compoundInstanceRef().value === this.instanceValue) {
+            //     // keeping the parentInstanceRef as-is
+            // } else {
+            //     if (this.compoundInstanceRef && this.parentInstanceRef) {
+            //         const compoundParent = this.compoundInstanceRef();
+            //         const parent = this.parentInstanceRef();
+            //
+            //         // handle object3d cases
+            //         /**
+            //          * compound
+            //          *  instance
+            //          * compound
+            //          *  parent
+            //          *    instance
+            //          * compound
+            //          *  compound
+            //          *    instance
+            //          */
+            //         if (is.object3d(compoundParent.value) && is.object3d(parent.value)) {
+            //             // if the compound parent is not a scene and its parent is null
+            //             // then it is inside of a portal
+            //             if (!is.scene(compoundParent.value) && compoundParent.value.parent === null) {
+            //                 console.log({
+            //                     compoundParent: { ...compoundParent.value },
+            //                     parent: { ...parent.value },
+            //                     instance: { ...this.instanceValue },
+            //                 });
+            //             }
+            //
+            //             if (compoundParent.value.parent === parent.value) {
+            //                 // if compoundParent.parent is parent
+            //                 // then this instance is a direct content child of the compound
+            //                 parent = this.__ngt__.parentRef = compoundParent;
+            //             } else if (parent.value.parent === compoundParent.value) {
+            //                 // if parent.parent is parent
+            //                 // then this instance is a direct content child of its parent
+            //                 parent = this.__ngt__.parentRef = parent;
+            //             }
+            //         }
+            //     }
+            // }
+
+            if (!parent) {
+                // re-run factory
                 if (!this.parent?.value) return;
 
                 // reassign on instance internal state
                 if (this.__ngt__) {
                     this.__ngt__.parentRef = this.parent;
                 }
-                parentInstanceRef = this.parent;
+                parent = this.parent;
             }
 
             if (typeof attach === 'function') {
-                const attachCleanUp = attach(parentInstanceRef, this.instanceRef, this.store.read);
+                const attachCleanUp = attach(parent, this.instanceRef, this.store.read);
                 if (attachCleanUp) {
                     this.__ngt__.attach = attachCleanUp;
                 }
@@ -338,9 +421,9 @@ export class NgtInstance<
                     if (
                         is.object3d(this.instanceValue) &&
                         is.object3d(this.proxyInstance) &&
-                        is.object3d(this.parent?.value)
+                        is.object3d(parent?.value)
                     ) {
-                        this.parent?.value.add(this.proxyInstance);
+                        parent?.value.add(this.proxyInstance);
                     }
                 } else {
                     // array material handling
@@ -350,8 +433,8 @@ export class NgtInstance<
                         typeof Number(propertyToAttach[1]) === 'number' &&
                         is.material(this.instanceValue)
                     ) {
-                        if (!Array.isArray(parentInstanceRef.value.material)) {
-                            parentInstanceRef.value.material = [];
+                        if (!Array.isArray(parent.value.material)) {
+                            parent.value.material = [];
                         }
                     }
 
@@ -359,20 +442,20 @@ export class NgtInstance<
                     if (this.__ngt__) {
                         this.__ngt__.attachValue = propertyToAttach.reduce(
                             (value, property) => value[property],
-                            parentInstanceRef.value
+                            parent.value
                         );
                     }
 
                     // attach the instance value on the parent
-                    mutate(parentInstanceRef.value, this.proxyInstance, propertyToAttach);
+                    mutate(parent.value, this.proxyInstance, propertyToAttach);
                 }
 
                 // validate on the instance
                 invalidateInstance(this.instanceValue);
 
                 // validate on the parent
-                if (getInstanceLocalState(parentInstanceRef.value)) {
-                    invalidateInstance(parentInstanceRef.value);
+                if (getInstanceLocalState(parent.value)) {
+                    invalidateInstance(parent.value);
                 }
 
                 // save the attach
@@ -393,15 +476,20 @@ export class NgtInstance<
             noAttach: false,
             skipWrapper: false,
             skipInit: false,
+            priority: 0,
         });
     }
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
             this.store.onReady(() => {
-                this.instanceReady(this.instanceRef.pipe(filter((instance) => !!instance)));
+                this.instanceReady(this.instanceRef.pipe(filterFalsy()));
             });
         });
+    }
+
+    setCompoundParentRef(compoundParentRef: NgtAnyFunction<NgtRef>) {
+        this.compoundParentRef = compoundParentRef;
     }
 
     get instanceRef(): NgtRef<TInstance> {
@@ -424,18 +512,27 @@ export class NgtInstance<
     }
 
     get parent(): NgtRef | undefined {
+        const compoundInstanceRef = this.compoundInstanceRef?.();
         const compoundParentRef = this.compoundParentRef?.();
-        let parentRef = this.parentRef?.();
+        let parentInstanceRef = this.parentInstanceRef?.();
+
+        if (compoundInstanceRef && compoundInstanceRef.value !== this.instanceValue) {
+            return compoundInstanceRef;
+        }
 
         if (compoundParentRef && compoundParentRef.value !== this.instanceValue) {
             return compoundParentRef;
         }
 
-        if (parentRef && parentRef !== this.__ngt__.parentRef) {
-            parentRef = this.__ngt__.parentRef as NgtRef;
+        if (parentInstanceRef && parentInstanceRef !== this.__ngt__.parentRef) {
+            if (this.__ngt__.parentRef !== null) {
+                parentInstanceRef = this.__ngt__.parentRef as NgtRef;
+            } else {
+                this.__ngt__.parentRef = parentInstanceRef;
+            }
         }
 
-        return parentRef;
+        return parentInstanceRef;
     }
 
     override ngOnDestroy() {

@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtIcosahedronGeometry extends THREE.IcosahedronGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.IcosahedronGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.IcosahedronGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

@@ -1,9 +1,11 @@
-import { Directive, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Directive, EventEmitter, OnChanges, reflectComponentType, SimpleChanges, Type } from '@angular/core';
 import { Observable, scan, takeUntil } from 'rxjs';
 import type { NgtInstance } from './instance';
+import { injectCompoundInstanceRef } from './instance';
 import { NgtRef } from './ref';
 import { NgtComponentStore } from './stores/component-store';
 import type { NgtAnyRecord } from './types';
+import { getInstanceLocalState } from './utils/get-instance-local-state';
 import { is } from './utils/is';
 
 export type EventEmitterOf<T extends object = object> = {
@@ -15,18 +17,27 @@ export abstract class NgtCompound<TObject extends object = any, THost extends Ng
     extends NgtComponentStore
     implements OnChanges
 {
+    readonly parentCompoundRef = injectCompoundInstanceRef({ skipSelf: true, optional: true });
     readonly instanceRef = new NgtRef();
+
+    get ngtInstance(): NgtInstance<TObject> | undefined {
+        return getInstanceLocalState(this.instanceRef?.value)?.hostInstance;
+    }
 
     get useOnHost(): (keyof TObject | string)[] {
         return [];
     }
 
     get compoundInputs(): (keyof TObject | string)[] {
-        return [];
+        const inputsFromMetadata = reflectComponentType(this.constructor as Type<unknown>)?.inputs;
+        if (!inputsFromMetadata) return [];
+        return inputsFromMetadata.map(({ propName }) => propName);
     }
 
     get compoundOutputs(): EventEmitterOf<THost>[] {
-        return [];
+        const outputsFromMetadata = reflectComponentType(this.constructor as Type<unknown>)?.outputs;
+        if (!outputsFromMetadata) return [];
+        return outputsFromMetadata.map(({ propName }) => propName) as EventEmitterOf<THost>[];
     }
 
     ngOnChanges(changes: SimpleChanges) {

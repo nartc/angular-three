@@ -1,8 +1,6 @@
 import {
-    EventEmitterOf,
     make,
     NgtCompound,
-    NgtInstance,
     NgtObjectCompound,
     NgtObservableInput,
     NgtVector3,
@@ -46,14 +44,6 @@ export class SobaCubicBezierLine extends NgtCompound<SobaLine> {
 
     @Input() set segments(segments: NgtObservableInput<number>) {
         this.write({ segments });
-    }
-
-    override get compoundInputs(): (keyof SobaLine | string)[] {
-        return [...super.compoundInputs, ...SOBA_LINE_INPUTS];
-    }
-
-    override get compoundOutputs(): EventEmitterOf<NgtInstance>[] {
-        return [...super.compoundOutputs, ...NGT_INSTANCE_OUTPUTS] as EventEmitterOf<NgtInstance>[];
     }
 
     readonly cubicBezierPoints$: Observable<ReturnType<THREE.CubicBezierCurve3['getPoints']>> = this.select(

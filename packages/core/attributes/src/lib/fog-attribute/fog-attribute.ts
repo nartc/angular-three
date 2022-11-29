@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtFogAttribute extends THREE.Fog {
     constructor() {
-        super(...(injectArgs<typeof THREE.Fog>({ optional: true }) || ['white']));
+        super(...(injectArgs<typeof THREE.Fog>({ optional: true })?.() || ['white']));
         return proxify(this);
     }
 }

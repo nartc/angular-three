@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtBufferGeometry extends THREE.BufferGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.BufferGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.BufferGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

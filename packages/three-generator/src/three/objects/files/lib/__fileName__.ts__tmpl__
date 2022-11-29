@@ -23,7 +23,7 @@ import { NGT_INSTANCE_INPUTS<% if (hasObject3D) { %>, NGT_INSTANCE_OUTPUTS, NGT_
 export class Ngt<%= name %> extends THREE.<%= name %> {
     constructor() {<% if (!args) { %>
         super();<% } else { %>
-        super(...(injectArgs<typeof THREE.<%= name %>>(<% if (args.optionalArgs) { %>{ optional: true }<% } %>))<% if (args.optionalArgs) { %>|| <%- args.optionalArgs %><% } %>);<% } %>
+        super(...(injectArgs<typeof THREE.<%= name %>><% if (args.optionalArgs) { %>({ optional: true })?.<% } else { %>()<% } %>() <% if (args.optionalArgs) { %>|| <%- args.optionalArgs %><% } %>));<% } %>
         return proxify(this<% if (!proxyOptions) { %>);<% } else { %>, {
             <% if (proxyOptions.created) { %>created: <%- proxyOptions.created %>,<% } %>
             <% if (proxyOptions.attach) { %>attach: <%- proxyOptions.attach %>,<% } %>

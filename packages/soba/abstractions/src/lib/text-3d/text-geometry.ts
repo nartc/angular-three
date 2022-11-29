@@ -12,7 +12,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class SobaTextGeometry extends TextGeometry {
     constructor() {
-        super(...injectArgs<typeof TextGeometry>());
+        super(...injectArgs<typeof TextGeometry>()());
         return proxify(this, { attach: 'geometry' });
     }
 }

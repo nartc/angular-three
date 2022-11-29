@@ -1,5 +1,5 @@
 // GENERATED - AngularThree v1.0.0
-import { NgtInstance, provideInstanceRef, proxify, NgtVector2, NgtObservableInput } from '@angular-three/core';
+import { NgtInstance, NgtObservableInput, NgtVector2, provideInstanceRef, proxify } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS } from '../common';

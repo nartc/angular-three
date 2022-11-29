@@ -1,18 +1,18 @@
 // GENERATED - AngularThree v1.0.0
-import * as THREE from 'three';
-import { Component } from '@angular/core';
 import {
     injectArgs,
+    NgtEuler,
     NgtInstance,
+    NgtLayers,
+    NgtMatrix4,
+    NgtObservableInput,
+    NgtQuaternion,
+    NgtVector3,
     provideInstanceRef,
     proxify,
-    NgtMatrix4,
-    NgtVector3,
-    NgtEuler,
-    NgtQuaternion,
-    NgtLayers,
-    NgtObservableInput,
 } from '@angular-three/core';
+import { Component } from '@angular/core';
+import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 @Component({
@@ -25,7 +25,7 @@ import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '
 })
 export class NgtStereoCamera extends THREE.StereoCamera {
     constructor() {
-        super(...(injectArgs<typeof THREE.StereoCamera>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.StereoCamera>({ optional: true })?.() || []));
         return proxify(this);
     }
 
@@ -41,8 +41,6 @@ export class NgtStereoCamera extends THREE.StereoCamera {
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
     static ngAcceptInputType_quaternion: NgtObservableInput<NgtQuaternion>;
     static ngAcceptInputType_scale: NgtObservableInput<NgtVector3>;
-    static ngAcceptInputType_modelViewMatrix: NgtObservableInput<NgtMatrix4>;
-    static ngAcceptInputType_normalMatrix: NgtObservableInput<THREE.Matrix3>;
     static ngAcceptInputType_matrix: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixWorld: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixAutoUpdate: NgtObservableInput<boolean>;

@@ -1,45 +1,45 @@
-import { injectInstance, NgtObservableInput, NgtStore, NgtThreeEvent } from '@angular-three/core';
+import { NgtComponentStore, NgtObservableInput, NgtStore, NgtThreeEvent } from '@angular-three/core';
 import { Directive, EventEmitter, inject, Input, Output } from '@angular/core';
 import { SobaGizmoHelper } from '../gizmo-helper';
 import { colors, defaultFaces } from './gizmo-viewcube-constants';
 
 @Directive()
-export abstract class SobaGizmoViewcubeInputs {
-    protected readonly instance = injectInstance({ host: true });
+export abstract class SobaGizmoViewcubeInputs extends NgtComponentStore {
     protected readonly store = inject(NgtStore);
 
     @Input() set font(font: NgtObservableInput<string>) {
-        this.instance.write({ font });
+        this.write({ font });
     }
 
     @Input() set opacity(opacity: NgtObservableInput<number>) {
-        this.instance.write({ opacity });
+        this.write({ opacity });
     }
 
     @Input() set color(color: NgtObservableInput<string>) {
-        this.instance.write({ color });
+        this.write({ color });
     }
 
     @Input() set hoverColor(hoverColor: NgtObservableInput<string>) {
-        this.instance.write({ hoverColor });
+        this.write({ hoverColor });
     }
 
     @Input() set textColor(textColor: NgtObservableInput<string>) {
-        this.instance.write({ textColor });
+        this.write({ textColor });
     }
 
     @Input() set strokeColor(strokeColor: NgtObservableInput<string>) {
-        this.instance.write({ strokeColor });
+        this.write({ strokeColor });
     }
 
     @Input() set faces(faces: NgtObservableInput<string[]>) {
-        this.instance.write({ faces });
+        this.write({ faces });
     }
 
     @Output() viewcubeClick = new EventEmitter<NgtThreeEvent<MouseEvent>>();
 
-    constructor() {
-        this.instance.write({
+    override initialize() {
+        super.initialize();
+        this.write({
             font: '20px Inter var, Arial, sans-serif',
             faces: defaultFaces,
             color: colors.bg,
@@ -50,10 +50,10 @@ export abstract class SobaGizmoViewcubeInputs {
         });
     }
 
-    private readonly _gizmoHelper = inject(SobaGizmoHelper, { optional: true });
+    private readonly sobaGizmoHelper = inject(SobaGizmoHelper, { optional: true });
 
     get gizmoHelper() {
-        return this._gizmoHelper as SobaGizmoHelper;
+        return this.sobaGizmoHelper as SobaGizmoHelper;
     }
 
     get raycast() {

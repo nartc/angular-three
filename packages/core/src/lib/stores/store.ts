@@ -1,5 +1,5 @@
 import { inject, Injectable, NgZone } from '@angular/core';
-import { filter, Subscription, tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import * as THREE from 'three';
 import { injectWindow } from '../di/window';
 import { NgtRef } from '../ref';
@@ -23,7 +23,7 @@ import { is } from '../utils/is';
 import { createLoop } from '../utils/loop';
 import { makeDpr } from '../utils/make';
 import { createRenderer } from '../utils/renderer';
-import { defaultProjector, NgtComponentStore, tapEffect } from './component-store';
+import { defaultProjector, filterFalsy, NgtComponentStore, tapEffect } from './component-store';
 
 export const rootStateMap = new Map<Element, NgtStateFactory>();
 const { invalidate, advance } = createLoop(rootStateMap);
@@ -521,7 +521,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     }
 
     onReady(cb: Parameters<typeof tapEffect>[0]): Subscription {
-        return this.effect(tapEffect(cb))(this.select((s) => s.ready).pipe(filter((ready) => ready)));
+        return this.effect(tapEffect(cb))(this.select((s) => s.ready).pipe(filterFalsy()));
     }
 }
 

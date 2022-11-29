@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS<% if (hasObject3D) { %>, NGT_INSTANCE_OUTPUTS<% } %
 })
 export class Ngt<%= name %> extends THREE.<%= name %> {
     constructor() {
-        super(...(injectArgs<typeof THREE.<%= name %>>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.<%= name %>>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

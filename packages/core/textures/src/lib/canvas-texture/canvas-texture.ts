@@ -1,7 +1,7 @@
 // GENERATED - AngularThree v1.0.0
-import * as THREE from 'three';
-import { Component } from '@angular/core';
 import { injectArgs, NgtInstance, provideInstanceRef, proxify } from '@angular-three/core';
+import { Component } from '@angular/core';
+import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS } from '../common';
 
 @Component({
@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtCanvasTexture extends THREE.CanvasTexture {
     constructor() {
-        super(...injectArgs<typeof THREE.CanvasTexture>());
+        super(...injectArgs<typeof THREE.CanvasTexture>()());
         return proxify(this);
     }
 }

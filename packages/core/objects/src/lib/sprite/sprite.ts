@@ -1,15 +1,15 @@
 // GENERATED - AngularThree v1.0.0
 import {
+    NgtEuler,
     NgtInstance,
-    provideInstanceRef,
-    proxify,
+    NgtLayers,
+    NgtMatrix4,
+    NgtObservableInput,
+    NgtQuaternion,
     NgtVector2,
     NgtVector3,
-    NgtEuler,
-    NgtQuaternion,
-    NgtMatrix4,
-    NgtLayers,
-    NgtObservableInput,
+    provideInstanceRef,
+    proxify,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
@@ -38,8 +38,6 @@ export class NgtSprite extends THREE.Sprite {
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
     static ngAcceptInputType_quaternion: NgtObservableInput<NgtQuaternion>;
     static ngAcceptInputType_scale: NgtObservableInput<NgtVector3>;
-    static ngAcceptInputType_modelViewMatrix: NgtObservableInput<NgtMatrix4>;
-    static ngAcceptInputType_normalMatrix: NgtObservableInput<THREE.Matrix3>;
     static ngAcceptInputType_matrix: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixWorld: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixAutoUpdate: NgtObservableInput<boolean>;

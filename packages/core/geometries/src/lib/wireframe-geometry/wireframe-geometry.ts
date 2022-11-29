@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtWireframeGeometry extends THREE.WireframeGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.WireframeGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.WireframeGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

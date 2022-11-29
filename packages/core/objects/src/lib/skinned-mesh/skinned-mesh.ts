@@ -1,14 +1,14 @@
 // GENERATED - AngularThree v1.0.0
 import {
+    NgtEuler,
     NgtInstance,
+    NgtLayers,
+    NgtMatrix4,
+    NgtObservableInput,
+    NgtQuaternion,
+    NgtVector3,
     provideInstanceRef,
     proxify,
-    NgtMatrix4,
-    NgtVector3,
-    NgtEuler,
-    NgtQuaternion,
-    NgtLayers,
-    NgtObservableInput,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
@@ -42,8 +42,6 @@ export class NgtSkinnedMesh extends THREE.SkinnedMesh {
     static ngAcceptInputType_rotation: NgtObservableInput<NgtEuler>;
     static ngAcceptInputType_quaternion: NgtObservableInput<NgtQuaternion>;
     static ngAcceptInputType_scale: NgtObservableInput<NgtVector3>;
-    static ngAcceptInputType_modelViewMatrix: NgtObservableInput<NgtMatrix4>;
-    static ngAcceptInputType_normalMatrix: NgtObservableInput<THREE.Matrix3>;
     static ngAcceptInputType_matrix: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixWorld: NgtObservableInput<NgtMatrix4>;
     static ngAcceptInputType_matrixAutoUpdate: NgtObservableInput<boolean>;

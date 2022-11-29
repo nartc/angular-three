@@ -14,15 +14,15 @@ import { NgtAnyCtor } from '../types';
 
 export const NGT_ARGS = new InjectionToken<unknown[]>('NgtArgs');
 
-export function injectArgs<TCtor extends NgtAnyCtor = NgtAnyCtor>(): ConstructorParameters<TCtor>;
+export function injectArgs<TCtor extends NgtAnyCtor = NgtAnyCtor>(): () => ConstructorParameters<TCtor>;
 export function injectArgs<TCtor extends NgtAnyCtor = NgtAnyCtor>(
     options: InjectOptions & { optional?: false }
-): ConstructorParameters<TCtor>;
+): () => ConstructorParameters<TCtor>;
 export function injectArgs<TCtor extends NgtAnyCtor = NgtAnyCtor>(
     options: InjectOptions & { optional?: true }
-): ConstructorParameters<TCtor> | null;
+): (() => ConstructorParameters<TCtor>) | null;
 export function injectArgs<TCtor extends NgtAnyCtor = NgtAnyCtor>(options: InjectOptions = {}) {
-    return inject<ConstructorParameters<TCtor>>(NGT_ARGS, options);
+    return inject<() => ConstructorParameters<TCtor>>(NGT_ARGS, options);
 }
 
 @Directive({
@@ -46,11 +46,27 @@ export class NgtArgs {
             }
             this.rAF = requestAnimationFrame(() => {
                 this.subscription = args.subscribe((results) => {
+                    let injected = false;
                     this.destroyView();
                     this.view = this.vcr.createEmbeddedView(
                         this.templateRef,
                         {},
-                        { injector: Injector.create({ providers: [{ provide: NGT_ARGS, useValue: results }] }) }
+                        {
+                            injector: Injector.create({
+                                providers: [
+                                    {
+                                        provide: NGT_ARGS,
+                                        useValue: () => {
+                                            if (!injected) {
+                                                injected = true;
+                                                return results;
+                                            }
+                                            return null;
+                                        },
+                                    },
+                                ],
+                            }),
+                        }
                     );
                     this.view.markForCheck();
                 });
@@ -59,12 +75,28 @@ export class NgtArgs {
             if (args.length === 1 && args[0] === null) {
                 return;
             }
+            let injected = false;
 
             this.destroyView();
             this.view = this.vcr.createEmbeddedView(
                 this.templateRef,
                 {},
-                { injector: Injector.create({ providers: [{ provide: NGT_ARGS, useValue: args }] }) }
+                {
+                    injector: Injector.create({
+                        providers: [
+                            {
+                                provide: NGT_ARGS,
+                                useValue: () => {
+                                    if (!injected) {
+                                        injected = true;
+                                        return args;
+                                    }
+                                    return null;
+                                },
+                            },
+                        ],
+                    }),
+                }
             );
             this.view.markForCheck();
         }

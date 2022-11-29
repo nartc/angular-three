@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtFloat32BufferAttribute extends THREE.Float32BufferAttribute {
     constructor() {
-        super(...(injectArgs<typeof THREE.Float32BufferAttribute>({ optional: true }) || [[], 0]));
+        super(...(injectArgs<typeof THREE.Float32BufferAttribute>({ optional: true })?.() || [[], 0]));
         return proxify(this);
     }
 }

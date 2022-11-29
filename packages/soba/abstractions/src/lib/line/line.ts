@@ -1,5 +1,6 @@
 import {
     checkNeedsUpdate,
+    filterFalsy,
     injectInstance,
     NgtArgs,
     NgtEuler,
@@ -17,7 +18,7 @@ import {
 } from '@angular-three/core';
 import { NgtObjectPrimitive, NgtPrimitive } from '@angular-three/core/primitives';
 import { Component, inject, Input, NgZone, OnInit } from '@angular/core';
-import { filter, Observable, pipe, tap } from 'rxjs';
+import { Observable, pipe, tap } from 'rxjs';
 import * as THREE from 'three';
 import { Line2, LineGeometry } from 'three-stdlib';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
@@ -92,7 +93,7 @@ export class SobaLine extends Line2 implements OnInit {
     private readonly store = inject(NgtStore);
 
     readonly lineGeometry$: Observable<LineGeometry> = this.instance.select(
-        this.instance.select((s) => s['points']).pipe(filter((points) => !!points)),
+        this.instance.select((s) => s['points']).pipe(filterFalsy()),
         this.instance.select((s) => s['vertexColors']),
         (points, vertexColors) => {
             const geometry = new LineGeometry();
@@ -151,7 +152,7 @@ export class SobaLine extends Line2 implements OnInit {
         { debounce: true }
     );
 
-    private readonly __computeLineDistances__ = this.instance.effect<LineGeometry>(
+    private readonly computeDistances = this.instance.effect<LineGeometry>(
         pipe(
             tap((lineGeometry) => {
                 if (this.geometry.uuid !== lineGeometry.uuid) {
@@ -162,11 +163,11 @@ export class SobaLine extends Line2 implements OnInit {
         )
     );
 
-    private readonly __disposeGeometry__ = this.instance.effect<LineGeometry>(
+    private readonly disposeGeometry = this.instance.effect<LineGeometry>(
         tapEffect((lineGeometry) => () => lineGeometry.dispose())
     );
 
-    private readonly __setDashed__ = this.instance.effect(
+    private readonly setUseDash = this.instance.effect(
         tap(() => {
             const dashed = this.instance.read((s) => s['dashed']);
             if (dashed) {
@@ -185,17 +186,17 @@ export class SobaLine extends Line2 implements OnInit {
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            this.__computeLineDistances__(
+            this.computeDistances(
                 this.instance.select(
                     this.lineGeometry$,
-                    this.instance.instanceRef.pipe(filter((instance) => !!instance)),
-                    this.instance.select((s) => s['points']).pipe(filter((points) => !!points)),
+                    this.instance.instanceRef.pipe(filterFalsy()),
+                    this.instance.select((s) => s['points']).pipe(filterFalsy()),
                     (lineGeometry) => lineGeometry,
                     { debounce: true }
                 )
             );
-            this.__disposeGeometry__(this.lineGeometry$);
-            this.__setDashed__(this.instance.select((s) => s['dashed']));
+            this.disposeGeometry(this.lineGeometry$);
+            this.setUseDash(this.instance.select((s) => s['dashed']));
         });
     }
 

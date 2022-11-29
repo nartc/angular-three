@@ -1,11 +1,8 @@
 import {
-    EventEmitterOf,
     NgtCompound,
-    NgtInstance,
     NgtObjectCompound,
     NgtObservableInput,
     NgtVector3,
-    NgtWrapper,
     provideInstanceRef,
 } from '@angular-three/core';
 import { Component, Input } from '@angular/core';
@@ -22,7 +19,7 @@ import { SobaLine, SOBA_LINE_INPUTS } from '../line/line';
             <ng-content></ng-content>
         </ngt-soba-line>
     `,
-    imports: [SobaLine, NgtWrapper, NgtObjectCompound],
+    imports: [SobaLine, NgtObjectCompound],
     providers: [provideInstanceRef(SobaQuadraticBezierLine, { compound: true })],
     inputs: [...NGT_INSTANCE_INPUTS, ...SOBA_LINE_INPUTS, ...NGT_OBJECT3D_INPUTS],
     outputs: NGT_INSTANCE_OUTPUTS,
@@ -44,20 +41,12 @@ export class SobaQuadraticBezierLine extends NgtCompound<SobaLine> {
         this.write({ segments });
     }
 
-    override get compoundInputs(): (keyof SobaLine | string)[] {
-        return [...super.compoundInputs, ...SOBA_LINE_INPUTS];
-    }
-
-    override get compoundOutputs(): EventEmitterOf<NgtInstance>[] {
-        return [...super.compoundOutputs, ...NGT_INSTANCE_OUTPUTS] as EventEmitterOf<NgtInstance>[];
-    }
-
-    private readonly __curve__ = new THREE.QuadraticBezierCurve3(
+    private readonly curve = new THREE.QuadraticBezierCurve3(
         new THREE.Vector3(),
         new THREE.Vector3(),
         new THREE.Vector3()
     );
-    private readonly __v__ = new THREE.Vector3();
+    private readonly v = new THREE.Vector3();
 
     readonly quadraticBezierPoints$: Observable<THREE.Vector3[]> = this.select(
         this.select((s) => s['start']),
@@ -86,20 +75,20 @@ export class SobaQuadraticBezierLine extends NgtCompound<SobaLine> {
     }
 
     private getPoints_(start: NgtVector3, end: NgtVector3, mid?: NgtVector3, segments = 20) {
-        if (start instanceof THREE.Vector3) this.__curve__.v0.copy(start);
-        else this.__curve__.v0.set(...(start as [number, number, number]));
-        if (end instanceof THREE.Vector3) this.__curve__.v2.copy(end);
-        else this.__curve__.v2.set(...(end as [number, number, number]));
+        if (start instanceof THREE.Vector3) this.curve.v0.copy(start);
+        else this.curve.v0.set(...(start as [number, number, number]));
+        if (end instanceof THREE.Vector3) this.curve.v2.copy(end);
+        else this.curve.v2.set(...(end as [number, number, number]));
         if (mid instanceof THREE.Vector3) {
-            this.__curve__.v1.copy(mid);
+            this.curve.v1.copy(mid);
         } else {
-            this.__curve__.v1.copy(
-                this.__curve__.v0
+            this.curve.v1.copy(
+                this.curve.v0
                     .clone()
-                    .add(this.__curve__.v2.clone().sub(this.__curve__.v0))
-                    .add(this.__v__.set(0, this.__curve__.v0.y - this.__curve__.v2.y, 0))
+                    .add(this.curve.v2.clone().sub(this.curve.v0))
+                    .add(this.v.set(0, this.curve.v0.y - this.curve.v2.y, 0))
             );
         }
-        return this.__curve__.getPoints(segments);
+        return this.curve.getPoints(segments);
     }
 }

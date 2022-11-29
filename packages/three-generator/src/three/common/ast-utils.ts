@@ -137,6 +137,8 @@ export function handleClassMembers(
             'children',
             'up',
             'isObject3D',
+            'modelViewMatrix',
+            'normalMatrix',
         ]);
     } else {
         handleClassMember(sourceFile, node.members, properties, skipConstructor, exclude);

@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtSphereGeometry extends THREE.SphereGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.SphereGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.SphereGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtCircleGeometry extends THREE.CircleGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.CircleGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.CircleGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

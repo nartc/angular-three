@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtTubeGeometry extends THREE.TubeGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.TubeGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.TubeGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

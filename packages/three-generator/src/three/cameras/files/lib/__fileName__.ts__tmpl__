@@ -14,7 +14,7 @@ import { NGT_INSTANCE_INPUTS<% if (hasObject3D) { %>, NGT_INSTANCE_OUTPUTS, NGT_
 })
 export class Ngt<%= name %> extends THREE.<%= name %> {
     constructor() {
-        super(...(injectArgs<typeof THREE.<%= name %>>(<% if (!isArgsRequired) { %>{ optional: true }<% } %>) <% if (!isArgsRequired) { %>|| []<% } %>));
+        super(...(injectArgs<typeof THREE.<%= name %>><% if (!isArgsRequired) { %>({ optional: true })?.<% } else { %>()<% } %>() <% if (!isArgsRequired) { %>|| []<% } %>));
         return proxify(this);
     }
     <% for (const input of staticInputs) { %>

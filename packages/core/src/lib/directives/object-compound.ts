@@ -18,26 +18,35 @@ export class NgtObjectCompound<TObject extends object = any> {
         const hostInstance = this.host.instanceValue as NgtAnyRecord;
         if (hostInstance) {
             compound.instanceRef.set(hostInstance);
+            // if there is 'ref' set on compound
+            if ((compound as NgtAnyRecord)['ref']) {
+                (compound as NgtAnyRecord)['ref'].set(hostInstance);
+            }
         } else {
             host.ref = compound.instanceRef;
+        }
+
+        if (compound.parentCompoundRef) {
+            host.setCompoundParentRef(compound.parentCompoundRef);
         }
 
         compound
             .getInputs$()
             .pipe(takeUntil(compound.destroy$))
             .subscribe((changes) => {
-                Object.entries(changes).forEach(([key, value]) => {
-                    const hostValue = is.setter(host, key as keyof typeof host)
-                        ? host.read((s) => s[key])
-                        : hostInstance[key];
-                    try {
-                        if (!is.equ(value, hostValue) && !compound.useOnHost.includes(key as keyof TObject & string)) {
+                for (const [key, value] of Object.entries(changes)) {
+                    // skip 'ref', it is special
+                    if (key === 'ref') continue;
+                    const isSetter = is.setter(host, key as keyof typeof host);
+                    const hostValue = isSetter ? host.read((s) => s[key]) : hostInstance[key];
+                    if (!is.equ(value, hostValue) && !compound.useOnHost.includes(key as keyof TObject & string)) {
+                        if (!isSetter) {
                             hostInstance[key] = value;
+                        } else {
+                            (host as NgtAnyRecord)[key] = value;
                         }
-                    } catch (e) {
-                        console.log(e);
                     }
-                });
+                }
             });
 
         compound.observeOutputs(this.host);

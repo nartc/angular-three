@@ -1,6 +1,6 @@
-import { defaultProjector, NgtComponentStore, NgtRef, NgtStore, tapEffect } from '@angular-three/core';
+import { defaultProjector, filterFalsy, NgtComponentStore, NgtRef, NgtStore, tapEffect } from '@angular-three/core';
 import { inject, Injectable } from '@angular/core';
-import { filter, isObservable, Observable, of, tap } from 'rxjs';
+import { isObservable, Observable, of, tap } from 'rxjs';
 import * as THREE from 'three';
 
 interface FBOSettings<T extends boolean = false> extends THREE.WebGLRenderTargetOptions {
@@ -89,7 +89,7 @@ export class SobaFBO extends NgtComponentStore<SobaFBOState> {
         this.setTarget(params$ as Observable<SobaFBOParams>);
         this.setup(
             this.select(
-                targetRef.pipe(filter((target) => !!target)),
+                targetRef.pipe(filterFalsy()),
                 this.select((s) => s.width),
                 this.select((s) => s.height),
                 this.select((s) => s.settings),

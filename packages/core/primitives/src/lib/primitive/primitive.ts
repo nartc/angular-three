@@ -21,7 +21,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 export class NgtPrimitive extends NgtComponentStore {
     constructor() {
         super();
-        const [object] = injectArgs();
+        const [object] = injectArgs()();
         return proxify(object, { primitive: true });
     }
 

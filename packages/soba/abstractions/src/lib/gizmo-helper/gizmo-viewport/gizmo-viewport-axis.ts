@@ -1,12 +1,11 @@
 import {
     checkNeedsUpdate,
-    injectInstance,
     NgtArgs,
-    NgtInstance,
+    NgtCompound,
+    NgtObjectCompound,
     NgtObservableInput,
     NgtStore,
     NgtThreeEvent,
-    NgtWrapper,
     provideInstanceRef,
 } from '@angular-three/core';
 import { NgtBoxGeometry } from '@angular-three/core/geometries';
@@ -15,7 +14,7 @@ import { NgtGroup, NgtMesh, NgtSprite } from '@angular-three/core/objects';
 import { DOCUMENT } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../../common';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../../common';
 import { SobaGizmoHelper } from '../gizmo-helper';
 
 @Component({
@@ -42,7 +41,7 @@ export class SobaGizmoViewportAxis {
     standalone: true,
     template: `
         <ngt-sprite
-            *wrapper="this"
+            [objectCompound]="this"
             [scale]="scale$"
             [raycast]="gizmoRaycast"
             (pointerout)="onPointerOut($event)"
@@ -57,57 +56,62 @@ export class SobaGizmoViewportAxis {
             ></ngt-sprite-material>
         </ngt-sprite>
     `,
-    imports: [NgtSprite, NgtSpriteMaterial, NgtWrapper],
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
-    providers: [provideInstanceRef(SobaGizmoViewportAxisHead)],
+    imports: [NgtSprite, NgtSpriteMaterial, NgtObjectCompound],
+    providers: [provideInstanceRef(SobaGizmoViewportAxisHead, { compound: true })],
+    inputs: [...NGT_INSTANCE_INPUTS, ...NGT_OBJECT3D_INPUTS],
+    outputs: NGT_INSTANCE_OUTPUTS,
 })
-export class SobaGizmoViewportAxisHead extends NgtSprite {
+export class SobaGizmoViewportAxisHead extends NgtCompound<NgtSprite> {
+    [x: string]: any;
     @Input() set arcStyle(arcStyle: NgtObservableInput<string>) {
-        this.instance.write({ arcStyle });
+        this.write({ arcStyle });
     }
 
     @Input() set label(label: NgtObservableInput<string>) {
-        this.instance.write({ label });
+        this.write({ label });
     }
 
     @Input() set labelColor(labelColor: NgtObservableInput<string>) {
-        this.instance.write({ labelColor });
+        this.write({ labelColor });
     }
 
     @Input() set axisHeadScale(axisHeadScale: NgtObservableInput<number>) {
-        this.instance.write({ axisHeadScale });
+        this.write({ axisHeadScale });
     }
 
     @Input() set disabled(disabled: NgtObservableInput<boolean>) {
-        this.instance.write({ disabled });
+        this.write({ disabled });
     }
 
     @Input() set font(font: NgtObservableInput<string>) {
-        this.instance.write({ font });
+        this.write({ font });
     }
 
     private readonly store = inject(NgtStore);
-    private readonly instance = injectInstance({ host: true });
-    private readonly __document__ = inject(DOCUMENT);
-    private readonly __gizmoHelper__ = inject(SobaGizmoHelper, { optional: true });
+    private readonly document = inject(DOCUMENT);
+    private readonly sobaGizmoHelper = inject(SobaGizmoHelper, { optional: true });
 
     get gizmoHelper() {
-        return this.__gizmoHelper__ as SobaGizmoHelper;
+        return this.sobaGizmoHelper as SobaGizmoHelper;
     }
 
     get gizmoRaycast() {
         return this.gizmoHelper.gizmoRaycast;
     }
 
-    readonly texture$ = this.instance.select(
-        this.instance.select((s) => s['arcStyle']),
-        this.instance.select((s) => s['label']),
-        this.instance.select((s) => s['labelColor']),
-        this.instance.select((s) => s['font']),
+    override get useOnHost(): (keyof NgtSprite | string)[] {
+        return [...super.useOnHost, 'scale', 'raycast'];
+    }
+
+    readonly texture$ = this.select(
+        this.select((s) => s['arcStyle']),
+        this.select((s) => s['label']),
+        this.select((s) => s['labelColor']),
+        this.select((s) => s['font']),
         (arcStyle, label, labelColor, font) => {
             const gl = this.store.read((s) => s.gl);
 
-            const canvas = this.__document__.createElement('canvas');
+            const canvas = this.document.createElement('canvas');
             canvas.width = 64;
             canvas.height = 64;
 
@@ -136,32 +140,32 @@ export class SobaGizmoViewportAxisHead extends NgtSprite {
         { debounce: true }
     );
 
-    readonly opacity$ = this.instance.select(
-        this.instance.select((s) => s['label']),
+    readonly opacity$ = this.select(
+        this.select((s) => s['label']),
         (label) => (label ? 1 : 0.75),
         { debounce: true }
     );
 
-    readonly scale$ = this.instance.select(
-        this.instance.select((s) => s['active']),
-        this.instance.select((s) => s['label']),
-        this.instance.select((s) => s['axisHeadScale']),
+    readonly scale$ = this.select(
+        this.select((s) => s['active']),
+        this.select((s) => s['label']),
+        this.select((s) => s['axisHeadScale']),
         (active, label, axisHeadScale) => (label ? 1 : 0.75) * (active ? 1.2 : 1) * axisHeadScale,
         { debounce: true }
     );
 
-    constructor() {
-        super();
-        this.instance.write({ axisHeadScale: 1, active: false, label: '' });
+    override initialize() {
+        super.initialize();
+        this.write({ axisHeadScale: 1, active: false, label: '' });
     }
 
     onPointerOut($event: NgtThreeEvent<PointerEvent>) {
         if (!this.disabled) {
-            if (this.instance.click.observed) {
-                this.instance.click.emit($event);
+            if (this.ngtInstance?.click.observed) {
+                this.ngtInstance?.click.emit($event);
             } else {
                 $event.stopPropagation();
-                this.instance.write({ active: false });
+                this.write({ active: false });
             }
         }
     }
@@ -169,7 +173,7 @@ export class SobaGizmoViewportAxisHead extends NgtSprite {
     onPointerOver($event: NgtThreeEvent<PointerEvent>) {
         if (!this.disabled) {
             $event.stopPropagation();
-            this.instance.write({ active: true });
+            this.write({ active: true });
         }
     }
 

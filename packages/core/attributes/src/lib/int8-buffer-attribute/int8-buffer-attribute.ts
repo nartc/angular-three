@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtInt8BufferAttribute extends THREE.Int8BufferAttribute {
     constructor() {
-        super(...(injectArgs<typeof THREE.Int8BufferAttribute>({ optional: true }) || [[], 0]));
+        super(...(injectArgs<typeof THREE.Int8BufferAttribute>({ optional: true })?.() || [[], 0]));
         return proxify(this);
     }
 }

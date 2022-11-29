@@ -37,7 +37,7 @@ export class SobaOrbitControls extends OrbitControls implements OnInit {
     }
 
     constructor() {
-        const [camera, domElement] = injectArgs<typeof OrbitControls>({ optional: true }) || [];
+        const [camera, domElement] = injectArgs<typeof OrbitControls>({ optional: true })?.() || [];
         const defaultCamera = inject(NgtStore).read((s) => s.camera);
         super(camera || defaultCamera, domElement);
         return proxify(this, {

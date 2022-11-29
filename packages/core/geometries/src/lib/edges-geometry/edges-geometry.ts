@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtEdgesGeometry extends THREE.EdgesGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.EdgesGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.EdgesGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

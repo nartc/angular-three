@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtCapsuleGeometry extends THREE.CapsuleGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.CapsuleGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.CapsuleGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

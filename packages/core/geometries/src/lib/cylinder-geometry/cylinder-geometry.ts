@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtCylinderGeometry extends THREE.CylinderGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.CylinderGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.CylinderGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

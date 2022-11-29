@@ -3,7 +3,7 @@ import { join } from 'path';
 
 export default async function commonInputsOutputsGenerator(tree: Tree, ngtVersion: string) {
     const { libsDir } = getWorkspaceLayout(tree);
-    const sobaLibs = ['cameras', 'controls'];
+    const sobaLibs = ['cameras', 'controls', 'abstractions'];
 
     logger.log('Generating common for soba...');
     for (const lib of sobaLibs) {

@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtRingGeometry extends THREE.RingGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.RingGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.RingGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

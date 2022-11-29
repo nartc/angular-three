@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtTetrahedronGeometry extends THREE.TetrahedronGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.TetrahedronGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.TetrahedronGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

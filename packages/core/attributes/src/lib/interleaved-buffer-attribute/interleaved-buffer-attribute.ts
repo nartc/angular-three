@@ -14,7 +14,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 export class NgtInterleavedBufferAttribute extends THREE.InterleavedBufferAttribute {
     constructor() {
         super(
-            ...(injectArgs<typeof THREE.InterleavedBufferAttribute>({ optional: true }) || [
+            ...(injectArgs<typeof THREE.InterleavedBufferAttribute>({ optional: true })?.() || [
                 new THREE.InterleavedBuffer([], 0),
                 0,
                 0,

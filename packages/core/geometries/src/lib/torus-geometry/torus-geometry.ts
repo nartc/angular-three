@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtTorusGeometry extends THREE.TorusGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.TorusGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.TorusGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

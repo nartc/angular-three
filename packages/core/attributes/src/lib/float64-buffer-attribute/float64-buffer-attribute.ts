@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtFloat64BufferAttribute extends THREE.Float64BufferAttribute {
     constructor() {
-        super(...(injectArgs<typeof THREE.Float64BufferAttribute>({ optional: true }) || [[], 0]));
+        super(...(injectArgs<typeof THREE.Float64BufferAttribute>({ optional: true })?.() || [[], 0]));
         return proxify(this);
     }
 }

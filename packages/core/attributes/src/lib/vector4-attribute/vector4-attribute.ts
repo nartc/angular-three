@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtVector4Attribute extends THREE.Vector4 {
     constructor() {
-        super(...(injectArgs<typeof THREE.Vector4>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.Vector4>({ optional: true })?.() || []));
         return proxify(this);
     }
 }

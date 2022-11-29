@@ -1,3 +1,4 @@
+// GENERATED - AngularThree v1.0.0
 export const NGT_INSTANCE_INPUTS = [
     'ref',
     'attach',
@@ -45,6 +46,7 @@ export const NGT_OBJECT3D_INPUTS = [
     'renderOrder',
     'animations',
     'userData',
+    'raycast',
     'customDepthMaterial',
     'customDistanceMaterial',
     'onBeforeRender',

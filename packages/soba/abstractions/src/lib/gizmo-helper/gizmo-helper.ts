@@ -1,15 +1,13 @@
 import {
-    injectInstance,
     make,
-    NgtInstance,
+    NgtCompound,
+    NgtObjectCompound,
     NgtObservableInput,
     NgtPortal,
     NgtRef,
     NgtStore,
-    NgtWrapper,
     prepare,
     provideInstanceRef,
-    provideIsWrapper,
     tapEffect,
 } from '@angular-three/core';
 import { NgtGroup } from '@angular-three/core/objects';
@@ -17,7 +15,7 @@ import { SobaOrthographicCamera } from '@angular-three/soba/cameras';
 import { useCamera } from '@angular-three/soba/misc';
 import { Component, EventEmitter, inject, Input, NgZone, OnInit, Output } from '@angular/core';
 import * as THREE from 'three';
-import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS } from '../common';
+import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
 type ControlsProto = { update(): void; target: THREE.Vector3 };
 
@@ -32,69 +30,68 @@ const targetPosition = new THREE.Vector3();
     selector: 'ngt-soba-gizmo-helper',
     standalone: true,
     template: `
-        <ngt-portal [container]="instance.readKey('virtualScene')">
+        <ngt-portal [container]="readKey('virtualScene')">
             <ngt-soba-orthographic-camera
-                [ref]="instance.readKey('virtualCamera')"
+                [ref]="readKey('virtualCamera')"
                 [position]="[0, 0, 200]"
             ></ngt-soba-orthographic-camera>
-            <ngt-group *wrapper="this" [position]="position$">
+            <ngt-group [objectCompound]="this" [position]="position$">
                 <ng-content></ng-content>
             </ngt-group>
         </ngt-portal>
     `,
-    hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS, outputs: NGT_INSTANCE_OUTPUTS }],
-    providers: [provideInstanceRef(SobaGizmoHelper), provideIsWrapper()],
-    imports: [NgtPortal, SobaOrthographicCamera, NgtGroup, NgtWrapper],
+    providers: [provideInstanceRef(SobaGizmoHelper, { compound: true })],
+    imports: [NgtPortal, SobaOrthographicCamera, NgtGroup, NgtObjectCompound],
+    inputs: [...NGT_INSTANCE_INPUTS, ...NGT_OBJECT3D_INPUTS],
+    outputs: NGT_INSTANCE_OUTPUTS,
 })
-export class SobaGizmoHelper extends NgtGroup implements OnInit {
+export class SobaGizmoHelper extends NgtCompound<NgtGroup> implements OnInit {
     @Input() set alignment(alignment: NgtObservableInput<'top-left' | 'top-right' | 'bottom-right' | 'bottom-left'>) {
-        this.instance.write({ alignment });
+        this.write({ alignment });
     }
 
     @Input() set margin(margin: NgtObservableInput<[number, number]>) {
-        this.instance.write({ margin });
+        this.write({ margin });
     }
 
     @Input() set renderPriority(renderPriority: number) {
-        this.instance.write({ renderPriority });
+        this.write({ renderPriority });
     }
 
     @Input() set autoClear(autoClear: NgtObservableInput<boolean>) {
-        this.instance.write({ autoClear });
+        this.write({ autoClear });
     }
 
     @Output() update = new EventEmitter();
 
-    protected readonly instance = injectInstance({ host: true });
     private readonly store = inject(NgtStore);
     private readonly zone = inject(NgZone);
 
-    private __animating__ = false;
-    private __focusPoint__ = new THREE.Vector3();
-    private __radius__ = 0;
+    private animating = false;
+    private focusPoint = new THREE.Vector3();
+    private radius = 0;
 
     get gizmoRaycast(): THREE.Object3D['raycast'] {
-        return this.instance.read((s) => s['gizmoRaycast']);
+        return this.read((s) => s['gizmoRaycast']);
     }
 
-    readonly position$ = this.instance.select(
-        this.instance.select((s) => s['margin']),
-        this.instance.select((s) => s['alignment']),
+    readonly position$ = this.select(
+        this.select((s) => s['margin']),
+        this.select((s) => s['alignment']),
         this.store.select((s) => s.size),
         ([marginX, marginY], alignment, size) => {
             const x = alignment.endsWith('-left') ? -size.width / 2 + marginX : size.width / 2 - marginX;
             const y = alignment.startsWith('top-') ? size.height / 2 - marginY : -size.height / 2 + marginY;
-
             return make(THREE.Vector3, [x, y, 0]);
         },
         { debounce: true }
     );
 
-    private readonly __switchBackground__ = this.instance.effect<void>(
+    private readonly switchBackground = this.effect<void>(
         tapEffect(() => {
             let mainSceneBackground: THREE.Scene['background'];
             const scene = this.store.read((s) => s.scene);
-            const virtualScene = this.instance.read((s) => s['virtualScene']) as NgtRef<THREE.Scene>;
+            const virtualScene = this.read((s) => s['virtualScene']) as NgtRef<THREE.Scene>;
 
             if (scene.background) {
                 mainSceneBackground = scene.background;
@@ -108,21 +105,21 @@ export class SobaGizmoHelper extends NgtGroup implements OnInit {
         })
     );
 
-    private readonly __setBeforeRender__ = this.instance.effect<void>(
+    private readonly setBeforeRender = this.effect<void>(
         tapEffect(() => {
-            const renderPriority = this.instance.read((s) => s['renderPriority']);
+            const renderPriority = this.read((s) => s['renderPriority']);
             const gl = this.store.read((s) => s.gl);
             const internal = this.store.read((s) => s.internal);
 
             return internal.subscribe(
                 ({ delta }) => {
                     const { camera: mainCamera, controls: defaultControls, invalidate } = this.store.read();
-                    const { virtualScene, virtualCamera, autoClear } = this.instance.read();
+                    const { virtualScene, virtualCamera, autoClear } = this.read();
 
                     if (virtualScene.value && virtualCamera.value) {
-                        if (this.__animating__) {
+                        if (this.animating) {
                             if (q1.angleTo(q2) < 0.01) {
-                                this.__animating__ = false;
+                                this.animating = false;
                             } else {
                                 const step = delta * turnRate;
                                 // animate position by doing a slerp and then scaling the position on the unit sphere
@@ -131,8 +128,8 @@ export class SobaGizmoHelper extends NgtGroup implements OnInit {
                                 mainCamera.position
                                     .set(0, 0, 1)
                                     .applyQuaternion(q1)
-                                    .multiplyScalar(this.__radius__)
-                                    .add(this.__focusPoint__);
+                                    .multiplyScalar(this.radius)
+                                    .add(this.focusPoint);
                                 mainCamera.up.set(0, 1, 0).applyQuaternion(q1).normalize();
                                 mainCamera.quaternion.copy(q1);
                                 if (this.update.observed) {
@@ -147,7 +144,7 @@ export class SobaGizmoHelper extends NgtGroup implements OnInit {
 
                         // Sync Gizmo with main camera orientation
                         matrix.copy(mainCamera.matrix).invert();
-                        this.quaternion.setFromRotationMatrix(matrix);
+                        this.instanceRef.value.quaternion.setFromRotationMatrix(matrix);
 
                         // Render virtual camera
                         if (autoClear) {
@@ -163,9 +160,13 @@ export class SobaGizmoHelper extends NgtGroup implements OnInit {
         })
     );
 
-    constructor() {
-        super();
-        this.instance.write({
+    override get useOnHost(): (keyof NgtGroup | string)[] {
+        return [...super.useOnHost, 'position'];
+    }
+
+    override initialize() {
+        super.initialize();
+        this.write({
             virtualCamera: new NgtRef(),
             alignment: 'bottom-right',
             margin: [80, 80],
@@ -176,42 +177,35 @@ export class SobaGizmoHelper extends NgtGroup implements OnInit {
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            this.instance.write({
+            this.write({
                 virtualScene: new NgtRef(prepare(new THREE.Scene(), this.store.read)),
                 gizmoRaycast: useCamera(
-                    this.instance.read((s) => s['virtualCamera']),
+                    this.read((s) => s['virtualCamera']),
                     this.store.read((s) => s.pointer)
                 ),
             });
 
-            setTimeout(() => {
-                console.log(
-                    this.store.read((s) => s.scene),
-                    this.instance.read((s) => s['virtualScene'])
-                );
-            });
-
-            this.__switchBackground__();
-            this.__setBeforeRender__();
+            this.switchBackground();
+            this.setBeforeRender();
         });
     }
 
     tweenCamera(direction: THREE.Vector3) {
-        this.__animating__ = true;
+        this.animating = true;
 
         const { controls: defaultControls, camera: mainCamera, invalidate } = this.store.read();
 
         if (defaultControls) {
-            this.__focusPoint__ = (defaultControls as unknown as ControlsProto).target;
+            this.focusPoint = (defaultControls as unknown as ControlsProto).target;
         }
 
-        this.__radius__ = mainCamera.position.distanceTo(target);
+        this.radius = mainCamera.position.distanceTo(target);
 
         // Rotate from current camera orientation
         q1.copy(mainCamera.quaternion);
 
         // To new current camera orientation
-        targetPosition.copy(direction).multiplyScalar(this.__radius__).add(target);
+        targetPosition.copy(direction).multiplyScalar(this.radius).add(target);
         dummy.lookAt(targetPosition);
         q2.copy(dummy.quaternion);
 

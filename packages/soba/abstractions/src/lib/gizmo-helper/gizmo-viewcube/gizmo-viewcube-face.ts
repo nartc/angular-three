@@ -1,4 +1,4 @@
-import { NgtInstance, NgtObservableInput, NgtRepeat, NgtThreeEvent, provideInstanceRef } from '@angular-three/core';
+import { NgtObservableInput, NgtRepeat, NgtThreeEvent } from '@angular-three/core';
 import { NgtBoxGeometry } from '@angular-three/core/geometries';
 import { NgtMeshLambertMaterial } from '@angular-three/core/materials';
 import { NgtMesh } from '@angular-three/core/objects';
@@ -13,38 +13,36 @@ import { SobaGizmoViewcubeInputs } from './gizmo-viewcube-inputs';
     template: `
         <ngt-mesh-lambert-material
             [map]="texture$"
-            [attach]="['material', instance.readKey('index')]"
-            [color]="instance.readKey('hover') ? instance.readKey('hoverColor') : 'white'"
+            [attach]="['material', readKey('index')]"
+            [color]="readKey('hover') ? readKey('hoverColor') : 'white'"
             [transparent]="true"
-            [opacity]="instance.readKey('opacity')"
+            [opacity]="readKey('opacity')"
         ></ngt-mesh-lambert-material>
     `,
     imports: [NgtMeshLambertMaterial],
-    hostDirectives: [{ directive: NgtInstance }],
-    providers: [provideInstanceRef(SobaGizmoViewcubeFaceMaterial)],
 })
 export class SobaGizmoViewcubeFaceMaterial extends SobaGizmoViewcubeInputs {
     @Input() set hover(hover: NgtObservableInput<boolean>) {
-        this.instance.write({ hover });
+        this.write({ hover });
     }
 
     @Input() set index(index: NgtObservableInput<number>) {
-        this.instance.write({ index });
+        this.write({ index });
     }
 
-    private readonly __document__ = inject(DOCUMENT);
+    private readonly document = inject(DOCUMENT);
 
-    readonly texture$ = this.instance.select(
-        this.instance.select((s) => s['index']),
-        this.instance.select((s) => s['faces']),
-        this.instance.select((s) => s['font']),
-        this.instance.select((s) => s['color']),
-        this.instance.select((s) => s['textColor']),
-        this.instance.select((s) => s['strokeColor']),
+    readonly texture$ = this.select(
+        this.select((s) => s['index']),
+        this.select((s) => s['faces']),
+        this.select((s) => s['font']),
+        this.select((s) => s['color']),
+        this.select((s) => s['textColor']),
+        this.select((s) => s['strokeColor']),
         () => {
             const gl = this.store.read((s) => s.gl);
-            const { color, strokeColor, textColor, font, faces, index } = this.instance.read();
-            const canvas = this.__document__.createElement('canvas');
+            const { color, strokeColor, textColor, font, faces, index } = this.read();
+            const canvas = this.document.createElement('canvas');
             canvas.width = 128;
             canvas.height = 128;
             const context = canvas.getContext('2d')!;
@@ -86,8 +84,6 @@ export class SobaGizmoViewcubeFaceMaterial extends SobaGizmoViewcubeInputs {
         </ngt-mesh>
     `,
     imports: [NgtMesh, NgtBoxGeometry, SobaGizmoViewcubeFaceMaterial, NgtRepeat],
-    hostDirectives: [{ directive: NgtInstance }],
-    providers: [provideInstanceRef(SobaGizmoViewcubeFaceCube)],
 })
 export class SobaGizmoViewcubeFaceCube extends SobaGizmoViewcubeInputs {
     hover = -1;

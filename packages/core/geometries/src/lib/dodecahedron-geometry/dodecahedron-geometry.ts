@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtDodecahedronGeometry extends THREE.DodecahedronGeometry {
     constructor() {
-        super(...(injectArgs<typeof THREE.DodecahedronGeometry>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.DodecahedronGeometry>({ optional: true })?.() || []));
         return proxify(this, { attach: 'geometry' });
     }
 }

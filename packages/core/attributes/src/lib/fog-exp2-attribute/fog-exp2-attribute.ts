@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtFogExp2Attribute extends THREE.FogExp2 {
     constructor() {
-        super(...(injectArgs<typeof THREE.FogExp2>({ optional: true }) || ['#fff']));
+        super(...(injectArgs<typeof THREE.FogExp2>({ optional: true })?.() || ['#fff']));
         return proxify(this);
     }
 }

@@ -1,8 +1,6 @@
 import {
     createBeforeRenderCallback,
-    EventEmitterOf,
     NgtCompound,
-    NgtInstance,
     NgtObjectCompound,
     NgtObservableInput,
     provideInstanceRef,
@@ -49,14 +47,6 @@ export class SobaBillboard extends NgtCompound<NgtGroup> {
 
     override get useOnHost(): (keyof NgtGroup | string)[] {
         return [...super.useOnHost, 'beforeRender'];
-    }
-
-    override get compoundInputs(): (keyof NgtGroup | string)[] {
-        return [...super.compoundInputs, ...NGT_OBJECT3D_INPUTS];
-    }
-
-    override get compoundOutputs(): EventEmitterOf<NgtInstance>[] {
-        return [...super.compoundOutputs, ...NGT_INSTANCE_OUTPUTS] as EventEmitterOf<NgtInstance>[];
     }
 
     readonly onBeforeRender = createBeforeRenderCallback<THREE.Group>(({ state, object: billboard }) => {

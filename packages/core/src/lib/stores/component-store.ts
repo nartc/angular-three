@@ -25,6 +25,8 @@ export const defaultProjector = () => ({});
 export const skipFirstUndefined = <T>(): MonoTypeOperatorFunction<T> =>
     filter<T>((value, index) => index > 0 || value !== undefined);
 
+export const filterFalsy = <T>(): MonoTypeOperatorFunction<T> => filter<T>((value): value is T => !!value);
+
 type EffectFn<TValue> = (
     value: TValue
 ) => void | undefined | ((cleanUpParams: { prev: TValue | undefined; complete: boolean; error: boolean }) => void);

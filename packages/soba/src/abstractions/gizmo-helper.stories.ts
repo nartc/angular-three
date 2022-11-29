@@ -13,9 +13,8 @@ import { setupCanvas, setupCanvasImports } from '../setup-canvas';
     standalone: true,
     template: `
         <ng-container *ngIf="node$ | async as node">
-            <ngt-soba-gizmo-helper [alignment]="alignment" [margin]="margin">
+            <ngt-soba-gizmo-helper *ngIf="mode === 'viewcube'; else viewport" [alignment]="alignment" [margin]="margin">
                 <ngt-soba-gizmo-viewcube
-                    *ngIf="mode === 'viewcube'; else viewport"
                     [faces]="['Right', 'Left', 'Top', 'Bottom', 'Front', 'Back']"
                     [opacity]="1"
                     color="white"
@@ -23,14 +22,16 @@ import { setupCanvas, setupCanvasImports } from '../setup-canvas';
                     textColor="black"
                     hoverColor="lightgray"
                 ></ngt-soba-gizmo-viewcube>
-                <ng-template #viewport>
+            </ngt-soba-gizmo-helper>
+            <ng-template #viewport>
+                <ngt-soba-gizmo-helper [alignment]="alignment" [margin]="margin">
                     <ngt-soba-gizmo-viewport
                         [axisColors]="['red', 'green', 'blue']"
                         labelColor="black"
-                        hideNegativeAxes="false"
+                        [hideNegativeAxes]="false"
                     ></ngt-soba-gizmo-viewport>
-                </ng-template>
-            </ngt-soba-gizmo-helper>
+                </ngt-soba-gizmo-helper>
+            </ng-template>
 
             <ngt-object-primitive *args="[node.scene]" [scale]="0.01"></ngt-object-primitive>
 

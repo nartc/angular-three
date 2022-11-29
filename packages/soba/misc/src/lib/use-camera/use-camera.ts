@@ -1,6 +1,6 @@
-import { applyProps, is, NgtRef, NgtStore } from '@angular-three/core';
+import { applyProps, filterFalsy, is, NgtRef, NgtStore } from '@angular-three/core';
 import { inject, Pipe, PipeTransform } from '@angular/core';
-import { filter, take } from 'rxjs';
+import { take } from 'rxjs';
 import * as THREE from 'three';
 
 export function useCamera(
@@ -24,12 +24,7 @@ export function useCamera(
         };
 
         if (is.ref(camera)) {
-            camera
-                .pipe(
-                    filter((c) => !!c),
-                    take(1)
-                )
-                .subscribe(raycast);
+            camera.pipe(filterFalsy(), take(1)).subscribe(raycast);
         } else {
             raycast(camera as THREE.Camera);
         }

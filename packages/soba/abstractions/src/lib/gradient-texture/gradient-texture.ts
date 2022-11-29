@@ -14,7 +14,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 export class SobaGradientTexture extends THREE.Texture {
     constructor() {
         const store = inject(NgtStore);
-        const [stops, colors, size = 1024] = injectArgs() as [stops: number[], colors: string[], size?: number];
+        const [stops, colors, size = 1024] = injectArgs()() as [stops: number[], colors: string[], size?: number];
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d')!;
         canvas.width = 16;

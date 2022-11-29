@@ -13,7 +13,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
 })
 export class NgtColorAttribute extends THREE.Color {
     constructor() {
-        super(...(injectArgs<typeof THREE.Color>({ optional: true }) || []));
+        super(...(injectArgs<typeof THREE.Color>({ optional: true })?.() || []));
         return proxify(this);
     }
 }

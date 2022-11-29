@@ -7,7 +7,7 @@ import helpersGenerator from './helpers/helpers';
 import lightsGenerator from './lights/lights';
 import materialsGenerator from './materials/materials';
 import objectsGenerator from './objects/objects';
-import commonInputsOutputsGenerator from './soba/common';
+import commonInputsOutputsGenerator from './soba/common-inputs-outputs';
 import texturesGenerator from './textures/textures';
 
 export default async function (tree: Tree) {
