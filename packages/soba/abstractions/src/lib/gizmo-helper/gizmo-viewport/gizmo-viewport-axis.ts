@@ -4,7 +4,6 @@ import {
     NgtCompound,
     NgtObjectCompound,
     NgtObservableInput,
-    NgtStore,
     NgtThreeEvent,
     provideInstanceRef,
 } from '@angular-three/core';
@@ -87,7 +86,6 @@ export class SobaGizmoViewportAxisHead extends NgtCompound<NgtSprite> {
         this.write({ font });
     }
 
-    private readonly store = inject(NgtStore);
     private readonly document = inject(DOCUMENT);
     private readonly sobaGizmoHelper = inject(SobaGizmoHelper, { optional: true });
 

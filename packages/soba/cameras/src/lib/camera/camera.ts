@@ -5,7 +5,6 @@ import {
     NgtCompound,
     NgtObservableInput,
     NgtRef,
-    NgtStore,
     tapEffect,
 } from '@angular-three/core';
 import { SobaFBO } from '@angular-three/soba/misc';
@@ -35,7 +34,6 @@ export abstract class SobaCamera<TCamera extends NgtCamera> extends NgtCompound<
         this.write({ envMap });
     }
 
-    protected readonly store = inject(NgtStore);
     protected readonly fbo = inject(SobaFBO);
 
     private readonly setFBO = this.effect(

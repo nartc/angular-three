@@ -5,7 +5,6 @@ import {
     NgtObservableInput,
     NgtPortal,
     NgtRef,
-    NgtStore,
     prepare,
     provideInstanceRef,
     tapEffect,
@@ -13,7 +12,7 @@ import {
 import { NgtGroup } from '@angular-three/core/objects';
 import { SobaOrthographicCamera } from '@angular-three/soba/cameras';
 import { useCamera } from '@angular-three/soba/misc';
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
@@ -63,8 +62,6 @@ export class SobaGizmoHelper extends NgtCompound<NgtGroup> implements OnInit {
     }
 
     @Output() update = new EventEmitter();
-
-    private readonly store = inject(NgtStore);
 
     private animating = false;
     private focusPoint = new THREE.Vector3();

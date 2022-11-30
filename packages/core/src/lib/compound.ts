@@ -13,6 +13,7 @@ import type { NgtInstance } from './instance';
 import { injectCompoundInstanceRef } from './instance';
 import { NgtRef } from './ref';
 import { NgtComponentStore } from './stores/component-store';
+import { NgtStore } from './stores/store';
 import type { NgtAnyRecord } from './types';
 import { getInstanceLocalState } from './utils/get-instance-local-state';
 import { is } from './utils/is';
@@ -29,7 +30,8 @@ export abstract class NgtCompound<
     extends NgtComponentStore
     implements OnChanges
 {
-    protected zone = inject(NgZone);
+    protected readonly zone = inject(NgZone);
+    protected readonly store = inject(NgtStore);
 
     readonly parentCompoundRef = injectCompoundInstanceRef({ skipSelf: true, optional: true });
     readonly instanceRef = new NgtRef<TObject>();
