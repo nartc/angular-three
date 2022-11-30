@@ -15,7 +15,7 @@ export class NgtObjectCompound<TObject extends object = any> {
     @Input() set objectCompound(compound: NgtCompound<TObject>) {
         if (!this.host || !is.object3d(this.host.instanceValue)) return;
         const host = this.host;
-        const hostInstance = this.host.instanceValue as NgtAnyRecord;
+        const hostInstance = this.host.instanceValue as TObject;
         if (hostInstance) {
             compound.instanceRef.set(hostInstance);
             // if there is 'ref' set on compound
@@ -37,11 +37,13 @@ export class NgtObjectCompound<TObject extends object = any> {
                 for (const [key, value] of Object.entries(changes)) {
                     // skip 'ref', it is special
                     if (key === 'ref') continue;
-                    const isSetter = is.setter(host, key as keyof typeof host);
-                    const hostValue = isSetter ? host.read((s) => s[key]) : hostInstance[key];
+                    const isSetter = is.setter(host as NgtAnyRecord, key);
+                    const hostValue = isSetter
+                        ? host.read((s) => s[key])
+                        : hostInstance[key as keyof typeof hostInstance];
                     if (!is.equ(value, hostValue) && !compound.useOnHost.includes(key as keyof TObject & string)) {
                         if (!isSetter) {
-                            hostInstance[key] = value;
+                            hostInstance[key as keyof typeof hostInstance] = value;
                         } else {
                             (host as NgtAnyRecord)[key] = value;
                         }

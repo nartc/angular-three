@@ -13,12 +13,15 @@ export type EventEmitterOf<T extends object = object> = {
 }[keyof T];
 
 @Directive()
-export abstract class NgtCompound<TObject extends object = any, THost extends NgtInstance = NgtInstance>
+export abstract class NgtCompound<
+        TObject extends object = any,
+        THost extends NgtInstance<TObject> = NgtInstance<TObject>
+    >
     extends NgtComponentStore
     implements OnChanges
 {
     readonly parentCompoundRef = injectCompoundInstanceRef({ skipSelf: true, optional: true });
-    readonly instanceRef = new NgtRef();
+    readonly instanceRef = new NgtRef<TObject>();
 
     get ngtInstance(): NgtInstance<TObject> | undefined {
         return getInstanceLocalState(this.instanceRef?.value)?.hostInstance;

@@ -1,21 +1,10 @@
-import {
-    defaultProjector,
-    filterFalsy,
-    NgtCompound,
-    NgtObjectCompound,
-    NgtObservableInput,
-    NgtRef,
-    NgtStore,
-    provideInstanceRef,
-    tapEffect,
-} from '@angular-three/core';
+import { NgtObjectCompound, provideInstanceRef } from '@angular-three/core';
 import { NgtOrthographicCamera } from '@angular-three/core/cameras';
 import { NgtGroup } from '@angular-three/core/objects';
 import { SobaFBO } from '@angular-three/soba/misc';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
-import { Component, ContentChild, inject, Input, NgZone, OnInit } from '@angular/core';
-import { tap } from 'rxjs';
-import * as THREE from 'three';
+import { Component, ContentChild, OnInit } from '@angular/core';
+import { SobaCamera } from '../camera/camera';
 import { SobaCameraContent } from '../camera/camera-content';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
@@ -48,32 +37,8 @@ import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '
     inputs: [...NGT_INSTANCE_INPUTS, ...NGT_OBJECT3D_INPUTS, ...getInputs()],
     outputs: NGT_INSTANCE_OUTPUTS,
 })
-export class SobaOrthographicCamera extends NgtCompound<NgtOrthographicCamera> implements OnInit {
-    @Input() set makeDefault(makeDefault: NgtObservableInput<boolean>) {
-        this.write({ makeDefault });
-    }
-
-    @Input() set manual(manual: NgtObservableInput<boolean>) {
-        this.write({ manual });
-    }
-
-    @Input() set frames(frames: NgtObservableInput<boolean>) {
-        this.write({ frames });
-    }
-
-    @Input() set resolution(resolution: NgtObservableInput<boolean>) {
-        this.write({ resolution });
-    }
-
-    @Input() set envMap(envMap: NgtObservableInput<THREE.Texture>) {
-        this.write({ envMap });
-    }
-
+export class SobaOrthographicCamera extends SobaCamera<NgtOrthographicCamera> implements OnInit {
     @ContentChild(SobaCameraContent) cameraContent?: SobaCameraContent;
-
-    private readonly store = inject(NgtStore);
-    private readonly zone = inject(NgZone);
-    private readonly fbo = inject(SobaFBO);
 
     readonly left$ = this.select(
         this.store.select((s) => s.size),
@@ -103,73 +68,8 @@ export class SobaOrthographicCamera extends NgtCompound<NgtOrthographicCamera> i
         { debounce: true }
     );
 
-    private readonly setDefaultCamera = this.effect(
-        tapEffect(() => {
-            if (this.read((s) => s['makeDefault'])) {
-                const { camera: oldCamera, cameraRef: oldCameraRef } = this.store.read();
-                this.store.write({ camera: this, cameraRef: this.instanceRef });
-                return () => this.store.write({ camera: oldCamera, cameraRef: oldCameraRef });
-            }
-        })
-    );
-
-    private readonly updateProjectionMatrix = this.effect(
-        tap(() => {
-            if (!this.read((s) => s['manual'])) {
-                this.instanceRef.value.updateProjectionMatrix();
-            }
-        })
-    );
-
-    private readonly setFBO = this.effect(
-        tap(() => {
-            const resolution = this.read((s) => s['resolution']);
-            this.write({
-                fboRef: this.fbo.use(() => ({ width: resolution })),
-            });
-        })
-    );
-
-    override initialize() {
-        super.initialize();
-        this.write({
-            resolution: 256,
-            frames: Infinity,
-            makeDefault: false,
-            manual: false,
-            groupRef: new NgtRef(),
-            fboRef: new NgtRef(),
-        });
-    }
-
     override get useOnHost(): (keyof NgtOrthographicCamera | string)[] {
         return [...super.useOnHost, 'left', 'right', 'top', 'bottom'];
-    }
-
-    ngOnInit() {
-        this.zone.runOutsideAngular(() => {
-            requestAnimationFrame(() => {
-                this.instanceRef.value.updateProjectionMatrix();
-            });
-            this.setFBO(this.select((s) => s['resolution']));
-            const instanceRef$ = this.instanceRef.pipe(filterFalsy());
-            this.setDefaultCamera(
-                this.select(
-                    this.select((s) => s['makeDefault']),
-                    instanceRef$,
-                    defaultProjector,
-                    { debounce: true }
-                )
-            );
-            this.updateProjectionMatrix(
-                this.select(
-                    this.select((s) => s['manual']),
-                    instanceRef$,
-                    defaultProjector,
-                    { debounce: true }
-                )
-            );
-        });
     }
 }
 

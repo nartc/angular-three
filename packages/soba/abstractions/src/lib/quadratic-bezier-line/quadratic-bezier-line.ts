@@ -67,8 +67,8 @@ export class SobaQuadraticBezierLine extends NgtCompound<SobaLine> {
                 }
             ).setPoints = (start, end, mid) => {
                 const points = this.getPoints_(start, end, mid);
-                if (this.instanceRef.value) {
-                    this.instanceRef.value.setPositions(points.map((p) => p.toArray()).flat());
+                if (this.instanceRef.value && this.instanceRef.value.geometry) {
+                    this.instanceRef.value.geometry.setPositions(points.map((p) => p.toArray()).flat());
                 }
             };
         });
