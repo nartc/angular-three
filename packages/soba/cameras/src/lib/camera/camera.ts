@@ -9,7 +9,7 @@ import {
     tapEffect,
 } from '@angular-three/core';
 import { SobaFBO } from '@angular-three/soba/misc';
-import { Directive, inject, Input, NgZone, OnInit } from '@angular/core';
+import { Directive, inject, Input, OnInit } from '@angular/core';
 import { tap } from 'rxjs';
 import * as THREE from 'three';
 
@@ -36,7 +36,6 @@ export abstract class SobaCamera<TCamera extends NgtCamera> extends NgtCompound<
     }
 
     protected readonly store = inject(NgtStore);
-    protected readonly zone = inject(NgZone);
     protected readonly fbo = inject(SobaFBO);
 
     private readonly setFBO = this.effect(

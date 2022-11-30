@@ -2,13 +2,11 @@
 export const NGT_INSTANCE_INPUTS = [
     'ref',
     'attach',
-    'skipWrapper',
-    'skipInit',
-    'noAttach',
     'beforeRender',
     'priority',
     'updateCallback',
     'readyCallback',
+    'dispose'
 ];
 <% if (hasObject3D) { %>
 export const NGT_INSTANCE_OUTPUTS = [

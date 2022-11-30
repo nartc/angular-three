@@ -23,7 +23,6 @@ import type {
     NgtBeforeRenderCallback,
     NgtEventHandlers,
     NgtInstanceLocalState,
-    NgtObservableInput,
     NgtThreeEvent,
 } from './types';
 import { applyProps } from './utils/apply-props';
@@ -120,9 +119,6 @@ export interface NgtInstanceState<TInstance extends object = NgtAnyRecord> {
     instanceRef: NgtRef<TInstance>;
     instanceArgs: unknown[];
     attach: string[] | NgtAttachFunction;
-    noAttach: boolean;
-    skipWrapper: boolean;
-    skipInit: boolean;
 }
 export function injectInstance<T extends object>(): NgtInstance<T>;
 export function injectInstance<T extends object>(options: InjectOptions & { optional?: false }): NgtInstance<T>;
@@ -160,28 +156,12 @@ export class NgtInstance<
     implements OnInit, OnDestroy
 {
     @Input() set ref(instance: TInstance | NgtRef<TInstance>) {
-        // this.write({ instanceRef: is.ref(instance) ? instance : new NgtRef(instance) });
         if (is.ref(instance) && instance.value === null) {
             instance.set(this.instanceValue);
             this.write({ instanceRef: instance });
         } else if (!is.ref(instance) && instance !== null) {
             this.instanceRef.set(instance as TInstance);
         }
-    }
-
-    @Input() set skipWrapper(skipWrapper: NgtObservableInput<boolean>) {
-        this.write({ skipWrapper });
-        this.write({ skipWrapperExplicit: true });
-    }
-
-    @Input() set skipInit(skipInit: NgtObservableInput<boolean>) {
-        this.write({ skipInit });
-        this.write({ skipInitExplicit: true });
-    }
-
-    @Input() set noAttach(noAttach: NgtObservableInput<boolean>) {
-        this.write({ noAttach });
-        this.write({ noAttachExplicit: true });
     }
 
     @Input() set attach(value: string | string[] | [string, ...(string | number)[]] | NgtAttachFunction | undefined) {
@@ -211,6 +191,10 @@ export class NgtInstance<
 
     @Input() set updateCallback(updateCallback: ((instance: TInstance) => void) | (() => void)) {
         this.write({ updateCallback });
+    }
+
+    @Input() set dispose(dispose: (() => void) | null) {
+        this.write({ dispose });
     }
 
     @Output() click = new EventEmitter<NgtThreeEvent<MouseEvent>>();
@@ -246,19 +230,15 @@ export class NgtInstance<
             let attachToParentSubscription: Subscription;
             if (this.parent) {
                 attachToParentSubscription = this.attachToParent(this.parent.pipe(filterFalsy()));
-                const { noAttach, skipWrapper } = this.read();
-                if (!noAttach && !skipWrapper) {
-                    const parentInstanceNode = getInstanceLocalState(
-                        getInstanceLocalState(this.instanceValue)?.parentRef?.value
-                    );
-
+                queueMicrotask(() => {
+                    const parentInstanceNode = getInstanceLocalState(this.__ngt__?.parentRef?.value);
                     if (parentInstanceNode) {
                         const collections = is.object3d(this.instanceValue)
                             ? parentInstanceNode.objectsRefs
                             : parentInstanceNode.instancesRefs;
                         collections.set((s) => [...s, this.instanceRef]);
                     }
-                }
+                });
             }
 
             if (is.object3d(this.instanceValue) && is.object3d(this.proxyInstance)) {
@@ -352,59 +332,15 @@ export class NgtInstance<
                 }
             }
 
-            // the instance is the compound parent
-            // this is the component we're compounding
-            // if (this.compoundInstanceRef && this.compoundInstanceRef().value === this.instanceValue) {
-            //     // keeping the parentInstanceRef as-is
-            // } else {
-            //     if (this.compoundInstanceRef && this.parentInstanceRef) {
-            //         const compoundParent = this.compoundInstanceRef();
-            //         const parent = this.parentInstanceRef();
-            //
-            //         // handle object3d cases
-            //         /**
-            //          * compound
-            //          *  instance
-            //          * compound
-            //          *  parent
-            //          *    instance
-            //          * compound
-            //          *  compound
-            //          *    instance
-            //          */
-            //         if (is.object3d(compoundParent.value) && is.object3d(parent.value)) {
-            //             // if the compound parent is not a scene and its parent is null
-            //             // then it is inside of a portal
-            //             if (!is.scene(compoundParent.value) && compoundParent.value.parent === null) {
-            //                 console.log({
-            //                     compoundParent: { ...compoundParent.value },
-            //                     parent: { ...parent.value },
-            //                     instance: { ...this.instanceValue },
-            //                 });
-            //             }
-            //
-            //             if (compoundParent.value.parent === parent.value) {
-            //                 // if compoundParent.parent is parent
-            //                 // then this instance is a direct content child of the compound
-            //                 parent = this.__ngt__.parentRef = compoundParent;
-            //             } else if (parent.value.parent === compoundParent.value) {
-            //                 // if parent.parent is parent
-            //                 // then this instance is a direct content child of its parent
-            //                 parent = this.__ngt__.parentRef = parent;
-            //             }
-            //         }
-            //     }
-            // }
-
             if (!parent) {
                 // re-run factory
                 if (!this.parent?.value) return;
-
-                // reassign on instance internal state
-                if (this.__ngt__) {
-                    this.__ngt__.parentRef = this.parent;
-                }
                 parent = this.parent;
+            }
+
+            // reassign on instance internal state
+            if (this.__ngt__) {
+                this.__ngt__.parentRef = this.parent as NgtRef;
             }
 
             if (typeof attach === 'function') {
@@ -447,7 +383,7 @@ export class NgtInstance<
                     }
 
                     // attach the instance value on the parent
-                    mutate(parent.value, this.proxyInstance, propertyToAttach);
+                    mutate(parent.value, this._isRaw ? this.instanceValue : this.proxyInstance, propertyToAttach);
                 }
 
                 // validate on the instance
@@ -473,10 +409,8 @@ export class NgtInstance<
             instanceRef: new NgtRef(null),
             wrappedRef: new NgtRef(null),
             attach: [],
-            noAttach: false,
-            skipWrapper: false,
-            skipInit: false,
             priority: 0,
+            dispose: null,
         });
     }
 
@@ -524,7 +458,7 @@ export class NgtInstance<
             return compoundParentRef;
         }
 
-        if (parentInstanceRef && parentInstanceRef !== this.__ngt__.parentRef) {
+        if (parentInstanceRef && this.__ngt__ && parentInstanceRef !== this.__ngt__.parentRef) {
             if (this.__ngt__.parentRef !== null) {
                 parentInstanceRef = this.__ngt__.parentRef as NgtRef;
             } else {
@@ -579,6 +513,10 @@ export class NgtInstance<
             const dispose = (this.instanceValue as NgtAnyRecord)['dispose'];
             if (dispose && typeof dispose === 'function') {
                 dispose.apply(this.instanceValue);
+            }
+
+            if (this.read((s) => s['dispose'])) {
+                this.read((s) => s['dispose'])();
             }
         }
 

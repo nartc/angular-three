@@ -9,4 +9,5 @@ export const NGT_INSTANCE_INPUTS = [
     'priority',
     'updateCallback',
     'readyCallback',
+    'dispose',
 ];

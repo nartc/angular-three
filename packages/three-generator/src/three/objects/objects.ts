@@ -115,6 +115,10 @@ export default async function objectsGenerator(tree: Tree, ngtVersion: string) {
                             );
                         }
 
+                        const exclude = [];
+                        if (node.name.getText(sF) === 'LOD') {
+                            exclude.push('levels');
+                        }
                         handleClassMembers(sF, node, props, true);
                     }
                 });

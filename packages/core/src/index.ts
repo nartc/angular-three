@@ -38,6 +38,7 @@ export * from './lib/types';
 export * from './lib/utils/apply-props';
 export * from './lib/utils/check-update';
 export * from './lib/utils/create';
+export * from './lib/utils/get-instance-local-state';
 export * from './lib/utils/instance';
 export * from './lib/utils/is';
 export * from './lib/utils/loop';

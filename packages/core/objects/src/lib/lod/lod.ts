@@ -28,7 +28,6 @@ export class NgtLOD extends THREE.LOD {
         return proxify(this);
     }
 
-    static ngAcceptInputType_levels: NgtObservableInput<{ distance: number; object: THREE.Object3D }[]>;
     static ngAcceptInputType_autoUpdate: NgtObservableInput<boolean>;
     static ngAcceptInputType_raycast: NgtObservableInput<THREE.Object3D['raycast']> | undefined;
     static ngAcceptInputType_name: NgtObservableInput<string>;
@@ -74,5 +73,5 @@ export class NgtLOD extends THREE.LOD {
 }
 
 function getInputs() {
-    return ['levels', 'autoUpdate', 'raycast'];
+    return ['autoUpdate', 'raycast'];
 }

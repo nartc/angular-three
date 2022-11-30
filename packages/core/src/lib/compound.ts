@@ -1,4 +1,13 @@
-import { Directive, EventEmitter, OnChanges, reflectComponentType, SimpleChanges, Type } from '@angular/core';
+import {
+    Directive,
+    EventEmitter,
+    inject,
+    NgZone,
+    OnChanges,
+    reflectComponentType,
+    SimpleChanges,
+    Type,
+} from '@angular/core';
 import { Observable, scan, takeUntil } from 'rxjs';
 import type { NgtInstance } from './instance';
 import { injectCompoundInstanceRef } from './instance';
@@ -20,6 +29,8 @@ export abstract class NgtCompound<
     extends NgtComponentStore
     implements OnChanges
 {
+    protected zone = inject(NgZone);
+
     readonly parentCompoundRef = injectCompoundInstanceRef({ skipSelf: true, optional: true });
     readonly instanceRef = new NgtRef<TObject>();
 

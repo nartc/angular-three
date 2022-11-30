@@ -8,8 +8,6 @@ import { applyProps } from './apply-props';
 import { capitalize } from './capitalize';
 import { prepare } from './instance';
 
-const wrapperMap = new Map();
-
 export function proxify<T extends object>(
     instance: T,
     proxifyOptions: {

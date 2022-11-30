@@ -10,7 +10,8 @@ import {
     proxify,
     tapEffect,
 } from '@angular-three/core';
-import { Component, inject, Input, NgZone, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, NgZone, OnInit, Output } from '@angular/core';
+import * as THREE from 'three';
 import { MOUSE, TOUCH } from 'three';
 import { OrbitControls } from 'three-stdlib';
 import { NGT_INSTANCE_INPUTS } from '../common';
@@ -35,6 +36,10 @@ export class SobaOrbitControls extends OrbitControls implements OnInit {
     @Input() set regress(regress: NgtObservableInput<boolean>) {
         this.instance.write({ regress });
     }
+
+    @Output() change = new EventEmitter<THREE.Event>();
+    @Output() start = new EventEmitter<THREE.Event>();
+    @Output() end = new EventEmitter<THREE.Event>();
 
     constructor() {
         const [camera, domElement] = injectArgs<typeof OrbitControls>({ optional: true })?.() || [];
@@ -66,6 +71,7 @@ export class SobaOrbitControls extends OrbitControls implements OnInit {
                     { debounce: true }
                 )
             );
+            this.setEvents(this.instance.instanceRef);
         });
     }
 
@@ -103,6 +109,48 @@ export class SobaOrbitControls extends OrbitControls implements OnInit {
                     this.store.write({ controls: old });
                 };
             }
+        })
+    );
+
+    private readonly setEvents = this.instance.effect(
+        tapEffect(() => {
+            const { invalidate, performance } = this.store.read();
+            const regress = this.instance.read((s) => s['regress']);
+
+            const changeCallback: (e: THREE.Event) => void = (e) => {
+                invalidate();
+                if (regress) {
+                    performance.regress();
+                }
+
+                if (this.change.observed) {
+                    this.change.emit(e);
+                }
+            };
+            let startCallback: (e: THREE.Event) => void;
+            let endCallback: (e: THREE.Event) => void;
+
+            this.addEventListener('change', changeCallback);
+
+            if (this.start.observed) {
+                startCallback = (event: THREE.Event) => {
+                    this.start.emit(event);
+                };
+                this.addEventListener('start', startCallback);
+            }
+
+            if (this.end.observed) {
+                endCallback = (event: THREE.Event) => {
+                    this.end.emit(event);
+                };
+                this.addEventListener('end', endCallback);
+            }
+
+            return () => {
+                this.removeEventListener('change', changeCallback);
+                if (endCallback) this.removeEventListener('end', endCallback);
+                if (startCallback) this.removeEventListener('start', startCallback);
+            };
         })
     );
 

@@ -98,7 +98,9 @@ export function applyProps<TInstance extends object>(instance: TInstance, props:
                 targetProp['copy'] &&
                 value &&
                 value.constructor &&
-                targetProp.constructor.name === value.constructor.name
+                (targetProp.constructor.name === value.constructor.name ||
+                    Object.getPrototypeOf(targetProp.constructor).name === value.constructor.name ||
+                    targetProp.constructor.name === Object.getPrototypeOf(value.constructor).name)
             ) {
                 (targetProp['copy'] as NgtAnyFunction)(value);
                 if (!is.supportColorManagement() && !rootState.linear && isColor) {
