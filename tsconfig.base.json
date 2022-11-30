@@ -34,6 +34,7 @@
             "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"],
             "@angular-three/soba/misc": ["packages/soba/misc/src/index.ts"],
             "@angular-three/soba/performances": ["packages/soba/performances/src/index.ts"],
+            "@angular-three/soba/staging": ["packages/soba/staging/src/index.ts"],
             "three-generator": ["packages/three-generator/src/index.ts"]
         }
     },

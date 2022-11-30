@@ -1,35 +1,36 @@
-import { NgtMeshStandardMaterial } from '@angular-three/core/materials';
+import { NgtMeshNormalMaterial } from '@angular-three/core/materials';
 import { SobaText3D } from '@angular-three/soba/abstractions';
+import { SobaCenter } from '@angular-three/soba/staging';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { createRangeControl } from '../create-control';
-import { setupCanvas, setupCanvasImports, turnAnimation } from '../setup-canvas';
+import { setupCanvas, setupCanvasImports } from '../setup-canvas';
 
 export default {
     title: 'Abstractions/Text 3D',
     decorators: [
         componentWrapperDecorator(setupCanvas({ camera: { position: [0, 0, 10] } })),
-        moduleMetadata({ imports: [setupCanvasImports, NgtMeshStandardMaterial, SobaText3D] }),
+        moduleMetadata({ imports: [setupCanvasImports, NgtMeshNormalMaterial, SobaText3D, SobaCenter] }),
     ],
 } as Meta;
 
 export const Default: Story = (args) => ({
-    props: { ...args, turnAnimation },
+    props: args,
     template: `
-<ngt-soba-text-3d
-    font="soba/helvetiker_regular.typeface.json"
-    [text]="text"
-    [size]="size"
-    [height]="height"
-    [curveSegments]="curveSegments"
-    [bevelEnabled]="bevelEnabled"
-    [bevelThickness]="bevelThickness"
-    [bevelSize]="bevelSize"
-    [bevelOffset]="bevelOffset"
-    [beforeRender]="turnAnimation"
->
-    <ngt-mesh-standard-material [attach]="['material', 0]" color="#b00000"></ngt-mesh-standard-material>
-    <ngt-mesh-standard-material [attach]="['material', 1]" color="#ff8000"></ngt-mesh-standard-material>
-</ngt-soba-text-3d>
+<ngt-soba-center>
+    <ngt-soba-text-3d
+        font="soba/helvetiker_regular.typeface.json"
+        [text]="text"
+        [size]="size"
+        [height]="height"
+        [curveSegments]="curveSegments"
+        [bevelEnabled]="bevelEnabled"
+        [bevelThickness]="bevelThickness"
+        [bevelSize]="bevelSize"
+        [bevelOffset]="bevelOffset"
+    >
+        <ngt-mesh-normal-material></ngt-mesh-normal-material>
+    </ngt-soba-text-3d> 
+</ngt-soba-center>
 `,
 });
 
@@ -38,7 +39,7 @@ Default.args = {
     size: 3,
     height: 0.5,
     curveSegments: 2,
-    bevelEnabled: false,
+    bevelEnabled: true,
     bevelThickness: 0.1,
     bevelSize: 0.1,
     bevelOffset: 0,

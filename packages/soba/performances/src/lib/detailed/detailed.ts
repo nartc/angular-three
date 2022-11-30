@@ -2,14 +2,13 @@ import {
     createBeforeRenderCallback,
     defaultProjector,
     filterFalsy,
-    getInstanceLocalState,
     NgtCompound,
     NgtObjectCompound,
     provideInstanceRef,
 } from '@angular-three/core';
 import { NgtLOD } from '@angular-three/core/objects';
 import { Component, Input, OnInit } from '@angular/core';
-import { filter, switchMap, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import * as THREE from 'three';
 import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '../common';
 
@@ -51,15 +50,11 @@ export class SobaDetailed extends NgtCompound<NgtLOD> implements OnInit {
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {
-            const instanceRef$ = this.instanceRef.pipe(filterFalsy());
             this.addLevels(
                 this.select(
                     this.select((s) => s['distances']),
-                    instanceRef$,
-                    instanceRef$.pipe(
-                        switchMap((lod) => getInstanceLocalState(lod)!.objectsRefs),
-                        filter((refs) => refs.length > 0)
-                    ),
+                    this.instanceRef.objectRefs$(),
+                    this.instanceRef.pipe(filterFalsy()),
                     defaultProjector,
                     { debounce: true }
                 )

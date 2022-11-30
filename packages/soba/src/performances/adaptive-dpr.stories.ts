@@ -60,7 +60,7 @@ class DefaultArcher {
     standalone: true,
     template: `
         <storybook-default-archer></storybook-default-archer>
-        <ngt-directional-light [readyCallback]="onReady" [intensity]="0.2" [position]="[10, 10, 5]" [castShadow]="true">
+        <ngt-directional-light [intensity]="0.2" [position]="[10, 10, 5]" [castShadow]="true">
             <ngt-vector2 [attach]="['shadow', 'mapSize']" *args="[64, 64]"></ngt-vector2>
             <ngt-value [attach]="['shadow', 'bias']" [value]="-0.001"></ngt-value>
         </ngt-directional-light>
@@ -79,11 +79,7 @@ class DefaultArcher {
         NgtArgs,
     ],
 })
-class DefaultAdaptive {
-    onReady = (data: any) => {
-        console.log(data);
-    };
-}
+class DefaultAdaptive {}
 
 export default {
     title: 'Performances/Adaptive DPR',

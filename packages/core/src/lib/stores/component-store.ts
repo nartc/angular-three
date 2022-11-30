@@ -22,8 +22,8 @@ export const defaultProjector = () => ({});
  * A custom operator that skips the first undefined value but allows subsequent undefined values.
  * NgRxComponentStore#select always emits the first value regardless of undefined or not after initialize
  */
-export const skipFirstUndefined = <T>(): MonoTypeOperatorFunction<T> =>
-    filter<T>((value, index) => index > 0 || value !== undefined);
+export const skipFirstUndefined = <T>(skipNull = false): MonoTypeOperatorFunction<T> =>
+    filter<T>((value, index) => index > 0 || (skipNull ? value != undefined : value !== undefined));
 
 export const filterFalsy = <T>(): MonoTypeOperatorFunction<T> => filter<T>((value): value is T => !!value);
 

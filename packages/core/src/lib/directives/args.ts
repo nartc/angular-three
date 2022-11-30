@@ -9,7 +9,8 @@ import {
     TemplateRef,
     ViewContainerRef,
 } from '@angular/core';
-import { isObservable, Observable, Subscription } from 'rxjs';
+import { isObservable, Observable, ReplaySubject, Subscription } from 'rxjs';
+import { injectInstance } from '../instance';
 import { NgtAnyCtor } from '../types';
 
 export const NGT_ARGS = new InjectionToken<unknown[]>('NgtArgs');
@@ -33,17 +34,25 @@ export class NgtArgs {
     private readonly templateRef = inject(TemplateRef);
     private readonly vcr = inject(ViewContainerRef);
 
+    private readonly parentInstance = injectInstance({ skipSelf: true, optional: true });
+
     private view?: EmbeddedViewRef<any>;
-    private subscription?: Subscription;
     private rAF?: ReturnType<typeof requestAnimationFrame>;
+    private subscription?: Subscription;
 
     @Input() set args(args: Observable<Array<unknown>> | Array<unknown>) {
+        const argsSubject = new ReplaySubject<void>(1);
+        if (this.parentInstance) {
+            this.parentInstance.setChildrenArgsReady(argsSubject);
+        }
+
         if (isObservable(args)) {
             this.destroyView();
             this.subscription?.unsubscribe();
             if (this.rAF) {
                 cancelAnimationFrame(this.rAF);
             }
+            // TODO: rAF is required or else we get the Injector already destroyed error with observable args
             this.rAF = requestAnimationFrame(() => {
                 this.subscription = args.subscribe((results) => {
                     let injected = false;
@@ -69,6 +78,7 @@ export class NgtArgs {
                         }
                     );
                     this.view.markForCheck();
+                    argsSubject.next();
                 });
             });
         } else {
@@ -99,6 +109,7 @@ export class NgtArgs {
                 }
             );
             this.view.markForCheck();
+            argsSubject.next();
         }
     }
 
