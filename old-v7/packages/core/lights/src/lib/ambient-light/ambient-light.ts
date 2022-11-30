@@ -1,12 +1,6 @@
 // GENERATED - AngularThree v7.0.0
-import {
-  NgtAnyConstructor,
-  NgtCommonLight,
-  provideNgtCommonLight,
-  provideCommonLightRef,
-  NgtObservableInput,
-} from '@angular-three/core';
-import { Component, Input } from '@angular/core';
+import { NgtAnyConstructor, NgtCommonLight, provideCommonLightRef, provideNgtCommonLight } from '@angular-three/core';
+import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({

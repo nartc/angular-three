@@ -1,16 +1,16 @@
 // GENERATED - AngularThree v7.0.0
-import * as THREE from 'three';
 import {
   make,
   NgtInstance,
+  NgtMatrix4,
+  NgtObservableInput,
   NgtPrepareInstanceFn,
   provideInstanceRef,
   provideNgtInstance,
-  NgtObservableInput,
   skipFirstUndefined,
-  NgtMatrix4,
 } from '@angular-three/core';
 import { Component, Input } from '@angular/core';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-matrix4[matrix4]',

@@ -1,15 +1,15 @@
 // GENERATED - AngularThree v7.0.0
 import {
+  coerceNumber,
   NgtAnyConstructor,
   NgtCommonTexture,
-  provideNgtCommonTexture,
-  provideCommonTextureRef,
-  NgtObservableInput,
-  coerceNumber,
   NgtNumberInput,
+  NgtObservableInput,
+  provideCommonTextureRef,
+  provideNgtCommonTexture,
 } from '@angular-three/core';
-import { isObservable, map } from 'rxjs';
 import { Component, Input } from '@angular/core';
+import { isObservable, map } from 'rxjs';
 import * as THREE from 'three';
 
 @Component({

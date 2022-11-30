@@ -1,5 +1,5 @@
 // GENERATED - AngularThree v7.0.0
-import { NgtAnyConstructor, NgtCommonAudio, provideNgtCommonAudio, provideCommonAudioRef } from '@angular-three/core';
+import { NgtAnyConstructor, NgtCommonAudio, provideCommonAudioRef, provideNgtCommonAudio } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 

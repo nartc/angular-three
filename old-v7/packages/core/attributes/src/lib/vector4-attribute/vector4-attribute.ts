@@ -1,16 +1,16 @@
 // GENERATED - AngularThree v7.0.0
-import * as THREE from 'three';
 import {
   make,
   NgtInstance,
+  NgtObservableInput,
   NgtPrepareInstanceFn,
+  NgtVector4,
   provideInstanceRef,
   provideNgtInstance,
-  NgtObservableInput,
   skipFirstUndefined,
-  NgtVector4,
 } from '@angular-three/core';
 import { Component, Input } from '@angular/core';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-vector4[vector4]',

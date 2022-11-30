@@ -2,9 +2,8 @@
 import {
   NgtAnyConstructor,
   NgtCommonMaterial,
-  provideNgtCommonMaterial,
   provideCommonMaterialRef,
-  NgtObservableInput,
+  provideNgtCommonMaterial,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';

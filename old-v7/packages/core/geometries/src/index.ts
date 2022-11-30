@@ -1,5 +1,6 @@
 // GENERATED - AngularThree v7.0.0
 export * from './lib/box-geometry/box-geometry';
+export * from './lib/buffer-geometry/buffer-geometry';
 export * from './lib/capsule-geometry/capsule-geometry';
 export * from './lib/circle-geometry/circle-geometry';
 export * from './lib/cone-geometry/cone-geometry';
@@ -8,6 +9,7 @@ export * from './lib/dodecahedron-geometry/dodecahedron-geometry';
 export * from './lib/edges-geometry/edges-geometry';
 export * from './lib/extrude-geometry/extrude-geometry';
 export * from './lib/icosahedron-geometry/icosahedron-geometry';
+export * from './lib/instanced-buffer-geometry/instanced-buffer-geometry';
 export * from './lib/lathe-geometry/lathe-geometry';
 export * from './lib/octahedron-geometry/octahedron-geometry';
 export * from './lib/plane-geometry/plane-geometry';
@@ -20,5 +22,3 @@ export * from './lib/torus-geometry/torus-geometry';
 export * from './lib/torus-knot-geometry/torus-knot-geometry';
 export * from './lib/tube-geometry/tube-geometry';
 export * from './lib/wireframe-geometry/wireframe-geometry';
-export * from './lib/buffer-geometry/buffer-geometry';
-export * from './lib/instanced-buffer-geometry/instanced-buffer-geometry';

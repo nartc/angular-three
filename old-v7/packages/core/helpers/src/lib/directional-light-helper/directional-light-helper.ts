@@ -2,9 +2,9 @@
 import {
   NgtAnyConstructor,
   NgtCommonObjectHelper,
-  provideNgtCommonObjectHelper,
-  provideCommonObjectHelperRef,
   NgtTail,
+  provideCommonObjectHelperRef,
+  provideNgtCommonObjectHelper,
 } from '@angular-three/core';
 import { Directive, Input } from '@angular/core';
 import * as THREE from 'three';

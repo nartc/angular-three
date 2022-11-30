@@ -1,16 +1,16 @@
 // GENERATED - AngularThree v7.0.0
-import * as THREE from 'three';
 import {
   make,
+  NgtFogExp2,
   NgtInstance,
+  NgtObservableInput,
   NgtPrepareInstanceFn,
   provideInstanceRef,
   provideNgtInstance,
-  NgtObservableInput,
   skipFirstUndefined,
-  NgtFogExp2,
 } from '@angular-three/core';
 import { Component, Input } from '@angular/core';
+import * as THREE from 'three';
 
 @Component({
   selector: 'ngt-fog-exp2[fogExp2]',

@@ -1,15 +1,15 @@
 // GENERATED - AngularThree v7.0.0
 import {
-  NgtAnyConstructor,
-  NgtUnknownRecord,
-  NgtObservableInput,
   coerceNumber,
+  NgtAnyConstructor,
   NgtNumberInput,
+  NgtObservableInput,
+  NgtUnknownRecord,
 } from '@angular-three/core';
 import { NgtCommonEffect, provideCommonEffectRef, provideNgtCommonEffect } from '@angular-three/postprocessing';
-import { isObservable, map } from 'rxjs';
 import { Directive, Input } from '@angular/core';
 import { ShockWaveEffect } from 'postprocessing';
+import { isObservable, map } from 'rxjs';
 
 @Directive({
   selector: 'ngt-shock-wave-effect',

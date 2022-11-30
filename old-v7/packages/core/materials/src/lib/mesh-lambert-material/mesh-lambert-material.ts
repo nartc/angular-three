@@ -1,14 +1,14 @@
 // GENERATED - AngularThree v7.0.0
 import {
-  NgtAnyConstructor,
-  NgtCommonMaterial,
-  provideNgtCommonMaterial,
-  provideCommonMaterialRef,
-  NgtObservableInput,
   coerceBoolean,
-  NgtBooleanInput,
   coerceNumber,
+  NgtAnyConstructor,
+  NgtBooleanInput,
+  NgtCommonMaterial,
   NgtNumberInput,
+  NgtObservableInput,
+  provideCommonMaterialRef,
+  provideNgtCommonMaterial,
 } from '@angular-three/core';
 import { Component, Input } from '@angular/core';
 import { isObservable, map } from 'rxjs';

@@ -1,5 +1,5 @@
 // GENERATED - AngularThree v7.0.0
-import { NgtAnyConstructor, NgtCommonCurve, provideNgtCommonCurve, provideCommonCurveRef } from '@angular-three/core';
+import { NgtAnyConstructor, NgtCommonCurve, provideCommonCurveRef, provideNgtCommonCurve } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 

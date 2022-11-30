@@ -22,8 +22,7 @@ module.exports = {
     { name: 'postprocessing', description: 'THREE.js Post processing' },
     {
       name: 'cannon',
-      description:
-        'Angular Three Physics (port of React use-cannon (cannon-es))',
+      description: 'Angular Three Physics (port of React use-cannon (cannon-es))',
     },
   ],
   // override the messages, defaults are as follows
@@ -32,12 +31,10 @@ module.exports = {
     scope: '\nDenote the SCOPE of this change (optional):',
     // used if allowCustomScopes is true
     customScope: 'Denote the SCOPE of this change:',
-    subject:
-      'Write a SHORT, IMPERATIVE (lowercase) description of the change:\n',
+    subject: 'Write a SHORT, IMPERATIVE (lowercase) description of the change:\n',
     body: 'Provide a LONGER description of the change (optional). Use "|" to break new line:\n',
     breaking: 'List any BREAKING CHANGES (optional):\n',
-    footer:
-      'List any ISSUES CLOSED by this change (optional). E.g.: #31, #34:\n',
+    footer: 'List any ISSUES CLOSED by this change (optional). E.g.: #31, #34:\n',
     confirmCommit: 'Are you sure you want to proceed with the commit above?',
   },
 

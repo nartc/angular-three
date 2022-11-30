@@ -2,9 +2,9 @@
 import {
   NgtAnyConstructor,
   NgtCommonLight,
-  provideNgtCommonLight,
-  provideCommonLightRef,
   NgtObservableInput,
+  provideCommonLightRef,
+  provideNgtCommonLight,
 } from '@angular-three/core';
 import { Component, Input } from '@angular/core';
 import * as THREE from 'three';

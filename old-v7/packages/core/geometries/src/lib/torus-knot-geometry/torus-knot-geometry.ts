@@ -2,8 +2,8 @@
 import {
   NgtAnyConstructor,
   NgtCommonGeometry,
-  provideNgtCommonGeometry,
   provideCommonGeometryRef,
+  provideNgtCommonGeometry,
 } from '@angular-three/core';
 import { Component } from '@angular/core';
 import * as THREE from 'three';

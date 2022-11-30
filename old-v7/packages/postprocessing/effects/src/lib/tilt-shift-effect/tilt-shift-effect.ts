@@ -1,9 +1,9 @@
 // GENERATED - AngularThree v7.0.0
-import { NgtAnyConstructor, NgtObservableInput, coerceNumber, NgtNumberInput } from '@angular-three/core';
+import { coerceNumber, NgtAnyConstructor, NgtNumberInput, NgtObservableInput } from '@angular-three/core';
 import { NgtCommonEffect, provideCommonEffectRef, provideNgtCommonEffect } from '@angular-three/postprocessing';
-import { isObservable, map } from 'rxjs';
 import { Directive, Input } from '@angular/core';
-import { BlendFunction, TiltShiftEffect, KernelSize } from 'postprocessing';
+import { BlendFunction, KernelSize, TiltShiftEffect } from 'postprocessing';
+import { isObservable, map } from 'rxjs';
 
 @Directive({
   selector: 'ngt-tilt-shift-effect',

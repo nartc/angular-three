@@ -2,11 +2,10 @@
 import {
   NgtAnyConstructor,
   NgtCommonCamera,
-  provideNgtCommonCamera,
   provideCommonCameraRef,
-  NgtObservableInput,
+  provideNgtCommonCamera,
 } from '@angular-three/core';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({

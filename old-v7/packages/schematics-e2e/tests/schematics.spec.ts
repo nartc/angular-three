@@ -1,4 +1,4 @@
-import { checkFilesExist, ensureNxProject, readJson, runNxCommandAsync, uniq } from '@nrwl/nx-plugin/testing';
+import { ensureNxProject, runNxCommandAsync } from '@nrwl/nx-plugin/testing';
 
 describe('schematics e2e', () => {
   // Setting up individual workspaces per
