@@ -2,9 +2,6 @@
 export const NGT_INSTANCE_INPUTS = [
     'ref',
     'attach',
-    'skipWrapper',
-    'skipInit',
-    'noAttach',
     'beforeRender',
     'priority',
     'updateCallback',

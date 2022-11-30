@@ -119,7 +119,7 @@ export default async function objectsGenerator(tree: Tree, ngtVersion: string) {
                         if (node.name.getText(sF) === 'LOD') {
                             exclude.push('levels');
                         }
-                        handleClassMembers(sF, node, props, true);
+                        handleClassMembers(sF, node, props, true, exclude);
                     }
                 });
             }
