@@ -5,7 +5,7 @@ import {
     NgtObjectCompound,
     NgtObservableInput,
     NgtRef,
-    provideInstanceRef
+    provideInstanceRef,
 } from '@angular-three/core';
 import { NgtGroup } from '@angular-three/core/objects';
 import { Component, Input } from '@angular/core';

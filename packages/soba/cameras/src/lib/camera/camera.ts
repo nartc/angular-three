@@ -57,7 +57,7 @@ export abstract class SobaCamera<TCamera extends NgtCamera> extends NgtCompound<
         tapEffect(() => {
             if (this.read((s) => s['makeDefault'])) {
                 const { camera: oldCamera, cameraRef: oldCameraRef } = this.store.read();
-                this.store.write({ camera: this, cameraRef: this.instanceRef });
+                this.store.write({ camera: this.instanceRef.value, cameraRef: this.instanceRef });
                 return () => this.store.write({ camera: oldCamera, cameraRef: oldCameraRef });
             }
         })
@@ -80,7 +80,7 @@ export abstract class SobaCamera<TCamera extends NgtCamera> extends NgtCompound<
             requestAnimationFrame(() => {
                 this.instanceRef.value.updateProjectionMatrix();
             });
-            this.setFBO(this.select((s) => s['resolution']));
+            this.setFBO(this.select((s) => s['resolution'], { debounce: true }));
             const instanceRef$ = this.instanceRef.pipe(filterFalsy());
             this.setDefaultCamera(
                 this.select(
@@ -98,6 +98,34 @@ export abstract class SobaCamera<TCamera extends NgtCamera> extends NgtCompound<
                     { debounce: true }
                 )
             );
+
+            // if (this.cameraContent && this.cameraContent.useFBO) {
+            //     let count = 0;
+            //     let oldEnvMap: THREE.Color | THREE.Texture | null = null;
+            //     this.effect<void>(
+            //       tapEffect(() =>
+            //         this.store.registerBeforeRender({
+            //           callback: (state) => {
+            //             const frames = this.getState((s) => s['frames']);
+            //             const envMap = this.getState((s) => s['envMap']);
+            //             const groupRef = this.groupRef;
+            //             const fboRef = this.fboRef;
+            //             if (groupRef.value && fboRef.value && (frames === Infinity || count < frames)) {
+            //               groupRef.value.visible = false;
+            //               state.gl.setRenderTarget(fboRef.value);
+            //               oldEnvMap = state.scene.background;
+            //               if (envMap) state.scene.background = envMap;
+            //               state.gl.render(state.scene, this.instanceValue);
+            //               state.scene.background = oldEnvMap;
+            //               state.gl.setRenderTarget(null);
+            //               groupRef.value.visible = true;
+            //               count++;
+            //             }
+            //           },
+            //         })
+            //       )
+            //     )();
+            //   }
         });
     }
 }

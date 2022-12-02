@@ -22,7 +22,7 @@ import { NGT_INSTANCE_INPUTS } from '../common';
     template: '<ng-content></ng-content>',
     hostDirectives: [{ directive: NgtInstance, inputs: NGT_INSTANCE_INPUTS }],
     providers: [provideInstanceRef(SobaOrbitControls)],
-    inputs: [...getInputs()],
+    inputs: getInputs(),
 })
 export class SobaOrbitControls extends OrbitControls implements OnInit {
     private readonly zone = inject(NgZone);
@@ -51,8 +51,9 @@ export class SobaOrbitControls extends OrbitControls implements OnInit {
     }
 
     ngOnInit() {
+        this.instance.instanceRef.subscribe(console.log.bind(console, 'instance'));
         this.zone.runOutsideAngular(() => {
-            this.setBeforeRender();
+            this.setBeforeRender(this.instance.instanceRef);
             this.connectElement(
                 this.instance.select(
                     this.instance.select((s) => s['domElement']),
@@ -75,14 +76,11 @@ export class SobaOrbitControls extends OrbitControls implements OnInit {
         });
     }
 
-    private readonly setBeforeRender = this.instance.effect<void>(
+    private readonly setBeforeRender = this.instance.effect(
         tapEffect(() => {
-            if (this.enabled) {
-                return this.store
-                    .read((s) => s.internal)
-                    .subscribe(() => {
-                        this.update();
-                    }, -1);
+            const controls = this.instance.instanceValue as OrbitControls;
+            if (controls.enabled) {
+                return this.store.read((s) => s.internal).subscribe(() => controls.update(), -1);
             }
         })
     );
@@ -91,7 +89,6 @@ export class SobaOrbitControls extends OrbitControls implements OnInit {
         tapEffect(() => {
             const { gl, events } = this.store.read();
             const domElement = this.instance.read((s) => s['domElement']) || events.connected || gl.domElement;
-
             this.connect(domElement);
             return () => {
                 this.dispose();

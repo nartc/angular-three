@@ -114,7 +114,8 @@ export class NgtArgs {
     }
 
     private destroyView() {
-        if (this.view) {
+        if (this.view && !this.view.destroyed) {
+            this.view.detectChanges();
             this.view.destroy();
         }
     }

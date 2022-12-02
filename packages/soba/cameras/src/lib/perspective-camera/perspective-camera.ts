@@ -15,9 +15,9 @@ import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '
         <ngt-perspective-camera
             [objectCompound]="this"
             [aspect]="aspect$"
-            [fov]="selectKey('fov')"
-            [near]="selectKey('near')"
-            [far]="selectKey('far')"
+            [fov]="readKey('fov')"
+            [near]="readKey('near')"
+            [far]="readKey('far')"
         >
             <ng-container
                 *ngIf="cameraContent && !cameraContent.sobaCameraContent"

@@ -13,6 +13,7 @@ export * from './lib/di/resize';
 export * from './lib/directives/args';
 export * from './lib/directives/cursor';
 export * from './lib/directives/object-compound';
+export * from './lib/directives/reconstruct-on';
 export * from './lib/directives/repeat';
 export * from './lib/instance';
 export * from './lib/pipes/math';

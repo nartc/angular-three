@@ -14,7 +14,7 @@ import {
 import { NgtOrthographicCamera } from '@angular-three/core/cameras';
 import { NgtMeshBasicMaterial } from '@angular-three/core/materials';
 import { NgtGroup, NgtMesh } from '@angular-three/core/objects';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { tap } from 'rxjs';
 import * as THREE from 'three';
 import { HorizontalBlurShader, VerticalBlurShader } from 'three-stdlib';
@@ -50,7 +50,7 @@ import { NGT_INSTANCE_INPUTS, NGT_INSTANCE_OUTPUTS, NGT_OBJECT3D_INPUTS } from '
     inputs: [...NGT_INSTANCE_INPUTS, ...NGT_OBJECT3D_INPUTS, 'color'],
     outputs: NGT_INSTANCE_OUTPUTS,
 })
-export class SobaContactShadows extends NgtCompound<NgtGroup> {
+export class SobaContactShadows extends NgtCompound<NgtGroup> implements OnInit {
     @Input() set opacity(opacity: NgtObservableInput<number>) {
         this.write({ opacity });
     }

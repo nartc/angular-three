@@ -235,7 +235,9 @@ export class NgtInstance<
 
     private readonly instanceReady = this.effect(
         tapEffect(() => {
-            this.handleEvents();
+            requestAnimationFrame(() => {
+                this.handleEvents();
+            });
 
             let attachToParentSubscription: Subscription;
             if (this.parent) {
@@ -297,6 +299,7 @@ export class NgtInstance<
     private handleEvents = this.effect<void>(
         tapEffect(() => {
             if (this.instanceValue && is.object3d(this.instanceValue) && is.object3d(this.proxyInstance)) {
+                console.log('here???');
                 const observedEvents = supportedEvents.reduce(
                     (result, event) => {
                         const controllerEvent = this[event].observed ? this[event] : null;
@@ -323,6 +326,8 @@ export class NgtInstance<
                         ?.stateFactory()
                         .rootStateFactory()
                         .addInteraction(this.instanceValue);
+
+                    console.log(getInstanceLocalState(this.instanceValue)?.stateFactory());
                 }
             }
             return () => {
@@ -517,7 +522,7 @@ export class NgtInstance<
         super.ngOnDestroy();
     }
 
-    private destroy() {
+    destroy() {
         if (this.instanceValue) {
             if (is.object3d(this.instanceValue)) {
                 const parentInstance = this.parent;

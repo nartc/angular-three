@@ -1,6 +1,6 @@
 import { NgtMeshNormalMaterial } from '@angular-three/core/materials';
 import { SobaText3D } from '@angular-three/soba/abstractions';
-import { SobaCenter } from '@angular-three/soba/staging';
+import { SobaCenter, SobaFloat } from '@angular-three/soba/staging';
 import { componentWrapperDecorator, Meta, moduleMetadata, Story } from '@storybook/angular';
 import { createRangeControl } from '../create-control';
 import { setupCanvas, setupCanvasImports } from '../setup-canvas';
@@ -9,28 +9,30 @@ export default {
     title: 'Abstractions/Text 3D',
     decorators: [
         componentWrapperDecorator(setupCanvas({ camera: { position: [0, 0, 10] } })),
-        moduleMetadata({ imports: [setupCanvasImports, NgtMeshNormalMaterial, SobaText3D, SobaCenter] }),
+        moduleMetadata({ imports: [setupCanvasImports, NgtMeshNormalMaterial, SobaText3D, SobaCenter, SobaFloat] }),
     ],
 } as Meta;
 
 export const Default: Story = (args) => ({
     props: args,
     template: `
-<ngt-soba-center>
-    <ngt-soba-text-3d
-        font="soba/helvetiker_regular.typeface.json"
-        [text]="text"
-        [size]="size"
-        [height]="height"
-        [curveSegments]="curveSegments"
-        [bevelEnabled]="bevelEnabled"
-        [bevelThickness]="bevelThickness"
-        [bevelSize]="bevelSize"
-        [bevelOffset]="bevelOffset"
-    >
-        <ngt-mesh-normal-material></ngt-mesh-normal-material>
-    </ngt-soba-text-3d> 
-</ngt-soba-center>
+    <ngt-soba-center>
+<ngt-soba-float [floatIntensity]="5" [speed]="2">
+        <ngt-soba-text-3d
+            font="soba/helvetiker_regular.typeface.json"
+            [text]="text"
+            [size]="size"
+            [height]="height"
+            [curveSegments]="curveSegments"
+            [bevelEnabled]="bevelEnabled"
+            [bevelThickness]="bevelThickness"
+            [bevelSize]="bevelSize"
+            [bevelOffset]="bevelOffset"
+        >
+            <ngt-mesh-normal-material></ngt-mesh-normal-material>
+        </ngt-soba-text-3d>
+</ngt-soba-float>
+    </ngt-soba-center>
 `,
 });
 
