@@ -1,7 +1,0 @@
-{
-  "eslint.validate": ["json"],
-  "search.exclude": {
-    "**/attempt-one": true,
-    "**/old": true
-  }
-}

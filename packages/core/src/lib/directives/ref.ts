@@ -1,5 +1,6 @@
 import {
   Directive,
+  ElementRef,
   EmbeddedViewRef,
   inject,
   Input,
@@ -7,43 +8,41 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { injectNgtStore } from '../store';
-import type { NgtHasValidateForRenderer } from '../types';
-import { createInject } from '../utils/di';
+import { NgtHasValidateForRenderer } from '../types';
 
 @Directive({
-  selector: '[args]',
+  selector: '[ref]',
   standalone: true,
 })
-export class NgtArgs implements NgtHasValidateForRenderer {
+export class NgtRef<T> implements NgtHasValidateForRenderer {
   readonly store = injectNgtStore({ skipSelf: true }).store;
   private readonly templateRef = inject(TemplateRef);
   private readonly vcr = inject(ViewContainerRef);
   private view?: EmbeddedViewRef<unknown>;
 
-  private injectedArgs: any[] = [];
+  private injectedRef?: ElementRef<T>;
   private injected = false;
   shouldCreateView = true;
 
-  @Input() set args(args: any[] | null) {
-    if (args == null) return;
-    if (!args.length || (args.length === 1 && args[0] === null)) return;
+  @Input() set ref(ref: ElementRef<T> | null) {
+    if (!ref) return;
     this.injected = false;
-    this.injectedArgs = args;
+    this.injectedRef = ref;
     if (this.shouldCreateView) {
       this.createView();
     }
   }
 
-  get args() {
-    if (!this.injected && this.injectedArgs.length) {
+  get ref(): ElementRef<T> | null {
+    if (!this.injected && this.injectedRef) {
       this.injected = true;
-      return this.injectedArgs;
+      return this.injectedRef;
     }
     return null;
   }
 
   validate() {
-    return !this.injected && !!this.injectedArgs.length;
+    return !this.injected && !!this.injectedRef && !this.injectedRef.nativeElement;
   }
 
   private createView() {
@@ -54,5 +53,3 @@ export class NgtArgs implements NgtHasValidateForRenderer {
     this.view.detectChanges();
   }
 }
-
-export const injectNgtArgs = createInject(NgtArgs);

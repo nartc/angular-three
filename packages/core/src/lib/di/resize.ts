@@ -1,4 +1,4 @@
-import { createInjection } from '../utils/inject';
+import { createInjectionToken } from '../utils/di';
 import { injectWindow } from './window';
 
 export interface NgtResizeOptions {
@@ -15,14 +15,12 @@ export const defaultResizeOptions: NgtResizeOptions = {
     debounce: { scroll: 50, resize: 0 },
 };
 
-export const [injectResizeOptions, provideResizeOptions] = createInjection<NgtResizeOptions>('ngtResize Options', {
-    defaultValueOrFactory: defaultResizeOptions,
-    provideValueFactory: (value) => ({ ...defaultResizeOptions, ...value }),
-});
+export const [injectResizeOptions, provideResizeOptions] = createInjectionToken<NgtResizeOptions>(
+    'ngtResize Options',
+    defaultResizeOptions
+);
 
-export const [injectResizeObserverSupport] = createInjection<boolean>('Resize Observer API support', {
-    defaultValueOrFactory: () => {
-        const window = injectWindow();
-        return 'ResizeObserver' in window && (window as any)['ResizeObserver'] != null;
-    },
-});
+export const [injectResizeObserverSupport] = createInjectionToken<boolean>(
+    'Resize Observer API support',
+    () => !!injectWindow().ResizeObserver
+);

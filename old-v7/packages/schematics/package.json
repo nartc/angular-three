@@ -1,8 +1,0 @@
-{
-  "name": "@angular-three/schematics",
-  "version": "0.0.1",
-  "main": "src/index.js",
-  "generators": "./generators.json",
-  "schematics": "./generators.json",
-  "executors": "./executors.json"
-}

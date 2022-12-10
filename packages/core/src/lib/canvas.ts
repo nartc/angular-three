@@ -1,254 +1,267 @@
-import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
-    ChangeDetectionStrategy,
-    Component,
-    ContentChild,
-    ElementRef,
-    EventEmitter,
-    HostBinding,
-    inject,
-    Input,
-    NgZone,
-    OnDestroy,
-    OnInit,
-    Output,
-    TemplateRef,
-    ViewChild,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  Directive,
+  ElementRef,
+  EmbeddedViewRef,
+  EnvironmentInjector,
+  EventEmitter,
+  HostBinding,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
-import { Observable } from 'rxjs';
-import * as THREE from 'three';
+import create from 'zustand/vanilla';
 import { createPointerEvents } from './events';
-import { provideInstanceRef } from './instance';
-import { NgtLoader } from './services/loader';
-import { NgtResize, NgtResizeResult } from './services/resize';
-import { NgtComponentStore } from './stores/component-store';
-import { NgtStore, rootStateMap } from './stores/store';
-import type { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtObservableInput, NgtState, NgtVector3 } from './types';
+import { injectNgtResize, NgtResize, NgtResizeResult } from './services/resize';
+import { injectNgtStore, NgtStore, rootStateMap } from './store';
+import type { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtState, NgtVector3 } from './types';
 
 @Component({
-    selector: 'ngt-canvas-container',
-    standalone: true,
-    template: '<ng-content></ng-content>',
-    providers: [NgtResize],
-    styles: [
-        `
-            :host {
-                display: block;
-                height: 100%;
-                width: 100%;
-            }
-        `,
-    ],
+  selector: 'ngt-canvas-container',
+  standalone: true,
+  template: '<ng-content></ng-content>',
+  providers: [NgtResize],
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+    `,
+  ],
 })
 export class NgtCanvasContainer {
-    @Output() resize = inject(NgtResize) as Observable<NgtResizeResult>;
+  @Output() canvasResize = injectNgtResize();
 }
 
-@Component({
-    selector: 'ngt-canvas',
-    standalone: true,
-    template: `
-        <ngt-canvas-container (resize)="onResize($event)">
-            <canvas #glCanvas style="display: block">
-                <ng-container *ngIf="isConfigured" [ngTemplateOutlet]="canvasContent"></ng-container>
-                <ng-content></ng-content>
-            </canvas>
-        </ngt-canvas-container>
-    `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    styles: [
-        `
-            :host {
-                display: block;
-                position: relative;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
-        `,
-    ],
-    imports: [NgtCanvasContainer, NgIf, NgTemplateOutlet, AsyncPipe],
-    providers: [NgtStore, provideInstanceRef(NgtCanvas, (canvas) => canvas.sceneRef)],
+@Directive({
+  selector: '[ngtCanvasContent]',
+  standalone: true,
 })
-export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnInit, OnDestroy {
-    @HostBinding('class.ngt-canvas') readonly hostClass = true;
+export class NgtCanvasContent {}
 
-    @HostBinding('style.pointerEvents') get pointerEvents() {
-        return this.read((s) => s.eventSource) !== this.host.nativeElement ? 'none' : 'auto';
+@Component({
+  selector: 'ngt-canvas',
+  standalone: true,
+  template: `
+    <ngt-canvas-container (canvasResize)="onResize($event)">
+      <canvas #glCanvas style="display: block"> </canvas>
+      <ng-container #glAnchor></ng-container>
+    </ngt-canvas-container>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [
+    `
+      :host {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+    `,
+  ],
+  imports: [NgtCanvasContainer],
+  providers: [NgtStore],
+})
+export class NgtCanvas implements OnInit, OnDestroy {
+  private readonly inputsStore = create<NgtCanvasInputs>(() => ({
+    shadows: false,
+    linear: false,
+    flat: false,
+    legacy: false,
+    orthographic: false,
+    frameloop: 'always',
+    dpr: [1, 2],
+    events: createPointerEvents,
+  }));
+
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly environmentInjector = inject(EnvironmentInjector);
+  private readonly host = inject(ElementRef) as ElementRef<HTMLElement>;
+  private readonly ngtStore = injectNgtStore({ self: true });
+
+  @HostBinding('class.ngt-canvas') readonly hostClass = true;
+
+  @HostBinding('style.pointerEvents') get pointerEvents() {
+    return this.inputsStore.getState().eventSource !== this.host.nativeElement ? 'none' : 'auto';
+  }
+
+  @Input() set linear(linear: boolean) {
+    this.inputsStore.setState({ linear });
+  }
+
+  @Input() set legacy(legacy: boolean) {
+    this.inputsStore.setState({ legacy });
+  }
+
+  @Input() set flat(flat: boolean) {
+    this.inputsStore.setState({ flat });
+  }
+
+  @Input() set orthographic(orthographic: boolean) {
+    this.inputsStore.setState({ orthographic });
+  }
+
+  @Input() set frameloop(frameloop: 'always' | 'demand' | 'never') {
+    this.inputsStore.setState({ frameloop });
+  }
+
+  @Input() set dpr(dpr: NgtDpr) {
+    this.inputsStore.setState({ dpr });
+  }
+
+  @Input() set raycaster(raycaster: Partial<THREE.Raycaster>) {
+    this.inputsStore.setState({ raycaster });
+  }
+
+  @Input() set shadows(shadows: boolean | Partial<THREE.WebGLShadowMap>) {
+    this.inputsStore.setState({
+      shadows: typeof shadows === 'object' ? (shadows as Partial<THREE.WebGLShadowMap>) : shadows,
+    });
+  }
+
+  @Input() set camera(camera: NgtCanvasInputs['camera']) {
+    this.inputsStore.setState({ camera });
+  }
+
+  @Input() set gl(gl: NgtCanvasInputs['gl']) {
+    this.inputsStore.setState({ gl });
+  }
+
+  @Input() set eventSource(eventSource: NgtCanvasInputs['eventSource']) {
+    this.inputsStore.setState({ eventSource });
+  }
+
+  @Input() set eventPrefix(eventPrefix: NgtCanvasInputs['eventPrefix']) {
+    this.inputsStore.setState({ eventPrefix });
+  }
+
+  @Input() set lookAt(lookAt: NgtVector3) {
+    this.inputsStore.setState({ lookAt });
+  }
+
+  @Input() set performance(performance: NgtCanvasInputs['performance']) {
+    this.inputsStore.setState({ performance });
+  }
+
+  @Output() created = new EventEmitter<NgtState>();
+  @Output() canvasPointerMissed = new EventEmitter();
+
+  @ViewChild('glCanvas', { static: true })
+  glCanvas!: ElementRef<HTMLCanvasElement>;
+
+  @ViewChild('glAnchor', { read: ViewContainerRef, static: true })
+  glAnchor!: ViewContainerRef;
+
+  @ContentChild(TemplateRef, { read: TemplateRef, static: true })
+  glTemplate!: TemplateRef<unknown>;
+
+  private glView?: EmbeddedViewRef<unknown>;
+  private subscription?: () => void;
+
+  ngOnInit() {
+    this.cdr.detach();
+
+    if (!this.inputsStore.getState().eventSource) {
+      this.eventSource = this.host.nativeElement;
     }
 
-    @Input() set linear(linear: NgtObservableInput<boolean>) {
-        this.write({ linear });
+    if (this.canvasPointerMissed.observed) {
+      // update pointerMissed event
+      this.ngtStore.store.setState({
+        onPointerMissed: (event: MouseEvent) => {
+          this.canvasPointerMissed.emit(event);
+          this.cdr.detectChanges();
+        },
+      });
     }
 
-    @Input() set legacy(legacy: NgtObservableInput<boolean>) {
-        this.write({ legacy });
+    // setup canvas state
+    this.ngtStore.init();
+
+    // set rootStateMap
+    rootStateMap.set(this.glCanvas.nativeElement, this.ngtStore.store);
+
+    // subscribe to store to listen for ready state
+    this.subscription = this.ngtStore.store.subscribe((state, prevState) => {
+      if (state.ready && prevState.ready !== state.ready) {
+        this.ready();
+      }
+    });
+  }
+
+  onResize(result: NgtResizeResult) {
+    const { width, height } = result;
+    if (width > 0 && height > 0) {
+      if (!this.ngtStore.isInit) {
+        this.ngtStore.init();
+      }
+      this.ngtStore.configure(this.inputsStore.getState(), this.glCanvas.nativeElement);
+    }
+  }
+
+  private ready() {
+    // canvas is ready
+    this.ngtStore.store.setState((s) => ({
+      internal: { ...s.internal, active: true },
+    }));
+
+    const inputs = this.inputsStore.getState();
+    const state = this.ngtStore.store.getState();
+
+    // Connect to eventsource
+    state.events.connect?.(
+      inputs.eventSource instanceof ElementRef
+        ? inputs.eventSource.nativeElement
+        : inputs.eventSource
+    );
+
+    // Set up compute function
+    if (inputs.eventPrefix) {
+      state.setEvents({
+        compute: (event, store) => {
+          const innerState = store.getState();
+          const x = event[(inputs.eventPrefix + 'X') as keyof NgtDomEvent] as number;
+          const y = event[(inputs.eventPrefix + 'Y') as keyof NgtDomEvent] as number;
+          innerState.pointer.set(
+            (x / innerState.size.width) * 2 - 1,
+            -(y / innerState.size.height) * 2 + 1
+          );
+          innerState.raycaster.setFromCamera(innerState.pointer, innerState.camera);
+        },
+      });
     }
 
-    @Input() set flat(flat: NgtObservableInput<boolean>) {
-        this.write({ flat });
+    if (this.created.observed) {
+      this.created.emit(this.ngtStore.store.getState());
+      this.cdr.detectChanges();
     }
 
-    @Input() set orthographic(orthographic: NgtObservableInput<boolean>) {
-        this.write({ orthographic });
+    // render
+    if (this.glView && !this.glView.destroyed) {
+      this.glView.destroy();
     }
 
-    @Input() set frameloop(frameloop: NgtObservableInput<'always' | 'demand' | 'never'>) {
-        this.write({ frameloop });
+    this.glView = this.glAnchor.createEmbeddedView(this.glTemplate, {});
+
+    this.cdr.detectChanges();
+    this.glView.detectChanges();
+  }
+
+  ngOnDestroy() {
+    this.subscription?.();
+    if (this.glView && !this.glView.destroyed) {
+      this.glView.destroy();
     }
-
-    @Input() set dpr(dpr: NgtObservableInput<NgtDpr>) {
-        this.write({ dpr });
-    }
-
-    @Input() set raycaster(raycaster: Partial<THREE.Raycaster>) {
-        this.write({ raycaster });
-    }
-
-    @Input() set shadows(shadows: boolean | Partial<THREE.WebGLShadowMap>) {
-        this.write({
-            shadows: typeof shadows === 'object' ? (shadows as Partial<THREE.WebGLShadowMap>) : shadows,
-        });
-    }
-
-    @Input() set camera(camera: NgtCanvasInputs['camera']) {
-        this.write({ camera });
-    }
-
-    @Input() set gl(gl: NgtCanvasInputs['gl']) {
-        this.write({ gl });
-    }
-
-    @Input() set eventSource(eventSource: NgtCanvasInputs['eventSource']) {
-        this.write({ eventSource });
-    }
-
-    @Input() set eventPrefix(eventPrefix: NgtCanvasInputs['eventPrefix']) {
-        this.write({ eventPrefix });
-    }
-
-    @Input() set lookAt(lookAt: NgtObservableInput<NgtVector3>) {
-        this.write({ lookAt });
-    }
-
-    @Input() set performance(performance: NgtCanvasInputs['performance']) {
-        this.write({ performance });
-    }
-
-    @Output() created = new EventEmitter<NgtState>();
-    @Output() canvasPointerMissed = new EventEmitter();
-
-    @ViewChild('glCanvas', { static: true })
-    glCanvas!: ElementRef<HTMLCanvasElement>;
-
-    @ContentChild(TemplateRef, { static: true })
-    canvasContent!: TemplateRef<unknown>;
-
-    private readonly zone = inject(NgZone);
-    private readonly loader = inject(NgtLoader);
-    private readonly store = inject(NgtStore, { self: true });
-
-    private readonly host = inject(ElementRef) as ElementRef<HTMLElement>;
-
-    get sceneRef() {
-        return this.store.read((s) => s.sceneRef);
-    }
-
-    get isConfigured() {
-        return this.store.isConfigured;
-    }
-
-    override initialize() {
-        super.initialize();
-        this.write({
-            shadows: false,
-            linear: false,
-            flat: false,
-            legacy: false,
-            orthographic: false,
-            frameloop: 'always',
-            dpr: [1, 2],
-            events: createPointerEvents,
-        });
-    }
-
-    ngOnInit() {
-        this.zone.runOutsideAngular(() => {
-            if (!this.eventSource) {
-                this.eventSource = this.host.nativeElement;
-            }
-
-            if (this.canvasPointerMissed.observed) {
-                // update pointerMissed event
-                this.store.write({
-                    onPointerMissed: (event: MouseEvent) => {
-                        // go back into angular zone
-                        this.zone.run(() => {
-                            this.canvasPointerMissed.emit(event);
-                        });
-                    },
-                });
-            }
-
-            // set rootStateMap
-            rootStateMap.set(this.glCanvas.nativeElement, this.store.read);
-
-            // setup canvas state
-            this.store.init();
-
-            this.store.onReady(() => {
-                const state = this.store.read();
-                const inputs = this.read();
-
-                // canvas is ready
-                this.store.write((s) => ({ internal: { ...s.internal, active: true } }));
-
-                // Connect to eventsource
-                state.events.connect?.(
-                    inputs.eventSource instanceof ElementRef ? inputs.eventSource.nativeElement : inputs.eventSource
-                );
-
-                // Set up compute function
-                if (inputs.eventPrefix) {
-                    state.setEvents({
-                        compute: (event, stateGetter) => {
-                            const innerState = stateGetter();
-                            const x = event[(inputs.eventPrefix + 'X') as keyof NgtDomEvent] as number;
-                            const y = event[(inputs.eventPrefix + 'Y') as keyof NgtDomEvent] as number;
-                            innerState.pointer.set(
-                                (x / innerState.size.width) * 2 - 1,
-                                -(y / innerState.size.height) * 2 + 1
-                            );
-                            innerState.raycaster.setFromCamera(innerState.pointer, innerState.camera);
-                        },
-                    });
-                }
-
-                if (this.created.observed) {
-                    this.zone.run(() => {
-                        requestAnimationFrame(() => {
-                            this.created.emit(this.store.read());
-                        });
-                    });
-                }
-            });
-        });
-    }
-
-    onResize(resizeResult: NgtResizeResult) {
-        this.zone.runOutsideAngular(() => {
-            const { width, height } = resizeResult;
-            if (width > 0 && height > 0) {
-                if (!this.store.isInit) {
-                    this.store.init();
-                }
-                this.store.configure(this.read(), this.glCanvas.nativeElement);
-            }
-        });
-    }
-
-    override ngOnDestroy() {
-        this.loader.destroy();
-        super.ngOnDestroy();
-    }
+  }
 }
