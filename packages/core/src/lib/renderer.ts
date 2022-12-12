@@ -49,9 +49,7 @@ export class NgtRendererFactory implements RendererFactory2 {
     if (!hostElement || !type) return this.createRendererIfNotExist(hostElement, type);
 
     console.log('createRenderer -->', { hostElement, type });
-    if (!instanceLocalState(hostElement)) {
-      hostElement = prepare(hostElement);
-    }
+    if (!instanceLocalState(hostElement)) hostElement = prepare(hostElement);
 
     if (!this.debugNodeMap.has(hostElement)) {
       // store the debugNode of this element
@@ -60,15 +58,10 @@ export class NgtRendererFactory implements RendererFactory2 {
     }
 
     const componentClass = (type as NgtAnyRecord)['type'];
-    const rendererState = {
-      dom: hostElement,
-    };
+    const rendererState = { dom: hostElement };
 
     if (componentClass[NGT_SCENE]) {
-      Object.assign(rendererState, {
-        scene: true,
-        parentDom: hostElement,
-      });
+      Object.assign(rendererState, { scene: true, parentDom: hostElement });
     } else if (componentClass[NGT_WRAPPER]) {
       Object.assign(rendererState, { wrapper: true });
     }
@@ -150,13 +143,7 @@ export class NgtRenderer implements Renderer2 {
         ngtAttachFn?.store ||
         this.tryGetStoreFromDebugNodeMap();
 
-      const instance = prepare(new target(), {
-        isThree: true,
-        attach,
-        args: injectedArgs,
-        store,
-      });
-
+      const instance = prepare(new target(), { isThree: true, attach, args: injectedArgs, store });
       const localState = instanceLocalState(instance) as NgtInstanceLocalState;
 
       if (is.material(instance)) {
@@ -165,10 +152,7 @@ export class NgtRenderer implements Renderer2 {
         localState.attach = ['geometry'];
       }
 
-      if (injectedRef) {
-        injectedRef.nativeElement = instance;
-      }
-
+      if (injectedRef) injectedRef.nativeElement = instance;
       return injectedRef?.nativeElement || instance;
     }
 
@@ -209,9 +193,7 @@ export class NgtRenderer implements Renderer2 {
       parentRendererState = instanceRendererState(parent) as StoreApi<NgtInstanceRendererState>;
       parentLocalState = instanceLocalState(parent) as NgtInstanceLocalState;
 
-      if (!parentRendererState.getState().dom) {
-        parentRendererState.setState({ dom: sceneDom });
-      }
+      if (!parentRendererState.getState().dom) parentRendererState.setState({ dom: sceneDom });
     }
 
     // if both parent and newChild are THREE, proceed with custom logic
@@ -240,9 +222,7 @@ export class NgtRenderer implements Renderer2 {
 
         if (typeof attachProp === 'function') {
           const attachCleanUp = (attachProp as NgtAttachFunction)(parent, newChild, null as any);
-          if (attachCleanUp) {
-            childLocalState.previousAttach = attachCleanUp;
-          }
+          if (attachCleanUp) childLocalState.previousAttach = attachCleanUp;
         } else {
           // we skip attach explicitly
           if (attachProp[0] === 'none') {
@@ -256,11 +236,10 @@ export class NgtRenderer implements Renderer2 {
             attachProp[0] === 'material' &&
             attachProp[1] &&
             typeof Number(attachProp[1]) === 'number' &&
-            is.material(newChild)
+            is.material(newChild) &&
+            !Array.isArray(parent['material'])
           ) {
-            if (!Array.isArray(parent['material'])) {
-              parent['material'] = [];
-            }
+            parent['material'] = [];
           }
 
           // attach
@@ -303,7 +282,6 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
-    // TODO: What to do when parent is THREE and newChild is HTML
     if (is.three(parent) && is.html(newChild)) {
       // TODO: Determine if we need to prepare the child
 
@@ -357,14 +335,8 @@ export class NgtRenderer implements Renderer2 {
     const refChildRendererState = instanceRendererState(refChild);
 
     if (is.three(newChild)) {
-      if (is.html(refChild)) {
-        childRendererState?.setState({ dom: refChild });
-      }
-
-      if (is.html(parent)) {
-        childRendererState?.setState({ parentDom: parent });
-      }
-
+      if (is.html(refChild)) childRendererState?.setState({ dom: refChild });
+      if (is.html(parent)) childRendererState?.setState({ parentDom: parent });
       this.appendChild(parent, newChild);
       return;
     }
