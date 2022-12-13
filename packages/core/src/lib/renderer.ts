@@ -28,14 +28,24 @@ import type {
   NgtInstanceRendererState,
   NgtState,
 } from './types';
+import { applyProps } from './utils/apply-props';
 import { attach } from './utils/attach';
 import { invalidateInstance } from './utils/instance';
 import { instanceLocalState, instanceRendererState } from './utils/instance-local-state';
 import { is } from './utils/is';
 import { prepare } from './utils/prepare';
 
-const NGT_SCENE = '__ngt_scene__';
-const NGT_WRAPPER = '__ngt_wrapper__';
+const ANNOTATED_FLAGS = {
+  NGT_SCENE: '__ngt_scene__',
+  NGT_WRAPPER: '__ngt_wrapper__',
+} as const;
+
+// ATTRIBUTES
+const ATTRIBUTES = {
+  BEFORE_RENDER_PRIORITY: 'beforeRenderPriority',
+  ATTACH: 'attach',
+  WRAPPER_MODE: 'wrapperMode',
+} as const;
 
 @Injectable()
 export class NgtRendererFactory implements RendererFactory2 {
@@ -60,9 +70,9 @@ export class NgtRendererFactory implements RendererFactory2 {
     const componentClass = (type as NgtAnyRecord)['type'];
     const rendererState = { dom: hostElement };
 
-    if (componentClass[NGT_SCENE]) {
+    if (componentClass[ANNOTATED_FLAGS.NGT_SCENE]) {
       Object.assign(rendererState, { scene: true, parentDom: hostElement });
-    } else if (componentClass[NGT_WRAPPER]) {
+    } else if (componentClass[ANNOTATED_FLAGS.NGT_WRAPPER]) {
       Object.assign(rendererState, { wrapper: true });
     }
 
@@ -156,7 +166,8 @@ export class NgtRenderer implements Renderer2 {
       return injectedRef?.nativeElement || instance;
     }
 
-    return this.delegateRenderer.createElement(name, namespace);
+    const element = this.delegateRenderer.createElement(name, namespace);
+    return prepare(element);
   }
   createComment(value: string) {
     console.log('createComment -->', { value });
@@ -174,6 +185,8 @@ export class NgtRenderer implements Renderer2 {
   destroyNode!: ((node: any) => void) | null;
 
   appendChild(parent: any, newChild: any): void {
+    console.log('appendChild -->', { parent, newChild, debugNodeMap: this.debugNodeMap });
+
     let parentRendererState = instanceRendererState(parent) as StoreApi<NgtInstanceRendererState>;
     let parentLocalState = instanceLocalState(parent) as NgtInstanceLocalState;
     let childRendererState = instanceRendererState(newChild);
@@ -275,10 +288,29 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
-    console.log('appendChild -->', { parent, newChild, debugNodeMap: this.debugNodeMap });
-
-    // TODO: What to do when both parent or newChild are html
     if (is.html(parent) && is.html(newChild)) {
+      // since both are HTMLs, we'll try set everything that we can set
+      // then delegate the parent and child to the DomRenderer
+      if (
+        !childRendererState?.getState().parentDom &&
+        (parentRendererState.getState().dom || parentRendererState.getState().parentDom)
+      ) {
+        childRendererState?.setState({
+          parentDom: parentRendererState.getState().dom || parentRendererState.getState().parentDom,
+        });
+      }
+
+      if (
+        !childRendererState?.getState().parent &&
+        (parentRendererState?.getState().instance || parentRendererState?.getState().parent)
+      ) {
+        childRendererState?.setState({
+          parent:
+            parentRendererState?.getState().instance || parentRendererState?.getState().parent,
+        });
+      }
+
+      this.delegateRenderer.appendChild(parent, newChild);
       return;
     }
 
@@ -289,6 +321,14 @@ export class NgtRenderer implements Renderer2 {
       childRendererState?.setState({ parent });
 
       // Since parent is a THREE object, we can check if there's a parentDom on it.
+      // if there's not, we will try to find the closest parent DOM from debugNodeMap
+      if (!parentRendererState.getState().parentDom) {
+        const domParentFromDebugNodeMap = this.tryGetDomParent(parent);
+        if (domParentFromDebugNodeMap) {
+          parentRendererState.setState({ parentDom: domParentFromDebugNodeMap });
+        }
+      }
+
       // if there is, and the child doesn't already have a parentDom, we'll set it
       if (parentRendererState.getState().parentDom && !childRendererState?.getState().parentDom) {
         childRendererState?.setState({ parentDom: parentRendererState.getState().parentDom });
@@ -301,7 +341,9 @@ export class NgtRenderer implements Renderer2 {
       ) {
         this.delegateRenderer.appendChild(childRendererState?.getState().parentDom, newChild);
       } else {
-        this.appendChild(childRendererState?.getState().parentDom, newChild);
+        if (childRendererState?.getState().parentDom) {
+          this.appendChild(childRendererState?.getState().parentDom, newChild);
+        }
       }
 
       // if on the child doesn't have any THREE instance, we bail
@@ -312,8 +354,33 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
-    // TODO: what to do when parent is HTML and newChild is THREE
     if (is.html(parent) && is.three(newChild)) {
+      // set the parentDom of the child to be parent
+      childRendererState?.setState({ parentDom: parent });
+
+      if (
+        parentRendererState.getState().parentDom &&
+        (parent as HTMLElement).parentElement !== parentRendererState.getState().parentDom
+      ) {
+        this.delegateRenderer.appendChild(parentRendererState.getState().parentDom, parent);
+      }
+
+      // there are cases where, with structural directives, the DOM parent
+      // has no information about its parent (due to ng-template)
+      // we'll try to walk the DebugNodeMap to find the closest parent
+      if (!parentRendererState.getState().parent) {
+        const parentFromDebugNodeMap = this.tryGetThreeParent(parent);
+        if (!parentFromDebugNodeMap) return;
+
+        parentRendererState.setState({ parent: parentFromDebugNodeMap });
+      }
+
+      // the DOM parent can also be a wrapper, if it is, the instance should be set
+      if (parentRendererState.getState().wrapper) {
+        parentRendererState.setState({ instance: newChild });
+      }
+
+      this.appendChild(parentRendererState.getState().parent, newChild);
       return;
     }
 
@@ -321,6 +388,8 @@ export class NgtRenderer implements Renderer2 {
     this.delegateRenderer.appendChild(parent, newChild);
   }
   insertBefore(parent: any, newChild: any, refChild: any, isMove?: boolean | undefined): void {
+    console.log('insertBefore -->', { parent, newChild, refChild, isMove });
+
     // Where the root scene component is being added to the ngt-canvas-container (eg: router-outlet)
     // after the first render cycle of all staytic elements on the templates (eg: no ngIf, no structural directives, no bindings)
     if (is.html(parent) && (parent as HTMLElement).nodeName === 'NGT-CANVAS-CONTAINER') {
@@ -328,12 +397,11 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
-    console.log('insertBefore -->', { parent, newChild, refChild, isMove });
-
     const parentRendererState = instanceRendererState(parent);
     const childRendererState = instanceRendererState(newChild);
     const refChildRendererState = instanceRendererState(refChild);
 
+    // if new child is a three object, appendChild will handle it
     if (is.three(newChild)) {
       if (is.html(refChild)) childRendererState?.setState({ dom: refChild });
       if (is.html(parent)) childRendererState?.setState({ parentDom: parent });
@@ -341,6 +409,8 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
+    // we'll let the DomRenderer handles the case where refChild.parentDom is found
+    // and it's different than the current child parentDom
     if (
       refChildRendererState?.getState().parentDom &&
       refChildRendererState?.getState().parentDom !== childRendererState?.getState().parentDom
@@ -352,11 +422,20 @@ export class NgtRenderer implements Renderer2 {
         refChild,
         isMove
       );
+    }
+
+    // we also check if parent is an instance (wrapper)
+    // if it is, we'll delegate to appendChild
+    if (is.three(parentRendererState?.getState().instance)) {
+      this.appendChild(parentRendererState?.getState().instance, newChild);
       return;
     }
 
+    // otherwise, delegate to DomRenderer
     this.delegateRenderer.insertBefore(parent, newChild, refChild, isMove);
   }
+
+  // TODO: this needs work
   removeChild(parent: any, oldChild: any, isHostElement?: boolean | undefined): void {
     console.log('removeChild -->', { parent, oldChild, isHostElement });
     this.delegateRenderer.removeChild(parent, oldChild, isHostElement);
@@ -382,7 +461,49 @@ export class NgtRenderer implements Renderer2 {
     return this.delegateRenderer.nextSibling(node);
   }
   setAttribute(el: any, name: string, value: string, namespace?: string | null | undefined): void {
-    console.log('setAttribute -->', { el, name, value, namespace });
+    const rendererState = instanceRendererState(el);
+
+    if (rendererState?.getState().wrapper) {
+      this.setAttribute(rendererState.getState().instance, name, value, namespace);
+      return;
+    }
+
+    if (is.three(el)) {
+      const localState = instanceLocalState(el);
+      if (name === ATTRIBUTES.BEFORE_RENDER_PRIORITY) {
+        // priority needs to be set as an attribute string
+        // we convert that string to number here. invalid number will be default to 0
+        let priority = Number(value);
+        if (isNaN(priority)) {
+          priority = 0;
+          console.warn(`[NGT] Invalid value for "beforeRenderPriority", default to 0`);
+        }
+        rendererState?.setState({ beforeRenderPriority: priority });
+        return;
+      }
+
+      if (name === ATTRIBUTES.ATTACH) {
+        // handle attach attribute as string
+        // attach can be passed as dotted paths
+        const paths = value.split('.');
+        if (paths.length && localState) localState.attach = paths;
+        return;
+      }
+
+      if (name === ATTRIBUTES.WRAPPER_MODE) {
+        if (localState) {
+          if (!localState.wrapper) {
+            localState.wrapper = { props: {}, applyFirst: value === 'first' };
+          }
+          localState.wrapper.applyFirst = value === 'first';
+        }
+        return;
+      }
+
+      applyProps(el, { [name]: value });
+      return;
+    }
+
     this.delegateRenderer.setAttribute(el, name, value, namespace);
   }
   removeAttribute(el: any, name: string, namespace?: string | null | undefined): void {
@@ -503,6 +624,60 @@ export class NgtRenderer implements Renderer2 {
     return debugNode.injector.get(NgtStore).store;
   }
 
+  // TODO: hack
+  private tryGetThreeParent(parent: any) {
+    const debugNodeKeys = Array.from(this.debugNodeMap.keys());
+    const parentDebugNodeIndex = debugNodeKeys.findIndex((key) => key === parent);
+    if (parentDebugNodeIndex <= 0) return;
+
+    let previousDebugNodeKeyIndex = parentDebugNodeIndex - 1;
+    let threeParent: NgtInstanceNode | undefined;
+
+    while (previousDebugNodeKeyIndex >= 1 && !threeParent) {
+      const previousDebugNodeKey = debugNodeKeys[previousDebugNodeKeyIndex];
+      const previousNodeRendererState = instanceRendererState(previousDebugNodeKey);
+      if (is.html(previousDebugNodeKey)) {
+        threeParent =
+          previousNodeRendererState?.getState().instance ||
+          previousNodeRendererState?.getState().parent;
+      } else if (is.three(previousDebugNodeKey)) {
+        threeParent = previousDebugNodeKey;
+      }
+
+      previousDebugNodeKeyIndex -= 1;
+    }
+
+    return threeParent;
+  }
+
+  // TODO: hack
+  private tryGetDomParent(instance?: any) {
+    const debugNodeKeys = Array.from(this.debugNodeMap.keys());
+    let debugNodeIndex =
+      instance && this.debugNodeMap.has(instance)
+        ? debugNodeKeys.findIndex((key) => key === instance)
+        : debugNodeKeys.length - 1;
+
+    if (debugNodeIndex < 0) return;
+
+    let domParent: HTMLElement | undefined;
+    while (!domParent && debugNodeIndex >= 0) {
+      const debugNodeKey = debugNodeKeys[debugNodeIndex];
+      const debugNodeRendererState = instanceRendererState(debugNodeKey);
+      if (is.three(debugNodeKey)) {
+        domParent =
+          debugNodeRendererState?.getState().dom || debugNodeRendererState?.getState().parentDom;
+      } else if (is.html(debugNodeKey)) {
+        domParent =
+          (debugNodeKey as NgtInstanceNode) instanceof HTMLElement ? debugNodeKey : undefined;
+      }
+
+      debugNodeIndex -= 1;
+    }
+
+    return domParent;
+  }
+
   // TODO: this is a hack. we need a better guarantee
   private firstNonInjectedDirective<T extends NgtHasValidateForRenderer>(
     directive: Type<T>
@@ -540,12 +715,12 @@ export function provideNgtRenderer(): Provider {
 
 export function NgtScene(): ClassDecorator {
   return (target) => {
-    (target as NgtAnyRecord)[NGT_SCENE] = true;
+    (target as NgtAnyRecord)[ANNOTATED_FLAGS.NGT_SCENE] = true;
   };
 }
 
 export function NgtWrapper(): ClassDecorator {
   return (target) => {
-    (target as NgtAnyRecord)[NGT_WRAPPER] = true;
+    (target as NgtAnyRecord)[ANNOTATED_FLAGS.NGT_WRAPPER] = true;
   };
 }
