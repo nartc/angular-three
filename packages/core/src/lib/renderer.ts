@@ -53,6 +53,11 @@ const EVENTS = {
   BEFORE_RENDER: 'beforeRender',
 } as const;
 
+const SPECIAL_TAGS = {
+  PORTAL: 'ngt-portal',
+  PRIMITIVE: 'ngt-primitive',
+} as const;
+
 @Injectable()
 export class NgtRendererFactory implements RendererFactory2 {
   private readonly delegateDomRendererFactory = inject(DomRendererFactory);
@@ -95,7 +100,6 @@ export class NgtRendererFactory implements RendererFactory2 {
     if (!this.defaultRenderer) {
       const delegateRenderer = this.delegateDomRendererFactory.createRenderer(hostElement, type);
       this.defaultRenderer = new NgtRenderer(delegateRenderer, this.debugNodeMap, this.catalogue);
-      // this.defaultRenderer = new NgtRenderer(delegateRenderer);
     }
     return this.defaultRenderer;
   }
@@ -116,8 +120,13 @@ export class NgtRenderer implements Renderer2 {
   }
   createElement(name: string, namespace?: string | null | undefined) {
     const element = prepare(this.delegateRenderer.createElement(name, namespace), {
-      primitive: name === 'ngt-primitive',
+      primitive: name === SPECIAL_TAGS.PRIMITIVE,
     });
+
+    if (name === SPECIAL_TAGS.PORTAL) {
+      instanceRendererState(element)!.portal = true;
+      return element;
+    }
 
     const threeTag = name.startsWith('ngt') && !name.startsWith('ngts') ? name.slice(4) : name;
 

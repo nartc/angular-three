@@ -6,7 +6,6 @@ import {
   Directive,
   ElementRef,
   EmbeddedViewRef,
-  EnvironmentInjector,
   EventEmitter,
   HostBinding,
   inject,
@@ -20,8 +19,9 @@ import {
 } from '@angular/core';
 import create from 'zustand/vanilla';
 import { createPointerEvents } from './events';
+import { injectNgtLoader } from './services/loader';
 import { injectNgtResize, NgtResize, NgtResizeResult } from './services/resize';
-import { injectNgtStore, NgtStore, rootStateMap } from './store';
+import { injectNgtStore, provideNgtStore, rootStateMap } from './store';
 import type { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtState, NgtVector3 } from './types';
 
 @Component({
@@ -71,7 +71,7 @@ export class NgtCanvasContent {}
     `,
   ],
   imports: [NgtCanvasContainer],
-  providers: [NgtStore],
+  providers: [provideNgtStore()],
 })
 export class NgtCanvas implements OnInit, OnDestroy {
   private readonly inputsStore = create<NgtCanvasInputs>(() => ({
@@ -86,9 +86,9 @@ export class NgtCanvas implements OnInit, OnDestroy {
   }));
 
   private readonly cdr = inject(ChangeDetectorRef);
-  private readonly environmentInjector = inject(EnvironmentInjector);
   private readonly host = inject(ElementRef) as ElementRef<HTMLElement>;
   private readonly ngtStore = injectNgtStore({ self: true });
+  private readonly ngtLoader = injectNgtLoader();
 
   @HostBinding('class.ngt-canvas') readonly hostClass = true;
 
@@ -263,5 +263,6 @@ export class NgtCanvas implements OnInit, OnDestroy {
     if (this.glView && !this.glView.destroyed) {
       this.glView.destroy();
     }
+    this.ngtLoader.destroy();
   }
 }

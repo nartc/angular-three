@@ -8,6 +8,8 @@ import type {
   EventDispatcher,
   Intersection,
   Layers,
+  Loader,
+  Material,
   Matrix4,
   Object3D,
   OrthographicCamera,
@@ -314,6 +316,7 @@ export type NgtAttachFunction<TChild = any, TParent = any> = (
 export interface NgtInstanceRendererState {
   scene?: boolean;
   wrapper?: boolean;
+  portal?: boolean;
   instance: NgtInstanceNode;
   parent: NgtInstanceNode | null;
   dom?: HTMLElement;
@@ -388,6 +391,37 @@ export type NgtObject3DNode<T, P> = NgtOverwrite<
   }
 > &
   NgtEventHandlers;
+
+export type NgtConditionalType<Child, Parent, Truthy, Falsy> = Child extends Parent
+  ? Truthy
+  : Falsy;
+
+export interface NgtLoaderProto<T> extends Loader {
+  load(
+    url: string | string[],
+    onLoad?: (result: T) => void,
+    onProgress?: (event: ProgressEvent) => void,
+    onError?: (event: ErrorEvent) => void
+  ): unknown;
+}
+
+export interface NgtLoaderExtensions {
+  (loader: Loader): void;
+}
+
+export type NgtLoaderResult<T> = T extends any[] ? NgtLoaderProto<T[number]> : NgtLoaderProto<T>;
+export type NgtBranchingReturn<T = any, Parent = any, Coerced = any> = NgtConditionalType<
+  T,
+  Parent,
+  Coerced,
+  T
+>;
+
+export interface NgtObjectMap {
+  nodes: { [name: string]: Object3D };
+  materials: { [name: string]: Material };
+  [key: string]: any;
+}
 
 export interface NgtCanvasInputs {
   /** A threejs renderer instance or props that go into the default renderer */
