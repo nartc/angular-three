@@ -1,4 +1,11 @@
-import { injectStore, NgtArgs, NgtScene, NgtVector3, NgtWrapper } from '@angular-three/core';
+import {
+  injectStore,
+  NgtArgs,
+  NgtPush,
+  NgtScene,
+  NgtVector3,
+  NgtWrapper,
+} from '@angular-three/core';
 import { NgIf } from '@angular/common';
 import {
   ChangeDetectorRef,
@@ -9,6 +16,8 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { delay, of } from 'rxjs';
+import { BoxGeometry } from 'three';
 import type { OrbitControls } from 'three-stdlib';
 
 @NgtWrapper()
@@ -34,24 +43,16 @@ export class Center {}
   selector: 'ngts-box',
   standalone: true,
   template: `
-    <ngt-mesh
-      [scale]="active ? 1.5 : 1"
-      (click)="active = !active"
-      (beforeRender)="onBeforeRender($any($event).object)"
-    >
-      <ngt-box-geometry></ngt-box-geometry>
+    <ngt-mesh>
+      <ngt-box-geometry *args="args"></ngt-box-geometry>
       <ng-content></ng-content>
     </ngt-mesh>
   `,
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Box {
-  active = false;
-
-  onBeforeRender(mesh: THREE.Mesh) {
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.01;
-  }
+  @Input() args: ConstructorParameters<typeof BoxGeometry> = [];
 }
 
 @Component({
@@ -59,10 +60,12 @@ export class Box {
   standalone: true,
   template: `
     <ngts-box
-      (click)="cubeClick.emit()"
       [position]="position"
+      [scale]="active ? 1.5 : 1"
+      (click)="active = !active; cubeClick.emit()"
       (pointerover)="hover = true"
       (pointerout)="hover = false"
+      (beforeRender)="onBeforeRender($any($event).object)"
     >
       <ngt-mesh-basic-material
         [color]="hover ? (cubeClick.observed ? 'red' : 'hotpink') : 'orange'"
@@ -77,6 +80,12 @@ export class Cube {
   @Output() cubeClick = new EventEmitter();
 
   hover = false;
+  active = false;
+
+  onBeforeRender(mesh: THREE.Mesh) {
+    mesh.rotation.x += 0.01;
+    mesh.rotation.y += 0.01;
+  }
 }
 
 @NgtScene()
@@ -90,13 +99,18 @@ export class Cube {
       <cube (cubeClick)="onCubeClick()" [position]="[-1.5, 0, 0]"></cube>
     </ngts-center>
 
+    <ngt-mesh [position]="position$ | ngtPush : [0, 0, 0]">
+      <ngt-box-geometry></ngt-box-geometry>
+      <ngt-mesh-basic-material></ngt-mesh-basic-material>
+    </ngt-mesh>
+
     <ngt-orbit-controls
       *args="[camera, domElement]"
       (beforeRender)="onBeforeRender($any($event).object)"
       [enableDamping]="true"
     ></ngt-orbit-controls>
   `,
-  imports: [Cube, NgIf, Center, NgtArgs],
+  imports: [Cube, NgIf, Center, NgtArgs, NgtPush],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export default class Scene {
@@ -105,6 +119,8 @@ export default class Scene {
 
   readonly camera = this.store.getState().camera;
   readonly domElement = this.store.getState().gl.domElement;
+
+  readonly position$ = of([0, 1, 0]).pipe(delay(1000));
 
   show = true;
 

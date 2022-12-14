@@ -25,8 +25,8 @@ export class NgtArgs implements NgtHasValidateForRenderer {
   shouldCreateView = true;
 
   @Input() set args(args: any[] | null) {
-    if (args == null) return;
-    if (!args.length || (args.length === 1 && args[0] === null)) return;
+    if (args == null || !Array.isArray(args)) return;
+    if (args.length === 1 && args[0] === null) return;
     this.injected = false;
     this.injectedArgs = args;
     if (this.shouldCreateView) {

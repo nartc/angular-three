@@ -115,62 +115,83 @@ export class NgtRenderer implements Renderer2 {
     this.delegateRenderer.destroy();
   }
   createElement(name: string, namespace?: string | null | undefined) {
-    const element = prepare(this.delegateRenderer.createElement(name, namespace));
+    const element = prepare(this.delegateRenderer.createElement(name, namespace), {
+      primitive: name === 'ngt-primitive',
+    });
 
     const threeTag = name.startsWith('ngt') && !name.startsWith('ngts') ? name.slice(4) : name;
-    const threeName = this.kebabToPascal(threeTag);
-    const target = this.catalogue[threeName];
 
-    if (target) {
-      /**
-       * Assuming the following template:
-       * <box-geometry *args="[2, 2, 2]"></box-geometry>
-       *
-       * The reason that it works is that:
-       * - When we have the Structural Directive, Angular will create a comment <!-- container -->
-       * on the DOM in place of the <ng-template> that Structural Directive has
-       * - In the Renderer, we can intercept this process (in appendChild()) and store the DebugNode
-       * of this Comment instance. Hence, we'll have access to the NgtArgs instance in the Injector
-       * - By the time we get to the actual THREE object that needs the "args", the DebugNode is ready
-       * to be used as the Injector.
-       */
-      const ngtArgs = this.firstNonInjectedDirective(NgtArgs);
-      const ngtRef = this.firstNonInjectedDirective(NgtRef);
-      const ngtAttachFn = this.firstNonInjectedDirective(NgtAttachFn);
-      const ngtAttachArray = this.firstNonInjectedDirective(NgtAttachArray);
+    /**
+     * Assuming the following template:
+     * <box-geometry *args="[2, 2, 2]"></box-geometry>
+     *
+     * The reason that it works is that:
+     * - When we have the Structural Directive, Angular will create a comment <!-- container -->
+     * on the DOM in place of the <ng-template> that Structural Directive has
+     * - In the Renderer, we can intercept this process (in appendChild()) and store the DebugNode
+     * of this Comment instance. Hence, we'll have access to the NgtArgs instance in the Injector
+     * - By the time we get to the actual THREE object that needs the "args", the DebugNode is ready
+     * to be used as the Injector.
+     */
+    const ngtArgs = this.firstNonInjectedDirective(NgtArgs);
+    const ngtRef = this.firstNonInjectedDirective(NgtRef);
+    const ngtAttachFn = this.firstNonInjectedDirective(NgtAttachFn);
+    const ngtAttachArray = this.firstNonInjectedDirective(NgtAttachArray);
 
-      const injectedArgs = ngtArgs?.args || [];
-      const injectedRef = ngtRef?.ref;
+    const injectedArgs = ngtArgs?.args || [];
+    const injectedRef = ngtRef?.ref;
 
-      const injectedAttachFn = ngtAttachFn?.attachFn;
-      const injectedAttachArray = ngtAttachArray?.attachArray;
+    const injectedAttachFn = ngtAttachFn?.attachFn;
+    const injectedAttachArray = ngtAttachArray?.attachArray;
 
-      const attach = injectedAttachFn || injectedAttachArray || undefined;
-      const store =
-        ngtArgs?.store ||
-        ngtRef?.store ||
-        ngtAttachArray?.store ||
-        ngtAttachFn?.store ||
-        this.tryGetStoreFromDebugNodeMap();
+    const attach = injectedAttachFn || injectedAttachArray || undefined;
+    const store =
+      ngtArgs?.store ||
+      ngtRef?.store ||
+      ngtAttachArray?.store ||
+      ngtAttachFn?.store ||
+      this.tryGetStoreFromDebugNodeMap();
 
-      const instance = prepare(
-        new target(...injectedArgs),
-        {
-          store,
-          isThree: true,
-          args: injectedArgs,
-          attach,
-        },
-        { dom: element }
-      );
-      const localState = instanceLocalState(instance);
+    let instance: NgtInstanceNode;
 
-      if (is.material(instance)) {
-        localState!.attach = ['material'];
-      } else if (is.geometry(instance)) {
-        localState!.attach = ['geometry'];
+    if (threeTag === 'primitive') {
+      if (!ngtArgs || !injectedArgs[0])
+        throw new Error(`[NGT] ngt-primitive without *args is invalid `);
+
+      const obj = injectedArgs[0];
+      instance = prepare(obj, {
+        store,
+        isThree: true,
+        primitive: true,
+        args: injectedArgs,
+        attach,
+      });
+    } else {
+      const threeName = this.kebabToPascal(threeTag);
+      const target = this.catalogue[threeName];
+
+      if (target) {
+        instance = prepare(
+          new target(...injectedArgs),
+          {
+            store,
+            isThree: true,
+            args: injectedArgs,
+            attach,
+          },
+          { dom: element }
+        );
+        const localState = instanceLocalState(instance);
+
+        if (is.material(instance)) {
+          localState!.attach = ['material'];
+        } else if (is.geometry(instance)) {
+          localState!.attach = ['geometry'];
+        }
       }
+    }
 
+    if (instance) {
       const elementLocalState = instanceLocalState(element);
 
       if (elementLocalState) {
@@ -362,6 +383,8 @@ export class NgtRenderer implements Renderer2 {
     this.delegateRenderer.removeStyle(el, style, flags);
   }
   setProperty(el: any, name: string, value: any): void {
+    console.log({ el, name, value });
+
     const rendererState = instanceRendererState(el);
 
     if (rendererState?.instance) {

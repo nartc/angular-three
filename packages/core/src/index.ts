@@ -5,6 +5,7 @@ export * from './lib/directives/attach-array';
 export * from './lib/directives/attach-fn';
 export * from './lib/directives/ref';
 export * from './lib/directives/repeat';
+export * from './lib/pipes/push';
 export { NgtScene, NgtWrapper, provideNgtRenderer } from './lib/renderer';
 export * from './lib/store';
 export * from './lib/types';
