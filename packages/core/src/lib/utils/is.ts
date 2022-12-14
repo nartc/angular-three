@@ -19,7 +19,7 @@ export const is = {
   canvas: (a: unknown): a is HTMLCanvasElement => a instanceof HTMLCanvasElement,
   three: (a: unknown): a is NgtInstanceNode =>
     is.instance(a) && !!instanceLocalState(a)?.isThree && !is.html(a),
-  html: (a: unknown): a is (HTMLElement | Comment | Text) & NgtInstanceNode =>
+  html: (a: unknown): a is NgtInstanceNode<HTMLElement | Comment | Text> =>
     a instanceof HTMLElement || a instanceof Comment || a instanceof Text,
   equ(
     a: any,

@@ -1,5 +1,10 @@
-import { StoreApi } from 'zustand/vanilla';
-import type { NgtAnyRecord, NgtInstanceLocalState, NgtInstanceRendererState } from '../types';
+import { ElementRef } from '@angular/core';
+import type {
+  NgtAnyRecord,
+  NgtInstanceLocalState,
+  NgtInstanceNode,
+  NgtInstanceRendererState,
+} from '../types';
 
 export function instanceLocalState<TInstance extends object = NgtAnyRecord>(
   obj: TInstance | undefined
@@ -10,6 +15,13 @@ export function instanceLocalState<TInstance extends object = NgtAnyRecord>(
 
 export function instanceRendererState(
   obj: NgtAnyRecord | undefined
-): StoreApi<NgtInstanceRendererState> | undefined {
-  return instanceLocalState(obj)?.__ngt_renderer__;
+): NgtInstanceRendererState | undefined {
+  if (!obj) return undefined;
+  return obj['__ngt_renderer__'] as NgtInstanceRendererState;
+}
+
+export function instanceFromElementRef<T extends object>(
+  elementRef: ElementRef<HTMLElement>
+): T & Omit<NgtInstanceNode, '__ngt_renderer__'> {
+  return instanceRendererState(elementRef.nativeElement)!.instance;
 }

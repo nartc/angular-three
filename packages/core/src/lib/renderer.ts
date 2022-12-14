@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   DebugNode,
   getDebugNode,
   inject,
@@ -11,25 +12,27 @@ import {
   Type,
 } from '@angular/core';
 import { ɵDomRendererFactory2 as DomRendererFactory } from '@angular/platform-browser';
-import type { StoreApi } from 'zustand/vanilla';
+import type { StoreApi } from 'zustand';
 import { injectNgtCatalogue } from './catalogue';
 import { NgtArgs } from './directives/args';
 import { NgtAttachArray } from './directives/attach-array';
 import { NgtAttachFn } from './directives/attach-fn';
 import { NgtRef } from './directives/ref';
+import { supportedEvents } from './events';
 import { NgtStore } from './store';
 import type {
   NgtAnyConstructor,
   NgtAnyRecord,
   NgtAttachFunction,
+  NgtEventHandlers,
   NgtHasValidateForRenderer,
-  NgtInstanceLocalState,
   NgtInstanceNode,
   NgtInstanceRendererState,
   NgtState,
 } from './types';
 import { applyProps } from './utils/apply-props';
-import { attach } from './utils/attach';
+import { attach, detach } from './utils/attach';
+import { removeInteractivity } from './utils/events';
 import { invalidateInstance } from './utils/instance';
 import { instanceLocalState, instanceRendererState } from './utils/instance-local-state';
 import { is } from './utils/is';
@@ -40,11 +43,14 @@ const ANNOTATED_FLAGS = {
   NGT_WRAPPER: '__ngt_wrapper__',
 } as const;
 
-// ATTRIBUTES
 const ATTRIBUTES = {
   BEFORE_RENDER_PRIORITY: 'beforeRenderPriority',
   ATTACH: 'attach',
   WRAPPER_MODE: 'wrapperMode',
+} as const;
+
+const EVENTS = {
+  BEFORE_RENDER: 'beforeRender',
 } as const;
 
 @Injectable()
@@ -58,7 +64,6 @@ export class NgtRendererFactory implements RendererFactory2 {
   createRenderer(hostElement: any, type: RendererType2 | null): Renderer2 {
     if (!hostElement || !type) return this.createRendererIfNotExist(hostElement, type);
 
-    console.log('createRenderer -->', { hostElement, type });
     if (!instanceLocalState(hostElement)) hostElement = prepare(hostElement);
 
     if (!this.debugNodeMap.has(hostElement)) {
@@ -68,15 +73,18 @@ export class NgtRendererFactory implements RendererFactory2 {
     }
 
     const componentClass = (type as NgtAnyRecord)['type'];
-    const rendererState = { dom: hostElement };
+    const state = { dom: hostElement };
 
     if (componentClass[ANNOTATED_FLAGS.NGT_SCENE]) {
-      Object.assign(rendererState, { scene: true, parentDom: hostElement });
+      Object.assign(state, { scene: true, parentDom: hostElement });
     } else if (componentClass[ANNOTATED_FLAGS.NGT_WRAPPER]) {
-      Object.assign(rendererState, { wrapper: true });
+      Object.assign(state, { wrapper: true });
     }
 
-    instanceRendererState(hostElement)?.setState((state) => ({ ...state, ...rendererState }));
+    const rendererState = instanceRendererState(hostElement);
+    if (rendererState) {
+      Object.assign(rendererState, state);
+    }
 
     return this.createRendererIfNotExist(hostElement, type);
   }
@@ -87,21 +95,11 @@ export class NgtRendererFactory implements RendererFactory2 {
     if (!this.defaultRenderer) {
       const delegateRenderer = this.delegateDomRendererFactory.createRenderer(hostElement, type);
       this.defaultRenderer = new NgtRenderer(delegateRenderer, this.debugNodeMap, this.catalogue);
+      // this.defaultRenderer = new NgtRenderer(delegateRenderer);
     }
     return this.defaultRenderer;
   }
 }
-
-/**
- * 1. Root Scene component, annotated with NgtScene followed by a plain THREE entity
- *    a. createElement (scene or ng-component if no selector)
- *    b. createRenderer (now Angular will try to create the Renderer for this Component)
- *    c. createElement (the THREE entity)
- *    d. appendChild (parent: scene component, child: THREE.Entity)
- *      - step (c) and (d) are repeated for every THREE entity on the template for all of their children as well
- *    e. parentNode (since our root Scene component is always wrapped in *ngtCanvasContent, the "comment" node is always created)
- *    f. insertBefore (ng-canvas-container will now try to insert the scene/ng-component root Scene DOM before the "comment" node)
- */
 
 export class NgtRenderer implements Renderer2 {
   constructor(
@@ -114,11 +112,13 @@ export class NgtRenderer implements Renderer2 {
     return this.delegateRenderer.data;
   }
   destroy(): void {
-    return this.delegateRenderer.destroy();
+    this.delegateRenderer.destroy();
   }
   createElement(name: string, namespace?: string | null | undefined) {
-    console.log('createElement -->', { name, namespace });
-    const threeName = this.kebabToPascal(name);
+    const element = prepare(this.delegateRenderer.createElement(name, namespace));
+
+    const threeTag = name.startsWith('ngt') && !name.startsWith('ngts') ? name.slice(4) : name;
+    const threeName = this.kebabToPascal(threeTag);
     const target = this.catalogue[threeName];
 
     if (target) {
@@ -153,44 +153,52 @@ export class NgtRenderer implements Renderer2 {
         ngtAttachFn?.store ||
         this.tryGetStoreFromDebugNodeMap();
 
-      const instance = prepare(new target(), { isThree: true, attach, args: injectedArgs, store });
-      const localState = instanceLocalState(instance) as NgtInstanceLocalState;
+      const instance = prepare(
+        new target(...injectedArgs),
+        {
+          store,
+          isThree: true,
+          args: injectedArgs,
+          attach,
+        },
+        { dom: element }
+      );
+      const localState = instanceLocalState(instance);
 
       if (is.material(instance)) {
-        localState.attach = ['material'];
+        localState!.attach = ['material'];
       } else if (is.geometry(instance)) {
-        localState.attach = ['geometry'];
+        localState!.attach = ['geometry'];
       }
 
+      const elementLocalState = instanceLocalState(element);
+
+      if (elementLocalState) {
+        elementLocalState.isThree = true;
+        if (store) elementLocalState.store = store;
+      }
+
+      const elementRendererState = instanceRendererState(element);
+
       if (injectedRef) injectedRef.nativeElement = instance;
-      return injectedRef?.nativeElement || instance;
+      if (elementRendererState) {
+        elementRendererState.instance = injectedRef?.nativeElement || instance;
+      }
     }
 
-    const element = this.delegateRenderer.createElement(name, namespace);
-    return prepare(element);
+    return element;
   }
   createComment(value: string) {
-    console.log('createComment -->', { value });
-    const comment = this.delegateRenderer.createComment(value);
-    prepare(comment);
-    instanceRendererState(comment)?.setState({ dom: comment });
-    return comment;
+    return prepare(this.delegateRenderer.createComment(value));
   }
-
   createText(value: string) {
     console.log('createText -->', { value });
     return this.delegateRenderer.createText(value);
   }
-
   destroyNode!: ((node: any) => void) | null;
-
-  appendChild(parent: any, newChild: any): void {
-    console.log('appendChild -->', { parent, newChild, debugNodeMap: this.debugNodeMap });
-
-    let parentRendererState = instanceRendererState(parent) as StoreApi<NgtInstanceRendererState>;
-    let parentLocalState = instanceLocalState(parent) as NgtInstanceLocalState;
-    let childRendererState = instanceRendererState(newChild);
-    let childLocalState = instanceLocalState(newChild);
+  appendChild(parent: any, newChild: any, fromInsertBefore = false): void {
+    const parentRendererState = instanceRendererState(parent);
+    const childRendererState = instanceRendererState(newChild);
 
     // Scene component might not have the Scene instance set. Let's try to do it here
     this.tryAssignRootScene(parentRendererState);
@@ -198,273 +206,107 @@ export class NgtRenderer implements Renderer2 {
     // Try to update our debugNodeMap so that the child at least knows about its parent DebugNode
     this.tryAssignDebugNode(parent, newChild);
 
-    // if parent is the root scene, let's reassign it
-    if (parentRendererState.getState().scene) {
-      const sceneDom = parent;
-      if (childRendererState) childRendererState.setState({ parentDom: sceneDom });
-      parent = parentRendererState.getState().instance;
-      parentRendererState = instanceRendererState(parent) as StoreApi<NgtInstanceRendererState>;
-      parentLocalState = instanceLocalState(parent) as NgtInstanceLocalState;
-
-      if (!parentRendererState.getState().dom) parentRendererState.setState({ dom: sceneDom });
-    }
-
-    // if both parent and newChild are THREE, proceed with custom logic
-    if (is.three(parent) && is.three(newChild)) {
-      // whether the child is added to the parent with parent.add()
-      let added = false;
-
-      if (!childLocalState) {
-        prepare(newChild, { isThree: true, store: this.getStore(newChild) });
-        childLocalState = instanceLocalState(newChild) as NgtInstanceLocalState;
-        childRendererState = instanceRendererState(newChild) as StoreApi<NgtInstanceRendererState>;
-      }
-
-      const newChildStore = this.getStore(newChild);
-      if (newChildStore && (!childLocalState.store || childLocalState.store !== newChildStore)) {
-        childLocalState.store = newChildStore;
-      }
-
-      const parentStore = this.getStore(parent);
-      if (parentStore && (!parentLocalState.store || parentLocalState.store !== parentStore)) {
-        parentLocalState.store = parentStore;
-      }
-
-      if (childLocalState?.attach) {
-        const attachProp = childLocalState.attach;
-
-        if (typeof attachProp === 'function') {
-          const attachCleanUp = (attachProp as NgtAttachFunction)(parent, newChild, null as any);
-          if (attachCleanUp) childLocalState.previousAttach = attachCleanUp;
-        } else {
-          // we skip attach explicitly
-          if (attachProp[0] === 'none') {
-            childLocalState.isThree = true;
-            invalidateInstance(newChild);
-            return;
-          }
-
-          // handle material array
-          if (
-            attachProp[0] === 'material' &&
-            attachProp[1] &&
-            typeof Number(attachProp[1]) === 'number' &&
-            is.material(newChild) &&
-            !Array.isArray(parent['material'])
-          ) {
-            parent['material'] = [];
-          }
-
-          // attach
-          attach(parent, newChild, attachProp);
-
-          // save value
-          childLocalState.previousAttach = attachProp.reduce(
-            (value, property) => value[property],
-            parent
-          );
-        }
-      } else if (is.object3d(parent) && is.object3d(newChild)) {
-        parent.add(newChild);
-        added = true;
-      }
-
-      // This is for anything that used attach, and for non-Object3Ds that don't get attached to props;
-      // that is, anything that's a child in React but not a child in the scenegraph.
-      const collection = added ? parentLocalState.objects : parentLocalState.nonObjects;
-      collection.setState((state) => [
-        ...(Array.isArray(state) ? state : Object.values(state)),
-        newChild,
-      ]);
-
-      childLocalState!.parent = parent;
-      childLocalState!.isThree = true;
-      childRendererState!.setState({ parent });
-      parentLocalState!.isThree = true;
-
-      invalidateInstance(newChild);
-      invalidateInstance(parent);
-
-      return;
-    }
-
-    if (is.html(parent) && is.html(newChild)) {
-      // since both are HTMLs, we'll try set everything that we can set
-      // then delegate the parent and child to the DomRenderer
-      if (
-        !childRendererState?.getState().parentDom &&
-        (parentRendererState.getState().dom || parentRendererState.getState().parentDom)
-      ) {
-        childRendererState?.setState({
-          parentDom: parentRendererState.getState().dom || parentRendererState.getState().parentDom,
-        });
-      }
-
-      if (
-        !childRendererState?.getState().parent &&
-        (parentRendererState?.getState().instance || parentRendererState?.getState().parent)
-      ) {
-        childRendererState?.setState({
-          parent:
-            parentRendererState?.getState().instance || parentRendererState?.getState().parent,
-        });
-      }
-
+    // let the DOM renderer does its thing
+    // but if we call appendChild manually from insertBefore, don't do it
+    if (!fromInsertBefore) {
       this.delegateRenderer.appendChild(parent, newChild);
-      return;
     }
 
-    if (is.three(parent) && is.html(newChild)) {
-      // TODO: Determine if we need to prepare the child
+    // assign the parentDom
+    if (childRendererState) {
+      childRendererState.parentDom = parent;
+    }
 
-      // Set the parent instance (THREE object) on the child instance (DOM element)
-      childRendererState?.setState({ parent });
+    if (parentRendererState?.wrapper && !parentRendererState?.instance) {
+      parentRendererState.instance = childRendererState?.instance;
 
-      // Since parent is a THREE object, we can check if there's a parentDom on it.
-      // if there's not, we will try to find the closest parent DOM from debugNodeMap
-      if (!parentRendererState.getState().parentDom) {
-        const domParentFromDebugNodeMap = this.tryGetDomParent(parent);
-        if (domParentFromDebugNodeMap) {
-          parentRendererState.setState({ parentDom: domParentFromDebugNodeMap });
+      let parentInstance = parentRendererState.parent;
+      if (!parentInstance) {
+        parentInstance = instanceRendererState(parentRendererState.parentDom)?.parent;
+        if (parentInstance) {
+          parentRendererState.parent = parentInstance;
         }
       }
 
-      // if there is, and the child doesn't already have a parentDom, we'll set it
-      if (parentRendererState.getState().parentDom && !childRendererState?.getState().parentDom) {
-        childRendererState?.setState({ parentDom: parentRendererState.getState().parentDom });
+      if (parentRendererState.parent) {
+        this.attachThreeInstances(parentRendererState.parent, parentRendererState.instance);
+        childRendererState!.parent = parentRendererState.parent;
       }
-
-      // append the child on the parentDom
-      if (
-        is.scene(parent) ||
-        instanceRendererState(childRendererState?.getState().parentDom)?.getState().scene
-      ) {
-        this.delegateRenderer.appendChild(childRendererState?.getState().parentDom, newChild);
-      } else {
-        if (childRendererState?.getState().parentDom) {
-          this.appendChild(childRendererState?.getState().parentDom, newChild);
-        }
-      }
-
-      // if on the child doesn't have any THREE instance, we bail
-      if (!is.three(childRendererState?.getState().instance)) return;
-
-      // if there is, append it to the parent
-      this.appendChild(parent, childRendererState?.getState().instance);
       return;
     }
 
-    if (is.html(parent) && is.three(newChild)) {
-      // set the parentDom of the child to be parent
-      childRendererState?.setState({ parentDom: parent });
+    if (childRendererState && !childRendererState.parent && parentRendererState?.instance) {
+      childRendererState.parent = parentRendererState.instance;
+    }
 
-      if (
-        parentRendererState.getState().parentDom &&
-        (parent as HTMLElement).parentElement !== parentRendererState.getState().parentDom
-      ) {
-        this.delegateRenderer.appendChild(parentRendererState.getState().parentDom, parent);
+    if (!childRendererState?.instance) {
+      // this might be the indicator that this is a regular Angular component
+      // we then can loop over its HTMLChildren
+      // TODO: this might be a case for a recusive algo
+      const grandChildren = Array.from((newChild as HTMLElement).children || []);
+      for (const grandChild of grandChildren) {
+        const grandChildRendererState = instanceRendererState(grandChild);
+        if (!grandChildRendererState || !grandChildRendererState.instance) continue;
+        this.attachThreeInstances(childRendererState?.parent, grandChildRendererState.instance);
       }
-
-      // there are cases where, with structural directives, the DOM parent
-      // has no information about its parent (due to ng-template)
-      // we'll try to walk the DebugNodeMap to find the closest parent
-      if (!parentRendererState.getState().parent) {
-        const parentFromDebugNodeMap = this.tryGetThreeParent(parent);
-        if (!parentFromDebugNodeMap) return;
-
-        parentRendererState.setState({ parent: parentFromDebugNodeMap });
-      }
-
-      // the DOM parent can also be a wrapper, if it is, the instance should be set
-      if (parentRendererState.getState().wrapper) {
-        parentRendererState.setState({ instance: newChild });
-      }
-
-      this.appendChild(parentRendererState.getState().parent, newChild);
       return;
     }
 
-    // none of the cases match, let's delegate
-    this.delegateRenderer.appendChild(parent, newChild);
+    if (
+      childRendererState?.instance &&
+      parentRendererState?.instance &&
+      parentRendererState.instance !== childRendererState.instance
+    ) {
+      this.attachThreeInstances(parentRendererState.instance, childRendererState.instance);
+    }
   }
   insertBefore(parent: any, newChild: any, refChild: any, isMove?: boolean | undefined): void {
-    console.log('insertBefore -->', { parent, newChild, refChild, isMove });
-
-    // Where the root scene component is being added to the ngt-canvas-container (eg: router-outlet)
-    // after the first render cycle of all staytic elements on the templates (eg: no ngIf, no structural directives, no bindings)
-    if (is.html(parent) && (parent as HTMLElement).nodeName === 'NGT-CANVAS-CONTAINER') {
-      this.delegateRenderer.insertBefore(parent, newChild, refChild, isMove);
-      return;
-    }
-
-    const parentRendererState = instanceRendererState(parent);
-    const childRendererState = instanceRendererState(newChild);
-    const refChildRendererState = instanceRendererState(refChild);
-
-    // if new child is a three object, appendChild will handle it
-    if (is.three(newChild)) {
-      if (is.html(refChild)) childRendererState?.setState({ dom: refChild });
-      if (is.html(parent)) childRendererState?.setState({ parentDom: parent });
-      this.appendChild(parent, newChild);
-      return;
-    }
-
-    // we'll let the DomRenderer handles the case where refChild.parentDom is found
-    // and it's different than the current child parentDom
-    if (
-      refChildRendererState?.getState().parentDom &&
-      refChildRendererState?.getState().parentDom !== childRendererState?.getState().parentDom
-    ) {
-      childRendererState?.setState({ parentDom: refChildRendererState?.getState().parentDom });
-      this.delegateRenderer.insertBefore(
-        childRendererState?.getState().parentDom,
-        newChild,
-        refChild,
-        isMove
-      );
-    }
-
-    // we also check if parent is an instance (wrapper)
-    // if it is, we'll delegate to appendChild
-    if (is.three(parentRendererState?.getState().instance)) {
-      this.appendChild(parentRendererState?.getState().instance, newChild);
-      return;
-    }
-
-    // otherwise, delegate to DomRenderer
     this.delegateRenderer.insertBefore(parent, newChild, refChild, isMove);
+    if ((parent as HTMLElement).nodeName === 'NGT-CANVAS-CONTAINER') return;
+    this.appendChild(parent, newChild, true);
   }
-
-  // TODO: this needs work
   removeChild(parent: any, oldChild: any, isHostElement?: boolean | undefined): void {
-    console.log('removeChild -->', { parent, oldChild, isHostElement });
+    const parentRendererState = instanceRendererState(parent);
+    const childRendererState = instanceRendererState(oldChild);
+
+    // if a child doesn't have any instance
+    // it might be an indicator where this is an Angular component
+    // that renders other stuffs instead of being a THREE entity OR a NgtWrapper
+    if (!childRendererState?.instance) {
+      // if this is the case, we'll loop over its' children HTML to determine
+      // TODO: this might be a case for a recusive algo
+      const grandChildren = Array.from((oldChild as HTMLElement).children || []);
+      for (const grandChild of grandChildren) {
+        const grandChildRendererState = instanceRendererState(grandChild);
+        if (!grandChildRendererState || !grandChildRendererState.instance) continue;
+        this.removeThreeChild(
+          childRendererState?.parent || parentRendererState?.instance,
+          grandChildRendererState.instance
+        );
+      }
+    }
+
+    if (parentRendererState?.instance && childRendererState?.instance) {
+      this.removeThreeChild(parentRendererState.instance, childRendererState.instance, true);
+    }
+
+    this.removeRendererReferences(oldChild);
     this.delegateRenderer.removeChild(parent, oldChild, isHostElement);
   }
   selectRootElement(selectorOrNode: any, preserveContent?: boolean | undefined) {
-    console.log('selectRootElement -->', { selectorOrNode, preserveContent });
     return this.delegateRenderer.selectRootElement(selectorOrNode, preserveContent);
   }
   parentNode(node: any) {
-    console.log('parentNode -->', { node });
-    const nodeRendererState = instanceRendererState(node);
-    if (nodeRendererState) {
-      return (
-        nodeRendererState.getState().parent ||
-        nodeRendererState.getState().parentDom ||
-        this.delegateRenderer.parentNode(node)
-      );
-    }
     return this.delegateRenderer.parentNode(node);
   }
   nextSibling(node: any) {
-    console.log('nextSibling -->', { node });
     return this.delegateRenderer.nextSibling(node);
   }
   setAttribute(el: any, name: string, value: string, namespace?: string | null | undefined): void {
     const rendererState = instanceRendererState(el);
 
-    if (rendererState?.getState().wrapper) {
-      this.setAttribute(rendererState.getState().instance, name, value, namespace);
+    if (rendererState?.wrapper) {
+      this.setAttribute(rendererState.instance, name, value, namespace);
       return;
     }
 
@@ -478,7 +320,7 @@ export class NgtRenderer implements Renderer2 {
           priority = 0;
           console.warn(`[NGT] Invalid value for "beforeRenderPriority", default to 0`);
         }
-        rendererState?.setState({ beforeRenderPriority: priority });
+        rendererState!.beforeRenderPriority = priority;
         return;
       }
 
@@ -491,12 +333,7 @@ export class NgtRenderer implements Renderer2 {
       }
 
       if (name === ATTRIBUTES.WRAPPER_MODE) {
-        if (localState) {
-          if (!localState.wrapper) {
-            localState.wrapper = { props: {}, applyFirst: value === 'first' };
-          }
-          localState.wrapper.applyFirst = value === 'first';
-        }
+        if (localState) localState.wrapper.applyFirst = value === 'first';
         return;
       }
 
@@ -505,71 +342,271 @@ export class NgtRenderer implements Renderer2 {
     }
 
     this.delegateRenderer.setAttribute(el, name, value, namespace);
+    if (rendererState?.instance) {
+      this.setAttribute(rendererState?.instance, name, value, namespace);
+    }
   }
   removeAttribute(el: any, name: string, namespace?: string | null | undefined): void {
-    console.log('removeAttribute -->', { el, name, namespace });
     this.delegateRenderer.removeAttribute(el, name, namespace);
   }
   addClass(el: any, name: string): void {
-    console.log('addClass -->', { el, name });
     this.delegateRenderer.addClass(el, name);
   }
   removeClass(el: any, name: string): void {
-    console.log('removeClass -->', { el, name });
     this.delegateRenderer.removeClass(el, name);
   }
   setStyle(el: any, style: string, value: any, flags?: RendererStyleFlags2 | undefined): void {
-    console.log('setStyle -->', { el, style, value, flags });
     this.delegateRenderer.setStyle(el, style, value, flags);
   }
   removeStyle(el: any, style: string, flags?: RendererStyleFlags2 | undefined): void {
-    console.log('removeStyle -->', { el, style, flags });
     this.delegateRenderer.removeStyle(el, style, flags);
   }
   setProperty(el: any, name: string, value: any): void {
-    console.log('setProperty -->', { el, name, value });
+    const rendererState = instanceRendererState(el);
+
+    if (rendererState?.instance) {
+      const instance = rendererState.instance;
+      const localState = instanceLocalState(instance);
+
+      if (rendererState.wrapper) {
+        // store the props on the instance's localState.wrapper
+        Object.assign(localState!.wrapper, {
+          ...localState!.wrapper,
+          props: { ...localState!.wrapper.props, [name]: value },
+        });
+      }
+
+      /**
+       * we ressign the value with the value from wrapper if
+       * - the property name is in the wrapper.props
+       * - if the wrapperMode is 'last' (aka we apply the bindings from the wrapper AFTER we apply the bindings on the element)
+       * eg:
+       * <ngts-box [position]="[1,2,3]"></ngts-box>
+       * <ngt-mesh [position]="[2,3,4]"></ngt-mesh> -> [2,3,4] takes precedence
+       * <ngt-mesh wrapperMode="last" [position]="[2,3,4]"></ngt-mesh> -> [1,2,3] takes precedence
+       */
+      if (
+        localState?.wrapper &&
+        localState.wrapper.props &&
+        name in localState.wrapper.props &&
+        !localState.wrapper.applyFirst
+      ) {
+        value = localState.wrapper.props[name];
+      }
+
+      applyProps(instance, { [name]: value });
+    }
+
     this.delegateRenderer.setProperty(el, name, value);
   }
   setValue(node: any, value: string): void {
-    console.log('setValue -->', { node, value });
+    if (node instanceof Comment && node.previousElementSibling) {
+      value = value
+        .slice(0, -2)
+        .concat(',\n  "ngt-for": ', `"${node.previousElementSibling.localName}"`, '\n}');
+    }
     this.delegateRenderer.setValue(node, value);
   }
-  listen(target: any, eventName: string, callback: (event: any) => boolean | void): () => void {
-    console.log('listen -->', { target, eventName, callback });
+  listen(
+    target: any,
+    eventName: string,
+    callback: (event: any) => boolean | void,
+    dom?: HTMLElement
+  ): () => void {
+    let rendererState = instanceRendererState(target);
+    let instance = rendererState?.instance;
+    const localState = instanceLocalState(instance);
+
+    if (instance && localState) {
+      // handling beforeRender
+      if (eventName === EVENTS.BEFORE_RENDER) {
+        return localState.store
+          .getState()
+          .internal.subscribe(
+            (state) => callback({ state, object: instance }),
+            rendererState?.beforeRenderPriority ?? 0,
+            localState.store
+          );
+      }
+
+      const previousHandler = localState.handlers[eventName as keyof typeof localState.handlers];
+      const updatedCallback: typeof callback = (event) => {
+        if (previousHandler) previousHandler(event);
+        callback(event);
+      };
+
+      if (localState.eventCount) {
+        localState.handlers[eventName as keyof typeof localState.handlers] = this.eventToHandler(
+          updatedCallback,
+          (dom || rendererState?.dom || rendererState?.parentDom) as HTMLElement
+        );
+      } else {
+        localState.handlers = {
+          [eventName]: this.eventToHandler(
+            updatedCallback,
+            (dom || rendererState?.dom || rendererState?.parentDom) as HTMLElement
+          ),
+        };
+      }
+      localState.eventCount += 1;
+
+      if (localState?.eventCount === 1 && instance['raycast']) {
+        localState.store.getState().addInteraction(instance);
+      }
+
+      return () => {
+        const localState = instanceLocalState(instance);
+        if (localState?.eventCount) {
+          localState.store.getState().removeInteraction(instance['uuid']);
+        }
+      };
+    }
+
+    if (!instance && rendererState?.wrapper) {
+      queueMicrotask(() => {
+        // refetch rendererState
+        rendererState = instanceRendererState(target);
+        const wrapperDom = rendererState?.parentDom || rendererState?.dom;
+        instance = rendererState?.instance;
+
+        if (instance) {
+          // re-assign rendererState to be instance
+          rendererState = instanceRendererState(instance);
+          rendererState?.cleanUps?.add(
+            this.listen(rendererState.dom, eventName, callback, wrapperDom)
+          );
+        }
+      });
+
+      return () => {};
+    }
+
     return this.delegateRenderer.listen(target, eventName, callback);
   }
 
-  private tryAssignRootScene(rendererState: StoreApi<NgtInstanceRendererState>) {
-    if (rendererState && rendererState.getState().scene && !rendererState.getState().instance) {
-      const debugNode = this.getDebugNodeForInstance(rendererState.getState());
-      const ngtStore = debugNode.injector.get(NgtStore, null, { skipSelf: true });
+  private removeThreeChild(parent: NgtInstanceNode, child: NgtInstanceNode, dispose?: boolean) {
+    if (child) {
+      const parentLocalState = instanceLocalState(parent);
+      const childLocalState = instanceLocalState(child);
+
+      // clear parent ref
+      if (childLocalState) childLocalState.parent = null;
+
+      // remove child from parents' objects
+      if (parentLocalState?.objects) {
+        parentLocalState.objects.setState(
+          this.toArray(parentLocalState.objects).filter((x) => x !== child)
+        );
+      }
+
+      if (parentLocalState?.nonObjects) {
+        parentLocalState.nonObjects.setState(
+          this.toArray(parentLocalState.nonObjects).filter((x) => x !== child)
+        );
+      }
+
+      // remove attachment
+      if (childLocalState?.attach) {
+        detach(parent, child, childLocalState.attach);
+      } else if (is.object3d(parent) && is.object3d(child)) {
+        parent.remove(child);
+
+        // remove interactivity
+        if (childLocalState?.store) {
+          removeInteractivity(childLocalState.store, child);
+        }
+      }
+
+      const isPrimitive = childLocalState?.primitive;
+
+      if (!isPrimitive) {
+        this.removeThreeRecursive(this.toArray(childLocalState?.objects), child, !!dispose);
+        this.removeThreeRecursive(child.children, child, !!dispose);
+      }
+
+      // Remove references
+      if (childLocalState) {
+        delete child.__ngt__.store;
+        delete child.__ngt__.objects;
+        delete child.__ngt__.handlers;
+        delete child.__ngt__.memoized;
+        if (!isPrimitive) delete child.__ngt__;
+      }
+
+      // remove renderer references
+      this.removeRendererReferences(child);
+
+      // dispose
+      if (child['dispose'] && !is.scene(child)) {
+        queueMicrotask(() => child['dispose']());
+      }
+
+      invalidateInstance(parent);
+    }
+  }
+
+  private removeRendererReferences(target: NgtInstanceNode) {
+    const rendererState = instanceRendererState(target);
+    if (rendererState) {
+      rendererState.cleanUps?.forEach((cleanUp) => cleanUp());
+      this.debugNodeMap.delete(rendererState.dom);
+      delete target.__ngt_renderer__.cleanUps;
+      delete target.__ngt_renderer__.scene;
+      delete target.__ngt_renderer__.wrapper;
+      delete target.__ngt_renderer__.instance;
+      delete target.__ngt_renderer__.parent;
+      delete target.__ngt_renderer__.dom;
+      delete target.__ngt_renderer__.parentDom;
+      delete target.__ngt_renderer__.beforeRenderPriority;
+    }
+  }
+
+  private removeThreeRecursive(
+    array: NgtInstanceNode[],
+    parent: NgtInstanceNode,
+    dispose: boolean
+  ) {
+    if (array) [...array].forEach((child) => this.removeThreeChild(parent, child, dispose));
+  }
+
+  private toArray<T>(arrayStore?: StoreApi<T[]>): T[] {
+    if (!arrayStore) return [];
+    const state = arrayStore.getState();
+    return Array.isArray(state) ? state : Object.values(state);
+  }
+
+  private tryAssignRootScene(rendererState?: NgtInstanceRendererState) {
+    if (rendererState && rendererState.scene && !rendererState.instance) {
+      const debugNode = this.getDebugNodeForInstance(rendererState);
+      const ngtStore = this.getStore(rendererState);
       if (ngtStore) {
-        const instance = ngtStore.store.getState().scene;
-        rendererState.setState({ instance });
+        const instance = ngtStore.getState().scene;
+        rendererState.instance = instance;
         this.debugNodeMap.set(instance, debugNode);
+        const localState = instanceLocalState(rendererState.dom);
+        if (localState) localState.isThree = true;
       }
     }
   }
 
   private tryAssignDebugNode(parent: any, child: any) {
     const childRendererState = instanceRendererState(child);
-
     if (!childRendererState) return;
 
     // if the child instance already be tracked in the debugNodeMap, bail out
-    if (this.debugNodeMap.has(childRendererState.getState().instance)) return;
-    const childDebugNode = this.getDebugNodeForInstance(childRendererState.getState());
+    if (this.debugNodeMap.has(childRendererState.instance)) return;
+    const childDebugNode = this.getDebugNodeForInstance(childRendererState);
     // if we have the debugNode for the child, which means we find it on the dom of the child
     // then we add a record of the same debugNode for the child instance
-    if (childDebugNode && childRendererState.getState().instance) {
-      this.debugNodeMap.set(childRendererState.getState().instance, childDebugNode);
+    if (childDebugNode && childRendererState.instance) {
+      this.debugNodeMap.set(childRendererState.instance, childDebugNode);
       return;
     }
 
     // at this point, we cannot find any debug node for the child. Let's try the parent
     const parentRendererState = instanceRendererState(parent);
     if (!parentRendererState) return;
-    const parentDebugNode = this.getDebugNodeForInstance(parentRendererState.getState());
+    const parentDebugNode = this.getDebugNodeForInstance(parentRendererState);
     if (!parentDebugNode) return;
 
     let debugNode = is.html(child) ? getDebugNode(child) : undefined;
@@ -579,27 +616,14 @@ export class NgtRenderer implements Renderer2 {
     }
 
     // add a record for the child dom
-    if (childRendererState.getState().dom) {
-      this.debugNodeMap.set(childRendererState.getState().dom, debugNode);
+    if (childRendererState.dom) {
+      this.debugNodeMap.set(childRendererState.dom, debugNode);
     }
 
     // add a record for the child instance
-    if (childRendererState.getState().instance) {
-      this.debugNodeMap.set(childRendererState.getState().instance, debugNode);
+    if (childRendererState.instance) {
+      this.debugNodeMap.set(childRendererState.instance, debugNode);
     }
-  }
-
-  private getDebugNodeForInstance(rendererState: NgtInstanceRendererState): DebugNode {
-    let debugNode =
-      this.debugNodeMap.get(rendererState.instance) || this.debugNodeMap.get(rendererState.dom);
-
-    if (!debugNode) {
-      debugNode =
-        this.debugNodeMap.get(rendererState.parent) ||
-        this.debugNodeMap.get(rendererState.parentDom);
-    }
-
-    return debugNode as DebugNode;
   }
 
   private tryGetStoreFromDebugNodeMap() {
@@ -614,68 +638,25 @@ export class NgtRenderer implements Renderer2 {
     return store;
   }
 
-  private getStore(instance: any) {
-    const localState = instanceLocalState(instance);
-    const rendererState = instanceRendererState(instance);
-    if (!localState || !rendererState) return;
+  private getStore(rendererState: NgtInstanceRendererState): StoreApi<NgtState> | undefined {
+    if (!rendererState) return;
 
-    const debugNode = this.getDebugNodeForInstance(rendererState.getState());
+    const debugNode = this.getDebugNodeForInstance(rendererState);
     if (!debugNode) return;
-    return debugNode.injector.get(NgtStore).store;
+    return debugNode.injector.get(NgtStore, null, { skipSelf: true })?.store;
   }
 
-  // TODO: hack
-  private tryGetThreeParent(parent: any) {
-    const debugNodeKeys = Array.from(this.debugNodeMap.keys());
-    const parentDebugNodeIndex = debugNodeKeys.findIndex((key) => key === parent);
-    if (parentDebugNodeIndex <= 0) return;
+  private getDebugNodeForInstance(rendererState: NgtInstanceRendererState): DebugNode {
+    let debugNode =
+      this.debugNodeMap.get(rendererState.instance) || this.debugNodeMap.get(rendererState.dom);
 
-    let previousDebugNodeKeyIndex = parentDebugNodeIndex - 1;
-    let threeParent: NgtInstanceNode | undefined;
-
-    while (previousDebugNodeKeyIndex >= 1 && !threeParent) {
-      const previousDebugNodeKey = debugNodeKeys[previousDebugNodeKeyIndex];
-      const previousNodeRendererState = instanceRendererState(previousDebugNodeKey);
-      if (is.html(previousDebugNodeKey)) {
-        threeParent =
-          previousNodeRendererState?.getState().instance ||
-          previousNodeRendererState?.getState().parent;
-      } else if (is.three(previousDebugNodeKey)) {
-        threeParent = previousDebugNodeKey;
-      }
-
-      previousDebugNodeKeyIndex -= 1;
+    if (!debugNode) {
+      debugNode =
+        this.debugNodeMap.get(rendererState.parent) ||
+        this.debugNodeMap.get(rendererState.parentDom);
     }
 
-    return threeParent;
-  }
-
-  // TODO: hack
-  private tryGetDomParent(instance?: any) {
-    const debugNodeKeys = Array.from(this.debugNodeMap.keys());
-    let debugNodeIndex =
-      instance && this.debugNodeMap.has(instance)
-        ? debugNodeKeys.findIndex((key) => key === instance)
-        : debugNodeKeys.length - 1;
-
-    if (debugNodeIndex < 0) return;
-
-    let domParent: HTMLElement | undefined;
-    while (!domParent && debugNodeIndex >= 0) {
-      const debugNodeKey = debugNodeKeys[debugNodeIndex];
-      const debugNodeRendererState = instanceRendererState(debugNodeKey);
-      if (is.three(debugNodeKey)) {
-        domParent =
-          debugNodeRendererState?.getState().dom || debugNodeRendererState?.getState().parentDom;
-      } else if (is.html(debugNodeKey)) {
-        domParent =
-          (debugNodeKey as NgtInstanceNode) instanceof HTMLElement ? debugNodeKey : undefined;
-      }
-
-      debugNodeIndex -= 1;
-    }
-
-    return domParent;
+    return debugNode as DebugNode;
   }
 
   // TODO: this is a hack. we need a better guarantee
@@ -693,6 +674,94 @@ export class NgtRenderer implements Renderer2 {
     });
 
     return nonInjectedDirective;
+  }
+
+  private attachThreeInstances(parent: NgtInstanceNode, child: NgtInstanceNode) {
+    const parentLocalState = instanceLocalState(parent);
+    const childRendererState = instanceRendererState(child);
+    const childLocalState = instanceLocalState(child);
+
+    // whether the child is added to the parent with parent.add()
+    let added = false;
+
+    const newChildStore = this.getStore(childRendererState!);
+    if (newChildStore && (!childLocalState!.store || childLocalState!.store !== newChildStore)) {
+      childLocalState!.store = newChildStore;
+    }
+
+    const parentStore = this.getStore(parent);
+    if (parentStore && (!parentLocalState!.store || parentLocalState!.store !== parentStore)) {
+      parentLocalState!.store = parentStore;
+    }
+
+    if (childLocalState?.attach) {
+      const attachProp = childLocalState.attach;
+
+      if (typeof attachProp === 'function') {
+        const attachCleanUp = (attachProp as NgtAttachFunction)(parent, child, null as any);
+        if (attachCleanUp) childLocalState.previousAttach = attachCleanUp;
+      } else {
+        // we skip attach explicitly
+        if (attachProp[0] === 'none') {
+          childLocalState.isThree = true;
+          invalidateInstance(child);
+          return;
+        }
+
+        // handle material array
+        if (
+          attachProp[0] === 'material' &&
+          attachProp[1] &&
+          typeof Number(attachProp[1]) === 'number' &&
+          is.material(child) &&
+          !Array.isArray(parent['material'])
+        ) {
+          parent['material'] = [];
+        }
+
+        // attach
+        attach(parent, child, attachProp);
+
+        // save value
+        childLocalState.previousAttach = attachProp.reduce(
+          (value, property) => value[property],
+          parent
+        );
+      }
+    } else if (is.object3d(parent) && is.object3d(child)) {
+      parent.add(child);
+      added = true;
+    }
+
+    // This is for anything that used attach, and for non-Object3Ds that don't get attached to props;
+    // that is, anything that's a child in React but not a child in the scenegraph.
+    const collection = added ? parentLocalState!.objects : parentLocalState!.nonObjects;
+    collection.setState([...this.toArray(collection), child]);
+
+    childLocalState!.parent = childRendererState!.parent = parent;
+    childLocalState!.isThree = parentLocalState!.isThree = true;
+
+    invalidateInstance(child);
+    invalidateInstance(parent);
+  }
+
+  private eventToHandler(callback: (event: any) => void, dom: HTMLElement) {
+    const cdr = this.closestCdr(dom);
+    return (
+      event: Parameters<Exclude<NgtEventHandlers[typeof supportedEvents[number]], undefined>>[0]
+    ) => {
+      callback(event);
+      cdr?.detectChanges();
+    };
+  }
+
+  private get lastDebugNode(): DebugNode | undefined {
+    return Array.from(this.debugNodeMap.values()).pop();
+  }
+
+  private closestCdr(domElement?: HTMLElement): ChangeDetectorRef | undefined {
+    const debugNode = domElement ? this.debugNodeMap.get(domElement) : this.lastDebugNode;
+    return debugNode?.injector.get(ChangeDetectorRef);
   }
 
   private kebabToPascal(str: string): string {

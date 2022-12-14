@@ -519,6 +519,9 @@ export class NgtStore implements OnDestroy {
 
 export const provideNgtStore = createProvide(NgtStore);
 export const injectNgtStore = createInject(NgtStore);
+export function injectStore() {
+  return injectNgtStore({ skipSelf: true }).store;
+}
 
 function computeInitialSize(
   canvas: HTMLCanvasElement | THREE.OffscreenCanvas,

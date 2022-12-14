@@ -5,12 +5,12 @@ import type {
   NgtInstanceNode,
   NgtInstanceRendererState,
 } from '../types';
-import { instanceRendererState } from './instance-local-state';
 import { is } from './is';
 
 export function prepare<TInstance extends object = NgtAnyRecord>(
   object: TInstance,
-  localState?: Partial<NgtInstanceLocalState>
+  localState?: Partial<NgtInstanceLocalState>,
+  rendererState?: Partial<NgtInstanceRendererState>
 ): NgtInstanceNode<TInstance> {
   const instance = object as unknown as NgtInstanceNode;
 
@@ -24,26 +24,26 @@ export function prepare<TInstance extends object = NgtAnyRecord>(
       handlers: {},
       objects: create<NgtInstanceNode[]>(() => []),
       nonObjects: create<NgtInstanceNode[]>(() => []),
-      __ngt_renderer__: create<NgtInstanceRendererState>(() => ({
-        instance: undefined,
-        parent: localState?.parent,
-        cleanUps: new Set(),
-      })),
-      ...localState,
+      wrapper: { applyFirst: true },
+      ...(localState || {}),
     } as NgtInstanceLocalState;
   }
 
-  if (instance.__ngt__) {
-    if (localState?.__ngt_renderer__) {
-      instanceRendererState(instance)?.setState((state) => ({
-        ...state,
-        ...localState.__ngt_renderer__,
-      }));
-    }
+  if (!instance.__ngt_renderer__) {
+    instance.__ngt_renderer__ = {
+      instance: undefined,
+      parent: localState?.parent,
+      cleanUps: new Set(),
+      ...(rendererState || {}),
+    };
   }
 
   if (is.three(instance) || localState?.primitive) {
-    instanceRendererState(instance)?.setState({ instance });
+    instance.__ngt_renderer__.instance = instance;
+  }
+
+  if (is.html(instance)) {
+    instance.__ngt_renderer__.dom = instance as HTMLElement;
   }
 
   return instance;

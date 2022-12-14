@@ -337,15 +337,15 @@ export interface NgtInstanceLocalState {
   previousAttach?: unknown | (() => void);
   memoized?: NgtAnyRecord;
   isThree?: boolean;
-  wrapper?: {
+  wrapper: {
     props: NgtAnyRecord;
     applyFirst: boolean;
   };
-  __ngt_renderer__?: StoreApi<NgtInstanceRendererState>;
 }
 
 export type NgtInstanceNode<TNode = any> = TNode & {
   __ngt__: NgtInstanceLocalState;
+  __ngt_renderer__: NgtInstanceRendererState;
 } & NgtAnyRecord;
 
 export type NgtRenderer = {
