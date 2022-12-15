@@ -9,7 +9,7 @@ import {
   RendererFactory2,
   RendererStyleFlags2,
   RendererType2,
-  Type
+  Type,
 } from '@angular/core';
 import { ɵDomRendererFactory2 as DomRendererFactory } from '@angular/platform-browser';
 import type { StoreApi } from 'zustand/vanilla';
@@ -28,7 +28,7 @@ import type {
   NgtHasValidateForRenderer,
   NgtInstanceNode,
   NgtInstanceRendererState,
-  NgtState
+  NgtState,
 } from './types';
 import { applyProps } from './utils/apply-props';
 import { attach, detach } from './utils/attach';
@@ -162,7 +162,29 @@ export class NgtRenderer implements Renderer2 {
       ngtAttachFn?.store ||
       this.tryGetStoreFromDebugNodeMap();
 
+    const elementLocalState = instanceLocalState(element);
+    const elementRendererState = instanceRendererState(element);
+
     let instance: NgtInstanceNode;
+
+    if (injectedRef && injectedRef.nativeElement) {
+      instance = injectedRef.nativeElement;
+
+      if (!instanceLocalState(injectedRef.nativeElement)) {
+        instance = prepare(instance, { store, isThree: true, attach }, { dom: element });
+      }
+
+      if (elementLocalState) {
+        elementLocalState.isThree = true;
+        if (store) elementLocalState.store = store;
+      }
+
+      if (elementRendererState) {
+        elementRendererState.instance = instance;
+      }
+
+      return element;
+    }
 
     if (threeTag === 'primitive') {
       if (!ngtArgs || !injectedArgs[0])
@@ -202,14 +224,10 @@ export class NgtRenderer implements Renderer2 {
     }
 
     if (instance) {
-      const elementLocalState = instanceLocalState(element);
-
       if (elementLocalState) {
         elementLocalState.isThree = true;
         if (store) elementLocalState.store = store;
       }
-
-      const elementRendererState = instanceRendererState(element);
 
       if (injectedRef) injectedRef.nativeElement = instance;
       if (elementRendererState) {

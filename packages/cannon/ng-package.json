@@ -3,5 +3,6 @@
   "dest": "../../dist/packages/cannon",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["@pmndrs/cannon-worker-api", "cannon-es", "cannon-es-debugger"]
 }

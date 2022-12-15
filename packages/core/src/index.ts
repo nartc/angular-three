@@ -11,5 +11,7 @@ export { NgtScene, NgtWrapper, provideNgtRenderer } from './lib/renderer';
 export * from './lib/services/loader';
 export * from './lib/store';
 export * from './lib/types';
+export * from './lib/utils/apply-props';
 export * from './lib/utils/di';
+export * from './lib/utils/is';
 export * from './lib/utils/ref';

@@ -1,5 +1,6 @@
 import { ElementRef } from '@angular/core';
 import * as THREE from 'three';
+import { StoreApi } from 'zustand/vanilla';
 import type { NgtAnyRecord, NgtEquConfig, NgtInstanceNode } from '../types';
 import { instanceLocalState } from './instance-local-state';
 
@@ -24,6 +25,10 @@ export const is = {
     a instanceof HTMLElement || a instanceof Comment || a instanceof Text,
   ref: (a: unknown): a is ElementRef =>
     a instanceof ElementRef || ('nativeElement' in (a as object) && 'subscribe' in (a as object)),
+  store: (a: unknown): a is StoreApi<any> =>
+    (a as NgtAnyRecord)['getState'] &&
+    (a as NgtAnyRecord)['setState'] &&
+    (a as NgtAnyRecord)['destroy'],
   equ(
     a: any,
     b: any,

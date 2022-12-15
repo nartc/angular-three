@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "packages/cannon/src",
-  "prefix": "angular-three",
+  "prefix": "ngtc",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:package",
@@ -33,7 +33,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/cannon/**/*.ts", "packages/cannon/**/*.html"]
+        "lintFilePatterns": [
+          "packages/cannon/**/*.ts",
+          "packages/cannon/**/*.html",
+          "packages/cannon/debug/**/*.ts",
+          "packages/cannon/debug/**/*.html",
+          "packages/cannon/services/**/*.ts",
+          "packages/cannon/services/**/*.html"
+        ]
       }
     }
   },
