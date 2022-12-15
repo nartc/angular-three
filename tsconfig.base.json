@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@angular-three/cannon": ["packages/cannon/src/index.ts"],
       "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/soba": ["packages/soba/src/index.ts"],
       "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"]
