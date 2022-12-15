@@ -6,7 +6,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'sandbox-cubes',
   standalone: true,
   template: `
-    <ngt-canvas>
+    <ngt-canvas [camera]="{ position: [0, 0, 5] }">
       <router-outlet *ngtCanvasContent name="gl"></router-outlet>
     </ngt-canvas>
   `,

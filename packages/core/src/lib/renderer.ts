@@ -287,6 +287,16 @@ export class NgtRenderer implements Renderer2 {
     }
 
     if (
+      !parentRendererState?.instance &&
+      parentRendererState?.parent &&
+      !instanceLocalState(parent)?.isThree &&
+      childRendererState.instance
+    ) {
+      this.attachThreeInstances(parentRendererState.parent, childRendererState.instance);
+      return;
+    }
+
+    if (
       childRendererState?.instance &&
       parentRendererState?.instance &&
       parentRendererState.instance !== childRendererState.instance
