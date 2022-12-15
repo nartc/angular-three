@@ -9,10 +9,10 @@ import {
   RendererFactory2,
   RendererStyleFlags2,
   RendererType2,
-  Type,
+  Type
 } from '@angular/core';
 import { ɵDomRendererFactory2 as DomRendererFactory } from '@angular/platform-browser';
-import type { StoreApi } from 'zustand';
+import type { StoreApi } from 'zustand/vanilla';
 import { injectNgtCatalogue } from './catalogue';
 import { NgtArgs } from './directives/args';
 import { NgtAttachArray } from './directives/attach-array';
@@ -28,7 +28,7 @@ import type {
   NgtHasValidateForRenderer,
   NgtInstanceNode,
   NgtInstanceRendererState,
-  NgtState,
+  NgtState
 } from './types';
 import { applyProps } from './utils/apply-props';
 import { attach, detach } from './utils/attach';
