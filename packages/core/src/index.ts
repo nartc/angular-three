@@ -6,6 +6,7 @@ export * from './lib/directives/attach-fn';
 export * from './lib/directives/ref';
 export * from './lib/directives/repeat';
 export * from './lib/pipes/push';
+export * from './lib/portal';
 export { NgtScene, NgtWrapper, provideNgtRenderer } from './lib/renderer';
 export * from './lib/store';
 export * from './lib/types';

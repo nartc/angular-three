@@ -16,27 +16,10 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { delay, of } from 'rxjs';
+import { map, timer } from 'rxjs';
+import * as THREE from 'three';
 import { BoxGeometry } from 'three';
 import type { OrbitControls } from 'three-stdlib';
-
-@NgtWrapper()
-@Component({
-  selector: 'ngts-center',
-  standalone: true,
-  template: `
-    <ngt-group>
-      <ngt-group>
-        <ngt-group *ngIf="true">
-          <ng-content></ng-content>
-        </ngt-group>
-      </ngt-group>
-    </ngt-group>
-  `,
-  imports: [NgIf],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-})
-export class Center {}
 
 @NgtWrapper()
 @Component({
@@ -62,21 +45,27 @@ export class Box {
     <ngts-box
       [position]="position"
       [scale]="active ? 1.5 : 1"
+      [visible]="visible"
       (click)="active = !active; cubeClick.emit()"
       (pointerover)="hover = true"
       (pointerout)="hover = false"
       (beforeRender)="onBeforeRender($any($event).object)"
     >
-      <ngt-mesh-basic-material
-        [color]="hover ? (cubeClick.observed ? 'red' : 'hotpink') : 'orange'"
-      ></ngt-mesh-basic-material>
+      <ngt-mesh-normal-material *ngIf="isFun; else noFun"></ngt-mesh-normal-material>
+      <ng-template #noFun>
+        <ngt-mesh-basic-material
+          [color]="hover ? (cubeClick.observed ? 'red' : 'hotpink') : 'orange'"
+        ></ngt-mesh-basic-material>
+      </ng-template>
     </ngts-box>
   `,
-  imports: [Box],
+  imports: [Box, NgIf],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Cube {
   @Input() position: NgtVector3 = [0, 0, 0];
+  @Input() visible = true;
+  @Input() isFun = false;
   @Output() cubeClick = new EventEmitter();
 
   hover = false;
@@ -94,15 +83,9 @@ export class Cube {
   template: `
     <ngt-color *args="['skyblue']" attach="background"></ngt-color>
 
-    <ngts-center>
-      <cube *ngIf="show" [position]="[1.5, 0, 0]"></cube>
-      <cube (cubeClick)="onCubeClick()" [position]="[-1.5, 0, 0]"></cube>
-    </ngts-center>
-
-    <ngt-mesh [position]="position$ | ngtPush : [0, 0, 0]">
-      <ngt-box-geometry></ngt-box-geometry>
-      <ngt-mesh-basic-material></ngt-mesh-basic-material>
-    </ngt-mesh>
+    <cube [visible]="show" [position]="[1.5, 0, 0]"></cube>
+    <cube (cubeClick)="onCubeClick()" [position]="[-1.5, 0, 0]"></cube>
+    <cube [position]="position$ | ngtPush : [0, 0, 0]" [isFun]="true"></cube>
 
     <ngt-orbit-controls
       *args="[camera, domElement]"
@@ -110,7 +93,7 @@ export class Cube {
       [enableDamping]="true"
     ></ngt-orbit-controls>
   `,
-  imports: [Cube, NgIf, Center, NgtArgs, NgtPush],
+  imports: [Cube, NgIf, NgtArgs, NgtPush, Box],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export default class Scene {
@@ -120,7 +103,9 @@ export default class Scene {
   readonly camera = this.store.getState().camera;
   readonly domElement = this.store.getState().gl.domElement;
 
-  readonly position$ = of([0, 1, 0]).pipe(delay(1000));
+  readonly position$ = timer(0, 500).pipe(
+    map(() => [0, Math.floor(Math.random() * 5 - 2) || 1, Math.floor(Math.random() * 5 - 2)])
+  );
 
   show = true;
 

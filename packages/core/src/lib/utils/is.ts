@@ -1,3 +1,4 @@
+import { ElementRef } from '@angular/core';
 import * as THREE from 'three';
 import type { NgtAnyRecord, NgtEquConfig, NgtInstanceNode } from '../types';
 import { instanceLocalState } from './instance-local-state';
@@ -21,6 +22,8 @@ export const is = {
     is.instance(a) && !!instanceLocalState(a)?.isThree && !is.html(a),
   html: (a: unknown): a is NgtInstanceNode<HTMLElement | Comment | Text> =>
     a instanceof HTMLElement || a instanceof Comment || a instanceof Text,
+  ref: (a: unknown): a is ElementRef =>
+    a instanceof ElementRef || ('nativeElement' in (a as object) && 'subscribe' in (a as object)),
   equ(
     a: any,
     b: any,

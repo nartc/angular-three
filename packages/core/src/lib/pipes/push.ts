@@ -11,6 +11,7 @@ function isPromise(value: unknown): value is Promise<unknown> {
 @Pipe({ name: 'ngtPush', pure: false, standalone: true })
 export class NgtPush<T> implements PipeTransform, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly parentCdr = inject(ChangeDetectorRef, { skipSelf: true, optional: true });
 
   private subscription?: Subscription;
   private obj?: ObservableInput<T>;
@@ -41,7 +42,11 @@ export class NgtPush<T> implements PipeTransform, OnDestroy {
 
   private updateValue(val: T) {
     this.latestValue = val;
-    this.cdr.detectChanges();
+    if (this.parentCdr) {
+      this.parentCdr.detectChanges();
+    } else {
+      this.cdr.detectChanges();
+    }
   }
 
   ngOnDestroy() {

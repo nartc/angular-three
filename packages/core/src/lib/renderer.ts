@@ -56,6 +56,7 @@ const EVENTS = {
 const SPECIAL_TAGS = {
   PORTAL: 'ngt-portal',
   PRIMITIVE: 'ngt-primitive',
+  CANVAS_CONTAINER: 'ngt-canvas-container',
 } as const;
 
 @Injectable()
@@ -233,6 +234,9 @@ export class NgtRenderer implements Renderer2 {
     // Scene component might not have the Scene instance set. Let's try to do it here
     this.tryAssignRootScene(parentRendererState);
 
+    // portal
+    this.tryAssignPortalContainer(parentRendererState);
+
     // Try to update our debugNodeMap so that the child at least knows about its parent DebugNode
     this.tryAssignDebugNode(parent, newChild);
 
@@ -292,7 +296,7 @@ export class NgtRenderer implements Renderer2 {
   }
   insertBefore(parent: any, newChild: any, refChild: any, isMove?: boolean | undefined): void {
     this.delegateRenderer.insertBefore(parent, newChild, refChild, isMove);
-    if ((parent as HTMLElement).nodeName === 'NGT-CANVAS-CONTAINER') return;
+    if ((parent as HTMLElement).localName === SPECIAL_TAGS.CANVAS_CONTAINER) return;
     this.appendChild(parent, newChild, true);
   }
   removeChild(parent: any, oldChild: any, isHostElement?: boolean | undefined): void {
@@ -392,8 +396,6 @@ export class NgtRenderer implements Renderer2 {
     this.delegateRenderer.removeStyle(el, style, flags);
   }
   setProperty(el: any, name: string, value: any): void {
-    console.log({ el, name, value });
-
     const rendererState = instanceRendererState(el);
 
     if (rendererState?.instance) {
@@ -621,6 +623,21 @@ export class NgtRenderer implements Renderer2 {
     }
   }
 
+  private tryAssignPortalContainer(rendererState?: NgtInstanceRendererState) {
+    if (rendererState && rendererState.portal) {
+      const debugNode = this.getDebugNodeForInstance(rendererState);
+      const ngtStore = this.getStore(rendererState);
+      if (ngtStore) {
+        const instance = ngtStore.getState().scene;
+        rendererState.instance = instance;
+        if (rendererState.parent) rendererState.parent = null;
+        this.debugNodeMap.set(instance, debugNode);
+        const localState = instanceLocalState(rendererState.dom);
+        if (localState) localState.isThree = true;
+      }
+    }
+  }
+
   private tryAssignDebugNode(parent: any, child: any) {
     const childRendererState = instanceRendererState(child);
     if (!childRendererState) return;
@@ -675,7 +692,7 @@ export class NgtRenderer implements Renderer2 {
 
     const debugNode = this.getDebugNodeForInstance(rendererState);
     if (!debugNode) return;
-    return debugNode.injector.get(NgtStore, null, { skipSelf: true })?.store;
+    return debugNode.injector.get(NgtStore, null)?.store;
   }
 
   private getDebugNodeForInstance(rendererState: NgtInstanceRendererState): DebugNode {
@@ -722,8 +739,12 @@ export class NgtRenderer implements Renderer2 {
     }
 
     const parentStore = this.getStore(parent);
-    if (parentStore && (!parentLocalState!.store || parentLocalState!.store !== parentStore)) {
-      parentLocalState!.store = parentStore;
+    if (
+      parentStore &&
+      parentLocalState &&
+      (!parentLocalState.store || parentLocalState.store !== parentStore)
+    ) {
+      parentLocalState.store = parentStore;
     }
 
     if (childLocalState?.attach) {
@@ -765,13 +786,16 @@ export class NgtRenderer implements Renderer2 {
       added = true;
     }
 
-    // This is for anything that used attach, and for non-Object3Ds that don't get attached to props;
-    // that is, anything that's a child in React but not a child in the scenegraph.
-    const collection = added ? parentLocalState!.objects : parentLocalState!.nonObjects;
-    collection.setState([...this.toArray(collection), child]);
+    if (parentLocalState) {
+      // This is for anything that used attach, and for non-Object3Ds that don't get attached to props;
+      // that is, anything that's a child in React but not a child in the scenegraph.
+      const collection = added ? parentLocalState.objects : parentLocalState.nonObjects;
+      collection.setState([...this.toArray(collection), child]);
+      parentLocalState.isThree = true;
+    }
 
     childLocalState!.parent = childRendererState!.parent = parent;
-    childLocalState!.isThree = parentLocalState!.isThree = true;
+    childLocalState!.isThree = true;
 
     invalidateInstance(child);
     invalidateInstance(parent);

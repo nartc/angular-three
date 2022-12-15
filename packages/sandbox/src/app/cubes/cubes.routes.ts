@@ -1,9 +1,9 @@
 import { extend, provideNgtRenderer } from '@angular-three/core';
 import { Route } from '@angular/router';
-import { BoxGeometry, Color, Group, Mesh, MeshBasicMaterial } from 'three';
+import { BoxGeometry, Color, Group, Mesh, MeshBasicMaterial, MeshNormalMaterial } from 'three';
 import { OrbitControls } from 'three-stdlib';
 
-extend({ Group, Mesh, BoxGeometry, MeshBasicMaterial, OrbitControls, Color });
+extend({ Group, Mesh, BoxGeometry, MeshBasicMaterial, MeshNormalMaterial, OrbitControls, Color });
 
 const cubesRoutes: Route[] = [
   {

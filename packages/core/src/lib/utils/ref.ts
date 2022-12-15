@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, ElementRef, inject, ViewRef } from '@angular/core';
 import create, { StoreApi } from 'zustand/vanilla';
+import { is } from './is';
 
 export function ref<T>(initialValue: ElementRef<T> | (T | null) = null): ElementRef<T> & {
   subscribe: (
@@ -8,7 +9,7 @@ export function ref<T>(initialValue: ElementRef<T> | (T | null) = null): Element
   destroy: StoreApi<ElementRef<T>>['destroy'];
 } {
   const store = create<ElementRef<T>>(() =>
-    initialValue instanceof ElementRef ? initialValue : new ElementRef(initialValue!)
+    initialValue && is.ref(initialValue) ? initialValue : new ElementRef(initialValue!)
   );
 
   try {
