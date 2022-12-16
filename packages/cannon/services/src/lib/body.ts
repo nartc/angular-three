@@ -175,75 +175,84 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
   const view = inject(ChangeDetectorRef) as ViewRef;
   const debugApi = injectNgtcDebugApi({ skipSelf: true, optional: true });
   const { store } = injectNgtcPhysicsStore({ skipSelf: true });
-  const { events, refs, scaleOverrides, subscriptions, worker } = store.getState();
 
-  const ref = instanceRef ? instanceRef : new ElementRef<TObject>(null!);
+  let ref = new ElementRef<TObject>(null!);
 
-  if (!ref?.nativeElement) {
-    ref.nativeElement = new Object3D() as TObject;
+  if (instanceRef) {
+    ref = instanceRef;
   }
-
-  const object = ref.nativeElement;
-  const currentWorker = worker;
-
-  let objectCount = 1;
-
-  if (object instanceof InstancedMesh) {
-    object.instanceMatrix.setUsage(DynamicDrawUsage);
-    objectCount = object.count;
-  }
-
-  const uuids =
-    object instanceof InstancedMesh
-      ? new Array(objectCount).fill(0).map((_, i) => `${object.uuid}/${i}`)
-      : [object.uuid];
-
-  const props: (TBodyProps & { args: unknown })[] =
-    object instanceof InstancedMesh
-      ? uuids.map((id, i) => {
-          let props = getPropsFn(i);
-          props = is.store(props) ? props.getState() : props;
-          NgtPhysicsUtils.prepare(temp, props);
-          object.setMatrixAt(i, temp.matrix);
-          object.instanceMatrix.needsUpdate = true;
-          refs[id] = object;
-          debugApi?.add(id, props, type);
-          NgtPhysicsUtils.setupCollision(events, props, id);
-          return { ...props, args: argsFn(props.args) };
-        })
-      : uuids.map((id, i) => {
-          let props = getPropsFn(i);
-          props = is.store(props) ? props.getState() : props;
-          NgtPhysicsUtils.prepare(object, props);
-          refs[id] = object;
-          debugApi?.add(id, props, type);
-          NgtPhysicsUtils.setupCollision(events, props, id);
-          return { ...props, args: argsFn(props.args) };
-        });
-
-  currentWorker.addBodies({
-    props: props.map(({ onCollide, onCollideBegin, onCollideEnd, ...serializableProps }) => ({
-      onCollide: Boolean(onCollide),
-      onCollideBegin: Boolean(onCollideBegin),
-      onCollideEnd: Boolean(onCollideEnd),
-      ...serializableProps,
-    })),
-    type,
-    uuid: uuids,
-  });
 
   queueMicrotask(() => {
-    view.onDestroy(() => {
-      uuids.forEach((id) => {
-        delete refs[id];
-        debugApi?.remove(id);
-        delete events[id];
+    const { events, refs, worker } = store.getState();
+
+    if (!ref?.nativeElement) {
+      ref.nativeElement = new Object3D() as TObject;
+    }
+
+    const object = ref.nativeElement;
+    const currentWorker = worker;
+
+    let objectCount = 1;
+
+    if (object instanceof InstancedMesh) {
+      object.instanceMatrix.setUsage(DynamicDrawUsage);
+      objectCount = object.count;
+    }
+
+    const uuids =
+      object instanceof InstancedMesh
+        ? new Array(objectCount).fill(0).map((_, i) => `${object.uuid}/${i}`)
+        : [object.uuid];
+
+    const props: (TBodyProps & { args: unknown })[] =
+      object instanceof InstancedMesh
+        ? uuids.map((id, i) => {
+            let props = getPropsFn(i);
+            props = is.store(props) ? props.getState() : props;
+            NgtPhysicsUtils.prepare(temp, props);
+            object.setMatrixAt(i, temp.matrix);
+            object.instanceMatrix.needsUpdate = true;
+            refs[id] = object;
+            debugApi?.add(id, props, type);
+            NgtPhysicsUtils.setupCollision(events, props, id);
+            return { ...props, args: argsFn(props.args) };
+          })
+        : uuids.map((id, i) => {
+            let props = getPropsFn(i);
+            props = is.store(props) ? props.getState() : props;
+            NgtPhysicsUtils.prepare(object, props);
+            refs[id] = object;
+            debugApi?.add(id, props, type);
+            NgtPhysicsUtils.setupCollision(events, props, id);
+            return { ...props, args: argsFn(props.args) };
+          });
+
+    currentWorker.addBodies({
+      props: props.map(({ onCollide, onCollideBegin, onCollideEnd, ...serializableProps }) => ({
+        onCollide: Boolean(onCollide),
+        onCollideBegin: Boolean(onCollideBegin),
+        onCollideEnd: Boolean(onCollideEnd),
+        ...serializableProps,
+      })),
+      type,
+      uuid: uuids,
+    });
+
+    queueMicrotask(() => {
+      view.onDestroy(() => {
+        uuids.forEach((id) => {
+          delete refs[id];
+          debugApi?.remove(id);
+          delete events[id];
+        });
+        currentWorker.removeBodies({ uuid: uuids });
       });
-      currentWorker.removeBodies({ uuid: uuids });
     });
   });
 
   const api = () => {
+    const { scaleOverrides, subscriptions, worker } = store.getState();
+
     const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
       const op: SetOpName<T> = `set${NgtPhysicsUtils.capitalize(type)}`;
 

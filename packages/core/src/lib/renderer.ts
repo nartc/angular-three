@@ -291,6 +291,10 @@ export class NgtRenderer implements Renderer2 {
       childRendererState.parent = parentRendererState.instance;
     }
 
+    if (childRendererState && !childRendererState?.parent && parentRendererState?.parent) {
+      childRendererState.parent = parentRendererState.parent;
+    }
+
     if (!childRendererState?.instance) {
       // this might be the indicator that this is a regular Angular component
       // we then can loop over its HTMLChildren
@@ -298,7 +302,12 @@ export class NgtRenderer implements Renderer2 {
       const grandChildren = Array.from((newChild as HTMLElement).children || []);
       for (const grandChild of grandChildren) {
         const grandChildRendererState = instanceRendererState(grandChild);
-        if (!grandChildRendererState || !grandChildRendererState.instance) continue;
+        if (
+          !grandChildRendererState ||
+          !grandChildRendererState.instance ||
+          grandChildRendererState.instance['parent']
+        )
+          continue;
         this.attachThreeInstances(childRendererState?.parent, grandChildRendererState.instance);
       }
       return;
@@ -680,13 +689,13 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
+    let debugNode = is.html(child) ? getDebugNode(child) : undefined;
+
     // at this point, we cannot find any debug node for the child. Let's try the parent
     const parentRendererState = instanceRendererState(parent);
     if (!parentRendererState) return;
     const parentDebugNode = this.getDebugNodeForInstance(parentRendererState);
-    if (!parentDebugNode) return;
-
-    let debugNode = is.html(child) ? getDebugNode(child) : undefined;
+    if (!parentDebugNode && !debugNode) return;
 
     if (!debugNode || debugNode === parentDebugNode) {
       debugNode = parentDebugNode;
@@ -742,13 +751,13 @@ export class NgtRenderer implements Renderer2 {
   ): T | undefined {
     let nonInjectedDirective: T | undefined;
 
-    this.debugNodeMap.forEach((debugNode) => {
+    for (const debugNode of this.debugNodeMap.values()) {
       const ngtDirective = debugNode.injector.get(directive, null);
       if (ngtDirective && ngtDirective.validate()) {
         nonInjectedDirective = ngtDirective;
-        return;
+        break;
       }
-    });
+    }
 
     return nonInjectedDirective;
   }

@@ -142,10 +142,9 @@ export class NgtsPhysics implements OnInit, OnDestroy {
   private updateWorkerPropCleanups: Array<() => void> = [];
 
   ngOnInit() {
-    this.physicsStore.store.getState().init(this.inputsStore.getState());
-
-    this.setupBeforeRender();
     this.connectWorker();
+    this.physicsStore.store.getState().init(this.inputsStore.getState());
+    this.setupBeforeRender();
 
     this.updateWorkerPropCleanups.push(
       this.physicsStore.store.subscribe((state, prevState) => {

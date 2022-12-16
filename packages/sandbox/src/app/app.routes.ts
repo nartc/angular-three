@@ -11,4 +11,9 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./cubes/cubes.component'),
     loadChildren: () => import('./cubes/cubes.routes'),
   },
+  {
+    path: 'physic-cubes',
+    loadComponent: () => import('./physic-cubes/physic-cubes.component'),
+    loadChildren: () => import('./physic-cubes/physic-cubes.routes'),
+  },
 ];
