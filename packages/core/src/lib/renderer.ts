@@ -408,7 +408,16 @@ export class NgtRenderer implements Renderer2 {
         return;
       }
 
-      applyProps(el, { [name]: value });
+      // coerce boolean
+      let maybeCoerced: any = value;
+
+      if (maybeCoerced === '' || maybeCoerced === 'true' || maybeCoerced === 'false') {
+        maybeCoerced = maybeCoerced === true || maybeCoerced === '';
+      } else if (!isNaN(Number(maybeCoerced))) {
+        maybeCoerced = Number(maybeCoerced);
+      }
+
+      applyProps(el, { [name]: maybeCoerced });
       return;
     }
 
