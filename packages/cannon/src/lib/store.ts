@@ -10,7 +10,7 @@ import {
   Refs,
   Subscriptions,
 } from '@pmndrs/cannon-worker-api';
-import create from 'zustand/vanilla';
+import { RxState } from '@rx-angular/state';
 
 export type NgtcCannonEvent = CollideBeginEvent | CollideEndEvent | CollideEvent | RayhitEvent;
 export type NgtcCallbackByType<T extends { type: string }> = {
@@ -34,19 +34,20 @@ export interface NgtcPhysicsState {
 }
 
 @Injectable()
-export class NgtcPhysicsStore implements OnDestroy {
-  store = create<NgtcPhysicsState>((set) => ({
-    worker: null as unknown as CannonWorkerAPI,
-    bodies: {},
-    events: {},
-    refs: {},
-    scaleOverrides: {},
-    subscriptions: {},
-    init: (inputs: CannonWorkerProps) => void set({ worker: new CannonWorkerAPI(inputs) }),
-  }));
+export class NgtcPhysicsStore extends RxState<NgtcPhysicsState> implements OnDestroy {
+  constructor() {
+    super();
+    this.set({
+      bodies: {},
+      events: {},
+      refs: {},
+      scaleOverrides: {},
+      subscriptions: {},
+    });
+  }
 
-  ngOnDestroy() {
-    this.store.destroy();
+  init(inputs: CannonWorkerProps) {
+    this.set({ worker: new CannonWorkerAPI(inputs) });
   }
 }
 

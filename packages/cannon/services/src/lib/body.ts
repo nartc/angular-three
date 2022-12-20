@@ -1,6 +1,5 @@
 import { injectNgtcPhysicsStore, NgtPhysicsUtils } from '@angular-three/cannon';
 import { injectNgtcDebugApi } from '@angular-three/cannon/debug';
-import { is } from '@angular-three/core';
 import { ChangeDetectorRef, ElementRef, inject, ViewRef } from '@angular/core';
 import type {
   AtomicName,
@@ -174,7 +173,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
 ): NgtPhysicBodyReturn<TObject> {
   const view = inject(ChangeDetectorRef) as ViewRef;
   const debugApi = injectNgtcDebugApi({ skipSelf: true, optional: true });
-  const { store } = injectNgtcPhysicsStore({ skipSelf: true });
+  const store = injectNgtcPhysicsStore({ skipSelf: true });
 
   let ref = new ElementRef<TObject>(null!);
 
@@ -183,7 +182,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
   }
 
   queueMicrotask(() => {
-    const { events, refs, worker } = store.getState();
+    const { events, refs, worker } = store.get();
 
     if (!ref?.nativeElement) {
       ref.nativeElement = new Object3D() as TObject;
@@ -204,28 +203,28 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
         ? new Array(objectCount).fill(0).map((_, i) => `${object.uuid}/${i}`)
         : [object.uuid];
 
-    const props: (TBodyProps & { args: unknown })[] =
-      object instanceof InstancedMesh
-        ? uuids.map((id, i) => {
-            let props = getPropsFn(i);
-            props = is.store(props) ? props.getState() : props;
-            NgtPhysicsUtils.prepare(temp, props);
-            object.setMatrixAt(i, temp.matrix);
-            object.instanceMatrix.needsUpdate = true;
-            refs[id] = object;
-            debugApi?.add(id, props, type);
-            NgtPhysicsUtils.setupCollision(events, props, id);
-            return { ...props, args: argsFn(props.args) };
-          })
-        : uuids.map((id, i) => {
-            let props = getPropsFn(i);
-            props = is.store(props) ? props.getState() : props;
-            NgtPhysicsUtils.prepare(object, props);
-            refs[id] = object;
-            debugApi?.add(id, props, type);
-            NgtPhysicsUtils.setupCollision(events, props, id);
-            return { ...props, args: argsFn(props.args) };
-          });
+    const props: (TBodyProps & { args: unknown })[] = [];
+    // object instanceof InstancedMesh
+    //   ? uuids.map((id, i) => {
+    //       let props = getPropsFn(i);
+    //       props = is.store(props) ? props.getState() : props;
+    //       NgtPhysicsUtils.prepare(temp, props);
+    //       object.setMatrixAt(i, temp.matrix);
+    //       object.instanceMatrix.needsUpdate = true;
+    //       refs[id] = object;
+    //       debugApi?.add(id, props, type);
+    //       NgtPhysicsUtils.setupCollision(events, props, id);
+    //       return { ...props, args: argsFn(props.args) };
+    //     })
+    //   : uuids.map((id, i) => {
+    //       let props = getPropsFn(i);
+    //       props = is.store(props) ? props.getState() : props;
+    //       NgtPhysicsUtils.prepare(object, props);
+    //       refs[id] = object;
+    //       debugApi?.add(id, props, type);
+    //       NgtPhysicsUtils.setupCollision(events, props, id);
+    //       return { ...props, args: argsFn(props.args) };
+    //     });
 
     currentWorker.addBodies({
       props: props.map(({ onCollide, onCollideBegin, onCollideEnd, ...serializableProps }) => ({
@@ -251,7 +250,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
   });
 
   const api = () => {
-    const { scaleOverrides, subscriptions, worker } = store.getState();
+    const { scaleOverrides, subscriptions, worker } = store.get();
 
     const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
       const op: SetOpName<T> = `set${NgtPhysicsUtils.capitalize(type)}`;

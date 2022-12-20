@@ -6,7 +6,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { StoreApi } from 'zustand/vanilla';
+import type { RxState } from '@rx-angular/state';
 import { injectNgtStore } from '../store';
 import type { NgtAttachFunction, NgtHasValidateForRenderer, NgtState } from '../types';
 import { injectNgtArgs, NgtArgs } from './args';
@@ -17,7 +17,7 @@ import { injectNgtArgs, NgtArgs } from './args';
   hostDirectives: [NgtArgs],
 })
 export class NgtAttachFn implements NgtHasValidateForRenderer {
-  readonly store = injectNgtStore({ skipSelf: true }).store;
+  readonly store = injectNgtStore({ skipSelf: true });
   private readonly ngtArgs = injectNgtArgs({ host: true });
 
   private readonly templateRef = inject(TemplateRef);
@@ -67,10 +67,10 @@ export function createAttachFn<TChild, TParent extends object>(
   callback: (params: {
     parent: TParent;
     child: TChild;
-    store: StoreApi<NgtState>;
+    store: RxState<NgtState>;
   }) => ReturnType<NgtAttachFunction<TChild, TParent>>
 ) {
-  return ((parent: TParent, child: TChild, store: StoreApi<NgtState>) => {
+  return ((parent: TParent, child: TChild, store: RxState<NgtState>) => {
     return callback({ parent, child, store });
   }) as NgtAttachFunction<TChild, TParent>;
 }

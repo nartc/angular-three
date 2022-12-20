@@ -10,13 +10,12 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { RxState } from '@rx-angular/state';
 import { Raycaster, Scene, Vector2, Vector3 } from 'three';
-import create from 'zustand/vanilla';
-import { injectNgtStore, provideNgtStore } from './store';
+import { injectNgtStore, NgtStore } from './store';
 import type { NgtEventManager, NgtSize, NgtState } from './types';
 import { updateCamera } from './utils/camera';
 import { is } from './utils/is';
-import { ref } from './utils/ref';
 
 const privateKeys = [
   'get',
@@ -46,20 +45,15 @@ export interface NgtPortalInputs {
   selector: 'ngt-portal[container]',
   standalone: true,
   template: '<ng-container #portalContentAnchor></ng-container>',
-  providers: [provideNgtStore()],
+  providers: [NgtStore],
 })
-export class NgtPortal implements OnInit, OnDestroy {
-  private readonly inputsStore = create<NgtPortalInputs>(() => ({
-    state: {},
-    container: ref<THREE.Object3D>(),
-  }));
-
+export class NgtPortal extends RxState<NgtPortalInputs> implements OnInit, OnDestroy {
   @Input() set container(container: NgtPortalInputs['container']) {
-    this.inputsStore.setState({ container });
+    this.set({ container });
   }
 
   @Input() set state(state: NgtPortalInputs['state']) {
-    this.inputsStore.setState({ state });
+    this.set({ state });
   }
 
   @ContentChild(TemplateRef, { static: true })
@@ -68,58 +62,58 @@ export class NgtPortal implements OnInit, OnDestroy {
   @ViewChild('portalContentAnchor', { read: ViewContainerRef, static: true })
   portalContentAnchor!: ViewContainerRef;
 
-  private readonly parentNgtStore = injectNgtStore({ skipSelf: true });
-  private readonly portalNgtStore = injectNgtStore({ self: true });
+  private readonly parentStore = injectNgtStore({ skipSelf: true });
+  private readonly portalStore = injectNgtStore({ self: true });
 
   private readonly raycaster = new Raycaster();
   private readonly pointer = new Vector2();
 
-  private subscription?: () => void;
   private portalContentView?: EmbeddedViewRef<unknown>;
 
   ngOnInit() {
-    const previousState = this.parentNgtStore.store.getState();
-    const inputsState = this.inputsStore.getState();
+    const previousState = this.parentStore.get();
+    const inputsState = this.get();
 
     const { events, size, ...restInputsState } = inputsState.state;
 
     const containerState = inputsState.container;
     const container = is.ref(containerState) ? containerState.nativeElement : containerState;
 
-    this.portalNgtStore.store = create<NgtState>((set, get) => ({
+    this.portalStore.set({
       ...previousState,
       scene: container as Scene,
       raycaster: this.raycaster,
       pointer: this.pointer,
-      previousStore: this.parentNgtStore.store,
+      previousStore: this.parentStore,
       events: { ...previousState.events, ...(events || {}) },
       size: { ...previousState.size, ...(size || {}) },
       ...restInputsState,
-      get,
-      set,
-      setEvents: (events) => set((state) => ({ ...state, events: { ...state.events, ...events } })),
-    }));
-
-    this.subscription = this.parentNgtStore.store.subscribe((previous) => {
-      this.portalNgtStore.store.setState((state) => this.inject(previous, state));
+      get: this.portalStore.get.bind(this.portalStore),
+      set: this.portalStore.set.bind(this.portalStore),
+      select: this.portalStore.select.bind(this.portalStore),
+      setEvents: (events) =>
+        this.portalStore.set((state) => ({ ...state, events: { ...state.events, ...events } })),
     });
 
+    this.hold(this.parentStore.select(), (previous) =>
+      this.portalStore.set((state) => this.inject(previous, state))
+    );
+
     requestAnimationFrame(() => {
-      this.portalNgtStore.store.setState((injectState) =>
-        this.inject(this.parentNgtStore.store.getState(), injectState)
-      );
+      this.portalStore.set((injectState) => this.inject(this.parentStore.get(), injectState));
     });
 
     this.portalContentView = this.portalContentAnchor.createEmbeddedView(
       this.portalContentTemplate
     );
+    this.portalContentView.detectChanges();
   }
 
-  ngOnDestroy() {
-    this.subscription?.();
+  override ngOnDestroy() {
     if (this.portalContentView && !this.portalContentView.destroyed) {
       this.portalContentView.destroy();
     }
+    super.ngOnDestroy();
   }
 
   private inject(rootState: NgtState, injectState: NgtState) {
@@ -134,7 +128,7 @@ export class NgtPortal implements OnInit, OnDestroy {
       }
     });
 
-    const inputs = this.inputsStore.getState();
+    const inputs = this.get();
     const { size, events, ...restInputsState } = inputs.state;
 
     let viewport = undefined;
@@ -149,7 +143,7 @@ export class NgtPortal implements OnInit, OnDestroy {
       scene: is.ref(inputs.container) ? inputs.container.nativeElement : inputs.container,
       raycaster: this.raycaster,
       pointer: this.pointer,
-      previousStore: this.parentNgtStore.store,
+      previousStore: this.parentStore,
       events: { ...rootState.events, ...(injectState?.events || {}), ...events },
       size: { ...rootState.size, ...size },
       viewport: { ...rootState.viewport, ...(viewport || {}) },

@@ -1,4 +1,4 @@
-import type { StoreApi } from 'zustand/vanilla';
+import type { RxState } from '@rx-angular/state';
 import type { NgtState } from './types';
 
 export type NgtGlobalRenderCallback = (timeStamp: number) => void;
@@ -79,7 +79,7 @@ function render(timestamp: number, state: NgtState, frame?: XRFrame) {
   return state.frameloop === 'always' ? 1 : state.internal.frames;
 }
 
-export function createLoop<TCanvas>(roots: Map<TCanvas, StoreApi<NgtState>>) {
+export function createLoop<TCanvas>(roots: Map<TCanvas, RxState<NgtState>>) {
   let running = false;
   let repeat: number;
   let frame: number;
@@ -95,14 +95,14 @@ export function createLoop<TCanvas>(roots: Map<TCanvas, StoreApi<NgtState>>) {
 
     // Render all roots
     for (const root of roots.values()) {
-      state = root.getState();
+      state = root.get();
       // If the frameloop is invalidated, do not run another frame
       if (
         state.internal.active &&
         (state.frameloop === 'always' || state.internal.frames > 0) &&
         !state.gl.xr?.isPresenting
       ) {
-        repeat += render(timestamp, root.getState());
+        repeat += render(timestamp, root.get());
       }
     }
 
@@ -121,8 +121,7 @@ export function createLoop<TCanvas>(roots: Map<TCanvas, StoreApi<NgtState>>) {
   }
 
   function invalidate(state?: NgtState, frames = 1): void {
-    if (!state) return roots.forEach((root) => invalidate(root.getState(), frames));
-
+    if (!state) return roots.forEach((root) => invalidate(root.get(), frames));
     if (state.gl.xr?.isPresenting || !state.internal.active || state.frameloop === 'never') return;
     // Increase frames, do not go higher than 60
     state.internal.frames = Math.min(60, state.internal.frames + frames);
@@ -140,7 +139,7 @@ export function createLoop<TCanvas>(roots: Map<TCanvas, StoreApi<NgtState>>) {
     frame?: XRFrame
   ): void {
     if (runGlobalEffects) flushGlobalEffects('before', timestamp);
-    if (!state) for (const root of roots.values()) render(timestamp, root.getState());
+    if (!state) for (const root of roots.values()) render(timestamp, root.get());
     else render(timestamp, state, frame);
     if (runGlobalEffects) flushGlobalEffects('after', timestamp);
   }
