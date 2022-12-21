@@ -1,4 +1,4 @@
-import { RxState } from '@rx-angular/state';
+import type { NgtComponentStore } from './stores/component-store';
 import type { NgtAnyRecord, NgtDomEvent, NgtEventManager, NgtEvents, NgtState } from './types';
 import { createEvents } from './utils/events';
 
@@ -31,14 +31,16 @@ export const supportedEvents = [
   'wheel',
 ] as const;
 
-export function createPointerEvents(store: RxState<NgtState>): NgtEventManager<HTMLElement> {
+export function createPointerEvents(
+  store: NgtComponentStore<NgtState>
+): NgtEventManager<HTMLElement> {
   const { handlePointer } = createEvents(store);
 
   return {
     priority: 1,
     enabled: true,
-    compute: (event: NgtDomEvent, root: RxState<NgtState>) => {
-      const state = root.get();
+    compute: (event: NgtDomEvent, root: NgtComponentStore<NgtState>) => {
+      const state = root.gett();
       // https://github.com/pmndrs/react-three-fiber/pull/782
       // Events trigger outside of canvas when moved, use offsetX/Y by default and allow overrides
       state.pointer.set(
@@ -53,7 +55,7 @@ export function createPointerEvents(store: RxState<NgtState>): NgtEventManager<H
       return handlers;
     }, {}) as NgtEvents,
     connect: (target: HTMLElement) => {
-      const state = store.get();
+      const state = store.gett();
       state.events.disconnect?.();
 
       state.setEvents({ connected: target });
@@ -66,7 +68,7 @@ export function createPointerEvents(store: RxState<NgtState>): NgtEventManager<H
       );
     },
     disconnect: () => {
-      const { events, setEvents } = store.get();
+      const { events, setEvents } = store.gett();
       if (events.connected) {
         Object.entries(events.handlers ?? {}).forEach(
           ([eventName, eventHandler]: [string, EventListener]) => {

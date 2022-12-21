@@ -1,5 +1,4 @@
 import type { ElementRef } from '@angular/core';
-import type { RxState } from '@rx-angular/state';
 import { BehaviorSubject } from 'rxjs';
 import type {
   Camera,
@@ -28,6 +27,7 @@ import type {
   WebGLRendererParameters,
   WebGLShadowMap,
 } from 'three';
+import type { NgtComponentStore } from './stores/component-store';
 
 export type NgtAnyRecord = Record<string, any>;
 export type NgtAnyFunction<TReturn = any> = (...args: any[]) => TReturn;
@@ -137,12 +137,12 @@ export interface NgtEventHandlers {
   wheel?: (event: NgtThreeEvent<WheelEvent>) => void;
 }
 
-export type NgtFilterFunction = (items: Intersection[], store: RxState<NgtState>) => Intersection[];
+export type NgtFilterFunction = (items: Intersection[], store: NgtComponentStore<NgtState>) => Intersection[];
 
 export type NgtComputeFunction = (
   event: NgtDomEvent,
-  root: RxState<NgtState>,
-  previous?: RxState<NgtState>
+  root: NgtComponentStore<NgtState>,
+  previous?: NgtComponentStore<NgtState>
 ) => void;
 
 export interface NgtEventManager<TTarget> {
@@ -207,7 +207,7 @@ export type NgtBeforeRenderCallback<TObject = any> = (state: NgtRenderState, obj
 
 export interface NgtBeforeRenderRecord {
   callback: NgtBeforeRenderCallback<Object3D | undefined>;
-  store: RxState<NgtState>;
+  store: NgtComponentStore<NgtState>;
   obj?: Object3D;
   priority?: number;
 }
@@ -226,16 +226,16 @@ export interface NgtInternalState {
   subscribe: (
     callback: NgtBeforeRenderCallback,
     priority: number,
-    store: RxState<NgtState>
+    store: NgtComponentStore<NgtState>
   ) => () => void;
 }
 
 export interface NgtState {
   /** Set current state */
-  set: RxState<NgtState>['set'];
+  set: NgtComponentStore<NgtState>['set'];
   /** Get current state */
-  get: RxState<NgtState>['get'];
-  select: RxState<NgtState>['select'];
+  get: NgtComponentStore<NgtState>['get'];
+  select: NgtComponentStore<NgtState>['select'];
   /** canvas ready state */
   ready: boolean;
   /** The instance of the renderer */
@@ -299,7 +299,7 @@ export interface NgtState {
   /** When the canvas was clicked but nothing was hit */
   onPointerMissed?: (event: MouseEvent) => void;
   /** If this state model is layerd (via createPortal) then this contains the previous layer */
-  previousStore?: RxState<NgtState>;
+  previousStore?: NgtComponentStore<NgtState>;
   /** Internals */
   internal: NgtInternalState;
   addInteraction: (interaction: Object3D) => void;
@@ -309,7 +309,7 @@ export interface NgtState {
 export type NgtAttachFunction<TChild = any, TParent = any> = (
   parent: TParent,
   child: TChild,
-  store: RxState<NgtState>
+  store: NgtComponentStore<NgtState>
 ) => void | (() => void);
 
 export interface NgtInstanceRendererState {
@@ -326,7 +326,7 @@ export interface NgtInstanceRendererState {
 
 export interface NgtInstanceLocalState {
   /** the state getter of the canvas that the instance is being rendered to */
-  store: RxState<NgtState>;
+  store: NgtComponentStore<NgtState>;
   // objects and parent are used when children are added with `attach` instead of being added to the Object3D scene graph
   nonObjects: BehaviorSubject<NgtInstanceNode[]>;
   // objects that are Object3D
@@ -478,7 +478,7 @@ export interface NgtCanvasInputs {
     manual?: boolean;
   };
   /** An R3F event manager to manage elements' pointer events */
-  events?: (store: RxState<NgtState>) => NgtEventManager<HTMLElement>;
+  events?: (store: NgtComponentStore<NgtState>) => NgtEventManager<HTMLElement>;
   /** The target where events are being subscribed to, default: the div that wraps canvas */
   eventSource?: HTMLElement | ElementRef<HTMLElement>;
   /** The event prefix that is cast into canvas pointer x/y events, default: "offset" */
@@ -488,6 +488,6 @@ export interface NgtCanvasInputs {
 }
 
 export interface NgtHasValidateForRenderer {
-  store: RxState<NgtState>;
+  store: NgtComponentStore<NgtState>;
   validate: () => boolean;
 }

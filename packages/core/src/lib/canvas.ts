@@ -17,12 +17,12 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { RxState } from '@rx-angular/state';
-import { filter } from 'rxjs';
+import { tap } from 'rxjs';
 import { createPointerEvents } from './events';
 import { injectNgtLoader } from './services/loader';
 import { injectNgtResize, NgtResize, NgtResizeResult } from './services/resize';
-import { injectNgtStore, NgtStore, rootStateMap } from './store';
+import { filterFalsy, NgtComponentStore } from './stores/component-store';
+import { injectNgtStore, NgtStore, rootStateMap } from './stores/store';
 import type { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtState, NgtVector3 } from './types';
 
 @Component({
@@ -74,14 +74,14 @@ export class NgtCanvasContent {}
   imports: [NgtCanvasContainer],
   providers: [NgtStore],
 })
-export class NgtCanvas extends RxState<NgtCanvasInputs> implements OnInit, OnDestroy {
+export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnInit, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly host = inject(ElementRef) as ElementRef<HTMLElement>;
   private readonly store = injectNgtStore({ self: true });
   private readonly loader = injectNgtLoader();
 
-  constructor() {
-    super();
+  override initialize() {
+    super.initialize();
     this.set({
       shadows: false,
       linear: false,
@@ -97,7 +97,7 @@ export class NgtCanvas extends RxState<NgtCanvasInputs> implements OnInit, OnDes
   @HostBinding('class.ngt-canvas') readonly hostClass = true;
 
   @HostBinding('style.pointerEvents') get pointerEvents() {
-    return this.get('eventSource') !== this.host.nativeElement ? 'none' : 'auto';
+    return this.get((s) => s.eventSource) !== this.host.nativeElement ? 'none' : 'auto';
   }
 
   @Input() set linear(linear: boolean) {
@@ -175,7 +175,7 @@ export class NgtCanvas extends RxState<NgtCanvasInputs> implements OnInit, OnDes
   ngOnInit() {
     this.cdr.detach();
 
-    if (!this.get('eventSource')) {
+    if (!this.get((s) => s.eventSource)) {
       this.eventSource = this.host.nativeElement;
     }
 
@@ -196,7 +196,7 @@ export class NgtCanvas extends RxState<NgtCanvasInputs> implements OnInit, OnDes
     rootStateMap.set(this.glCanvas.nativeElement, this.store);
 
     // subscribe to store to listen for ready state
-    this.hold(this.store.select('ready').pipe(filter((ready) => ready)), this.ready.bind(this));
+    this.effect(tap(() => this.ready()))(this.store.select((s) => s.ready).pipe(filterFalsy()));
   }
 
   onResize(result: NgtResizeResult) {
@@ -214,7 +214,7 @@ export class NgtCanvas extends RxState<NgtCanvasInputs> implements OnInit, OnDes
     this.store.set((s) => ({ internal: { ...s.internal, active: true } }));
 
     const inputs = this.get();
-    const state = this.store.get();
+    const state = this.store.gett();
 
     // Connect to eventsource
     state.events.connect?.(
@@ -227,7 +227,7 @@ export class NgtCanvas extends RxState<NgtCanvasInputs> implements OnInit, OnDes
     if (inputs.eventPrefix) {
       state.setEvents({
         compute: (event, store) => {
-          const innerState = store.get();
+          const innerState = store.gett();
           const x = event[(inputs.eventPrefix + 'X') as keyof NgtDomEvent] as number;
           const y = event[(inputs.eventPrefix + 'Y') as keyof NgtDomEvent] as number;
           innerState.pointer.set(
@@ -240,7 +240,7 @@ export class NgtCanvas extends RxState<NgtCanvasInputs> implements OnInit, OnDes
     }
 
     if (this.created.observed) {
-      this.created.emit(this.store.get());
+      this.created.emit(this.store.gett());
       this.cdr.detectChanges();
     }
 

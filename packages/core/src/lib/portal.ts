@@ -10,9 +10,10 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { RxState } from '@rx-angular/state';
+import { tap } from 'rxjs';
 import { Raycaster, Scene, Vector2, Vector3 } from 'three';
-import { injectNgtStore, NgtStore } from './store';
+import { NgtComponentStore } from './stores/component-store';
+import { injectNgtStore, NgtStore } from './stores/store';
 import type { NgtEventManager, NgtSize, NgtState } from './types';
 import { updateCamera } from './utils/camera';
 import { is } from './utils/is';
@@ -47,7 +48,7 @@ export interface NgtPortalInputs {
   template: '<ng-container #portalContentAnchor></ng-container>',
   providers: [NgtStore],
 })
-export class NgtPortal extends RxState<NgtPortalInputs> implements OnInit, OnDestroy {
+export class NgtPortal extends NgtComponentStore<NgtPortalInputs> implements OnInit, OnDestroy {
   @Input() set container(container: NgtPortalInputs['container']) {
     this.set({ container });
   }
@@ -71,7 +72,7 @@ export class NgtPortal extends RxState<NgtPortalInputs> implements OnInit, OnDes
   private portalContentView?: EmbeddedViewRef<unknown>;
 
   ngOnInit() {
-    const previousState = this.parentStore.get();
+    const previousState = this.parentStore.gett();
     const inputsState = this.get();
 
     const { events, size, ...restInputsState } = inputsState.state;
@@ -88,19 +89,19 @@ export class NgtPortal extends RxState<NgtPortalInputs> implements OnInit, OnDes
       events: { ...previousState.events, ...(events || {}) },
       size: { ...previousState.size, ...(size || {}) },
       ...restInputsState,
-      get: this.portalStore.get.bind(this.portalStore),
+      get: this.portalStore.gett.bind(this.portalStore),
       set: this.portalStore.set.bind(this.portalStore),
       select: this.portalStore.select.bind(this.portalStore),
       setEvents: (events) =>
         this.portalStore.set((state) => ({ ...state, events: { ...state.events, ...events } })),
     });
 
-    this.hold(this.parentStore.select(), (previous) =>
-      this.portalStore.set((state) => this.inject(previous, state))
-    );
+    this.effect<NgtState>(
+      tap((previous) => this.portalStore.set((state) => this.inject(previous, state)))
+    )(this.parentStore.state$);
 
     requestAnimationFrame(() => {
-      this.portalStore.set((injectState) => this.inject(this.parentStore.get(), injectState));
+      this.portalStore.set((injectState) => this.inject(this.parentStore.gett(), injectState));
     });
 
     this.portalContentView = this.portalContentAnchor.createEmbeddedView(
