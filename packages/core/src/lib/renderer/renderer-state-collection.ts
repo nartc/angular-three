@@ -208,7 +208,10 @@ export class NgtRendererStateCollection {
     while (i >= 0) {
       // loop through dom states to find the closest store
       const debugNode = domStates[i].debugNodeFactory?.();
-      if (!debugNode) continue;
+      if (!debugNode) {
+        i--;
+        continue;
+      }
       const ngtStore = debugNode.injector.get(NgtStore, null);
       if (ngtStore) {
         store = ngtStore;
@@ -233,7 +236,10 @@ export class NgtRendererStateCollection {
       // loop through comment states to find the directive
       // and we loop backwards because the latest added node is the closest one
       const debugNode = commentStates[i].debugNodeFactory?.();
-      if (!debugNode) continue;
+      if (!debugNode) {
+        i--;
+        continue;
+      }
       const ngtDirective = debugNode.injector.get(dir, null);
       if (ngtDirective && ngtDirective.validate()) {
         nonInjectedDirective = ngtDirective;
