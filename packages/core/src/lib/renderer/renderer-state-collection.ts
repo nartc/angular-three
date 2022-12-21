@@ -12,6 +12,7 @@ export class NgtRendererStateCollection {
   private readonly domMap = new Map<HTMLElement, NgtRendererState>();
   private readonly threeMap = new Map<NgtInstanceNode, NgtRendererState>();
 
+  // shortcut to add a Comment node so we can set some defaults
   addComment(comment: Comment, partial: Partial<NgtRendererState> = {}) {
     if (!this.commentMap.has(comment)) {
       this.commentMap.set(
@@ -28,6 +29,7 @@ export class NgtRendererStateCollection {
     return this.getComment(comment);
   }
 
+  // shortcut to add a Dom node so we can set some defaults
   addDom(dom: HTMLElement, partial: Partial<NgtRendererState> = {}) {
     if (!this.domMap.has(dom)) {
       this.domMap.set(
@@ -44,6 +46,7 @@ export class NgtRendererStateCollection {
     return this.getDom(dom);
   }
 
+  // shortcut to add a THREE node so we can set some defaults
   addThree(three: NgtInstanceNode, partial: Partial<NgtRendererState> = {}) {
     if (!this.threeMap.has(three)) {
       this.threeMap.set(
@@ -82,6 +85,7 @@ export class NgtRendererStateCollection {
     };
   }
 
+  // remove the state from their Map and delete all the references to release from GC
   removeState(child: any) {
     const { state, nodeType } = this.getState(child);
     state.cleanUps.forEach((cleanUp) => cleanUp());
@@ -109,6 +113,7 @@ export class NgtRendererStateCollection {
     const childState = this.getComment(child) || this.getDom(child) || this.getThree(child);
     if (!childState) throw new Error(`[NGT] No child state found`);
 
+    // while getting the state for parent and child, we also process the root Scene here
     if (parentState.threeType === 'scene') {
       if (!parentState.instance) {
         const oldParentState = parentState;
@@ -135,6 +140,7 @@ export class NgtRendererStateCollection {
     };
   }
 
+  // look up closest NgtStore related to a specific Node
   getStore(state: NgtRendererState) {
     let store: NgtStore | null | undefined = undefined;
     let debugNode = state.debugNodeFactory?.();
@@ -156,6 +162,7 @@ export class NgtRendererStateCollection {
     return store;
   }
 
+  // look up all closest Structural Directives
   getInitPhaseStates(): {
     injectedArgs: any[];
     injectedRef?: ElementRef<NgtInstanceNode> | null;

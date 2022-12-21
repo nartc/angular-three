@@ -20,7 +20,7 @@ import {
   Output,
 } from '@angular/core';
 import { map } from 'rxjs';
-import { AnimationMixer, BoxGeometry } from 'three';
+import { AnimationMixer, BoxGeometry, Group } from 'three';
 import { OrbitControls } from 'three-stdlib';
 
 function createEventEmitter<T>(): EventEmitter<T> {
@@ -143,10 +143,12 @@ export class Model {
 
     <ngt-ambient-light></ngt-ambient-light>
 
-    <cube *ngIf="show" [position]="[2.5, -1, 0]"></cube>
-    <cube (cubeClick)="show = !show" [position]="[-2.5, 1, 0]"></cube>
-    <cube [visible]="show" [isFun]="true" [position]="[2.5, 1, 0]"></cube>
-    <cube [isFun]="show" [position]="[-2.5, -1, 0]"></cube>
+    <ngt-group (beforeRender)="onGroupBeforeRender($any($event).object)">
+      <cube *ngIf="show" [position]="[2.5, -1, 0]"></cube>
+      <cube (cubeClick)="show = !show" [position]="[-2.5, 1, 0]"></cube>
+      <cube [visible]="show" [isFun]="true" [position]="[2.5, 1, 0]"></cube>
+      <cube [isFun]="show" [position]="[-2.5, -1, 0]"></cube>
+    </ngt-group>
 
     <model></model>
 
@@ -170,5 +172,9 @@ export default class Scene {
 
   onBeforeRender(controls: OrbitControls) {
     controls.update();
+  }
+
+  onGroupBeforeRender(group: Group) {
+    group.rotation.z += 0.01;
   }
 }

@@ -73,6 +73,12 @@ export class NgtRendererFactory implements RendererFactory2 {
   }
 }
 
+/**
+ * This Renderer handles both DOM and THREE instances:
+ * - For DOM instances, the Renderer calculates whether it is a Compound/Wrapper around THREE objects
+ * or it is a regular Angular component.
+ * - For THREE instances, the Renderer returns the THREE instances directly.
+ */
 export class NgtRenderer implements Renderer2 {
   constructor(
     private delegateRenderer: Renderer2,
@@ -93,6 +99,8 @@ export class NgtRenderer implements Renderer2 {
     parent = rest.parent;
     newChild = rest.child;
 
+    // handling a DOM child. If its parent is a THREE instance, we'll store that information
+    // we also store the parentDom as well
     if (childNodeType === 'dom') {
       if (parentNodeType === 'three') {
         childState.parent = parent;
@@ -104,20 +112,27 @@ export class NgtRenderer implements Renderer2 {
         }
       }
       if (childState.parentDom) {
+        // we'll try to append the dom if it satisfies the condition
         this.tryAppendDom(childState.parentDom, newChild, fromInsertBefore && newChild.parent);
       }
       return;
     }
 
+    // handling Comment nodes. These comments are created by Structural Directives.
+    // Due to Angular Renderer limitation, we keep track of these Comments and their DebugNode
+    // so that we can inject the Structural Directives assigned to them later.
     if (childNodeType === 'comment') {
+      // store the parent THREE instance if available
       if (!childState.parent && parentState.instance) {
         childState.parent = parentState.instance;
       }
 
+      // if the immediate parent doesn't have a THREE instance, try look for the grand parent
       if (!childState.parent && !parentState.instance && parentState.parent) {
         childState.parent = parentState.parent;
       }
 
+      // try to append the Comment node to a parent DOM node depending on the parent type.
       if (parentNodeType === 'three') {
         childState.parentDom = parentState.parentDom;
         if (childState.parentDom) {
@@ -130,13 +145,18 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
+    // handling THREE instances
     if (childNodeType === 'three') {
+      // if parent node is a wrapper, it is initially a DOM type.
       if (parentThreeType === 'wrapper') {
         let useParentInstance = false;
+        // this is the EARLIEST place where we can say: "hey, you wrap this THREE instance. You are now this THREE instance"
         if (parentNodeType === 'dom') {
           parentState.instance = newChild;
+          // here, we switch the nodeType from 'dom' to 'three'
           parentState.nodeType = 'three';
 
+          // if the consumers use *ref on a wrapper, we handle it here
           if (parentState.ref) {
             parentState.ref.nativeElement = newChild;
           }
@@ -146,6 +166,7 @@ export class NgtRenderer implements Renderer2 {
         if (!parentState.instance) throw new Error(`[NGT] fail to append child to THREE wrapper`);
         childState.parentDom = parent;
         childState.debugNodeFactory = () => parentState.debugNodeFactory!();
+        // child is a THREE instance so we will handle this based on whether we already have the Wrapper instance
         if (useParentInstance && parentState.parent) {
           this.appendChild(parentState.parent, newChild);
         } else if (parentState.instance && parentState.instance !== newChild) {
@@ -154,6 +175,8 @@ export class NgtRenderer implements Renderer2 {
         return;
       }
 
+      // if parent node is a 'dom' and child is 'wrapper' then we'll append the DOM nodes
+      // else we'll append the THREE instances
       if (parentNodeType === 'dom') {
         childState.parentDom = parent;
         if (childThreeType === 'wrapper') {
@@ -170,7 +193,12 @@ export class NgtRenderer implements Renderer2 {
         return;
       }
 
+      // if parent is THREE, straightforward, we just call our logic to attach the THREE instances
       if (parentNodeType === 'three') {
+        if (childThreeType === 'wrapper') {
+          newChild = childState.instance;
+        }
+
         if (!childState.debugNodeFactory && parentState.debugNodeFactory) {
           childState.debugNodeFactory = () => parentState.debugNodeFactory!();
         }
@@ -193,13 +221,14 @@ export class NgtRenderer implements Renderer2 {
   private tryAppendDom(
     parentDom: HTMLElement,
     childDom: HTMLElement | Comment,
-    fromInsertBefore = false
+    shouldAppend = false
   ) {
-    if (!fromInsertBefore) {
+    if (!shouldAppend) {
       this.delegateRenderer.appendChild(parentDom, childDom);
     }
   }
 
+  // create the comment normally and store it
   createComment(value: string): any {
     const comment = this.delegateRenderer.createComment(value);
     this.rendererStateCollection.addComment(comment);
@@ -251,6 +280,7 @@ export class NgtRenderer implements Renderer2 {
       this.rendererStateCollection.addThree(threeInstance, { threeType: 'normal', for: threeName });
 
       const localState = instanceLocalState(threeInstance)!;
+      // for three instances, default material and geometry attach if it's not already existed
       if (!attach) {
         if (is.material(threeInstance)) {
           localState.attach = ['material'];
@@ -270,13 +300,17 @@ export class NgtRenderer implements Renderer2 {
   }
 
   insertBefore(parent: any, newChild: any, refChild: any, isMove?: boolean): void {
+    // this is the parent <ngt-canvas-container>, we don't care in the Renderer
     if ((parent as HTMLElement).localName === SPECIAL_TAGS.CANVAS_CONTAINER) {
       this.delegateRenderer.insertBefore(parent, newChild, refChild, isMove);
       return;
     }
+
     const { state: refState, nodeType: refNodeType } =
       this.rendererStateCollection.getState(refChild);
     const { state, nodeType } = this.rendererStateCollection.getState(newChild);
+
+    // little funsie, we "enhance" the comment's value so we know what the structural directive is for
     if (refNodeType === 'comment') {
       if (nodeType === 'three') {
         refState.for = state.for || state.instance['type'];
@@ -284,6 +318,20 @@ export class NgtRenderer implements Renderer2 {
         refState.for = state.for || (state.dom as HTMLElement).localName;
       }
     }
+
+    // TODO: it was late when I wrote this. I don't understand. Investigate further when problem arises
+    if (Array.isArray(parent)) {
+      const [parentThree, parentDom] = parent;
+
+      if (nodeType === 'dom') {
+        this.appendChild(parentThree || parentDom, newChild, true);
+      } else if (nodeType === 'three') {
+        this.appendChild(parentDom || parentThree, newChild, true);
+      }
+
+      return;
+    }
+
     this.appendChild(parent, newChild, true);
   }
 
@@ -294,16 +342,20 @@ export class NgtRenderer implements Renderer2 {
     dom?: HTMLElement
   ): () => void {
     const { state, nodeType, threeType } = this.rendererStateCollection.getState(target);
+    // if the target is just a DOM, we let Angular handles it
     if (nodeType === 'dom' && !threeType) {
       return this.delegateRenderer.listen(target, eventName, callback);
     }
 
     if (threeType === 'wrapper') {
+      // wrapper instance might be late.
+      // if we have instance, we process the events
       const instance = state.instance;
       if (instance) {
         return this.processThreeEvent(instance, state, eventName, callback, dom);
       }
 
+      // else, we queue the events listeners
       queueMicrotask(() => {
         // refetch renderer state
         const { state: refetchState } = this.rendererStateCollection.getState(target);
@@ -312,6 +364,7 @@ export class NgtRenderer implements Renderer2 {
           const { state: instanceState } = this.rendererStateCollection.getState(
             refetchState.instance
           );
+          // this.listen returns a clean up function. we'll store this function to clean up later
           instanceState.cleanUps.add(
             this.listen(instanceState.instance, eventName, callback, wrapperDom as HTMLElement)
           );
@@ -321,6 +374,7 @@ export class NgtRenderer implements Renderer2 {
       return () => {};
     }
 
+    // if it's just THREE, process the events
     if (nodeType === 'three') {
       return this.processThreeEvent(target, state, eventName, callback, dom);
     }
@@ -338,6 +392,8 @@ export class NgtRenderer implements Renderer2 {
     const localState = instanceLocalState(instance);
     if (localState) {
       if (eventName === EVENTS.BEFORE_RENDER) {
+        // beforeRender is special event, we'll handle it here
+        // TODO: what happens if both wrapper and three have beforeRender
         return localState.store
           .gett((s) => s.internal)
           .subscribe(
@@ -347,19 +403,24 @@ export class NgtRenderer implements Renderer2 {
           );
       }
 
+      // try to get the previous handler. wrapper might have one, the THREE object might also have one with the same name
       const previousHandler = localState.handlers[eventName as keyof typeof localState.handlers];
+      // readjust the callback
       const updatedCallback: typeof callback = (event) => {
         if (previousHandler) previousHandler(event);
         callback(event);
       };
 
+      // if we have eventCount, which means we already setup handlers
       if (localState.eventCount) {
+        // process the event with ChangeDetectorRef
         localState.handlers[eventName as keyof typeof localState.handlers] = eventToHandler(
           updatedCallback,
           (dom || state.dom || state.parentDom) as HTMLElement,
           this.rendererStateCollection
         );
       } else {
+        // no eventCount, first time setting up handlers
         localState.handlers = {
           [eventName]: eventToHandler(
             updatedCallback,
@@ -369,12 +430,16 @@ export class NgtRenderer implements Renderer2 {
         };
       }
 
+      // increment the count everytime
       localState.eventCount += 1;
 
+      // but only add the instance (target) to the interaction array (so that it is handled by the EventManager with Raycast)
+      // the first time eventCount is incremented
       if (localState.eventCount === 1 && instance['raycast']) {
         localState.store.gett((s) => s.addInteraction)(instance);
       }
 
+      // clean up the event listener by removing the target from the interaction array
       return () => {
         const localState = instanceLocalState(instance);
         if (localState && localState.eventCount) {
@@ -387,14 +452,22 @@ export class NgtRenderer implements Renderer2 {
   }
 
   parentNode(node: any): any {
+    // we try/catch this because the initial comment (created by <router-outlet> and <ngt-canvas-container>) doesn't have
+    // RendererState because NgtRenderer doesn't handle that comment specifically
     try {
-      const { state, nodeType, threeType } = this.rendererStateCollection.getState(node);
-      if (state.parentDom) {
-        return state.parentDom;
+      const { state } = this.rendererStateCollection.getState(node);
+
+      // if a comment have both parent and parentDom, returns as an Array. We handle array in removeChild and insertBefore
+      if (state.parent && state.parentDom) {
+        return [state.parent, state.parentDom];
       }
 
       if (state.parent) {
         return state.parent;
+      }
+
+      if (state.parentDom) {
+        return state.parentDom;
       }
 
       return this.delegateRenderer.parentNode(node);
@@ -403,72 +476,71 @@ export class NgtRenderer implements Renderer2 {
     }
   }
 
+  // TODO: again, wrote when late. Investigate further when problem arises
   removeChild(parent: any, oldChild: any, isHostElement?: boolean): void {
-    const {
-      parentState,
-      parentNodeType,
-      parentThreeType,
-      childState,
-      childNodeType,
-      childThreeType,
-      ...rest
-    } = this.rendererStateCollection.processParentChild(parent, oldChild);
+    if (Array.isArray(parent)) {
+      this.removeChild(parent[0], oldChild, isHostElement);
+      this.removeChild(parent[1], oldChild, isHostElement);
+      return;
+    }
 
-    if (childNodeType === 'dom') {
-      const remove = (dom: HTMLElement) => {
-        const children = dom.children;
-        let i = children.length - 1;
-        while (i >= 0) {
-          const child = children.item(i);
-          if (!child) {
-            i--;
-            continue;
+    try {
+      const { nodeType: childNodeType } = this.rendererStateCollection.getState(oldChild);
+
+      try {
+        const { state: parentState, nodeType: parentNodeType } =
+          this.rendererStateCollection.getState(parent);
+
+        if (childNodeType === 'dom') {
+          // Angular component because wrapper and three would have nodeType of 'three'
+          if (parentNodeType === 'dom') {
+            this.delegateRenderer.removeChild(parent, oldChild, isHostElement);
+            return;
           }
-          const { state, nodeType } = this.rendererStateCollection.getState(child);
-          if (nodeType === 'dom') {
-            remove(state.dom as HTMLElement);
-            i--;
-          } else if (nodeType === 'three') {
-            if (childState.parent || parentState.instance) {
-              removeThreeChild(
-                childState.parent || parentState.instance,
-                state.instance,
-                this.rendererStateCollection,
-                true
-              );
+
+          if (parentNodeType === 'three') {
+            // here we'll try to loop through oldChild's children DOM
+            const domChildren = (oldChild as HTMLElement).children;
+            let i = domChildren.length - 1;
+            while (i >= 0) {
+              const domChild = domChildren.item(i);
+              if (!domChild) {
+                i--;
+                continue;
+              }
+              const { state, nodeType } = this.rendererStateCollection.getState(domChild);
+              if (nodeType !== 'three') {
+                i--;
+                continue;
+              }
+              removeThreeChild(parent, state.instance, this.rendererStateCollection, true);
+              i--;
             }
-            i--;
           }
+          return;
         }
-      };
 
-      remove(childState.dom as HTMLElement);
+        if (childNodeType === 'three') {
+          if (parentNodeType === 'three') {
+            removeThreeChild(parentState.instance, oldChild, this.rendererStateCollection, true);
+          }
+          return;
+        }
 
-      if (childState.parentDom) {
-        this.delegateRenderer.removeChild(childState.parentDom, oldChild);
-        // (childState.parentDom as HTMLElement).removeChild(oldChild);
+        this.delegateRenderer.removeChild(parent, oldChild, isHostElement);
+      } catch (e) {
+        this.delegateRenderer.removeChild(parent, oldChild, isHostElement);
       }
-      return;
+    } catch (e) {
+      // ignore error. this is because child is being referenced twice and on the 2nd run
+      // it has already been removed
     }
-
-    if (childNodeType === 'three') {
-      if (parentState.instance) {
-        removeThreeChild(
-          parentState.instance,
-          childState.instance,
-          this.rendererStateCollection,
-          true
-        );
-      }
-      return;
-    }
-
-    this.delegateRenderer.removeChild(parent, oldChild, isHostElement);
   }
 
   setAttribute(el: any, name: string, value: string, namespace?: string | null): void {
     const { state, nodeType, threeType } = this.rendererStateCollection.getState(el);
 
+    // if el is a wrapper and it has instance, recall setAttribute with the instance
     if (threeType === 'wrapper' && state.instance) {
       this.setAttribute(state.instance, name, value, namespace);
       return;
@@ -555,15 +627,12 @@ export class NgtRenderer implements Renderer2 {
     this.delegateRenderer.setProperty(el, name, value);
   }
 
+  // setValue is called when Angular sets value for the Comment nodes
   setValue(node: any, value: string): void {
     const { state, nodeType } = this.rendererStateCollection.getState(node);
+    // we do a little fun stuffs here
     if (nodeType === 'comment' && state.for) {
       value = value.slice(0, -2).concat(',\n  "ngt-for": ', `"${state.for}"`, '\n}');
-    }
-    if (node instanceof Comment && node.previousElementSibling) {
-      value = value
-        .slice(0, -2)
-        .concat(',\n  "ngt-for": ', `"${node.previousElementSibling.localName}"`, '\n}');
     }
     this.delegateRenderer.setValue(node, value);
   }
@@ -581,6 +650,7 @@ export class NgtRenderer implements Renderer2 {
   }
 
   destroyNode(node: any): void {
+    // TODO: should we use this for removing THREE instead?
     this.delegateRenderer.destroyNode?.(node);
   }
 
