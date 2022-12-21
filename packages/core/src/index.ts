@@ -14,5 +14,6 @@ export * from './lib/utils/apply-props';
 export * from './lib/utils/di';
 export * from './lib/utils/is';
 export * from './lib/utils/ref';
+export * from './lib/utils/destroy';
 export * from './lib/stores/store';
 export * from './lib/stores/component-store';

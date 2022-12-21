@@ -1,12 +1,6 @@
-import { ChangeDetectorRef, ElementRef, inject, ViewRef } from '@angular/core';
-import {
-  BehaviorSubject,
-  distinctUntilChanged,
-  pairwise,
-  Subject,
-  Subscription,
-  takeUntil,
-} from 'rxjs';
+import { ElementRef } from '@angular/core';
+import { BehaviorSubject, distinctUntilChanged, pairwise, Subscription, takeUntil } from 'rxjs';
+import { injectNgtDestroy } from './destroy';
 
 type Subscribe<T> = (callback: (current: T, previous: T | null) => void) => Subscription;
 
@@ -18,21 +12,15 @@ export function injectRef<T>(
     ref = initialValue;
   }
 
-  const destroy$ = new Subject<void>();
   const ref$ = new BehaviorSubject<T>(ref.nativeElement);
+  const destroy$ = injectNgtDestroy(() => {
+    ref$.complete();
+  });
   const obs$ = ref$.asObservable().pipe(distinctUntilChanged(), pairwise(), takeUntil(destroy$));
-  const cdr = inject(ChangeDetectorRef) as ViewRef;
 
   const subscribe: Subscribe<T> = (callback) => {
     return obs$.subscribe(([previous, current]) => callback(current, previous));
   };
-
-  queueMicrotask(() => {
-    cdr.onDestroy(() => {
-      destroy$.next();
-      ref$.complete();
-    });
-  });
 
   return new Proxy(ref, {
     get(target, p, receiver) {

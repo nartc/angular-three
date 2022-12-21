@@ -36,6 +36,8 @@ export class NgtRendererState {
   ref?: ElementRef<NgtInstanceNode>;
   // if this is a Comment node by Structural Directive, what's it for
   for?: string;
+  // applicable to THREEnode, whether this should be wrapped with a Wrapper
+  noWrap = false;
 
   constructor(partial: Partial<NgtRendererState> = {}) {
     this.threeType = partial.threeType;
@@ -47,5 +49,6 @@ export class NgtRendererState {
     this.parentDom = partial.parentDom;
     this.ref = partial.ref;
     this.for = partial.for;
+    this.noWrap = partial.noWrap ?? this.noWrap;
   }
 }

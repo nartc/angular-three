@@ -27,6 +27,7 @@ const ATTRIBUTES = {
   BEFORE_RENDER_PRIORITY: 'priority',
   ATTACH: 'attach',
   WRAPPER_MODE: 'wrapperMode',
+  NO_WRAP: 'noWrap',
 } as const;
 
 const EVENTS = {
@@ -151,7 +152,8 @@ export class NgtRenderer implements Renderer2 {
       if (parentThreeType === 'wrapper') {
         let useParentInstance = false;
         // this is the EARLIEST place where we can say: "hey, you wrap this THREE instance. You are now this THREE instance"
-        if (parentNodeType === 'dom') {
+        // and we only do so if the child specifies "noWrap = false"
+        if (parentNodeType === 'dom' && !childState.noWrap) {
           parentState.instance = newChild;
           // here, we switch the nodeType from 'dom' to 'three'
           parentState.nodeType = 'three';
@@ -570,6 +572,11 @@ export class NgtRenderer implements Renderer2 {
 
       if (name === ATTRIBUTES.WRAPPER_MODE) {
         localState!.wrapper.applyFirst = value === 'first';
+        return;
+      }
+
+      if (name === ATTRIBUTES.NO_WRAP) {
+        state.noWrap = true;
         return;
       }
 
