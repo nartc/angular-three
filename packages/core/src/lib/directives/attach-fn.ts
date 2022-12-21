@@ -6,8 +6,8 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import type { RxState } from '@rx-angular/state';
-import { injectNgtStore } from '../store';
+import { NgtComponentStore } from '../stores/component-store';
+import { injectNgtStore } from '../stores/store';
 import type { NgtAttachFunction, NgtHasValidateForRenderer, NgtState } from '../types';
 import { injectNgtArgs, NgtArgs } from './args';
 
@@ -67,10 +67,10 @@ export function createAttachFn<TChild, TParent extends object>(
   callback: (params: {
     parent: TParent;
     child: TChild;
-    store: RxState<NgtState>;
+    store: NgtComponentStore<NgtState>;
   }) => ReturnType<NgtAttachFunction<TChild, TParent>>
 ) {
-  return ((parent: TParent, child: TChild, store: RxState<NgtState>) => {
+  return ((parent: TParent, child: TChild, store: NgtComponentStore<NgtState>) => {
     return callback({ parent, child, store });
   }) as NgtAttachFunction<TChild, TParent>;
 }

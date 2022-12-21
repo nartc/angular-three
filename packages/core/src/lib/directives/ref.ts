@@ -7,7 +7,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { injectNgtStore } from '../store';
+import { injectNgtStore } from '../stores/store';
 import { NgtHasValidateForRenderer } from '../types';
 
 @Directive({

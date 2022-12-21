@@ -1,6 +1,14 @@
-import { injectNgtStore, NgtAnyFunction } from '@angular-three/core';
+import {
+  filterFalsy,
+  injectNgtStore,
+  NgtAnyFunction,
+  NgtAnyRecord,
+  NgtComponentStore,
+  tapEffect,
+} from '@angular-three/core';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import type {
+import {
+  CannonWorkerAPI,
   CannonWorkerProps,
   WorkerCollideBeginEvent,
   WorkerCollideEndEvent,
@@ -8,7 +16,8 @@ import type {
   WorkerFrameMessage,
   WorkerRayhitEvent,
 } from '@pmndrs/cannon-worker-api';
-import { RxState } from '@rx-angular/state';
+import { map, Subscription, tap } from 'rxjs';
+
 import { InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three';
 import { injectNgtcPhysicsStore, NgtcPhysicsStore } from './store';
 
@@ -48,12 +57,12 @@ export interface NgtcPhysicsInputs extends CannonWorkerProps {
   template: '<ng-content></ng-content>',
   providers: [NgtcPhysicsStore],
 })
-export class NgtsPhysics extends RxState<NgtcPhysicsInputs> implements OnInit, OnDestroy {
+export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements OnInit, OnDestroy {
   private readonly store = injectNgtStore();
   private readonly physicsStore = injectNgtcPhysicsStore();
 
-  constructor() {
-    super();
+  override initialize() {
+    super.initialize();
     this.set({
       allowSleep: false,
       axisIndex: 0,
@@ -72,7 +81,6 @@ export class NgtsPhysics extends RxState<NgtcPhysicsInputs> implements OnInit, O
       stepSize: 1 / 60,
       tolerance: 0.001,
     });
-    console.log('here-->', this.get());
   }
 
   @Input() set allowSleep(allowSleep: NgtcPhysicsInputs['allowSleep']) {
@@ -141,96 +149,96 @@ export class NgtsPhysics extends RxState<NgtcPhysicsInputs> implements OnInit, O
     this.set({ stepSize });
   }
 
-  private beforeRenderCleanup?: () => void;
-  private connectWorkerCleanup?: () => void;
-  private updateWorkerPropCleanups: Array<() => void> = [];
-
   ngOnInit() {
-      this.connectWorker();
-      this.physicsStore.init(this.get());
-      this.setupBeforeRender();
+    this.physicsStore.set(
+      this.select((s) => s, { debounce: true }).pipe(
+        map((inputs) => ({ worker: new CannonWorkerAPI(inputs) }))
+      )
+    );
+    this.connectWorker();
+    this.setupBeforeRender();
 
-    this.updateWorkerPropCleanups
-      .push
-      // this.physicsStore.store.subscribe((state, prevState) => {
-      //   if (state.worker && state.worker !== prevState.worker) {
-      //     // purposely mutate
-      //     const updatePropCleanups = this.updateWorkerPropCleanups.splice(1);
-      //     updatePropCleanups.forEach((cleanup) => cleanup());
-      //
-      //     this.updateWorkerProp('axisIndex');
-      //     this.updateWorkerProp('broadphase');
-      //     this.updateWorkerProp('gravity');
-      //     this.updateWorkerProp('iterations');
-      //     this.updateWorkerProp('tolerance');
-      //   }
-      // })
-      ();
+    this.effect(
+      tapEffect(() => {
+        const subs: Subscription[] = [];
+        subs.push(
+          this.updateWorkerProp('axisIndex'),
+          this.updateWorkerProp('broadphase'),
+          this.updateWorkerProp('gravity'),
+          this.updateWorkerProp('iterations'),
+          this.updateWorkerProp('tolerance')
+        );
+
+        return () => {
+          subs.forEach((sub) => sub.unsubscribe());
+        };
+      })
+    )(this.physicsStore.select((s) => s.worker, { debounce: true }).pipe(filterFalsy()));
   }
 
   override ngOnDestroy() {
-    this.beforeRenderCleanup?.();
-    this.connectWorkerCleanup?.();
-    const worker = this.physicsStore.get('worker');
+    const worker = this.physicsStore.gett((s) => s.worker);
     if (worker) {
       worker.terminate();
       (worker as unknown as { removeAllListeners: NgtAnyFunction }).removeAllListeners();
     }
 
-    this.updateWorkerPropCleanups.forEach((cleanup) => cleanup());
     super.ngOnDestroy();
   }
 
   private setupBeforeRender() {
     let timeSinceLastCalled = 0;
-    this.beforeRenderCleanup = this.store.get('internal').subscribe(
-      ({ delta }) => {
-        const { isPaused, maxSubSteps, stepSize } = this.get();
-        const worker = this.physicsStore.get('worker');
-        if (isPaused || !worker) return;
-        timeSinceLastCalled += delta;
-        worker.step({ maxSubSteps, timeSinceLastCalled, stepSize: stepSize! });
-        timeSinceLastCalled = 0;
-      },
-      0,
-      this.store
-    );
+    this.effect<void>(
+      tapEffect(() =>
+        this.store
+          .gett((s) => s.internal)
+          .subscribe(
+            ({ delta }) => {
+              const { isPaused, maxSubSteps, stepSize } = this.get();
+              const worker = this.physicsStore.gett((s) => s.worker);
+              if (isPaused || !worker) return;
+              timeSinceLastCalled += delta;
+              worker.step({ maxSubSteps, timeSinceLastCalled, stepSize: stepSize! });
+              timeSinceLastCalled = 0;
+            },
+            0,
+            this.store
+          )
+      )
+    )();
   }
 
   private connectWorker() {
-    // this.connectWorkerCleanup = this.physicsStore.store.subscribe((state, prevState) => {
-    //   if (state.worker && state.worker !== prevState.worker) {
-    //     const worker = state.worker;
-    //     worker.connect();
-    //     worker.init();
-    //
-    //     (worker as unknown as { on: NgtAnyFunction }).on('collide', this.collideHandler.bind(this));
-    //     (worker as unknown as { on: NgtAnyFunction }).on(
-    //       'collideBegin',
-    //       this.collideBeginHandler.bind(this)
-    //     );
-    //     (worker as unknown as { on: NgtAnyFunction }).on(
-    //       'collideEnd',
-    //       this.collideEndHandler.bind(this)
-    //     );
-    //     (worker as unknown as { on: NgtAnyFunction }).on('frame', this.frameHandler.bind(this));
-    //     (worker as unknown as { on: NgtAnyFunction }).on('rayhit', this.rayhitHandler.bind(this));
-    //   }
-    // });
+    this.effect<CannonWorkerAPI>(
+      tap(() => {
+        const worker = this.physicsStore.gett((s) => s.worker);
+        worker.connect();
+        worker.init();
+
+        (worker as unknown as { on: NgtAnyFunction }).on('collide', this.collideHandler.bind(this));
+        (worker as unknown as { on: NgtAnyFunction }).on(
+          'collideBegin',
+          this.collideBeginHandler.bind(this)
+        );
+        (worker as unknown as { on: NgtAnyFunction }).on(
+          'collideEnd',
+          this.collideEndHandler.bind(this)
+        );
+        (worker as unknown as { on: NgtAnyFunction }).on('frame', this.frameHandler.bind(this));
+        (worker as unknown as { on: NgtAnyFunction }).on('rayhit', this.rayhitHandler.bind(this));
+      })
+    )(this.physicsStore.select((s) => s.worker, { debounce: true }).pipe(filterFalsy()));
   }
 
   private updateWorkerProp(prop: keyof NgtcPhysicsInputs) {
-    this.updateWorkerPropCleanups
-      .push
-      // this.inputsStore.subscribe((state, prevState) => {
-      //   if (state[prop] !== prevState[prop]) {
-      //     const worker = this.physicsStore.store.getState().worker;
-      //     if (worker) {
-      //       (worker as NgtAnyRecord)[prop] = state[prop];
-      //     }
-      //   }
-      // })
-      ();
+    return this.effect<NgtcPhysicsInputs[typeof prop]>(
+      tap((value) => {
+        const worker = this.physicsStore.gett((s) => s.worker);
+        if (worker) {
+          (worker as NgtAnyRecord)[prop] = value;
+        }
+      })
+    )(this.select((s) => s[prop]));
   }
 
   private collideHandler({
@@ -239,7 +247,7 @@ export class NgtsPhysics extends RxState<NgtcPhysicsInputs> implements OnInit, O
     target,
     ...rest
   }: WorkerCollideEvent['data']) {
-    const { events, refs } = this.physicsStore.get();
+    const { events, refs } = this.physicsStore.gett();
     const cb = events[target]?.collide;
 
     if (cb) {
@@ -253,7 +261,7 @@ export class NgtsPhysics extends RxState<NgtcPhysicsInputs> implements OnInit, O
   }
 
   private collideBeginHandler({ bodyA, bodyB }: WorkerCollideBeginEvent['data']) {
-    const { events, refs } = this.physicsStore.get();
+    const { events, refs } = this.physicsStore.gett();
 
     const cbA = events[bodyA]?.collideBegin;
 
@@ -278,7 +286,7 @@ export class NgtsPhysics extends RxState<NgtcPhysicsInputs> implements OnInit, O
   }
 
   private collideEndHandler({ bodyA, bodyB }: WorkerCollideEndEvent['data']) {
-    const { events, refs } = this.physicsStore.get();
+    const { events, refs } = this.physicsStore.gett();
 
     const cbA = events[bodyA]?.collideEnd;
 
@@ -309,9 +317,9 @@ export class NgtsPhysics extends RxState<NgtcPhysicsInputs> implements OnInit, O
     positions,
     quaternions,
   }: WorkerFrameMessage['data']) {
-    const { bodies, subscriptions, refs, scaleOverrides } = this.physicsStore.get();
-    const invalidate = this.store.get('invalidate');
-    const shouldInvalidate = this.get('shouldInvalidate');
+    const { bodies, subscriptions, refs, scaleOverrides } = this.physicsStore.gett();
+    const invalidate = this.store.gett((s) => s.invalidate);
+    const shouldInvalidate = this.get((s) => s.shouldInvalidate);
 
     for (let i = 0; i < uuids.length; i++) {
       bodies[uuids[i]] = i;
@@ -347,7 +355,7 @@ export class NgtsPhysics extends RxState<NgtcPhysicsInputs> implements OnInit, O
   }
 
   private rayhitHandler({ body, ray: { uuid, ...rayRest }, ...rest }: WorkerRayhitEvent['data']) {
-    const { events, refs } = this.physicsStore.get();
+    const { events, refs } = this.physicsStore.gett();
     const cb = events[uuid]?.rayhit;
 
     if (cb) {

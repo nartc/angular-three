@@ -6,7 +6,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { injectNgtStore } from '../store';
+import { injectNgtStore } from '../stores/store';
 import type { NgtHasValidateForRenderer } from '../types';
 import { createInject } from '../utils/di';
 

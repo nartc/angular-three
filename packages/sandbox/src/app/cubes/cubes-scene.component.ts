@@ -1,137 +1,3 @@
-// import {
-//   injectNgtStore,
-//   injectRef,
-//   NgtArgs,
-//   NgtPush,
-//   NgtRef,
-//   NgtScene,
-//   NgtVector3,
-//   NgtWrapper,
-// } from '@angular-three/core';
-// import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
-// import { NgIf } from '@angular/common';
-// import {
-//   ChangeDetectorRef,
-//   Component,
-//   CUSTOM_ELEMENTS_SCHEMA,
-//   EventEmitter,
-//   inject,
-//   Input,
-//   Output,
-// } from '@angular/core';
-// import { map } from 'rxjs';
-// import * as THREE from 'three';
-// import { AnimationMixer, BoxGeometry } from 'three';
-// import { OrbitControls } from 'three-stdlib';
-//
-// function createEventEmitter<T>(): EventEmitter<T> {
-//   const cdr = inject(ChangeDetectorRef);
-//   const parentCdr = inject(ChangeDetectorRef, { skipSelf: true, optional: true });
-//
-//   const eventEmitter = new EventEmitter<T>();
-//
-//   const originalEmit = eventEmitter.emit.bind(eventEmitter);
-//
-//   eventEmitter.emit = (...args: Parameters<EventEmitter<T>['emit']>) => {
-//     originalEmit(...args);
-//     cdr.detectChanges();
-//     if (parentCdr) {
-//       parentCdr.detectChanges();
-//     }
-//   };
-//
-//   return eventEmitter;
-// }
-//
-// @NgtWrapper()
-// @Component({
-//   selector: 'ngts-box',
-//   standalone: true,
-//   template: `
-//     <ngt-mesh *ref="meshRef">
-//       <ngt-box-geometry *args="args"></ngt-box-geometry>
-//       <ng-content></ng-content>
-//     </ngt-mesh>
-//   `,
-//   imports: [NgtArgs, NgtRef],
-//   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-// })
-// export class Box {
-//   @Input() args: ConstructorParameters<typeof BoxGeometry> = [];
-//
-//   readonly meshRef = injectRef<THREE.Mesh>();
-// }
-//
-// @Component({
-//   selector: 'cube',
-//   standalone: true,
-//   template: `
-//     <ngts-box
-//       [position]="position"
-//       [scale]="active ? 1.5 : 1"
-//       (beforeRender)="onBeforeRender($any($event).object)"
-//       (pointerover)="hover = true"
-//       (pointerout)="hover = false"
-//       (click)="active = !active; cubeClick.emit()"
-//     >
-//       <ngt-mesh-normal-material *ngIf="isFun; else noFun"></ngt-mesh-normal-material>
-//       <ng-template #noFun>
-//         <ngt-mesh-basic-material
-//           [color]="hover ? (cubeClick.observed ? 'red' : 'hotpink') : 'orange'"
-//         ></ngt-mesh-basic-material>
-//       </ng-template>
-//     </ngts-box>
-//   `,
-//   imports: [Box, NgIf],
-//   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-// })
-// export class Cube {
-//   @Input() position: NgtVector3 = [0, 0, 0];
-//   @Input() visible = true;
-//   @Input() isFun = false;
-//   @Output() cubeClick = createEventEmitter();
-//
-//   hover = false;
-//   active = false;
-//
-//   onBeforeRender(mesh: THREE.Mesh) {
-//     mesh.rotation.x += 0.01;
-//     mesh.rotation.y += 0.01;
-//   }
-// }
-//
-// @Component({
-//   selector: 'model',
-//   standalone: true,
-//   template: `
-//     <ngt-primitive
-//       *args="[model$ | ngtPush : null]"
-//       scale="0.005"
-//       (beforeRender)="onBeforeRender($any($event).state.delta)"
-//     ></ngt-primitive>
-//   `,
-//   imports: [NgtArgs, NgtPush],
-//   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-// })
-// export class Model {
-//   private mixer?: AnimationMixer;
-//   readonly model$ = injectNgtsGLTFLoader()
-//     .load('/assets/LittlestTokyo.glb')
-//     .pipe(
-//       map((s) => {
-//         this.mixer = new AnimationMixer(s.scene);
-//         this.mixer.clipAction(s.animations[0]).play();
-//         return s.scene;
-//       })
-//     );
-//
-//   onBeforeRender(delta: number) {
-//     if (this.mixer) {
-//       this.mixer.update(delta);
-//     }
-//   }
-// }
-
 import {
   injectNgtStore,
   injectRef,
@@ -277,10 +143,10 @@ export class Model {
 
     <ngt-ambient-light></ngt-ambient-light>
 
-    <cube [visible]="show" [position]="[2.5, -1, 0]"></cube>
+    <cube *ngIf="show" [position]="[2.5, -1, 0]"></cube>
     <cube (cubeClick)="show = !show" [position]="[-2.5, 1, 0]"></cube>
-    <cube [isFun]="true" [position]="[2.5, 1, 0]"></cube>
-    <cube [isFun]="true" [position]="[-2.5, -1, 0]"></cube>
+    <cube [visible]="show" [isFun]="true" [position]="[2.5, 1, 0]"></cube>
+    <cube [isFun]="show" [position]="[-2.5, -1, 0]"></cube>
 
     <model></model>
 
@@ -291,14 +157,14 @@ export class Model {
       (beforeRender)="onBeforeRender($any($event).object)"
     ></ngt-orbit-controls>
   `,
-  imports: [Model, Cube, NgtArgs],
+  imports: [Model, Cube, NgIf, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export default class Scene {
   private readonly store = injectNgtStore();
 
-  readonly camera = this.store.get('camera');
-  readonly domElement = this.store.get('gl', 'domElement');
+  readonly camera = this.store.gett((s) => s.camera);
+  readonly domElement = this.store.gett((s) => s.gl.domElement);
 
   show = true;
 

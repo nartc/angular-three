@@ -71,20 +71,22 @@ export class NgtcDebug implements OnInit, OnDestroy {
   private beforeRenderCleanup?: () => void;
 
   ngOnInit() {
-    this.beforeRenderCleanup = this.store.get('internal').subscribe(
-      () => {
-        if (this.disabled || !this.cannonDebugger) return;
-        const refs = this.physicsStore.get('refs');
-        for (const uuid in this.bodyMap) {
-          getMatrix(refs[uuid]).decompose(v, q, s);
-          this.bodyMap[uuid].position.copy(v as unknown as Vec3);
-          this.bodyMap[uuid].quaternion.copy(q as unknown as CQuarternion);
-        }
-        this.cannonDebugger.update();
-      },
-      0,
-      this.store
-    );
+    this.beforeRenderCleanup = this.store
+      .gett((s) => s.internal)
+      .subscribe(
+        () => {
+          if (this.disabled || !this.cannonDebugger) return;
+          const refs = this.physicsStore.gett((s) => s.refs);
+          for (const uuid in this.bodyMap) {
+            getMatrix(refs[uuid]).decompose(v, q, s);
+            this.bodyMap[uuid].position.copy(v as unknown as Vec3);
+            this.bodyMap[uuid].quaternion.copy(q as unknown as CQuarternion);
+          }
+          this.cannonDebugger.update();
+        },
+        0,
+        this.store
+      );
   }
 
   ngOnDestroy() {

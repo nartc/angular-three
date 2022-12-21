@@ -1,4 +1,4 @@
-import { createInject } from '@angular-three/core';
+import { createInject, NgtComponentStore } from '@angular-three/core';
 import { Injectable, OnDestroy } from '@angular/core';
 import {
   CannonWorkerAPI,
@@ -10,7 +10,6 @@ import {
   Refs,
   Subscriptions,
 } from '@pmndrs/cannon-worker-api';
-import { RxState } from '@rx-angular/state';
 
 export type NgtcCannonEvent = CollideBeginEvent | CollideEndEvent | CollideEvent | RayhitEvent;
 export type NgtcCallbackByType<T extends { type: string }> = {
@@ -34,9 +33,13 @@ export interface NgtcPhysicsState {
 }
 
 @Injectable()
-export class NgtcPhysicsStore extends RxState<NgtcPhysicsState> implements OnDestroy {
+export class NgtcPhysicsStore extends NgtComponentStore<NgtcPhysicsState> implements OnDestroy {
   constructor() {
     super();
+  }
+
+  override initialize() {
+    super.initialize();
     this.set({
       bodies: {},
       events: {},
@@ -44,10 +47,6 @@ export class NgtcPhysicsStore extends RxState<NgtcPhysicsState> implements OnDes
       scaleOverrides: {},
       subscriptions: {},
     });
-  }
-
-  init(inputs: CannonWorkerProps) {
-    this.set({ worker: new CannonWorkerAPI(inputs) });
   }
 }
 

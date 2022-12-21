@@ -59,7 +59,7 @@ export function applyProps<TInstance extends object>(
 
   // Filter equals, events and reserved props
   const localState = instanceLocalState(instance) || ({} as NgtInstanceLocalState);
-  const rootState = localState.store?.get();
+  const rootState = localState.store?.gett();
   const { changes, memoized } = diffProps(instance, props);
   const instanceHandlers = localState.eventCount;
 

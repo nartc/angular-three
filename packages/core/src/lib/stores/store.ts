@@ -272,9 +272,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
       });
 
       this.isInit = true;
-
       this.resize();
-      this.invalidate();
     }
   }
 
@@ -453,6 +451,8 @@ export class NgtStore extends NgtComponentStore<NgtState> {
     if (!this.get((s) => s.ready)) {
       this.set({ ready: true });
     }
+
+    this.invalidate();
   }
 
   private resize() {
