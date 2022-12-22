@@ -5,22 +5,16 @@
     {
       "files": ["*.ts"],
       "rules": {
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "type": "attribute",
-            "prefix": "angularThree",
-            "style": "camelCase"
-          }
-        ],
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "angular-three",
-            "style": "kebab-case"
-          }
-        ]
+        "@angular-eslint/directive-selector": "off",
+        "@angular-eslint/directive-class-suffix": "off",
+        "@angular-eslint/component-selector": "off",
+        "@angular-eslint/component-class-suffix": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/no-non-null-assertion": "off"
       },
       "extends": [
         "plugin:@nrwl/nx/angular",
