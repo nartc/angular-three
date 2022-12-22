@@ -1,6 +1,7 @@
 import {
   Component,
   ContentChild,
+  Directive,
   ElementRef,
   EmbeddedViewRef,
   Input,
@@ -29,18 +30,27 @@ const privateKeys = [
   'advance',
   'size',
   'viewport',
+  'addInteraction',
+  'removeInteraction'
 ] as const;
 type PrivateKeys = typeof privateKeys[number];
 
 export interface NgtPortalInputs {
   container: ElementRef<THREE.Object3D> | THREE.Object3D;
+  camera: ElementRef<THREE.Camera> | THREE.Camera;
   state: Partial<
     Omit<NgtState, PrivateKeys> & {
-      events: Pick<NgtEventManager<any>, 'enabled' | 'priority' | 'compute' | 'connected'>;
+      events: Partial<Pick<NgtEventManager<any>, 'enabled' | 'priority' | 'compute' | 'connected'>>;
       size: NgtSize;
     }
   >;
 }
+
+@Directive({
+  selector: 'ng-template[ngtPortalContent]',
+  standalone: true,
+})
+export class NgtPortalContent {}
 
 @Component({
   selector: 'ngt-portal[container]',
@@ -53,11 +63,15 @@ export class NgtPortal extends NgtComponentStore<NgtPortalInputs> implements OnI
     this.set({ container });
   }
 
+  @Input() set camera(camera: NgtPortalInputs['camera']) {
+    this.set({ camera });
+  }
+
   @Input() set state(state: NgtPortalInputs['state']) {
     this.set({ state });
   }
 
-  @ContentChild(TemplateRef, { static: true })
+  @ContentChild(NgtPortalContent, { read: TemplateRef, static: true })
   portalContentTemplate!: TemplateRef<unknown>;
 
   @ViewChild('portalContentAnchor', { read: ViewContainerRef, static: true })
@@ -72,42 +86,44 @@ export class NgtPortal extends NgtComponentStore<NgtPortalInputs> implements OnI
   private portalContentView?: EmbeddedViewRef<unknown>;
 
   ngOnInit() {
-    const previousState = this.parentStore.gett();
-    const inputsState = this.get();
-
-    const { events, size, ...restInputsState } = inputsState.state;
-
-    const containerState = inputsState.container;
-    const container = is.ref(containerState) ? containerState.nativeElement : containerState;
-
-    this.portalStore.set({
-      ...previousState,
-      scene: container as Scene,
-      raycaster: this.raycaster,
-      pointer: this.pointer,
-      previousStore: this.parentStore,
-      events: { ...previousState.events, ...(events || {}) },
-      size: { ...previousState.size, ...(size || {}) },
-      ...restInputsState,
-      get: this.portalStore.gett.bind(this.portalStore),
-      set: this.portalStore.set.bind(this.portalStore),
-      select: this.portalStore.select.bind(this.portalStore),
-      setEvents: (events) =>
-        this.portalStore.set((state) => ({ ...state, events: { ...state.events, ...events } })),
-    });
-
-    this.effect<NgtState>(
-      tap((previous) => this.portalStore.set((state) => this.inject(previous, state)))
-    )(this.parentStore.state$);
-
     requestAnimationFrame(() => {
-      this.portalStore.set((injectState) => this.inject(this.parentStore.gett(), injectState));
-    });
+      const previousState = this.parentStore.get();
+      const inputsState = this.get();
 
-    this.portalContentView = this.portalContentAnchor.createEmbeddedView(
-      this.portalContentTemplate
-    );
-    this.portalContentView.detectChanges();
+      const { events, size, ...restInputsState } = inputsState.state || {};
+
+      const containerState = inputsState.container;
+      const container = is.ref(containerState) ? containerState.nativeElement : containerState;
+
+      this.portalStore.set({
+        ...previousState,
+        scene: container as Scene,
+        raycaster: this.raycaster,
+        pointer: this.pointer,
+        previousStore: this.parentStore,
+        events: { ...previousState.events, ...(events || {}) },
+        size: { ...previousState.size, ...(size || {}) },
+        ...restInputsState,
+        get: this.portalStore.get.bind(this.portalStore),
+        set: this.portalStore.set.bind(this.portalStore),
+        select: this.portalStore.select.bind(this.portalStore),
+        setEvents: (events) =>
+          this.portalStore.set((state) => ({ ...state, events: { ...state.events, ...events } })),
+      });
+
+      this.effect<NgtState>(
+        tap((previous) => this.portalStore.set((state) => this.inject(previous, state)))
+      )(this.parentStore.state$);
+
+      requestAnimationFrame(() => {
+        this.portalStore.set((injectState) => this.inject(this.parentStore.get(), injectState));
+      });
+
+      this.portalContentView = this.portalContentAnchor.createEmbeddedView(
+        this.portalContentTemplate
+      );
+      this.portalContentView.detectChanges();
+    });
   }
 
   override ngOnDestroy() {
@@ -130,7 +146,7 @@ export class NgtPortal extends NgtComponentStore<NgtPortalInputs> implements OnI
     });
 
     const inputs = this.get();
-    const { size, events, ...restInputsState } = inputs.state;
+    const { size, events, ...restInputsState } = inputs.state || {};
 
     let viewport = undefined;
     if (injectState && size) {

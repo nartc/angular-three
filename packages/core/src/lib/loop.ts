@@ -95,14 +95,14 @@ export function createLoop<TCanvas>(roots: Map<TCanvas, NgtComponentStore<NgtSta
 
     // Render all roots
     for (const root of roots.values()) {
-      state = root.gett();
+      state = root.get();
       // If the frameloop is invalidated, do not run another frame
       if (
         state.internal.active &&
         (state.frameloop === 'always' || state.internal.frames > 0) &&
         !state.gl.xr?.isPresenting
       ) {
-        repeat += render(timestamp, root.gett());
+        repeat += render(timestamp, root.get());
       }
     }
 
@@ -121,7 +121,7 @@ export function createLoop<TCanvas>(roots: Map<TCanvas, NgtComponentStore<NgtSta
   }
 
   function invalidate(state?: NgtState, frames = 1): void {
-    if (!state) return roots.forEach((root) => invalidate(root.gett(), frames));
+    if (!state) return roots.forEach((root) => invalidate(root.get(), frames));
     if (state.gl.xr?.isPresenting || !state.internal.active || state.frameloop === 'never') return;
     // Increase frames, do not go higher than 60
     state.internal.frames = Math.min(60, state.internal.frames + frames);
@@ -139,7 +139,7 @@ export function createLoop<TCanvas>(roots: Map<TCanvas, NgtComponentStore<NgtSta
     frame?: XRFrame
   ): void {
     if (runGlobalEffects) flushGlobalEffects('before', timestamp);
-    if (!state) for (const root of roots.values()) render(timestamp, root.gett());
+    if (!state) for (const root of roots.values()) render(timestamp, root.get());
     else render(timestamp, state, frame);
     if (runGlobalEffects) flushGlobalEffects('after', timestamp);
   }

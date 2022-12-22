@@ -102,7 +102,7 @@ export class NgtStore extends NgtComponentStore<NgtState> {
       };
 
       this.set({
-        get: this.gett.bind(this),
+        get: this.get.bind(this),
         set: this.set.bind(this),
         ready: false,
 
@@ -252,12 +252,14 @@ export class NgtStore extends NgtComponentStore<NgtState> {
           this.set({ frameloop });
         },
         addInteraction: (interaction: Object3D) => {
-          this.set((state) => ({
-            internal: {
-              ...state.internal,
-              interaction: [...state.internal.interaction, interaction],
-            },
-          }));
+          this.set((state) => {
+              return ({
+                  internal: {
+                      ...state.internal,
+                      interaction: [...state.internal.interaction, interaction],
+                  },
+              });
+          });
         },
         removeInteraction: (uuid: string) => {
           this.set((state) => ({

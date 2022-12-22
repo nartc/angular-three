@@ -33,7 +33,7 @@ function releaseInternalPointerCapture(
 }
 
 export function removeInteractivity(store: NgtComponentStore<NgtState>, object: THREE.Object3D) {
-  const { internal } = store.gett();
+  const { internal } = store.get();
   // Removes every trace of an object from the data store
   internal.interaction = internal.interaction.filter((o) => o !== object);
   internal.initialHits = internal.initialHits.filter((o) => o !== object);
@@ -51,7 +51,7 @@ export function removeInteractivity(store: NgtComponentStore<NgtState>, object: 
 export function createEvents(store: NgtComponentStore<NgtState>) {
   /** Calculates delta */
   function calculateDistance(event: NgtDomEvent) {
-    const { internal } = store.gett();
+    const { internal } = store.get();
     const dx = event.offsetX - internal.initialClick[0];
     const dy = event.offsetY - internal.initialClick[1];
     return Math.round(Math.sqrt(dx * dx + dy * dy));
@@ -68,14 +68,14 @@ export function createEvents(store: NgtComponentStore<NgtState>) {
   }
 
   function intersect(event: NgtDomEvent, filter?: (objects: THREE.Object3D[]) => THREE.Object3D[]) {
-    const state = store.gett();
+    const state = store.get();
     const duplicates = new Set<string>();
     const intersections: NgtIntersection[] = [];
     // Allow callers to eliminate event objects
     const eventsObjects = filter ? filter(state.internal.interaction) : state.internal.interaction;
     // Reset all raycaster cameras to undefined
     for (let i = 0; i < eventsObjects.length; i++) {
-      const instanceState = instanceLocalState(eventsObjects[i])?.store.gett();
+      const instanceState = instanceLocalState(eventsObjects[i])?.store.get();
       if (instanceState) {
         instanceState.raycaster.camera = undefined as unknown as THREE.Camera;
       }
@@ -87,13 +87,13 @@ export function createEvents(store: NgtComponentStore<NgtState>) {
     }
 
     function handleRaycast(obj: THREE.Object3D<THREE.Event>) {
-      const state = instanceLocalState(obj)?.store.gett();
+      const state = instanceLocalState(obj)?.store.get();
       // Skip event handling when noEvents is set, or when the raycasters camera is null
       if (!state || !state.events.enabled || state.raycaster.camera === null) return [];
 
       // When the camera is undefined we have to call the event layers update function
       if (state.raycaster.camera === undefined) {
-        state.events.compute?.(event, store, state.previousStore);
+        state.events.compute?.(event, instanceLocalState(obj)!.store, state.previousStore);
         // If the camera is still undefined we have to skip this layer entirely
         if (state.raycaster.camera === undefined)
           state.raycaster.camera = null as unknown as THREE.Camera;
@@ -109,8 +109,8 @@ export function createEvents(store: NgtComponentStore<NgtState>) {
       .flatMap(handleRaycast)
       // Sort by event priority and distance
       .sort((a, b) => {
-        const aState = instanceLocalState(a.object)?.store.gett();
-        const bState = instanceLocalState(b.object)?.store.gett();
+        const aState = instanceLocalState(a.object)?.store.get();
+        const bState = instanceLocalState(b.object)?.store.get();
         if (!aState || !bState) return 0;
         return bState.events.priority - aState.events.priority || a.distance - b.distance;
       })
@@ -157,12 +157,12 @@ export function createEvents(store: NgtComponentStore<NgtState>) {
     delta: number,
     callback: (event: NgtThreeEvent<NgtDomEvent>) => void
   ) {
-    const rootState = store.gett();
+    const rootState = store.get();
     // If anything has been found, forward it to the event listeners
     if (intersections.length) {
       const innerState = { stopped: false };
       for (const hit of intersections) {
-        const state = instanceLocalState(hit.object)?.store.gett() || rootState;
+        const state = instanceLocalState(hit.object)?.store.get() || rootState;
         const { raycaster, pointer, camera, internal } = state;
         const unprojectedPoint = new Vector3(pointer.x, pointer.y, 0).unproject(camera);
         const hasPointerCapture = (id: number) =>
@@ -265,7 +265,7 @@ export function createEvents(store: NgtComponentStore<NgtState>) {
   }
 
   function cancelPointer(intersections: NgtIntersection[]) {
-    const { internal } = store.gett();
+    const { internal } = store.get();
     for (const hoveredObj of internal.hovered.values()) {
       // When no objects were hit or the hovered object wasn't found underneath the cursor
       // we call onPointerOut and delete the object from the hovered-elements map
@@ -307,7 +307,7 @@ export function createEvents(store: NgtComponentStore<NgtState>) {
         return () => cancelPointer([]);
       case 'lostpointercapture':
         return (event: NgtDomEvent) => {
-          const { internal } = store.gett();
+          const { internal } = store.get();
           if ('pointerId' in event && !internal.capturedMap.has(event.pointerId)) {
             // If the object event interface had onLostPointerCapture, we'd call it here on every
             // object that's getting removed.
@@ -319,7 +319,7 @@ export function createEvents(store: NgtComponentStore<NgtState>) {
 
     // Any other pointer goes here ...
     return function handleEvent(event: NgtDomEvent) {
-      const { onPointerMissed, internal } = store.gett();
+      const { onPointerMissed, internal } = store.get();
 
       // prepareRay(event)
       internal.lastEvent = event;

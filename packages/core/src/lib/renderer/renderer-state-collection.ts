@@ -114,18 +114,21 @@ export class NgtRendererStateCollection {
     if (!childState) throw new Error(`[NGT] No child state found`);
 
     // while getting the state for parent and child, we also process the root Scene here
-    if (parentState.threeType === 'scene') {
+    if (parentState.threeType === 'scene' || parentState.threeType === 'portal') {
       if (!parentState.instance) {
         const oldParentState = parentState;
-        // switch parent
-        parent = this.processRootScene(parent);
-        // assign root Scene on the old root DOM
-        oldParentState.instance = parent;
+        const scene = this.processRootScene(parent);
+        if (scene) {
+          // switch parent
+          parent = scene;
+          // assign root Scene on the old root DOM
+          oldParentState.instance = parent;
+        }
       } else {
         parent = parentState.instance;
       }
       // switch parentState
-      parentState = this.getThree(parent);
+      parentState = this.getThree(parent) || parentState;
     }
 
     return {
@@ -192,8 +195,11 @@ export class NgtRendererStateCollection {
   }
 
   tryGetCdrFromDom(dom: HTMLElement) {
-    const domState = this.getDom(dom);
-    if (!domState) return undefined;
+    let domState = this.getDom(dom);
+    if (!domState) {
+      // dom is undefined, we'll fallback to the root DOM
+      domState = this.domMap.values().next().value;
+    }
     let cdr = domState.debugNodeFactory?.().injector.get(ChangeDetectorRef, null);
     if (!cdr && domState.parentDom) {
       const parentDomState = this.getDom(domState.parentDom);
@@ -258,14 +264,19 @@ export class NgtRendererStateCollection {
     return nonInjectedDirective;
   }
 
-  private processRootScene(parent: HTMLElement) {
+  processRootScene(parent: HTMLElement) {
     const parentState = this.getDom(parent);
     if (!parentState) throw new Error(`[NGT] no parent state found`);
     const parentDebugNode = parentState.debugNodeFactory?.();
     if (!parentDebugNode) throw new Error(`[NGT] no parent debug node found`);
     const store = parentDebugNode.injector.get(NgtStore, null);
     if (!store) throw new Error(`[NGT] no store found on parent debug node`);
-    const scene = store.gett((s) => s.scene);
+    const scene = store.get((s) => s.scene);
+    // if the parent is portal but scene is undefined, it's ok.
+    if (!scene) {
+      if (parentState.threeType === 'portal') return;
+      throw new Error(`[NGT] no root scene found. render stops`);
+    }
     this.addThree(scene, {
       threeType: 'scene',
       dom: parent,

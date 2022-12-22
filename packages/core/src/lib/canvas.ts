@@ -45,7 +45,7 @@ export class NgtCanvasContainer {
 }
 
 @Directive({
-  selector: '[ngtCanvasContent]',
+  selector: 'ng-template[ngtCanvasContent]',
   standalone: true,
 })
 export class NgtCanvasContent {}
@@ -213,7 +213,7 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
     this.store.set((s) => ({ internal: { ...s.internal, active: true } }));
 
     const inputs = this.get();
-    const state = this.store.gett();
+    const state = this.store.get();
 
     // Connect to eventsource
     state.events.connect?.(
@@ -226,7 +226,7 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
     if (inputs.eventPrefix) {
       state.setEvents({
         compute: (event, store) => {
-          const innerState = store.gett();
+          const innerState = store.get();
           const x = event[(inputs.eventPrefix + 'X') as keyof NgtDomEvent] as number;
           const y = event[(inputs.eventPrefix + 'Y') as keyof NgtDomEvent] as number;
           innerState.pointer.set(
@@ -239,7 +239,7 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
     }
 
     if (this.created.observed) {
-      this.created.emit(this.store.gett());
+      this.created.emit(this.store.get());
       this.cdr.detectChanges();
     }
 

@@ -27,7 +27,7 @@ export function injectNgtsFBO<T extends boolean = false>(
   const params$ = isObservable(params) ? params : of(params);
 
   params$.pipe(takeUntil(destroy$)).subscribe(({ width, height, settings }) => {
-    const { gl, size, viewport } = store.gett();
+    const { gl, size, viewport } = store.get();
     const _width = typeof width === 'number' ? width : size.width * viewport.dpr;
     const _height = typeof height === 'number' ? height : size.height * viewport.dpr;
     const _settings = (typeof width === 'number' ? settings : (width as FBOSettings)) || {};

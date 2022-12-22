@@ -40,7 +40,7 @@ export function createPointerEvents(
     priority: 1,
     enabled: true,
     compute: (event: NgtDomEvent, root: NgtComponentStore<NgtState>) => {
-      const state = root.gett();
+      const state = root.get();
       // https://github.com/pmndrs/react-three-fiber/pull/782
       // Events trigger outside of canvas when moved, use offsetX/Y by default and allow overrides
       state.pointer.set(
@@ -55,7 +55,7 @@ export function createPointerEvents(
       return handlers;
     }, {}) as NgtEvents,
     connect: (target: HTMLElement) => {
-      const state = store.gett();
+      const state = store.get();
       state.events.disconnect?.();
 
       state.setEvents({ connected: target });
@@ -68,7 +68,7 @@ export function createPointerEvents(
       );
     },
     disconnect: () => {
-      const { events, setEvents } = store.gett();
+      const { events, setEvents } = store.get();
       if (events.connected) {
         Object.entries(events.handlers ?? {}).forEach(
           ([eventName, eventHandler]: [string, EventListener]) => {

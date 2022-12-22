@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { filter, MonoTypeOperatorFunction, Observable, tap } from 'rxjs';
+import { filter, MonoTypeOperatorFunction, Observable, take, tap } from 'rxjs';
 import { NgtAnyRecord } from '../types';
 
 /**
@@ -104,7 +104,21 @@ export class NgtComponentStore<
   // exposing get (as gett) since THREE is imperative.
   // we need to imperatively get state sometimes for usages in animation loop
   // we also bind "this" instance so we don't have to bind it later
-  readonly gett = this.get.bind(this);
+  override get(): TInternalState;
+  override get<R>(projector: (s: TInternalState) => R): R;
+  override get<R>(projector?: (s: TInternalState) => R): R | TInternalState {
+    if (!this['isInitialized']) {
+      this.set({});
+    }
+    let value: R | TInternalState;
+
+    this['stateSubject$'].pipe(take(1)).subscribe((state: TInternalState) => {
+      value = projector ? projector(state) : state;
+    });
+
+    return value!;
+  }
+
   readonly set = this.patchState.bind(this);
 
   /**

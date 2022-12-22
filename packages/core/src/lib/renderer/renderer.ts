@@ -100,6 +100,16 @@ export class NgtRenderer implements Renderer2 {
     parent = rest.parent;
     newChild = rest.child;
 
+    console.log('appendChild -->', {
+      parent,
+      newChild,
+      parentState,
+      parentNodeType,
+      parentThreeType,
+      childNodeType,
+      childThreeType,
+    });
+
     // handling a DOM child. If its parent is a THREE instance, we'll store that information
     // we also store the parentDom as well
     if (childNodeType === 'dom') {
@@ -238,13 +248,15 @@ export class NgtRenderer implements Renderer2 {
   }
 
   createElement(name: string, namespace?: string | null): any {
-    if (name === SPECIAL_TAGS.PORTAL) {
-      // TODO: handle portal
-      return this.delegateRenderer.createElement(name, namespace);
-    }
-
     const { injectedRef, injectedArgs, store, attach } =
       this.rendererStateCollection.getInitPhaseStates();
+
+    if (name === SPECIAL_TAGS.PORTAL) {
+      // TODO: handle portal
+      const element = this.delegateRenderer.createElement(name, namespace);
+      this.rendererStateCollection.addDom(element, { threeType: 'portal', ref: injectedRef! });
+      return element;
+    }
 
     // handle injectedRef
     if (injectedRef && injectedRef.nativeElement) {
@@ -312,6 +324,16 @@ export class NgtRenderer implements Renderer2 {
       this.rendererStateCollection.getState(refChild);
     const { state, nodeType } = this.rendererStateCollection.getState(newChild);
 
+    console.log('insertBefore -->', {
+      parent,
+      newChild,
+      refChild,
+      refState,
+      refNodeType,
+      state,
+      nodeType,
+    });
+
     // little funsie, we "enhance" the comment's value so we know what the structural directive is for
     if (refNodeType === 'comment') {
       if (nodeType === 'three') {
@@ -328,7 +350,14 @@ export class NgtRenderer implements Renderer2 {
       if (nodeType === 'dom') {
         this.appendChild(parentThree || parentDom, newChild, true);
       } else if (nodeType === 'three') {
-        this.appendChild(parentDom || parentThree, newChild, true);
+        const { state: parentState } = this.rendererStateCollection.getState(parentThree);
+        if (parentState.parentDom === parentDom) {
+          this.appendChild(parentThree, newChild, true);
+        } else {
+          this.appendChild(parentDom || parentThree, newChild, true);
+        }
+      } else {
+        this.appendChild(parentDom, newChild, true);
       }
 
       return;
@@ -397,7 +426,7 @@ export class NgtRenderer implements Renderer2 {
         // beforeRender is special event, we'll handle it here
         // TODO: what happens if both wrapper and three have beforeRender
         return localState.store
-          .gett((s) => s.internal)
+          .get((s) => s.internal)
           .subscribe(
             (state) => callback({ state, object: instance }),
             localState.priority || 0,
@@ -438,14 +467,14 @@ export class NgtRenderer implements Renderer2 {
       // but only add the instance (target) to the interaction array (so that it is handled by the EventManager with Raycast)
       // the first time eventCount is incremented
       if (localState.eventCount === 1 && instance['raycast']) {
-        localState.store.gett((s) => s.addInteraction)(instance);
+        localState.store.get((s) => s.addInteraction)(instance);
       }
 
       // clean up the event listener by removing the target from the interaction array
       return () => {
         const localState = instanceLocalState(instance);
         if (localState && localState.eventCount) {
-          localState.store.gett((s) => s.removeInteraction)(instance['uuid']);
+          localState.store.get((s) => s.removeInteraction)(instance['uuid']);
         }
       };
     }
@@ -458,6 +487,23 @@ export class NgtRenderer implements Renderer2 {
     // RendererState because NgtRenderer doesn't handle that comment specifically
     try {
       const { state } = this.rendererStateCollection.getState(node);
+
+      if (state.parentDom) {
+        const { state: parentState, threeType: parentThreeType } =
+          this.rendererStateCollection.getState(state.parentDom);
+        if (parentThreeType === 'portal' && !parentState.instance) {
+          // we can maybe try to get the portal scene here again?
+          const scene = this.rendererStateCollection.processRootScene(
+            parentState.dom as HTMLElement
+          );
+          if (scene) {
+            state.parent = scene;
+            parentState.instance = scene;
+            return this.parentNode(node);
+          }
+          return state.parentDom;
+        }
+      }
 
       // if a comment have both parent and parentDom, returns as an Array. We handle array in removeChild and insertBefore
       if (state.parent && state.parentDom) {

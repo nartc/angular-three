@@ -180,7 +180,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
   }
 
   queueMicrotask(() => {
-    const { events, refs, worker } = store.gett();
+    const { events, refs, worker } = store.get();
 
     if (!ref?.nativeElement) {
       ref.nativeElement = new Object3D() as TObject;
@@ -246,7 +246,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
   });
 
   const api = () => {
-    const { scaleOverrides, subscriptions, worker } = store.gett();
+    const { scaleOverrides, subscriptions, worker } = store.get();
 
     const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
       const op: SetOpName<T> = `set${NgtPhysicsUtils.capitalize(type)}`;

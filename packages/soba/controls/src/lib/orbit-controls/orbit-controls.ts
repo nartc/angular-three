@@ -75,7 +75,7 @@ export class NgtsOrbitControls extends NgtComponentStore implements OnInit {
   private setControls() {
     this.effect(
       tap(() => {
-        const camera = this.get((s) => s['camera']) || this.store.gett((s) => s.camera);
+        const camera = this.get((s) => s['camera']) || this.store.get((s) => s.camera);
         this.controlsRef.nativeElement = new OrbitControls(camera);
       })
     )(this.store.select((s) => s.camera, { debounce: true }));
@@ -85,7 +85,7 @@ export class NgtsOrbitControls extends NgtComponentStore implements OnInit {
     this.effect<void>(
       tapEffect(() =>
         this.store
-          .gett((s) => s.internal)
+          .get((s) => s.internal)
           .subscribe(
             () => {
               if (this.controlsRef.nativeElement && this.controlsRef.nativeElement.enabled) {
@@ -102,7 +102,7 @@ export class NgtsOrbitControls extends NgtComponentStore implements OnInit {
   private connectElement() {
     this.effect(
       tapEffect(() => {
-        const { gl, events } = this.store.gett();
+        const { gl, events } = this.store.get();
         const domElement = this.get((s) => s['domElement']) || events.connected || gl.domElement;
         if (this.controlsRef.nativeElement) {
           this.controlsRef.nativeElement.connect(domElement);
@@ -131,13 +131,12 @@ export class NgtsOrbitControls extends NgtComponentStore implements OnInit {
       tapEffect(() => {
         const makeDefault = this.get((s) => s['makeDefault']);
         if (makeDefault) {
-          const oldControls = this.store.gett((s) => s.controls);
+          const oldControls = this.store.get((s) => s.controls);
           this.store.set({ controls: this.controlsRef.nativeElement });
           return () => {
             this.store.set({ controls: oldControls });
           };
         }
-        return;
       })
     )(
       this.select(
@@ -152,7 +151,7 @@ export class NgtsOrbitControls extends NgtComponentStore implements OnInit {
   private setEvents() {
     this.effect(
       tapEffect(() => {
-        const { invalidate, performance } = this.store.gett();
+        const { invalidate, performance } = this.store.get();
         const regress = this.get((s) => s['regress']);
 
         const changeCallback: (e: THREE.Event) => void = (e) => {

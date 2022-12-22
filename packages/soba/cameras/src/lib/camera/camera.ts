@@ -86,7 +86,7 @@ export abstract class NgtsCamera<TCamera extends NgtCamera>
       tapEffect(() => {
         const makeDefault = this.get((s) => s['makeDefault']);
         if (makeDefault) {
-          const { camera: oldCamera } = this.store.gett();
+          const { camera: oldCamera } = this.store.get();
           this.store.set({ camera: this.cameraRef.nativeElement });
           return () => {
             this.store.set({ camera: oldCamera });

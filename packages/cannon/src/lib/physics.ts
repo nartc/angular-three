@@ -177,7 +177,7 @@ export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements
   }
 
   override ngOnDestroy() {
-    const worker = this.physicsStore.gett((s) => s.worker);
+    const worker = this.physicsStore.get((s) => s.worker);
     if (worker) {
       worker.terminate();
       (worker as unknown as { removeAllListeners: NgtAnyFunction }).removeAllListeners();
@@ -191,11 +191,11 @@ export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements
     this.effect<void>(
       tapEffect(() =>
         this.store
-          .gett((s) => s.internal)
+          .get((s) => s.internal)
           .subscribe(
             ({ delta }) => {
               const { isPaused, maxSubSteps, stepSize } = this.get();
-              const worker = this.physicsStore.gett((s) => s.worker);
+              const worker = this.physicsStore.get((s) => s.worker);
               if (isPaused || !worker) return;
               timeSinceLastCalled += delta;
               worker.step({ maxSubSteps, timeSinceLastCalled, stepSize: stepSize! });
@@ -211,7 +211,7 @@ export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements
   private connectWorker() {
     this.effect<CannonWorkerAPI>(
       tap(() => {
-        const worker = this.physicsStore.gett((s) => s.worker);
+        const worker = this.physicsStore.get((s) => s.worker);
         worker.connect();
         worker.init();
 
@@ -233,7 +233,7 @@ export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements
   private updateWorkerProp(prop: keyof NgtcPhysicsInputs) {
     return this.effect<NgtcPhysicsInputs[typeof prop]>(
       tap((value) => {
-        const worker = this.physicsStore.gett((s) => s.worker);
+        const worker = this.physicsStore.get((s) => s.worker);
         if (worker) {
           (worker as NgtAnyRecord)[prop] = value;
         }
@@ -247,7 +247,7 @@ export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements
     target,
     ...rest
   }: WorkerCollideEvent['data']) {
-    const { events, refs } = this.physicsStore.gett();
+    const { events, refs } = this.physicsStore.get();
     const cb = events[target]?.collide;
 
     if (cb) {
@@ -261,7 +261,7 @@ export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements
   }
 
   private collideBeginHandler({ bodyA, bodyB }: WorkerCollideBeginEvent['data']) {
-    const { events, refs } = this.physicsStore.gett();
+    const { events, refs } = this.physicsStore.get();
 
     const cbA = events[bodyA]?.collideBegin;
 
@@ -286,7 +286,7 @@ export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements
   }
 
   private collideEndHandler({ bodyA, bodyB }: WorkerCollideEndEvent['data']) {
-    const { events, refs } = this.physicsStore.gett();
+    const { events, refs } = this.physicsStore.get();
 
     const cbA = events[bodyA]?.collideEnd;
 
@@ -317,8 +317,8 @@ export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements
     positions,
     quaternions,
   }: WorkerFrameMessage['data']) {
-    const { bodies, subscriptions, refs, scaleOverrides } = this.physicsStore.gett();
-    const invalidate = this.store.gett((s) => s.invalidate);
+    const { bodies, subscriptions, refs, scaleOverrides } = this.physicsStore.get();
+    const invalidate = this.store.get((s) => s.invalidate);
     const shouldInvalidate = this.get((s) => s.shouldInvalidate);
 
     for (let i = 0; i < uuids.length; i++) {
@@ -355,7 +355,7 @@ export class NgtsPhysics extends NgtComponentStore<NgtcPhysicsInputs> implements
   }
 
   private rayhitHandler({ body, ray: { uuid, ...rayRest }, ...rest }: WorkerRayhitEvent['data']) {
-    const { events, refs } = this.physicsStore.gett();
+    const { events, refs } = this.physicsStore.get();
     const cb = events[uuid]?.rayhit;
 
     if (cb) {
