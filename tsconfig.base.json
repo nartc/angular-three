@@ -18,6 +18,7 @@
       "@angular-three/cannon": ["packages/cannon/src/index.ts"],
       "@angular-three/cannon/debug": ["packages/cannon/debug/src/index.ts"],
       "@angular-three/cannon/services": ["packages/cannon/services/src/index.ts"],
+      "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/core-two": ["packages/core-two/src/index.ts"],
       "@angular-three/soba": ["packages/soba/src/index.ts"],
       "@angular-three/soba/cameras": ["packages/soba/cameras/src/index.ts"],
