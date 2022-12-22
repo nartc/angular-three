@@ -5,7 +5,7 @@ import {
   NgtCamera,
   NgtComponentStore,
   tapEffect,
-} from '@angular-three/core';
+} from '@angular-three/core-two';
 import { injectNgtsFBO } from '@angular-three/soba/misc';
 import { Directive, Input, OnInit } from '@angular/core';
 import { map, tap } from 'rxjs';

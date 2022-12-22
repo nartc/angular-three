@@ -1,4 +1,4 @@
-import { NgtCanvas, NgtCanvasContent } from '@angular-three/core';
+import { NgtCanvas, NgtCanvasContent } from '@angular-three/core-two';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 

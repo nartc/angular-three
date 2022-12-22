@@ -7,7 +7,7 @@ import {
   NgtScene,
   NgtVector3,
   NgtWrapper,
-} from '@angular-three/core';
+} from '@angular-three/core-two';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import { NgIf } from '@angular/common';

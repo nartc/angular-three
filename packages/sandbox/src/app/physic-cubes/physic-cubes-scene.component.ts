@@ -1,7 +1,7 @@
 import { NgtsPhysics } from '@angular-three/cannon';
 import { NgtcDebug } from '@angular-three/cannon/debug';
 import { injectBox, injectPlane } from '@angular-three/cannon/services';
-import { NgtArgs, NgtRef, NgtScene } from '@angular-three/core';
+import { NgtArgs, NgtRef, NgtScene } from '@angular-three/core-two';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { Triplet } from '@pmndrs/cannon-worker-api';
 
@@ -55,7 +55,7 @@ export class Cube {
 @Component({
   standalone: true,
   template: `
-   <ngt-color *args="['skyblue']" attach="background"></ngt-color>
+    <ngt-color *args="['skyblue']" attach="background"></ngt-color>
 
     <ngt-ambient-light></ngt-ambient-light>
     <ngt-directional-light [position]="10" castShadow>

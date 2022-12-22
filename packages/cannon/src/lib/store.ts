@@ -1,4 +1,4 @@
-import { createInject, NgtComponentStore } from '@angular-three/core';
+import { createInject, NgtComponentStore } from '@angular-three/core-two';
 import { Injectable, OnDestroy } from '@angular/core';
 import {
   CannonWorkerAPI,

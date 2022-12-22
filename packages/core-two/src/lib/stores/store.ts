@@ -253,12 +253,12 @@ export class NgtStore extends NgtComponentStore<NgtState> {
         },
         addInteraction: (interaction: Object3D) => {
           this.set((state) => {
-              return ({
-                  internal: {
-                      ...state.internal,
-                      interaction: [...state.internal.interaction, interaction],
-                  },
-              });
+            return {
+              internal: {
+                ...state.internal,
+                interaction: [...state.internal.interaction, interaction],
+              },
+            };
           });
         },
         removeInteraction: (uuid: string) => {

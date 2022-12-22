@@ -1,4 +1,4 @@
-import { injectNgtDestroy, injectNgtStore, injectRef } from '@angular-three/core';
+import { injectNgtDestroy, injectNgtStore, injectRef } from '@angular-three/core-two';
 import { isObservable, Observable, of, takeUntil } from 'rxjs';
 import { HalfFloatType, LinearFilter, WebGLRenderTarget } from 'three';
 

@@ -137,7 +137,10 @@ export interface NgtEventHandlers {
   wheel?: (event: NgtThreeEvent<WheelEvent>) => void;
 }
 
-export type NgtFilterFunction = (items: Intersection[], store: NgtComponentStore<NgtState>) => Intersection[];
+export type NgtFilterFunction = (
+  items: Intersection[],
+  store: NgtComponentStore<NgtState>
+) => Intersection[];
 
 export type NgtComputeFunction = (
   event: NgtDomEvent,

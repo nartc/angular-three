@@ -13,7 +13,7 @@ import {
   NgtVector3,
   prepare,
   tapEffect,
-} from '@angular-three/core';
+} from '@angular-three/core-two';
 import { NgtsOrthographicCamera } from '@angular-three/soba/cameras';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectCameraRaycast } from '@angular-three/soba/misc';

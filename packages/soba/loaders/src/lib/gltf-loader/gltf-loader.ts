@@ -1,4 +1,4 @@
-import { injectNgtLoader, NgtObjectMap } from '@angular-three/core';
+import { injectNgtLoader, NgtObjectMap } from '@angular-three/core-two';
 import { Observable } from 'rxjs';
 import * as THREE from 'three';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

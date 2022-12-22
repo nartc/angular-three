@@ -31,7 +31,7 @@ const privateKeys = [
   'size',
   'viewport',
   'addInteraction',
-  'removeInteraction'
+  'removeInteraction',
 ] as const;
 type PrivateKeys = typeof privateKeys[number];
 

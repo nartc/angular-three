@@ -9,7 +9,7 @@ import {
   NgtVector3,
   NgtWrapper,
   tapEffect,
-} from '@angular-three/core';
+} from '@angular-three/core-two';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit, Output } from '@angular/core';
 import { tap } from 'rxjs';
 import { OrbitControls } from 'three-stdlib';

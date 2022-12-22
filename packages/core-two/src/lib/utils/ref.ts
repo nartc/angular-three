@@ -13,11 +13,9 @@ import { injectNgtDestroy } from './destroy';
 
 type Subscribe<T> = (callback: (current: T, previous: T | null) => void) => Subscription;
 
-export type NgtInjectedRef<T> = ElementRef<T> & {subscribe: Subscribe<T>; $: Observable<T>};
+export type NgtInjectedRef<T> = ElementRef<T> & { subscribe: Subscribe<T>; $: Observable<T> };
 
-export function injectRef<T>(
-  initialValue: ElementRef<T> | (T | null) = null
-): NgtInjectedRef<T> {
+export function injectRef<T>(initialValue: ElementRef<T> | (T | null) = null): NgtInjectedRef<T> {
   let ref = new ElementRef<T>(initialValue as T);
   if (initialValue instanceof ElementRef) {
     ref = initialValue;

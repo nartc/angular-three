@@ -1,4 +1,4 @@
-import { extend, NgtPush, NgtRef, NgtWrapper } from '@angular-three/core';
+import { extend, NgtPush, NgtRef, NgtWrapper } from '@angular-three/core-two';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, ContentChild, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { Group, OrthographicCamera } from 'three';

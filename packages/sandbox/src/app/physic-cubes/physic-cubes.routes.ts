@@ -1,4 +1,4 @@
-import { extend, provideNgtRenderer } from '@angular-three/core';
+import { extend, provideNgtRenderer } from '@angular-three/core-two';
 import { Route } from '@angular/router';
 import {
   AmbientLight,

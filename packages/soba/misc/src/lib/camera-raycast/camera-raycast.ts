@@ -1,4 +1,4 @@
-import { applyProps, injectNgtStore, is, NgtInjectedRef } from '@angular-three/core';
+import { applyProps, injectNgtStore, is, NgtInjectedRef } from '@angular-three/core-two';
 import { ElementRef } from '@angular/core';
 import { take } from 'rxjs';
 import { Raycaster } from 'three';

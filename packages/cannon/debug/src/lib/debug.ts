@@ -1,5 +1,5 @@
 import { injectNgtcPhysicsStore } from '@angular-three/cannon';
-import { createInjectionToken, injectNgtStore, NgtArgs } from '@angular-three/core';
+import { createInjectionToken, injectNgtStore, NgtArgs } from '@angular-three/core-two';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnDestroy, OnInit } from '@angular/core';
 import { BodyProps, BodyShapeType, propsToBody } from '@pmndrs/cannon-worker-api';
 import { Body, Quaternion as CQuarternion, Vec3, World } from 'cannon-es';

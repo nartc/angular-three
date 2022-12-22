@@ -5,7 +5,7 @@ import {
   NgtAnyRecord,
   NgtComponentStore,
   tapEffect,
-} from '@angular-three/core';
+} from '@angular-three/core-two';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   CannonWorkerAPI,
