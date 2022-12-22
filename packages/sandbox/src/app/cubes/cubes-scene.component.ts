@@ -1,5 +1,5 @@
 import {
-  injectNgtStore,
+  createEventEmitter,
   injectRef,
   NgtArgs,
   NgtPush,
@@ -8,39 +8,12 @@ import {
   NgtVector3,
   NgtWrapper,
 } from '@angular-three/core';
+import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import { NgIf } from '@angular/common';
-import {
-  ChangeDetectorRef,
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  EventEmitter,
-  inject,
-  Input,
-  Output,
-} from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, Output } from '@angular/core';
 import { map } from 'rxjs';
 import { AnimationMixer, BoxGeometry, Group } from 'three';
-import { OrbitControls } from 'three-stdlib';
-
-function createEventEmitter<T>(): EventEmitter<T> {
-  const cdr = inject(ChangeDetectorRef);
-  const parentCdr = inject(ChangeDetectorRef, { skipSelf: true, optional: true });
-
-  const eventEmitter = new EventEmitter<T>();
-
-  const originalEmit = eventEmitter.emit.bind(eventEmitter);
-
-  eventEmitter.emit = (...args: Parameters<EventEmitter<T>['emit']>) => {
-    originalEmit(...args);
-    cdr.detectChanges();
-    if (parentCdr) {
-      parentCdr.detectChanges();
-    }
-  };
-
-  return eventEmitter;
-}
 
 @NgtWrapper()
 @Component({
@@ -152,27 +125,13 @@ export class Model {
 
     <model></model>
 
-    <ngt-orbit-controls
-      *args="[camera, domElement]"
-      enableDamping
-      autoRotate
-      (beforeRender)="onBeforeRender($any($event).object)"
-    ></ngt-orbit-controls>
+    <ngts-orbit-controls></ngts-orbit-controls>
   `,
-  imports: [Model, Cube, NgIf, NgtArgs],
+  imports: [Model, Cube, NgIf, NgtArgs, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export default class Scene {
-  private readonly store = injectNgtStore();
-
-  readonly camera = this.store.gett((s) => s.camera);
-  readonly domElement = this.store.gett((s) => s.gl.domElement);
-
   show = true;
-
-  onBeforeRender(controls: OrbitControls) {
-    controls.update();
-  }
 
   onGroupBeforeRender(group: Group) {
     group.rotation.z += 0.01;

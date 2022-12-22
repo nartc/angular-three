@@ -23,7 +23,6 @@
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true
   },
-
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

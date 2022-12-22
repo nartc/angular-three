@@ -20,7 +20,7 @@ export function injectNgtsFBO<T extends boolean = false>(
 ) {
   const store = injectNgtStore();
   const targetRef = injectRef<THREE.WebGLRenderTarget>();
-  const destroy$ = injectNgtDestroy(() => {
+  const [destroy$, cdr] = injectNgtDestroy(() => {
     targetRef.nativeElement?.dispose();
   });
   const params = paramsFactory({});
@@ -52,6 +52,8 @@ export function injectNgtsFBO<T extends boolean = false>(
     if (samples) {
       targetRef.nativeElement.samples = samples;
     }
+
+    cdr.detectChanges();
   });
 
   return targetRef;

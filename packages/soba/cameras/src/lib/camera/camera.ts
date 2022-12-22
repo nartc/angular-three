@@ -8,7 +8,7 @@ import {
 } from '@angular-three/core';
 import { injectNgtsFBO } from '@angular-three/soba/misc';
 import { Directive, Input, OnInit } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 @Directive()
 export abstract class NgtsCamera<TCamera extends NgtCamera>
@@ -38,7 +38,9 @@ export abstract class NgtsCamera<TCamera extends NgtCamera>
   protected readonly store = injectNgtStore();
   readonly cameraRef = injectRef<TCamera>();
   readonly fboRef = injectNgtsFBO(() =>
-    this.select((s) => s['resolution']).pipe(map((resolution) => ({ width: resolution })))
+    this.select((s) => s['resolution'], { debounce: true }).pipe(
+      map((resolution) => ({ width: resolution }))
+    )
   );
 
   override initialize() {
@@ -71,9 +73,10 @@ export abstract class NgtsCamera<TCamera extends NgtCamera>
       })
     )(
       this.select(
-        this.cameraRef as unknown as Observable<TCamera>,
+        this.cameraRef.$,
         this.select((s) => s['manual']),
-        defaultProjector
+        defaultProjector,
+        { debounce: true }
       )
     );
   }
@@ -92,9 +95,10 @@ export abstract class NgtsCamera<TCamera extends NgtCamera>
       })
     )(
       this.select(
-        this.cameraRef as unknown as Observable<TCamera>,
+        this.cameraRef.$,
         this.select((s) => s['makeDefault']),
-        defaultProjector
+        defaultProjector,
+        { debounce: true }
       )
     );
   }

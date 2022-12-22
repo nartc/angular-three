@@ -120,7 +120,7 @@ export class NgtComponentStore<
   /**
    * A utility class method to get a state on the template as imperative value
    */
-  readKey<TKey extends keyof TInternalState & string>(key: TKey): TInternalState[TKey] {
+  getKey<TKey extends keyof TInternalState & string>(key: TKey): TInternalState[TKey] {
     return this.get((s) => s[key]);
   }
 

@@ -9,7 +9,6 @@ import {
   MeshBasicMaterial,
   MeshNormalMaterial,
 } from 'three';
-import { OrbitControls } from 'three-stdlib';
 
 extend({
   Group,
@@ -17,7 +16,6 @@ extend({
   BoxGeometry,
   MeshBasicMaterial,
   MeshNormalMaterial,
-  OrbitControls,
   Color,
   AmbientLight,
 });

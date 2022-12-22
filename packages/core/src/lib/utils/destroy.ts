@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, inject, ViewRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-export function injectNgtDestroy(destroyCallback?: () => void) {
+export function injectNgtDestroy(
+  destroyCallback?: () => void
+): [Observable<void>, ChangeDetectorRef] {
   try {
     const cdr = inject(ChangeDetectorRef) as ViewRef;
     const destroy$ = new Subject<void>();
@@ -14,11 +16,11 @@ export function injectNgtDestroy(destroyCallback?: () => void) {
       });
     });
 
-    return destroy$.asObservable();
+    return [destroy$.asObservable(), cdr];
   } catch (e) {
     console.warn(
       `[NGT] injectNgtDestroy must be used in a Component/Directive constructor context`
     );
-    return null! as Observable<void>;
+    return [] as unknown as [Observable<void>, ChangeDetectorRef];
   }
 }
