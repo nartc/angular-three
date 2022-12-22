@@ -631,6 +631,14 @@ export class NgtRenderer implements Renderer2 {
       applyProps(instance, { [name]: value });
       return;
     }
+
+    if (nodeType === 'dom' && threeType === 'wrapper') {
+      // at this point, we don't have the instance yet. let's queue it then rerun setProperty
+      queueMicrotask(() => {
+        this.setProperty(el, name, value);
+      });
+      return;
+    }
     this.delegateRenderer.setProperty(el, name, value);
   }
 

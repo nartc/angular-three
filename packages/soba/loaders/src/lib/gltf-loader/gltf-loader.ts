@@ -1,5 +1,4 @@
-import { createInject, injectNgtLoader, NgtObjectMap } from '@angular-three/core';
-import { Injectable } from '@angular/core';
+import { injectNgtLoader, NgtObjectMap } from '@angular-three/core';
 import { Observable } from 'rxjs';
 import * as THREE from 'three';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -41,22 +40,15 @@ function _extensions(
   };
 }
 
-@Injectable({ providedIn: 'root' })
-export class NgtsGLTFLoader {
-  private readonly loader = injectNgtLoader();
-
-  load<TInput extends string | string[]>(
-    path: TInput,
-    useDraco: boolean | string = true,
-    useMeshOpt = true,
-    extensions?: (loader: GLTFLoader) => void
-  ): Observable<TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap> {
-    return this.loader.use(
-      GLTFLoader,
-      path,
-      _extensions(useDraco, useMeshOpt, extensions)
-    ) as Observable<TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap>;
-  }
+export function injectNgtsGLTFLoader<TInput extends string | string[]>(
+  path: TInput,
+  useDraco: boolean | string = true,
+  useMeshOpt = true,
+  extensions?: (loader: GLTFLoader) => void
+): Observable<TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap> {
+  return injectNgtLoader(
+    GLTFLoader,
+    path,
+    _extensions(useDraco, useMeshOpt, extensions)
+  ) as Observable<TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap>;
 }
-
-export const injectNgtsGLTFLoader = createInject(NgtsGLTFLoader);

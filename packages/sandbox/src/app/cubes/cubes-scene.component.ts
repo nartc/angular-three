@@ -90,15 +90,13 @@ export class Cube {
 })
 export class Model {
   private mixer?: AnimationMixer;
-  readonly model$ = injectNgtsGLTFLoader()
-    .load('/assets/LittlestTokyo.glb')
-    .pipe(
-      map((s) => {
-        this.mixer = new AnimationMixer(s.scene);
-        this.mixer.clipAction(s.animations[0]).play();
-        return s.scene;
-      })
-    );
+  readonly model$ = injectNgtsGLTFLoader('/assets/LittlestTokyo.glb').pipe(
+    map((s) => {
+      this.mixer = new AnimationMixer(s.scene);
+      this.mixer.clipAction(s.animations[0]).play();
+      return s.scene;
+    })
+  );
 
   onBeforeRender(delta: number) {
     if (this.mixer) {
@@ -125,7 +123,7 @@ export class Model {
 
     <model></model>
 
-    <ngts-orbit-controls></ngts-orbit-controls>
+    <ngts-orbit-controls [autoRotate]="true"></ngts-orbit-controls>
   `,
   imports: [Model, Cube, NgIf, NgtArgs, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

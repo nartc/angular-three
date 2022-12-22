@@ -78,7 +78,6 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly host = inject(ElementRef) as ElementRef<HTMLElement>;
   private readonly store = injectNgtStore({ self: true });
-  private readonly loader = injectNgtLoader();
 
   override initialize() {
     super.initialize();
@@ -261,7 +260,7 @@ export class NgtCanvas extends NgtComponentStore<NgtCanvasInputs> implements OnI
     if (this.glView && !this.glView.destroyed) {
       this.glView.destroy();
     }
-    this.loader.destroy();
+    injectNgtLoader.destroy();
     super.ngOnDestroy();
   }
 }
