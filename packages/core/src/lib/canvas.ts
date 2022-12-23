@@ -19,6 +19,7 @@ import {
 } from '@angular/core';
 import { filter } from 'rxjs';
 import { createPointerEvents } from './events';
+import { provideNgtRenderer } from './renderer/provider';
 import { injectNgtLoader } from './services/loader';
 import { injectNgtResize, NgtResizeResult } from './services/resize';
 import { NgtRxStore } from './stores/rx-store';
@@ -245,11 +246,10 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
 
     this.#glComponentRef = this.glAnchor.createComponent(this.scene, {
       environmentInjector: createEnvironmentInjector(
-        [
-          { provide: NgtStore, useValue: this.#store },
-          { provide: ChangeDetectorRef, useValue: this.#cdr },
-          /* provide renderer */
-        ],
+          [
+
+        provideNgtRenderer(this.#store, this.#cdr)
+          ],
         this.#environmentInjector
       ),
     });
