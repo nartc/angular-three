@@ -77,8 +77,18 @@ export class NgtRxStore<
   TState extends object,
   TInternalState extends object = TState & Record<string, any>
 > extends RxState<TInternalState> {
+  constructor() {
+    super();
+    // set a dummy property so that initial this.get() won't return undefined
+    this.set({ __ngt__dummy__: '__ngt__dummy__' } as TInternalState);
+    this.initialize();
+  }
+
+  protected initialize() {
+    return;
+  }
+
   effect<S>(obs: Observable<S>, sideEffectFn: EffectFn<S>): void {
     return this.hold(obs.pipe(tapEffect(sideEffectFn)));
   }
 }
-
