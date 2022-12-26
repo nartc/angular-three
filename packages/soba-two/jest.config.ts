@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'soba',
+  displayName: 'soba-two',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -9,7 +9,7 @@ export default {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/packages/soba',
+  coverageDirectory: '../../coverage/packages/soba-two',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

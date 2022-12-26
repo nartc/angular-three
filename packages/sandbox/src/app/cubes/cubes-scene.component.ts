@@ -8,8 +8,8 @@ import {
   NgtVector3,
   NgtWrapper,
 } from '@angular-three/core-two';
-import { NgtsOrbitControls } from '@angular-three/soba/controls';
-import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
+import { NgtsOrbitControls } from '@angular-three/soba-two/controls';
+import { injectNgtsGLTFLoader } from '@angular-three/soba-two/loaders';
 import { NgIf } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, Output } from '@angular/core';
 import { map } from 'rxjs';

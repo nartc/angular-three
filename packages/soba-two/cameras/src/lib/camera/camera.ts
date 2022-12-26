@@ -6,7 +6,7 @@ import {
   NgtComponentStore,
   tapEffect,
 } from '@angular-three/core-two';
-import { injectNgtsFBO } from '@angular-three/soba/misc';
+import { injectNgtsFBO } from '@angular-three/soba-two/misc';
 import { Directive, Input, OnInit } from '@angular/core';
 import { map, tap } from 'rxjs';
 

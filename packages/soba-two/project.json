@@ -1,22 +1,22 @@
 {
-  "name": "soba",
+  "name": "soba-two",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "packages/soba/src",
+  "sourceRoot": "packages/soba-two/src",
   "prefix": "ngts",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:package",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "project": "packages/soba/ng-package.json"
+        "project": "packages/soba-two/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "packages/soba/tsconfig.lib.prod.json"
+          "tsConfig": "packages/soba-two/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "packages/soba/tsconfig.lib.json"
+          "tsConfig": "packages/soba-two/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
@@ -25,7 +25,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/soba/jest.config.ts",
+        "jestConfig": "packages/soba-two/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -34,16 +34,16 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "packages/soba/**/*.ts",
-          "packages/soba/**/*.html",
-          "packages/soba/loaders/**/*.ts",
-          "packages/soba/loaders/**/*.html",
-          "packages/soba/cameras/**/*.ts",
-          "packages/soba/cameras/**/*.html",
-          "packages/soba/misc/**/*.ts",
-          "packages/soba/misc/**/*.html",
-          "packages/soba/controls/**/*.ts",
-          "packages/soba/controls/**/*.html"
+          "packages/soba-two/**/*.ts",
+          "packages/soba-two/**/*.html",
+          "packages/soba-two/loaders/**/*.ts",
+          "packages/soba-two/loaders/**/*.html",
+          "packages/soba-two/cameras/**/*.ts",
+          "packages/soba-two/cameras/**/*.html",
+          "packages/soba-two/misc/**/*.ts",
+          "packages/soba-two/misc/**/*.html",
+          "packages/soba-two/controls/**/*.ts",
+          "packages/soba-two/controls/**/*.html"
         ]
       }
     }

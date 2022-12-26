@@ -14,9 +14,9 @@ import {
   prepare,
   tapEffect,
 } from '@angular-three/core-two';
-import { NgtsOrthographicCamera } from '@angular-three/soba/cameras';
-import { NgtsOrbitControls } from '@angular-three/soba/controls';
-import { injectCameraRaycast } from '@angular-three/soba/misc';
+import { NgtsOrthographicCamera } from '@angular-three/soba-two/cameras';
+import { NgtsOrbitControls } from '@angular-three/soba-two/controls';
+import { injectCameraRaycast } from '@angular-three/soba-two/misc';
 import {
   ChangeDetectorRef,
   Component,
