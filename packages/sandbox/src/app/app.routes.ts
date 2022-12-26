@@ -9,7 +9,6 @@ export const appRoutes: Route[] = [
   {
     path: 'cubes',
     loadComponent: () => import('./cubes/cubes.component'),
-    loadChildren: () => import('./cubes/cubes.routes'),
   },
   {
     path: 'physic-cubes',

@@ -136,7 +136,7 @@ export function createEvents(store: NgtRxStore<NgtState>) {
 
     // if the interaction is captured, make all capturing targets part of the intersects
     if ('pointerId' in event && state.internal.capturedMap.has(event.pointerId)) {
-      for (let capturedData of state.internal.capturedMap.get(event.pointerId)!.values()) {
+      for (const capturedData of state.internal.capturedMap.get(event.pointerId)!.values()) {
         if (!duplicates.has(makeId(capturedData.intersection))) {
           intersections.push(capturedData.intersection);
         }
@@ -184,17 +184,17 @@ export function createEvents(store: NgtRxStore<NgtState>) {
         };
 
         // add native event props
-        let extractEventProps: NgtAnyRecord = {};
+        const extractEventProps: NgtAnyRecord = {};
         // This iterates over the event's properties including the inherited ones. Native PointerEvents have most of their props as getters which are inherited, but polyfilled PointerEvents have them all as their own properties (i.e. not inherited). We can't use Object.keys() or Object.entries() as they only return "own" properties; nor Object.getPrototypeOf(event) as that *doesn't* return "own" properties, only inherited ones.
-        for (let prop in event) {
-          let property = event[prop as keyof NgtDomEvent];
+        for (const prop in event) {
+          const property = event[prop as keyof NgtDomEvent];
           // only copy over atomics, leave functions alone as these should be called as event.nativeEvent.fn()
           if (typeof property !== 'function') {
             extractEventProps[prop] = property;
           }
         }
 
-        let raycastEvent: NgtThreeEvent<NgtDomEvent> = {
+        const raycastEvent: NgtThreeEvent<NgtDomEvent> = {
           ...hit,
           ...extractEventProps,
           pointer,
@@ -243,7 +243,7 @@ export function createEvents(store: NgtRxStore<NgtState>) {
             releasePointerCapture,
           } as unknown as EventTarget,
           nativeEvent: event,
-        };
+        } as NgtThreeEvent<NgtDomEvent>;
 
         // call subscribers
         callback(raycastEvent);

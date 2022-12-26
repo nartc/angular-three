@@ -246,10 +246,7 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
 
     this.#glComponentRef = this.glAnchor.createComponent(this.scene, {
       environmentInjector: createEnvironmentInjector(
-          [
-
-        provideNgtRenderer(this.#store, this.#cdr)
-          ],
+        [provideNgtRenderer(this.#store, this.#cdr)],
         this.#environmentInjector
       ),
     });

@@ -1,8 +1,9 @@
 import { Color, ColorManagement, Layers, sRGBEncoding, Texture } from 'three';
 import type { NgtAnyConstructor, NgtAnyFunction, NgtAnyRecord } from '../types';
-import { checkNeedsUpdate, invalidateInstance } from './instance';
+import { invalidateInstance } from './instance';
 import { is } from './is';
 import { getLocalState } from './local-state';
+import { checkNeedsUpdate } from './update';
 
 const DEFAULT = '__default__';
 
@@ -32,7 +33,7 @@ export function diffProps<TInstance extends object>(
   }
 
   const memoized: NgtAnyRecord = { ...props };
-  if (localState.memoized && localState.memoized['args']) {
+  if (localState?.memoized && localState.memoized['args']) {
     memoized['args'] = localState.memoized['args'];
   }
 
@@ -48,9 +49,9 @@ export function applyProps<TInstance extends object>(
 
   // filter equals, events , and reserved props
   const localState = getLocalState(instance);
-  const rootState = localState.store.get();
+  const rootState = localState?.store.get();
   const { changes, memoized } = diffProps(instance, props);
-  const instanceHandlers = localState.eventCount;
+  const instanceHandlers = localState?.eventCount;
 
   if (localState) {
     localState.memoized = memoized;
@@ -115,7 +116,7 @@ export function applyProps<TInstance extends object>(
         }
 
         // auto-convert srgb
-        if (!ColorManagement && !rootState.linear && isColor) {
+        if (!ColorManagement && !rootState?.linear && isColor) {
           targetProp.convertSRGBToLinear();
         }
       }
@@ -124,7 +125,7 @@ export function applyProps<TInstance extends object>(
     else {
       (currentInstance as NgtAnyRecord)[key] = value;
       // auto-convert srgb textures
-      if (!rootState.linear && (currentInstance as NgtAnyRecord)[key] instanceof Texture) {
+      if (!rootState?.linear && (currentInstance as NgtAnyRecord)[key] instanceof Texture) {
         ((currentInstance as NgtAnyRecord)[key] as NgtAnyRecord)['encoding'] = sRGBEncoding;
       }
     }
@@ -134,7 +135,7 @@ export function applyProps<TInstance extends object>(
   }
 
   if (
-    localState.parent &&
+    localState?.parent &&
     rootState.internal &&
     (instance as NgtAnyRecord)['raycast'] &&
     instanceHandlers !== localState.eventCount

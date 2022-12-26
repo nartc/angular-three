@@ -350,9 +350,11 @@ export interface NgtInstanceLocalState {
   memoized?: NgtAnyRecord;
   isThree?: boolean;
   priority?: number;
-  wrapper: {
+  compound: {
     props: NgtAnyRecord;
     applyFirst: boolean;
+    isCompound: boolean;
+    shouldApplyFirst: (propName: string) => boolean;
   };
 }
 
@@ -491,6 +493,5 @@ export interface NgtCanvasInputs {
 }
 
 export interface NgtHasValidateForRenderer {
-  store: NgtComponentStore<NgtState>;
   validate: () => boolean;
 }

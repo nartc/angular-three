@@ -10,7 +10,7 @@ export function getLocalState<TInstance extends object = NgtAnyRecord>(
 }
 
 export function invalidateInstance<TInstance extends object>(instance: TInstance) {
-  const state = getLocalState(instance).store.get();
+  const state = getLocalState(instance)?.store.get();
   if (state && state?.internal?.frames === 0) state.invalidate();
   checkUpdate(instance);
 }
@@ -42,7 +42,13 @@ export function prepare<TInstance extends object = NgtAnyRecord>(
       addNonObject: (object) => nonObjects.next([...nonObjects.value, object]),
       removeNonObject: (object) =>
         nonObjects.next(nonObjects.value.filter((obj) => obj !== object)),
-      wrapper: { applyFirst: true },
+      compound: {
+        applyFirst: true,
+        isCompound: false,
+        shouldApplyFirst(propName) {
+          return this.props && propName in this.props && !this.applyFirst;
+        },
+      },
       ...rest,
     } as NgtInstanceLocalState;
   }

@@ -14,4 +14,3 @@ export const NGT_CATALOGUE = new InjectionToken<Record<string, NgtAnyConstructor
 );
 
 export const injectNgtCatalogue = createInject(NGT_CATALOGUE);
-
