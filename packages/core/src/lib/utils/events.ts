@@ -1,7 +1,6 @@
 import { Event, Intersection, Object3D, Vector3 } from 'three';
 import { NgtRxStore } from '../stores/rx-store';
 import type {
-  NgtAnyRecord,
   NgtDomEvent,
   NgtEventHandlers,
   NgtIntersection,
@@ -56,12 +55,12 @@ export function createEvents(store: NgtRxStore<NgtState>) {
 
   /** returns true if an instance has a valid pointer-event registered, this excludes scroll, clicks etc... **/
   function filterPointerEvents(objects: Object3D[]) {
-    return objects.filter((obj) => {
+    return objects.filter((obj) =>
       ['move', 'over', 'enter', 'out', 'leave'].some((name) => {
         const eventName = `pointer${name}` as keyof NgtEventHandlers;
-        return !!getLocalState(obj).handlers?.[eventName];
-      });
-    });
+        return getLocalState(obj).handlers?.[eventName];
+      })
+    );
   }
 
   function intersect(event: NgtDomEvent, filter?: (objects: Object3D[]) => Object3D[]) {
@@ -156,6 +155,7 @@ export function createEvents(store: NgtRxStore<NgtState>) {
     // if anything has been found, forward it to the event listeners
     if (intersections.length) {
       const localState = { stopped: false };
+
       for (const hit of intersections) {
         const state = getLocalState(hit.object).store?.get() || rootState;
         const { raycaster, pointer, camera, internal } = state;
@@ -184,7 +184,7 @@ export function createEvents(store: NgtRxStore<NgtState>) {
         };
 
         // add native event props
-        const extractEventProps: NgtAnyRecord = {};
+        const extractEventProps: any = {};
         // This iterates over the event's properties including the inherited ones. Native PointerEvents have most of their props as getters which are inherited, but polyfilled PointerEvents have them all as their own properties (i.e. not inherited). We can't use Object.keys() or Object.entries() as they only return "own" properties; nor Object.getPrototypeOf(event) as that *doesn't* return "own" properties, only inherited ones.
         for (const prop in event) {
           const property = event[prop as keyof NgtDomEvent];
@@ -236,14 +236,14 @@ export function createEvents(store: NgtRxStore<NgtState>) {
             hasPointerCapture,
             setPointerCapture,
             releasePointerCapture,
-          } as unknown as EventTarget,
+          },
           currentTarget: {
             hasPointerCapture,
             setPointerCapture,
             releasePointerCapture,
-          } as unknown as EventTarget,
+          },
           nativeEvent: event,
-        } as NgtThreeEvent<NgtDomEvent>;
+        };
 
         // call subscribers
         callback(raycastEvent);

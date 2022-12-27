@@ -32,6 +32,7 @@ export function prepare<TInstance extends object = NgtAnyRecord>(
       previousAttach: null,
       store: null,
       parent: null,
+      parentDom: null,
       memoized: {},
       eventCount: 0,
       handlers: {},

@@ -13,7 +13,12 @@ import { NgtAnyConstructor, NgtAnyRecord } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { getLocalState, prepare } from '../utils/instance';
 import { is } from '../utils/is';
-import { NgtRendererState, NgtRendererStateCollection } from './state';
+import {
+  NgtCompoundState,
+  NgtDomState,
+  NgtRendererState,
+  NgtRendererStateCollection,
+} from './state';
 import {
   attachThreeInstances,
   ATTRIBUTES,
@@ -85,9 +90,10 @@ export class NgtRenderer implements Renderer2 {
       this.#seenFirstElement = true;
       const el = this.delegate.createElement(name, namespace);
       this.stateCol.root.dom = el;
+      const sceneLS = getLocalState(this.stateCol.root.scene);
+      sceneLS.parentDom = el;
       return this.stateCol.root.scene;
     }
-
     const { injectedRef, injectedArgs, attach, store } = this.stateCol.getCreationState();
 
     if (name === SPECIAL_DOM_TAG.NGT_PORTAL) {
@@ -155,6 +161,9 @@ export class NgtRenderer implements Renderer2 {
     // THREE parent, THREE Child
     if (pLS && cLS) {
       attachThreeInstances(parent, newChild);
+      if (parent === this.stateCol.root.scene && !cLS.parentDom) {
+        cLS.parentDom = this.stateCol.root.dom;
+      }
       return;
     }
 
@@ -189,8 +198,16 @@ export class NgtRenderer implements Renderer2 {
       }
 
       while (cRS.unprocessedThreeChildren.length) {
-          const unprocessed = cRS.unprocessedThreeChildren.shift();
-          this.appendChild(parent, unprocessed);
+        const unprocessed = cRS.unprocessedThreeChildren.shift();
+        this.appendChild(parent, unprocessed);
+      }
+
+      if (pLS.parentDom) {
+        if (pLS.parentDom && this.stateCol.root.dom) {
+          this.delegate.appendChild(pLS.parentDom, newChild);
+        } else {
+          this.appendChild(pLS.parentDom, newChild);
+        }
       }
 
       return;
@@ -198,12 +215,17 @@ export class NgtRenderer implements Renderer2 {
 
     // DOM parent, THREE child
     if (cLS) {
+      cLS.parentDom = parent;
       const pRS = this.stateCol.get(parent);
-      if (pRS.type === 'compound' && !is.instance(pRS.instance)) {
-        const childLocalState = getLocalState(newChild);
-        if (childLocalState.compound.isCompound) {
-          pRS.instance = newChild;
-        }
+      if (pRS.type === 'compound' && !is.instance(pRS.instance) && cLS.compound.isCompound) {
+        pRS.instance = newChild;
+      }
+
+      if (
+        (pRS.type === 'dom' || (pRS.type === 'compound' && pRS.instance !== newChild)) &&
+        is.object3D(newChild)
+      ) {
+        (pRS as NgtDomState | NgtCompoundState).children.push(newChild);
       }
 
       if (pRS.parent && is.instance(pRS.parent)) {
@@ -218,6 +240,7 @@ export class NgtRenderer implements Renderer2 {
         } else if (gpRS.instance) {
           this.appendChild(gpRS.instance, newChild);
         }
+        return;
       }
 
       if (!pRS.unprocessedThreeChildren.includes(newChild)) {
@@ -264,8 +287,64 @@ export class NgtRenderer implements Renderer2 {
       removeThreeChild(parent, oldChild, true);
       return;
     }
+
+    // DOM parent and DOM child
+    if (!pLS && !cLS) {
+      this.delegate.removeChild(parent, oldChild, isHostElement);
+      return;
+    }
+
+    if (pLS) {
+      const cRS = this.stateCol.get(oldChild);
+      if (pLS.parentDom) {
+        try {
+          this.delegate.removeChild(pLS.parentDom, oldChild, isHostElement);
+        } catch (error) {
+          console.log('error -->', error);
+        }
+      }
+
+      // try to loop through the child (DOM) children
+      const domChildren = (oldChild as HTMLElement).children;
+      let i = domChildren.length - 1;
+      while (i >= 0) {
+        const domChild = domChildren.item(i);
+        if (!domChild) {
+          i--;
+          continue;
+        }
+        const rS = this.stateCol.get(domChild);
+        if (!rS) {
+          i--;
+          continue;
+        }
+
+        if (rS.type === 'compound' && is.instance(rS.instance)) {
+          this.removeChild(parent, rS.instance);
+        }
+
+        if (rS.type === 'dom' || rS.type === 'compound') {
+          this.removeChild(parent, domChild, isHostElement);
+          i--;
+          continue;
+        }
+
+        // <cube><ngts-box>
+        // <cube><ngt-mesh>
+        // Angular Rendere is really tricky, or limited.
+        // We might actually need to go back to render the useless DOM. They don't have any dimensions or styles
+        i--;
+      }
+
+      if ((cRS as NgtAnyRecord)['children']?.length) {
+        for (const child of (cRS as NgtAnyRecord)['children']) {
+          this.removeChild(parent, child, isHostElement);
+        }
+      }
+      return;
+    }
     // TODO: handle other cases
-    this.delegate.removeChild(parent, oldChild, isHostElement);
+    //this.delegate.removeChild(parent, oldChild, isHostElement);
   }
 
   setAttribute(el: any, name: string, value: string, namespace?: string | null | undefined): void {
@@ -313,7 +392,7 @@ export class NgtRenderer implements Renderer2 {
     this.delegate.setAttribute(el, name, value, namespace);
   }
 
-  setProperty(el: any, name: string, value: any): void {
+  setProperty(el: any, name: string, value: any, fromQueue = 0): void {
     const rS = this.stateCol.get(el);
     if (!rS) {
       if (Object.values(ATTRIBUTES).includes(name as typeof ATTRIBUTES[keyof typeof ATTRIBUTES])) {
@@ -342,9 +421,11 @@ export class NgtRenderer implements Renderer2 {
         this.delegate.setProperty(el, name, value);
         return;
       }
-      if (!rS.instance || (rS.instance && !is.instance(rS.instance))) {
+      // TODO: 5 is the maximum time we're queueing this for now.
+      if ((!rS.instance || (rS.instance && !is.instance(rS.instance))) && fromQueue <= 5) {
         queueMicrotask(() => {
-          this.setProperty(el, name, value);
+          // TODO: need a failfast mechanism here, maybe with a counter to prevent infinity loop
+          this.setProperty(el, name, value, fromQueue++);
         });
         return;
       }
@@ -360,6 +441,7 @@ export class NgtRenderer implements Renderer2 {
 
   listen(target: any, eventName: string, callback: (event: any) => boolean | void): () => void {
     const rS = this.stateCol.get(target);
+
     if (rS && rS.type !== 'compound') {
       return this.delegate.listen(target, eventName, callback);
     }

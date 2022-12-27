@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { RxState } from '@rx-angular/state';
-import { MonoTypeOperatorFunction, Observable, tap } from 'rxjs';
+import { MonoTypeOperatorFunction, Observable, startWith, tap } from 'rxjs';
+
+export const startWithUndefined = <T>(): MonoTypeOperatorFunction<T> =>
+  startWith<T>(undefined! as T);
 
 type EffectFn<TValue> = (
   value: TValue
@@ -74,7 +77,7 @@ export function tapEffect<TValue>(effectFn: EffectFn<TValue>): MonoTypeOperatorF
 
 @Injectable()
 export class NgtRxStore<
-  TState extends object,
+  TState extends object = any,
   TInternalState extends object = TState & Record<string, any>
 > extends RxState<TInternalState> {
   constructor() {

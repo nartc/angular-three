@@ -8,7 +8,7 @@ import { is } from '../utils/is';
 
 export const SPECIAL_DOM_TAG = {
   NGT_PORTAL: 'ngt-portal',
-  NGT_PRIMITIVE: 'ngt-primitve',
+  NGT_PRIMITIVE: 'ngt-primitive',
 } as const;
 
 export const ATTRIBUTES = {
@@ -144,6 +144,10 @@ export function processThreeEvent(
         .subscribe((state) => callback({ state, object: instance }), lS.priority || 0, lS.store);
     }
 
+    if (!lS.handlers) {
+      lS.handlers = {};
+    }
+
     // try to get the previous handler. wrapper might have one, the THREE object might also have one with the same name
     const previousHandler = lS.handlers[eventName as keyof typeof lS.handlers];
     // readjust the callback
@@ -152,15 +156,10 @@ export function processThreeEvent(
       callback(event);
     };
 
-    if (!lS.handlers) {
-      lS.handlers = {};
-    }
-
     lS.handlers = {
       ...lS.handlers,
       [eventName]: eventToHandler(updatedCallback, cdr),
     };
-
     //    // if we have eventCount, which means we already setup handlers
     //    if (localState.eventCount) {
     //      // process the event with ChangeDetectorRef

@@ -336,20 +336,33 @@ export interface NgtInstanceLocalState {
   objects: BehaviorSubject<NgtInstanceNode[]>;
   // shortcut to add object to list
   addObject: (instance: NgtInstanceNode) => void;
+  // shortcut to remove object form list
   removeObject: (instance: NgtInstanceNode) => void;
   // shortcut to add non object to list
   addNonObject: (instance: NgtInstanceNode) => void;
+  // short cut to remove non object from list
   removeNonObject: (instanct: NgtInstanceNode) => void;
   parent: NgtInstanceNode | null;
+  // the renderer needs this to append DOM child
+  parentDom: HTMLElement | null;
+  // if this THREE instance is a ngt-primitive
   primitive?: boolean;
+  // if this THREE object has any events bound to it
   eventCount: number;
+  // list of handlers to handle the events
   handlers: Partial<NgtEventHandlers>;
+  // previous args
   args?: unknown[];
+  // attach information so that we can detach as well as reset
   attach?: string[] | NgtAttachFunction;
+  // previously attach information so we can reset as well as clean up
   previousAttach?: unknown | (() => void);
+  // memoized props
   memoized?: NgtAnyRecord;
   isThree?: boolean;
+  // render priority. consumers set this by setting an attribute priority with a number string
   priority?: number;
+  // compound component information; if this instance is being compounded upon
   compound: {
     props: NgtAnyRecord;
     applyFirst: boolean;

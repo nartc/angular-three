@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { filter, MonoTypeOperatorFunction, Observable, take, tap } from 'rxjs';
+import { filter, MonoTypeOperatorFunction, Observable, startWith, take, tap } from 'rxjs';
 import { NgtAnyRecord } from '../types';
 
 /**
@@ -14,6 +14,9 @@ export const defaultProjector = () => ({});
  */
 export const skipFirstUndefined = <T>(skipNull = false): MonoTypeOperatorFunction<T> =>
   filter<T>((value, index) => index > 0 || (skipNull ? value != undefined : value !== undefined));
+
+export const startWithUndefined = <T>(): MonoTypeOperatorFunction<T> =>
+  startWith<T>(undefined! as T);
 
 export const filterFalsy = <T>(): MonoTypeOperatorFunction<T> =>
   filter<T>((value): value is T => !!value);

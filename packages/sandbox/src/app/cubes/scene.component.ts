@@ -1,158 +1,156 @@
-import { extend, injectNgtRef, NgtArgs, NgtRef, NgtRendererFlags } from '@angular-three/core';
-import { NgIf } from '@angular/common';
 import {
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ElementRef,
-  Input,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
+  extend,
+  injectNgtRef,
+  NgtArgs,
+  NgtPush,
+  NgtRef,
+  NgtRendererFlags,
+  NgtVector3,
+} from '@angular-three/core';
+import { NgtsOrbitControls } from '@angular-three/soba/controls';
+import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
+import { NgIf } from '@angular/common';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output } from '@angular/core';
+import { map } from 'rxjs';
 import {
   AmbientLight,
+  AnimationMixer,
   BoxGeometry,
   Color,
   Group,
   Mesh,
   MeshBasicMaterial,
-  MeshLambertMaterial,
-  MeshStandardMaterial,
-  TorusGeometry,
+  MeshNormalMaterial,
 } from 'three';
 
 extend({
   Mesh,
-  MeshBasicMaterial,
   BoxGeometry,
-  MeshStandardMaterial,
-  MeshLambertMaterial,
-  TorusGeometry,
-  Group,
+  MeshBasicMaterial,
+  MeshNormalMaterial,
   AmbientLight,
   Color,
+  Group,
 });
 
 @Component({
-  selector: 'box',
+  selector: 'ngts-box',
   standalone: true,
   template: `
-    <ngt-mesh *ref="ref" ngtCompound>
+    <ngt-mesh ngtCompound *ref="ref">
       <ngt-box-geometry *args="args"></ngt-box-geometry>
       <ng-content></ng-content>
     </ngt-mesh>
   `,
-  imports: [NgtArgs, NgtRef],
+  imports: [NgtRef, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Box {
   static [NgtRendererFlags.COMPOUND] = true;
+  @Input() ref = injectNgtRef<Mesh>();
   @Input() args: ConstructorParameters<typeof BoxGeometry> = [];
-  @Input() ref: ElementRef<Mesh> = injectNgtRef<Mesh>();
 }
 
 @Component({
   selector: 'cube',
   standalone: true,
   template: `
-    <box [ref]="ref">
-      <ngt-mesh-basic-material color="red"></ngt-mesh-basic-material>
-    </box>
+    <ngts-box
+      [ref]="meshRef"
+      [position]="position"
+      [visible]="visible"
+      [scale]="active ? 1.5 : 1"
+      (click)="active = !active; cubeClick.emit()"
+      (pointerover)="hover = true"
+      (pointerout)="hover = false"
+      (beforeRender)="onBeforeRender()"
+    >
+      <ngt-mesh-normal-material *ngIf="isFun; else noFun"></ngt-mesh-normal-material>
+      <ng-template #noFun>
+        <ngt-mesh-basic-material
+          [color]="hover ? (cubeClick.observed ? 'red' : 'hotpink') : 'orange'"
+        ></ngt-mesh-basic-material>
+      </ng-template>
+    </ngts-box>
   `,
-  imports: [Box],
-  schemas: [NO_ERRORS_SCHEMA],
+  imports: [Box, NgIf],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Cube {
-  readonly ref = injectNgtRef<Mesh>();
+  @Input() position: NgtVector3 = [0, 0, 0];
+  @Input() isFun = false;
+  @Input() visible = true;
+  @Output() cubeClick = new EventEmitter();
+
+  hover = false;
+  active = false;
+
+  readonly meshRef = injectNgtRef<Mesh>();
+
+  onBeforeRender() {
+    if (this.meshRef.nativeElement) {
+      this.meshRef.nativeElement.rotation.x += 0.01;
+      this.meshRef.nativeElement.rotation.y += 0.01;
+    }
+  }
 }
 
 @Component({
-  selector: 'center',
+  selector: 'model',
   standalone: true,
   template: `
-    <ngt-group ngtCompound>
-      <ngt-group>
-        <ngt-group *ref="ref">
-          <ng-content></ng-content>
-        </ngt-group>
-      </ngt-group>
-    </ngt-group>
+    <ngt-primitive
+      *args="[model$ | ngtPush : null]"
+      scale="0.005"
+      (beforeRender)="onBeforeRender($any($event).state.delta)"
+    ></ngt-primitive>
   `,
-  imports: [NgtRef],
+  imports: [NgtArgs, NgtPush],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class Center {
-  static [NgtRendererFlags.COMPOUND] = true;
-  @Input() ref: ElementRef<Group> = injectNgtRef<Group>();
+export class Model {
+  #mixer?: AnimationMixer;
+  readonly model$ = injectNgtsGLTFLoader('/assets/LittlestTokyo.glb').pipe(
+    map((s) => {
+      this.#mixer = new AnimationMixer(s.scene);
+      this.#mixer.clipAction(s.animations[0]).play();
+      return s.scene;
+    })
+  );
+
+  onBeforeRender(delta: number) {
+    if (this.#mixer) {
+      this.#mixer.update(delta);
+    }
+  }
 }
 
 @Component({
-  selector: 'two-cubes',
-  standalone: true,
-  template: `
-    <cube></cube>
-    <cube></cube>
-    <center *ngIf="true">
-      <cube></cube>
-    </center>
-  `,
-  imports: [Center, Cube, NgIf],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-})
-export class TwoCubes {}
-
-@Component({
+  selector: 'cubes-scene',
   standalone: true,
   template: `
     <ngt-color *args="['skyblue']" attach="background"></ngt-color>
-    <ngt-mesh>
-      <ngt-torus-geometry></ngt-torus-geometry>
-      <ngt-mesh-lambert-material></ngt-mesh-lambert-material>
-    </ngt-mesh>
 
-    <box>
-      <ngt-mesh-basic-material></ngt-mesh-basic-material>
-    </box>
+    <ngt-ambient-light></ngt-ambient-light>
 
-    <box>
-      <ngt-mesh-standard-material *ngIf="true"></ngt-mesh-standard-material>
-    </box>
-
-    <cube></cube>
-
-    <ngt-group>
-      <box>
-        <ngt-mesh-standard-material></ngt-mesh-standard-material>
-      </box>
+    <ngt-group (beforeRender)="onBeforeRender($any($event).object)">
+      <cube *ngIf="show" [position]="[2.5, -1, 0]"></cube>
+      <cube (cubeClick)="show = !show" [position]="[-2.5, 1, 0]"></cube>
+      <cube [visible]="show" [isFun]="true" [position]="[2.5, 1, 0]"></cube>
+      <cube [isFun]="show" [position]="[-2.5, -1, 0]"></cube>
     </ngt-group>
 
-    <center>
-      <box>
-        <ngt-mesh-basic-material></ngt-mesh-basic-material>
-      </box>
-    </center>
+    <model></model>
 
-    <ngt-group *ngIf="true">
-      <box>
-        <ngt-mesh-basic-material></ngt-mesh-basic-material>
-      </box>
-    </ngt-group>
-
-    <center *ngIf="true">
-      <box *ngIf="true">
-        <ngt-mesh-basic-material *ngIf="true"></ngt-mesh-basic-material>
-      </box>
-    </center>
-
-    <box *ngIf="true">
-      <ngt-mesh-standard-material *ngIf="true"></ngt-mesh-standard-material>
-      <cube *ngIf="true"></cube>
-      <box>
-        <ngt-mesh-lambert-material></ngt-mesh-lambert-material>
-      </box>
-    </box>
-
-    <two-cubes></two-cubes>
+    <ngts-orbit-controls [autoRotate]="true"></ngts-orbit-controls>
   `,
-  imports: [Box, NgIf, Center, Cube, TwoCubes, NgtArgs],
+  imports: [Cube, NgIf, NgtArgs, NgtsOrbitControls, Model],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class Scene {}
+export class Scene {
+  show = true;
+
+  onBeforeRender(group: Group) {
+    group.rotation.z += 0.01;
+  }
+}

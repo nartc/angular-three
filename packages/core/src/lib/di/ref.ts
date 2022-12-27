@@ -3,9 +3,7 @@ import {
   BehaviorSubject,
   distinctUntilChanged,
   filter,
-  map,
   Observable,
-  pairwise,
   Subscription,
   takeUntil,
 } from 'rxjs';
@@ -24,19 +22,22 @@ export function injectNgtRef<T>(
     ref = initialValue;
   }
 
-  const ref$ = new BehaviorSubject<T>(ref.nativeElement);
+  let lastValue = ref.nativeElement;
+  const ref$ = new BehaviorSubject<T>(lastValue);
   const [destroy$, cdr] = injectNgtDestroy(() => {
     ref$.complete();
   });
 
-  const obs$ = ref$.asObservable().pipe(distinctUntilChanged(), pairwise(), takeUntil(destroy$));
+  const obs$ = ref$.asObservable().pipe(distinctUntilChanged(), takeUntil(destroy$));
 
   const subscribe: Subscribe<T> = (callback) => {
-    return obs$.subscribe(([previous, current]) => callback(current, previous));
+    return obs$.subscribe((current) => {
+      callback(current, lastValue);
+      lastValue = current;
+    });
   };
 
   const $ = obs$.pipe(
-    map(([, curr]) => curr),
     filter((s) => !!s),
     takeUntil(destroy$)
   );
@@ -51,6 +52,7 @@ export function injectNgtRef<T>(
       if (p === 'nativeElement' && target[p] !== newValue) {
         ref$.next(newValue);
         cdr.detectChanges();
+        lastValue = target[p];
         return Reflect.set(target, p, newValue, receiver);
       }
       return Reflect.set(target, p, newValue, receiver);

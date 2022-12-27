@@ -1,1 +1,1 @@
-export * from './lib/soba.module';
+export default void 0;

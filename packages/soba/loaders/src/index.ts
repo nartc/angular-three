@@ -1,1 +1,1 @@
-export const greeting = 'Hello World!';
+export * from './lib/gltf-loader/gltf-loader';

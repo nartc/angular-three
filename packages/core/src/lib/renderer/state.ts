@@ -34,13 +34,19 @@ export interface NgtCompoundState extends Omit<NgtRendererState, 'type'> {
   type: 'compound';
   inputs: string[];
   cleanUps: Set<() => void>;
+  children: NgtInstanceNode[];
+}
+
+export interface NgtDomState extends Omit<NgtRendererState, 'type'> {
+  type: 'dom';
+  children: NgtInstanceNode[];
 }
 
 export class NgtRendererStateCollection {
   private readonly commentMap = new Map<Comment, NgtRendererState<Comment>>();
   private readonly portalMap = new Map<HTMLElement, NgtRendererState>();
   private readonly compoundMap = new Map<HTMLElement, NgtCompoundState>();
-  private readonly domMap = new Map<HTMLElement, NgtRendererState>();
+  private readonly domMap = new Map<HTMLElement, NgtDomState>();
 
   readonly #root: NgtRendererRoot;
 
@@ -77,6 +83,9 @@ export class NgtRendererStateCollection {
       if (!state.unprocessedThreeChildren?.length) {
         state.unprocessedThreeChildren = oldState.unprocessedThreeChildren;
       }
+      if (!state.children) {
+        state.children = oldState.children;
+      }
       this.domMap.delete(compound);
     }
     const compoundState = {
@@ -95,10 +104,10 @@ export class NgtRendererStateCollection {
   }
 
   addDom(dom: HTMLElement, state: Partial<Omit<NgtRendererState, 'type' | 'dispose'>>) {
-    return this.#internalAdd(this.domMap, dom, { ...state, type: 'dom' });
+    return this.#internalAdd(this.domMap, dom, { ...state, type: 'dom', children: [] });
   }
 
-  get(obj: any): NgtRendererState<Comment> | NgtRendererState | NgtCompoundState {
+  get(obj: any): NgtRendererState<Comment> | NgtRendererState | NgtDomState | NgtCompoundState {
     return (this.commentMap.get(obj) ||
       this.domMap.get(obj) ||
       this.compoundMap.get(obj) ||
