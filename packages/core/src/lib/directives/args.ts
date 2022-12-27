@@ -14,42 +14,42 @@ import { createInject } from '../utils/di';
   standalone: true,
 })
 export class NgtArgs implements NgtHasValidateForRenderer {
-  private readonly templateRef = inject(TemplateRef);
-  private readonly vcr = inject(ViewContainerRef);
-  private view?: EmbeddedViewRef<unknown>;
+  readonly #templateRef = inject(TemplateRef);
+  readonly #vcr = inject(ViewContainerRef);
+  #view?: EmbeddedViewRef<unknown>;
 
-  private injectedArgs: any[] = [];
-  private injected = false;
+  #injectedArgs: any[] = [];
+  #injected = false;
   shouldCreateView = true;
 
   @Input() set args(args: any[] | null) {
     if (args == null || !Array.isArray(args)) return;
     if (args.length === 1 && args[0] === null) return;
-    this.injected = false;
-    this.injectedArgs = args;
+    this.#injected = false;
+    this.#injectedArgs = args;
     if (this.shouldCreateView) {
-      this.createView();
+      this.#createView();
     }
   }
 
   get args() {
-    if (!this.injected && this.injectedArgs.length) {
-      this.injected = true;
-      return this.injectedArgs;
+    if (!this.#injected && this.#injectedArgs.length) {
+      this.#injected = true;
+      return this.#injectedArgs;
     }
     return null;
   }
 
   validate() {
-    return !this.injected && !!this.injectedArgs.length;
+    return !this.#injected && !!this.#injectedArgs.length;
   }
 
-  private createView() {
-    if (this.view && !this.view.destroyed) {
-      this.view.destroy();
+  #createView() {
+    if (this.#view && !this.#view.destroyed) {
+      this.#view.destroy();
     }
-    this.view = this.vcr.createEmbeddedView(this.templateRef);
-    this.view.detectChanges();
+    this.#view = this.#vcr.createEmbeddedView(this.#templateRef);
+    this.#view.detectChanges();
   }
 }
 

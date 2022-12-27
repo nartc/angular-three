@@ -16,48 +16,48 @@ import { injectNgtArgs, NgtArgs } from './args';
   hostDirectives: [NgtArgs],
 })
 export class NgtAttachFn implements NgtHasValidateForRenderer {
-  private readonly ngtArgs = injectNgtArgs({ host: true });
+  readonly #ngtArgs = injectNgtArgs({ host: true });
 
-  private readonly templateRef = inject(TemplateRef);
-  private readonly vcr = inject(ViewContainerRef);
-  private view?: EmbeddedViewRef<unknown>;
+  readonly #templateRef = inject(TemplateRef);
+  readonly #vcr = inject(ViewContainerRef);
+  #view?: EmbeddedViewRef<unknown>;
 
-  private injectedAttachFn?: NgtAttachFunction;
-  private injected = false;
+  #injectedAttachFn?: NgtAttachFunction;
+  #injected = false;
 
   constructor() {
-    this.ngtArgs.shouldCreateView = false;
+    this.#ngtArgs.shouldCreateView = false;
   }
 
   @Input() set attachFn(inputs: NgtAttachFunction | [NgtAttachFunction, any[]] | null) {
     if (!inputs) return;
     const [attachFn, args] = Array.isArray(inputs) ? inputs : [inputs, undefined];
     if (args) {
-      this.ngtArgs.args = args;
+      this.#ngtArgs.args = args;
     }
-    this.injected = false;
-    this.injectedAttachFn = attachFn;
-    this.createView();
+    this.#injected = false;
+    this.#injectedAttachFn = attachFn;
+    this.#createView();
   }
 
   get attachFn(): NgtAttachFunction | null {
-    if (!this.injected && this.injectedAttachFn) {
-      this.injected = true;
-      return this.injectedAttachFn;
+    if (!this.#injected && this.#injectedAttachFn) {
+      this.#injected = true;
+      return this.#injectedAttachFn;
     }
     return null;
   }
 
   validate() {
-    return !this.injected && !!this.injectedAttachFn;
+    return !this.#injected && !!this.#injectedAttachFn;
   }
 
-  private createView() {
-    if (this.view && !this.view.destroyed) {
-      this.view.destroy();
+  #createView() {
+    if (this.#view && !this.#view.destroyed) {
+      this.#view.destroy();
     }
-    this.view = this.vcr.createEmbeddedView(this.templateRef);
-    this.view.detectChanges();
+    this.#view = this.#vcr.createEmbeddedView(this.#templateRef);
+    this.#view.detectChanges();
   }
 }
 

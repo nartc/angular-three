@@ -271,7 +271,7 @@ export class NgtStore extends NgtRxStore<NgtState> {
       });
 
       this.isInit = true;
-      this.resize();
+      this.#resize();
     }
   }
 
@@ -450,14 +450,14 @@ export class NgtStore extends NgtRxStore<NgtState> {
       this.set({ ready: true });
     }
 
-    this.invalidate();
+    this.#invalidate();
   }
 
   get internal(): NgtInternalState {
     return this.get('internal');
   }
 
-  private resize() {
+  #resize() {
     const state = this.get();
     let oldSize = state.size;
     let oldDpr = state.viewport.dpr;
@@ -485,7 +485,7 @@ export class NgtStore extends NgtRxStore<NgtState> {
     });
   }
 
-  private invalidate() {
+  #invalidate() {
     this.hold(this.select(), (state) => invalidate(state));
   }
 }

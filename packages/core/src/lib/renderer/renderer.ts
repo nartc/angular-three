@@ -13,7 +13,7 @@ import { NgtAnyConstructor, NgtAnyRecord } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { getLocalState, prepare } from '../utils/instance';
 import { is } from '../utils/is';
-import { RendererStateCollection } from './state';
+import { NgtRendererStateCollection } from './state';
 import {
   attachThreeInstances,
   ATTRIBUTES,
@@ -38,7 +38,7 @@ export class NgtRendererFactory implements RendererFactory2 {
 
   #defaultRenderer?: NgtRenderer;
 
-  readonly #stateCollection = new RendererStateCollection({
+  readonly #stateCollection = new NgtRendererStateCollection({
     scene: this.#rootStore.get('scene'),
     glDom: this.#rootStore.get('gl', 'domElement'),
     dom: null!,
@@ -75,7 +75,7 @@ export class NgtRenderer implements Renderer2 {
   constructor(
     private readonly delegate: Renderer2,
     private readonly catalogue: Catalogue,
-    private readonly stateCol: RendererStateCollection
+    private readonly stateCol: NgtRendererStateCollection
   ) {}
 
   createElement(name: string, namespace?: string | null | undefined) {

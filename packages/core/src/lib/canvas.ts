@@ -192,7 +192,7 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
 
     // subscribe to store to listen for ready state
     this.hold(this.#store.select('ready').pipe(filter((ready) => ready)), () => {
-      this.ready();
+      this.#ready();
     });
   }
 
@@ -206,7 +206,7 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
     }
   }
 
-  private ready() {
+  #ready() {
     // canvas is ready
     this.#store.set((state) => ({ internal: { ...state.internal, active: true } }));
 

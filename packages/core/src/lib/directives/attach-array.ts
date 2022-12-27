@@ -15,54 +15,54 @@ import { injectNgtArgs, NgtArgs } from './args';
   hostDirectives: [NgtArgs],
 })
 export class NgtAttachArray implements NgtHasValidateForRenderer {
-  private readonly ngtArgs = injectNgtArgs({ host: true });
+  readonly #ngtArgs = injectNgtArgs({ host: true });
 
-  private readonly templateRef = inject(TemplateRef);
-  private readonly vcr = inject(ViewContainerRef);
-  private view?: EmbeddedViewRef<unknown>;
+  readonly #templateRef = inject(TemplateRef);
+  readonly #vcr = inject(ViewContainerRef);
+  #view?: EmbeddedViewRef<unknown>;
 
-  private injectedAttachArray: Array<string> = [];
-  private injected = false;
+  #injectedAttachArray: Array<string> = [];
+  #injected = false;
 
   constructor() {
-    this.ngtArgs.shouldCreateView = false;
+    this.#ngtArgs.shouldCreateView = false;
   }
 
   @Input() set attachArray(
     inputs: Array<string | number> | [Array<string | number>, any[]] | null
   ) {
     if (!inputs) return;
-    const [attachArray, args] = this.processArrayInputs(inputs);
+    const [attachArray, args] = this.#processArrayInputs(inputs);
     if (!attachArray.length) return;
     if (args) {
-      this.ngtArgs.args = args;
+      this.#ngtArgs.args = args;
     }
-    this.injected = false;
-    this.injectedAttachArray = attachArray.map((item) => item.toString());
-    this.createView();
+    this.#injected = false;
+    this.#injectedAttachArray = attachArray.map((item) => item.toString());
+    this.#createView();
   }
 
   get attachArray(): Array<string> | null {
-    if (!this.injected && this.injectedAttachArray.length) {
-      this.injected = true;
-      return this.injectedAttachArray;
+    if (!this.#injected && this.#injectedAttachArray.length) {
+      this.#injected = true;
+      return this.#injectedAttachArray;
     }
     return null;
   }
 
   validate() {
-    return !this.injected && !!this.injectedAttachArray.length;
+    return !this.#injected && !!this.#injectedAttachArray.length;
   }
 
-  private createView() {
-    if (this.view && !this.view.destroyed) {
-      this.view.destroy();
+  #createView() {
+    if (this.#view && !this.#view.destroyed) {
+      this.#view.destroy();
     }
-    this.view = this.vcr.createEmbeddedView(this.templateRef);
-    this.view.detectChanges();
+    this.#view = this.#vcr.createEmbeddedView(this.#templateRef);
+    this.#view.detectChanges();
   }
 
-  private processArrayInputs(
+  #processArrayInputs(
     inputs: Array<string | number> | [Array<string | number>, any[]]
   ): [Array<string | number>, any[]] {
     if (
