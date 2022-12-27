@@ -38,6 +38,9 @@ export class NgtRendererFactory implements RendererFactory2 {
 
   #defaultRenderer?: NgtRenderer;
 
+  /**
+   * We create the StateCollection singleton here with the information from Root providers
+   */
   readonly #stateCollection = new NgtRendererStateCollection({
     scene: this.#rootStore.get('scene'),
     glDom: this.#rootStore.get('gl', 'domElement'),
@@ -50,6 +53,7 @@ export class NgtRendererFactory implements RendererFactory2 {
     if (!hostElement || !type) return this.#createRendererIfNotExist(hostElement, type);
     const componentType = type as NgtAnyRecord;
     const componentClass = componentType['type'];
+    // handle Compound
     if (componentClass[NgtRendererFlags.COMPOUND]) {
       const domOptions = this.#stateCollection.getDom(hostElement);
       if (domOptions) domOptions.isCompound = true;
@@ -69,6 +73,13 @@ export class NgtRendererFactory implements RendererFactory2 {
   }
 }
 
+/**
+ * Welcome to Angular Three Renderer, if you're here, you are either curious
+ * or wanting to contribute to this Renderer. Thank you
+ *
+ * The Renderer keeps track of some specific states to encounter the limitation of Angular Renderer,
+ * as well as to accommodate the way that Structural Directives are handled in Angular
+ */
 export class NgtRenderer implements Renderer2 {
   #seenFirstElement = false;
 
@@ -79,38 +90,44 @@ export class NgtRenderer implements Renderer2 {
   ) {}
 
   createElement(name: string, namespace?: string | null | undefined) {
+    // since we base the Renderer on DOM element as source of truth, we always create the Element here
     const el = this.delegate.createElement(name, namespace);
+
+    // this is the first time that createElement event ran
+    // we'll capture the root Scene component
     if (!this.#seenFirstElement) {
       this.#seenFirstElement = true;
       this.stateCol.root.dom = el;
-      const sceneLocalState = getLocalState(this.stateCol.root.scene);
-      sceneLocalState.parentDom = el;
       this.stateCol.addDomThree(el, this.stateCol.root.scene);
       return el;
     }
 
+    // State Collection creation phase based on the Comments (from structural directives)
     const { injectedRef, injectedArgs, attach, store } = this.stateCol.getCreationState();
 
+    // handle Portal to opt-out of normal rendering
     if (name === SPECIAL_DOM_TAG.NGT_PORTAL) {
       this.stateCol.addPortal(el);
       return el;
     }
 
+    // with injectNgtRef, consumers can pass in ref with value. We respect that value
     if (injectedRef && injectedRef.nativeElement) {
       const injectedInstance = injectedRef.nativeElement;
       if (!is.instance(injectedInstance)) {
-        prepare(injectedInstance, { store, isThree: true, attach });
+        prepare(injectedInstance, { store, attach });
       }
       this.stateCol.addDomThree(el, injectedInstance);
       this.stateCol.addThree(injectedInstance);
       return el;
     }
 
+    // handle ngt-primitive and fail fast when not met requirement
     if (name === SPECIAL_DOM_TAG.NGT_PRIMITIVE) {
       if (!injectedArgs[0]) throw new Error(`[NGT] ngt-primitve without args is invalid`);
       const object = injectedArgs[0];
       if (!is.instance(object)) {
-        prepare(object, { store, attach, args: injectedArgs, isThree: true, primitive: true });
+        prepare(object, { store, attach, args: injectedArgs, primitive: true });
       }
       this.stateCol.addDomThree(el, object);
       this.stateCol.addThree(object);
@@ -122,13 +139,14 @@ export class NgtRenderer implements Renderer2 {
     const threeTarget = this.catalogue[threeName];
 
     if (threeTarget) {
+      // create the THREE objects here with injectedArgs (default to [])
       const threeInstance = prepare(new threeTarget(...injectedArgs), {
         store,
-        isThree: true,
         attach,
         args: injectedArgs,
       });
       const lS = getLocalState(threeInstance);
+      // default attach property for Material and Geometry
       if (!attach) {
         if (is.material(threeInstance)) {
           lS.attach = ['material'];
@@ -136,6 +154,7 @@ export class NgtRenderer implements Renderer2 {
           lS.attach = ['geometry'];
         }
       }
+      // assign the reference to injectedRef
       if (injectedRef) injectedRef.nativeElement = threeInstance;
       this.stateCol.addDomThree(el, threeInstance);
       this.stateCol.addThree(threeInstance);
@@ -148,14 +167,20 @@ export class NgtRenderer implements Renderer2 {
 
   createComment(value: string) {
     const comment = this.delegate.createComment(value);
+    // we track Comment for their Injector
     this.stateCol.addComment(comment);
     return comment;
   }
 
   appendChild(parent: any, newChild: any, shouldAppend = true): void {
+    // methods inside of the Renderer can call appendChild anytime.
+    // shouldAppend can be passed from other methods to let the Renderer know to NOT call
+    // appendChild on the DomRenderer again
     if (shouldAppend) {
       this.delegate.appendChild(parent, newChild);
     }
+
+    // try to assign the portal container
     if ((newChild as HTMLElement).localName === SPECIAL_DOM_TAG.NGT_PORTAL) {
       this.stateCol.tryAssignPortalContainer(newChild);
     } else if ((parent as HTMLElement).localName === SPECIAL_DOM_TAG.NGT_PORTAL) {
@@ -164,8 +189,12 @@ export class NgtRenderer implements Renderer2 {
     const parentThree = this.stateCol.getThree(parent);
     const childThree = this.stateCol.getThree(newChild);
 
+    // THREE parent and THREE child
     if (parentThree && childThree && parentThree !== childThree) {
       attachThreeInstances(parentThree, childThree);
+      // handle special case where a compounded component is not the top-level THREE instance
+      // eg: ngts-compound -> ngt-group -> ngt-group -> ngt-group[ngtCompound]
+      // last ngt-group needs to be compounded instead of the top level ngt-group
       let grandParent = parentThree.parent;
       if (!grandParent) return;
       let grandParentOptions = this.stateCol.getThreeOptions(grandParent);
@@ -180,6 +209,7 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
+    //    TODO: unsure what needs to happen here. It seems fine without having to handle this case
     //    if (parentThree && !childThree) {
     //      console.log('[NGT] This case is unhandled.', { parent, newChild, parentThree });
     //    }
@@ -189,9 +219,12 @@ export class NgtRenderer implements Renderer2 {
       const parentOptions = this.stateCol.getDom(parent);
       const childThreeOptions = this.stateCol.getThreeOptions(childThree);
       if (parentOptions?.isCompound) {
+        // if the parent is a Compound component
+        // and the child is indeed a THREE instance to be compounded, track it
         if (childThreeOptions?.compound) {
           this.stateCol.addDomThree(parent, childThree);
         } else if (childThreeOptions && !childThreeOptions.compoundParent) {
+          // otherwise, we'll track the parent DOM (compound component)
           childThreeOptions.compoundParent = parent;
         }
       }
@@ -209,16 +242,21 @@ export class NgtRenderer implements Renderer2 {
     if (newChild === this.stateCol.root.dom) return;
     const parentThree = this.stateCol.getThree(parent);
     const childThree = this.stateCol.getThree(newChild);
+    // either one has THREE instance, call appendChlid
     if (parentThree || childThree) {
       this.appendChild(parent, newChild, false);
     }
   }
 
+  /**
+   * removeChild needs to ensure that all the references in State Collection are removed
+   */
   removeChild(parent: any, oldChild: any, isHostElement?: boolean | undefined): void {
     const parentThree = this.stateCol.getThree(parent);
     const childThree = this.stateCol.getThree(oldChild);
     const domChildren = (oldChild as HTMLElement).childNodes;
 
+    // THREE parent and THREE child
     if (parentThree && childThree) {
       removeThreeChild(parentThree, childThree, true);
       this.stateCol.removeThreeState(childThree);
@@ -228,6 +266,7 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
+    // THREE parent and DOM child
     if (parentThree && !childThree) {
       this.stateCol.traverseAndRemoveChildNodes(domChildren, parentThree);
       this.stateCol.removeDomState(oldChild);
@@ -235,6 +274,7 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
+    // DOM parent and THREE child
     if (!parentThree && childThree) {
       const [grandParent, grandParentThree] = this.stateCol.getGrandParentThree(parent);
       if (grandParentThree) {
@@ -299,11 +339,19 @@ export class NgtRenderer implements Renderer2 {
     this.delegate.setAttribute(el, name, value, namespace);
   }
 
+  /*
+   * Logic for [propertyBinding]
+   */
   setProperty(el: any, name: string, value: any, fromQueue = 0): void {
     const { isThree, isCompoundWithInstance, isCompoundNoInstance } =
       this.stateCol.getTargetFlags(el);
     const three = this.stateCol.getThree(el);
     if (isThree) {
+      // skip this property binding if it is an Attribute instead
+      if (Object.values(ATTRIBUTES).includes(name as typeof ATTRIBUTES[keyof typeof ATTRIBUTES])) {
+        this.setAttribute(el, name, value);
+        return;
+      }
       const threeOptions = this.stateCol.getThreeOptions(three);
       if (
         threeOptions?.compound?.props &&
@@ -317,6 +365,7 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
     if (isCompoundWithInstance) {
+      // TODO: we might not need to handle the inputs here since Angualr seems to handle it
       const compoundOptions = this.stateCol.getCompoundOptions(el);
       if (compoundOptions?.inputs.includes(name)) {
         this.delegate.setProperty(el, name, value);
@@ -331,6 +380,7 @@ export class NgtRenderer implements Renderer2 {
       applyProps(three, { [name]: value });
       return;
     }
+    // at this point, we don't have the Compound instance yet. Queue it and queue it max 5 times
     if (isCompoundNoInstance && fromQueue <= 5) {
       queueMicrotask(() => {
         this.setProperty(el, name, value, fromQueue++);
@@ -340,6 +390,9 @@ export class NgtRenderer implements Renderer2 {
     this.delegate.setProperty(el, name, value);
   }
 
+  /*
+   * Logic for (eventBinding)
+   */
   listen(
     target: any,
     eventName: string,
@@ -350,9 +403,11 @@ export class NgtRenderer implements Renderer2 {
       this.stateCol.getTargetFlags(target);
     const three = this.stateCol.getThree(target);
     if (isThree || isCompoundWithInstance) {
-      return processThreeEvent(three, eventName, callback, this.stateCol.root.cdr);
+      const priority = this.stateCol.getThreeOptions(three)!.priority;
+      return processThreeEvent(three, priority, eventName, callback, this.stateCol.root.cdr);
     }
 
+    // again, compound doesn't have instance yet.queue it to 5 times max
     if (isCompoundNoInstance && fromQueue <= 5) {
       queueMicrotask(() => {
         const compoundOptions = this.stateCol.getCompoundOptions(target);

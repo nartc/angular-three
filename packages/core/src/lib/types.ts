@@ -315,18 +315,6 @@ export type NgtAttachFunction<TChild = any, TParent = any> = (
   store: NgtRxStore<NgtState>
 ) => void | (() => void);
 
-export interface NgtInstanceRendererState {
-  scene?: boolean;
-  wrapper?: boolean;
-  portal?: boolean;
-  instance: NgtInstanceNode;
-  parent: NgtInstanceNode | null;
-  dom?: HTMLElement;
-  parentDom?: HTMLElement;
-  beforeRenderPriority?: number;
-  cleanUps?: Set<() => void>;
-}
-
 export interface NgtInstanceLocalState {
   /** the state getter of the canvas that the instance is being rendered to */
   store: NgtRxStore<NgtState>;
@@ -343,8 +331,6 @@ export interface NgtInstanceLocalState {
   // short cut to remove non object from list
   removeNonObject: (instanct: NgtInstanceNode) => void;
   parent: NgtInstanceNode | null;
-  // the renderer needs this to append DOM child
-  parentDom: HTMLElement | null;
   // if this THREE instance is a ngt-primitive
   primitive?: boolean;
   // if this THREE object has any events bound to it
@@ -359,21 +345,10 @@ export interface NgtInstanceLocalState {
   previousAttach?: unknown | (() => void);
   // memoized props
   memoized?: NgtAnyRecord;
-  isThree?: boolean;
-  // render priority. consumers set this by setting an attribute priority with a number string
-  priority?: number;
-  // compound component information; if this instance is being compounded upon
-  compound: {
-    props: NgtAnyRecord;
-    applyFirst: boolean;
-    isCompound: boolean;
-    shouldApplyFirst: (propName: string) => boolean;
-  };
 }
 
 export type NgtInstanceNode<TNode = any> = TNode & {
   __ngt__: NgtInstanceLocalState;
-  __ngt_renderer__: NgtInstanceRendererState;
 } & NgtAnyRecord;
 
 export type NgtGLRenderer = {

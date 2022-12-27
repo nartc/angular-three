@@ -54,7 +54,7 @@ export interface NgtcPhysicsInputs extends CannonWorkerProps {
 export class NgtcPhysics extends NgtRxStore<NgtcPhysicsInputs> implements OnInit, OnDestroy {
   readonly #store = injectNgtStore();
   readonly #physicsStore = injectNgtcPhysicsStore();
-  readonly #actions = inject<RxActionFactory<{ setBeforeRender: void }>>(RxActionFactory).create();
+  readonly #actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
 
   override initialize() {
     super.initialize();

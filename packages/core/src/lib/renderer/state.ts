@@ -167,6 +167,7 @@ export class NgtRendererStateCollection {
     if (this.compoundMap.has(target)) {
       const compoundOptions = this.compoundMap.get(target)!;
       compoundOptions.cleanUps.forEach((cleanUp) => cleanUp());
+      compoundOptions.cleanUps.clear();
       delete (compoundOptions as NgtAnyRecord)['cleanUps'];
       delete (compoundOptions as NgtAnyRecord)['inputs'];
       this.compoundMap.delete(target);

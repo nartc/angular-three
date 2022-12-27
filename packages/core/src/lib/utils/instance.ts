@@ -32,7 +32,6 @@ export function prepare<TInstance extends object = NgtAnyRecord>(
       previousAttach: null,
       store: null,
       parent: null,
-      parentDom: null,
       memoized: {},
       eventCount: 0,
       handlers: {},
@@ -43,13 +42,6 @@ export function prepare<TInstance extends object = NgtAnyRecord>(
       addNonObject: (object) => nonObjects.next([...nonObjects.value, object]),
       removeNonObject: (object) =>
         nonObjects.next(nonObjects.value.filter((obj) => obj !== object)),
-      compound: {
-        applyFirst: true,
-        isCompound: false,
-        shouldApplyFirst(propName) {
-          return this.props && propName in this.props && !this.applyFirst;
-        },
-      },
       ...rest,
     } as NgtInstanceLocalState;
   }

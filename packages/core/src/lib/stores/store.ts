@@ -105,7 +105,7 @@ export class NgtStore extends NgtRxStore<NgtState> {
         select: this.select.bind(this),
         ready: false,
 
-        scene: prepare(new Scene(), { store: this, isThree: true }),
+        scene: prepare(new Scene(), { store: this }),
         events: { priority: 1, enabled: true, connected: false },
 
         invalidate: (frames = 1) => invalidate(this.get(), frames),
@@ -340,7 +340,7 @@ export class NgtStore extends NgtRxStore<NgtState> {
       }
 
       if (!is.instance(camera)) {
-        camera = prepare(camera, { isThree: true, store: this });
+        camera = prepare(camera, { store: this });
       }
       stateToUpdate.camera = camera;
     }

@@ -69,7 +69,7 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
   @Output() end = new EventEmitter<THREE.Event>();
 
   readonly #store = injectNgtStore();
-  readonly #actions = inject<RxActionFactory<{ setBeforeRender: void }>>(RxActionFactory).create();
+  readonly #actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
   readonly enableDamping$ = this.select('enableDamping');
 
   override initialize() {

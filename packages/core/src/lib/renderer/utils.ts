@@ -37,7 +37,6 @@ export function attachThreeInstances(parent: NgtInstanceNode, child: NgtInstance
     } else {
       // we skip attach explicitly
       if (attachProp[0] === 'none') {
-        cLS.isThree = true;
         invalidateInstance(child);
         return;
       }
@@ -72,7 +71,6 @@ export function attachThreeInstances(parent: NgtInstanceNode, child: NgtInstance
     pLS.addNonObject(child);
   }
 
-  pLS.isThree = cLS.isThree = true;
   cLS.parent = parent;
 
   invalidateInstance(child);
@@ -131,6 +129,7 @@ function removeThreeRecursive(array: NgtInstanceNode[], parent: NgtInstanceNode,
 
 export function processThreeEvent(
   instance: NgtInstanceNode,
+  priority: number,
   eventName: string,
   callback: (event: any) => void,
   cdr: ChangeDetectorRef
@@ -141,7 +140,7 @@ export function processThreeEvent(
       // beforeRender is a special event
       return lS.store
         .get('internal')
-        .subscribe((state) => callback({ state, object: instance }), lS.priority || 0, lS.store);
+        .subscribe((state) => callback({ state, object: instance }), priority || 0, lS.store);
     }
 
     if (!lS.handlers) {

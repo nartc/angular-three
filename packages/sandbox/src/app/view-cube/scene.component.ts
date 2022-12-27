@@ -72,7 +72,7 @@ extend({
 })
 export class ViewCube extends NgtRxStore implements OnInit {
   readonly #store = injectNgtStore();
-  readonly #actions$ = inject<RxActionFactory<{ setBeforeRender: void }>>(RxActionFactory).create();
+  readonly #actions$ = inject(RxActionFactory<{ setBeforeRender: void }>).create();
 
   readonly events = this.#store.get('events');
 
