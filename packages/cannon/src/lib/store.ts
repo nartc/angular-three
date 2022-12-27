@@ -1,4 +1,4 @@
-import { createInject, NgtComponentStore } from '@angular-three/core-two';
+import { createInject, NgtRxStore } from '@angular-three/core';
 import { Injectable, OnDestroy } from '@angular/core';
 import {
   CannonWorkerAPI,
@@ -33,11 +33,7 @@ export interface NgtcPhysicsState {
 }
 
 @Injectable()
-export class NgtcPhysicsStore extends NgtComponentStore<NgtcPhysicsState> implements OnDestroy {
-  constructor() {
-    super();
-  }
-
+export class NgtcPhysicsStore extends NgtRxStore<NgtcPhysicsState> implements OnDestroy {
   override initialize() {
     super.initialize();
     this.set({

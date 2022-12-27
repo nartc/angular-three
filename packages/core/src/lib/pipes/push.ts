@@ -29,7 +29,6 @@ export class NgtPush<T> implements PipeTransform, OnDestroy {
     }
 
     if (isObservable(this.obj)) {
-        this.obj.subscribe()
       this.subscription = this.obj.subscribe(this.updateValue.bind(this));
     } else if (isPromise(this.obj)) {
       (this.obj as Promise<T>).then(this.updateValue.bind(this));

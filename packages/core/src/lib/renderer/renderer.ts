@@ -13,12 +13,7 @@ import { NgtAnyConstructor, NgtAnyRecord } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { getLocalState, prepare } from '../utils/instance';
 import { is } from '../utils/is';
-import {
-  NgtCompoundState,
-  NgtDomState,
-  NgtRendererState,
-  NgtRendererStateCollection,
-} from './state';
+import { RendererStateCollection } from './state';
 import {
   attachThreeInstances,
   ATTRIBUTES,
@@ -43,7 +38,7 @@ export class NgtRendererFactory implements RendererFactory2 {
 
   #defaultRenderer?: NgtRenderer;
 
-  readonly #stateCollection = new NgtRendererStateCollection({
+  readonly #stateCollection = new RendererStateCollection({
     scene: this.#rootStore.get('scene'),
     glDom: this.#rootStore.get('gl', 'domElement'),
     dom: null!,
@@ -56,6 +51,8 @@ export class NgtRendererFactory implements RendererFactory2 {
     const componentType = type as NgtAnyRecord;
     const componentClass = componentType['type'];
     if (componentClass[NgtRendererFlags.COMPOUND]) {
+      const domOptions = this.#stateCollection.getDom(hostElement);
+      if (domOptions) domOptions.isCompound = true;
       this.#stateCollection.addCompound(hostElement, {
         inputs: Object.values(componentType['inputs']),
       });
@@ -72,33 +69,30 @@ export class NgtRendererFactory implements RendererFactory2 {
   }
 }
 
-/**
- * lS: localState (THREE instances only)
- * rS: rendererState (DOM instances)
- */
 export class NgtRenderer implements Renderer2 {
   #seenFirstElement = false;
 
   constructor(
     private readonly delegate: Renderer2,
     private readonly catalogue: Catalogue,
-    private readonly stateCol: NgtRendererStateCollection
+    private readonly stateCol: RendererStateCollection
   ) {}
 
   createElement(name: string, namespace?: string | null | undefined) {
+    const el = this.delegate.createElement(name, namespace);
     if (!this.#seenFirstElement) {
       this.#seenFirstElement = true;
-      const el = this.delegate.createElement(name, namespace);
       this.stateCol.root.dom = el;
-      const sceneLS = getLocalState(this.stateCol.root.scene);
-      sceneLS.parentDom = el;
-      return this.stateCol.root.scene;
+      const sceneLocalState = getLocalState(this.stateCol.root.scene);
+      sceneLocalState.parentDom = el;
+      this.stateCol.addDomThree(el, this.stateCol.root.scene);
+      return el;
     }
+
     const { injectedRef, injectedArgs, attach, store } = this.stateCol.getCreationState();
 
     if (name === SPECIAL_DOM_TAG.NGT_PORTAL) {
-      const el = this.delegate.createElement(name, namespace);
-      this.stateCol.addPortal(el, {});
+      this.stateCol.addPortal(el);
       return el;
     }
 
@@ -107,8 +101,9 @@ export class NgtRenderer implements Renderer2 {
       if (!is.instance(injectedInstance)) {
         prepare(injectedInstance, { store, isThree: true, attach });
       }
-
-      return injectedInstance;
+      this.stateCol.addDomThree(el, injectedInstance);
+      this.stateCol.addThree(injectedInstance);
+      return el;
     }
 
     if (name === SPECIAL_DOM_TAG.NGT_PRIMITIVE) {
@@ -117,7 +112,9 @@ export class NgtRenderer implements Renderer2 {
       if (!is.instance(object)) {
         prepare(object, { store, attach, args: injectedArgs, isThree: true, primitive: true });
       }
-      return object;
+      this.stateCol.addDomThree(el, object);
+      this.stateCol.addThree(object);
+      return el;
     }
 
     const threeTag = name.startsWith('ngt') && !name.startsWith('ngts') ? name.slice(4) : name;
@@ -140,218 +137,126 @@ export class NgtRenderer implements Renderer2 {
         }
       }
       if (injectedRef) injectedRef.nativeElement = threeInstance;
-      return threeInstance;
+      this.stateCol.addDomThree(el, threeInstance);
+      this.stateCol.addThree(threeInstance);
+      return el;
     }
 
-    const el = this.delegate.createElement(name, namespace);
-    this.stateCol.addDom(el, {});
+    this.stateCol.addDom(el);
     return el;
   }
 
   createComment(value: string) {
     const comment = this.delegate.createComment(value);
-    this.stateCol.addComment(comment, {});
+    this.stateCol.addComment(comment);
     return comment;
   }
 
-  appendChild(parent: any, newChild: any): void {
-    const pLS = getLocalState(parent);
-    const cLS = getLocalState(newChild);
-
-    // THREE parent, THREE Child
-    if (pLS && cLS) {
-      attachThreeInstances(parent, newChild);
-      if (parent === this.stateCol.root.scene && !cLS.parentDom) {
-        cLS.parentDom = this.stateCol.root.dom;
-      }
-      return;
-    }
-
-    // DOM parent, DOM child
-    if (!pLS && !cLS) {
-      const pRS = this.stateCol.get(parent);
-      const cRS = this.stateCol.get(newChild);
-      if (pRS.parent && !cRS.parent) {
-        cRS.parent = pRS.parent;
-      }
-      cRS.parentStateFactory = (() => pRS) as () => NgtRendererState;
+  appendChild(parent: any, newChild: any, shouldAppend = true): void {
+    if (shouldAppend) {
       this.delegate.appendChild(parent, newChild);
+    }
+    if ((newChild as HTMLElement).localName === SPECIAL_DOM_TAG.NGT_PORTAL) {
+      this.stateCol.tryAssignPortalContainer(newChild);
+    } else if ((parent as HTMLElement).localName === SPECIAL_DOM_TAG.NGT_PORTAL) {
+      this.stateCol.tryAssignPortalContainer(parent);
+    }
+    const parentThree = this.stateCol.getThree(parent);
+    const childThree = this.stateCol.getThree(newChild);
+
+    if (parentThree && childThree && parentThree !== childThree) {
+      attachThreeInstances(parentThree, childThree);
+      let grandParent = parentThree.parent;
+      if (!grandParent) return;
+      let grandParentOptions = this.stateCol.getThreeOptions(grandParent);
+      while (!grandParentOptions || !grandParentOptions.compoundParent) {
+        grandParent = grandParent.parent;
+        if (!grandParent) return;
+        grandParentOptions = this.stateCol.getThreeOptions(grandParent);
+      }
+      if (grandParentOptions.compoundParent) {
+        this.appendChild(grandParentOptions.compoundParent, newChild, false);
+      }
       return;
     }
 
-    // THREE parent, DOM child
-    if (pLS) {
-      const cRS = this.stateCol.get(newChild);
-      cRS.parent = parent;
+    //    if (parentThree && !childThree) {
+    //      console.log('[NGT] This case is unhandled.', { parent, newChild, parentThree });
+    //    }
 
-      if (parent === this.stateCol.root.scene) {
-        this.delegate.appendChild(this.stateCol.root.dom, newChild);
-      }
-
-      // TODO: we might lose some comments here because we don't know what the DOM parent of the THREE parent
-      // TODO: figure out how NOT to lose this DOM child
-      console.log('in THREE parent , DOM child -->', { parent, newChild, childRendererState: cRS });
-
-      if (cRS.type === 'compound' && is.instance(cRS.instance)) {
-        this.appendChild(parent, cRS.instance);
-        return;
-      }
-
-      while (cRS.unprocessedThreeChildren.length) {
-        const unprocessed = cRS.unprocessedThreeChildren.shift();
-        this.appendChild(parent, unprocessed);
-      }
-
-      if (pLS.parentDom) {
-        if (pLS.parentDom && this.stateCol.root.dom) {
-          this.delegate.appendChild(pLS.parentDom, newChild);
-        } else {
-          this.appendChild(pLS.parentDom, newChild);
+    // DOM parent, THREE child, compound
+    if (!parentThree && childThree) {
+      const parentOptions = this.stateCol.getDom(parent);
+      const childThreeOptions = this.stateCol.getThreeOptions(childThree);
+      if (parentOptions?.isCompound) {
+        if (childThreeOptions?.compound) {
+          this.stateCol.addDomThree(parent, childThree);
+        } else if (childThreeOptions && !childThreeOptions.compoundParent) {
+          childThreeOptions.compoundParent = parent;
         }
       }
 
-      return;
+      // here we'll try to traverse the parentNode to find the THREE
+      const [grandParent, grandParentThree] = this.stateCol.getGrandParentThree(parent);
+      if (grandParentThree) {
+        this.appendChild(grandParent, newChild, false);
+      }
     }
-
-    // DOM parent, THREE child
-    if (cLS) {
-      cLS.parentDom = parent;
-      const pRS = this.stateCol.get(parent);
-      if (pRS.type === 'compound' && !is.instance(pRS.instance) && cLS.compound.isCompound) {
-        pRS.instance = newChild;
-      }
-
-      if (
-        (pRS.type === 'dom' || (pRS.type === 'compound' && pRS.instance !== newChild)) &&
-        is.object3D(newChild)
-      ) {
-        (pRS as NgtDomState | NgtCompoundState).children.push(newChild);
-      }
-
-      if (pRS.parent && is.instance(pRS.parent)) {
-        this.appendChild(pRS.parent, newChild);
-        return;
-      }
-
-      if (pRS.parentStateFactory) {
-        const gpRS = pRS.parentStateFactory();
-        if (gpRS.parent && is.instance(gpRS.parent)) {
-          this.appendChild(gpRS.parent, newChild);
-        } else if (gpRS.instance) {
-          this.appendChild(gpRS.instance, newChild);
-        }
-        return;
-      }
-
-      if (!pRS.unprocessedThreeChildren.includes(newChild)) {
-        pRS.unprocessedThreeChildren.push(newChild);
-      }
-
-      return;
-    }
-
-    this.delegate.appendChild(parent, newChild);
-  }
-
-  parentNode(node: any) {
-    const rS = this.stateCol.get(node);
-    if (rS && rS.parent) return rS.parent;
-    if (rS && rS.parentStateFactory && rS.parentStateFactory().instance)
-      return rS.parentStateFactory().instance;
-    return this.delegate.parentNode(node);
   }
 
   insertBefore(parent: any, newChild: any, refChild: any, isMove?: boolean | undefined): void {
-    if (newChild === this.stateCol.root.scene) {
-      this.delegate.insertBefore(parent, this.stateCol.root.dom, refChild, isMove);
-      return;
+    this.delegate.insertBefore(parent, newChild, refChild, isMove);
+    if (newChild === this.stateCol.root.dom) return;
+    const parentThree = this.stateCol.getThree(parent);
+    const childThree = this.stateCol.getThree(newChild);
+    if (parentThree || childThree) {
+      this.appendChild(parent, newChild, false);
     }
-    const refRS = this.stateCol.get(refChild);
-    const pRS = refRS.parentStateFactory?.();
-    if (
-      pRS?.type === ('compound' as string) &&
-      !is.instance(pRS.instance) &&
-      is.instance(newChild)
-    ) {
-      pRS.instance = newChild;
-    }
-    this.appendChild(parent, newChild);
   }
 
   removeChild(parent: any, oldChild: any, isHostElement?: boolean | undefined): void {
-    const pLS = getLocalState(parent);
-    const cLS = getLocalState(oldChild);
+    const parentThree = this.stateCol.getThree(parent);
+    const childThree = this.stateCol.getThree(oldChild);
+    const domChildren = (oldChild as HTMLElement).childNodes;
 
-    // THREE parent, THREE child
-    if (pLS && cLS) {
-      removeThreeChild(parent, oldChild, true);
-      return;
-    }
-
-    // DOM parent and DOM child
-    if (!pLS && !cLS) {
+    if (parentThree && childThree) {
+      removeThreeChild(parentThree, childThree, true);
+      this.stateCol.removeThreeState(childThree);
+      this.stateCol.traverseAndRemoveChildNodes(domChildren, parentThree);
+      this.stateCol.removeDomState(oldChild);
       this.delegate.removeChild(parent, oldChild, isHostElement);
       return;
     }
 
-    if (pLS) {
-      const cRS = this.stateCol.get(oldChild);
-      if (pLS.parentDom) {
-        try {
-          this.delegate.removeChild(pLS.parentDom, oldChild, isHostElement);
-        } catch (error) {
-          console.log('error -->', error);
-        }
-      }
-
-      // try to loop through the child (DOM) children
-      const domChildren = (oldChild as HTMLElement).children;
-      let i = domChildren.length - 1;
-      while (i >= 0) {
-        const domChild = domChildren.item(i);
-        if (!domChild) {
-          i--;
-          continue;
-        }
-        const rS = this.stateCol.get(domChild);
-        if (!rS) {
-          i--;
-          continue;
-        }
-
-        if (rS.type === 'compound' && is.instance(rS.instance)) {
-          this.removeChild(parent, rS.instance);
-        }
-
-        if (rS.type === 'dom' || rS.type === 'compound') {
-          this.removeChild(parent, domChild, isHostElement);
-          i--;
-          continue;
-        }
-
-        // <cube><ngts-box>
-        // <cube><ngt-mesh>
-        // Angular Rendere is really tricky, or limited.
-        // We might actually need to go back to render the useless DOM. They don't have any dimensions or styles
-        i--;
-      }
-
-      if ((cRS as NgtAnyRecord)['children']?.length) {
-        for (const child of (cRS as NgtAnyRecord)['children']) {
-          this.removeChild(parent, child, isHostElement);
-        }
-      }
+    if (parentThree && !childThree) {
+      this.stateCol.traverseAndRemoveChildNodes(domChildren, parentThree);
+      this.stateCol.removeDomState(oldChild);
+      this.delegate.removeChild(parent, oldChild, isHostElement);
       return;
     }
-    // TODO: handle other cases
-    //this.delegate.removeChild(parent, oldChild, isHostElement);
+
+    if (!parentThree && childThree) {
+      const [grandParent, grandParentThree] = this.stateCol.getGrandParentThree(parent);
+      if (grandParentThree) {
+        this.removeChild(grandParent, oldChild, isHostElement);
+      } else {
+        this.stateCol.traverseAndRemoveChildNodes(domChildren);
+        this.stateCol.removeDomState(oldChild);
+      }
+      this.delegate.removeChild(parent, oldChild, isHostElement);
+      return;
+    }
+
+    this.stateCol.traverseAndRemoveChildNodes(domChildren);
+    this.stateCol.removeDomState(oldChild);
+    this.delegate.removeChild(parent, oldChild, isHostElement);
   }
 
   setAttribute(el: any, name: string, value: string, namespace?: string | null | undefined): void {
-    const rS = this.stateCol.get(el);
-    // THREE
-    if (!rS) {
-      const lS = getLocalState(el);
+    const three = this.stateCol.getThree(el);
+    if (three) {
+      const localState = getLocalState(three);
+      const threeOptions = this.stateCol.getThreeOptions(three);
       if (name === ATTRIBUTES.RENDER_PRIORITY) {
         // priority needs to be set as an attribute string
         // we then convert that string to number here. invalid number will be default to 0
@@ -360,7 +265,7 @@ export class NgtRenderer implements Renderer2 {
           priority = 0;
           console.warn(`[NGT] invalid value for "priority" attribute`);
         }
-        lS.priority = priority;
+        threeOptions!.priority = priority;
         return;
       }
 
@@ -368,13 +273,15 @@ export class NgtRenderer implements Renderer2 {
         // handle attach attribute as string
         // attach can accept a dotted paths
         const paths = value.split('.');
-        if (paths.length) lS.attach = paths;
+        if (paths.length) localState.attach = paths;
         return;
       }
 
       if (name === ATTRIBUTES.COMPOUND) {
-        lS.compound.isCompound = true;
-        lS.compound.applyFirst = value === '' || value === 'first';
+        threeOptions!.compound = {
+          applyFirst: true,
+          props: {},
+        };
         return;
       }
 
@@ -386,82 +293,72 @@ export class NgtRenderer implements Renderer2 {
         maybeCoerced = Number(maybeCoerced);
       }
 
-      applyProps(el, { [name]: maybeCoerced });
+      applyProps(three, { [name]: maybeCoerced });
       return;
     }
     this.delegate.setAttribute(el, name, value, namespace);
   }
 
   setProperty(el: any, name: string, value: any, fromQueue = 0): void {
-    const rS = this.stateCol.get(el);
-    if (!rS) {
-      if (Object.values(ATTRIBUTES).includes(name as typeof ATTRIBUTES[keyof typeof ATTRIBUTES])) {
-        this.setAttribute(el, name, value);
-        return;
-      }
-      const lS = getLocalState(el);
-      /**
-       * We reassign the value with the value from wrapper if
-       * - the property name is in wrapper.props
-       * - if the wrapperMode is 'last' (aka we apply the bindings from the wrapper AFTER we apply the bindings to the instance)
-       *   eg:
-       *   <ngts-box [position]="[1,2,3]"></ngts-box>
-       *   <ngt-mesh [position]="[2,3,4]"></ngt-mesh> --> [2,3,4] takes precedence
-       *   <ngt-mesh [position]="[2,3,4]" wrapperMode="last"></ngt-mesh> --> [1,2,3] takes precedence
-       */
-      if (lS?.compound?.shouldApplyFirst(name)) {
-        value = lS.compound.props[name];
+    const { isThree, isCompoundWithInstance, isCompoundNoInstance } =
+      this.stateCol.getTargetFlags(el);
+    const three = this.stateCol.getThree(el);
+    if (isThree) {
+      const threeOptions = this.stateCol.getThreeOptions(three);
+      if (
+        threeOptions?.compound?.props &&
+        name in threeOptions.compound.props &&
+        !threeOptions.compound.applyFirst
+      ) {
+        value = threeOptions.compound.props['name'];
       }
 
-      applyProps(el, { [name]: value });
+      applyProps(three, { [name]: value });
       return;
     }
-    if (rS.type === 'compound') {
-      if (rS.inputs.includes(name)) {
+    if (isCompoundWithInstance) {
+      const compoundOptions = this.stateCol.getCompoundOptions(el);
+      if (compoundOptions?.inputs.includes(name)) {
         this.delegate.setProperty(el, name, value);
         return;
       }
-      // TODO: 5 is the maximum time we're queueing this for now.
-      if ((!rS.instance || (rS.instance && !is.instance(rS.instance))) && fromQueue <= 5) {
-        queueMicrotask(() => {
-          // TODO: need a failfast mechanism here, maybe with a counter to prevent infinity loop
-          this.setProperty(el, name, value, fromQueue++);
+      const threeOptions = this.stateCol.getThreeOptions(three);
+      if (threeOptions?.compound) {
+        Object.assign(threeOptions.compound, {
+          props: { ...threeOptions.compound.props, [name]: value },
         });
-        return;
       }
-
-      const instance = rS.instance;
-      const iLS = getLocalState(instance);
-      Object.assign(iLS.compound, { props: { ...iLS.compound.props, [name]: value } });
-      applyProps(instance, { [name]: value });
+      applyProps(three, { [name]: value });
+      return;
+    }
+    if (isCompoundNoInstance && fromQueue <= 5) {
+      queueMicrotask(() => {
+        this.setProperty(el, name, value, fromQueue++);
+      });
       return;
     }
     this.delegate.setProperty(el, name, value);
   }
 
-  listen(target: any, eventName: string, callback: (event: any) => boolean | void): () => void {
-    const rS = this.stateCol.get(target);
-
-    if (rS && rS.type !== 'compound') {
-      return this.delegate.listen(target, eventName, callback);
+  listen(
+    target: any,
+    eventName: string,
+    callback: (event: any) => boolean | void,
+    fromQueue = 0
+  ): () => void {
+    const { isThree, isCompoundNoInstance, isCompoundWithInstance } =
+      this.stateCol.getTargetFlags(target);
+    const three = this.stateCol.getThree(target);
+    if (isThree || isCompoundWithInstance) {
+      return processThreeEvent(three, eventName, callback, this.stateCol.root.cdr);
     }
 
-    if (rS && rS.type === 'compound') {
-      if (rS.instance && getLocalState(rS.instance)) {
-        return processThreeEvent(rS.instance, eventName, callback, this.stateCol.root.cdr);
-      }
-
+    if (isCompoundNoInstance && fromQueue <= 5) {
       queueMicrotask(() => {
-        const refetchRS = this.stateCol.get(target);
-        if (refetchRS.type === 'compound') {
-          refetchRS.cleanUps.add(this.listen(refetchRS.instance, eventName, callback));
-        }
+        const compoundOptions = this.stateCol.getCompoundOptions(target);
+        compoundOptions?.cleanUps.add(this.listen(target, eventName, callback, fromQueue++));
       });
       return () => {};
-    }
-
-    if (!rS) {
-      return processThreeEvent(target, eventName, callback, this.stateCol.root.cdr);
     }
     return this.delegate.listen(target, eventName, callback);
   }
@@ -471,6 +368,7 @@ export class NgtRenderer implements Renderer2 {
   }
 
   destroyNode = null;
+  parentNode = this.delegate.parentNode.bind(this.delegate);
   setValue = this.delegate.setValue.bind(this.delegate);
   destroy = this.delegate.destroy.bind(this.delegate);
   removeAttribute = this.delegate.removeAttribute.bind(this.delegate);

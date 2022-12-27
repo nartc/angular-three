@@ -1,15 +1,13 @@
-import { NgtCanvas, NgtCanvasContent } from '@angular-three/core-two';
+import { NgtCanvas } from '@angular-three/core';
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Scene } from './scene.component';
 
 @Component({
   selector: 'sandbox-view-cube',
   standalone: true,
-  template: `
-    <ngt-canvas>
-      <router-outlet *ngtCanvasContent name="gl"></router-outlet>
-    </ngt-canvas>
-  `,
-  imports: [NgtCanvas, NgtCanvasContent, RouterOutlet],
+  template: ` <ngt-canvas [scene]="Scene"></ngt-canvas> `,
+  imports: [NgtCanvas],
 })
-export default class SandboxViewCube {}
+export default class SandboxViewCube {
+  readonly Scene = Scene;
+}

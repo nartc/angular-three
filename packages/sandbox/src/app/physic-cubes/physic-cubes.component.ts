@@ -1,6 +1,6 @@
-import { NgtCanvas, NgtCanvasContent } from '@angular-three/core-two';
+import { NgtCanvas } from '@angular-three/core';
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Scene } from './scene.component';
 
 @Component({
   selector: 'sandbox-physic-cubes',
@@ -11,10 +11,12 @@ import { RouterOutlet } from '@angular/router';
       [dpr]="[1, 2]"
       [gl]="{ alpha: false }"
       [camera]="{ position: [-1, 5, 5], fov: 45 }"
+      [scene]="Scene"
     >
-      <router-outlet *ngtCanvasContent name="gl"></router-outlet>
     </ngt-canvas>
   `,
-  imports: [NgtCanvas, NgtCanvasContent, RouterOutlet],
+  imports: [NgtCanvas],
 })
-export default class SandboxPhysicCubes {}
+export default class SandboxPhysicCubes {
+  readonly Scene = Scene;
+}

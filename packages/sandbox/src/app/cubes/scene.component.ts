@@ -144,7 +144,7 @@ export class Model {
 
     <ngts-orbit-controls [autoRotate]="true"></ngts-orbit-controls>
   `,
-  imports: [Cube, NgIf, NgtArgs, NgtsOrbitControls, Model],
+  imports: [Cube, Box, NgIf, NgtArgs, NgtsOrbitControls, Model],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene {

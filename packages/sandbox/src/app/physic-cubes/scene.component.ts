@@ -1,9 +1,32 @@
-import { NgtsPhysics } from '@angular-three/cannon';
+import { NgtcPhysics } from '@angular-three/cannon';
 import { NgtcDebug } from '@angular-three/cannon/debug';
 import { injectBox, injectPlane } from '@angular-three/cannon/services';
-import { NgtArgs, NgtRef, NgtScene } from '@angular-three/core-two';
+import { extend, NgtArgs, NgtRef } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { Triplet } from '@pmndrs/cannon-worker-api';
+import {
+  AmbientLight,
+  BoxGeometry,
+  Color,
+  DirectionalLight,
+  Mesh,
+  MeshLambertMaterial,
+  PlaneGeometry,
+  ShadowMaterial,
+  Vector2,
+} from 'three';
+
+extend({
+  Mesh,
+  PlaneGeometry,
+  ShadowMaterial,
+  BoxGeometry,
+  MeshLambertMaterial,
+  Color,
+  AmbientLight,
+  DirectionalLight,
+  Vector2,
+});
 
 @Component({
   selector: 'floor',
@@ -22,10 +45,10 @@ export class Floor {
   readonly rotation = [-Math.PI / 2, 0, 0] as Triplet;
   readonly args = [1000, 1000];
 
-  readonly plane = injectPlane<THREE.Mesh>(() => ({
+  readonly plane = injectPlane<Mesh>(() => ({
     args: this.args,
-    rotation: this.rotation,
     position: this.position,
+    rotation: this.rotation,
   }));
 }
 
@@ -44,15 +67,15 @@ export class Floor {
 export class Cube {
   @Input() position: Triplet = [0, 0, 0];
   readonly rotation = [0.4, 0.2, 0.5] as Triplet;
-  readonly box = injectBox<THREE.Mesh>(() => ({
+  readonly box = injectBox<Mesh>(() => ({
     mass: 1,
     position: this.position,
     rotation: this.rotation,
   }));
 }
 
-@NgtScene()
 @Component({
+  selector: 'physics-cubes-scene',
   standalone: true,
   template: `
     <ngt-color *args="['skyblue']" attach="background"></ngt-color>
@@ -71,7 +94,7 @@ export class Cube {
       </ngtc-debug>
     </ngtc-physics>
   `,
-  imports: [NgtArgs, NgtsPhysics, NgtcDebug, Floor, Cube],
+  imports: [NgtcPhysics, NgtcDebug, NgtArgs, Floor, Cube],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export default class Scene {}
+export class Scene {}

@@ -3,7 +3,7 @@ import { ElementRef } from '@angular/core';
 import { take } from 'rxjs';
 import { Raycaster } from 'three';
 
-export function injectCameraRaycast(
+export function injectNgtCameraRaycast(
   camera: THREE.Camera | ElementRef<THREE.Camera>,
   raycasterProps?: Partial<THREE.Raycaster>
 ): THREE.Object3D['raycast'] {

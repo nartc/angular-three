@@ -160,19 +160,7 @@ export function processThreeEvent(
       ...lS.handlers,
       [eventName]: eventToHandler(updatedCallback, cdr),
     };
-    //    // if we have eventCount, which means we already setup handlers
-    //    if (localState.eventCount) {
-    //      // process the event with ChangeDetectorRef
-    //      localState.handlers[eventName as keyof typeof localState.handlers] = eventToHandler(
-    //        updatedCallback,
-    //        cdr
-    //      );
-    //    } else {
-    //      // no eventCount, first time setting up handlers
-    //      localState.handlers = {
-    //        [eventName]: eventToHandler(updatedCallback, cdr),
-    //      };
-    //    }
+
     // increment the count everytime
     lS.eventCount += 1;
     // but only add the instance (target) to the interaction array (so that it is handled by the EventManager with Raycast)

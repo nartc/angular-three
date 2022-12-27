@@ -244,14 +244,16 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
       this.#glComponentRef.destroy();
     }
 
-    this.#glComponentRef = this.glAnchor.createComponent(this.scene, {
-      environmentInjector: createEnvironmentInjector(
-        [provideNgtRenderer(this.#store, this.#cdr)],
-        this.#environmentInjector
-      ),
+    requestAnimationFrame(() => {
+      this.#glComponentRef = this.glAnchor.createComponent(this.scene, {
+        environmentInjector: createEnvironmentInjector(
+          [provideNgtRenderer(this.#store, this.#cdr)],
+          this.#environmentInjector
+        ),
+      });
+      this.#glComponentRef.changeDetectorRef.detectChanges();
+      this.#cdr.detectChanges();
     });
-
-    this.#glComponentRef.changeDetectorRef.detectChanges();
     this.#cdr.detectChanges();
   }
 

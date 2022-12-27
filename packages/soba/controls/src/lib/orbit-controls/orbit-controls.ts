@@ -2,6 +2,7 @@ import {
   injectNgtRef,
   injectNgtStore,
   NgtArgs,
+  NgtPush,
   NgtRendererFlags,
   NgtRxStore,
   NgtVector3,
@@ -27,10 +28,10 @@ import { OrbitControls } from 'three-stdlib';
     <ngt-primitive
       ngtCompound
       *args="[ref.nativeElement]"
-      [enableDamping]="get('enableDamping')"
+      [enableDamping]="enableDamping$ | ngtPush : true"
     ></ngt-primitive>
   `,
-  imports: [NgtArgs],
+  imports: [NgtArgs, NgtPush],
   providers: [RxActionFactory],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -69,6 +70,7 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
 
   readonly #store = injectNgtStore();
   readonly #actions = inject<RxActionFactory<{ setBeforeRender: void }>>(RxActionFactory).create();
+  readonly enableDamping$ = this.select('enableDamping');
 
   override initialize() {
     super.initialize();

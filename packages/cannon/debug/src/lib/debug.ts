@@ -1,5 +1,5 @@
 import { injectNgtcPhysicsStore } from '@angular-three/cannon';
-import { createInjectionToken, injectNgtStore, NgtArgs } from '@angular-three/core-two';
+import { createInjectionToken, injectNgtStore, NgtArgs } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnDestroy, OnInit } from '@angular/core';
 import { BodyProps, BodyShapeType, propsToBody } from '@pmndrs/cannon-worker-api';
 import { Body, Quaternion as CQuarternion, Vec3, World } from 'cannon-es';
@@ -60,36 +60,34 @@ export class NgtcDebug implements OnInit, OnDestroy {
   readonly bodies: Body[] = [];
   readonly bodyMap: Record<string, Body> = {};
   readonly scene = new Scene();
-  private readonly cannonDebugger = this.impl(this.scene, { bodies: this.bodies } as World, {
+  readonly #cannonDebugger = this.impl(this.scene, { bodies: this.bodies } as World, {
     color: this.color,
     scale: this.scale,
   });
 
-  private readonly physicsStore = injectNgtcPhysicsStore({ skipSelf: true });
-  private readonly store = injectNgtStore();
+  readonly #physicsStore = injectNgtcPhysicsStore({ skipSelf: true });
+  readonly #store = injectNgtStore();
 
-  private beforeRenderCleanup?: () => void;
+  #beforeRenderCleanup?: () => void;
 
   ngOnInit() {
-    this.beforeRenderCleanup = this.store
-      .get((s) => s.internal)
-      .subscribe(
-        () => {
-          if (this.disabled || !this.cannonDebugger) return;
-          const refs = this.physicsStore.get((s) => s.refs);
-          for (const uuid in this.bodyMap) {
-            getMatrix(refs[uuid]).decompose(v, q, s);
-            this.bodyMap[uuid].position.copy(v as unknown as Vec3);
-            this.bodyMap[uuid].quaternion.copy(q as unknown as CQuarternion);
-          }
-          this.cannonDebugger.update();
-        },
-        0,
-        this.store
-      );
+    this.#beforeRenderCleanup = this.#store.get('internal').subscribe(
+      () => {
+        if (this.disabled || !this.#cannonDebugger) return;
+        const refs = this.#physicsStore.get('refs');
+        for (const uuid in this.bodyMap) {
+          getMatrix(refs[uuid]).decompose(v, q, s);
+          this.bodyMap[uuid].position.copy(v as unknown as Vec3);
+          this.bodyMap[uuid].quaternion.copy(q as unknown as CQuarternion);
+        }
+        this.#cannonDebugger.update();
+      },
+      0,
+      this.#store
+    );
   }
 
   ngOnDestroy() {
-    this.beforeRenderCleanup?.();
+    this.#beforeRenderCleanup?.();
   }
 }
