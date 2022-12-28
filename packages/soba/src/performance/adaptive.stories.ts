@@ -81,7 +81,7 @@ class AdaptiveStory {}
 
 export default {
   title: 'Performance/Adaptive DPR',
-  decorators: [moduleMetadata({ imports: [StorybookSetup, AdaptiveStory] })],
+  decorators: [moduleMetadata({ imports: [StorybookSetup] })],
 } as Meta;
 
 export const Default: Story = () => ({

@@ -1,4 +1,4 @@
-import { extend, NgtArgs, NgtCanvas, NgtPerformance } from '@angular-three/core';
+import { extend, NgtArgs, NgtCanvas, NgtPerformance, NgtRxStore } from '@angular-three/core';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { NgComponentOutlet, NgIf } from '@angular/common';
 import {
@@ -12,11 +12,11 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  TemplateRef,
   Type,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { debounceTime, Observable } from 'rxjs';
 import { AmbientLight, Color, PointLight } from 'three';
 
 interface CanvasOptions {
@@ -51,7 +51,8 @@ const defaultCanvasOptions: CanvasOptions = {
 };
 
 const CANVAS_OPTIONS = new InjectionToken<CanvasOptions>('canvas options');
-const STORY_COMPONENT = new InjectionToken<TemplateRef<unknown>>('story component');
+const STORY_COMPONENT = new InjectionToken<Type<unknown>>('story component');
+const STORY_INPUTS = new InjectionToken<Observable<Record<string, unknown>>>('story inputs');
 
 extend({
   Color,
@@ -78,14 +79,37 @@ extend({
       ></ngts-orbit-controls>
     </ng-container>
 
-    <ng-container *ngComponentOutlet="storyComponent"></ng-container>
+    <ng-container #anchor></ng-container>
   `,
   imports: [NgIf, NgtArgs, NgtsOrbitControls, NgComponentOutlet],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class StorybookScene {
+export class StorybookScene extends NgtRxStore implements OnInit, OnDestroy {
   readonly canvasOptions = inject(CANVAS_OPTIONS);
   readonly storyComponent = inject(STORY_COMPONENT);
+  readonly storyInputs = inject(STORY_INPUTS);
+
+  @ViewChild('anchor', { read: ViewContainerRef, static: true })
+  anchor!: ViewContainerRef;
+  #ref?: ComponentRef<unknown>;
+
+  ngOnInit() {
+    this.#ref = this.anchor.createComponent(this.storyComponent);
+
+    this.hold(this.storyInputs, (inputs) => {
+      for (const [key, value] of Object.entries(inputs)) {
+        this.#ref!.setInput(key, value);
+      }
+      this.#ref!.changeDetectorRef.detectChanges();
+    });
+
+    this.#ref.changeDetectorRef.detectChanges();
+  }
+
+  override ngOnDestroy() {
+    this.#ref?.destroy();
+    super.ngOnDestroy();
+  }
 }
 
 @Component({
@@ -112,20 +136,28 @@ export class StorybookCanvas {
   template: ` <ng-container #anchor></ng-container> `,
   imports: [StorybookCanvas],
 })
-export class StorybookSetup implements OnInit, OnDestroy {
+export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
   @Input() camera: CanvasOptions['camera'] = defaultCanvasOptions.camera;
   @Input() performance: CanvasOptions['performance'] = defaultCanvasOptions.performance;
   @Input() whiteBackground: CanvasOptions['whiteBackground'] = defaultCanvasOptions.whiteBackground;
   @Input() lights: CanvasOptions['lights'] = defaultCanvasOptions.lights;
   @Input() controls: CanvasOptions['controls'] = defaultCanvasOptions.controls;
   @Input() storyComponent!: Type<unknown>;
+  @Input() set storyInputs(storyInputs: Record<string, unknown>) {
+    this.set({ storyInputs });
+  }
 
   @ViewChild('anchor', { read: ViewContainerRef, static: true })
   anchor!: ViewContainerRef;
 
   private ref?: ComponentRef<unknown>;
-  readonly StorybookCanvas = StorybookCanvas;
+  readonly storybookCanvas = StorybookCanvas;
   readonly envInjector = inject(EnvironmentInjector);
+
+  override initialize(): void {
+    super.initialize();
+    this.set({ storyInputs: {} });
+  }
 
   ngOnInit() {
     const mergedOptions = {
@@ -136,11 +168,13 @@ export class StorybookSetup implements OnInit, OnDestroy {
       controls: this.controls,
       lights: this.lights,
     } as Required<CanvasOptions>;
-    this.ref = this.anchor.createComponent(this.StorybookCanvas, {
+    const storyInputs$ = this.select('storyInputs').pipe(debounceTime(100));
+    this.ref = this.anchor.createComponent(this.storybookCanvas, {
       environmentInjector: createEnvironmentInjector(
         [
           { provide: CANVAS_OPTIONS, useValue: mergedOptions },
           { provide: STORY_COMPONENT, useValue: this.storyComponent },
+          { provide: STORY_INPUTS, useValue: storyInputs$ },
         ],
         this.envInjector
       ),
@@ -148,7 +182,12 @@ export class StorybookSetup implements OnInit, OnDestroy {
     this.ref.changeDetectorRef.detectChanges();
   }
 
-  ngOnDestroy() {
+  override ngOnDestroy() {
     this.ref?.destroy();
+    super.ngOnDestroy();
   }
+}
+
+export function turn(object: THREE.Object3D) {
+  object.rotation.y += 0.01;
 }
