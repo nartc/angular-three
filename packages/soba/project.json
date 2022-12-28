@@ -43,7 +43,9 @@
           "packages/soba/cameras/**/*.ts",
           "packages/soba/cameras/**/*.html",
           "packages/soba/controls/**/*.ts",
-          "packages/soba/controls/**/*.html"
+          "packages/soba/controls/**/*.html",
+          "packages/soba/performance/**/*.ts",
+          "packages/soba/performance/**/*.html"
         ]
       }
     }
