@@ -9,6 +9,7 @@ import { is } from '../utils/is';
 export const SPECIAL_DOM_TAG = {
   NGT_PORTAL: 'ngt-portal',
   NGT_PRIMITIVE: 'ngt-primitive',
+  NGT_VALUE: 'ngt-value',
 } as const;
 
 export const ATTRIBUTES = {
@@ -53,7 +54,11 @@ export function attachThreeInstances(parent: NgtInstanceNode, child: NgtInstance
       }
 
       // attach
-      attach(parent, child, attachProp);
+      if (cLS.isRaw) {
+        attach(parent, child.valueOf(), attachProp);
+      } else {
+        attach(parent, child, attachProp);
+      }
 
       // save value
       cLS.previousAttach = attachProp.reduce((value, property) => value[property], parent);

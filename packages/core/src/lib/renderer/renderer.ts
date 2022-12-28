@@ -111,6 +111,24 @@ export class NgtRenderer implements Renderer2 {
       return el;
     }
 
+    // handle raw value
+    if (name === SPECIAL_DOM_TAG.NGT_VALUE) {
+      if (!injectedArgs[0]) throw new Error(`[NGT] ngt-value without args is invalid`);
+      const value = injectedArgs[0];
+      this.stateCol.addDomThree(
+        el,
+        Object.assign(value, {
+          __ngt__: {
+            store,
+            attach,
+            args: injectedArgs,
+            isRaw: true,
+          },
+        })
+      );
+      return el;
+    }
+
     // with injectNgtRef, consumers can pass in ref with value. We respect that value
     if (injectedRef && injectedRef.nativeElement) {
       const injectedInstance = injectedRef.nativeElement;
@@ -209,10 +227,20 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
 
-    //    TODO: unsure what needs to happen here. It seems fine without having to handle this case
-    //    if (parentThree && !childThree) {
-    //      console.log('[NGT] This case is unhandled.', { parent, newChild, parentThree });
-    //    }
+    if (parentThree && !childThree) {
+      // we traverse the childNodes of newChild to try adding to the parentThree
+      const domChildren = (newChild as HTMLElement).childNodes;
+      let i = domChildren.length - 1;
+      while (i >= 0) {
+        const domChild = domChildren.item(i)!;
+        const domThree = this.stateCol.getThree(domChild as HTMLElement);
+        if (domThree) {
+          this.appendChild(parent, domChild, false);
+        }
+        i--;
+      }
+      return;
+    }
 
     // DOM parent, THREE child, compound
     if (!parentThree && childThree) {

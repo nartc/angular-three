@@ -121,7 +121,7 @@ export class NgtStore extends NgtRxStore<NgtState> {
         pointer,
 
         frameloop: 'always',
-        perforamnce: {
+        performance: {
           current: 1,
           min: 0.5,
           max: 1,

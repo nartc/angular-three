@@ -345,6 +345,8 @@ export interface NgtInstanceLocalState {
   previousAttach?: unknown | (() => void);
   // memoized props
   memoized?: NgtAnyRecord;
+  // is raw value
+  isRaw?: boolean;
 }
 
 export type NgtInstanceNode<TNode = any> = TNode & {

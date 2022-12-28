@@ -24,7 +24,10 @@ export interface NgtRendererRoot {
 
 export class NgtRendererStateCollection {
   private readonly domThreeMap = new Map<HTMLElement, NgtInstanceNode>();
-  private readonly domMap = new Map<HTMLElement, { isCompound?: boolean }>();
+  private readonly domMap = new Map<
+    HTMLElement,
+    { isCompound?: boolean; rawValue?: any; attach?: string[] | NgtAttachFunction }
+  >();
   private readonly threeMap = new Map<
     NgtInstanceNode,
     {
@@ -188,16 +191,21 @@ export class NgtRendererStateCollection {
     this.threeMap.delete(three);
     const localState = getLocalState(three);
     if (localState) {
-      const objects = localState.objects.value;
-      objects.forEach((obj) => this.removeThreeState(obj));
-      const nonObjects = localState.nonObjects.value;
-      nonObjects.forEach((obj) => this.removeThreeState(obj));
+      if (localState.objects) {
+        const objects = localState.objects.value;
+        objects.forEach((obj) => this.removeThreeState(obj));
+        localState.objects.complete();
+      }
 
-      localState.objects.complete();
+      if (localState.nonObjects) {
+        const nonObjects = localState.nonObjects.value;
+        nonObjects.forEach((obj) => this.removeThreeState(obj));
+        localState.nonObjects.complete();
+      }
+
       delete (localState as NgtAnyRecord)['objects'];
       delete (localState as NgtAnyRecord)['addObject'];
       delete (localState as NgtAnyRecord)['removeObject'];
-      localState.nonObjects.complete();
       delete (localState as NgtAnyRecord)['nonObjects'];
       delete (localState as NgtAnyRecord)['addNonObject'];
       delete (localState as NgtAnyRecord)['removeNonObject'];

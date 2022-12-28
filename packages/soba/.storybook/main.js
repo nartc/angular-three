@@ -3,7 +3,7 @@ const rootMain = require('../../../.storybook/main');
 module.exports = {
   ...rootMain,
   core: { ...rootMain.core, builder: 'webpack5' },
-  stories: [...rootMain.stories, '../**/*.stories.mdx', '../**/*.stories.@(js|jsx|ts|tsx)'],
+  stories: [...rootMain.stories, '../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [...rootMain.addons],
   webpackFinal: async (config, { configType }) => {
     // apply any global webpack configs that might have been specified in .storybook/main.js
@@ -15,4 +15,5 @@ module.exports = {
 
     return config;
   },
+  staticDirs: ['./public'],
 };

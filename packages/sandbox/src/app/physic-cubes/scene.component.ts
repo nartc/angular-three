@@ -83,6 +83,7 @@ export class Cube {
     <ngt-ambient-light></ngt-ambient-light>
     <ngt-directional-light [position]="10" castShadow>
       <ngt-vector2 *args="[2048, 2048]" attach="shadow.mapSize"></ngt-vector2>
+      <ngt-value *args="[-0.001]" attach="shadow.bias"></ngt-value>
     </ngt-directional-light>
 
     <ngtc-physics>
