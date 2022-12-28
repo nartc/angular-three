@@ -1,12 +1,12 @@
 import { injectNgtDestroy, injectNgtLoader, injectNgtStore } from '@angular-three/core';
-import { map, Observable, takeUntil } from 'rxjs';
+import { isObservable, map, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
 import { Texture, TextureLoader } from 'three';
 
 export const IsObject = (url: any): url is Record<string, string> =>
   url === Object(url) && !Array.isArray(url) && typeof url !== 'function';
 
 export function injectNgtsTextureLoader<TInput extends string[] | string | Record<string, string>>(
-  input: TInput,
+  input: TInput | Observable<TInput>,
   onLoad?: (texture: Texture | Texture[]) => void
 ): Observable<
   TInput extends any[]
@@ -17,25 +17,31 @@ export function injectNgtsTextureLoader<TInput extends string[] | string | Recor
 > {
   const store = injectNgtStore();
   const [destroy$] = injectNgtDestroy();
-  const textures$ = injectNgtLoader(TextureLoader, IsObject(input) ? Object.values(input) : input);
+  const input$ = isObservable(input) ? input : of(input);
 
-  textures$.pipe(takeUntil(destroy$)).subscribe((textures: Texture | Texture[]) => {
-    if (onLoad) onLoad(textures);
-    const array = Array.isArray(textures) ? textures : [textures];
-    array.forEach(store.get('gl').initTexture);
-  });
+  return input$.pipe(
+    switchMap((inputs) => {
+      // NOTE: this works because injectNgtLoader doesn't actually use any "inject". We need to reevaluate this approach
+      return injectNgtLoader(TextureLoader, IsObject(inputs) ? Object.values(inputs) : inputs).pipe(
+        tap((textures) => {
+          if (onLoad) onLoad(textures);
+          const array = Array.isArray(textures) ? textures : [textures];
+          array.forEach(store.get('gl').initTexture);
+        }),
+        map((textures) => {
+          if (IsObject(inputs)) {
+            const keys = Object.keys(input);
+            return keys.reduce((result, key) => {
+              result[key as keyof typeof result] = (textures as Texture[])[keys.indexOf(key)];
+              return result;
+            }, {} as Record<keyof TInput, Texture>);
+          }
+          return textures as any;
+        })
+      );
+    }),
 
-  return textures$.pipe(
-    map((textures: Texture | Texture[]) => {
-      if (IsObject(input)) {
-        const keys = Object.keys(input);
-        return keys.reduce((result, key) => {
-          result[key as keyof typeof result] = (textures as Texture[])[keys.indexOf(key)];
-          return result;
-        }, {} as Record<keyof TInput, Texture>);
-      }
-      return textures;
-    })
+    takeUntil(destroy$)
   ) as Observable<
     TInput extends any[]
       ? Texture[]

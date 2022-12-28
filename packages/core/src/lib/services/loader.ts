@@ -42,10 +42,10 @@ function injectLoader<TReturnType, TUrl extends string | string[]>(
   extensions?: NgtLoaderExtensions,
   onProgress?: (event: ProgressEvent) => void
 ): Observable<
-    TUrl extends string[]
-      ? Array<NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>>
-      : NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>
-  >{
+  TUrl extends string[]
+    ? Array<NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>>
+    : NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>
+> {
   const urls = Array.isArray(input) ? input : [input];
   const loader = new loaderConstructor();
   if (extensions) {

@@ -1,1 +1,1 @@
-export * from './lib/cloud/cloud'
+export * from './lib/cloud/cloud';

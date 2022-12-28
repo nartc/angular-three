@@ -1,5 +1,6 @@
 import {
   extend,
+  injectNgtRef,
   injectNgtStore,
   NgtBeforeRender,
   NgtPush,
@@ -11,7 +12,7 @@ import { NgtsBillboard } from '@angular-three/soba/abstractions';
 import { injectNgtsTextureLoader } from '@angular-three/soba/loaders';
 import { NgFor } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
-import { Observable, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   ColorRepresentation,
   Group,
@@ -35,31 +36,32 @@ extend({
   selector: 'ngts-cloud',
   standalone: true,
   template: `
-    <ngt-group ngtCompound>
+    <ngt-group ngtCompound *ref="ref">
       <ngt-group
         [position]="[0, 0, (get('segments') / 2) * get('depth')]"
         (beforeRender)="onBeforeRender($any($event))"
       >
-        <ng-container *ngFor="let cloud of clouds$ | ngtPush : []; let index = i">
-          <ngts-billboard [position]="[cloud.x, cloud.y, -i * get('depth')]">
-            <ngt-mesh [scale]="cloud.scale" [rotation]="[0, 0, 0]">
-              <ngt-plane-geometry></ngt-plane-geometry>
-              <ngt-mesh-standard-material
-                transparent
-                [map]="cloudTexture$ | ngtPush: null"
-                [depthTest]="get('depthTest')"
-                [opacity]="(cloud.scale / 6) * cloud.density * get('opacity')"
-                [color]="get('color')"
-              >
-                <ngt-value *args="[encoding]" attach="map.encoding"></ngt-value>
-              </ngt-mesh-standard-material>
-            </ngt-mesh>
-          </ngts-billboard>
-        </ng-container>
+        <ngts-billboard
+          *ngFor="let cloud of clouds$ | ngtPush : []; let i = index"
+          [position]="[cloud.x, cloud.y, -i * get('depth')]"
+        >
+          <ngt-mesh [scale]="cloud.scale" [rotation]="[0, 0, 0]">
+            <ngt-plane-geometry></ngt-plane-geometry>
+            <ngt-mesh-standard-material
+              transparent
+              [map]="cloudTexture$ | ngtPush : null"
+              [depthTest]="get('depthTest')"
+              [opacity]="(cloud.scale / 6) * cloud.density * get('opacity')"
+              [color]="get('color')"
+            >
+              <ngt-value *args="[encoding]" attach="map.encoding"></ngt-value>
+            </ngt-mesh-standard-material>
+          </ngt-mesh>
+        </ngts-billboard>
       </ngt-group>
     </ngt-group>
   `,
-  imports: [NgtRef, NgFor, NgtPush, NgtsBillboard],
+  imports: [NgFor, NgtPush, NgtsBillboard, NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsCloud extends NgtRxStore {
@@ -67,6 +69,8 @@ export class NgtsCloud extends NgtRxStore {
 
   readonly #store = injectNgtStore();
   readonly encoding = this.#store.get('gl', 'outputEncoding');
+
+  @Input() ref = injectNgtRef<Group>();
 
   @Input() set opacity(opacity: number) {
     this.set({ opacity });
@@ -101,9 +105,7 @@ export class NgtsCloud extends NgtRxStore {
   }
 
   readonly clouds$ = this.select('clouds');
-  readonly cloudTexture$ = this.select('texture').pipe(
-    switchMap((texture) => injectNgtsTextureLoader(texture) as Observable<Texture>)
-  );
+  readonly cloudTexture$ = injectNgtsTextureLoader(this.select('texture')) as Observable<Texture>;
 
   override initialize() {
     super.initialize();
