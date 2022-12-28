@@ -8,9 +8,18 @@ import {
   NgtRxStore,
 } from '@angular-three/core';
 import { NgtsBillboard } from '@angular-three/soba/abstractions';
+import { injectNgtsTextureLoader } from '@angular-three/soba/loaders';
 import { NgFor } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
-import { ColorRepresentation, Group, Mesh, MeshStandardMaterial, PlaneGeometry } from 'three';
+import { Observable, switchMap } from 'rxjs';
+import {
+  ColorRepresentation,
+  Group,
+  Mesh,
+  MeshStandardMaterial,
+  PlaneGeometry,
+  Texture,
+} from 'three';
 
 const CLOUD_URL =
   'https://rawcdn.githack.com/pmndrs/drei-assets/9225a9f1fbd449d9411125c2f419b843d0308c9f/cloud.png';
@@ -37,6 +46,7 @@ extend({
               <ngt-plane-geometry></ngt-plane-geometry>
               <ngt-mesh-standard-material
                 transparent
+                [map]="cloudTexture$ | ngtPush: null"
                 [depthTest]="get('depthTest')"
                 [opacity]="(cloud.scale / 6) * cloud.density * get('opacity')"
                 [color]="get('color')"
@@ -91,6 +101,9 @@ export class NgtsCloud extends NgtRxStore {
   }
 
   readonly clouds$ = this.select('clouds');
+  readonly cloudTexture$ = this.select('texture').pipe(
+    switchMap((texture) => injectNgtsTextureLoader(texture) as Observable<Texture>)
+  );
 
   override initialize() {
     super.initialize();

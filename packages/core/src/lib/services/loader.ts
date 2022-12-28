@@ -26,9 +26,11 @@ interface NgtLoader {
     input: TUrl,
     extensions?: NgtLoaderExtensions,
     onProgress?: (event: ProgressEvent) => void
-  ): TUrl extends string[]
-    ? Observable<Array<NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>>>
-    : Observable<NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>>;
+  ): Observable<
+    TUrl extends string[]
+      ? Array<NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>>
+      : NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>
+  >;
   destroy: () => void;
 }
 
@@ -39,9 +41,11 @@ function injectLoader<TReturnType, TUrl extends string | string[]>(
   input: TUrl,
   extensions?: NgtLoaderExtensions,
   onProgress?: (event: ProgressEvent) => void
-): TUrl extends string[]
-  ? Observable<Array<NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>>>
-  : Observable<NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>> {
+): Observable<
+    TUrl extends string[]
+      ? Array<NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>>
+      : NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>
+  >{
   const urls = Array.isArray(input) ? input : [input];
   const loader = new loaderConstructor();
   if (extensions) {
