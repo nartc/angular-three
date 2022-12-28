@@ -1,0 +1,130 @@
+import {
+  extend,
+  injectNgtStore,
+  NgtBeforeRender,
+  NgtPush,
+  NgtRef,
+  NgtRendererFlags,
+  NgtRxStore,
+} from '@angular-three/core';
+import { NgtsBillboard } from '@angular-three/soba/abstractions';
+import { NgFor } from '@angular/common';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
+import { ColorRepresentation, Group, Mesh, MeshStandardMaterial, PlaneGeometry } from 'three';
+
+const CLOUD_URL =
+  'https://rawcdn.githack.com/pmndrs/drei-assets/9225a9f1fbd449d9411125c2f419b843d0308c9f/cloud.png';
+
+extend({
+  Group,
+  Mesh,
+  PlaneGeometry,
+  MeshStandardMaterial,
+});
+
+@Component({
+  selector: 'ngts-cloud',
+  standalone: true,
+  template: `
+    <ngt-group ngtCompound>
+      <ngt-group
+        [position]="[0, 0, (get('segments') / 2) * get('depth')]"
+        (beforeRender)="onBeforeRender($any($event))"
+      >
+        <ng-container *ngFor="let cloud of clouds$ | ngtPush : []; let index = i">
+          <ngts-billboard [position]="[cloud.x, cloud.y, -i * get('depth')]">
+            <ngt-mesh [scale]="cloud.scale" [rotation]="[0, 0, 0]">
+              <ngt-plane-geometry></ngt-plane-geometry>
+              <ngt-mesh-standard-material
+                transparent
+                [depthTest]="get('depthTest')"
+                [opacity]="(cloud.scale / 6) * cloud.density * get('opacity')"
+                [color]="get('color')"
+              >
+                <ngt-value *args="[encoding]" attach="map.encoding"></ngt-value>
+              </ngt-mesh-standard-material>
+            </ngt-mesh>
+          </ngts-billboard>
+        </ng-container>
+      </ngt-group>
+    </ngt-group>
+  `,
+  imports: [NgtRef, NgFor, NgtPush, NgtsBillboard],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+export class NgtsCloud extends NgtRxStore {
+  static [NgtRendererFlags.COMPOUND] = true;
+
+  readonly #store = injectNgtStore();
+  readonly encoding = this.#store.get('gl', 'outputEncoding');
+
+  @Input() set opacity(opacity: number) {
+    this.set({ opacity });
+  }
+
+  @Input() set speed(speed: number) {
+    this.set({ speed });
+  }
+
+  @Input() set width(width: number) {
+    this.set({ width });
+  }
+
+  @Input() set depth(depth: number) {
+    this.set({ depth });
+  }
+
+  @Input() set segments(segments: number) {
+    this.set({ segments });
+  }
+
+  @Input() set texture(texture: string) {
+    this.set({ texture });
+  }
+
+  @Input() set color(color: ColorRepresentation) {
+    this.set({ color });
+  }
+
+  @Input() set depthTest(depthTest: boolean) {
+    this.set({ depthTest });
+  }
+
+  readonly clouds$ = this.select('clouds');
+
+  override initialize() {
+    super.initialize();
+    this.set({
+      opacity: 0.5,
+      speed: 0.4,
+      width: 10,
+      depth: 1.5,
+      segments: 20,
+      texture: CLOUD_URL,
+      color: '#ffffff',
+      depthTest: true,
+    });
+    this.connect(
+      'clouds',
+      this.select(['width', 'segments', 'speed'], ({ width, segments, speed }) => {
+        return [...new Array(segments)].map((_, index) => ({
+          x: width / 2 - Math.random() * width,
+          y: width / 2 - Math.random() * width,
+          scale: 0.4 + Math.sin(((index + 1) / segments) * Math.PI) * ((0.2 + Math.random()) * 10),
+          density: Math.max(0.2, Math.random()),
+          rotation: Math.max(0.002, 0.005 * Math.random()) * speed,
+        }));
+      })
+    );
+  }
+
+  onBeforeRender({ state, object }: NgtBeforeRender<Group>) {
+    const clouds = this.get('clouds');
+    object.children.forEach((cloud, index) => {
+      cloud.children[0].rotation.z += clouds[index].rotation;
+      cloud.children[0].scale.setScalar(
+        clouds[index].scale + (((1 + Math.sin(state.clock.getElapsedTime() / 10)) / 2) * index) / 10
+      );
+    });
+  }
+}
