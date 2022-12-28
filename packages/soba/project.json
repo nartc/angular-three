@@ -45,7 +45,9 @@
           "packages/soba/controls/**/*.ts",
           "packages/soba/controls/**/*.html",
           "packages/soba/performance/**/*.ts",
-          "packages/soba/performance/**/*.html"
+          "packages/soba/performance/**/*.html",
+          "packages/soba/staging/**/*.ts",
+          "packages/soba/staging/**/*.html"
         ]
       }
     },
