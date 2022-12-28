@@ -6,6 +6,8 @@
     "@angular/core": "^15.0.0"
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "three-stdlib": "^2.21.1",
+    "troika-three-text": "^0.47.1"
   }
 }

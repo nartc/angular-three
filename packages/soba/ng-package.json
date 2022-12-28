@@ -3,5 +3,6 @@
   "dest": "../../dist/packages/soba",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["three-stdlib", "troika-three-text"]
 }
