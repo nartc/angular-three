@@ -1,6 +1,6 @@
 import { extend, NgtArgs, NgtCanvas, NgtPerformance, NgtRxStore } from '@angular-three/core';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
-import { NgComponentOutlet, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import {
   Component,
   ComponentRef,
@@ -81,7 +81,7 @@ extend({
 
     <ng-container #anchor></ng-container>
   `,
-  imports: [NgIf, NgtArgs, NgtsOrbitControls, NgComponentOutlet],
+  imports: [NgIf, NgtArgs, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class StorybookScene extends NgtRxStore implements OnInit, OnDestroy {

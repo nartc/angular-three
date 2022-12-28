@@ -193,10 +193,9 @@ export default {
 
 export const Default: Story = (args) => ({
   props: {
-    ...args,
     camera: { position: [0, 0, 200] },
     storyComponent: DefaultTextStory,
-    storyInputs: { text: args['text'] },
+    storyInputs: args,
   },
   template: `
 <storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
@@ -213,10 +212,9 @@ Default.args = {
 
 export const Outline: Story = (args) => ({
   props: {
-    ...args,
     camera: { position: [0, 0, 200] },
     storyComponent: OutlineTextStory,
-    storyInputs: { text: args['text'] },
+    storyInputs: args,
   },
   template: `
 <storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
@@ -233,10 +231,9 @@ Outline.args = {
 
 export const Stroke: Story = (args) => ({
   props: {
-    ...args,
     camera: { position: [0, 0, 200] },
     storyComponent: StrokeTextStory,
-    storyInputs: { text: args['text'] },
+    storyInputs: args,
   },
   template: `
 <storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
@@ -253,10 +250,9 @@ Stroke.args = {
 
 export const Shadow: Story = (args) => ({
   props: {
-    ...args,
     camera: { position: [0, 0, 200] },
     storyComponent: ShadowTextStory,
-    storyInputs: { text: args['text'] },
+    storyInputs: args,
   },
   template: `
 <storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
@@ -273,10 +269,9 @@ Shadow.args = {
 
 export const LTR: Story = (args) => ({
   props: {
-    ...args,
     camera: { position: [0, 0, 200] },
     storyComponent: LTRTextStory,
-    storyInputs: { text: args['text'] },
+    storyInputs: args,
   },
   template: `
 <storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
@@ -291,10 +286,9 @@ LTR.args = {
 
 export const CustomMaterial: Story = (args) => ({
   props: {
-    ...args,
     camera: { position: [0, 0, 200] },
     storyComponent: CustomMaterialTextStory,
-    storyInputs: { text: args['text'], color: args['color'] },
+    storyInputs: args,
   },
   template: `
 <storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">

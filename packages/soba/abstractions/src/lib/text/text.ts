@@ -80,11 +80,6 @@ export class NgtsText extends NgtRxStore implements OnInit, OnDestroy {
     if (!this.ref.nativeElement) this.ref.nativeElement = this.#text;
     this.#preloadFont();
     this.#sync();
-
-    setTimeout(() => {
-      console.log(this.#text);
-      this.#store.get('invalidate')();
-    });
   }
 
   override ngOnDestroy(): void {
