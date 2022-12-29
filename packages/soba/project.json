@@ -49,7 +49,9 @@
           "packages/soba/staging/**/*.ts",
           "packages/soba/staging/**/*.html",
           "packages/soba/abstractions/**/*.ts",
-          "packages/soba/abstractions/**/*.html"
+          "packages/soba/abstractions/**/*.html",
+          "packages/soba/shaders/**/*.ts",
+          "packages/soba/shaders/**/*.html"
         ]
       }
     },

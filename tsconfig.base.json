@@ -26,6 +26,7 @@
       "@angular-three/soba/loaders": ["packages/soba/loaders/src/index.ts"],
       "@angular-three/soba/misc": ["packages/soba/misc/src/index.ts"],
       "@angular-three/soba/performance": ["packages/soba/performance/src/index.ts"],
+      "@angular-three/soba/shaders": ["packages/soba/shaders/src/index.ts"],
       "@angular-three/soba/staging": ["packages/soba/staging/src/index.ts"]
     }
   },
