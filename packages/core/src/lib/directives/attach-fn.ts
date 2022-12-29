@@ -8,16 +8,12 @@ import {
 } from '@angular/core';
 import { NgtRxStore } from '../stores/rx-store';
 import type { NgtAttachFunction, NgtHasValidateForRenderer, NgtState } from '../types';
-import { injectNgtArgs, NgtArgs } from './args';
 
 @Directive({
   selector: '[attachFn]',
   standalone: true,
-  hostDirectives: [NgtArgs],
 })
 export class NgtAttachFn implements NgtHasValidateForRenderer {
-  readonly #ngtArgs = injectNgtArgs({ host: true });
-
   readonly #templateRef = inject(TemplateRef);
   readonly #vcr = inject(ViewContainerRef);
   #view?: EmbeddedViewRef<unknown>;
@@ -25,16 +21,8 @@ export class NgtAttachFn implements NgtHasValidateForRenderer {
   #injectedAttachFn?: NgtAttachFunction;
   #injected = false;
 
-  constructor() {
-    this.#ngtArgs.shouldCreateView = false;
-  }
-
-  @Input() set attachFn(inputs: NgtAttachFunction | [NgtAttachFunction, any[]] | null) {
-    if (!inputs) return;
-    const [attachFn, args] = Array.isArray(inputs) ? inputs : [inputs, undefined];
-    if (args) {
-      this.#ngtArgs.args = args;
-    }
+  @Input() set attachFn(attachFn: NgtAttachFunction | null) {
+    if (!attachFn) return;
     this.#injected = false;
     this.#injectedAttachFn = attachFn;
     this.#createView();

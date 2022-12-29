@@ -20,16 +20,13 @@ export class NgtArgs implements NgtHasValidateForRenderer {
 
   #injectedArgs: any[] = [];
   #injected = false;
-  shouldCreateView = true;
 
   @Input() set args(args: any[] | null) {
     if (args == null || !Array.isArray(args)) return;
     if (args.length === 1 && args[0] === null) return;
     this.#injected = false;
     this.#injectedArgs = args;
-    if (this.shouldCreateView) {
-      this.#createView();
-    }
+    this.#createView();
   }
 
   get args() {

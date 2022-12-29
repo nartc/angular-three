@@ -8,15 +8,12 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { NgtHasValidateForRenderer } from '../types';
-import { injectNgtArgs, NgtArgs } from './args';
 
 @Directive({
   selector: '[ref]',
   standalone: true,
-  hostDirectives: [NgtArgs],
 })
 export class NgtRef<T> implements NgtHasValidateForRenderer {
-  readonly #ngtArgs = injectNgtArgs({ host: true });
   readonly #templateRef = inject(TemplateRef);
   readonly #vcr = inject(ViewContainerRef);
   #view?: EmbeddedViewRef<unknown>;
@@ -25,17 +22,8 @@ export class NgtRef<T> implements NgtHasValidateForRenderer {
   #injected = false;
   shouldCreateView = true;
 
-  constructor() {
-    this.#ngtArgs.shouldCreateView = false;
-  }
-
-  @Input() set ref(input: ElementRef<T> | [ElementRef<T>, any[]] | null) {
-    if (!input) return;
-    const [ref, args] = Array.isArray(input) ? input : [input, undefined];
-    if (args) {
-        console.log(args);
-      this.#ngtArgs.args = args;
-    }
+  @Input() set ref(ref: ElementRef<T> | null) {
+    if (!ref) return;
     this.#injected = false;
     this.#injectedRef = ref;
     if (this.shouldCreateView) {

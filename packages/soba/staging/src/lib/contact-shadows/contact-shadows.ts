@@ -52,19 +52,9 @@ extend({
             <ngt-value *args="[encoding]" attach="map.encoding"></ngt-value>
           </ngt-mesh-basic-material>
         </ngt-mesh>
-        <ngt-orthographic-camera
-          *ref="[
-            shadowCameraRef,
-            [
-              -get('scaledWidth') / 2,
-              get('scaledWidth') / 2,
-              get('scaledHeight') / 2,
-              -get('scaledHeight') / 2,
-              0,
-              get('far')
-            ]
-          ]"
-        ></ngt-orthographic-camera>
+        <ng-container *args="get('cameraArgs')">
+          <ngt-orthographic-camera *ref="shadowCameraRef"></ngt-orthographic-camera>
+        </ng-container>
       </ng-container>
     </ngt-group>
   `,
@@ -160,6 +150,20 @@ export class NgtsContactShadows extends NgtRxStore implements OnInit {
       this.select(
         ['height', 'scale'],
         ({ height, scale }) => height * (Array.isArray(scale) ? scale[1] : scale || 1)
+      )
+    );
+    this.connect(
+      'cameraArgs',
+      this.select(
+        ['scaledWidth', 'scaledHeight', 'far'],
+        ({ scaledWidth: width, scaledHeight: height, far }) => [
+          -width / 2,
+          width / 2,
+          height / 2,
+          -height / 2,
+          0,
+          far,
+        ]
       )
     );
     this.connect(
