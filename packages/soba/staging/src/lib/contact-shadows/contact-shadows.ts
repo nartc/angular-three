@@ -75,6 +75,11 @@ extend({
 export class NgtsContactShadows extends NgtRxStore implements OnInit {
   static [NgtRendererFlags.COMPOUND] = true;
 
+  readonly #store = injectNgtStore();
+  readonly #actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
+  readonly shadowCameraRef = injectNgtRef<OrthographicCamera>();
+  readonly encoding = this.#store.get('gl', 'outputEncoding');
+  readonly contactShadows$ = this.select('contactShadows');
   readonly Math = Math;
 
   @Input() ref = injectNgtRef<Group>();
@@ -126,12 +131,6 @@ export class NgtsContactShadows extends NgtRxStore implements OnInit {
   @Input() set renderOrder(renderOrder: number) {
     this.set({ renderOrder });
   }
-
-  readonly #store = injectNgtStore();
-  readonly #actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
-  readonly shadowCameraRef = injectNgtRef<OrthographicCamera>();
-  readonly encoding = this.#store.get('gl', 'outputEncoding');
-  readonly contactShadows$ = this.select('contactShadows');
 
   override initialize() {
     super.initialize();
