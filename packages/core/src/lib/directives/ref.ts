@@ -33,6 +33,7 @@ export class NgtRef<T> implements NgtHasValidateForRenderer {
     if (!input) return;
     const [ref, args] = Array.isArray(input) ? input : [input, undefined];
     if (args) {
+        console.log(args);
       this.#ngtArgs.args = args;
     }
     this.#injected = false;

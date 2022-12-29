@@ -116,7 +116,7 @@ export function removeThreeChild(
 
   const isPrimitive = cLS?.primitive;
   if (!isPrimitive) {
-    removeThreeRecursive(cLS?.objects.value || [], child, !!dispose);
+    removeThreeRecursive(cLS?.objects?.value || [], child, !!dispose);
     removeThreeRecursive(child.children, child, !!dispose);
   }
 

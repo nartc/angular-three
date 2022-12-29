@@ -29,22 +29,27 @@ export function calcPosFromAngles(
   selector: 'ngts-sky',
   standalone: true,
   template: `
-    <ngt-primitive *ref="[ref, [ref.nativeElement]]" [scale]="get('scale')">
-      <ngt-value
-        *args="[get('mieCoefficient')]"
-        attach="material.uniforms.mieCoefficient.value"
-      ></ngt-value>
-      <ngt-value
-        *args="[get('mieDirectionalG')]"
-        attach="material.uniforms.mieDirectionalG.value"
-      ></ngt-value>
-      <ngt-value *args="[get('rayleigh')]" attach="material.uniforms.rayleigh.value"></ngt-value>
-      <ngt-value
-        *args="[get('sunPosition')]"
-        attach="material.uniforms.sunPosition.value"
-      ></ngt-value>
-      <ngt-value *args="[get('turbidity')]" attach="material.uniforms.turbidity.value"></ngt-value>
-    </ngt-primitive>
+    <ng-container *args="[ref.nativeElement]">
+      <ngt-primitive ngtCompound *ref="ref" [scale]="get('scale')">
+        <ngt-value
+          *args="[get('mieCoefficient')]"
+          attach="material.uniforms.mieCoefficient.value"
+        ></ngt-value>
+        <ngt-value
+          *args="[get('mieDirectionalG')]"
+          attach="material.uniforms.mieDirectionalG.value"
+        ></ngt-value>
+        <ngt-value *args="[get('rayleigh')]" attach="material.uniforms.rayleigh.value"></ngt-value>
+        <ngt-value
+          *args="[get('sunPosition')]"
+          attach="material.uniforms.sunPosition.value"
+        ></ngt-value>
+        <ngt-value
+          *args="[get('turbidity')]"
+          attach="material.uniforms.turbidity.value"
+        ></ngt-value>
+      </ngt-primitive>
+    </ng-container>
   `,
   imports: [NgtRef, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -53,6 +58,7 @@ export class NgtsSky extends NgtRxStore implements OnInit {
   static [NgtRendererFlags.COMPOUND] = true;
 
   @Input() ref = injectNgtRef<Sky>();
+  sky = new Sky();
 
   @Input() set distance(distance: number) {
     this.set({ distance });
@@ -101,12 +107,19 @@ export class NgtsSky extends NgtRxStore implements OnInit {
       sunPosition: calcPosFromAngles(inclination, azimuth),
     });
     this.connect(
+      'sunPosition',
+      this.select(['inclination', 'azimuth'], ({ inclination, azimuth }) =>
+        calcPosFromAngles(inclination, azimuth)
+      )
+    );
+    this.connect(
       'scale',
-      this.select('distance', (distance) => new Vector3().setScalar(distance))
+      this.select(['distance'], ({ distance }) => new Vector3().setScalar(distance))
     );
   }
 
   ngOnInit() {
     if (!this.ref.nativeElement) this.ref.nativeElement = new Sky();
+    this.ref.nativeElement.scale.setScalar(1000);
   }
 }
