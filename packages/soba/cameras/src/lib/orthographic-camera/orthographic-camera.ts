@@ -1,4 +1,4 @@
-import { extend, injectNgtRef, NgtPush, NgtRendererFlags } from '@angular-three/core';
+import { extend, NgtPush, NgtRendererFlags } from '@angular-three/core';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, ContentChild, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
@@ -13,7 +13,7 @@ extend({ OrthographicCamera, Group });
   standalone: true,
   template: `
     <ngt-orthographic-camera
-      *ref="ref"
+      *ref="cameraRef"
       ngtCompound
       [left]="left$ | ngtPush : 0"
       [right]="right$ | ngtPush : 0"
@@ -29,7 +29,7 @@ extend({ OrthographicCamera, Group });
       <ng-container
         *ngIf="cameraContent && cameraContent.ngtsCameraContent"
         [ngTemplateOutlet]="cameraContent.template"
-        [ngTemplateOutletContext]="{ fbo: fboRef.nativeElement, group }"
+        [ngTemplateOutletContext]="{ fbo: fboRef.nativeElement, group: group['__ngt_three__'] }"
       ></ng-container>
     </ngt-group>
   `,
@@ -40,8 +40,6 @@ export class NgtsOrthographicCamera extends NgtsCamera<THREE.OrthographicCamera>
   static [NgtRendererFlags.COMPOUND] = true;
 
   @ContentChild(NgtsCameraContent) cameraContent?: NgtsCameraContent;
-
-  @Input() ref = injectNgtRef<THREE.OrthographicCamera>();
 
   @Input() set left(left: number) {
     this.set({ left });

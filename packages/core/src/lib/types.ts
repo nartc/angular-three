@@ -206,15 +206,18 @@ export interface NgtRenderState extends NgtState {
   frame?: XRFrame;
 }
 
-export interface NgtBeforeRender<TObject extends Object3D = Object3D> {
+export interface NgtBeforeRender<TObject extends NgtInstanceNode = NgtInstanceNode> {
   state: NgtRenderState;
   object: TObject;
 }
 
-export type NgtBeforeRenderCallback<TObject = any> = (state: NgtRenderState, obj: TObject) => void;
+export type NgtBeforeRenderCallback<TObject extends NgtInstanceNode = NgtInstanceNode> = (
+  state: NgtRenderState,
+  obj: TObject
+) => void;
 
 export interface NgtBeforeRenderRecord {
-  callback: NgtBeforeRenderCallback<Object3D | undefined>;
+  callback: NgtBeforeRenderCallback;
   store: NgtRxStore<NgtState>;
   obj?: Object3D;
   priority?: number;

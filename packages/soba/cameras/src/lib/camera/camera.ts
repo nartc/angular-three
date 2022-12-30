@@ -25,8 +25,9 @@ export abstract class NgtsCamera<TCamera extends NgtCamera> extends NgtRxStore i
     this.set({ envMap });
   }
 
+  @Input() cameraRef = injectNgtRef<TCamera>();
+
   protected readonly store = injectNgtStore();
-  readonly cameraRef = injectNgtRef<TCamera>();
   readonly fboRef = injectNgtsFBO(() =>
     this.select('resolution').pipe(map((resolution) => ({ width: resolution })))
   );
@@ -45,11 +46,11 @@ export abstract class NgtsCamera<TCamera extends NgtCamera> extends NgtRxStore i
   }
 
   #setDefaultCamera() {
-    this.effect(combineLatest([this.cameraRef.$, this.select('makeDefault')]), () => {
+    this.effect(combineLatest([this.cameraRef.$, this.select('makeDefault')]), ([camera]) => {
       const makeDefault = this.get('makeDefault');
       if (makeDefault) {
         const { camera: oldCamera } = this.store.get();
-        this.store.set({ camera: this.cameraRef.nativeElement });
+        this.store.set({ camera });
         return () => {
           this.store.set({ camera: oldCamera });
         };

@@ -1,1 +1,1 @@
-export * from './lib/shader-material/shader-material'
+export * from './lib/shader-material/shader-material';

@@ -48,7 +48,11 @@ export function injectNgtsFBO<T extends boolean = false>(
 
     targetRef.nativeElement.setSize(_width, _height);
     if (samples) targetRef.nativeElement.samples = samples;
-    cdr.detectChanges();
+    try {
+      cdr.detectChanges();
+    } catch (e) {
+      cdr.markForCheck();
+    }
   });
 
   return targetRef;

@@ -51,7 +51,11 @@ export function injectNgtRef<T>(
     set(target, p, newValue, receiver) {
       if (p === 'nativeElement' && target[p] !== newValue) {
         ref$.next(newValue);
-        cdr.detectChanges();
+        try {
+          cdr.detectChanges();
+        } catch (e) {
+          cdr.markForCheck();
+        }
         lastValue = target[p];
         return Reflect.set(target, p, newValue, receiver);
       }

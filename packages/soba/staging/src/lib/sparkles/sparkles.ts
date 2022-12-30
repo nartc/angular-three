@@ -2,7 +2,9 @@ import {
   extend,
   injectNgtRef,
   injectNgtStore,
+  NgtAnyRecord,
   NgtArgs,
+  NgtBeforeRender,
   NgtRef,
   NgtRendererFlags,
   NgtRxStore,
@@ -142,6 +144,7 @@ function usePropAsIsOrAsAttribute<T = any>(
         transparent
         [pixelRatio]="dpr"
         [depthWrite]="false"
+        (beforeRender)="onMaterialBeforeRender($any($event))"
       ></ngt-sparkles-material>
     </ngt-points>
   `,
@@ -200,7 +203,6 @@ export class NgtsSparkles extends NgtRxStore {
       speed: 1,
       opacity: 1,
       scale: 1,
-      size: null,
     });
     this.connect(
       'positions',
@@ -213,16 +215,19 @@ export class NgtsSparkles extends NgtRxStore {
       )
     );
 
-    this.connect('sizes', this.#getAttribute<number>('size', { setDefault: Math.random }));
-    this.connect('opacities', this.#getAttribute<number>('opacity'));
-    this.connect('speeds', this.#getAttribute<number>('speed'));
+    this.connect('sizes', this.getAttribute$<number>('size', { setDefault: Math.random }));
+    this.connect('opacities', this.getAttribute$<number>('opacity'));
+    this.connect('speeds', this.getAttribute$<number>('speed'));
     this.connect(
       'noises',
-      this.#getAttribute<number | [number, number, number] | THREE.Vector3 | Float32Array>('noise')
+      this.getAttribute$<number | [number, number, number] | THREE.Vector3 | Float32Array>(
+        'noise',
+        { countValue: (_, count) => count * 3 }
+      )
     );
     this.connect(
       'colors',
-      this.#getAttribute<THREE.ColorRepresentation>('color', {
+      this.getAttribute$<THREE.ColorRepresentation>('color', {
         keyValue: (color) => (!isFloat32Array(color) ? new Color(color) : color),
         countValue: (color, count) => (color === undefined ? count * 3 : count),
         setDefault: () => 1,
@@ -230,7 +235,11 @@ export class NgtsSparkles extends NgtRxStore {
     );
   }
 
-  #getAttribute<TValue>(
+  onMaterialBeforeRender({ state, object }: NgtBeforeRender<typeof SparklesMaterial>) {
+    (object as NgtAnyRecord)['uniforms'].time.value = state.clock.elapsedTime;
+  }
+
+  private getAttribute$<TValue>(
     key: string,
     options?: {
       keyValue?: (value: TValue, count: number) => TValue;

@@ -47,6 +47,7 @@ export class NgtRendererStateCollection {
 
   addDomThree(dom: HTMLElement, three: NgtInstanceNode) {
     if (!this.domThreeMap.has(dom)) this.domThreeMap.set(dom, three);
+    Object.assign(dom, {__ngt_three__: three});
     return this.domThreeMap.get(dom)!;
   }
 
@@ -177,6 +178,7 @@ export class NgtRendererStateCollection {
     }
 
     if (this.domThreeMap.has(target)) {
+        delete this.domThreeMap.get(target)!['__ngt_three__'];
       this.domThreeMap.delete(target);
     }
   }
