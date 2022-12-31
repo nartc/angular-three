@@ -24,7 +24,7 @@ import { makeObjectGraph } from '../utils/make';
 
 interface NgtLoader {
   <TReturnType, TUrl extends string | string[]>(
-    loaderConstructor: NgtAnyConstructor<NgtLoaderResult<TReturnType>>,
+    loaderConstructorFactory: (inputs: TUrl) => NgtAnyConstructor<NgtLoaderResult<TReturnType>>,
     input: TUrl | Observable<TUrl>,
     extensions?: NgtLoaderExtensions,
     onProgress?: (event: ProgressEvent) => void
@@ -39,7 +39,7 @@ interface NgtLoader {
 const cached = new Map<string, Observable<any>>();
 
 function injectLoader<TReturnType, TUrl extends string | string[]>(
-  loaderConstructor: NgtAnyConstructor<NgtLoaderResult<TReturnType>>,
+  loaderConstructorFactory: (inputs: TUrl) => NgtAnyConstructor<NgtLoaderResult<TReturnType>>,
   input: TUrl | Observable<TUrl>,
   extensions?: NgtLoaderExtensions,
   onProgress?: (event: ProgressEvent) => void
@@ -49,13 +49,14 @@ function injectLoader<TReturnType, TUrl extends string | string[]>(
     : NgtBranchingReturn<TReturnType, GLTF, GLTF & NgtObjectMap>
 > {
   const urls$ = isObservable(input) ? input : of(input);
-  const loader = new loaderConstructor();
-  if (extensions) {
-    extensions(loader);
-  }
 
   return urls$.pipe(
     map((inputs) => {
+      const loaderConstructor = loaderConstructorFactory(inputs);
+      const loader = new loaderConstructor();
+      if (extensions) {
+        extensions(loader);
+      }
       const urls = Array.isArray(inputs) ? inputs : [inputs];
       return [
         urls.map((url) => {

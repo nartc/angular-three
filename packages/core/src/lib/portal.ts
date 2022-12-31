@@ -16,6 +16,7 @@ import { NgtRxStore } from './stores/rx-store';
 import { injectNgtStore, NgtStore } from './stores/store';
 import { NgtEventManager, NgtSize, NgtState } from './types';
 import { getLocalState } from './utils/instance';
+import { is } from './utils/is';
 import { updateCamera } from './utils/update';
 
 const privateKeys = [
@@ -92,8 +93,7 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
     const { events, size, ...restInputsState } = inputsState.state || {};
 
     const containerState = inputsState.container;
-    const container =
-      containerState instanceof ElementRef ? containerState.nativeElement : containerState;
+    const container = is.ref(containerState) ? containerState.nativeElement : containerState;
 
     const localState = getLocalState(container);
     if (!localState.store) {
@@ -160,8 +160,7 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
 
     return {
       ...intersect,
-      scene:
-        inputs.container instanceof ElementRef ? inputs.container.nativeElement : inputs.container,
+      scene: is.ref(inputs.container) ? inputs.container.nativeElement : inputs.container,
       raycaster: this.#raycaster,
       pointer: this.#pointer,
       previousStore: this.#parentStore,

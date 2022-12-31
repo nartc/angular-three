@@ -47,7 +47,7 @@ export function injectNgtsGLTFLoader<TInput extends string | string[]>(
   extensions?: (loader: GLTFLoader) => void
 ): Observable<TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap> {
   return injectNgtLoader(
-    GLTFLoader,
+    () => GLTFLoader,
     path,
     _extensions(useDraco, useMeshOpt, extensions)
   ) as Observable<TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap>;

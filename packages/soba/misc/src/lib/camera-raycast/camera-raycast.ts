@@ -1,4 +1,4 @@
-import { applyProps, injectNgtStore, NgtInjectedRef } from '@angular-three/core';
+import { applyProps, injectNgtStore, is, NgtInjectedRef } from '@angular-three/core';
 import { ElementRef } from '@angular/core';
 import { take } from 'rxjs';
 import { Raycaster } from 'three';
@@ -24,7 +24,7 @@ export function injectNgtCameraRaycast(
       }
     };
 
-    if (camera instanceof ElementRef) {
+    if (is.ref(camera)) {
       (camera as NgtInjectedRef<THREE.Camera>).$.pipe(take(1)).subscribe(raycast);
     } else {
       raycast(camera);
