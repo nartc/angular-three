@@ -38,7 +38,7 @@ export class NgtRendererStateCollection {
   >();
   private readonly compoundMap = new Map<
     HTMLElement,
-    { inputs: string[]; cleanUps: Set<() => void> }
+    { inputs: string[]; cleanUps: Set<() => void>; queueOps: Set<() => void> }
   >();
   private readonly commentMap = new Map<Comment, { injectorFactory: () => Injector }>();
   private readonly portalMap = new Map<HTMLElement, { injectorFactory: () => Injector }>();
@@ -47,7 +47,7 @@ export class NgtRendererStateCollection {
 
   addDomThree(dom: HTMLElement, three: NgtInstanceNode) {
     if (!this.domThreeMap.has(dom)) this.domThreeMap.set(dom, three);
-    Object.assign(dom, {__ngt_three__: three});
+    Object.assign(dom, { __ngt_three__: three });
     return this.domThreeMap.get(dom)!;
   }
 
@@ -85,7 +85,7 @@ export class NgtRendererStateCollection {
 
   addCompound(dom: HTMLElement, partial?: { inputs?: string[] }) {
     if (!this.compoundMap.has(dom)) {
-      const state: NgtAnyRecord = { inputs: [], cleanUps: new Set() };
+      const state: NgtAnyRecord = { inputs: [], cleanUps: new Set(), queueOps: new Set() };
       if (partial?.inputs) {
         state['inputs'] = partial.inputs;
       }
@@ -173,12 +173,14 @@ export class NgtRendererStateCollection {
       compoundOptions.cleanUps.forEach((cleanUp) => cleanUp());
       compoundOptions.cleanUps.clear();
       delete (compoundOptions as NgtAnyRecord)['cleanUps'];
+      compoundOptions.queueOps.clear();
+      delete (compoundOptions as NgtAnyRecord)['queueOps'];
       delete (compoundOptions as NgtAnyRecord)['inputs'];
       this.compoundMap.delete(target);
     }
 
     if (this.domThreeMap.has(target)) {
-        delete this.domThreeMap.get(target)!['__ngt_three__'];
+      delete this.domThreeMap.get(target)!['__ngt_three__'];
       this.domThreeMap.delete(target);
     }
   }

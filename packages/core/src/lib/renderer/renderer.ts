@@ -251,6 +251,11 @@ export class NgtRenderer implements Renderer2 {
         // and the child is indeed a THREE instance to be compounded, track it
         if (childThreeOptions?.compound) {
           this.stateCol.addDomThree(parent, childThree);
+          queueMicrotask(() => {
+            const compoundOptions = this.stateCol.getCompoundOptions(parent);
+            compoundOptions?.queueOps.forEach((op) => op());
+            compoundOptions?.queueOps.clear();
+          });
         } else if (childThreeOptions && !childThreeOptions.compoundParent) {
           // otherwise, we'll track the parent DOM (compound component)
           childThreeOptions.compoundParent = parent;
@@ -370,8 +375,7 @@ export class NgtRenderer implements Renderer2 {
   /*
    * Logic for [propertyBinding]
    */
-  setProperty(el: any, name: string, value: any, fromQueue?: number): void {
-    fromQueue ??= 1;
+  setProperty(el: any, name: string, value: any): void {
     const { isThree, isCompoundWithInstance, isCompoundNoInstance } =
       this.stateCol.getTargetFlags(el);
     const three = this.stateCol.getThree(el);
@@ -410,10 +414,12 @@ export class NgtRenderer implements Renderer2 {
       return;
     }
     // at this point, we don't have the Compound instance yet. Queue it and queue it max 5 times
-    if (isCompoundNoInstance && fromQueue <= 5) {
+    if (isCompoundNoInstance) {
       queueMicrotask(() => {
-        fromQueue ??= 1;
-        this.setProperty(el, name, value, fromQueue += 1);
+        const compoundOptions = this.stateCol.getCompoundOptions(el);
+        compoundOptions?.queueOps.add(() => {
+          this.setProperty(el, name, value);
+        });
       });
       return;
     }
@@ -423,13 +429,7 @@ export class NgtRenderer implements Renderer2 {
   /*
    * Logic for (eventBinding)
    */
-  listen(
-    target: any,
-    eventName: string,
-    callback: (event: any) => boolean | void,
-    fromQueue?: number
-  ): () => void {
-    fromQueue ??= 1;
+  listen(target: any, eventName: string, callback: (event: any) => boolean | void): () => void {
     const { isThree, isCompoundNoInstance, isCompoundWithInstance } =
       this.stateCol.getTargetFlags(target);
     const three = this.stateCol.getThree(target);
@@ -439,11 +439,12 @@ export class NgtRenderer implements Renderer2 {
     }
 
     // again, compound doesn't have instance yet.queue it to 5 times max
-    if (isCompoundNoInstance && fromQueue <= 5) {
+    if (isCompoundNoInstance) {
       queueMicrotask(() => {
-        fromQueue ??= 1;
         const compoundOptions = this.stateCol.getCompoundOptions(target);
-        compoundOptions?.cleanUps.add(this.listen(target, eventName, callback, fromQueue += 1));
+        compoundOptions?.queueOps.add(() => {
+          compoundOptions?.cleanUps.add(this.listen(target, eventName, callback));
+        });
       });
       return () => {};
     }
