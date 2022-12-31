@@ -370,7 +370,8 @@ export class NgtRenderer implements Renderer2 {
   /*
    * Logic for [propertyBinding]
    */
-  setProperty(el: any, name: string, value: any, fromQueue = 0): void {
+  setProperty(el: any, name: string, value: any, fromQueue?: number): void {
+    fromQueue ??= 1;
     const { isThree, isCompoundWithInstance, isCompoundNoInstance } =
       this.stateCol.getTargetFlags(el);
     const three = this.stateCol.getThree(el);
@@ -411,7 +412,8 @@ export class NgtRenderer implements Renderer2 {
     // at this point, we don't have the Compound instance yet. Queue it and queue it max 5 times
     if (isCompoundNoInstance && fromQueue <= 5) {
       queueMicrotask(() => {
-        this.setProperty(el, name, value, fromQueue++);
+        fromQueue ??= 1;
+        this.setProperty(el, name, value, fromQueue += 1);
       });
       return;
     }
@@ -425,8 +427,9 @@ export class NgtRenderer implements Renderer2 {
     target: any,
     eventName: string,
     callback: (event: any) => boolean | void,
-    fromQueue = 0
+    fromQueue?: number
   ): () => void {
+    fromQueue ??= 1;
     const { isThree, isCompoundNoInstance, isCompoundWithInstance } =
       this.stateCol.getTargetFlags(target);
     const three = this.stateCol.getThree(target);
@@ -438,8 +441,9 @@ export class NgtRenderer implements Renderer2 {
     // again, compound doesn't have instance yet.queue it to 5 times max
     if (isCompoundNoInstance && fromQueue <= 5) {
       queueMicrotask(() => {
+        fromQueue ??= 1;
         const compoundOptions = this.stateCol.getCompoundOptions(target);
-        compoundOptions?.cleanUps.add(this.listen(target, eventName, callback, fromQueue++));
+        compoundOptions?.cleanUps.add(this.listen(target, eventName, callback, fromQueue += 1));
       });
       return () => {};
     }

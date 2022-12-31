@@ -41,7 +41,7 @@ function _extensions(
 }
 
 export function injectNgtsGLTFLoader<TInput extends string | string[]>(
-  path: TInput,
+  path: TInput | Observable<TInput>,
   useDraco: boolean | string = true,
   useMeshOpt = true,
   extensions?: (loader: GLTFLoader) => void

@@ -237,21 +237,22 @@ extend({ Group });
         },
       } as NgtsBoundsApi;
 
-      let count = 0;
-      bounds.hold(
-        combineLatest([
-          bounds.select(selectSlice(['clip', 'fit', 'observe'])),
-          store.select(selectSlice(['camera', 'controls', 'size'])),
-        ]),
-        ([{ clip, fit, observe }]) => {
-          if (observe || count++ === 0) {
-            api.refresh();
-            if (fit) api.fit();
-            if (clip) api.clip();
+      queueMicrotask(() => {
+        let count = 0;
+        bounds.hold(
+          combineLatest([
+            bounds.select(selectSlice(['clip', 'fit', 'observe'])),
+            store.select(selectSlice(['camera', 'controls', 'size'])),
+          ]),
+          ([{ clip, fit, observe }]) => {
+            if (observe || count++ === 0) {
+              api.refresh();
+              if (fit) api.fit();
+              if (clip) api.clip();
+            }
           }
-        }
-      );
-
+        );
+      });
       return api;
     }),
     RxActionFactory,
