@@ -13,82 +13,63 @@ import { injectNgtsBoundsApi, NgtsBounds, NgtsContactShadows } from '@angular-th
 import { NgIf } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { map } from 'rxjs';
 import { Color, Group, HemisphereLight, Mesh, SpotLight } from 'three';
 import { StorybookSetup } from '../setup-canvas';
 
 extend({ Mesh, Color, SpotLight, HemisphereLight, Group });
 
 @Component({
-  selector: 'model',
+  selector: 'model[name]',
   standalone: true,
   template: `
-    <ngt-mesh ngtCompound [material]="model.material" [geometry]="model.geometry">
+    <ngt-mesh
+      *ngIf="model$ | ngtPush : null as model"
+      ngtCompound
+      [material]="model.material"
+      [geometry]="model.geometry"
+    >
       <ngt-value *args="['red']" attach="material.emissive"></ngt-value>
       <ngt-value *args="[1]" attach="material.roughness"></ngt-value>
     </ngt-mesh>
   `,
-  imports: [NgtArgs],
+  imports: [NgtArgs, NgIf, NgtPush],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class Model extends NgtRxStore {
   static [NgtRendererFlags.COMPOUND] = true;
-  @Input() model!: Mesh;
+
+  readonly models$ = injectNgtsGLTFLoader('soba/bounds-assets.glb');
+  readonly model$ = this.models$.pipe(map(({ nodes }) => nodes[this.name] as Mesh));
+
+  @Input() name!: string;
 }
 
 @Component({
   selector: 'models',
   standalone: true,
   template: `
-    <ngt-group
-      *ngIf="models$ | ngtPush : null as models"
-      (click)="onClick($any($event))"
-      (pointermissed)="onPointerMissed($any($event))"
-    >
+    <ngt-group (click)="onClick($any($event))" (pointermissed)="onPointerMissed($any($event))">
+      <model name="Curly" [position]="[1, -11, -20]" [rotation]="[2, 0, -0]"></model>
+      <model name="DNA" [position]="[20, 0, -17]" [rotation]="[1, 1, -2]"></model>
+      <model name="Headphones" [position]="[20, 2, 4]" [rotation]="[1, 0, -1]"></model>
+      <model name="Notebook" [position]="[-21, -15, -13]" [rotation]="[2, 0, 1]"></model>
+      <model name="Rocket003" [position]="[18, 15, -25]" [rotation]="[1, 1, 0]"></model>
       <model
-        [model]="models.nodes['Curly']"
-        [position]="[1, -11, -20]"
-        [rotation]="[2, 0, -0]"
-      ></model>
-      <model
-        [model]="models.nodes['DNA']"
-        [position]="[20, 0, -17]"
-        [rotation]="[1, 1, -2]"
-      ></model>
-      <model
-        [model]="models.nodes['Headphones']"
-        [position]="[20, 2, 4]"
-        [rotation]="[1, 0, -1]"
-      ></model>
-      <model
-        [model]="models.nodes['Notebook']"
-        [position]="[-21, -15, -13]"
-        [rotation]="[2, 0, 1]"
-      ></model>
-      <model
-        [model]="models.nodes['Rocket003']"
-        [position]="[18, 15, -25]"
-        [rotation]="[1, 1, 0]"
-      ></model>
-      <model
-        [model]="models.nodes['Roundcube001']"
+        name="Roundcube001"
         [position]="[-25, -4, 5]"
         [rotation]="[1, 0, 0]"
         [scale]="0.5"
       ></model>
+      <model name="Table" [position]="[1, -4, -28]" [rotation]="[1, 0, -1]" [scale]="0.5"></model>
       <model
-        [model]="models.nodes['Table']"
-        [position]="[1, -4, -28]"
-        [rotation]="[1, 0, -1]"
-        [scale]="0.5"
-      ></model>
-      <model
-        [model]="models.nodes['VR_Headset']"
+        name="VR_Headset"
         [position]="[7, -15, 28]"
         [rotation]="[1, 0, -1]"
         [scale]="5"
       ></model>
       <model
-        [model]="models.nodes['Zeppelin']"
+        name="Zeppelin"
         [position]="[-20, 10, 10]"
         [rotation]="[3, -1, 3]"
         [scale]="0.005"
@@ -99,7 +80,6 @@ class Model extends NgtRxStore {
   schemas: [NO_ERRORS_SCHEMA],
 })
 class Models {
-  readonly models$ = injectNgtsGLTFLoader('soba/bounds-assets.glb');
   readonly #boundsApi = injectNgtsBoundsApi();
 
   onClick(event: NgtThreeEvent<MouseEvent>) {
