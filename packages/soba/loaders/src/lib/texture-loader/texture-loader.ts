@@ -22,7 +22,10 @@ export function injectNgtsTextureLoader<TInput extends string[] | string | Recor
   return input$.pipe(
     switchMap((inputs) => {
       // NOTE: this works because injectNgtLoader doesn't actually use any "inject". We need to reevaluate this approach
-      return injectNgtLoader(TextureLoader, IsObject(inputs) ? Object.values(inputs) : inputs).pipe(
+      return injectNgtLoader(
+        () => TextureLoader,
+        IsObject(inputs) ? Object.values(inputs) : inputs
+      ).pipe(
         tap((textures) => {
           if (onLoad) onLoad(textures);
           const array = Array.isArray(textures) ? textures : [textures];

@@ -26,6 +26,14 @@ export class NgtsEnvironmentContent {}
       [scene]="get('scene')"
       [blur]="get('blur')"
       [background]="get('background')"
+      [preset]="get('preset')"
+      [frames]="get('frames')"
+      [far]="get('far')"
+      [near]="get('near')"
+      [resolution]="get('resolution')"
+      [files]="get('files')"
+      [path]="get('path')"
+      [extensions]="get('extensions')"
     ></ngts-environment-ground>
     <ng-template #noGround>
       <ngts-environment-map

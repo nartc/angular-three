@@ -6,7 +6,7 @@ import {
   NgtAnyConstructor,
 } from '@angular-three/core';
 import { ElementRef } from '@angular/core';
-import { isObservable, map, Observable, of, takeUntil } from 'rxjs';
+import { debounceTime, isObservable, map, Observable, of, takeUntil } from 'rxjs';
 import {
   CubeReflectionMapping,
   CubeTexture,
@@ -75,6 +75,7 @@ export function injectNgtsEnvironment(
   const loaderResult = injectNgtLoader(
     (inputs) => (Array.isArray(inputs) ? CubeTextureLoader : RGBELoader) as NgtAnyConstructor,
     params$.pipe(
+      debounceTime(0),
       map((data) => {
         p = data;
         return p;
@@ -88,7 +89,8 @@ export function injectNgtsEnvironment(
           data.files = ngtsEnvironmentPresetsObj[data.preset];
           data.path = CUBEMAP_ROOT;
         }
-        return data.files!;
+        console.log(data);
+        return Array.isArray(data.files) ? [data.files] : (data.files! as any);
       })
     ),
     (loader) => {

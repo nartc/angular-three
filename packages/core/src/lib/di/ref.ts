@@ -46,6 +46,7 @@ export function injectNgtRef<T>(
     get(target, p, receiver) {
       if (p === 'subscribe') return subscribe;
       if (p === '$') return $;
+      if (p === 'nativeElement') return ref$.value;
       return Reflect.get(target, p, receiver);
     },
     set(target, p, newValue, receiver) {

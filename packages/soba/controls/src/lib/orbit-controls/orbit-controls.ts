@@ -18,7 +18,7 @@ import {
   Output,
 } from '@angular/core';
 import { RxActionFactory } from '@rx-angular/state/actions';
-import { combineLatest } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 import { OrbitControls } from 'three-stdlib';
 
 @Component({
@@ -27,7 +27,7 @@ import { OrbitControls } from 'three-stdlib';
   template: `
     <ngt-primitive
       ngtCompound
-      *args="[ref.nativeElement]"
+      *args="get('args')"
       [enableDamping]="enableDamping$ | ngtPush : true"
     ></ngt-primitive>
   `,
@@ -83,6 +83,7 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
     this.#connectElement();
     this.#makeDefault();
     this.#setEvents();
+    this.connect('args', this.ref.$.pipe(map((controls) => [controls])));
   }
 
   #setControls() {
@@ -91,11 +92,8 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
         this.#store.select('camera'),
         this.select('camera').pipe(startWithUndefined()),
       ]),
-      () => {
-        const camera = this.get('camera') || this.#store.get('camera');
-        if (!this.ref.nativeElement) {
-          this.ref.nativeElement = new OrbitControls(camera);
-        }
+      ([defaultCamera, camera]) => {
+        this.ref.nativeElement = new OrbitControls(camera || defaultCamera);
       }
     );
   }
@@ -126,14 +124,9 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
       () => {
         const { gl, events } = this.#store.get();
         const domElement = this.get('domElement') || events.connected || gl.domElement;
-        if (this.ref.nativeElement) {
-          this.ref.nativeElement.connect(domElement);
-        }
+        this.ref.nativeElement.connect(domElement);
 
         return () => {
-          if (this.ref.nativeElement) {
-            this.ref.nativeElement.dispose();
-          }
         };
       }
     );
@@ -160,7 +153,6 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
       const changeCallback: (e: THREE.Event) => void = (e) => {
         invalidate();
         if (regress) performance.regress();
-
         if (this.change.observed) this.change.emit(e);
       };
 

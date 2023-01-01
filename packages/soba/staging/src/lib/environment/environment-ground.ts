@@ -1,4 +1,5 @@
 import { extend, NgtArgs, startWithUndefined } from '@angular-three/core';
+import { NgIf } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { combineLatest, map, startWith } from 'rxjs';
 import { GroundProjectedEnv } from 'three-stdlib';
@@ -12,20 +13,24 @@ extend({ GroundProjectedEnv });
   selector: 'ngts-environment-ground',
   standalone: true,
   template: `
-    <ngts-environment-map
-      [background]="get('background')"
-      [blur]="get('blur')"
-      [scene]="get('scene')"
-      [map]="get('texture')"
-    ></ngts-environment-map>
-    <ngt-ground-projected-env
-      *args="get('groundArgs')"
-      [scale]="get('groundScale')"
-      [height]="get('groundHeight')"
-      [radius]="get('groundRadius')"
-    ></ngt-ground-projected-env>
+    <ng-container *ngIf="get('texture') as texture">
+      <ngts-environment-map
+        [background]="get('background')"
+        [blur]="get('blur')"
+        [scene]="get('scene')"
+        [map]="texture"
+      ></ngts-environment-map>
+    </ng-container>
+    <ng-container *ngIf="get('groundArgs') as groundArgs">
+      <ngt-ground-projected-env
+        *args="groundArgs"
+        [scale]="get('groundScale')"
+        [height]="get('groundHeight')"
+        [radius]="get('groundRadius')"
+      ></ngt-ground-projected-env>
+    </ng-container>
   `,
-  imports: [NgtsEnvironmentMap, NgtArgs],
+  imports: [NgtsEnvironmentMap, NgtArgs, NgIf],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsEnvironmentGround extends NgtsEnvironmentInputs {
@@ -33,8 +38,7 @@ export class NgtsEnvironmentGround extends NgtsEnvironmentInputs {
     this.select().pipe(startWith(params))
   );
 
-  override initialize(): void {
-    super.initialize();
+  ngOnInit() {
     this.connect(
       'texture',
       combineLatest([this.select('map').pipe(startWithUndefined()), this.defaultTexture.$]).pipe(

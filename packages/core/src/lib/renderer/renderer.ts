@@ -379,6 +379,9 @@ export class NgtRenderer implements Renderer2 {
     const { isThree, isCompoundWithInstance, isCompoundNoInstance } =
       this.stateCol.getTargetFlags(el);
     const three = this.stateCol.getThree(el);
+    if (name === 'autoRotate') {
+      console.log(el, name, three);
+    }
     if (isThree) {
       // skip this property binding if it is an Attribute instead
       if (Object.values(ATTRIBUTES).includes(name as typeof ATTRIBUTES[keyof typeof ATTRIBUTES])) {

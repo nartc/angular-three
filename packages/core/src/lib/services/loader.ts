@@ -1,7 +1,7 @@
 import {
   catchError,
-  defer,
   forkJoin,
+  from,
   isObservable,
   map,
   Observable,
@@ -63,7 +63,7 @@ function injectLoader<TReturnType, TUrl extends string | string[]>(
           if (!cached.has(url)) {
             cached.set(
               url,
-              defer(() => loader.loadAsync(url, onProgress)).pipe(
+              from(loader.loadAsync(url, onProgress)).pipe(
                 tap((data) => {
                   if (data.scene) {
                     Object.assign(data, makeObjectGraph(data.scene));
@@ -72,7 +72,7 @@ function injectLoader<TReturnType, TUrl extends string | string[]>(
                 retry(2),
                 catchError((err) => {
                   console.error(`[NGT] Error loading ${url}: ${err.message}`);
-                  return of(null);
+                  return of([]);
                 }),
                 share({
                   connector: () => new ReplaySubject(1),
