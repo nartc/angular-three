@@ -3,8 +3,12 @@ import { Route } from '@angular/router';
 export const appRoutes: Route[] = [
   {
     path: '',
-    redirectTo: 'cubes',
+    redirectTo: 'test',
     pathMatch: 'full',
+  },
+  {
+    path: 'test',
+    loadComponent: () => import('./test/test.component'),
   },
   {
     path: 'cubes',

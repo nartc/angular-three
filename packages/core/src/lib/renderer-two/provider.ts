@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, RendererFactory2 } from '@angular/core';
 import { NgtStore } from '../stores/store';
-import { NgtRendererFactory2 } from './renderer-two';
+import { provideNgtCompoundPrefixes } from './di';
+import { NgtRendererFactory2 } from './renderer';
 
 export type NgtRenderer2ProviderOptions = {
   store: NgtStore;
