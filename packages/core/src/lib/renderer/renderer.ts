@@ -140,7 +140,6 @@ export class NgtRenderer2 implements Renderer2 {
   }
 
   appendChild(parent: NgtRendererNode, newChild: NgtRendererNode): void {
-    console.log('appendChild -->', { parent, newChild });
     if (newChild.renderType === 'comment') {
       this.state.setParent(newChild, parent);
       return;
@@ -215,7 +214,6 @@ export class NgtRenderer2 implements Renderer2 {
     refChild: NgtRendererNode | Comment,
     isMove?: boolean | undefined
   ): void {
-    console.log('insertBefore -->', { parent, newChild, refChild, isMove });
     if (!parent.renderType) return;
     this.appendChild(parent, newChild);
   }
@@ -225,7 +223,6 @@ export class NgtRenderer2 implements Renderer2 {
     oldChild: NgtRendererNode,
     isHostElement?: boolean | undefined
   ): void {
-    console.log('removeChild -->', { parent, oldChild, isHostElement });
     if (parent.renderType === 'instance' && oldChild.renderType === 'instance') {
       removeThreeChild(parent, oldChild, true);
       this.state.remove(oldChild, parent);
