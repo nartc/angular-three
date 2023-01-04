@@ -64,16 +64,11 @@ export class NgtRenderer2 implements Renderer2 {
       return this.state.createNode('instance', this.state.rootScene);
     }
 
-    if (this.state.isCompound(name)) {
-      return this.state.createNode('compound', element);
-    }
+    if (this.state.isCompound(name)) return this.state.createNode('compound', element);
+    // handle Portal to opt-out of normal rendering
+    if (name === SPECIAL_DOM_TAG.NGT_PORTAL) return this.state.createNode('portal', element);
 
     const { injectedRef, injectedArgs, attach, store } = this.state.getCreationState();
-
-    // handle Portal to opt-out of normal rendering
-    if (name === SPECIAL_DOM_TAG.NGT_PORTAL) {
-      return this.state.createNode('portal', element);
-    }
 
     // handle raw value
     if (name === SPECIAL_DOM_TAG.NGT_VALUE) {
@@ -153,6 +148,22 @@ export class NgtRenderer2 implements Renderer2 {
 
     this.state.setParent(newChild, parent);
     this.state.addChild(parent, newChild);
+
+    if (newChild.renderType === 'portal') {
+      this.state.processPortal(newChild);
+      if (newChild.portalContainer) {
+        this.appendChild(parent, newChild.portalContainer);
+      }
+      return;
+    }
+
+    if (parent.renderType === 'portal') {
+      this.state.processPortal(parent);
+      if (parent.portalContainer) {
+        this.appendChild(parent.portalContainer, newChild);
+      }
+      return;
+    }
 
     if (parent.renderType === 'instance' && newChild.renderType === 'instance') {
       attachThreeInstances(parent, newChild);

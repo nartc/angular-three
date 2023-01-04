@@ -50,6 +50,7 @@ export interface NgtRendererCommentNode extends NgtRendererCommonNode, Comment {
 export interface NgtRendererPortalNode extends NgtRendererCommonNode {
   renderType: 'portal';
   injectorFactory: () => Injector;
+  portalContainer?: NgtRendererInstanceNode;
 }
 
 export interface NgtRendererComponentNode extends NgtRendererCommonNode {
@@ -148,6 +149,22 @@ export class NgtRendererState {
         node.queueOps.forEach((op) => op());
         node.queueOps.clear();
       });
+    }
+  }
+
+  processPortal(portal: NgtRendererPortalNode) {
+    const injector = portal.injectorFactory?.();
+    if (injector) {
+      const portalStore = injector.get(NgtStore, null);
+      if (portalStore) {
+        const portalContainer = portalStore.get('scene');
+        if (portalContainer) {
+          portal.portalContainer = this.createNode(
+            'instance',
+            portalContainer
+          ) as NgtRendererInstanceNode;
+        }
+      }
     }
   }
 

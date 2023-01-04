@@ -95,6 +95,7 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
     const containerState = inputsState.container;
     const container = is.ref(containerState) ? containerState.nativeElement : containerState;
 
+
     const localState = getLocalState(container);
     if (!localState.store) {
       localState.store = this.#portalStore;
