@@ -23,7 +23,7 @@ import {
 } from './utils';
 
 @Injectable()
-export class NgtRendererFactory2 implements RendererFactory2 {
+export class NgtRendererFactory implements RendererFactory2 {
   readonly #domRendererFactory = inject(DomRendererFactory2);
   readonly #cdr = inject(ChangeDetectorRef);
   readonly #store = injectNgtStore();
@@ -36,18 +36,18 @@ export class NgtRendererFactory2 implements RendererFactory2 {
     compoundPrefixes: this.#compoundPrefixes,
   });
 
-  #renderer?: NgtRenderer2;
+  #renderer?: NgtRenderer;
 
   createRenderer(hostElement: any, type: RendererType2 | null): Renderer2 {
     if (!this.#renderer) {
       const domRenderer = this.#domRendererFactory.createRenderer(hostElement, type);
-      this.#renderer = new NgtRenderer2(domRenderer, this.#state, this.#catalogue);
+      this.#renderer = new NgtRenderer(domRenderer, this.#state, this.#catalogue);
     }
     return this.#renderer;
   }
 }
 
-export class NgtRenderer2 implements Renderer2 {
+export class NgtRenderer implements Renderer2 {
   #firstCreateElement = false;
 
   constructor(

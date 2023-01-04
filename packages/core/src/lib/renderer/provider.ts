@@ -1,19 +1,19 @@
 import { ChangeDetectorRef, RendererFactory2 } from '@angular/core';
 import { NgtStore } from '../stores/store';
 import { provideNgtCompoundPrefixes } from './di';
-import { NgtRendererFactory2 } from './renderer';
+import { NgtRendererFactory } from './renderer';
 
-export type NgtRenderer2ProviderOptions = {
+export type NgtRendererProviderOptions = {
   store: NgtStore;
   changeDetectorRef: ChangeDetectorRef;
   compoundPrefixes?: string[];
 };
 
-export function provideNgtRenderer2({
+export function provideNgtRenderer({
   store,
   changeDetectorRef,
   compoundPrefixes,
-}: NgtRenderer2ProviderOptions) {
+}: NgtRendererProviderOptions) {
   if (!compoundPrefixes) {
     compoundPrefixes = [];
   }
@@ -23,7 +23,7 @@ export function provideNgtRenderer2({
   }
 
   return [
-    { provide: RendererFactory2, useClass: NgtRendererFactory2 },
+    { provide: RendererFactory2, useClass: NgtRendererFactory },
     { provide: NgtStore, useValue: store },
     { provide: ChangeDetectorRef, useValue: changeDetectorRef },
     provideNgtCompoundPrefixes(compoundPrefixes),
