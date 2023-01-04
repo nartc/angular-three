@@ -37,14 +37,36 @@ export function prepare<TInstance extends object = NgtAnyRecord>(
       handlers: {},
       objects,
       nonObjects,
-      addObject: (object) => objects.next([...objects.value, object]),
-      removeObject: (object) => objects.next(objects.value.filter((obj) => obj !== object)),
-      addNonObject: (object) => nonObjects.next([...nonObjects.value, object]),
-      removeNonObject: (object) =>
-        nonObjects.next(nonObjects.value.filter((obj) => obj !== object)),
+      addObject: (object) => {
+        objects.next([...objects.value, object]);
+        notifyAncestors(getLocalState(instance)?.parent);
+      },
+      removeObject: (object) => {
+        objects.next(objects.value.filter((obj) => obj !== object));
+        notifyAncestors(getLocalState(instance)?.parent);
+      },
+      addNonObject: (object) => {
+        nonObjects.next([...nonObjects.value, object]);
+        notifyAncestors(getLocalState(instance)?.parent);
+      },
+      removeNonObject: (object) => {
+        nonObjects.next(nonObjects.value.filter((obj) => obj !== object));
+        notifyAncestors(getLocalState(instance)?.parent);
+      },
       ...rest,
     } as NgtInstanceLocalState;
   }
 
   return instance;
+}
+
+function notifyAncestors(instance: NgtInstanceNode | null) {
+  if (!instance) return;
+  const localState = getLocalState(instance);
+  if (!localState) return;
+
+  localState.objects.next([...localState.objects.value]);
+  localState.nonObjects.next([...localState.nonObjects.value]);
+
+  notifyAncestors(localState.parent);
 }
