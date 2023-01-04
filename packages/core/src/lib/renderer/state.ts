@@ -1,271 +1,258 @@
-import { ChangeDetectorRef, ElementRef, getDebugNode, Injector, Type } from '@angular/core';
-import type { Scene } from 'three';
+import { ChangeDetectorRef, getDebugNode, Injector, Type } from '@angular/core';
 import { NgtArgs } from '../directives/args';
 import { NgtAttachArray } from '../directives/attach-array';
 import { NgtAttachFn } from '../directives/attach-fn';
 import { NgtRef } from '../directives/ref';
 import { NgtStore } from '../stores/store';
-import type {
+import {
   NgtAnyRecord,
-  NgtAttachFunction,
   NgtHasValidateForRenderer,
+  NgtInstanceLocalState,
   NgtInstanceNode,
 } from '../types';
+import { applyProps } from '../utils/apply-props';
 import { getLocalState } from '../utils/instance';
-import { removeThreeChild } from './utils';
+import { ATTRIBUTES, removeThreeChild } from './utils';
 
-export interface NgtRendererRoot {
-  scene: Scene;
-  dom: HTMLElement;
-  glDom: HTMLCanvasElement;
+export interface NgtRendererRootState {
   store: NgtStore;
   cdr: ChangeDetectorRef;
+  compoundPrefixes: string[];
 }
 
-export class NgtRendererStateCollection {
-  private readonly domThreeMap = new Map<HTMLElement, NgtInstanceNode>();
-  private readonly domMap = new Map<
-    HTMLElement,
-    { isCompound?: boolean; rawValue?: any; attach?: string[] | NgtAttachFunction }
-  >();
-  private readonly threeMap = new Map<
-    NgtInstanceNode,
-    {
-      priority: number;
-      compound?: { applyFirst: boolean; props: Record<string, any> };
-      compoundParent?: HTMLElement;
+export interface NgtRendererCommonNode {
+  renderParent: NgtRendererNode | null;
+  renderChildren: NgtRendererNode[];
+}
+
+export interface NgtRendererInstanceNode extends NgtInstanceNode, NgtRendererCommonNode {
+  renderType: 'instance';
+  compound?: { applyFirst: boolean; props: Record<string, any> };
+  localState: () => NgtInstanceLocalState;
+  compoundParent?: NgtRendererCompoundNode;
+}
+
+export interface NgtRendererCompoundNode extends NgtRendererCommonNode {
+  renderType: 'compound';
+  compounded?: NgtRendererInstanceNode;
+  localState: () => NgtInstanceLocalState;
+  queueOps: Set<() => void>;
+  cleanUps: Set<() => void>;
+  renderAttributes: Record<string, any>;
+  renderProperties: Record<string, any>;
+}
+
+export interface NgtRendererCommentNode extends NgtRendererCommonNode, Comment {
+  renderType: 'comment';
+  injectorFactory: () => Injector;
+}
+
+export interface NgtRendererPortalNode extends NgtRendererCommonNode {
+  renderType: 'portal';
+  injectorFactory: () => Injector;
+}
+
+export interface NgtRendererComponentNode extends NgtRendererCommonNode {
+  renderType: 'component';
+}
+
+export type NgtRendererNode =
+  | NgtRendererInstanceNode
+  | NgtRendererCompoundNode
+  | NgtRendererCommentNode
+  | NgtRendererPortalNode
+  | NgtRendererComponentNode;
+
+export class NgtRendererState {
+  private readonly commentNodes = new Set<NgtRendererCommentNode>();
+  private readonly portalNodes = new Set<NgtRendererPortalNode>();
+
+  constructor(private readonly root: NgtRendererRootState) {}
+
+  createNode(renderType: NgtRendererNode['renderType'], node: NgtAnyRecord) {
+    const rendererNode = Object.assign(node, {
+      renderType,
+      renderParent: null,
+      renderChildren: [],
+    } as NgtRendererNode);
+
+    if (rendererNode.renderType === 'instance') {
+      rendererNode.localState = () => getLocalState(node)!;
+      return rendererNode;
     }
-  >();
-  private readonly compoundMap = new Map<
-    HTMLElement,
-    { inputs: string[]; cleanUps: Set<() => void>; queueOps: Set<() => void> }
-  >();
-  private readonly commentMap = new Map<Comment, { injectorFactory: () => Injector }>();
-  private readonly portalMap = new Map<HTMLElement, { injectorFactory: () => Injector }>();
 
-  constructor(public readonly root: NgtRendererRoot) {}
-
-  addDomThree(dom: HTMLElement, three: NgtInstanceNode) {
-    if (!this.domThreeMap.has(dom)) this.domThreeMap.set(dom, three);
-    Object.assign(dom, { __ngt_three__: three });
-    return this.domThreeMap.get(dom)!;
-  }
-
-  addDom(dom: HTMLElement) {
-    if (!this.domMap.has(dom)) this.domMap.set(dom, { isCompound: false });
-    return this.domMap.get(dom)!;
-  }
-
-  addPortal(dom: HTMLElement) {
-    if (!this.portalMap.has(dom))
-      this.portalMap.set(dom, { injectorFactory: () => getDebugNode(dom)!.injector });
-    return this.portalMap.get(dom)!;
-  }
-
-  addThree(
-    three: NgtInstanceNode,
-    partial?: {
-      priority?: number;
-      compound?: { applyFirst?: boolean; props?: Record<string, any> };
-      compoundParent?: HTMLElement;
-    }
-  ) {
-    if (!this.threeMap.has(three)) {
-      const state: NgtAnyRecord = { priority: 0 };
-      if (partial?.compound) {
-        state['compound'] = { applyFirst: true, props: {}, ...partial.compound };
+    if (rendererNode.renderType === 'comment' || rendererNode.renderType === 'portal') {
+      rendererNode.injectorFactory = () => getDebugNode(node)!.injector;
+      if (rendererNode.renderType === 'comment') {
+        this.commentNodes.add(rendererNode);
+      } else {
+        this.portalNodes.add(rendererNode);
       }
-      if (partial?.compoundParent) {
-        state['compoundParent'] = partial.compoundParent;
+      return rendererNode;
+    }
+
+    if (rendererNode.renderType === 'compound') {
+      rendererNode.queueOps = new Set();
+      rendererNode.cleanUps = new Set();
+      rendererNode.renderAttributes = {};
+      rendererNode.renderProperties = {};
+      return rendererNode;
+    }
+
+    return rendererNode;
+  }
+
+  setParent(node: NgtRendererNode, parent: NgtRendererNode) {
+    if (!node.renderParent) {
+      node.renderParent = parent;
+    }
+  }
+
+  addChild(node: NgtRendererNode, child: NgtRendererNode) {
+    if (!node.renderChildren.includes(child)) {
+      node.renderChildren.push(child);
+    }
+  }
+
+  removeChild(node: NgtRendererNode, child: NgtRendererNode) {
+    const index = node.renderChildren.findIndex((c) => child === c);
+    if (index >= 0) {
+      node.renderChildren.splice(index, 1);
+    }
+  }
+
+  setCompoundInstance(compound: NgtRendererCompoundNode, instance: NgtRendererInstanceNode) {
+    compound.compounded = instance;
+    compound.localState = () => getLocalState(instance);
+    if (Object.keys(compound.renderAttributes).length) {
+      for (const [key, value] of Object.entries(compound.renderAttributes)) {
+        this.applyAttribute(instance, key, value);
       }
-      this.threeMap.set(three, state as any);
     }
-    return this.threeMap.get(three)!;
-  }
 
-  addCompound(dom: HTMLElement, partial?: { inputs?: string[] }) {
-    if (!this.compoundMap.has(dom)) {
-      const state: NgtAnyRecord = { inputs: [], cleanUps: new Set(), queueOps: new Set() };
-      if (partial?.inputs) {
-        state['inputs'] = partial.inputs;
+    if (Object.keys(compound.renderProperties).length) {
+      for (const [key, value] of Object.entries(compound.renderProperties)) {
+        this.applyProperty(instance, key, value);
       }
-      this.compoundMap.set(dom, state as any);
     }
-    return this.compoundMap.get(dom)!;
+    this.executeQueuedOperation(compound);
   }
 
-  addComment(comment: Comment) {
-    if (!this.commentMap.has(comment))
-      this.commentMap.set(comment, { injectorFactory: () => getDebugNode(comment)!.injector });
-    return this.commentMap.get(comment)!;
+  queueCompoundOperation(node: NgtRendererCompoundNode, op: () => void) {
+    node.queueOps.add(op);
   }
 
-  removeComment(comment: Comment) {
-    const commentState = this.commentMap.get(comment);
-    if (commentState) {
-      commentState.injectorFactory = undefined!;
+  executeQueuedOperation(node: NgtRendererCompoundNode) {
+    if (node.queueOps.size) {
+      queueMicrotask(() => {
+        node.queueOps.forEach((op) => op());
+        node.queueOps.clear();
+      });
     }
-    this.commentMap.delete(comment);
   }
 
-  getThree(dom: HTMLElement) {
-    return this.domThreeMap.get(dom);
-  }
-
-  getGrandParentThree(parent: HTMLElement) {
-    let grandParent = parent.parentNode as HTMLElement;
-    if (!grandParent) return [] as any[];
-    let grandParentThree = this.getThree(grandParent);
-    while (!grandParentThree) {
-      grandParent = grandParent.parentNode as HTMLElement;
-      if (!grandParent) break;
-      grandParentThree = this.getThree(grandParent);
-    }
-    return [grandParent, grandParentThree];
-  }
-
-  getPortal(dom: HTMLElement) {
-    return this.portalMap.get(dom);
-  }
-
-  getDom(dom: HTMLElement) {
-    return this.domMap.get(dom);
-  }
-
-  getThreeOptions(three: NgtInstanceNode) {
-    return this.threeMap.get(three);
-  }
-
-  getCompoundOptions(dom: HTMLElement) {
-    return this.compoundMap.get(dom);
-  }
-
-  getTargetFlags(el: HTMLElement): {
-    isThree: boolean;
-    isCompoundNoInstance: boolean;
-    isCompoundWithInstance: boolean;
-  } {
-    const three = this.getThree(el);
-    const domOptions = this.getDom(el);
-    return {
-      isThree: three && !domOptions,
-      isCompoundNoInstance: !three && !!domOptions?.isCompound,
-      isCompoundWithInstance: three && !!domOptions?.isCompound,
-    };
-  }
-
-  removeDomState(target: HTMLElement | Comment) {
-    if (target instanceof Comment) {
-      const commentState = this.commentMap.get(target);
-      if (commentState) {
-        delete (commentState as NgtAnyRecord)['injectorFactory'];
+  applyAttribute(el: NgtRendererInstanceNode, name: string, value: string) {
+    if (name === ATTRIBUTES.RENDER_PRIORITY) {
+      // priority needs to be set as an attribute string so that they can be set as early as possible
+      // we convert that string to a number here. If it is invalid, we default to 0
+      let priority = Number(value);
+      if (isNaN(priority)) {
+        priority = 0;
+        console.warn(`[NGT] passed in "priority" is an invalid number. Default to 0`);
       }
-      this.commentMap.delete(target);
+
+      el.localState().priority = priority;
       return;
     }
 
-    if (this.domMap.has(target)) {
-      this.domMap.delete(target);
+    if (name === ATTRIBUTES.COMPOUND) {
+      // we set the compound property on NgtRendererInstanceNode now so we know that this instance is being compounded
+      el.compound = { applyFirst: value === '' || value === 'first', props: {} };
+      return;
     }
 
-    if (this.compoundMap.has(target)) {
-      const compoundOptions = this.compoundMap.get(target)!;
-      compoundOptions.cleanUps.forEach((cleanUp) => cleanUp());
-      compoundOptions.cleanUps.clear();
-      delete (compoundOptions as NgtAnyRecord)['cleanUps'];
-      compoundOptions.queueOps.clear();
-      delete (compoundOptions as NgtAnyRecord)['queueOps'];
-      delete (compoundOptions as NgtAnyRecord)['inputs'];
-      this.compoundMap.delete(target);
+    if (name === ATTRIBUTES.ATTACH) {
+      // handle attach attribute as string
+      // attach can accept a dotted paths
+      const paths = value.split('.');
+      if (paths.length) el.localState().attach = paths;
+      return;
     }
 
-    if (this.domThreeMap.has(target)) {
-      delete this.domThreeMap.get(target)!['__ngt_three__'];
-      this.domThreeMap.delete(target);
+    // coercion
+    let maybeCoerced: any = value;
+    if (maybeCoerced === '' || maybeCoerced === 'true' || maybeCoerced === 'false') {
+      maybeCoerced = maybeCoerced === 'true' || maybeCoerced === '';
+    } else if (!isNaN(Number(maybeCoerced))) {
+      maybeCoerced = Number(maybeCoerced);
     }
+
+    applyProps(el, { [name]: maybeCoerced });
   }
 
-  removeThreeState(three: NgtInstanceNode) {
-    const threeOptions = this.threeMap.get(three);
-    if (threeOptions) {
-      delete (threeOptions as NgtAnyRecord)['priority'];
-      delete (threeOptions as NgtAnyRecord)['compound'];
-      delete (threeOptions as NgtAnyRecord)['compoundParent'];
+  applyProperty(el: NgtRendererInstanceNode, name: string, value: any) {
+    if (el.compound?.props && name in el.compound.props && !el.compound.applyFirst) {
+      value = el.compound.props[name];
     }
-    this.threeMap.delete(three);
-    const localState = getLocalState(three);
-    if (localState) {
-      if (localState.objects) {
-        const objects = localState.objects.value;
-        objects.forEach((obj) => this.removeThreeState(obj));
-        localState.objects.complete();
-      }
-
-      if (localState.nonObjects) {
-        const nonObjects = localState.nonObjects.value;
-        nonObjects.forEach((obj) => this.removeThreeState(obj));
-        localState.nonObjects.complete();
-      }
-
-      delete (localState as NgtAnyRecord)['objects'];
-      delete (localState as NgtAnyRecord)['addObject'];
-      delete (localState as NgtAnyRecord)['removeObject'];
-      delete (localState as NgtAnyRecord)['nonObjects'];
-      delete (localState as NgtAnyRecord)['addNonObject'];
-      delete (localState as NgtAnyRecord)['removeNonObject'];
-
-      delete (localState as NgtAnyRecord)['store'];
-      delete (localState as NgtAnyRecord)['handlers'];
-      delete (localState as NgtAnyRecord)['memoized'];
-
-      if (!localState.primitive) {
-        delete (three as NgtAnyRecord)['__ngt__'];
-      }
-    }
+    applyProps(el, { [name]: value });
   }
 
-  traverseAndRemoveChildNodes(childNodes: NodeList, parentThree?: NgtInstanceNode) {
-    let i = childNodes.length - 1;
-    while (i >= 0) {
-      const node = childNodes.item(i)!;
-      const three = this.getThree(node as HTMLElement);
-      if (three) {
-        if (parentThree) removeThreeChild(parentThree, three, true);
-        this.removeThreeState(three);
-      }
-
-      const nodes = node.childNodes;
-      if (nodes.length) {
-        this.traverseAndRemoveChildNodes(nodes);
-      }
-      this.removeDomState(node as HTMLElement | Comment);
-      i--;
-    }
+  isCompound(name: string) {
+    return this.root.compoundPrefixes.some((prefix) => name.startsWith(prefix));
   }
 
-  tryAssignPortalContainer(portal: HTMLElement) {
-    const portalState = this.getPortal(portal);
-    if (portalState) {
-      const portalStore = portalState.injectorFactory().get(NgtStore, null);
-      if (portalStore) {
-        const portalContainer = portalStore.get('scene');
-        if (portalContainer) {
-          this.addDomThree(portal, portalContainer);
-        }
-      }
-    }
+  get rootScene() {
+    return this.root.store.get('scene');
   }
 
-  getCreationState(): {
-    injectedArgs: any[];
-    store: NgtStore;
-    injectedRef?: ElementRef<NgtInstanceNode> | null;
-    attach?: string[] | NgtAttachFunction;
-  } {
+  get rootCdr() {
+    return this.root.cdr;
+  }
+
+  getClosestParentWithInstance(node: NgtRendererNode): NgtRendererInstanceNode | null {
+    let parent = node.renderParent;
+    while (parent && parent.renderType !== 'instance') {
+      parent = parent.renderParent;
+    }
+
+    return parent as NgtRendererInstanceNode;
+  }
+
+  getClosestParentWithCompound(node: NgtRendererInstanceNode) {
+    if (node.compoundParent) return node.compoundParent;
+    let parent: NgtRendererNode | null = node.renderParent;
+    if (parent && parent.renderType === 'compound' && !parent.compounded) {
+      return parent;
+    }
+    while (
+      parent &&
+      ((parent.renderType === 'instance' && !parent.compoundParent) ||
+        parent.renderType !== 'compound')
+    ) {
+      parent = parent.renderParent;
+    }
+
+    if (!parent) return;
+
+    if (
+      (parent as NgtRendererNode).renderType === 'instance' &&
+      (parent as unknown as NgtRendererInstanceNode).compoundParent
+    ) {
+      return (parent as unknown as NgtRendererInstanceNode).compoundParent;
+    }
+
+    if (parent.renderType === 'compound' && !parent.compounded) {
+      return parent;
+    }
+
+    return null;
+  }
+
+  getCreationState() {
     const ngtArgs = this.#firstNonInjectedDirective(NgtArgs);
-    const ngtRef = this.#firstNonInjectedDirective(NgtRef);
-    const ngtAttachArray = this.#firstNonInjectedDirective(NgtAttachArray);
     const ngtAttachFn = this.#firstNonInjectedDirective(NgtAttachFn);
+    const ngtAttachArray = this.#firstNonInjectedDirective(NgtAttachArray);
+    const ngtRef = this.#firstNonInjectedDirective(NgtRef);
 
     const injectedArgs = ngtArgs?.args || [];
     const injectedRef = ngtRef?.ref;
@@ -279,33 +266,106 @@ export class NgtRendererStateCollection {
     return { injectedArgs, injectedRef, attach, store };
   }
 
-  #firstNonInjectedDirective<T extends NgtHasValidateForRenderer>(dir: Type<T>): T | undefined {
-    let dirInstance: T | undefined;
-    // we only care about the comment states because structural directives create Comments
-    const commentState = Array.from(this.commentMap.values());
-    console.log(commentState)
-    let i = commentState.length - 1;
+  remove(node: NgtRendererNode, parent?: NgtRendererInstanceNode) {
+    if (node.renderType === 'instance') {
+      delete node.compound;
+      delete node.compoundParent;
+
+      const localState = node.localState?.();
+      if (localState) {
+        if (localState.objects) {
+          const objects = localState.objects.value;
+          objects.forEach((obj) => this.remove(obj));
+          localState.objects.complete();
+        }
+
+        if (localState.nonObjects) {
+          const nonObjects = localState.nonObjects.value;
+          nonObjects.forEach((obj) => this.remove(obj));
+          localState.nonObjects.complete();
+        }
+
+        delete (localState as NgtAnyRecord)['objects'];
+        delete (localState as NgtAnyRecord)['addObject'];
+        delete (localState as NgtAnyRecord)['removeObject'];
+        delete (localState as NgtAnyRecord)['nonObjects'];
+        delete (localState as NgtAnyRecord)['addNonObject'];
+        delete (localState as NgtAnyRecord)['removeNonObject'];
+
+        delete (localState as NgtAnyRecord)['store'];
+        delete (localState as NgtAnyRecord)['handlers'];
+        delete (localState as NgtAnyRecord)['memoized'];
+
+        if (!localState.primitive) {
+          delete (node as NgtAnyRecord)['__ngt__'];
+        }
+      }
+
+      node.localState = null as unknown as NgtRendererInstanceNode['localState'];
+    }
+
+    if (node.renderType === 'comment') {
+      node.injectorFactory = null as unknown as NgtRendererCommentNode['injectorFactory'];
+    }
+
+    if (node.renderType === 'portal') {
+      node.injectorFactory = null as unknown as NgtRendererPortalNode['injectorFactory'];
+    }
+
+    if (node.renderType === 'compound') {
+      node.localState = null as unknown as NgtRendererCompoundNode['localState'];
+      delete node.compounded;
+      node.renderAttributes = null as unknown as NgtRendererCompoundNode['renderAttributes'];
+      node.renderProperties = null as unknown as NgtRendererCompoundNode['renderProperties'];
+      node.queueOps.clear();
+      node.queueOps = null as unknown as NgtRendererCompoundNode['queueOps'];
+      node.cleanUps.forEach((cleanUp) => cleanUp());
+      node.cleanUps.clear();
+      node.cleanUps = null as unknown as NgtRendererCompoundNode['cleanUps'];
+    }
+
+    node.renderParent = null;
+    for (const renderChild of node.renderChildren || []) {
+      if (renderChild.renderType === 'instance' && parent) {
+        removeThreeChild(parent, renderChild, true);
+      }
+      this.remove(renderChild, parent);
+    }
+    node.renderChildren = null as unknown as NgtRendererNode['renderChildren'];
+  }
+
+  #firstNonInjectedDirective<T extends NgtHasValidateForRenderer>(dir: Type<T>) {
+    let directive: T | undefined;
+
+    // we only care about the comment states
+    const commentNodes = Array.from(this.commentNodes.values());
+
+    let i = commentNodes.length - 1;
     while (i >= 0) {
-      // loop through the comment state backwards to find the directive
-      const injector = commentState[i].injectorFactory?.();
+      // loop through the nodes backwards
+      const injector = getDebugNode(commentNodes[i])?.injector;
       if (!injector) {
         i--;
         continue;
       }
       const instance = injector.get(dir, null);
       if (instance && instance.validate()) {
-        dirInstance = instance;
+        directive = instance;
+        // TODO: testing this to see if we can stop tracking this comment node
+        this.commentNodes.delete(commentNodes[i]);
         break;
       }
+
       i--;
     }
-    return dirInstance;
+
+    return directive;
   }
 
-  #tryGetPortalStore(): NgtStore {
+  #tryGetPortalStore() {
     let store: NgtStore | undefined;
     // we only care about the portal states because NgtStore only differs per Portal
-    const portalState = Array.from(this.portalMap.values());
+    const portalState = Array.from(this.portalNodes.values());
     let i = portalState.length - 1;
     while (i >= 0) {
       // loop through the portal state backwards to find the closest NgtStore

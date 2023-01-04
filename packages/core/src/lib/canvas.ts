@@ -19,7 +19,7 @@ import {
 } from '@angular/core';
 import { filter } from 'rxjs';
 import { createPointerEvents } from './events';
-import { provideNgtRenderer2 } from './renderer-two/provider';
+import { provideNgtRenderer2 } from './renderer/provider';
 import { injectNgtLoader } from './services/loader';
 import { injectNgtResize, NgtResizeResult } from './services/resize';
 import { NgtRxStore } from './stores/rx-store';
@@ -255,7 +255,6 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
               compoundPrefixes: this.compoundPrefixes,
             }),
           ],
-          // [provideNgtRenderer(this.#store, this.#cdr)],
           this.#environmentInjector
         ),
       });
