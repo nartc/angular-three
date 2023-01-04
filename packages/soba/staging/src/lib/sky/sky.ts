@@ -1,11 +1,4 @@
-import {
-  injectNgtRef,
-  NgtArgs,
-  NgtRef,
-  NgtRendererFlags,
-  NgtRxStore,
-  NgtVector3,
-} from '@angular-three/core';
+import { injectNgtRef, NgtArgs, NgtRef, NgtRxStore, NgtVector3 } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core';
 import { Vector3 } from 'three';
 import { Sky } from 'three-stdlib';
@@ -29,8 +22,8 @@ export function calcPosFromAngles(
   selector: 'ngts-sky',
   standalone: true,
   template: `
-    <ng-container *args="[ref.nativeElement]">
-      <ngt-primitive ngtCompound *ref="ref" [scale]="get('scale')">
+    <ng-container *args="[skyRef.nativeElement]">
+      <ngt-primitive ngtCompound *ref="skyRef" [scale]="get('scale')">
         <ngt-value
           *args="[get('mieCoefficient')]"
           attach="material.uniforms.mieCoefficient.value"
@@ -55,10 +48,7 @@ export function calcPosFromAngles(
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsSky extends NgtRxStore implements OnInit {
-  static [NgtRendererFlags.COMPOUND] = true;
-
-  @Input() ref = injectNgtRef<Sky>();
-  sky = new Sky();
+  @Input() skyRef = injectNgtRef<Sky>();
 
   @Input() set distance(distance: number) {
     this.set({ distance });
@@ -119,7 +109,6 @@ export class NgtsSky extends NgtRxStore implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.ref.nativeElement) this.ref.nativeElement = new Sky();
-    this.ref.nativeElement.scale.setScalar(1000);
+    if (!this.skyRef.nativeElement) this.skyRef.nativeElement = new Sky();
   }
 }

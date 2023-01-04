@@ -89,7 +89,6 @@ export function injectNgtsEnvironment(
           data.files = ngtsEnvironmentPresetsObj[data.preset];
           data.path = CUBEMAP_ROOT;
         }
-        console.log(data);
         return Array.isArray(data.files) ? [data.files] : (data.files! as any);
       })
     ),

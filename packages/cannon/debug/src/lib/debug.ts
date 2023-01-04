@@ -60,31 +60,28 @@ export class NgtcDebug implements OnInit, OnDestroy {
   readonly bodies: Body[] = [];
   readonly bodyMap: Record<string, Body> = {};
   readonly scene = new Scene();
-  readonly #cannonDebugger = this.impl(this.scene, { bodies: this.bodies } as World, {
-    color: this.color,
-    scale: this.scale,
-  });
-
   readonly #physicsStore = injectNgtcPhysicsStore({ skipSelf: true });
   readonly #store = injectNgtStore();
 
+  #cannonDebugger!: ReturnType<typeof CannonDebugger>;
   #beforeRenderCleanup?: () => void;
 
   ngOnInit() {
-    this.#beforeRenderCleanup = this.#store.get('internal').subscribe(
-      () => {
-        if (this.disabled || !this.#cannonDebugger) return;
-        const refs = this.#physicsStore.get('refs');
-        for (const uuid in this.bodyMap) {
-          getMatrix(refs[uuid]).decompose(v, q, s);
-          this.bodyMap[uuid].position.copy(v as unknown as Vec3);
-          this.bodyMap[uuid].quaternion.copy(q as unknown as CQuarternion);
-        }
-        this.#cannonDebugger.update();
-      },
-      0,
-      this.#store
-    );
+    this.#cannonDebugger = this.impl(this.scene, { bodies: this.bodies } as World, {
+      color: this.color,
+      scale: this.scale,
+    });
+
+    this.#beforeRenderCleanup = this.#store.get('internal').subscribe(() => {
+      if (this.disabled || !this.#cannonDebugger) return;
+      const refs = this.#physicsStore.get('refs');
+      for (const uuid in this.bodyMap) {
+        getMatrix(refs[uuid]).decompose(v, q, s);
+        this.bodyMap[uuid].position.copy(v as unknown as Vec3);
+        this.bodyMap[uuid].quaternion.copy(q as unknown as CQuarternion);
+      }
+      this.#cannonDebugger.update();
+    });
   }
 
   ngOnDestroy() {

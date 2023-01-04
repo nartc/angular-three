@@ -1,6 +1,6 @@
-import { extend, NgtArgs, startWithUndefined } from '@angular-three/core';
+import { extend, NgtArgs, NgtPush, startWithUndefined } from '@angular-three/core';
 import { NgIf } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { combineLatest, map, startWith } from 'rxjs';
 import { GroundProjectedEnv } from 'three-stdlib';
 import { NgtsEnvironmentInputs } from './environment-inputs';
@@ -13,14 +13,12 @@ extend({ GroundProjectedEnv });
   selector: 'ngts-environment-ground',
   standalone: true,
   template: `
-    <ng-container *ngIf="get('texture') as texture">
-      <ngts-environment-map
-        [background]="get('background')"
-        [blur]="get('blur')"
-        [scene]="get('scene')"
-        [map]="texture"
-      ></ngts-environment-map>
-    </ng-container>
+    <ngts-environment-map
+      [background]="get('background')"
+      [blur]="get('blur')"
+      [scene]="get('scene')"
+      [map]="get('texture')"
+    ></ngts-environment-map>
     <ng-container *ngIf="get('groundArgs') as groundArgs">
       <ngt-ground-projected-env
         *args="groundArgs"
@@ -33,7 +31,7 @@ extend({ GroundProjectedEnv });
   imports: [NgtsEnvironmentMap, NgtArgs, NgIf],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class NgtsEnvironmentGround extends NgtsEnvironmentInputs {
+export class NgtsEnvironmentGround extends NgtsEnvironmentInputs implements OnInit {
   readonly defaultTexture = injectNgtsEnvironment((params) =>
     this.select().pipe(startWith(params))
   );

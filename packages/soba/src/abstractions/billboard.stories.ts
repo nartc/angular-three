@@ -1,4 +1,4 @@
-import { extend, NgtArgs, NgtRendererFlags } from '@angular-three/core';
+import { extend, NgtArgs } from '@angular-three/core';
 import { NgtsBillboard, NgtsText } from '@angular-three/soba/abstractions';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
@@ -47,7 +47,6 @@ class Cone {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class Box {
-  static [NgtRendererFlags.COMPOUND] = true;
   @Input() args: ConstructorParameters<typeof BoxGeometry> = [];
   @Input() color = 'white';
 }

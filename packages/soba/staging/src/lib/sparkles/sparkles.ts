@@ -6,7 +6,6 @@ import {
   NgtArgs,
   NgtBeforeRender,
   NgtRef,
-  NgtRendererFlags,
   NgtRxStore,
 } from '@angular-three/core';
 import { shaderMaterial } from '@angular-three/soba/shaders';
@@ -112,7 +111,7 @@ function usePropAsIsOrAsAttribute<T = any>(
   selector: 'ngts-sparkles',
   standalone: true,
   template: `
-    <ngt-points ngtCompount *ref="ref">
+    <ngt-points ngtCompount *ref="pointsRef">
       <ngt-buffer-geometry>
         <ngt-buffer-attribute
           *args="[get('positions'), 3]"
@@ -152,13 +151,11 @@ function usePropAsIsOrAsAttribute<T = any>(
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsSparkles extends NgtRxStore {
-  static [NgtRendererFlags.COMPOUND] = true;
-
   readonly #store = injectNgtStore();
   readonly dpr = this.#store.get('viewport', 'dpr');
   readonly materialRef = injectNgtRef<typeof SparklesMaterial>();
 
-  @Input() ref = injectNgtRef<Points>();
+  @Input() pointsRef = injectNgtRef<Points>();
 
   /** Number of particles (default: 100) */
   @Input() set count(count: number) {

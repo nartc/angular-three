@@ -101,21 +101,17 @@ export class ViewCube extends NgtRxStore implements OnInit {
 
     this.effect(this.#actions$.setBeforeRender$, () => {
       const matrix = new Matrix4();
-      return this.#store.get('internal').subscribe(
-        ({ scene, camera, gl }) => {
-          if (this.meshRef.nativeElement) {
-            matrix.copy(camera.matrix).invert();
-            this.meshRef.nativeElement.quaternion.setFromRotationMatrix(matrix);
-            gl.autoClear = true;
-            gl.render(scene, camera);
-            gl.autoClear = false;
-            gl.clearDepth();
-            gl.render(this.virtualSceneRef.nativeElement, this.virtualCam);
-          }
-        },
-        1,
-        this.#store
-      );
+      return this.#store.get('internal').subscribe(({ scene, camera, gl }) => {
+        if (this.meshRef.nativeElement) {
+          matrix.copy(camera.matrix).invert();
+          this.meshRef.nativeElement.quaternion.setFromRotationMatrix(matrix);
+          gl.autoClear = true;
+          gl.render(scene, camera);
+          gl.autoClear = false;
+          gl.clearDepth();
+          gl.render(this.virtualSceneRef.nativeElement, this.virtualCam);
+        }
+      }, 1);
     });
 
     this.#actions$.setBeforeRender();

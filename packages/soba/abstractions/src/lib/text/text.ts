@@ -1,10 +1,4 @@
-import {
-  injectNgtRef,
-  injectNgtStore,
-  NgtArgs,
-  NgtRendererFlags,
-  NgtRxStore,
-} from '@angular-three/core';
+import { injectNgtRef, injectNgtStore, NgtArgs, NgtRxStore } from '@angular-three/core';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -25,7 +19,7 @@ import { preloadFont, Text } from 'troika-three-text';
   template: `
     <ngt-primitive
       ngtCompound
-      *args="[ref.nativeElement]"
+      *args="[textRef.nativeElement]"
       [text]="get('text')"
       [anchorX]="get('anchorX')"
       [anchorY]="get('anchorY')"
@@ -39,9 +33,7 @@ import { preloadFont, Text } from 'troika-three-text';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsText extends NgtRxStore implements OnInit, OnDestroy {
-  static [NgtRendererFlags.COMPOUND] = true;
-
-  @Input() ref = injectNgtRef<Text>();
+  @Input() textRef = injectNgtRef<Text>();
 
   @Input() set text(text: string) {
     this.set({ text });
@@ -77,7 +69,7 @@ export class NgtsText extends NgtRxStore implements OnInit, OnDestroy {
   readonly #text = new Text();
 
   ngOnInit(): void {
-    if (!this.ref.nativeElement) this.ref.nativeElement = this.#text;
+    if (!this.textRef.nativeElement) this.textRef.nativeElement = this.#text;
     this.#preloadFont();
     this.#sync();
   }

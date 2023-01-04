@@ -10,7 +10,7 @@ import { ɵDomRendererFactory2 as DomRendererFactory2 } from '@angular/platform-
 import { injectNgtCatalogue } from '../catalogue';
 import { injectNgtStore } from '../stores/store';
 import { NgtAnyConstructor } from '../types';
-import { prepare } from '../utils/instance';
+import { getLocalState, prepare } from '../utils/instance';
 import { is } from '../utils/is';
 import { injectNgtCompoundPrefixes } from './di';
 import { NgtRendererInstanceNode, NgtRendererNode, NgtRendererState } from './state';
@@ -76,14 +76,17 @@ export class NgtRenderer2 implements Renderer2 {
       const value = injectedArgs[0];
       return this.state.createNode(
         'instance',
-        Object.assign(value, {
-          __ngt__: {
-            store,
-            attach,
-            args: injectedArgs,
-            isRaw: true,
-          },
-        })
+        Object.assign(
+          { rawValue: value },
+          {
+            __ngt__: {
+              store,
+              attach,
+              args: injectedArgs,
+              isRaw: true,
+            },
+          }
+        )
       );
     }
 
@@ -98,10 +101,16 @@ export class NgtRenderer2 implements Renderer2 {
 
     // handle ngt-primitive and fail fast when not met requirement
     if (name === SPECIAL_DOM_TAG.NGT_PRIMITIVE) {
-      if (!injectedArgs[0]) throw new Error(`[NGT] ngt-primitve without args is invalid`);
+      if (!injectedArgs[0]) throw new Error(`[NGT] ngt-primitive without args is invalid`);
       const object = injectedArgs[0];
-      if (!is.instance(object)) {
+      let localState = getLocalState(object);
+      if (!localState) {
         prepare(object, { store, attach, args: injectedArgs, primitive: true });
+        localState = getLocalState(object);
+      }
+
+      if (!localState.store) {
+        localState.store = store;
       }
       return this.state.createNode('instance', object);
     }
@@ -197,6 +206,16 @@ export class NgtRenderer2 implements Renderer2 {
           }
         }
       }
+
+      // reset the compound if it's changed
+      if (
+        parent.compounded &&
+        newChild.renderType === 'instance' &&
+        newChild.compound &&
+        parent.compounded !== newChild
+      ) {
+        this.state.setCompoundInstance(parent, newChild);
+      }
     }
 
     if (newChild.renderType === 'instance' && !newChild.localState().parent) {
@@ -288,7 +307,6 @@ export class NgtRenderer2 implements Renderer2 {
           props: { ...el.compounded.compound, [name]: value },
         });
       }
-
       this.setProperty(el.compounded, name, value);
       return;
     }

@@ -27,16 +27,11 @@ export class NgtsAdaptiveDpr extends NgtRxStore implements OnInit {
 
     this.#actions.restorePixel();
 
-    this.hold(this.#store.select('performance', 'current'), () => {
-      const {
-        performance: { current },
-        gl,
-        viewport: { initialDpr },
-        setDpr,
-      } = this.#store.get();
-      setDpr(current * initialDpr);
+    this.hold(this.#store.select('performance', 'current'), (performanceCurrent) => {
+      const { gl, viewport, setDpr } = this.#store.get();
+      setDpr(performanceCurrent * viewport.initialDpr);
       if (this.pixelated && gl.domElement)
-        gl.domElement.style.imageRendering = current === 1 ? 'auto' : 'pixelated';
+        gl.domElement.style.imageRendering = performanceCurrent === 1 ? 'auto' : 'pixelated';
     });
   }
 }

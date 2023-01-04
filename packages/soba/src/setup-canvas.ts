@@ -121,6 +121,7 @@ export class StorybookScene extends NgtRxStore implements OnInit, OnDestroy {
       [performance]="canvasOptions.performance"
       [camera]="canvasOptions.camera"
       [scene]="Scene"
+      [compoundPrefixes]="['storybook']"
     ></ngt-canvas>
   `,
   imports: [NgtCanvas],

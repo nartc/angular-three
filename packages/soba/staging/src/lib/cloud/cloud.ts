@@ -5,7 +5,6 @@ import {
   NgtBeforeRender,
   NgtPush,
   NgtRef,
-  NgtRendererFlags,
   NgtRxStore,
 } from '@angular-three/core';
 import { NgtsBillboard } from '@angular-three/soba/abstractions';
@@ -36,7 +35,7 @@ extend({
   selector: 'ngts-cloud',
   standalone: true,
   template: `
-    <ngt-group ngtCompound *ref="ref">
+    <ngt-group ngtCompound *ref="groupRef">
       <ngt-group
         [position]="[0, 0, (get('segments') / 2) * get('depth')]"
         (beforeRender)="onBeforeRender($any($event))"
@@ -65,12 +64,10 @@ extend({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsCloud extends NgtRxStore {
-  static [NgtRendererFlags.COMPOUND] = true;
-
   readonly #store = injectNgtStore();
   readonly encoding = this.#store.get('gl', 'outputEncoding');
 
-  @Input() ref = injectNgtRef<Group>();
+  @Input() groupRef = injectNgtRef<Group>();
 
   @Input() set opacity(opacity: number) {
     this.set({ opacity });

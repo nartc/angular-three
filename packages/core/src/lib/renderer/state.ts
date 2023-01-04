@@ -21,6 +21,7 @@ export interface NgtRendererRootState {
 }
 
 export interface NgtRendererCommonNode {
+  renderRemoved: boolean;
   renderParent: NgtRendererNode | null;
   renderChildren: NgtRendererNode[];
 }
@@ -30,6 +31,7 @@ export interface NgtRendererInstanceNode extends NgtInstanceNode, NgtRendererCom
   compound?: { applyFirst: boolean; props: Record<string, any> };
   localState: () => NgtInstanceLocalState;
   compoundParent?: NgtRendererCompoundNode;
+  rawValue?: any;
 }
 
 export interface NgtRendererCompoundNode extends NgtRendererCommonNode {
@@ -72,6 +74,7 @@ export class NgtRendererState {
 
   createNode(renderType: NgtRendererNode['renderType'], node: NgtAnyRecord) {
     const rendererNode = Object.assign(node, {
+      renderRemoved: false,
       renderType,
       renderParent: null,
       renderChildren: [],
@@ -208,6 +211,7 @@ export class NgtRendererState {
   }
 
   applyProperty(el: NgtRendererInstanceNode, name: string, value: any) {
+    if (el.renderRemoved) return;
     if (el.compound?.props && name in el.compound.props && !el.compound.applyFirst) {
       value = el.compound.props[name];
     }
@@ -349,6 +353,7 @@ export class NgtRendererState {
       this.remove(renderChild, parent);
     }
     node.renderChildren = null as unknown as NgtRendererNode['renderChildren'];
+    node.renderRemoved = true;
   }
 
   #firstNonInjectedDirective<T extends NgtHasValidateForRenderer>(dir: Type<T>) {
@@ -369,7 +374,7 @@ export class NgtRendererState {
       if (instance && instance.validate()) {
         directive = instance;
         // TODO: testing this to see if we can stop tracking this comment node
-        this.commentNodes.delete(commentNodes[i]);
+        // this.commentNodes.delete(commentNodes[i]);
         break;
       }
 

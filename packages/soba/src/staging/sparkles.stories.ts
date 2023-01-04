@@ -64,9 +64,10 @@ export const Default: Story = (args) => ({
     storyComponent: DefaultSparklesStory,
     storyInputs: args,
     camera: { position: [1, 1, 1] },
+    controls: false,
   },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
     `,
 });
 

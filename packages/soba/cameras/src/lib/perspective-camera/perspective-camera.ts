@@ -1,4 +1,4 @@
-import { extend, NgtRef, NgtRendererFlags } from '@angular-three/core';
+import { extend, NgtRef } from '@angular-three/core';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, ContentChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Group, PerspectiveCamera } from 'three';
@@ -21,7 +21,7 @@ extend({ PerspectiveCamera, Group });
       <ng-container
         *ngIf="cameraContent && cameraContent.ngtsCameraContent"
         [ngTemplateOutlet]="cameraContent.template"
-        [ngTemplateOutletContext]="{ fbo: fboRef.nativeElement, group: group['__ngt_three__'] }"
+        [ngTemplateOutletContext]="{ fbo: fboRef.nativeElement, group }"
       ></ng-container>
     </ngt-group>
   `,
@@ -29,7 +29,5 @@ extend({ PerspectiveCamera, Group });
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsPerspectiveCamera extends NgtsCamera<PerspectiveCamera> {
-  static [NgtRendererFlags.COMPOUND] = true;
-
   @ContentChild(NgtsCameraContent) cameraContent?: NgtsCameraContent;
 }

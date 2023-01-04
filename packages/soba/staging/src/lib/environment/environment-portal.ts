@@ -118,20 +118,16 @@ export class NgtsEnvironmentPortal extends NgtsEnvironmentInputs implements OnIn
   #setBeforeRender() {
     let count = 1;
     this.effect(this.#actions.setBeforeRender$, () =>
-      this.store.get('internal').subscribe(
-        () => {
-          const { frames } = this.get();
-          const gl = this.store.get('gl');
-          if (frames === Infinity || count < frames) {
-            if (this.cubeCameraRef.nativeElement) {
-              this.cubeCameraRef.nativeElement.update(gl, this.virtualSceneRef.nativeElement);
-              count++;
-            }
+      this.store.get('internal').subscribe(() => {
+        const { frames } = this.get();
+        const gl = this.store.get('gl');
+        if (frames === Infinity || count < frames) {
+          if (this.cubeCameraRef.nativeElement) {
+            this.cubeCameraRef.nativeElement.update(gl, this.virtualSceneRef.nativeElement);
+            count++;
           }
-        },
-        0,
-        this.store
-      )
+        }
+      })
     );
     this.#actions.setBeforeRender();
   }

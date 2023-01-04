@@ -167,18 +167,14 @@ export class NgtcPhysics extends NgtRxStore<NgtcPhysicsInputs> implements OnInit
   #setupBeforeRender() {
     let timeSinceLastCalled = 0;
     this.effect(this.#actions.setBeforeRender$, () =>
-      this.#store.get('internal').subscribe(
-        ({ delta }) => {
-          const { isPaused, maxSubSteps, stepSize } = this.get();
-          const worker = this.#physicsStore.get('worker');
-          if (isPaused || !worker) return;
-          timeSinceLastCalled += delta;
-          worker.step({ maxSubSteps, timeSinceLastCalled, stepSize: stepSize! });
-          timeSinceLastCalled = 0;
-        },
-        0,
-        this.#store
-      )
+      this.#store.get('internal').subscribe(({ delta }) => {
+        const { isPaused, maxSubSteps, stepSize } = this.get();
+        const worker = this.#physicsStore.get('worker');
+        if (isPaused || !worker) return;
+        timeSinceLastCalled += delta;
+        worker.step({ maxSubSteps, timeSinceLastCalled, stepSize: stepSize! });
+        timeSinceLastCalled = 0;
+      })
     );
     this.#actions.setBeforeRender();
   }

@@ -1,6 +1,13 @@
 import { extend, injectNgtRef, NgtArgs, NgtRef } from '@angular-three/core';
 import { NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, inject, Input } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core';
 import {
   BoxGeometry,
   Group,
@@ -164,28 +171,17 @@ export class Cube {}
   imports: [NgtArgs, NgtRef, NgIf, Box, Center, Cube],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class Scene {
-  readonly ref = injectNgtRef<Mesh>();
-  readonly geometryRef = injectNgtRef<BoxGeometry>();
-
+export class Scene implements OnInit {
   readonly #cdr = inject(ChangeDetectorRef);
 
   useNormal = true;
-
   active = false;
 
   ngOnInit() {
-    console.log(this.ref);
-    console.log(this.geometryRef);
-
     setTimeout(() => {
       this.useNormal = false;
       this.#cdr.detectChanges();
     }, 2000);
-  }
-
-  onClick(event: any) {
-    console.log('here?');
   }
 
   onBeforeRender(obj: Mesh) {

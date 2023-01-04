@@ -1,11 +1,4 @@
-import {
-  extend,
-  injectNgtRef,
-  NgtBeforeRender,
-  NgtRef,
-  NgtRendererFlags,
-  NgtRxStore,
-} from '@angular-three/core';
+import { extend, injectNgtRef, NgtBeforeRender, NgtRef, NgtRxStore } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { Group, MathUtils } from 'three';
 
@@ -16,7 +9,7 @@ extend({ Group });
   standalone: true,
   template: `
     <ngt-group ngtCompound>
-      <ngt-group *ref="ref" (beforeRender)="onBeforeRender($any($event))">
+      <ngt-group *ref="groupRef" (beforeRender)="onBeforeRender($any($event))">
         <ng-content></ng-content>
       </ngt-group>
     </ngt-group>
@@ -25,11 +18,9 @@ extend({ Group });
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsFloat extends NgtRxStore {
-  static [NgtRendererFlags.COMPOUND] = true;
-
   readonly #offset = Math.random() * 10000;
 
-  @Input() ref = injectNgtRef<Group>();
+  @Input() groupRef = injectNgtRef<Group>();
 
   @Input() set speed(speed: number) {
     this.set({ speed });

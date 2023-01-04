@@ -21,9 +21,8 @@ export class NgtsAdaptiveEvents extends NgtRxStore implements OnInit {
     });
     this.#actions.setEvents();
 
-    this.effect(this.#store.select('performance', 'current'), () => {
+    this.effect(this.#store.select('performance', 'current'), (current) => {
       const setEvents = this.#store.get('setEvents');
-      const current = this.#store.get('performance', 'current');
       setEvents({ enabled: current === 1 });
     });
   }

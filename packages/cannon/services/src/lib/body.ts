@@ -25,62 +25,62 @@ import type {
 } from '@pmndrs/cannon-worker-api';
 import { DynamicDrawUsage, Euler, InstancedMesh, Object3D, Quaternion, Vector3 } from 'three';
 
-export type NgtAtomicApi<K extends AtomicName> = {
+export type NgtcAtomicApi<K extends AtomicName> = {
   set: (value: AtomicProps[K]) => void;
   subscribe: (callback: (value: AtomicProps[K]) => void) => () => void;
 };
 
-export type NgtQuaternionApi = {
+export type NgtcQuaternionApi = {
   copy: ({ w, x, y, z }: THREE.Quaternion) => void;
   set: (x: number, y: number, z: number, w: number) => void;
   subscribe: (callback: (value: Quad) => void) => () => void;
 };
 
-export type NgtVectorApi = {
+export type NgtcVectorApi = {
   copy: ({ x, y, z }: THREE.Vector3 | THREE.Euler) => void;
   set: (x: number, y: number, z: number) => void;
   subscribe: (callback: (value: Triplet) => void) => () => void;
 };
 
-export type NgtWorkerApi = {
-  [K in AtomicName]: NgtAtomicApi<K>;
+export type NgtcWorkerApi = {
+  [K in AtomicName]: NgtcAtomicApi<K>;
 } & {
-  [K in VectorName]: NgtVectorApi;
+  [K in VectorName]: NgtcVectorApi;
 } & {
   applyForce: (force: Triplet, worldPoint: Triplet) => void;
   applyImpulse: (impulse: Triplet, worldPoint: Triplet) => void;
   applyLocalForce: (force: Triplet, localPoint: Triplet) => void;
   applyLocalImpulse: (impulse: Triplet, localPoint: Triplet) => void;
   applyTorque: (torque: Triplet) => void;
-  quaternion: NgtQuaternionApi;
-  rotation: NgtVectorApi;
+  quaternion: NgtcQuaternionApi;
+  rotation: NgtcVectorApi;
   scaleOverride: (scale: Triplet) => void;
   sleep: () => void;
   wakeUp: () => void;
   remove: () => void;
 };
 
-export interface NgtPhysicsBodyPublicApi extends NgtWorkerApi {
-  at: (index: number) => NgtWorkerApi;
+export interface NgtcPhysicsBodyPublicApi extends NgtcWorkerApi {
+  at: (index: number) => NgtcWorkerApi;
 }
 
-export interface NgtPhysicBodyReturn<TObject extends THREE.Object3D> {
+export interface NgtcPhysicBodyReturn<TObject extends THREE.Object3D> {
   ref: ElementRef<TObject>;
-  api: () => NgtPhysicsBodyPublicApi;
+  api: () => NgtcPhysicsBodyPublicApi;
 }
 
-export type NgtGetByIndex<T extends BodyProps> = (index: number) => T;
-export type NgtArgFn<T> = (args: T) => unknown[];
+export type NgtcGetByIndex<T extends BodyProps> = (index: number) => T;
+export type NgtcArgFn<T> = (args: T) => unknown[];
 
 export function injectPlane<TObject extends THREE.Object3D>(
-  fn: NgtGetByIndex<PlaneProps>,
+  fn: NgtcGetByIndex<PlaneProps>,
   ref?: ElementRef<TObject>
 ) {
   return injectBody<PlaneProps, TObject>('Plane', fn, () => [], ref);
 }
 
 export function injectBox<TObject extends THREE.Object3D>(
-  fn: NgtGetByIndex<BoxProps>,
+  fn: NgtcGetByIndex<BoxProps>,
   ref?: ElementRef<TObject>
 ) {
   const defaultBoxArgs: Triplet = [1, 1, 1];
@@ -88,28 +88,28 @@ export function injectBox<TObject extends THREE.Object3D>(
 }
 
 export function injectCylinder<TObject extends THREE.Object3D>(
-  fn: NgtGetByIndex<CylinderProps>,
+  fn: NgtcGetByIndex<CylinderProps>,
   ref?: ElementRef<TObject>
 ) {
   return injectBody<CylinderProps, TObject>('Cylinder', fn, (args = [] as []) => args, ref);
 }
 
 export function injectHeightfield<TObject extends THREE.Object3D>(
-  fn: NgtGetByIndex<HeightfieldProps>,
+  fn: NgtcGetByIndex<HeightfieldProps>,
   ref?: ElementRef<TObject>
 ) {
   return injectBody<HeightfieldProps, TObject>('Heightfield', fn, (args) => args, ref);
 }
 
 export function injectParticle<TObject extends THREE.Object3D>(
-  fn: NgtGetByIndex<ParticleProps>,
+  fn: NgtcGetByIndex<ParticleProps>,
   ref?: ElementRef<TObject>
 ) {
   return injectBody<ParticleProps, TObject>('Particle', fn, () => [], ref);
 }
 
 export function injectSphere<TObject extends THREE.Object3D>(
-  fn: NgtGetByIndex<SphereProps>,
+  fn: NgtcGetByIndex<SphereProps>,
   ref?: ElementRef<TObject>
 ) {
   return injectBody<SphereProps, TObject>(
@@ -124,14 +124,14 @@ export function injectSphere<TObject extends THREE.Object3D>(
 }
 
 export function injectTrimesh<TObject extends THREE.Object3D>(
-  fn: NgtGetByIndex<TrimeshProps>,
+  fn: NgtcGetByIndex<TrimeshProps>,
   ref?: ElementRef<TObject>
 ) {
   return injectBody<TrimeshProps, TObject>('Trimesh', fn, (args) => args, ref);
 }
 
 export function injectConvexPolyhedron<TObject extends THREE.Object3D>(
-  fn: NgtGetByIndex<ConvexPolyhedronProps>,
+  fn: NgtcGetByIndex<ConvexPolyhedronProps>,
   ref?: ElementRef<TObject>
 ) {
   return injectBody<ConvexPolyhedronProps, TObject>(
@@ -155,7 +155,7 @@ export function injectConvexPolyhedron<TObject extends THREE.Object3D>(
 }
 
 export function injectCompoundBody<TObject extends THREE.Object3D>(
-  fn: NgtGetByIndex<CompoundBodyProps>,
+  fn: NgtcGetByIndex<CompoundBodyProps>,
   ref?: ElementRef<TObject>
 ) {
   return injectBody<CompoundBodyProps, TObject>('Compound', fn, (args) => args as unknown[], ref);
@@ -165,10 +165,10 @@ const temp = new Object3D();
 
 function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D>(
   type: BodyShapeType,
-  getPropsFn: NgtGetByIndex<TBodyProps>,
-  argsFn: NgtArgFn<TBodyProps['args']>,
+  getPropsFn: NgtcGetByIndex<TBodyProps>,
+  argsFn: NgtcArgFn<TBodyProps['args']>,
   instanceRef?: ElementRef<TObject>
-): NgtPhysicBodyReturn<TObject> {
+): NgtcPhysicBodyReturn<TObject> {
   const view = inject(ChangeDetectorRef) as ViewRef;
   const debugApi = injectNgtcDebugApi({ skipSelf: true, optional: true });
   const store = injectNgtcPhysicsStore({ skipSelf: true });
@@ -233,15 +233,13 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       uuid: uuids,
     });
 
-    queueMicrotask(() => {
-      view.onDestroy(() => {
-        uuids.forEach((id) => {
-          delete refs[id];
-          debugApi?.remove(id);
-          delete events[id];
-        });
-        currentWorker.removeBodies({ uuid: uuids });
+    view.onDestroy(() => {
+      uuids.forEach((id) => {
+        delete refs[id];
+        debugApi?.remove(id);
+        delete events[id];
       });
+      currentWorker.removeBodies({ uuid: uuids });
     });
   });
 
@@ -329,7 +327,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       };
     };
 
-    function makeApi(index?: number): NgtWorkerApi {
+    function makeApi(index?: number): NgtcWorkerApi {
       return {
         allowSleep: makeAtomic('allowSleep', index),
         angularDamping: makeAtomic('angularDamping', index),
@@ -387,7 +385,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       };
     }
 
-    const cache: { [index: number]: NgtWorkerApi } = {};
+    const cache: { [index: number]: NgtcWorkerApi } = {};
     return {
       ...makeApi(undefined),
       at: (index: number) => cache[index] || (cache[index] = makeApi(index)),

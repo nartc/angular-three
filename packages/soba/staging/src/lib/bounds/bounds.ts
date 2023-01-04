@@ -5,7 +5,6 @@ import {
   injectNgtStore,
   is,
   NgtRef,
-  NgtRendererFlags,
   NgtRxStore,
 } from '@angular-three/core';
 import {
@@ -72,7 +71,7 @@ extend({ Group });
   selector: 'ngts-bounds',
   standalone: true,
   template: `
-    <ngt-group ngtCompound *ref="ref">
+    <ngt-group ngtCompound *ref="groupRef">
       <ng-content></ng-content>
     </ngt-group>
   `,
@@ -107,7 +106,7 @@ extend({ Group });
 
           if (isBox3(object)) box.copy(object);
           else {
-            const target = object || bounds.ref.nativeElement;
+            const target = object || bounds.groupRef.nativeElement;
             target.updateWorldMatrix(true, true);
             box.setFromObject(target);
           }
@@ -260,9 +259,7 @@ extend({ Group });
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsBounds extends NgtRxStore implements OnInit {
-  static [NgtRendererFlags.COMPOUND] = true;
-
-  @Input() ref = injectNgtRef<Group>();
+  @Input() groupRef = injectNgtRef<Group>();
 
   @Input() set damping(damping: number) {
     this.set({ damping });
@@ -325,48 +322,41 @@ export class NgtsBounds extends NgtRxStore implements OnInit {
 
   #setBeforeRender() {
     this.effect(this.#actions.setBeforeRender$, () =>
-      this.#store.get('internal').subscribe(
-        ({ delta }) => {
-          if (this.current.animating) {
-            const { damping, eps } = this.get();
-            const { camera, controls: storeControls, invalidate } = this.#store.get();
-            const controls = storeControls as unknown as ControlsProto;
+      this.#store.get('internal').subscribe(({ delta }) => {
+        if (this.current.animating) {
+          const { damping, eps } = this.get();
+          const { camera, controls: storeControls, invalidate } = this.#store.get();
+          const controls = storeControls as unknown as ControlsProto;
 
-            damp(this.current.focus, this.goal.focus, damping, delta);
-            damp(this.current.camera, this.goal.camera, damping, delta);
-            this.current.zoom = MathUtils.damp(this.current.zoom, this.goal.zoom, damping, delta);
-            camera.position.copy(this.current.camera);
+          damp(this.current.focus, this.goal.focus, damping, delta);
+          damp(this.current.camera, this.goal.camera, damping, delta);
+          this.current.zoom = MathUtils.damp(this.current.zoom, this.goal.zoom, damping, delta);
+          camera.position.copy(this.current.camera);
 
-            if (is.orthographicCamera(camera)) {
-              camera.zoom = this.current.zoom;
-              camera.updateProjectionMatrix();
-            }
-
-            if (!controls) {
-              camera.lookAt(this.current.focus);
-            } else {
-              controls.target.copy(this.current.focus);
-              controls.update();
-            }
-
-            invalidate();
-            if (
-              is.orthographicCamera(camera) &&
-              !(Math.abs(this.current.zoom - this.goal.zoom) < eps)
-            )
-              return;
-            if (
-              !is.orthographicCamera(camera) &&
-              !equals(this.current.camera, this.goal.camera, eps)
-            )
-              return;
-            if (controls && !equals(this.current.focus, this.goal.focus, eps)) return;
-            this.current.animating = false;
+          if (is.orthographicCamera(camera)) {
+            camera.zoom = this.current.zoom;
+            camera.updateProjectionMatrix();
           }
-        },
-        0,
-        this.#store
-      )
+
+          if (!controls) {
+            camera.lookAt(this.current.focus);
+          } else {
+            controls.target.copy(this.current.focus);
+            controls.update();
+          }
+
+          invalidate();
+          if (
+            is.orthographicCamera(camera) &&
+            !(Math.abs(this.current.zoom - this.goal.zoom) < eps)
+          )
+            return;
+          if (!is.orthographicCamera(camera) && !equals(this.current.camera, this.goal.camera, eps))
+            return;
+          if (controls && !equals(this.current.focus, this.goal.focus, eps)) return;
+          this.current.animating = false;
+        }
+      })
     );
 
     this.#actions.setBeforeRender();

@@ -1,6 +1,6 @@
+import { startWithUndefined } from '@angular-three/core';
 import { Directive, OnInit } from '@angular/core';
-import { selectSlice } from '@rx-angular/state';
-import { combineLatest } from 'rxjs';
+import { combineLatest, startWith } from 'rxjs';
 import { NgtsEnvironmentInputs } from './environment-inputs';
 import { setEnvProps } from './utils';
 
@@ -22,9 +22,12 @@ export class NgtsEnvironmentMap extends NgtsEnvironmentInputs implements OnInit 
     this.effect(
       combineLatest([
         this.store.select('scene'),
-        this.select(selectSlice(['scene', 'map', 'background', 'blur'])),
+        this.select('map'),
+        this.select('scene').pipe(startWithUndefined()),
+        this.select('background').pipe(startWith(false)),
+        this.select('blur').pipe(startWithUndefined()),
       ]),
-      ([defaultScene, { scene, map, background, blur }]) => {
+      ([defaultScene, map, scene, background, blur]) => {
         if (map) {
           return setEnvProps(background, scene, defaultScene, map, blur);
         }

@@ -5,7 +5,6 @@ import {
   NgtArgs,
   NgtPush,
   NgtRef,
-  NgtRendererFlags,
   NgtRxStore,
 } from '@angular-three/core';
 import { NgIf } from '@angular/common';
@@ -35,7 +34,7 @@ extend({
   selector: 'ngts-contact-shadows',
   standalone: true,
   template: `
-    <ngt-group ngtCompound *ref="ref" [rotation]="[Math.PI / 2, 0, 0]">
+    <ngt-group ngtCompound *ref="groupRef" [rotation]="[Math.PI / 2, 0, 0]">
       <ng-container *ngIf="contactShadows$ | ngtPush : null as contactShadows">
         <ngt-mesh
           [renderOrder]="get('renderOrder')"
@@ -63,8 +62,6 @@ extend({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsContactShadows extends NgtRxStore implements OnInit {
-  static [NgtRendererFlags.COMPOUND] = true;
-
   readonly #store = injectNgtStore();
   readonly #actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
   readonly shadowCameraRef = injectNgtRef<OrthographicCamera>();
@@ -72,7 +69,7 @@ export class NgtsContactShadows extends NgtRxStore implements OnInit {
   readonly contactShadows$ = this.select('contactShadows');
   readonly Math = Math;
 
-  @Input() ref = injectNgtRef<Group>();
+  @Input() groupRef = injectNgtRef<Group>();
 
   @Input() set opacity(opacity: number) {
     this.set({ opacity });
@@ -220,35 +217,31 @@ export class NgtsContactShadows extends NgtRxStore implements OnInit {
   #setBeforeRender() {
     let count = 0;
     this.effect(this.#actions.setBeforeRender$, () =>
-      this.#store.get('internal').subscribe(
-        ({ scene, gl }) => {
-          const {
-            frames,
-            blur,
-            contactShadows: { depthMaterial, renderTarget },
-            smooth,
-          } = this.get();
+      this.#store.get('internal').subscribe(({ scene, gl }) => {
+        const {
+          frames,
+          blur,
+          contactShadows: { depthMaterial, renderTarget },
+          smooth,
+        } = this.get();
 
-          if (this.shadowCameraRef.nativeElement && (frames === Infinity || count < frames)) {
-            const initialBackground = scene.background;
-            scene.background = null;
-            const initialOverrideMaterial = scene.overrideMaterial;
-            scene.overrideMaterial = depthMaterial;
-            gl.setRenderTarget(renderTarget);
-            gl.render(scene, this.shadowCameraRef.nativeElement);
-            scene.overrideMaterial = initialOverrideMaterial;
+        if (this.shadowCameraRef.nativeElement && (frames === Infinity || count < frames)) {
+          const initialBackground = scene.background;
+          scene.background = null;
+          const initialOverrideMaterial = scene.overrideMaterial;
+          scene.overrideMaterial = depthMaterial;
+          gl.setRenderTarget(renderTarget);
+          gl.render(scene, this.shadowCameraRef.nativeElement);
+          scene.overrideMaterial = initialOverrideMaterial;
 
-            this.#blurShadows(blur);
-            if (smooth) this.#blurShadows(blur * 0.4);
+          this.#blurShadows(blur);
+          if (smooth) this.#blurShadows(blur * 0.4);
 
-            gl.setRenderTarget(null);
-            scene.background = initialBackground;
-            count++;
-          }
-        },
-        0,
-        this.#store
-      )
+          gl.setRenderTarget(null);
+          scene.background = initialBackground;
+          count++;
+        }
+      })
     );
     this.#actions.setBeforeRender();
   }

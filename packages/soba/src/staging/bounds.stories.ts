@@ -3,7 +3,6 @@ import {
   NgtAnyRecord,
   NgtArgs,
   NgtPush,
-  NgtRendererFlags,
   NgtRxStore,
   NgtThreeEvent,
 } from '@angular-three/core';
@@ -20,7 +19,7 @@ import { StorybookSetup } from '../setup-canvas';
 extend({ Mesh, Color, SpotLight, HemisphereLight, Group });
 
 @Component({
-  selector: 'model[name]',
+  selector: 'storybook-model[name]',
   standalone: true,
   template: `
     <ngt-mesh
@@ -37,8 +36,6 @@ extend({ Mesh, Color, SpotLight, HemisphereLight, Group });
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class Model extends NgtRxStore {
-  static [NgtRendererFlags.COMPOUND] = true;
-
   readonly models$ = injectNgtsGLTFLoader('soba/bounds-assets.glb');
   readonly model$ = this.models$.pipe(map(({ nodes }) => nodes[this.name] as Mesh));
 
@@ -50,30 +47,55 @@ class Model extends NgtRxStore {
   standalone: true,
   template: `
     <ngt-group (click)="onClick($any($event))" (pointermissed)="onPointerMissed($any($event))">
-      <model name="Curly" [position]="[1, -11, -20]" [rotation]="[2, 0, -0]"></model>
-      <model name="DNA" [position]="[20, 0, -17]" [rotation]="[1, 1, -2]"></model>
-      <model name="Headphones" [position]="[20, 2, 4]" [rotation]="[1, 0, -1]"></model>
-      <model name="Notebook" [position]="[-21, -15, -13]" [rotation]="[2, 0, 1]"></model>
-      <model name="Rocket003" [position]="[18, 15, -25]" [rotation]="[1, 1, 0]"></model>
-      <model
+      <storybook-model
+        name="Curly"
+        [position]="[1, -11, -20]"
+        [rotation]="[2, 0, -0]"
+      ></storybook-model>
+      <storybook-model
+        name="DNA"
+        [position]="[20, 0, -17]"
+        [rotation]="[1, 1, -2]"
+      ></storybook-model>
+      <storybook-model
+        name="Headphones"
+        [position]="[20, 2, 4]"
+        [rotation]="[1, 0, -1]"
+      ></storybook-model>
+      <storybook-model
+        name="Notebook"
+        [position]="[-21, -15, -13]"
+        [rotation]="[2, 0, 1]"
+      ></storybook-model>
+      <storybook-model
+        name="Rocket003"
+        [position]="[18, 15, -25]"
+        [rotation]="[1, 1, 0]"
+      ></storybook-model>
+      <storybook-model
         name="Roundcube001"
         [position]="[-25, -4, 5]"
         [rotation]="[1, 0, 0]"
         [scale]="0.5"
-      ></model>
-      <model name="Table" [position]="[1, -4, -28]" [rotation]="[1, 0, -1]" [scale]="0.5"></model>
-      <model
+      ></storybook-model>
+      <storybook-model
+        name="Table"
+        [position]="[1, -4, -28]"
+        [rotation]="[1, 0, -1]"
+        [scale]="0.5"
+      ></storybook-model>
+      <storybook-model
         name="VR_Headset"
         [position]="[7, -15, 28]"
         [rotation]="[1, 0, -1]"
         [scale]="5"
-      ></model>
-      <model
+      ></storybook-model>
+      <storybook-model
         name="Zeppelin"
         [position]="[-20, 10, 10]"
         [rotation]="[3, -1, 3]"
         [scale]="0.005"
-      ></model>
+      ></storybook-model>
     </ngt-group>
   `,
   imports: [Model, NgIf, NgtPush],

@@ -13,6 +13,7 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -34,7 +35,7 @@ import { OrbitControls } from 'three-stdlib';
   providers: [RxActionFactory],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class NgtsOrbitControls extends NgtRxStore implements OnInit {
+export class NgtsOrbitControls extends NgtRxStore implements OnInit, OnDestroy {
   @Input() controlsRef = injectNgtRef<OrbitControls>();
 
   @Input() set camera(camera: THREE.Camera) {
@@ -83,6 +84,11 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
     this.connect('args', this.controlsRef.$.pipe(map((controls) => [controls])));
   }
 
+  override ngOnDestroy(): void {
+    this.controlsRef.nativeElement.dispose();
+    super.ngOnDestroy();
+  }
+
   #setControls() {
     this.hold(
       combineLatest([
@@ -90,22 +96,24 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
         this.select('camera').pipe(startWithUndefined()),
       ]),
       ([defaultCamera, camera]) => {
-        this.controlsRef.nativeElement = new OrbitControls(camera || defaultCamera);
+        const controlsCamera = camera || defaultCamera;
+        if (
+          !this.controlsRef.nativeElement ||
+          this.controlsRef.nativeElement.object !== controlsCamera
+        ) {
+          this.controlsRef.nativeElement = new OrbitControls(controlsCamera);
+        }
       }
     );
   }
 
   #setBeforeRender() {
     this.effect(this.#actions.setBeforeRender$, () => {
-      return this.#store.get('internal').subscribe(
-        () => {
-          if (this.controlsRef.nativeElement && this.controlsRef.nativeElement.enabled) {
-            this.controlsRef.nativeElement.update();
-          }
-        },
-        -1,
-        this.#store
-      );
+      return this.#store.get('internal').subscribe(() => {
+        if (this.controlsRef.nativeElement && this.controlsRef.nativeElement.enabled) {
+          this.controlsRef.nativeElement.update();
+        }
+      }, -1);
     });
     this.#actions.setBeforeRender();
   }
@@ -118,29 +126,31 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
         this.select('regress'),
         this.controlsRef.$,
       ]),
-      () => {
-        const { gl, events } = this.#store.get();
-        const domElement = this.get('domElement') || events.connected || gl.domElement;
-        this.controlsRef.nativeElement.connect(domElement);
+      ([glDom, , , controls]) => {
+        const { events } = this.#store.get();
+        const domElement = this.get('domElement') || events.connected || glDom;
+        controls.connect(domElement);
       }
     );
   }
 
   #makeDefault() {
-    this.effect(combineLatest([this.controlsRef.$, this.select('makeDefault')]), () => {
-      const makeDefault = this.get('makeDefault');
-      if (makeDefault) {
-        const oldControls = this.#store.get('controls');
-        this.#store.set({ controls: this.controlsRef.nativeElement });
-        return () => {
-          this.#store.set({ controls: oldControls });
-        };
+    this.effect(
+      combineLatest([this.controlsRef.$, this.select('makeDefault')]),
+      ([controls, makeDefault]) => {
+        if (makeDefault) {
+          const oldControls = this.#store.get('controls');
+          this.#store.set({ controls });
+          return () => {
+            this.#store.set({ controls: oldControls });
+          };
+        }
       }
-    });
+    );
   }
 
   #setEvents() {
-    this.effect(this.controlsRef.$, () => {
+    this.effect(this.controlsRef.$, (controls) => {
       const { invalidate, performance } = this.#store.get();
       const regress = this.get('regress');
 
@@ -153,15 +163,14 @@ export class NgtsOrbitControls extends NgtRxStore implements OnInit {
       const startCallback = this.start.observed ? this.start.emit.bind(this.start) : null;
       const endCallback = this.end.observed ? this.end.emit.bind(this.end) : null;
 
-      this.controlsRef.nativeElement.addEventListener('change', changeCallback);
-      if (startCallback) this.controlsRef.nativeElement.addEventListener('start', startCallback);
-      if (endCallback) this.controlsRef.nativeElement.addEventListener('end', endCallback);
+      controls.addEventListener('change', changeCallback);
+      if (startCallback) controls.addEventListener('start', startCallback);
+      if (endCallback) controls.addEventListener('end', endCallback);
 
       return () => {
-        this.controlsRef.nativeElement.removeEventListener('change', changeCallback);
-        if (startCallback)
-          this.controlsRef.nativeElement.removeEventListener('start', startCallback);
-        if (endCallback) this.controlsRef.nativeElement.removeEventListener('end', endCallback);
+        controls.removeEventListener('change', changeCallback);
+        if (startCallback) controls.removeEventListener('start', startCallback);
+        if (endCallback) controls.removeEventListener('end', endCallback);
       };
     });
   }
