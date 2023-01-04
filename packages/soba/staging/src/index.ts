@@ -1,3 +1,5 @@
+export * from './lib/accumulative-shadows/accumulative-shadows';
+export * from './lib/accumulative-shadows/randomized-light';
 export * from './lib/bounds/bounds';
 export * from './lib/camera-shake/camera-shake';
 export * from './lib/center/center';

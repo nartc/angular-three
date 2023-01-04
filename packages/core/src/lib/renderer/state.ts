@@ -288,6 +288,7 @@ export class NgtRendererState {
   }
 
   remove(node: NgtRendererNode, parent?: NgtRendererInstanceNode) {
+    if (node.renderRemoved) return;
     if (node.renderType === 'instance') {
       delete node.compound;
       delete node.compoundParent;
