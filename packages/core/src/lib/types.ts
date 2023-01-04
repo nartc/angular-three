@@ -219,7 +219,7 @@ export type NgtBeforeRenderCallback<TObject extends NgtInstanceNode = NgtInstanc
 export interface NgtBeforeRenderRecord {
   callback: NgtBeforeRenderCallback;
   store: NgtRxStore<NgtState>;
-  obj?: Object3D;
+  obj?: NgtInstanceNode;
   priority?: number;
 }
 
@@ -236,8 +236,9 @@ export interface NgtInternalState {
   initialHits: Object3D[];
   subscribe: (
     callback: NgtBeforeRenderCallback,
-    priority: number,
-    store: NgtRxStore<NgtState>
+    priority?: number,
+    store?: NgtRxStore<NgtState>,
+    obj?: NgtInstanceNode
   ) => () => void;
 }
 
@@ -355,6 +356,8 @@ export interface NgtInstanceLocalState {
   memoized?: NgtAnyRecord;
   // is raw value
   isRaw?: boolean;
+  // priority for before render
+  priority?: number;
 }
 
 export type NgtInstanceNode<TNode = any> = TNode & {

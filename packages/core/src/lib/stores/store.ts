@@ -24,6 +24,7 @@ import type {
   NgtDpr,
   NgtEquConfig,
   NgtEventManager,
+  NgtInstanceNode,
   NgtInternalState,
   NgtSize,
   NgtState,
@@ -31,7 +32,7 @@ import type {
 } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { createInject } from '../utils/di';
-import { prepare } from '../utils/instance';
+import { getLocalState, prepare } from '../utils/instance';
 import { is } from '../utils/is';
 import { makeDefaultCamera, makeDefaultRenderer, makeDpr } from '../utils/make';
 import { checkNeedsUpdate, updateCamera } from '../utils/update';
@@ -176,7 +177,7 @@ export class NgtStore extends NgtRxStore<NgtState> {
             callback: NgtBeforeRenderCallback,
             priority = 0,
             store: NgtRxStore<NgtState> = this,
-            obj?: Object3D
+            obj?: NgtInstanceNode
           ) => {
             const internal = this.get('internal');
             // If this subscription was given a priority, it takes rendering into its own hands
@@ -193,6 +194,12 @@ export class NgtStore extends NgtRxStore<NgtState> {
             // Register subscriber and sort layers from lowest to highest, meaning,
             // highest priority renders last (on top of the other frames)
             internal.subscribers.sort((a, b) => (a.priority || 0) - (b.priority || 0));
+
+            if (obj) {
+              const localState = getLocalState(obj);
+              if (localState) localState.priority = priority;
+            }
+
             return () => {
               const internal = this.get('internal');
               if (internal?.subscribers) {

@@ -1,12 +1,4 @@
-import {
-  extend,
-  injectNgtRef,
-  NgtArgs,
-  NgtPush,
-  NgtRef,
-  NgtRendererFlags,
-  NgtVector3,
-} from '@angular-three/core';
+import { extend, injectNgtRef, NgtArgs, NgtPush, NgtRef, NgtVector3 } from '@angular-three/core';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import { NgIf } from '@angular/common';
@@ -37,7 +29,7 @@ extend({
   selector: 'ngts-box',
   standalone: true,
   template: `
-    <ngt-mesh ngtCompound *ref="ref">
+    <ngt-mesh ngtCompound *ref="meshRef">
       <ngt-box-geometry *args="args"></ngt-box-geometry>
       <ng-content></ng-content>
     </ngt-mesh>
@@ -46,8 +38,7 @@ extend({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Box {
-  static [NgtRendererFlags.COMPOUND] = true;
-  @Input() ref = injectNgtRef<Mesh>();
+  @Input() meshRef = injectNgtRef<Mesh>();
   @Input() args: ConstructorParameters<typeof BoxGeometry> = [];
 }
 
@@ -56,7 +47,7 @@ export class Box {
   standalone: true,
   template: `
     <ngts-box
-      [ref]="meshRef"
+      [meshRef]="meshRef"
       [position]="position"
       [visible]="visible"
       [scale]="active ? 1.5 : 1"

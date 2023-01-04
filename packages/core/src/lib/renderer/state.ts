@@ -283,6 +283,7 @@ export class NgtRendererStateCollection {
     let dirInstance: T | undefined;
     // we only care about the comment states because structural directives create Comments
     const commentState = Array.from(this.commentMap.values());
+    console.log(commentState)
     let i = commentState.length - 1;
     while (i >= 0) {
       // loop through the comment state backwards to find the directive

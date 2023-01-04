@@ -1,5 +1,6 @@
 import {
   ChangeDetectorRef,
+  getDebugNode,
   inject,
   Injectable,
   Renderer2,
@@ -185,6 +186,7 @@ export class NgtRenderer implements Renderer2 {
 
   createComment(value: string) {
     const comment = this.delegate.createComment(value);
+    comment['__ngt_test__'] = ()=>getDebugNode(comment)
     // we track Comment for their Injector
     this.stateCol.addComment(comment);
     return comment;

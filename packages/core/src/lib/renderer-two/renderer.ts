@@ -8,13 +8,19 @@ import {
 } from '@angular/core';
 import { ɵDomRendererFactory2 as DomRendererFactory2 } from '@angular/platform-browser';
 import { injectNgtCatalogue } from '../catalogue';
-import { attachThreeInstances, kebabToPascal } from '../renderer/utils';
+import {
+  attachThreeInstances,
+  kebabToPascal,
+  processThreeEvent,
+  removeThreeChild,
+  SPECIAL_DOM_TAG,
+} from '../renderer/utils';
 import { injectNgtStore } from '../stores/store';
 import { NgtAnyConstructor } from '../types';
 import { prepare } from '../utils/instance';
 import { is } from '../utils/is';
 import { injectNgtCompoundPrefixes } from './di';
-import { NgtRendererNode, NgtRendererState } from './state';
+import { NgtRendererInstanceNode, NgtRendererNode, NgtRendererState } from './state';
 
 @Injectable()
 export class NgtRendererFactory2 implements RendererFactory2 {
@@ -51,22 +57,59 @@ export class NgtRenderer2 implements Renderer2 {
   ) {}
 
   createElement(name: string, namespace?: string | null | undefined) {
-    console.log('createElement -->', { name });
-
     const element = this.delegate.createElement(name, namespace);
 
     if (!this.#firstCreateElement) {
       this.#firstCreateElement = true;
-      return new NgtRendererNode('three', this.state.rootScene, element);
+      return this.state.createNode('instance', this.state.rootScene);
     }
 
     if (this.state.isCompound(name)) {
-      const node = new NgtRendererNode('compound', element);
-      this.state.addNode(node);
-      return node;
+      return this.state.createNode('compound', element);
     }
 
     const { injectedRef, injectedArgs, attach, store } = this.state.getCreationState();
+
+    // handle Portal to opt-out of normal rendering
+    if (name === SPECIAL_DOM_TAG.NGT_PORTAL) {
+      return this.state.createNode('portal', element);
+    }
+
+    // handle raw value
+    if (name === SPECIAL_DOM_TAG.NGT_VALUE) {
+      if (!injectedArgs[0]) throw new Error(`[NGT] ngt-value without args is invalid`);
+      const value = injectedArgs[0];
+      return this.state.createNode(
+        'instance',
+        Object.assign(value, {
+          __ngt__: {
+            store,
+            attach,
+            args: injectedArgs,
+            isRaw: true,
+          },
+        })
+      );
+    }
+
+    // with injectNgtRef, consumers can pass in ref with value. We respect that value
+    if (injectedRef && injectedRef.nativeElement) {
+      const injectedInstance = injectedRef.nativeElement;
+      if (!is.instance(injectedInstance)) {
+        prepare(injectedInstance, { store, attach });
+      }
+      return this.state.createNode('instance', injectedInstance);
+    }
+
+    // handle ngt-primitive and fail fast when not met requirement
+    if (name === SPECIAL_DOM_TAG.NGT_PRIMITIVE) {
+      if (!injectedArgs[0]) throw new Error(`[NGT] ngt-primitve without args is invalid`);
+      const object = injectedArgs[0];
+      if (!is.instance(object)) {
+        prepare(object, { store, attach, args: injectedArgs, primitive: true });
+      }
+      return this.state.createNode('instance', object);
+    }
 
     const threeTag = name.startsWith('ngt') ? name.slice(4) : name;
     const threeName = kebabToPascal(threeTag);
@@ -77,8 +120,8 @@ export class NgtRenderer2 implements Renderer2 {
         attach,
         args: injectedArgs,
       });
-      const node = new NgtRendererNode('three', instance);
-      const localState = node.localState;
+      const node = this.state.createNode('instance', instance);
+      const localState = node.localState();
       if (localState) {
         if (!attach) {
           if (is.geometry(instance)) {
@@ -93,63 +136,77 @@ export class NgtRenderer2 implements Renderer2 {
       return node;
     }
 
-    const node = new NgtRendererNode('component', element);
-    this.state.addNode(node);
-    return node;
+    return this.state.createNode('component', element);
   }
 
   createComment(value: string) {
     const comment = this.delegate.createComment(value);
-    const node = new NgtRendererNode('comment', comment);
-    this.state.addNode(node);
-    return node;
-  }
-
-  createText(value: string) {
-    console.log('createText -->', { value });
-    return this.delegate.createText(value);
+    return this.state.createNode('comment', comment);
   }
 
   appendChild(parent: NgtRendererNode, newChild: NgtRendererNode): void {
     console.log('appendChild -->', { parent, newChild });
-
-    if (!newChild.parent) {
-      newChild.setParent(parent);
-    }
-    parent.addChild(newChild);
-
-    if (parent.instance && newChild.instance) {
-      attachThreeInstances(parent.instance, newChild.instance);
+    if (newChild.renderType === 'comment') {
+      this.state.setParent(newChild, parent);
       return;
     }
 
-    let grandParent = parent.parent;
-    while (grandParent !== null && !grandParent.secondaryElement) {
-      if (grandParent.parent === null) {
-        break;
+    this.state.setParent(newChild, parent);
+    this.state.addChild(parent, newChild);
+
+    if (parent.renderType === 'instance' && newChild.renderType === 'instance') {
+      attachThreeInstances(parent, newChild);
+      // here, we handle the special case of if the parent has compoundParent, which means that this is part of a compound component
+      const closestGrandparentCompound = this.state.getClosestParentWithCompound(parent);
+      if (!closestGrandparentCompound) return;
+      if (newChild.compound) {
+        this.appendChild(closestGrandparentCompound, newChild);
       }
-      grandParent = grandParent.parent;
+      return;
     }
 
-    if (grandParent?.secondaryElement && newChild.element) {
-      this.delegate.appendChild(grandParent.secondaryElement, newChild.element);
+    if (parent.renderType === 'instance') {
+      if (newChild.renderChildren.length) {
+        for (const renderChild of newChild.renderChildren) {
+          this.appendChild(parent, renderChild);
+        }
+      }
+      return;
+    }
+
+    if (parent.renderType === 'compound') {
+      // if compound doesn't have its instance set yet
+      if (!parent.compounded && newChild.renderType === 'instance') {
+        // if child is indeed an ngtCompound
+        if (newChild.compound) {
+          this.state.setCompoundInstance(parent, newChild);
+        } else {
+          // if not, we track the parent (that is supposedly the compound component) on this three instance
+          if (!newChild.compoundParent) {
+            newChild.compoundParent = parent;
+          }
+        }
+      }
+    }
+
+    if (newChild.renderType === 'instance' && !newChild.localState().parent) {
+      // we'll try to get the grandparent instance here so that we can run appendChild with both instances
+      const closestGrandparentInstance = this.state.getClosestParentWithInstance(parent);
+      if (closestGrandparentInstance) {
+        this.appendChild(closestGrandparentInstance, newChild);
+      }
     }
   }
 
   insertBefore(
     parent: NgtRendererNode,
     newChild: NgtRendererNode,
-    refChild: NgtRendererNode,
+    refChild: NgtRendererNode | Comment,
     isMove?: boolean | undefined
   ): void {
-    if (newChild.secondaryElement) {
-      this.delegate.insertBefore(parent, newChild.secondaryElement, refChild, isMove);
-      return;
-    }
-    if (!(parent instanceof NgtRendererNode) || !(newChild instanceof NgtRendererNode)) return;
-    parent.removeChild(refChild);
-    this.appendChild(parent, newChild);
     console.log('insertBefore -->', { parent, newChild, refChild, isMove });
+    if (!parent.renderType) return;
+    this.appendChild(parent, newChild);
   }
 
   removeChild(
@@ -158,12 +215,31 @@ export class NgtRenderer2 implements Renderer2 {
     isHostElement?: boolean | undefined
   ): void {
     console.log('removeChild -->', { parent, oldChild, isHostElement });
-    return this.delegate.removeChild(parent, oldChild, isHostElement);
+    if (parent.renderType === 'instance' && oldChild.renderType === 'instance') {
+      removeThreeChild(parent, oldChild, true);
+      this.state.remove(oldChild, parent);
+      return;
+    }
+
+    if (parent.renderType === 'compound' && parent.renderParent) {
+      this.removeChild(parent.renderParent, oldChild, isHostElement);
+      return;
+    }
+
+    if (parent.renderType === 'instance') {
+      this.state.remove(oldChild, parent);
+      return;
+    }
+
+    const closestGrandparentInstance = this.state.getClosestParentWithInstance(parent);
+    if (closestGrandparentInstance) {
+      this.removeChild(closestGrandparentInstance, oldChild, isHostElement);
+    }
+    this.state.remove(oldChild, closestGrandparentInstance as NgtRendererInstanceNode);
   }
 
   parentNode(node: NgtRendererNode) {
-    console.log('parentNode -->', { node });
-    if (node.parent) return node.parent;
+    if (node.renderParent) return node.renderParent;
     return this.delegate.parentNode(node);
   }
 
@@ -173,19 +249,45 @@ export class NgtRenderer2 implements Renderer2 {
     value: string,
     namespace?: string | null | undefined
   ): void {
-    console.log('setAttribute -->', { el, name, value, namespace });
-    return this.delegate.setAttribute(el, name, value, namespace);
+    if (el.renderType === 'compound') {
+      // we don't have the compound instance yet
+      el.renderAttributes[name] = value;
+      if (!el.compounded) {
+        this.state.queueCompoundOperation(el, () => this.setAttribute(el, name, value, namespace));
+        return;
+      }
+
+      this.setAttribute(el.compounded, name, value, namespace);
+      return;
+    }
+
+    if (el.renderType === 'instance') {
+      this.state.applyAttribute(el, name, value);
+    }
   }
 
   setProperty(el: NgtRendererNode, name: string, value: any): void {
-    console.log('setProperty -->', { el, name, value });
-    return this.delegate.setProperty(el, name, value);
-  }
+    if (el.renderType === 'compound') {
+      // we don't have the compound instance yet
+      el.renderProperties[name] = value;
+      if (!el.compounded) {
+        this.state.queueCompoundOperation(el, () => this.setProperty(el, name, value));
+        return;
+      }
 
-  setValue(node: NgtRendererNode, value: string): void {
-    console.log('setValue -->', { node, value });
-    if (node.element) return this.delegate.setValue(node.element, value);
-    return this.delegate.setValue(node, value);
+      if (el.compounded.compound) {
+        Object.assign(el.compounded.compound, {
+          props: { ...el.compounded.compound, [name]: value },
+        });
+      }
+
+      this.setProperty(el.compounded, name, value);
+      return;
+    }
+
+    if (el.renderType === 'instance') {
+      this.state.applyProperty(el, name, value);
+    }
   }
 
   listen(
@@ -193,13 +295,27 @@ export class NgtRenderer2 implements Renderer2 {
     eventName: string,
     callback: (event: any) => boolean | void
   ): () => void {
-    console.log('listen -->', { target, eventName, callback });
-    return this.delegate.listen(target, eventName, callback);
+    if (
+      target.renderType === 'instance' ||
+      (target.renderType === 'compound' && target.compounded)
+    ) {
+      const instance = target.compounded || target;
+      const priority = target.localState().priority;
+      return processThreeEvent(instance, priority || 0, eventName, callback, this.state.rootCdr);
+    }
+
+    if (target.renderType === 'compound' && !target.compounded) {
+      this.state.queueCompoundOperation(target, () => {
+        target.cleanUps.add(this.listen(target, eventName, callback));
+      });
+    }
+    return () => {};
   }
 
   get data(): { [key: string]: any } {
     return this.delegate.data;
   }
+  setValue = this.delegate.setValue.bind(this);
   destroy = this.delegate.destroy.bind(this.delegate);
   destroyNode = this.delegate.destroyNode;
   selectRootElement = this.delegate.selectRootElement.bind(this.delegate);
@@ -209,4 +325,5 @@ export class NgtRenderer2 implements Renderer2 {
   removeClass = this.delegate.removeClass.bind(this.delegate);
   setStyle = this.delegate.setStyle.bind(this.delegate);
   removeStyle = this.delegate.removeStyle.bind(this.delegate);
+  createText = this.delegate.createText.bind(this.delegate);
 }
