@@ -46,21 +46,22 @@ export abstract class NgtsCamera<TCamera extends NgtCamera> extends NgtRxStore i
   }
 
   #setDefaultCamera() {
-    this.effect(combineLatest([this.cameraRef.$, this.select('makeDefault')]), ([camera]) => {
-      const makeDefault = this.get('makeDefault');
-      if (makeDefault) {
-        const { camera: oldCamera } = this.store.get();
-        this.store.set({ camera });
-        return () => {
-          this.store.set({ camera: oldCamera });
-        };
+    this.effect(
+      combineLatest([this.cameraRef.$, this.select('makeDefault')]),
+      ([camera, makeDefault]) => {
+        if (makeDefault) {
+          const { camera: oldCamera } = this.store.get();
+          this.store.set({ camera });
+          return () => {
+            this.store.set({ camera: oldCamera });
+          };
+        }
       }
-    });
+    );
   }
 
   #updateProjectionMatrix() {
-    this.effect(combineLatest([this.cameraRef.$, this.select('manual')]), ([camera]) => {
-      const manual = this.get('manual');
+    this.effect(combineLatest([this.cameraRef.$, this.select('manual')]), ([camera, manual]) => {
       if (!manual && camera) camera.updateProjectionMatrix();
     });
   }
