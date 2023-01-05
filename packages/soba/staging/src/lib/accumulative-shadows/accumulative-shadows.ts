@@ -8,7 +8,6 @@ import {
   NgtRxStore,
 } from '@angular-three/core';
 import { shaderMaterial } from '@angular-three/soba/shaders';
-import { NgIf } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Directive, inject, Input } from '@angular/core';
 import { RxActionFactory } from '@rx-angular/state/actions';
 import * as THREE from 'three';
@@ -72,10 +71,10 @@ extend({ SoftShadowMaterial, Group, Mesh, PlaneGeometry });
   selector: 'ngts-accumulative-shadows-consumer',
   standalone: true,
 })
-export class accumulativeShadowsConsumer {
+export class AccumulativeShadowsConsumer {
   readonly #api = injectNgtsAccumulativeApi();
 }
-
+// TODO: not working correctly. investigate later
 @Component({
   selector: 'ngts-accumulative-shadows',
   standalone: true,
@@ -83,6 +82,7 @@ export class accumulativeShadowsConsumer {
     <ngt-group ngtCompound>
       <ngt-group *ref="groupRef" [traverse]="nullTraverse">
         <ng-content></ng-content>
+        <ngts-accumulative-shadows-consumer></ngts-accumulative-shadows-consumer>
       </ngt-group>
       <ngt-mesh
         receiveShadow
@@ -101,9 +101,8 @@ export class accumulativeShadowsConsumer {
         ></ngt-soft-shadow-material>
       </ngt-mesh>
     </ngt-group>
-    <ngts-accumulative-shadows-consumer></ngts-accumulative-shadows-consumer>
   `,
-  imports: [NgtRef, NgIf, accumulativeShadowsConsumer],
+  imports: [NgtRef, AccumulativeShadowsConsumer],
   providers: [
     RxActionFactory,
     provideNgtsAccumulativeApi(
@@ -178,7 +177,9 @@ export class accumulativeShadowsConsumer {
             ),
         });
 
-        queueMicrotask(() => {
+        accumulativeShadows.hold(accumulativeShadows.meshRef.$, (mesh) => {});
+
+        requestAnimationFrame(() => {
           accumulativeShadows.progressiveLightMap.configure(
             accumulativeShadows.meshRef.nativeElement
           );
@@ -189,6 +190,7 @@ export class accumulativeShadowsConsumer {
             // Update lightmap
             if (!api.temporal && api.frames !== Infinity) api.update(api.blend);
           });
+
           accumulativeShadows.effect(actions.setBeforeRender$, () =>
             store.get('internal').subscribe(() => {
               const limit = accumulativeShadows.get('limit');
@@ -214,7 +216,9 @@ export class accumulativeShadowsConsumer {
 export class NgtsAccumulativeShadows extends NgtRxStore {
   readonly nullTraverse = () => null;
   readonly Math = Math;
+
   readonly #store = injectNgtStore();
+
   readonly progressiveLightMap = new ProgressiveLightMap(
     this.#store.get('gl'),
     this.#store.get('scene'),

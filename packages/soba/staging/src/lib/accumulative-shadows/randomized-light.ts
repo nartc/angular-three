@@ -7,7 +7,7 @@ import {
   NgtRepeat,
   NgtRxStore,
 } from '@angular-three/core';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, Directive, Input, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, Directive, Input } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import * as THREE from 'three';
 import { DirectionalLight, Group, OrthographicCamera, Vector2, Vector3 } from 'three';
@@ -48,8 +48,8 @@ export class RandomizedLightConsumer {
           attach="shadow.camera"
         ></ngt-orthographic-camera>
       </ngt-directional-light>
+      <ngts-randomized-light-consumer></ngts-randomized-light-consumer>
     </ngt-group>
-    <ngts-randomized-light-consumer></ngts-randomized-light-consumer>
   `,
   imports: [NgtRef, NgtRepeat, NgtArgs, RandomizedLightConsumer],
   providers: [
@@ -85,23 +85,21 @@ export class RandomizedLightConsumer {
 
       const api = { update } as NgtsRandomizedLightApi;
 
-      queueMicrotask(() => {
-        randomizedLight.effect(
-          randomizedLight.select(selectSlice(['radius', 'ambient', 'length', 'position'])),
-          () => {
-            const group = randomizedLight.groupRef.nativeElement;
-            if (accumulativeApi) accumulativeApi.lights.set(group.uuid, api);
-            return () => accumulativeApi.lights.delete(group.uuid);
-          }
-        );
-      });
+      randomizedLight.effect(
+        randomizedLight.select(selectSlice(['radius', 'ambient', 'length', 'position'])),
+        () => {
+          const group = randomizedLight.groupRef.nativeElement;
+          if (accumulativeApi) accumulativeApi.lights.set(group.uuid, api);
+          return () => accumulativeApi.lights.delete(group.uuid);
+        }
+      );
 
       return api;
     }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class NgtsRandomizedLight extends NgtRxStore implements OnInit {
+export class NgtsRandomizedLight extends NgtRxStore {
   @Input() groupRef = injectNgtRef<Group>();
 
   /** How many frames it will jiggle the lights, 1.
@@ -197,6 +195,4 @@ export class NgtsRandomizedLight extends NgtRxStore implements OnInit {
       this.select(['position'], ({ position }) => new Vector3(...position).length())
     );
   }
-
-  ngOnInit(): void {}
 }

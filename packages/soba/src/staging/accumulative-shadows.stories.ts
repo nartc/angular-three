@@ -1,4 +1,11 @@
-import { applyProps, extend, NgtArgs, NgtPush, NgtRxStore } from '@angular-three/core';
+import {
+  applyProps,
+  extend,
+  injectNgtStore,
+  NgtArgs,
+  NgtPush,
+  NgtRxStore,
+} from '@angular-three/core';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import {
@@ -11,7 +18,7 @@ import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { Observable } from 'rxjs';
 import * as THREE from 'three';
 import { Color } from 'three';
-import { FlakesTexture } from 'three-stdlib';
+import { FlakesTexture } from 'three/examples/jsm/textures/FlakesTexture';
 import { StorybookSetup } from '../setup-canvas';
 
 @Component({
@@ -33,7 +40,7 @@ class Suzi extends NgtRxStore implements OnInit {
         color: 'orange',
         roughness: 0,
         normalMap: new THREE.CanvasTexture(
-          new FlakesTexture() as any,
+          new FlakesTexture(),
           THREE.UVMapping,
           THREE.RepeatWrapping,
           THREE.RepeatWrapping
@@ -91,7 +98,15 @@ extend({ Color });
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-class DefaultAccumulativeShadowsStory {}
+class DefaultAccumulativeShadowsStory {
+  readonly store = injectNgtStore();
+
+  ngOnInit() {
+    setTimeout(() => {
+      console.log(this.store.get('scene'));
+    }, 500);
+  }
+}
 
 export default {
   title: 'Staging/Accumulative Shadows',
