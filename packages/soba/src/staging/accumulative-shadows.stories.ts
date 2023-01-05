@@ -1,11 +1,4 @@
-import {
-  applyProps,
-  extend,
-  injectNgtStore,
-  NgtArgs,
-  NgtPush,
-  NgtRxStore,
-} from '@angular-three/core';
+import { applyProps, extend, NgtArgs, NgtPush, NgtRxStore } from '@angular-three/core';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import {
@@ -69,9 +62,9 @@ extend({ Color });
       [position]="[0, -1.175, 0]"
     ></storybook-suzi>
     <ngts-accumulative-shadows
+      [color]="'goldenrod'"
       [temporal]="true"
       [frames]="100"
-      [color]="'goldenrod'"
       [alphaTest]="0.65"
       [opacity]="2"
       [scale]="14"
@@ -98,15 +91,7 @@ extend({ Color });
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-class DefaultAccumulativeShadowsStory {
-  readonly store = injectNgtStore();
-
-  ngOnInit() {
-    setTimeout(() => {
-      console.log(this.store.get('scene'));
-    }, 500);
-  }
-}
+class DefaultAccumulativeShadowsStory {}
 
 export default {
   title: 'Staging/Accumulative Shadows',

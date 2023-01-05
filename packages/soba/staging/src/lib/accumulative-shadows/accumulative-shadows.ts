@@ -1,6 +1,7 @@
 import {
   createInjectionToken,
   extend,
+  getLocalState,
   injectNgtRef,
   injectNgtStore,
   NgtAnyRecord,
@@ -10,6 +11,7 @@ import {
 import { shaderMaterial } from '@angular-three/soba/shaders';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Directive, inject, Input } from '@angular/core';
 import { RxActionFactory } from '@rx-angular/state/actions';
+import { combineLatest } from 'rxjs';
 import * as THREE from 'three';
 import { Group, Mesh, PlaneGeometry } from 'three';
 import { ProgressiveLightMap } from './progressive-light-map';
@@ -65,6 +67,104 @@ interface NgtsAccumulativeApi {
 export const [injectNgtsAccumulativeApi, provideNgtsAccumulativeApi] =
   createInjectionToken<NgtsAccumulativeApi>('NgtsAccumulativeShadows API');
 
+function accumulativeApiFactory(shadows: NgtsAccumulativeShadows) {
+  const store = injectNgtStore();
+  const actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
+
+  const api = {
+    lights: new Map(),
+    count: 0,
+    getMesh: () =>
+      shadows.meshRef.nativeElement as THREE.Mesh<
+        THREE.PlaneGeometry,
+        SoftShadowMaterialProps & THREE.ShaderMaterial
+      >,
+    reset: () => {
+      shadows.pLM.clear();
+      const material = shadows.meshRef.nativeElement.material as NgtAnyRecord;
+      material['opacity'] = 0;
+      material['alphaTest'] = 0;
+      api.count = 0;
+    },
+    update: (frames = 1) => {
+      // Adapt the opacity-blend ratio to the number of frames
+      const material = shadows.meshRef.nativeElement.material as SoftShadowMaterialProps &
+        THREE.ShaderMaterial;
+      if (!api.temporal) {
+        material.opacity = shadows.get('opacity');
+        material.alphaTest = shadows.get('alphaTest');
+      } else {
+        material.opacity = Math.min(
+          shadows.get('opacity'),
+          material.opacity + shadows.get('opacity') / api.blend
+        );
+        material.alphaTest = Math.min(
+          shadows.get('alphaTest'),
+          material.alphaTest + shadows.get('alphaTest') / api.blend
+        );
+      }
+
+      // Switch accumulative lights on
+      shadows.groupRef.nativeElement.visible = true;
+      // Collect scene lights and meshes
+      shadows.pLM.prepare();
+
+      // Update the lightmap and the accumulative lights
+      for (let i = 0; i < frames; i++) {
+        api.lights.forEach((light) => light.update());
+        shadows.pLM.update(store.get('camera'), api.blend);
+      }
+      // Switch lights off
+      shadows.groupRef.nativeElement.visible = false;
+      // Restore lights and meshes
+      shadows.pLM.finish();
+    },
+  } as NgtsAccumulativeApi;
+
+  Object.defineProperty(api, 'temporal', {
+    get: () => !!shadows.get('temporal'),
+  });
+  Object.defineProperty(api, 'frames', {
+    get: () => Math.max(2, shadows.get('frames')),
+  });
+  Object.defineProperty(api, 'blend', {
+    get: () =>
+      Math.max(
+        2,
+        shadows.get('frames') === Infinity ? shadows.get('blend') : shadows.get('frames')
+      ),
+  });
+
+  shadows.pLM.configure(shadows.meshRef.nativeElement);
+
+  shadows.hold(
+    combineLatest([shadows.select(), getLocalState(store.get('scene'))!.objects]),
+    () => {
+      // Reset internals, buffers, ...
+      api.reset();
+      // Update lightmap
+      if (!api.temporal && api.frames !== Infinity) api.update(api.blend);
+    }
+  );
+
+  shadows.effect(actions.setBeforeRender$, () =>
+    store.get('internal').subscribe(() => {
+      const limit = shadows.get('limit');
+      if (
+        (api.temporal || api.frames === Infinity) &&
+        api.count < api.frames &&
+        api.count < limit
+      ) {
+        api.update();
+        api.count++;
+      }
+    })
+  );
+  actions.setBeforeRender();
+
+  return api as NgtsAccumulativeApi;
+}
+
 extend({ SoftShadowMaterial, Group, Mesh, PlaneGeometry });
 
 @Directive({
@@ -74,7 +174,7 @@ extend({ SoftShadowMaterial, Group, Mesh, PlaneGeometry });
 export class AccumulativeShadowsConsumer {
   readonly #api = injectNgtsAccumulativeApi();
 }
-// TODO: not working correctly. investigate later
+
 @Component({
   selector: 'ngts-accumulative-shadows',
   standalone: true,
@@ -85,19 +185,19 @@ export class AccumulativeShadowsConsumer {
         <ngts-accumulative-shadows-consumer></ngts-accumulative-shadows-consumer>
       </ngt-group>
       <ngt-mesh
-        receiveShadow
         *ref="meshRef"
+        receiveShadow
         [scale]="get('scale')"
         [rotation]="[-Math.PI / 2, 0, 0]"
       >
         <ngt-plane-geometry></ngt-plane-geometry>
         <ngt-soft-shadow-material
-          transparent
+          [transparent]="true"
           [depthWrite]="false"
           [color]="get('color')"
           [toneMapped]="get('toneMapped')"
           [blend]="get('colorBlend')"
-          [map]="progressiveLightMap.progressiveLightMap2.texture"
+          [map]="pLM.progressiveLightMap2.texture"
         ></ngt-soft-shadow-material>
       </ngt-mesh>
     </ngt-group>
@@ -105,111 +205,7 @@ export class AccumulativeShadowsConsumer {
   imports: [NgtRef, AccumulativeShadowsConsumer],
   providers: [
     RxActionFactory,
-    provideNgtsAccumulativeApi(
-      [NgtsAccumulativeShadows],
-      (accumulativeShadows: NgtsAccumulativeShadows) => {
-        const store = injectNgtStore();
-        const actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
-
-        const api = {
-          lights: new Map(),
-          count: 0,
-          getMesh: () =>
-            accumulativeShadows.meshRef.nativeElement as THREE.Mesh<
-              THREE.PlaneGeometry,
-              SoftShadowMaterialProps & THREE.ShaderMaterial
-            >,
-          reset: () => {
-            accumulativeShadows.progressiveLightMap.clear();
-            const material = accumulativeShadows.meshRef.nativeElement.material as NgtAnyRecord;
-            material['opacity'] = 0;
-            material['alphaTest'] = 0;
-            api.count = 0;
-          },
-          update: (frames = 1) => {
-            // Adapt the opacity-blend ratio to the number of frames
-            const material = accumulativeShadows.meshRef.nativeElement
-              .material as SoftShadowMaterialProps & THREE.ShaderMaterial;
-            if (!api.temporal) {
-              material.opacity = accumulativeShadows.get('opacity');
-              material.alphaTest = accumulativeShadows.get('alphaTest');
-            } else {
-              material.opacity = Math.min(
-                accumulativeShadows.get('opacity'),
-                material.opacity + accumulativeShadows.get('opacity') / api.blend
-              );
-              material.alphaTest = Math.min(
-                accumulativeShadows.get('alphaTest'),
-                material.alphaTest + accumulativeShadows.get('alphaTest') / api.blend
-              );
-            }
-
-            // Switch accumulative lights on
-            accumulativeShadows.groupRef.nativeElement.visible = true;
-            // Collect scene lights and meshes
-            accumulativeShadows.progressiveLightMap.prepare();
-
-            // Update the lightmap and the accumulative lights
-            for (let i = 0; i < frames; i++) {
-              api.lights.forEach((light) => light.update());
-              accumulativeShadows.progressiveLightMap.update(store.get('camera'), api.blend);
-            }
-            // Switch lights off
-            accumulativeShadows.groupRef.nativeElement.visible = false;
-            // Restore lights and meshes
-            accumulativeShadows.progressiveLightMap.finish();
-          },
-        } as NgtsAccumulativeApi;
-
-        Object.defineProperty(api, 'temporal', {
-          get: () => !!accumulativeShadows.get('temporal'),
-        });
-        Object.defineProperty(api, 'frames', {
-          get: () => Math.max(2, accumulativeShadows.get('frames')),
-        });
-        Object.defineProperty(api, 'blend', {
-          get: () =>
-            Math.max(
-              2,
-              accumulativeShadows.get('frames') === Infinity
-                ? accumulativeShadows.get('blend')
-                : accumulativeShadows.get('frames')
-            ),
-        });
-
-        accumulativeShadows.hold(accumulativeShadows.meshRef.$, (mesh) => {});
-
-        requestAnimationFrame(() => {
-          accumulativeShadows.progressiveLightMap.configure(
-            accumulativeShadows.meshRef.nativeElement
-          );
-
-          accumulativeShadows.hold(accumulativeShadows.select(), () => {
-            // Reset internals, buffers, ...
-            api.reset();
-            // Update lightmap
-            if (!api.temporal && api.frames !== Infinity) api.update(api.blend);
-          });
-
-          accumulativeShadows.effect(actions.setBeforeRender$, () =>
-            store.get('internal').subscribe(() => {
-              const limit = accumulativeShadows.get('limit');
-              if (
-                (api.temporal || api.frames === Infinity) &&
-                api.count < api.frames &&
-                api.count < limit
-              ) {
-                api.update();
-                api.count++;
-              }
-            })
-          );
-          actions.setBeforeRender();
-        });
-
-        return api as NgtsAccumulativeApi;
-      }
-    ),
+    provideNgtsAccumulativeApi([NgtsAccumulativeShadows], accumulativeApiFactory),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -219,7 +215,7 @@ export class NgtsAccumulativeShadows extends NgtRxStore {
 
   readonly #store = injectNgtStore();
 
-  readonly progressiveLightMap = new ProgressiveLightMap(
+  readonly pLM = new ProgressiveLightMap(
     this.#store.get('gl'),
     this.#store.get('scene'),
     this.get('resolution')

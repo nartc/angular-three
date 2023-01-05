@@ -10,7 +10,7 @@ import {
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Directive, Input } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import * as THREE from 'three';
-import { DirectionalLight, Group, OrthographicCamera, Vector2, Vector3 } from 'three';
+import { DirectionalLight, Group, MathUtils, OrthographicCamera, Vector2, Vector3 } from 'three';
 import { injectNgtsAccumulativeApi } from './accumulative-shadows';
 
 extend({ Group, DirectionalLight, OrthographicCamera, Vector2 });
@@ -22,6 +22,44 @@ interface NgtsRandomizedLightApi {
 
 export const [injectNgtsRandomizedLightApi, provideNgtsRandomizedLightApi] =
   createInjectionToken<NgtsRandomizedLightApi>('NgtsRandomizedLight API');
+
+function lightsApiFactory(lights: NgtsRandomizedLight) {
+  const accumulativeApi = injectNgtsAccumulativeApi();
+
+  const update = () => {
+    let light: THREE.Object3D | undefined;
+    if (lights.groupRef.nativeElement) {
+      for (let l = 0; l < lights.groupRef.nativeElement.children.length; l++) {
+        light = lights.groupRef.nativeElement.children[l];
+        if (Math.random() > lights.get('ambient')) {
+          light.position.set(
+            lights.get('position')[0] + MathUtils.randFloatSpread(lights.get('radius')),
+            lights.get('position')[1] + MathUtils.randFloatSpread(lights.get('radius')),
+            lights.get('position')[2] + MathUtils.randFloatSpread(lights.get('radius'))
+          );
+        } else {
+          const lambda = Math.acos(2 * Math.random() - 1) - Math.PI / 2.0;
+          const phi = 2 * Math.PI * Math.random();
+          light.position.set(
+            Math.cos(lambda) * Math.cos(phi) * lights.get('length'),
+            Math.abs(Math.cos(lambda) * Math.sin(phi) * lights.get('length')),
+            Math.sin(lambda) * lights.get('length')
+          );
+        }
+      }
+    }
+  };
+
+  const api = { update } as NgtsRandomizedLightApi;
+
+  lights.effect(lights.select(selectSlice(['radius', 'ambient', 'length', 'position'])), () => {
+    const group = lights.groupRef.nativeElement;
+    if (accumulativeApi) accumulativeApi.lights.set(group.uuid, api);
+    return () => accumulativeApi.lights.delete(group.uuid);
+  });
+
+  return api;
+}
 
 @Directive({
   selector: 'ngts-randomized-light-consumer',
@@ -52,51 +90,7 @@ export class RandomizedLightConsumer {
     </ngt-group>
   `,
   imports: [NgtRef, NgtRepeat, NgtArgs, RandomizedLightConsumer],
-  providers: [
-    provideNgtsRandomizedLightApi([NgtsRandomizedLight], (randomizedLight: NgtsRandomizedLight) => {
-      const accumulativeApi = injectNgtsAccumulativeApi();
-
-      const update = () => {
-        let light: THREE.Object3D | undefined;
-        if (randomizedLight.groupRef.nativeElement) {
-          for (let l = 0; l < randomizedLight.groupRef.nativeElement.children.length; l++) {
-            light = randomizedLight.groupRef.nativeElement.children[l];
-            if (Math.random() > randomizedLight.get('ambient')) {
-              light.position.set(
-                randomizedLight.get('position')[0] +
-                  THREE.MathUtils.randFloatSpread(randomizedLight.get('radius')),
-                randomizedLight.get('position')[1] +
-                  THREE.MathUtils.randFloatSpread(randomizedLight.get('radius')),
-                randomizedLight.get('position')[2] +
-                  THREE.MathUtils.randFloatSpread(randomizedLight.get('radius'))
-              );
-            } else {
-              const lambda = Math.acos(2 * Math.random() - 1) - Math.PI / 2.0;
-              const phi = 2 * Math.PI * Math.random();
-              light.position.set(
-                Math.cos(lambda) * Math.cos(phi) * length,
-                Math.abs(Math.cos(lambda) * Math.sin(phi) * length),
-                Math.sin(lambda) * length
-              );
-            }
-          }
-        }
-      };
-
-      const api = { update } as NgtsRandomizedLightApi;
-
-      randomizedLight.effect(
-        randomizedLight.select(selectSlice(['radius', 'ambient', 'length', 'position'])),
-        () => {
-          const group = randomizedLight.groupRef.nativeElement;
-          if (accumulativeApi) accumulativeApi.lights.set(group.uuid, api);
-          return () => accumulativeApi.lights.delete(group.uuid);
-        }
-      );
-
-      return api;
-    }),
-  ],
+  providers: [provideNgtsRandomizedLightApi([NgtsRandomizedLight], lightsApiFactory)],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsRandomizedLight extends NgtRxStore {
