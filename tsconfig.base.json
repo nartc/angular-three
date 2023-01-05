@@ -20,6 +20,7 @@
       "@angular-three/cannon/services": ["packages/cannon/services/src/index.ts"],
       "@angular-three/core": ["packages/core/src/index.ts"],
       "@angular-three/postprocessing": ["packages/postprocessing/src/index.ts"],
+      "@angular-three/postprocessing/effects": ["packages/postprocessing/effects/src/index.ts"],
       "@angular-three/soba": ["packages/soba/src/index.ts"],
       "@angular-three/soba/abstractions": ["packages/soba/abstractions/src/index.ts"],
       "@angular-three/soba/cameras": ["packages/soba/cameras/src/index.ts"],

@@ -1,4 +1,4 @@
-import { extend, getLocalState, injectNgtRef, NgtRef, NgtRxStore } from '@angular-three/core';
+import { extend, injectNgtRef, NgtRef, NgtRxStore } from '@angular-three/core';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -7,7 +7,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { filter, switchMap } from 'rxjs';
 import { Box3, Group, Sphere, Vector3 } from 'three';
 
 extend({ Group });
@@ -98,49 +97,43 @@ export class NgtsCenter extends NgtRxStore implements OnInit {
   }
 
   #setPosition() {
-    this.hold(
-      this.innerRef.$.pipe(
-        switchMap((innerGroup) => getLocalState(innerGroup)!.objects),
-        filter((objects) => objects.length > 0)
-      ),
-      () => {
-        const { precise, top, left, front, disableX, disableY, disableZ, back, bottom, right } =
-          this.get();
-        this.outerRef.nativeElement.matrixWorld.identity();
-        const box3 = new Box3().setFromObject(this.innerRef.nativeElement, precise);
-        const center = new Vector3();
-        const sphere = new Sphere();
-        const width = box3.max.x - box3.min.x;
-        const height = box3.max.y - box3.min.y;
-        const depth = box3.max.z - box3.min.z;
+    this.hold(this.innerRef.children$(), () => {
+      const { precise, top, left, front, disableX, disableY, disableZ, back, bottom, right } =
+        this.get();
+      this.outerRef.nativeElement.matrixWorld.identity();
+      const box3 = new Box3().setFromObject(this.innerRef.nativeElement, precise);
+      const center = new Vector3();
+      const sphere = new Sphere();
+      const width = box3.max.x - box3.min.x;
+      const height = box3.max.y - box3.min.y;
+      const depth = box3.max.z - box3.min.z;
 
-        box3.getCenter(center);
-        box3.getBoundingSphere(sphere);
-        const vAlign = top ? height / 2 : bottom ? -height / 2 : 0;
-        const hAlign = left ? -width / 2 : right ? width / 2 : 0;
-        const dAlign = front ? depth / 2 : back ? -depth / 2 : 0;
-        this.outerRef.nativeElement.position.set(
-          disableX ? 0 : -center.x + hAlign,
-          disableY ? 0 : -center.y + vAlign,
-          disableZ ? 0 : -center.z + dAlign
-        );
+      box3.getCenter(center);
+      box3.getBoundingSphere(sphere);
+      const vAlign = top ? height / 2 : bottom ? -height / 2 : 0;
+      const hAlign = left ? -width / 2 : right ? width / 2 : 0;
+      const dAlign = front ? depth / 2 : back ? -depth / 2 : 0;
+      this.outerRef.nativeElement.position.set(
+        disableX ? 0 : -center.x + hAlign,
+        disableY ? 0 : -center.y + vAlign,
+        disableZ ? 0 : -center.z + dAlign
+      );
 
-        if (this.centered.observed) {
-          this.centered.emit({
-            parent: this.groupRef.nativeElement.parent!,
-            container: this.groupRef.nativeElement,
-            width,
-            height,
-            depth,
-            boundingBox: box3,
-            boundingSphere: sphere,
-            center: center,
-            verticalAlignment: vAlign,
-            horizontalAlignment: hAlign,
-            depthAlignment: dAlign,
-          });
-        }
+      if (this.centered.observed) {
+        this.centered.emit({
+          parent: this.groupRef.nativeElement.parent!,
+          container: this.groupRef.nativeElement,
+          width,
+          height,
+          depth,
+          boundingBox: box3,
+          boundingSphere: sphere,
+          center: center,
+          verticalAlignment: vAlign,
+          horizontalAlignment: hAlign,
+          depthAlignment: dAlign,
+        });
       }
-    );
+    });
   }
 }

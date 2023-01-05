@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "packages/postprocessing/src",
-  "prefix": "angular-three",
+  "prefix": "ngtp",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:package",
@@ -33,7 +33,12 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/postprocessing/**/*.ts", "packages/postprocessing/**/*.html"]
+        "lintFilePatterns": [
+          "packages/postprocessing/**/*.ts",
+          "packages/postprocessing/**/*.html",
+          "packages/postprocessing/effects/**/*.ts",
+          "packages/postprocessing/effects/**/*.html"
+        ]
       }
     }
   },
