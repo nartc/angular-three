@@ -4,5 +4,5 @@
   "lib": {
     "entryFile": "src/index.ts"
   },
-  "allowedNonPeerDependencies": ["three-stdlib", "troika-three-text"]
+  "allowedNonPeerDependencies": ["troika-three-text"]
 }

@@ -29,11 +29,11 @@
     "@storybook/manager-webpack5": "6.5.15",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",
-    "@types/three": "^0.146.0",
-    "@typescript-eslint/eslint-plugin": "^5.47.1",
-    "@typescript-eslint/parser": "^5.47.1",
-    "eslint": "~8.30.0",
-    "eslint-config-prettier": "8.5.0",
+    "@types/three": "^0.148.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "eslint": "~8.31.0",
+    "eslint-config-prettier": "8.6.0",
     "html-webpack-plugin": "^5.5.0",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
@@ -49,7 +49,7 @@
     "ts-jest": "28.0.5",
     "ts-node": "10.9.1",
     "typescript": "~4.8.2",
-    "webpack": "^5.64.0"
+    "webpack": "^5.75.0"
   },
   "dependencies": {
     "@angular/animations": "~15.0.4",
@@ -67,7 +67,7 @@
     "cannon-es-debugger": "^1.0.0",
     "rxjs": "~7.8.0",
     "three": "^0.148.0",
-    "three-stdlib": "^2.21.1",
+    "three-stdlib": "^2.21.5",
     "troika-three-text": "^0.47.1",
     "tslib": "^2.4.1",
     "zone.js": "~0.12.0"
