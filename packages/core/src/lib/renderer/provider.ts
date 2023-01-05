@@ -22,6 +22,10 @@ export function provideNgtRenderer({
     compoundPrefixes.push('ngts');
   }
 
+  if (!compoundPrefixes.includes('ngtp')) {
+    compoundPrefixes.push('ngtp');
+  }
+
   return [
     { provide: RendererFactory2, useClass: NgtRendererFactory },
     { provide: NgtStore, useValue: store },

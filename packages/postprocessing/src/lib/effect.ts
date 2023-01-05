@@ -5,14 +5,16 @@ import {
   startWithUndefined,
 } from '@angular-three/core';
 import { Directive, Input, OnInit } from '@angular/core';
+import { selectSlice } from '@rx-angular/state';
 import { BlendFunction, Effect } from 'postprocessing';
-import { combineLatest } from 'rxjs';
+import { combineLatest, startWith } from 'rxjs';
+
+export type NgtpKeyofProps<T extends Effect> = Array<
+  keyof NonNullable<ConstructorParameters<NgtAnyConstructor<T>>[0]>
+>;
 
 @Directive()
-export abstract class NgtpEffect<T extends NgtAnyConstructor<Effect>>
-  extends NgtRxStore
-  implements OnInit
-{
+export abstract class NgtpEffect<T extends Effect> extends NgtRxStore implements OnInit {
   @Input() set blendFunction(blendFunction: BlendFunction) {
     this.set({ blendFunction });
   }
@@ -21,11 +23,8 @@ export abstract class NgtpEffect<T extends NgtAnyConstructor<Effect>>
     this.set({ opacity });
   }
 
-  @Input() set args(args: ConstructorParameters<T>[0]) {
-    this.set({ args });
-  }
-
-  abstract get effectConstructor(): T;
+  abstract get effectConstructor(): NgtAnyConstructor<T>;
+  abstract get effectPropsKeys(): NgtpKeyofProps<T>;
 
   protected defaultBlendMode = BlendFunction.NORMAL;
   protected readonly store = injectNgtStore();
@@ -33,10 +32,18 @@ export abstract class NgtpEffect<T extends NgtAnyConstructor<Effect>>
   ngOnInit() {
     this.connect(
       'effect',
-      this.select(['args'], ({ args }) => new this.effectConstructor(...args))
+      this.select(selectSlice(this.effectPropsKeys), startWith(this.#startWithProps)),
+      (props) => new this.effectConstructor(props)
     );
 
     this.#configureBlendMode();
+  }
+
+  #startWithProps() {
+    return this.effectPropsKeys.reduce((defaultProps, key) => {
+      defaultProps[key] = this.get(key);
+      return defaultProps;
+    }, {} as ConstructorParameters<NgtAnyConstructor<T>>[0]);
   }
 
   #configureBlendMode() {

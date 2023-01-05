@@ -124,7 +124,9 @@ export class NgtpEffectComposer extends NgtRxStore implements OnInit {
       multisampling: 8,
       frameBufferType: HalfFloatType,
     });
+  }
 
+  ngOnInit() {
     this.connect(
       'activeScene',
       combineLatest([
@@ -199,9 +201,7 @@ export class NgtpEffectComposer extends NgtRxStore implements OnInit {
         )
       )
     );
-  }
-
-  ngOnInit() {
+    console.log(this.get());
     this.#setComposerSize();
     this.#setEffectPasses();
     this.#setBeforeRender();
