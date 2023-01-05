@@ -5,9 +5,9 @@ import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import { NgIf } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { AmbientLight, DirectionalLight, Group, Mesh } from 'three';
+import { AmbientLight, Color, DirectionalLight, Group, Mesh } from 'three';
 
-extend({ Group, Mesh, AmbientLight, DirectionalLight });
+extend({ Group, Mesh, AmbientLight, DirectionalLight, Color });
 
 @Component({
   selector: 'sandbox-keen',
@@ -46,6 +46,7 @@ export class Keen {
   selector: 'sandbox-keen-bloom-scene',
   standalone: true,
   template: `
+    <ngt-color *args="['black']" attach="background"></ngt-color>
     <ngts-orbit-controls></ngts-orbit-controls>
     <sandbox-keen></sandbox-keen>
 
@@ -56,7 +57,7 @@ export class Keen {
       <ngtp-bloom></ngtp-bloom>
     </ngtp-effect-composer>
   `,
-  imports: [Keen, NgtsOrbitControls, NgtpEffectComposer, NgtpBloom],
+  imports: [Keen, NgtsOrbitControls, NgtpEffectComposer, NgtpBloom, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene {}
