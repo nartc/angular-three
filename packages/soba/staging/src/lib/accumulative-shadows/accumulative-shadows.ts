@@ -192,7 +192,7 @@ export class AccumulativeShadowsConsumer {
       >
         <ngt-plane-geometry></ngt-plane-geometry>
         <ngt-soft-shadow-material
-          [transparent]="true"
+          transparent
           [depthWrite]="false"
           [color]="get('color')"
           [toneMapped]="get('toneMapped')"

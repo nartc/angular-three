@@ -18,7 +18,7 @@ extend({ MeshNormalMaterial });
           [font]="'soba/helvetiker_regular.typeface.json'"
           [bevelEnabled]="true"
           [bevelSize]="0.05"
-          [text]="'Text 3D'"
+          text="Angular Three"
         >
           <ngt-mesh-normal-material></ngt-mesh-normal-material>
         </ngts-text-3d>
