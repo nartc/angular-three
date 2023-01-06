@@ -9,4 +9,4 @@ export * from './lib/scanline/scanline';
 export * from './lib/sepia/sepia';
 export * from './lib/tilt-shift/tilt-shift';
 export * from './lib/tone-mapping/tone-mapping';
-
+export * from './lib/vignette/vignette';
