@@ -10,7 +10,7 @@ import {
   WorkerRayhitEvent,
 } from '@pmndrs/cannon-worker-api';
 import { RxActionFactory } from '@rx-angular/state/actions';
-import { filter, map } from 'rxjs';
+import { filter } from 'rxjs';
 
 import { InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three';
 import { injectNgtcPhysicsStore, NgtcPhysicsStore } from './store';
@@ -54,7 +54,7 @@ export interface NgtcPhysicsInputs extends CannonWorkerProps {
 export class NgtcPhysics extends NgtRxStore<NgtcPhysicsInputs> implements OnInit, OnDestroy {
   readonly #store = injectNgtStore();
   readonly #actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
-readonly #physicsStore = injectNgtcPhysicsStore();
+  readonly #physicsStore = injectNgtcPhysicsStore();
 
   override initialize() {
     super.initialize();
@@ -145,7 +145,7 @@ readonly #physicsStore = injectNgtcPhysicsStore();
   }
 
   ngOnInit() {
-      this.#physicsStore.set({worker: new CannonWorkerAPI(this.get())})
+    this.#physicsStore.set({ worker: new CannonWorkerAPI(this.get()) });
     this.#connectWorker();
     this.#setupBeforeRender();
     this.#updateWorkerProp('axisIndex');

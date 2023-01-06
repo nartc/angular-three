@@ -34,8 +34,8 @@ extend({
   MeshLambertMaterial,
   PlaneGeometry,
   HemisphereLight,
-  SpotLight,
   PointLight,
+  SpotLight,
   Vector2,
 });
 

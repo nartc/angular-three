@@ -15,6 +15,10 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./kinematic-cube/kinematic-cube.component'),
   },
   {
+    path: 'object-clump',
+    loadComponent: () => import('./object-clump/object-clump.component'),
+  },
+  {
     path: 'keen-bloom',
     loadComponent: () => import('./keen-bloom/keen-bloom.component'),
   },
