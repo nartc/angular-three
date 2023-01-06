@@ -14,7 +14,9 @@ export function checkNeedsUpdate(value: unknown) {
 export function checkUpdate(value: unknown) {
   if (is.object3D(value)) {
     value.updateMatrix();
-  } else if (is.camera(value)) {
+  }
+
+  if (is.camera(value)) {
     if (is.perspectiveCamera(value) || is.orthographicCamera(value)) {
       value.updateProjectionMatrix();
     }
