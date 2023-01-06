@@ -1,21 +1,25 @@
+import { NgIf } from '@angular/common';
 import {
   Component,
   ContentChild,
   Directive,
   ElementRef,
   EmbeddedViewRef,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Raycaster, Scene, Vector2, Vector3 } from 'three';
+import { Camera, Raycaster, Scene, Vector2, Vector3 } from 'three';
+import { injectNgtRef } from './di/ref';
 import { NgtRxStore } from './stores/rx-store';
 import { injectNgtStore, NgtStore } from './stores/store';
-import { NgtEventManager, NgtSize, NgtState } from './types';
-import { getLocalState } from './utils/instance';
+import { NgtEventManager, NgtRenderState, NgtSize, NgtState } from './types';
+import { getLocalState, prepare } from './utils/instance';
 import { is } from './utils/is';
 import { updateCamera } from './utils/update';
 
@@ -48,15 +52,70 @@ export interface NgtPortalInputs {
 }
 
 @Directive({
+  selector: 'ngt-portal-before-render',
+  standalone: true,
+})
+export class NgtPortalBeforeRender implements OnInit, OnDestroy {
+  readonly #portalStore = injectNgtStore();
+
+  @Input() renderPriority = 1;
+  @Input() parentScene!: Scene;
+  @Input() parentCamera!: Camera;
+
+  @Output() beforeRender = new EventEmitter<NgtRenderState>();
+
+  #subscription?: () => void;
+
+  ngOnInit() {
+    let oldClear: boolean;
+    this.#subscription = this.#portalStore.get('internal').subscribe(
+      ({ delta, frame }) => {
+        this.beforeRender.emit({ ...this.#portalStore.get(), delta, frame });
+        const { gl, scene, camera } = this.#portalStore.get();
+        oldClear = gl.autoClear;
+        if (this.renderPriority === 1) {
+          // clear scene and render with default
+          gl.autoClear = true;
+          gl.render(this.parentScene, this.parentCamera);
+        }
+        // disable cleaning
+        gl.autoClear = false;
+        gl.clearDepth();
+        gl.render(scene, camera);
+        // restore
+        gl.autoClear = oldClear;
+      },
+      this.renderPriority,
+      this.#portalStore
+    );
+  }
+
+  ngOnDestroy() {
+    this.#subscription?.();
+  }
+}
+
+@Directive({
   selector: 'ng-template[ngtPortalContent]',
   standalone: true,
 })
 export class NgtPortalContent {}
 
 @Component({
-  selector: 'ngt-portal[container]',
+  selector: 'ngt-portal',
   standalone: true,
-  template: '<ng-container #portalContentAnchor></ng-container>',
+  template: `
+    <ng-container #portalContentAnchor>
+      <ngt-portal-before-render
+        *ngIf="autoRender"
+        [renderPriority]="autoRenderPriority"
+        [parentScene]="parentScene"
+        [parentCamera]="parentCamera"
+        (beforeRender)="onBeforeRender($event)"
+      ></ngt-portal-before-render>
+    </ng-container>
+  `,
+  imports: [NgIf, NgtPortalBeforeRender],
   providers: [NgtStore],
 })
 export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, OnDestroy {
@@ -72,6 +131,11 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
     this.set({ state });
   }
 
+  @Input() autoRender = true;
+  @Input() autoRenderPriority = 1;
+
+  @Output() beforeRender = new EventEmitter<{ root: NgtRenderState; portal: NgtRenderState }>();
+
   @ContentChild(NgtPortalContent, { read: TemplateRef, static: true })
   readonly portalContentTemplate!: TemplateRef<unknown>;
 
@@ -79,6 +143,9 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
   readonly portalContentAnchor!: ViewContainerRef;
 
   readonly #parentStore = injectNgtStore({ skipSelf: true });
+  readonly parentScene = this.#parentStore.get('scene');
+  readonly parentCamera = this.#parentStore.get('camera');
+
   readonly #portalStore = injectNgtStore({ self: true });
 
   readonly #raycaster = new Raycaster();
@@ -86,15 +153,25 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
 
   #portalContentView?: EmbeddedViewRef<unknown>;
 
+  override initialize() {
+    super.initialize();
+    this.set({
+      container: injectNgtRef<Scene>(prepare(new Scene())),
+    });
+  }
+
   ngOnInit() {
     const previousState = this.#parentStore.get();
     const inputsState = this.get();
+
+    if (!inputsState.state && this.autoRender) {
+      inputsState.state = { events: { priority: this.autoRenderPriority + 1 } };
+    }
 
     const { events, size, ...restInputsState } = inputsState.state || {};
 
     const containerState = inputsState.container;
     const container = is.ref(containerState) ? containerState.nativeElement : containerState;
-
 
     const localState = getLocalState(container);
     if (!localState.store) {
@@ -128,6 +205,13 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
       this.portalContentTemplate
     );
     this.#portalContentView.detectChanges();
+  }
+
+  onBeforeRender(portal: NgtRenderState) {
+    this.beforeRender.emit({
+      root: { ...this.#parentStore.get(), delta: portal.delta, frame: portal.frame },
+      portal,
+    });
   }
 
   override ngOnDestroy() {

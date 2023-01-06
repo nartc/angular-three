@@ -1,4 +1,4 @@
-import { extend, NgtPush } from '@angular-three/core';
+import { extend, NgtPush, NgtRef, startWithUndefined } from '@angular-three/core';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, ContentChild, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
@@ -25,15 +25,13 @@ extend({ OrthographicCamera, Group });
         [ngTemplateOutlet]="cameraContent.template"
       ></ng-container>
     </ngt-orthographic-camera>
-    <ngt-group #group>
+    <ngt-group #group *ngIf="cameraContent && cameraContent.ngtsCameraContent">
       <ng-container
-        *ngIf="cameraContent && cameraContent.ngtsCameraContent"
-        [ngTemplateOutlet]="cameraContent.template"
-        [ngTemplateOutletContext]="{ fbo: fboRef.nativeElement, group }"
+        *ngTemplateOutlet="cameraContent.template; context: { fbo: fboRef.nativeElement, group }"
       ></ng-container>
     </ngt-group>
   `,
-  imports: [NgIf, NgTemplateOutlet, NgtPush],
+  imports: [NgIf, NgtRef, NgTemplateOutlet, NgtPush],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsOrthographicCamera extends NgtsCamera<THREE.OrthographicCamera> {
@@ -55,19 +53,23 @@ export class NgtsOrthographicCamera extends NgtsCamera<THREE.OrthographicCamera>
     this.set({ bottom });
   }
 
-  readonly left$ = combineLatest([this.select('left'), this.store.select('size')]).pipe(
-    map(([left, size]) => left ?? size.width / -2)
-  );
+  readonly left$ = combineLatest([
+    this.select('left').pipe(startWithUndefined()),
+    this.store.select('size'),
+  ]).pipe(map(([left, size]) => left ?? size.width / -2));
 
-  readonly right$ = combineLatest([this.select('right'), this.store.select('size')]).pipe(
-    map(([right, size]) => right ?? size.width / 2)
-  );
+  readonly right$ = combineLatest([
+    this.select('right').pipe(startWithUndefined()),
+    this.store.select('size'),
+  ]).pipe(map(([right, size]) => right ?? size.width / 2));
 
-  readonly top$ = combineLatest([this.select('top'), this.store.select('size')]).pipe(
-    map(([top, size]) => top ?? size.height / 2)
-  );
+  readonly top$ = combineLatest([
+    this.select('top').pipe(startWithUndefined()),
+    this.store.select('size'),
+  ]).pipe(map(([top, size]) => top ?? size.height / 2));
 
-  readonly bottom$ = combineLatest([this.select('bottom'), this.store.select('size')]).pipe(
-    map(([bottom, size]) => bottom ?? size.height / -2)
-  );
+  readonly bottom$ = combineLatest([
+    this.select('bottom').pipe(startWithUndefined()),
+    this.store.select('size'),
+  ]).pipe(map(([bottom, size]) => bottom ?? size.height / -2));
 }
