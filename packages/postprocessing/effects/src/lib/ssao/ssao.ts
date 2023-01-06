@@ -1,8 +1,9 @@
-import { NgtAnyRecord, NgtArgs, NgtRxStore } from '@angular-three/core';
+import { injectNgtRef, NgtAnyRecord, NgtArgs, NgtRef, NgtRxStore } from '@angular-three/core';
 import { injectNgtpEffectComposertApi } from '@angular-three/postprocessing';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
+  Input,
   OnChanges,
   OnInit,
   reflectComponentType,
@@ -16,8 +17,12 @@ import { combineLatest, map, startWith } from 'rxjs';
 @Component({
   selector: 'ngtp-ssao',
   standalone: true,
-  template: `<ngt-primitive *args="[get('effect')]"></ngt-primitive>`,
-  imports: [NgtArgs],
+  template: `
+    <ng-container *args="[get('effect')]">
+      <ngt-primitive *ref="ssaoRef"></ngt-primitive>
+    </ng-container>
+  `,
+  imports: [NgtArgs, NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   inputs: [
     'blendFunction',
@@ -54,7 +59,12 @@ export class NgtpSSAO
 {
   readonly #composerApi = injectNgtpEffectComposertApi();
 
+  @Input() ssaoRef = injectNgtRef<SSAOEffect>();
+
   ngOnChanges(changes: SimpleChanges) {
+    if (changes['ssaoRef']) {
+      delete changes['ssaoRef'];
+    }
     this.set((s) => ({
       ...s,
       ...Object.entries(changes).reduce((props, [key, change]) => {
@@ -66,13 +76,14 @@ export class NgtpSSAO
 
   ngOnInit() {
     const inputs =
-      reflectComponentType(this.constructor as Type<any>)?.inputs.map((input) => input.propName) ||
-      [];
+      reflectComponentType(this.constructor as Type<any>)
+        ?.inputs.filter((input) => input.propName !== 'ssaoRef')
+        .map((input) => input.propName) || [];
     this.connect(
       'effect',
       combineLatest([
         this.#composerApi.select('entities'),
-        this.#composerApi.select('camera'),
+        this.#composerApi.select('activeCamera'),
         this.select(
           selectSlice(inputs),
           startWith({

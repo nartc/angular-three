@@ -1,4 +1,4 @@
-import type { ElementRef } from '@angular/core';
+import type { ElementRef, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import type {
   Camera,
@@ -358,6 +358,8 @@ export interface NgtInstanceLocalState {
   isRaw?: boolean;
   // priority for before render
   priority?: number;
+  // update emitter after props update
+  afterUpdate?: EventEmitter<NgtInstanceNode>;
 }
 
 export type NgtInstanceNode<TNode = any> = TNode & {

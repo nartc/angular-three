@@ -1,4 +1,4 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { supportedEvents } from '../events';
 import { NgtAttachFunction, NgtEventHandlers, NgtInstanceNode } from '../types';
 import { attach, detach } from '../utils/attach';
@@ -146,6 +146,14 @@ export function processThreeEvent(
       return lS.store
         .get('internal')
         .subscribe((state) => callback({ state, object: instance }), priority || 0, lS.store);
+    }
+
+    if (eventName === 'afterUpdate') {
+      if (!lS.afterUpdate) {
+        lS.afterUpdate = new EventEmitter();
+      }
+      const sub = lS.afterUpdate.subscribe(callback);
+      return sub.unsubscribe.bind(sub);
     }
 
     if (!lS.handlers) {

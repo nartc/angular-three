@@ -146,5 +146,15 @@ export function applyProps<TInstance extends object>(
     if (localState.eventCount) rootState.addInteraction(instance as THREE.Object3D);
   }
 
+  if (
+    localState &&
+    localState.parent &&
+    localState.afterUpdate &&
+    localState.afterUpdate.observed &&
+    changes.length
+  ) {
+    localState.afterUpdate.emit(instance);
+  }
+
   return instance;
 }
