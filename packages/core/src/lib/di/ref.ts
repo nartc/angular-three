@@ -11,7 +11,7 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs';
-import { NgtInstanceNode } from '../types';
+import { NgtAnyRecord, NgtInstanceNode } from '../types';
 import { getLocalState } from '../utils/instance';
 import { is } from '../utils/is';
 import { injectNgtDestroy } from './destroy';
@@ -83,7 +83,9 @@ export function injectNgtRef<T>(
       if (p === 'nativeElement' && target[p] !== newValue) {
         ref$.next(newValue);
         try {
-          cdr.detectChanges();
+          if ((cdr as NgtAnyRecord)['context']) {
+            cdr.detectChanges();
+          }
         } catch (e) {
           cdr.markForCheck();
         }

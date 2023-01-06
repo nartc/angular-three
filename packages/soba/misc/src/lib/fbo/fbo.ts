@@ -1,4 +1,4 @@
-import { injectNgtDestroy, injectNgtRef, injectNgtStore } from '@angular-three/core';
+import { injectNgtDestroy, injectNgtRef, injectNgtStore, NgtAnyRecord } from '@angular-three/core';
 import { isObservable, Observable, of, takeUntil } from 'rxjs';
 import { HalfFloatType, LinearFilter, WebGLRenderTarget } from 'three';
 
@@ -49,7 +49,9 @@ export function injectNgtsFBO<T extends boolean = false>(
     targetRef.nativeElement.setSize(_width, _height);
     if (samples) targetRef.nativeElement.samples = samples;
     try {
-      cdr.detectChanges();
+      if ((cdr as NgtAnyRecord)['context']) {
+        cdr.detectChanges();
+      }
     } catch (e) {
       cdr.markForCheck();
     }
