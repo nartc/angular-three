@@ -4,5 +4,6 @@ export * from './lib/color-depth/color-depth';
 export * from './lib/depth/depth';
 export * from './lib/dot-screen/dot-screen';
 export * from './lib/hue-saturation/hue-saturation';
-export * from './lib/scanline/scanline';
 export * from './lib/noise/noise';
+export * from './lib/scanline/scanline';
+export * from './lib/sepia/sepia';
