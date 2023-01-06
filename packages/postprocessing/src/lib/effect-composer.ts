@@ -30,6 +30,7 @@ interface NgtpEffectComposerApi {
   scene: Scene;
   camera: Camera;
   resolutionScale?: number;
+  select: NgtpEffectComposer['select'];
 }
 
 export const [injectNgtpEffectComposertApi, provideNgtpEffectComposerApi] =
@@ -45,6 +46,7 @@ function effectComposerApiFactory(composer: NgtpEffectComposer) {
     resolutionScale: { get: () => composer.get('resolutionScale') },
     scene: { get: () => composer.get('activeScene') },
     camera: { get: () => composer.get('activeCamera') },
+    select: { get: () => composer.select.bind(composer) },
   });
 
   return api;

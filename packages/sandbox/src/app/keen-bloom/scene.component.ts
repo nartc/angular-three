@@ -1,6 +1,6 @@
 import { extend, NgtArgs, NgtPush } from '@angular-three/core';
 import { NgtpEffectComposer } from '@angular-three/postprocessing';
-import { NgtpDepth, NgtpDotScreen } from '@angular-three/postprocessing/effects';
+import { NgtpBloom, NgtpDepth, NgtpDotScreen } from '@angular-three/postprocessing/effects';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import { NgIf } from '@angular/common';
@@ -54,11 +54,20 @@ export class Keen {
     <ngt-directional-light [position]="[0, 1, 2]" color="white"></ngt-directional-light>
 
     <ngtp-effect-composer>
-      <ngtp-depth></ngtp-depth>
-      <ngtp-dot-screen></ngtp-dot-screen>
+      <ngtp-bloom [intensity]="5"></ngtp-bloom>
+      <ngtp-depth [inverted]="false"></ngtp-depth>
+      <ngtp-dot-screen [scale]="3"></ngtp-dot-screen>
     </ngtp-effect-composer>
   `,
-  imports: [Keen, NgtsOrbitControls, NgtpEffectComposer, NgtpDepth, NgtpDotScreen, NgtArgs],
+  imports: [
+    Keen,
+    NgtsOrbitControls,
+    NgtpEffectComposer,
+    NgtpDepth,
+    NgtpDotScreen,
+    NgtpBloom,
+    NgtArgs,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene {}

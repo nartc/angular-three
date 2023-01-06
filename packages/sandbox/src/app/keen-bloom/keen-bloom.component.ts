@@ -6,7 +6,7 @@ import { Scene } from './scene.component';
   selector: 'sandbox-keen-bloom',
   standalone: true,
   template: `
-    <ngt-canvas [scene]="Scene" [camera]="{ position: [0, 0, 15], near: 5, far: 20 }"></ngt-canvas>
+    <ngt-canvas [scene]="Scene" [camera]="{ position: [0, 0, 11], near: 5, far: 20 }"></ngt-canvas>
   `,
   imports: [NgtCanvas],
 })

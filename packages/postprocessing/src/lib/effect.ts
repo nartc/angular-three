@@ -4,17 +4,21 @@ import {
   NgtRxStore,
   startWithUndefined,
 } from '@angular-three/core';
-import { Directive, Input, OnInit } from '@angular/core';
+import {
+  Directive,
+  Input,
+  OnChanges,
+  OnInit,
+  reflectComponentType,
+  SimpleChanges,
+  Type,
+} from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { BlendFunction, Effect } from 'postprocessing';
 import { combineLatest, startWith } from 'rxjs';
 
-export type NgtpKeyofProps<T extends Effect> = Array<
-  keyof NonNullable<ConstructorParameters<NgtAnyConstructor<T>>[0]>
->;
-
 @Directive()
-export abstract class NgtpEffect<T extends Effect> extends NgtRxStore implements OnInit {
+export abstract class NgtpEffect<T extends Effect> extends NgtRxStore implements OnInit, OnChanges {
   @Input() set blendFunction(blendFunction: BlendFunction) {
     this.set({ blendFunction });
   }
@@ -24,23 +28,47 @@ export abstract class NgtpEffect<T extends Effect> extends NgtRxStore implements
   }
 
   abstract get effectConstructor(): NgtAnyConstructor<T>;
-  abstract get effectPropsKeys(): NgtpKeyofProps<T>;
 
   protected defaultBlendMode = BlendFunction.NORMAL;
   protected readonly store = injectNgtStore();
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['opacity']) {
+      delete changes['opacity'];
+    }
+
+    if (changes['blendFunction']) {
+      delete changes['blendFunction'];
+    }
+
+    this.set((s) => ({
+      ...s,
+      ...Object.entries(changes).reduce((props, [key, change]) => {
+        props[key] = change.currentValue;
+        return props;
+      }, {} as ConstructorParameters<NgtAnyConstructor<T>>[0]),
+    }));
+  }
+
   ngOnInit() {
+    const inputs =
+      reflectComponentType(this.constructor as Type<any>)?.inputs.map((input) => input.propName) ||
+      [];
     this.connect(
       'effect',
-      this.select(selectSlice(this.effectPropsKeys), startWith(this.#startWithProps)),
-      (props) => new this.effectConstructor(props)
+      this.select(selectSlice(inputs), startWith(this.#startWithProps(inputs))),
+      (props) => {
+        delete props['__ngt__dummy__'];
+        delete props['effect'];
+        return new this.effectConstructor(props);
+      }
     );
 
     this.#configureBlendMode();
   }
 
-  #startWithProps() {
-    return this.effectPropsKeys.reduce((defaultProps, key) => {
+  #startWithProps(inputs: string[]) {
+    return inputs.reduce((defaultProps, key) => {
       defaultProps[key] = this.get(key);
       return defaultProps;
     }, {} as ConstructorParameters<NgtAnyConstructor<T>>[0]);

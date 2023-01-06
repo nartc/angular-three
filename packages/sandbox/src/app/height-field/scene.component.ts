@@ -176,7 +176,6 @@ export class HeightMapGeometry
         }
       }
 
-
       geometry.setIndex(indices);
       geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
       geometry.computeVertexNormals();
