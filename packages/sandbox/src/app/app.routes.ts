@@ -15,6 +15,10 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./kinematic-cube/kinematic-cube.component'),
   },
   {
+    path: 'height-field',
+    loadComponent: () => import('./height-field/height-field.component'),
+  },
+  {
     path: 'object-clump',
     loadComponent: () => import('./object-clump/object-clump.component'),
   },
