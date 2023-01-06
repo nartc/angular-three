@@ -7,3 +7,4 @@ export * from './lib/hue-saturation/hue-saturation';
 export * from './lib/noise/noise';
 export * from './lib/scanline/scanline';
 export * from './lib/sepia/sepia';
+export * from './lib/tilt-shift/tilt-shift';
