@@ -233,7 +233,10 @@ export class NgtRendererState {
   getClosestParentWithInstance(node: NgtRendererNode): NgtRendererInstanceNode | null {
     let parent = node.renderParent;
     while (parent && parent.renderType !== 'instance') {
-      parent = parent.renderParent;
+      parent =
+        parent.renderType === 'portal' && parent.portalContainer
+          ? parent.portalContainer
+          : parent.renderParent;
     }
 
     return parent as NgtRendererInstanceNode;
