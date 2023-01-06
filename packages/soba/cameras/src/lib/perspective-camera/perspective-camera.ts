@@ -17,11 +17,9 @@ extend({ PerspectiveCamera, Group });
         [ngTemplateOutlet]="cameraContent.template"
       ></ng-container>
     </ngt-perspective-camera>
-    <ngt-group #group>
+    <ngt-group #group *ngIf="cameraContent && cameraContent.ngtsCameraContent">
       <ng-container
-        *ngIf="cameraContent && cameraContent.ngtsCameraContent"
-        [ngTemplateOutlet]="cameraContent.template"
-        [ngTemplateOutletContext]="{ fbo: fboRef.nativeElement, group }"
+        *ngTemplateOutlet="cameraContent.template; context: { fbo: fboRef.nativeElement, group }"
       ></ng-container>
     </ngt-group>
   `,

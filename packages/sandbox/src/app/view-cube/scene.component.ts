@@ -57,7 +57,7 @@ extend({
           <ng-container *ngFor="let i; repeat: 6">
             <ngt-mesh-lambert-material
               *attachArray="['material', i]"
-              [color]="hovered === i ? 'hotpink' : 'white'"
+              [color]="hovered === i ? 'lightblue' : 'white'"
             >
             </ngt-mesh-lambert-material>
           </ng-container>
