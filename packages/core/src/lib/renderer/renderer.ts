@@ -149,6 +149,9 @@ export class NgtRenderer implements Renderer2 {
   }
 
   appendChild(parent: NgtRendererNode, newChild: NgtRendererNode): void {
+    // TODO: just ignore text node for now
+    if (newChild instanceof Text) return;
+
     if (newChild.renderType === 'comment') {
       this.state.setParent(newChild, parent);
       return;

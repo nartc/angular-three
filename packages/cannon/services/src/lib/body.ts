@@ -66,7 +66,7 @@ export interface NgtcPhysicsBodyPublicApi extends NgtcWorkerApi {
 
 export interface NgtcPhysicBodyReturn<TObject extends THREE.Object3D> {
   ref: ElementRef<TObject>;
-  api: () => NgtcPhysicsBodyPublicApi;
+  api: NgtcPhysicsBodyPublicApi;
 }
 
 export type NgtcGetByIndex<T extends BodyProps> = (index: number) => T;
@@ -222,6 +222,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
             return { ...props, args: argsFn(props.args) };
           });
 
+
     currentWorker.addBodies({
       props: props.map(({ onCollide, onCollideBegin, onCollideEnd, ...serializableProps }) => ({
         onCollide: Boolean(onCollide),
@@ -243,154 +244,175 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
     });
   });
 
-  const api = () => {
-    const { scaleOverrides, subscriptions, worker } = store.get();
+  const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
+    const op: SetOpName<T> = `set${NgtPhysicsUtils.capitalize(type)}`;
 
-    const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
-      const op: SetOpName<T> = `set${NgtPhysicsUtils.capitalize(type)}`;
-
-      return {
-        set: (value: PropValue<T>) => {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid &&
-            worker[op]({
-              props: value,
-              uuid,
-            } as never);
-        },
-        subscribe: NgtPhysicsUtils.subscribe(ref, worker, subscriptions, type, index),
-      };
-    };
-
-    const makeQuaternion = (index?: number) => {
-      const type = 'quaternion';
-      return {
-        copy: ({ w, x, y, z }: Quaternion) => {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.setQuaternion({ props: [x, y, z, w], uuid });
-        },
-        set: (x: number, y: number, z: number, w: number) => {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.setQuaternion({ props: [x, y, z, w], uuid });
-        },
-        subscribe: NgtPhysicsUtils.subscribe(ref, worker, subscriptions, type, index),
-      };
-    };
-
-    const makeRotation = (index?: number) => {
-      return {
-        copy: ({ x, y, z }: Vector3 | Euler) => {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.setRotation({ props: [x, y, z], uuid });
-        },
-        set: (x: number, y: number, z: number) => {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.setRotation({ props: [x, y, z], uuid });
-        },
-        subscribe: (callback: (value: Triplet) => void) => {
-          const id = NgtPhysicsUtils.incrementingId++;
-          const target = 'bodies';
-          const type = 'quaternion';
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-
-          subscriptions[id] = { [type]: NgtPhysicsUtils.quaternionToRotation(callback) };
-          uuid && worker.subscribe({ props: { id, target, type }, uuid });
-          return () => {
-            delete subscriptions[id];
-            worker.unsubscribe({ props: id });
-          };
-        },
-      };
-    };
-
-    const makeVec = (type: VectorName, index?: number) => {
-      const op: SetOpName<VectorName> = `set${NgtPhysicsUtils.capitalize(type)}`;
-      return {
-        copy: ({ x, y, z }: Vector3 | Euler) => {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker[op]({ props: [x, y, z], uuid });
-        },
-        set: (x: number, y: number, z: number) => {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker[op]({ props: [x, y, z], uuid });
-        },
-        subscribe: NgtPhysicsUtils.subscribe(ref, worker, subscriptions, type, index),
-      };
-    };
-
-    const makeRemove = (index?: number) => {
-      const uuid = NgtPhysicsUtils.getUUID(ref, index);
-      return () => {
-        if (uuid) {
-          worker.removeBodies({ uuid: [uuid] });
-        }
-      };
-    };
-
-    function makeApi(index?: number): NgtcWorkerApi {
-      return {
-        allowSleep: makeAtomic('allowSleep', index),
-        angularDamping: makeAtomic('angularDamping', index),
-        angularFactor: makeVec('angularFactor', index),
-        angularVelocity: makeVec('angularVelocity', index),
-        applyForce(force: Triplet, worldPoint: Triplet) {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.applyForce({ props: [force, worldPoint], uuid });
-        },
-        applyImpulse(impulse: Triplet, worldPoint: Triplet) {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.applyImpulse({ props: [impulse, worldPoint], uuid });
-        },
-        applyLocalForce(force: Triplet, localPoint: Triplet) {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.applyLocalForce({ props: [force, localPoint], uuid });
-        },
-        applyLocalImpulse(impulse: Triplet, localPoint: Triplet) {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.applyLocalImpulse({ props: [impulse, localPoint], uuid });
-        },
-        applyTorque(torque: Triplet) {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.applyTorque({ props: [torque], uuid });
-        },
-        collisionFilterGroup: makeAtomic('collisionFilterGroup', index),
-        collisionFilterMask: makeAtomic('collisionFilterMask', index),
-        collisionResponse: makeAtomic('collisionResponse', index),
-        fixedRotation: makeAtomic('fixedRotation', index),
-        isTrigger: makeAtomic('isTrigger', index),
-        linearDamping: makeAtomic('linearDamping', index),
-        linearFactor: makeVec('linearFactor', index),
-        mass: makeAtomic('mass', index),
-        material: makeAtomic('material', index),
-        position: makeVec('position', index),
-        quaternion: makeQuaternion(index),
-        remove: makeRemove(index),
-        rotation: makeRotation(index),
-        scaleOverride(scale) {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          if (uuid) scaleOverrides[uuid] = new Vector3(...scale);
-        },
-        sleep() {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.sleep({ uuid });
-        },
-        sleepSpeedLimit: makeAtomic('sleepSpeedLimit', index),
-        sleepTimeLimit: makeAtomic('sleepTimeLimit', index),
-        userData: makeAtomic('userData', index),
-        velocity: makeVec('velocity', index),
-        wakeUp() {
-          const uuid = NgtPhysicsUtils.getUUID(ref, index);
-          uuid && worker.wakeUp({ uuid });
-        },
-      };
-    }
-
-    const cache: { [index: number]: NgtcWorkerApi } = {};
     return {
-      ...makeApi(undefined),
-      at: (index: number) => cache[index] || (cache[index] = makeApi(index)),
+      set: (value: PropValue<T>) => {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid &&
+          worker[op]({
+            props: value,
+            uuid,
+          } as never);
+      },
+      get subscribe() {
+        const { subscriptions, worker } = store.get();
+        return NgtPhysicsUtils.subscribe(ref, worker, subscriptions, type, index);
+      },
     };
   };
 
+  const makeQuaternion = (index?: number) => {
+    const type = 'quaternion';
+    return {
+      copy: ({ w, x, y, z }: Quaternion) => {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.setQuaternion({ props: [x, y, z, w], uuid });
+      },
+      set: (x: number, y: number, z: number, w: number) => {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.setQuaternion({ props: [x, y, z, w], uuid });
+      },
+      get subscribe() {
+        const { subscriptions, worker } = store.get();
+        return NgtPhysicsUtils.subscribe(ref, worker, subscriptions, type, index);
+      },
+    };
+  };
+
+  const makeRotation = (index?: number) => {
+    return {
+      copy: ({ x, y, z }: Vector3 | Euler) => {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.setRotation({ props: [x, y, z], uuid });
+      },
+      set: (x: number, y: number, z: number) => {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.setRotation({ props: [x, y, z], uuid });
+      },
+      subscribe: (callback: (value: Triplet) => void) => {
+        const { subscriptions, worker } = store.get();
+        const id = NgtPhysicsUtils.incrementingId++;
+        const target = 'bodies';
+        const type = 'quaternion';
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+
+        subscriptions[id] = { [type]: NgtPhysicsUtils.quaternionToRotation(callback) };
+        uuid && worker.subscribe({ props: { id, target, type }, uuid });
+        return () => {
+          delete subscriptions[id];
+          worker.unsubscribe({ props: id });
+        };
+      },
+    };
+  };
+
+  const makeVec = (type: VectorName, index?: number) => {
+    const op: SetOpName<VectorName> = `set${NgtPhysicsUtils.capitalize(type)}`;
+    return {
+      copy: ({ x, y, z }: Vector3 | Euler) => {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker[op]({ props: [x, y, z], uuid });
+      },
+      set: (x: number, y: number, z: number) => {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker[op]({ props: [x, y, z], uuid });
+      },
+      get subscribe() {
+        const { subscriptions, worker } = store.get();
+        return NgtPhysicsUtils.subscribe(ref, worker, subscriptions, type, index);
+      },
+    };
+  };
+
+  const makeRemove = (index?: number) => {
+    const { worker } = store.get();
+    const uuid = NgtPhysicsUtils.getUUID(ref, index);
+    return () => {
+      if (uuid) {
+        worker.removeBodies({ uuid: [uuid] });
+      }
+    };
+  };
+
+  function makeApi(index?: number): NgtcWorkerApi {
+    return {
+      allowSleep: makeAtomic('allowSleep', index),
+      angularDamping: makeAtomic('angularDamping', index),
+      angularFactor: makeVec('angularFactor', index),
+      angularVelocity: makeVec('angularVelocity', index),
+      applyForce(force: Triplet, worldPoint: Triplet) {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.applyForce({ props: [force, worldPoint], uuid });
+      },
+      applyImpulse(impulse: Triplet, worldPoint: Triplet) {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.applyImpulse({ props: [impulse, worldPoint], uuid });
+      },
+      applyLocalForce(force: Triplet, localPoint: Triplet) {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.applyLocalForce({ props: [force, localPoint], uuid });
+      },
+      applyLocalImpulse(impulse: Triplet, localPoint: Triplet) {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.applyLocalImpulse({ props: [impulse, localPoint], uuid });
+      },
+      applyTorque(torque: Triplet) {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.applyTorque({ props: [torque], uuid });
+      },
+      collisionFilterGroup: makeAtomic('collisionFilterGroup', index),
+      collisionFilterMask: makeAtomic('collisionFilterMask', index),
+      collisionResponse: makeAtomic('collisionResponse', index),
+      fixedRotation: makeAtomic('fixedRotation', index),
+      isTrigger: makeAtomic('isTrigger', index),
+      linearDamping: makeAtomic('linearDamping', index),
+      linearFactor: makeVec('linearFactor', index),
+      mass: makeAtomic('mass', index),
+      material: makeAtomic('material', index),
+      position: makeVec('position', index),
+      quaternion: makeQuaternion(index),
+      remove: makeRemove(index),
+      rotation: makeRotation(index),
+      scaleOverride(scale) {
+        const { scaleOverrides } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        if (uuid) scaleOverrides[uuid] = new Vector3(...scale);
+      },
+      sleep() {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.sleep({ uuid });
+      },
+      sleepSpeedLimit: makeAtomic('sleepSpeedLimit', index),
+      sleepTimeLimit: makeAtomic('sleepTimeLimit', index),
+      userData: makeAtomic('userData', index),
+      velocity: makeVec('velocity', index),
+      wakeUp() {
+        const { worker } = store.get();
+        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        uuid && worker.wakeUp({ uuid });
+      },
+    };
+  }
+
+  const cache: { [index: number]: NgtcWorkerApi } = {};
+  const api = {
+    ...makeApi(undefined),
+    at: (index: number) => cache[index] || (cache[index] = makeApi(index)),
+  };
   return { ref, api };
 }

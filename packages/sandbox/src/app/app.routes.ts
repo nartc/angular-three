@@ -11,6 +11,10 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./test/test.component'),
   },
   {
+    path: 'kinematic-cube',
+    loadComponent: () => import('./kinematic-cube/kinematic-cube.component'),
+  },
+  {
     path: 'keen-bloom',
     loadComponent: () => import('./keen-bloom/keen-bloom.component'),
   },
