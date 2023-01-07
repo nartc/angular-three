@@ -78,7 +78,7 @@ export class ColorsInstances {
   standalone: true,
   template: `
     <ngt-ambient-light></ngt-ambient-light>
-    <ngt-directional-light intensity="0.55" [position]="[150, 150, 150]"></ngt-directional-light>
+    <ngt-directional-light intensity="0.55" [position]="150"></ngt-directional-light>
 
     <sandbox-colors-instances></sandbox-colors-instances>
 

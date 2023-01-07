@@ -64,7 +64,7 @@ extend({
           <ngt-box-geometry *args="[60, 60, 60]"></ngt-box-geometry>
         </ngt-mesh>
         <ngt-ambient-light intensity="1"></ngt-ambient-light>
-        <ngt-point-light [position]="[200, 200, 100]" intensity="0.5"></ngt-point-light>
+        <ngt-point-light [position]="200" intensity="0.5"></ngt-point-light>
       </ng-template>
     </ngt-portal>
   `,

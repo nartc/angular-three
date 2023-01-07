@@ -42,10 +42,10 @@ export class Pointer implements OnInit, OnDestroy {
     position: [0, 0, 0],
   }));
 
-  subscription?: () => void;
+  #unsub?: () => void;
 
   ngOnInit() {
-    this.subscription = this.#store.get('internal').subscribe(({ pointer, viewport }) => {
+    this.#unsub = this.#store.get('internal').subscribe(({ pointer, viewport }) => {
       this.pointerBody.api.position.set(
         (pointer.x * viewport.width) / 2,
         (pointer.y * viewport.height) / 2,
@@ -55,7 +55,7 @@ export class Pointer implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription?.();
+    this.#unsub?.();
   }
 }
 
@@ -124,14 +124,10 @@ export class Clump {
   standalone: true,
   template: `
     <ngt-ambient-light intensity="0.25"></ngt-ambient-light>
-    <ngt-spot-light [position]="[30, 30, 30]" intensity="1" angle="0.2" penumbra="1" castShadow>
+    <ngt-spot-light [position]="30" intensity="1" angle="0.2" penumbra="1" castShadow>
       <ngt-vector2 attach="shadow.mapSize" *args="[512, 512]"></ngt-vector2>
     </ngt-spot-light>
-    <ngt-directional-light
-      [position]="[-10, -10, -10]"
-      intensity="5"
-      color="purple"
-    ></ngt-directional-light>
+    <ngt-directional-light [position]="-10" intensity="5" color="purple"></ngt-directional-light>
 
     <ngtc-physics [gravity]="[0, 2, 0]" [iterations]="10">
       <sandbox-pointer></sandbox-pointer>
@@ -146,7 +142,16 @@ export class Clump {
 
     <ngts-sky></ngts-sky>
   `,
-  imports: [NgtArgs, NgtcPhysics, NgtsEnvironment, NgtsSky, NgtpEffectComposer, NgtpBloom, Clump, Pointer],
+  imports: [
+    NgtArgs,
+    NgtcPhysics,
+    NgtsEnvironment,
+    NgtsSky,
+    NgtpEffectComposer,
+    NgtpBloom,
+    Clump,
+    Pointer,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene {}

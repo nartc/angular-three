@@ -15,7 +15,7 @@ extend({ MeshNormalMaterial });
     <ngts-center>
       <ngts-float [floatIntensity]="5" [speed]="2">
         <ngts-text-3d
-          [font]="'soba/helvetiker_regular.typeface.json'"
+          font="soba/helvetiker_regular.typeface.json"
           [bevelEnabled]="true"
           [bevelSize]="0.05"
           text="Angular Three"
