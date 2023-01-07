@@ -55,7 +55,7 @@ export function attachThreeInstances(parent: NgtInstanceNode, child: NgtInstance
 
       // attach
       if (cLS.isRaw) {
-        attach(parent, child.rawValue, attachProp);
+        attach(parent, child.__ngt_renderer__.rawValue, attachProp);
       } else {
         attach(parent, child, attachProp);
       }

@@ -231,7 +231,7 @@ export class Effects implements OnInit, OnDestroy {
       [fontSize]="0.6"
       [letterSpacing]="0"
     >
-        <ngt-value *args="[false]" attach="material.fog"></ngt-value>
+      <ngt-value *args="[false]" attach="material.fog"></ngt-value>
     </ngts-text>
     <ngt-mesh scale="4" [position]="[0, 1, -0.2]">
       <ngt-plane-geometry></ngt-plane-geometry>
@@ -249,5 +249,4 @@ export class Effects implements OnInit, OnDestroy {
   imports: [Lights, YBot, NgtsText, NgtsAdaptiveDpr, NgtArgs, Effects],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class Scene {
-}
+export class Scene {}
