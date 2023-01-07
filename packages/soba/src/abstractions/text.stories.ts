@@ -165,7 +165,7 @@ class OutlineTextStory {
   template: `
     <ngts-text
       [text]="text"
-      [color]="'#EC2D2D'"
+      [color]="color"
       [fontSize]="12"
       [maxWidth]="200"
       [lineHeight]="1"
@@ -183,6 +183,7 @@ class OutlineTextStory {
 })
 class DefaultTextStory {
   @Input() text = '';
+  @Input() color = '#ec2d2d';
   readonly turn = turn;
 }
 
@@ -208,6 +209,7 @@ Default.args = {
       MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO
       CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR.
       EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID EST LABORUM.`,
+  color: '#ec2d2d',
 };
 
 export const Outline: Story = (args) => ({
