@@ -15,6 +15,10 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./kinematic-cube/kinematic-cube.component'),
   },
   {
+    path: 'vertex-colors-instances',
+    loadComponent: () => import('./vertex-colors-instances/vertex-colors-instances.component'),
+  },
+  {
     path: 'height-field',
     loadComponent: () => import('./height-field/height-field.component'),
   },

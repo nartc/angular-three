@@ -18,3 +18,4 @@ export * from './lib/utils/apply-props';
 export * from './lib/utils/di';
 export * from './lib/utils/instance';
 export * from './lib/utils/is';
+export * from './lib/utils/update';
