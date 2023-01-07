@@ -203,7 +203,6 @@ export class NgtpEffectComposer extends NgtRxStore implements OnInit {
         )
       )
     );
-    console.log(this.get());
     this.#setComposerSize();
     this.#setEffectPasses();
     this.#setBeforeRender();
