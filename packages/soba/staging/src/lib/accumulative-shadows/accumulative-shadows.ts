@@ -226,57 +226,57 @@ export class NgtsAccumulativeShadows extends NgtRxStore {
 
   /** How many frames it can render, more yields cleaner results but takes more time, 40 */
   @Input() set frames(frames: number) {
-    this.set({ frames });
+    this.set({ frames: frames === undefined ? this.get('frames') : frames });
   }
 
   /** If frames === Infinity blend controls the refresh ratio, 100 */
   @Input() set blend(blend: number) {
-    this.set({ blend });
+    this.set({ blend: blend === undefined ? this.get('blend') : blend });
   }
 
   /** Can limit the amount of frames rendered if frames === Infinity, usually to get some performance back once a movable scene has settled, Infinity */
   @Input() set limit(limit: number) {
-    this.set({ limit });
+    this.set({ limit: limit === undefined ? this.get('limit') : limit });
   }
 
   /** Scale of the plane,  */
   @Input() set scale(scale: number) {
-    this.set({ scale });
+    this.set({ scale: scale === undefined ? this.get('scale') : scale });
   }
 
   /** Temporal accumulates shadows over time which is more performant but has a visual regression over instant results, false  */
   @Input() set temporal(temporal: boolean) {
-    this.set({ temporal });
+    this.set({ temporal: temporal === undefined ? this.get('temporal') : temporal });
   }
 
   /** Opacity of the plane, 1 */
   @Input() set opacity(opacity: number) {
-    this.set({ opacity });
+    this.set({ opacity: opacity === undefined ? this.get('opacity') : opacity });
   }
 
   /** Discards alpha pixels, 0.65 */
   @Input() set alphaTest(alphaTest: number) {
-    this.set({ alphaTest });
+    this.set({ alphaTest: alphaTest === undefined ? this.get('alphaTest') : alphaTest });
   }
 
   /** Shadow color, black */
   @Input() set color(color: string) {
-    this.set({ color });
+    this.set({ color: color === undefined ? this.get('color') : color });
   }
 
   /** Colorblend, how much colors turn to black, 0 is black, 2 */
   @Input() set colorBlend(colorBlend: number) {
-    this.set({ colorBlend });
+    this.set({ colorBlend: colorBlend === undefined ? this.get('colorBlend') : colorBlend });
   }
 
   /** Buffer resolution, 1024 */
   @Input() set resolution(resolution: number) {
-    this.set({ resolution });
+    this.set({ resolution: resolution === undefined ? this.get('resolution') : resolution });
   }
 
   /** Texture tonemapping */
   @Input() set toneMapped(toneMapped: boolean) {
-    this.set({ toneMapped });
+    this.set({ toneMapped: toneMapped === undefined ? this.get('toneMapped') : toneMapped });
   }
 
   override initialize(): void {

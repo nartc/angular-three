@@ -32,43 +32,43 @@ export class NgtsCenter extends NgtRxStore implements OnInit {
   readonly innerRef = injectNgtRef<Group>();
 
   @Input() set top(top: boolean) {
-    this.set({ top });
+    this.set({ top: top === undefined ? this.get('top') : top });
   }
 
   @Input() set right(right: boolean) {
-    this.set({ right });
+    this.set({ right: right === undefined ? this.get('right') : right });
   }
 
   @Input() set bottom(bottom: boolean) {
-    this.set({ bottom });
+    this.set({ bottom: bottom === undefined ? this.get('bottom') : bottom });
   }
 
   @Input() set left(left: boolean) {
-    this.set({ left });
+    this.set({ left: left === undefined ? this.get('left') : left });
   }
 
   @Input() set front(front: boolean) {
-    this.set({ front });
+    this.set({ front: front === undefined ? this.get('front') : front });
   }
 
   @Input() set back(back: boolean) {
-    this.set({ back });
+    this.set({ back: back === undefined ? this.get('back') : back });
   }
 
   @Input() set disableX(disableX: boolean) {
-    this.set({ disableX });
+    this.set({ disableX: disableX === undefined ? this.get('disableX') : disableX });
   }
 
   @Input() set disableY(disableY: boolean) {
-    this.set({ disableY });
+    this.set({ disableY: disableY === undefined ? this.get('disableY') : disableY });
   }
 
   @Input() set disableZ(disableZ: boolean) {
-    this.set({ disableZ });
+    this.set({ disableZ: disableZ === undefined ? this.get('disableZ') : disableZ });
   }
 
   @Input() set precise(precise: boolean) {
-    this.set({ precise });
+    this.set({ precise: precise === undefined ? this.get('precise') : precise });
   }
 
   @Output() centered = new EventEmitter<{

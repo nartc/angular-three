@@ -18,7 +18,7 @@ import {
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { RxActionFactory } from '@rx-angular/state/actions';
-import { combineLatest } from 'rxjs';
+import { combineLatest, switchMap } from 'rxjs';
 import { Box3, Group, MathUtils, Object3D, Vector3 } from 'three';
 
 export interface NgtsBoundsSize {
@@ -107,8 +107,10 @@ extend({ Group });
           if (isBox3(object)) box.copy(object);
           else {
             const target = object || bounds.groupRef.nativeElement;
-            target.updateWorldMatrix(true, true);
-            box.setFromObject(target);
+            if (target) {
+              target.updateWorldMatrix(true, true);
+              box.setFromObject(target);
+            }
           }
           if (box.isEmpty()) {
             const max = camera.position.length() || 10;
@@ -239,10 +241,14 @@ extend({ Group });
       queueMicrotask(() => {
         let count = 0;
         bounds.hold(
-          combineLatest([
-            bounds.select(selectSlice(['clip', 'fit', 'observe'])),
-            store.select(selectSlice(['camera', 'controls', 'size'])),
-          ]),
+          bounds.groupRef.$.pipe(
+            switchMap(() =>
+              combineLatest([
+                bounds.select(selectSlice(['clip', 'fit', 'observe'])),
+                store.select(selectSlice(['camera', 'controls', 'size'])),
+              ])
+            )
+          ),
           ([{ clip, fit, observe }]) => {
             if (observe || count++ === 0) {
               api.refresh();
@@ -262,27 +268,27 @@ export class NgtsBounds extends NgtRxStore implements OnInit {
   @Input() groupRef = injectNgtRef<Group>();
 
   @Input() set damping(damping: number) {
-    this.set({ damping });
+    this.set({ damping: damping === undefined ? this.get('damping') : damping });
   }
 
   @Input() set fit(fit: boolean) {
-    this.set({ fit });
+    this.set({ fit: fit === undefined ? this.get('fit') : fit });
   }
 
   @Input() set clip(clip: boolean) {
-    this.set({ clip });
+    this.set({ clip: clip === undefined ? this.get('clip') : clip });
   }
 
   @Input() set observe(observe: boolean) {
-    this.set({ observe });
+    this.set({ observe: observe === undefined ? this.get('observe') : observe });
   }
 
   @Input() set margin(margin: number) {
-    this.set({ margin });
+    this.set({ margin: margin === undefined ? this.get('margin') : margin });
   }
 
   @Input() set eps(eps: number) {
-    this.set({ eps });
+    this.set({ eps: eps === undefined ? this.get('eps') : eps });
   }
 
   @Output() fitted = new EventEmitter<NgtsBoundsSize>();

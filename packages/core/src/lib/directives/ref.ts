@@ -20,15 +20,12 @@ export class NgtRef<T> implements NgtHasValidateForRenderer {
 
   #injectedRef?: ElementRef<T>;
   #injected = false;
-  shouldCreateView = true;
 
   @Input() set ref(ref: ElementRef<T> | null) {
     if (!ref) return;
     this.#injected = false;
     this.#injectedRef = ref;
-    if (this.shouldCreateView) {
-      this.#createView();
-    }
+    this.#createView();
   }
 
   get ref(): ElementRef<T> | null {
@@ -37,6 +34,10 @@ export class NgtRef<T> implements NgtHasValidateForRenderer {
       return this.#injectedRef;
     }
     return null;
+  }
+
+  get forceRef(): ElementRef<T> | undefined {
+      return this.#injectedRef;
   }
 
   validate() {

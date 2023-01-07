@@ -72,51 +72,51 @@ export class NgtsContactShadows extends NgtRxStore implements OnInit {
   @Input() groupRef = injectNgtRef<Group>();
 
   @Input() set opacity(opacity: number) {
-    this.set({ opacity });
+    this.set({ opacity: opacity === undefined ? this.get('opacity') : opacity });
   }
 
   @Input() set width(width: number) {
-    this.set({ width });
+    this.set({ width: width === undefined ? this.get('width') : width });
   }
 
   @Input() set height(height: number) {
-    this.set({ height });
+    this.set({ height: height === undefined ? this.get('height') : height });
   }
 
   @Input() set blur(blur: number) {
-    this.set({ blur });
+    this.set({ blur: blur === undefined ? this.get('blur') : blur });
   }
 
   @Input() set far(far: number) {
-    this.set({ far });
+    this.set({ far: far === undefined ? this.get('far') : far });
   }
 
   @Input() set smooth(smooth: boolean) {
-    this.set({ smooth });
+    this.set({ smooth: smooth === undefined ? this.get('smooth') : smooth });
   }
 
   @Input() set resolution(resolution: number) {
-    this.set({ resolution });
+    this.set({ resolution: resolution === undefined ? this.get('resolution') : resolution });
   }
 
   @Input() set frames(frames: number) {
-    this.set({ frames });
+    this.set({ frames: frames === undefined ? this.get('frames') : frames });
   }
 
   @Input() set scale(scale: number | [x: number, y: number]) {
-    this.set({ scale });
+    this.set({ scale: scale === undefined ? this.get('scale') : scale });
   }
 
   @Input() set color(color: THREE.ColorRepresentation) {
-    this.set({ color });
+    this.set({ color: color === undefined ? this.get('color') : color });
   }
 
   @Input() set depthWrite(depthWrite: boolean) {
-    this.set({ depthWrite });
+    this.set({ depthWrite: depthWrite === undefined ? this.get('depthWrite') : depthWrite });
   }
 
   @Input() set renderOrder(renderOrder: number) {
-    this.set({ renderOrder });
+    this.set({ renderOrder: renderOrder === undefined ? this.get('renderOrder') : renderOrder });
   }
 
   override initialize() {
@@ -153,14 +153,9 @@ export class NgtsContactShadows extends NgtRxStore implements OnInit {
       'cameraArgs',
       this.select(
         ['scaledWidth', 'scaledHeight', 'far'],
-        ({ scaledWidth: width, scaledHeight: height, far }) => [
-          -width / 2,
-          width / 2,
-          height / 2,
-          -height / 2,
-          0,
-          far,
-        ]
+        ({ scaledWidth: width, scaledHeight: height, far }) => {
+          return [-width / 2, width / 2, height / 2, -height / 2, 0, far];
+        }
       )
     );
     this.connect(
@@ -196,6 +191,7 @@ export class NgtsContactShadows extends NgtRxStore implements OnInit {
           const horizontalBlurMaterial = new ShaderMaterial(HorizontalBlurShader);
           const verticalBlurMaterial = new ShaderMaterial(VerticalBlurShader);
           verticalBlurMaterial.depthTest = horizontalBlurMaterial.depthTest = false;
+
           return {
             renderTarget,
             planeGeometry,

@@ -356,6 +356,11 @@ export class NgtRendererState {
     }
 
     if (node.__ngt_renderer_type__ === 'comment') {
+      // find out if this comment is a *ref
+      const ngtRef = node.__ngt_renderer__.injectorFactory?.().get(NgtRef, null);
+      if (ngtRef?.forceRef && ngtRef.forceRef.nativeElement) {
+        ngtRef.forceRef.nativeElement = null;
+      }
       node.__ngt_renderer__.injectorFactory =
         null as unknown as NgtRendererCommentNode['__ngt_renderer__']['injectorFactory'];
     }

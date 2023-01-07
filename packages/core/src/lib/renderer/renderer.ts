@@ -13,7 +13,12 @@ import { NgtAnyConstructor } from '../types';
 import { getLocalState, prepare } from '../utils/instance';
 import { is } from '../utils/is';
 import { injectNgtCompoundPrefixes } from './di';
-import { NgtRendererCompoundNode, NgtRendererInstanceNode, NgtRendererNode, NgtRendererState } from './state';
+import {
+  NgtRendererCompoundNode,
+  NgtRendererInstanceNode,
+  NgtRendererNode,
+  NgtRendererState,
+} from './state';
 import {
   attachThreeInstances,
   kebabToPascal,
