@@ -237,8 +237,8 @@ export class Effects implements OnInit, OnDestroy {
       <ngt-plane-geometry></ngt-plane-geometry>
       <ngt-mesh-standard-material
         color="lightblue"
-        [toneMapped]="false"
-        [fog]="false"
+        toneMapped="false"
+        fog="false"
         envMapIntensity="0"
       ></ngt-mesh-standard-material>
     </ngt-mesh>

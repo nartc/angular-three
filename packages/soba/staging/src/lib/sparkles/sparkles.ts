@@ -141,8 +141,8 @@ function usePropAsIsOrAsAttribute<T = any>(
       <ngt-sparkles-material
         *ref="materialRef"
         transparent
+        depthWrite="false"
         [pixelRatio]="dpr"
-        [depthWrite]="false"
         (beforeRender)="onMaterialBeforeRender($any($event))"
       ></ngt-sparkles-material>
     </ngt-points>

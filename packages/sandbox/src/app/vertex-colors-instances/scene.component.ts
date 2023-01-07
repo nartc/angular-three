@@ -1,4 +1,5 @@
-import { checkNeedsUpdate, extend, NgtArgs } from '@angular-three/core';
+import { extend, NgtArgs } from '@angular-three/core';
+import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angular/core';
 import {
   AmbientLight,
@@ -10,7 +11,6 @@ import {
   MeshLambertMaterial,
   Object3D,
 } from 'three';
-import { NgtsOrbitControls } from '@angular-three/soba/controls';
 // @ts-ignore
 import niceColors from 'nice-color-palettes';
 const niceColor = niceColors[Math.floor(Math.random() * niceColors.length)];
@@ -21,7 +21,7 @@ extend({
   MeshLambertMaterial,
   AmbientLight,
   DirectionalLight,
-  InstancedBufferAttribute
+  InstancedBufferAttribute,
 });
 
 @Component({
@@ -39,7 +39,7 @@ extend({
     </ngt-instanced-mesh>
   `,
   imports: [NgtArgs],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ColorsInstances {
   readonly length = 125000;
@@ -69,7 +69,7 @@ export class ColorsInstances {
         }
       }
     }
-    checkNeedsUpdate(instanced.nativeElement.instanceMatrix);
+    instanced.nativeElement.instanceMatrix.needsUpdate = true;
   }
 }
 

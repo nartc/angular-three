@@ -37,7 +37,7 @@ class RotationSkyStory {
   @Input() mieDirectionalG = 0.8;
   @Input() azimuth = 0.25;
 
-  readonly inclination$ = timer(0, 30).pipe(scan((value) => value + 0.001, 0));
+  readonly inclination$ = timer(0, 7.5).pipe(scan((value) => value + 0.001, 0));
   readonly Math = Math;
 }
 @Component({
