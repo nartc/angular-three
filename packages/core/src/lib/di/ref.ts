@@ -71,17 +71,10 @@ export function injectNgtRef<T>(
       takeUntil(destroy$)
     );
 
-  return new Proxy(ref, {
-    get(target, p, receiver) {
-      if (p === 'subscribe') return subscribe;
-      if (p === '$') return $;
-      if (p === 'nativeElement') return ref$.value;
-      if (p === 'children$') return children$;
-      return Reflect.get(target, p, receiver);
-    },
-    set(target, p, newValue, receiver) {
-      if (p === 'nativeElement' && target[p] !== newValue) {
-        ref$.next(newValue);
+  Object.defineProperty(ref, 'nativeElement', {
+    set: (newVal: T) => {
+      if (ref.nativeElement !== newVal) {
+        ref$.next(newVal);
         try {
           if ((cdr as NgtAnyRecord)['context']) {
             cdr.detectChanges();
@@ -89,10 +82,22 @@ export function injectNgtRef<T>(
         } catch (e) {
           cdr.markForCheck();
         }
-        lastValue = target[p];
-        return Reflect.set(target, p, newValue, receiver);
+        lastValue = ref.nativeElement;
+        ref.nativeElement = newVal;
       }
-      return Reflect.set(target, p, newValue, receiver);
     },
-  }) as NgtInjectedRef<T>;
+    get: () => ref$.value,
+  });
+
+  return Object.assign(ref, {
+    get subscribe() {
+      return subscribe;
+    },
+    get $() {
+      return $;
+    },
+    get children$() {
+      return children$;
+    },
+  });
 }
