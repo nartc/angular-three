@@ -10,34 +10,42 @@ import { NgtRxStore } from '../stores/rx-store';
 import type { NgtAttachFunction, NgtHasValidateForRenderer, NgtState } from '../types';
 
 @Directive({
-  selector: '[attachFn]',
+  selector: '[dynamicAttach]',
   standalone: true,
 })
-export class NgtAttachFn implements NgtHasValidateForRenderer {
+export class NgtDynamicAttach implements NgtHasValidateForRenderer {
   readonly #templateRef = inject(TemplateRef);
   readonly #vcr = inject(ViewContainerRef);
   #view?: EmbeddedViewRef<unknown>;
 
-  #injectedAttachFn?: NgtAttachFunction;
+  #injectedDynamicAttach: string[] | NgtAttachFunction = [];
   #injected = false;
 
-  @Input() set attachFn(attachFn: NgtAttachFunction | null) {
-    if (!attachFn) return;
+  @Input() set dynamicAttach(dynamicAttach: Array<string | number> | NgtAttachFunction | null) {
+    if (!dynamicAttach || !dynamicAttach.length) return;
+    this.#injectedDynamicAttach = Array.isArray(dynamicAttach)
+      ? dynamicAttach.map((item) => item.toString())
+      : dynamicAttach;
     this.#injected = false;
-    this.#injectedAttachFn = attachFn;
     this.#createView();
   }
 
-  get attachFn(): NgtAttachFunction | null {
-    if (!this.#injected && this.#injectedAttachFn) {
+  get dynamicAttach(): string[] | NgtAttachFunction | null {
+    if (
+      !this.#injected &&
+      (typeof this.#injectedDynamicAttach === 'function' || this.#injectedDynamicAttach.length)
+    ) {
       this.#injected = true;
-      return this.#injectedAttachFn;
+      return this.#injectedDynamicAttach;
     }
     return null;
   }
 
   validate() {
-    return !this.#injected && !!this.#injectedAttachFn;
+    const isValidatedFunction = typeof this.#injectedDynamicAttach === 'function';
+    const isValidatedArray =
+      Array.isArray(this.#injectedDynamicAttach) && !!this.#injectedDynamicAttach.length;
+    return !this.#injected && (isValidatedFunction || isValidatedArray);
   }
 
   #createView() {
@@ -49,7 +57,7 @@ export class NgtAttachFn implements NgtHasValidateForRenderer {
   }
 }
 
-export function createAttachFn<TChild, TParent extends object>(
+export function createAttachFunction<TChild, TParent extends object>(
   callback: (params: {
     parent: TParent;
     child: TChild;

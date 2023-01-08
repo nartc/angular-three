@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, getDebugNode, Injector, Type } from '@angular/core';
 import { NgtArgs } from '../directives/args';
-import { NgtAttachArray } from '../directives/attach-array';
-import { NgtAttachFn } from '../directives/attach-fn';
+import { NgtDynamicAttach } from '../directives/dynamic-attach';
 import { NgtRef } from '../directives/ref';
 import { NgtStore } from '../stores/store';
 import { NgtAnyRecord, NgtHasValidateForRenderer, NgtInstanceLocalState } from '../types';
@@ -294,17 +293,13 @@ export class NgtRendererState {
 
   getCreationState() {
     const ngtArgs = this.#firstNonInjectedDirective(NgtArgs);
-    const ngtAttachFn = this.#firstNonInjectedDirective(NgtAttachFn);
-    const ngtAttachArray = this.#firstNonInjectedDirective(NgtAttachArray);
+    const ngtDynamicAttach = this.#firstNonInjectedDirective(NgtDynamicAttach);
     const ngtRef = this.#firstNonInjectedDirective(NgtRef);
 
     const injectedArgs = ngtArgs?.args || [];
     const injectedRef = ngtRef?.ref;
 
-    const injectedAttachFn = ngtAttachFn?.attachFn;
-    const injectedAttachArray = ngtAttachArray?.attachArray;
-
-    const attach = injectedAttachFn || injectedAttachArray || undefined;
+    const attach = ngtDynamicAttach?.dynamicAttach || undefined;
     const store = this.#tryGetPortalStore();
 
     return { injectedArgs, injectedRef, attach, store };

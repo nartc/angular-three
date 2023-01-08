@@ -3,7 +3,7 @@ import {
   injectNgtRef,
   injectNgtStore,
   NgtArgs,
-  NgtAttachArray,
+  NgtDynamicAttach,
   NgtPortal,
   NgtPortalContent,
   NgtPush,
@@ -56,7 +56,7 @@ extend({
         >
           <ng-container *ngFor="let i; repeat: 6">
             <ngt-mesh-lambert-material
-              *attachArray="['material', i]"
+              *dynamicAttach="['material', i]"
               [color]="hovered === i ? 'lightblue' : 'white'"
             >
             </ngt-mesh-lambert-material>
@@ -75,7 +75,7 @@ extend({
     NgtArgs,
     NgtRepeat,
     NgtRef,
-    NgtAttachArray,
+    NgtDynamicAttach,
     NgtsOrthographicCamera,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
