@@ -17,11 +17,11 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { injectNgxResize, NgxResizeResult } from 'ngx-resize';
 import { filter } from 'rxjs';
 import { createPointerEvents } from './events';
 import { provideNgtRenderer } from './renderer/provider';
 import { injectNgtLoader } from './services/loader';
-import { injectNgtResize, NgtResizeResult } from './services/resize';
 import { NgtRxStore } from './stores/rx-store';
 import { injectNgtStore, NgtStore, rootStateMap } from './stores/store';
 import { NgtCanvasInputs, NgtDomEvent, NgtDpr, NgtState, NgtVector3 } from './types';
@@ -42,7 +42,7 @@ import { is } from './utils/is';
   ],
 })
 export class NgtCanvasContainer {
-  @Output() canvasResize = injectNgtResize();
+  @Output() canvasResize = injectNgxResize();
 }
 
 @Component({
@@ -197,7 +197,7 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
     });
   }
 
-  onResize(result: NgtResizeResult) {
+  onResize(result: NgxResizeResult) {
     const { width, height } = result;
     if (width > 0 && height > 0) {
       if (!this.#store.isInit) {

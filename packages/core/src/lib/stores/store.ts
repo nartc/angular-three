@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { inject, Injectable } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import {
   ACESFilmicToneMapping,
@@ -14,7 +15,6 @@ import {
   Vector2,
   Vector3,
 } from 'three';
-import { injectNgtWindow } from '../di/window';
 import { createLoop } from '../loop';
 import type {
   NgtBeforeRenderCallback,
@@ -45,7 +45,7 @@ const shallowLoose = { objects: 'shallow', strict: false } as NgtEquConfig;
 @Injectable()
 export class NgtStore extends NgtRxStore<NgtState> {
   readonly #parentStore = injectNgtStore({ skipSelf: true, optional: true });
-  readonly #window = injectNgtWindow();
+  readonly #window = inject(DOCUMENT).defaultView as Window & typeof globalThis;
 
   isInit = false;
 

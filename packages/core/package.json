@@ -7,6 +7,7 @@
     "three": "0.148"
   },
   "dependencies": {
+    "ngx-resize": "^1.0.0",
     "tslib": "^2.3.0"
   }
 }

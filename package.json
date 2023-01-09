@@ -65,6 +65,7 @@
     "@rx-angular/state": "^1.7.0",
     "cannon-es": "^0.20.0",
     "cannon-es-debugger": "^1.0.0",
+    "ngx-resize": "^1.0.4",
     "nice-color-palettes": "^3.0.0",
     "postprocessing": "^6.29.3",
     "rxjs": "~7.8.0",
