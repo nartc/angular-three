@@ -1,4 +1,8 @@
-import { NgtsLine } from '@angular-three/soba/abstractions';
+import {
+  NgtsCubicBezierLine,
+  NgtsLine,
+  NgtsQuadraticBezierLine,
+} from '@angular-three/soba/abstractions';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
@@ -15,6 +19,78 @@ const points = GeometryUtils.hilbert3D(new Vector3(0), 5).map((p) => [p.x, p.y, 
 const colors = new Array(points.length)
   .fill(0)
   .map(() => [Math.random(), Math.random(), Math.random()]) as [number, number, number][];
+
+const defaultQuadraticBezier = {
+  start: [0, 0, 0],
+  end: [4, 7, 5],
+  segments: 10,
+};
+
+const defaultCubicBezier = {
+  start: [0, 0, 0],
+  end: [10, 0, 10],
+  midA: [5, 4, 0],
+  midB: [0, 0, 5],
+  segments: 10,
+};
+
+@Component({
+  selector: 'storybook-quadratic-bezier-line',
+  standalone: true,
+  template: `
+    <ngts-quadratic-bezier-line
+      [start]="start"
+      [end]="end"
+      [midA]="midA"
+      [midB]="midB"
+      [segments]="segments"
+      [color]="color"
+      [lineWidth]="lineWidth"
+      [dashed]="dashed"
+    ></ngts-quadratic-bezier-line>
+    <ngts-orbit-controls [zoomSpeed]="0.5"></ngts-orbit-controls>
+  `,
+  imports: [NgtsQuadraticBezierLine, NgtsOrbitControls],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+class QuadraticBezierLineStory {
+  @Input() color = 'red';
+  @Input() lineWidth = 3;
+  @Input() dashed = false;
+  @Input() start = defaultQuadraticBezier.start;
+  @Input() end = defaultQuadraticBezier.end;
+  @Input() segments = defaultQuadraticBezier.segments;
+}
+
+@Component({
+  selector: 'storybook-cubic-bezier-line',
+  standalone: true,
+  template: `
+    <ngts-cubic-bezier-line
+      [start]="start"
+      [end]="end"
+      [midA]="midA"
+      [midB]="midB"
+      [segments]="segments"
+      [color]="color"
+      [lineWidth]="lineWidth"
+      [dashed]="dashed"
+    ></ngts-cubic-bezier-line>
+    <ngts-orbit-controls [zoomSpeed]="0.5"></ngts-orbit-controls>
+  `,
+  imports: [NgtsCubicBezierLine, NgtsOrbitControls],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+class CubicBezierLineStory {
+  @Input() color = 'red';
+  @Input() lineWidth = 3;
+  @Input() dashed = false;
+  @Input() start = defaultCubicBezier.start;
+  @Input() end = defaultCubicBezier.end;
+  @Input() midA = defaultCubicBezier.midA;
+  @Input() midB = defaultCubicBezier.midB;
+  @Input() segments = defaultCubicBezier.segments;
+}
 
 @Component({
   selector: 'storybook-vertex-colors-line',
@@ -102,4 +178,48 @@ VertexColors.args = {
   color: 'red',
   lineWidth: 3,
   dashed: false,
+};
+
+export const CubicBezierLine: Story = (args) => ({
+  props: {
+    storyComponent: CubicBezierLineStory,
+    camera: { position: [0, 0, 17] },
+    controsl: false,
+    storyInputs: args,
+  },
+  template: `
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
+    `,
+});
+
+CubicBezierLine.args = {
+  color: 'red',
+  lineWidth: 3,
+  dashed: false,
+  start: defaultCubicBezier.start,
+  end: defaultCubicBezier.end,
+  midA: defaultCubicBezier.midA,
+  midB: defaultCubicBezier.midB,
+  segments: defaultCubicBezier.segments,
+};
+
+export const QuadraticBezierLine: Story = (args) => ({
+  props: {
+    storyComponent: QuadraticBezierLineStory,
+    camera: { position: [0, 0, 17] },
+    controsl: false,
+    storyInputs: args,
+  },
+  template: `
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
+    `,
+});
+
+QuadraticBezierLine.args = {
+  color: 'red',
+  lineWidth: 3,
+  dashed: false,
+  start: defaultQuadraticBezier.start,
+  end: defaultQuadraticBezier.end,
+  segments: defaultQuadraticBezier.segments,
 };

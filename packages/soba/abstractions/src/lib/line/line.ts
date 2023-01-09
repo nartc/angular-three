@@ -106,25 +106,12 @@ export class NgtsLine extends NgtsLineInputs implements OnInit {
     );
     if (!this.lineRef.nativeElement) this.lineRef.nativeElement = new Line2();
     this.#computeLineDistances();
-    this.#setDash();
     this.#disposeGeometry();
   }
 
   #computeLineDistances() {
     this.hold(combineLatest([this.lineRef.$, this.select('points')]), ([line]) => {
       line.computeLineDistances();
-    });
-  }
-
-  #setDash() {
-    this.hold(this.select('dashed').pipe(startWithUndefined()), (dashed) => {
-      if (dashed) {
-        this.lineMaterial.defines['USE_DASH'] = '';
-      } else {
-        // Setting lineMaterial.defines.USE_DASH to undefined is apparently not sufficient.
-        delete this.lineMaterial.defines['USE_DASH'];
-      }
-      this.lineMaterial.needsUpdate = true;
     });
   }
 
