@@ -1,4 +1,5 @@
 import {
+  NgtsCatmullRomLine,
   NgtsCubicBezierLine,
   NgtsLine,
   NgtsQuadraticBezierLine,
@@ -33,6 +34,52 @@ const defaultCubicBezier = {
   midB: [0, 0, 5],
   segments: 10,
 };
+
+const catPoints = [
+  [0, 0, 0] as [number, number, number],
+  [-8, 6, -5] as [number, number, number],
+  [-2, 3, 7] as [number, number, number],
+  [6, 4.5, 3] as [number, number, number],
+  [0.5, 8, -1] as [number, number, number],
+];
+
+const defaultCatmullRom = {
+  points: catPoints,
+  segments: 20,
+  tension: 0.5,
+  closed: false,
+  curveType: 'centripetal',
+};
+
+@Component({
+  selector: 'storybook-quadratic-bezier-line',
+  standalone: true,
+  template: `
+    <ngts-catmull-rom-line
+      [points]="points"
+      [closed]="closed"
+      [curveType]="curveType"
+      [tension]="tension"
+      [segments]="segments"
+      [color]="color"
+      [lineWidth]="lineWidth"
+      [dashed]="dashed"
+    ></ngts-catmull-rom-line>
+    <ngts-orbit-controls [zoomSpeed]="0.5"></ngts-orbit-controls>
+  `,
+  imports: [NgtsCatmullRomLine, NgtsOrbitControls],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+class CatmullRomLineStory {
+  readonly points = defaultCatmullRom.points;
+  @Input() color = 'red';
+  @Input() lineWidth = 3;
+  @Input() dashed = false;
+  @Input() segments = defaultCatmullRom.segments;
+  @Input() closed = defaultCatmullRom.closed;
+  @Input() curveType = defaultCatmullRom.curveType;
+  @Input() tension = defaultCatmullRom.tension;
+}
 
 @Component({
   selector: 'storybook-quadratic-bezier-line',
@@ -222,4 +269,30 @@ QuadraticBezierLine.args = {
   start: defaultQuadraticBezier.start,
   end: defaultQuadraticBezier.end,
   segments: defaultQuadraticBezier.segments,
+};
+
+export const CatmulRomLine: Story = (args) => ({
+  props: {
+    storyComponent: CatmullRomLineStory,
+    camera: { position: [0, 0, 17] },
+    controsl: false,
+    storyInputs: args,
+  },
+  template: `
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
+    `,
+});
+
+CatmulRomLine.args = {
+  color: 'red',
+  lineWidth: 3,
+  dashed: false,
+  segments: defaultCatmullRom.segments,
+  closed: defaultCatmullRom.closed,
+  curveType: defaultCatmullRom.curveType,
+  tension: defaultCatmullRom.tension,
+};
+
+CatmulRomLine.argTypes = {
+  curveType: { options: ['centripetal', 'chordal', 'catmullrom'], control: { type: 'select' } },
 };

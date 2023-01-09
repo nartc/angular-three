@@ -11,13 +11,14 @@ import { Color, Vector2, Vector3 } from 'three';
 import { Line2, LineGeometry, LineMaterial } from 'three-stdlib';
 import { NgtsLineInputs } from './line-inputs';
 
+// TODO: there is a bug with either primitive or the renderer in general
+// if the props change then the LineMaterial#dashed stops working. I'm not sure how to debug that.
 @Component({
   selector: 'ngts-line[points]',
   standalone: true,
   template: `
     <ng-container *args="[lineRef.nativeElement]">
       <ngt-primitive *ref="lineRef" ngtCompound>
-        <ngt-primitive *args="[get('lineGeometry')]" attach="geometry"></ngt-primitive>
         <ngt-primitive
           *args="[lineMaterial]"
           attach="material"
@@ -34,6 +35,7 @@ import { NgtsLineInputs } from './line-inputs';
           [wireframe]="get('wireframe')"
           [worldUnits]="get('worldUnits')"
         ></ngt-primitive>
+        <ngt-primitive *args="[get('lineGeometry')]" attach="geometry"></ngt-primitive>
       </ngt-primitive>
     </ng-container>
   `,

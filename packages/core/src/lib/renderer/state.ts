@@ -392,6 +392,9 @@ export class NgtRendererState {
     node.__ngt_renderer__.children =
       null as unknown as NgtRendererNode['__ngt_renderer__']['children'];
     node.__ngt_renderer__.removed = true;
+    if (parent) {
+      this.removeChild(parent, node);
+    }
   }
 
   #firstNonInjectedDirective<T extends NgtHasValidateForRenderer>(dir: Type<T>) {

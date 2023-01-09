@@ -38,19 +38,19 @@ export class NgtsQuadraticBezierLine extends NgtsLineInputs implements OnInit {
   @Input() lineRef = injectNgtRef<Line2>();
 
   @Input() set start(start: Vector3 | [number, number, number]) {
-    this.set({ start });
+    this.set({ start: start === undefined ? this.get('start') : start });
   }
 
   @Input() set end(end: Vector3 | [number, number, number]) {
-    this.set({ end });
+    this.set({ end: end === undefined ? this.get('end') : end });
   }
 
   @Input() set mid(mid: Vector3 | [number, number, number]) {
-    this.set({ mid });
+    this.set({ mid: mid === undefined ? this.get('mid') : mid });
   }
 
   @Input() set segments(segments: number) {
-    this.set({ segments });
+    this.set({ segments: segments === undefined ? this.get('segments') : segments });
   }
 
   override initialize(): void {
