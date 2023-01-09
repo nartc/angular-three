@@ -3,13 +3,13 @@ import {
   injectNgtStore,
   NgtArgs,
   NgtRef,
-  NgtRxStore,
   startWithUndefined,
 } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
-import { Color, ColorRepresentation, Vector2, Vector3 } from 'three';
+import { Color, Vector2, Vector3 } from 'three';
 import { Line2, LineGeometry, LineMaterial } from 'three-stdlib';
+import { NgtsLineInputs } from './line-inputs';
 
 @Component({
   selector: 'ngts-line[points]',
@@ -40,7 +40,7 @@ import { Line2, LineGeometry, LineMaterial } from 'three-stdlib';
   imports: [NgtArgs, NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class NgtsLine extends NgtRxStore implements OnInit {
+export class NgtsLine extends NgtsLineInputs implements OnInit {
   readonly Boolean = Boolean;
   readonly lineMaterial = new LineMaterial();
 
@@ -54,62 +54,8 @@ export class NgtsLine extends NgtRxStore implements OnInit {
     this.set({ points });
   }
 
-  @Input() set vertexColors(vertexColors: Array<Color | [number, number, number]>) {
-    this.set({
-      vertexColors: vertexColors === undefined ? this.get('vertexColors') : vertexColors,
-    });
-  }
-
-  @Input() set lineWidth(lineWidth: number) {
-    this.set({ lineWidth: lineWidth === undefined ? this.get('lineWidth') : lineWidth });
-  }
-
-  @Input() set alphaToCoverage(alphaToCoverage: boolean) {
-    this.set({
-      alphaToCoverage:
-        alphaToCoverage === undefined ? this.get('alphaToCoverage') : alphaToCoverage,
-    });
-  }
-
-  @Input() set color(color: ColorRepresentation) {
-    this.set({ color: color === undefined ? this.get('color') : color });
-  }
-
-  @Input() set dashed(dashed: boolean) {
-    this.set({ dashed: dashed === undefined ? this.get('dashed') : dashed });
-  }
-
-  @Input() set dashScale(dashScale: number) {
-    this.set({ dashScale: dashScale === undefined ? this.get('dashScale') : dashScale });
-  }
-
-  @Input() set dashSize(dashSize: number) {
-    this.set({ dashSize: dashSize === undefined ? this.get('dashSize') : dashSize });
-  }
-
-  @Input() set dashOffset(dashOffset: number) {
-    this.set({ dashOffset: dashOffset === undefined ? this.get('dashOffset') : dashOffset });
-  }
-
-  @Input() set gapSize(gapSize: number) {
-    this.set({ gapSize: gapSize === undefined ? this.get('gapSize') : gapSize });
-  }
-
-  @Input() set resolution(resolution: Vector2) {
-    this.set({ resolution: resolution === undefined ? this.get('resolution') : resolution });
-  }
-
-  @Input() set wireframe(wireframe: boolean) {
-    this.set({ wireframe: wireframe === undefined ? this.get('wireframe') : wireframe });
-  }
-
-  @Input() set worldUnits(worldUnits: boolean) {
-    this.set({ worldUnits: worldUnits === undefined ? this.get('worldUnits') : worldUnits });
-  }
-
   override initialize() {
     super.initialize();
-    this.set({ color: 'black' });
     this.connect(
       'lineGeometry',
       combineLatest([
