@@ -78,6 +78,10 @@ export function attachThreeInstances(parent: NgtInstanceNode, child: NgtInstance
 
   cLS.parent = parent;
 
+  if (cLS.afterAttach) {
+    cLS.afterAttach.emit({ parent, node: child });
+  }
+
   invalidateInstance(child);
   invalidateInstance(parent);
 }
@@ -153,6 +157,14 @@ export function processThreeEvent(
         lS.afterUpdate = new EventEmitter();
       }
       const sub = lS.afterUpdate.subscribe(callback);
+      return sub.unsubscribe.bind(sub);
+    }
+
+    if (eventName === 'afterAttach') {
+      if (!lS.afterAttach) {
+        lS.afterAttach = new EventEmitter();
+      }
+      const sub = lS.afterAttach.subscribe(callback);
       return sub.unsubscribe.bind(sub);
     }
 

@@ -324,6 +324,11 @@ export type NgtAttachFunction<TChild = any, TParent = any> = (
   store: NgtRxStore<NgtState>
 ) => void | (() => void);
 
+export type NgtAfterAttach<TParent extends NgtInstanceNode = NgtInstanceNode, TChild extends NgtInstanceNode = NgtInstanceNode> = {
+    parent: TParent;
+    node: TChild;
+}
+
 export interface NgtInstanceLocalState {
   /** the state getter of the canvas that the instance is being rendered to */
   store: NgtRxStore<NgtState>;
@@ -360,6 +365,8 @@ export interface NgtInstanceLocalState {
   priority?: number;
   // update emitter after props update
   afterUpdate?: EventEmitter<NgtInstanceNode>;
+  // update emitter after props update
+  afterAttach?: EventEmitter<NgtAfterAttach>;
 }
 
 export type NgtInstanceNode<TNode = any> = TNode & {
