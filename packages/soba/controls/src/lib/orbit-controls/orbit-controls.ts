@@ -29,7 +29,7 @@ import { OrbitControls } from 'three-stdlib';
       ngtCompound
       *args="get('args')"
       [enableDamping]="enableDamping$ | ngtPush : true"
-    ></ngt-primitive>
+    />
   `,
   imports: [NgtArgs, NgtPush],
   providers: [RxActionFactory],

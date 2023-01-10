@@ -113,30 +113,12 @@ function usePropAsIsOrAsAttribute<T = any>(
   template: `
     <ngt-points ngtCompount *ref="pointsRef">
       <ngt-buffer-geometry>
-        <ngt-buffer-attribute
-          *args="[get('positions'), 3]"
-          attach="attributes.position"
-        ></ngt-buffer-attribute>
-        <ngt-buffer-attribute
-          *args="[get('sizes'), 1]"
-          attach="attributes.size"
-        ></ngt-buffer-attribute>
-        <ngt-buffer-attribute
-          *args="[get('opacities'), 1]"
-          attach="attributes.opacity"
-        ></ngt-buffer-attribute>
-        <ngt-buffer-attribute
-          *args="[get('speeds'), 1]"
-          attach="attributes.speed"
-        ></ngt-buffer-attribute>
-        <ngt-buffer-attribute
-          *args="[get('colors'), 3]"
-          attach="attributes.color"
-        ></ngt-buffer-attribute>
-        <ngt-buffer-attribute
-          *args="[get('noises'), 3]"
-          attach="attributes.noise"
-        ></ngt-buffer-attribute>
+        <ngt-buffer-attribute *args="[get('positions'), 3]" attach="attributes.position" />
+        <ngt-buffer-attribute *args="[get('sizes'), 1]" attach="attributes.size" />
+        <ngt-buffer-attribute *args="[get('opacities'), 1]" attach="attributes.opacity" />
+        <ngt-buffer-attribute *args="[get('speeds'), 1]" attach="attributes.speed" />
+        <ngt-buffer-attribute *args="[get('colors'), 3]" attach="attributes.color" />
+        <ngt-buffer-attribute *args="[get('noises'), 3]" attach="attributes.noise" />
       </ngt-buffer-geometry>
       <ngt-sparkles-material
         *ref="materialRef"
@@ -144,7 +126,7 @@ function usePropAsIsOrAsAttribute<T = any>(
         depthWrite="false"
         [pixelRatio]="dpr"
         (beforeRender)="onMaterialBeforeRender($any($event))"
-      ></ngt-sparkles-material>
+      />
     </ngt-points>
   `,
   imports: [NgtRef, NgtArgs],

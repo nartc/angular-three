@@ -96,24 +96,21 @@ extend({ AmbientLight, SpotLight, Vector2, PointLight, Group });
   selector: 'ngts-stage',
   standalone: true,
   template: `
-    <ngt-ambient-light [intensity]="get('intensity')! / 3"></ngt-ambient-light>
+    <ngt-ambient-light [intensity]="get('intensity')! / 3" />
     <ngt-spot-light
       penumbra="1"
       [position]="get('spotLightPosition')"
       [intensity]="get('intensity')! * 2"
       [castShadow]="!!get('shadows')"
     >
-      <ngt-value *args="[get('shadowsInfo').shadowBias]" attach="shadow.bias"></ngt-value>
-      <ngt-value *args="[get('shadowsInfo').normalBias]" attach="shadow.normalBias"></ngt-value>
+      <ngt-value *args="[get('shadowsInfo').shadowBias]" attach="shadow.bias" />
+      <ngt-value *args="[get('shadowsInfo').normalBias]" attach="shadow.normalBias" />
       <ngt-vector2
         *args="[get('shadowsInfo').shadowSize, get('shadowsInfo').shadowSize]"
         attach="shadow.mapSize"
-      ></ngt-vector2>
+      />
     </ngt-spot-light>
-    <ngt-point-light
-      [position]="get('pointLightPosition')"
-      [intensity]="get('intensity')"
-    ></ngt-point-light>
+    <ngt-point-light [position]="get('pointLightPosition')" [intensity]="get('intensity')" />
 
     <ngts-bounds
       [fit]="!!get('adjustCamera')"
@@ -121,10 +118,7 @@ extend({ AmbientLight, SpotLight, Vector2, PointLight, Group });
       [margin]="Number(get('adjustCamera'))"
       [observe]="true"
     >
-      <ngts-stage-refit
-        [radius]="get('radius')"
-        [adjustCamera]="!!get('adjustCamera')"
-      ></ngts-stage-refit>
+      <ngts-stage-refit [radius]="get('radius')" [adjustCamera]="!!get('adjustCamera')" />
       <ngts-center
         [position]="[0, get('shadowsInfo').shadowOffset / 2, 0]"
         [top]="!!get('center')?.top"
@@ -139,7 +133,7 @@ extend({ AmbientLight, SpotLight, Vector2, PointLight, Group });
         [precise]="!!get('center')?.precise"
         (centered)="onCentered($event)"
       >
-        <ng-content></ng-content>
+        <ng-content />
       </ngts-center>
     </ngts-bounds>
     <ngt-group [position]="[0, -get('height') / 2 - get('shadowsInfo').shadowOffset / 2, 0]">
@@ -158,7 +152,7 @@ extend({ AmbientLight, SpotLight, Vector2, PointLight, Group });
         [color]="get('shadowsInfo').color"
         [depthWrite]="get('shadowsInfo').depthWrite"
         [renderOrder]="get('shadowsInfo').renderOrder"
-      ></ngts-contact-shadows>
+      />
       <ngts-accumulative-shadows
         *ngIf="get('shadowsInfo').accumulativeShadow"
         [temporal]="true"
@@ -181,7 +175,7 @@ extend({ AmbientLight, SpotLight, Vector2, PointLight, Group });
           [size]="get('radius') * 4"
           [bias]="-get('shadowsInfo').shadowBias"
           [mapSize]="get('shadowsInfo').shadowSize"
-        ></ngts-randomized-light>
+        />
       </ngts-accumulative-shadows>
     </ngt-group>
     <ngts-environment
@@ -200,7 +194,7 @@ extend({ AmbientLight, SpotLight, Vector2, PointLight, Group });
       [extensions]="get('environmentInfo').extensions"
       [ground]="get('environmentInfo').ground"
       [encoding]="get('environmentInfo').encoding"
-    ></ngts-environment>
+    />
   `,
   imports: [
     NgtArgs,

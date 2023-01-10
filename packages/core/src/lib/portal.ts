@@ -112,7 +112,7 @@ export class NgtPortalContent {}
         [parentScene]="parentScene"
         [parentCamera]="parentCamera"
         (beforeRender)="onBeforeRender($event)"
-      ></ngt-portal-before-render>
+      />
     </ng-container>
   `,
   imports: [NgIf, NgtPortalBeforeRender],

@@ -45,7 +45,7 @@ extend({
           [position]="[cloud.x, cloud.y, -i * get('depth')]"
         >
           <ngt-mesh [scale]="cloud.scale" [rotation]="[0, 0, 0]">
-            <ngt-plane-geometry></ngt-plane-geometry>
+            <ngt-plane-geometry />
             <ngt-mesh-standard-material
               transparent
               [map]="cloudTexture$ | ngtPush : null"
@@ -53,7 +53,7 @@ extend({
               [opacity]="(cloud.scale / 6) * cloud.density * get('opacity')"
               [color]="get('color')"
             >
-              <ngt-value *args="[encoding]" attach="map.encoding"></ngt-value>
+              <ngt-value *args="[encoding]" attach="map.encoding" />
             </ngt-mesh-standard-material>
           </ngt-mesh>
         </ngts-billboard>

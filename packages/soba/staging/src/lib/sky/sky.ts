@@ -24,23 +24,11 @@ export function calcPosFromAngles(
   template: `
     <ng-container *args="[skyRef.nativeElement]">
       <ngt-primitive ngtCompound *ref="skyRef" [scale]="get('scale')">
-        <ngt-value
-          *args="[get('mieCoefficient')]"
-          attach="material.uniforms.mieCoefficient.value"
-        ></ngt-value>
-        <ngt-value
-          *args="[get('mieDirectionalG')]"
-          attach="material.uniforms.mieDirectionalG.value"
-        ></ngt-value>
-        <ngt-value *args="[get('rayleigh')]" attach="material.uniforms.rayleigh.value"></ngt-value>
-        <ngt-value
-          *args="[get('sunPosition')]"
-          attach="material.uniforms.sunPosition.value"
-        ></ngt-value>
-        <ngt-value
-          *args="[get('turbidity')]"
-          attach="material.uniforms.turbidity.value"
-        ></ngt-value>
+        <ngt-value *args="[get('mieCoefficient')]" attach="material.uniforms.mieCoefficient.value" />
+        <ngt-value *args="[get('mieDirectionalG')]" attach="material.uniforms.mieDirectionalG.value" />
+        <ngt-value *args="[get('rayleigh')]" attach="material.uniforms.rayleigh.value" />
+        <ngt-value *args="[get('sunPosition')]" attach="material.uniforms.sunPosition.value" />
+        <ngt-value *args="[get('turbidity')]" attach="material.uniforms.turbidity.value" />
       </ngt-primitive>
     </ng-container>
   `,

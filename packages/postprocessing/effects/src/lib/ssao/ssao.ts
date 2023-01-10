@@ -19,7 +19,7 @@ import { combineLatest, map, startWith } from 'rxjs';
   standalone: true,
   template: `
     <ng-container *args="[get('effect')]">
-      <ngt-primitive *ref="ssaoRef"></ngt-primitive>
+      <ngt-primitive *ref="ssaoRef" />
     </ng-container>
   `,
   imports: [NgtArgs, NgtRef],

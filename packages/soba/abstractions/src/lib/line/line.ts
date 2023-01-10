@@ -22,7 +22,7 @@ import { NgtsLineInputs } from './line-inputs';
           *args="[get('lineGeometry')]"
           attach="geometry"
           (afterAttach)="onAfterAttach($any($event))"
-        ></ngt-primitive>
+        />
         <ngt-primitive
           *args="[lineMaterial]"
           attach="material"
@@ -38,7 +38,7 @@ import { NgtsLineInputs } from './line-inputs';
           [gapSize]="get('gapSize')"
           [wireframe]="get('wireframe')"
           [worldUnits]="get('worldUnits')"
-        ></ngt-primitive>
+        />
       </ngt-primitive>
     </ng-container>
   `,

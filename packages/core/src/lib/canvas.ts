@@ -17,7 +17,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { injectNgxResize, NgxResizeResult } from 'ngx-resize';
+import { injectNgxResize, NgxResizeResult, provideNgxResizeOptions } from 'ngx-resize';
 import { filter } from 'rxjs';
 import { createPointerEvents } from './events';
 import { provideNgtRenderer } from './renderer/provider';
@@ -30,7 +30,7 @@ import { is } from './utils/is';
 @Component({
   selector: 'ngt-canvas-container',
   standalone: true,
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   styles: [
     `
       :host {
@@ -40,6 +40,7 @@ import { is } from './utils/is';
       }
     `,
   ],
+  providers: [provideNgxResizeOptions({ emitInZone: false })],
 })
 export class NgtCanvasContainer {
   @Output() canvasResize = injectNgxResize();
@@ -51,7 +52,7 @@ export class NgtCanvasContainer {
   template: `
     <ngt-canvas-container (canvasResize)="onResize($event)">
       <canvas #glCanvas style="display:block"></canvas>
-      <ng-container #glAnchor></ng-container>
+      <ng-container #glAnchor />
     </ngt-canvas-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

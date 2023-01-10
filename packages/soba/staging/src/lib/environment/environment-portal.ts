@@ -26,9 +26,9 @@ extend({ CubeCamera });
   template: `
     <ngt-portal [container]="virtualSceneRef">
       <ng-template ngtPortalContent>
-        <ng-content></ng-content>
+        <ng-content />
         <ng-container *args="get('cameraArgs')">
-          <ngt-cube-camera *ref="cubeCameraRef"></ngt-cube-camera>
+          <ngt-cube-camera *ref="cubeCameraRef" />
         </ng-container>
         <ng-container *ngIf="get('files') || get('preset'); else environmentMap">
           <ngts-environment-cube
@@ -37,14 +37,10 @@ extend({ CubeCamera });
             [preset]="get('preset')"
             [path]="get('path')"
             [extensions]="get('extensions')"
-          ></ngts-environment-cube>
+          />
         </ng-container>
         <ng-template #environmentMap>
-          <ngts-environment-map
-            [background]="true"
-            [map]="get('map')"
-            [extensions]="get('extensions')"
-          ></ngts-environment-map>
+          <ngts-environment-map [background]="true" [map]="get('map')" [extensions]="get('extensions')" />
         </ng-template>
       </ng-template>
     </ngt-portal>

@@ -484,6 +484,7 @@ export class NgtStore extends NgtRxStore<NgtState> {
 
       // update viewport when camera changes
       if (camera !== oldCamera) {
+        updateCamera(camera, size);
         oldCamera = camera;
         set((state) => ({
           viewport: { ...state.viewport, ...state.viewport.getCurrentViewport(camera) },

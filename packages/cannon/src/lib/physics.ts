@@ -48,7 +48,7 @@ export interface NgtcPhysicsInputs extends CannonWorkerProps {
 @Component({
   selector: 'ngtc-physics',
   standalone: true,
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   providers: [NgtcPhysicsStore, RxActionFactory],
 })
 export class NgtcPhysics extends NgtRxStore<NgtcPhysicsInputs> implements OnInit, OnDestroy {

@@ -23,12 +23,12 @@ extend({ OrthographicCamera, Group });
       <ng-container
         *ngIf="cameraContent && !cameraContent.ngtsCameraContent"
         [ngTemplateOutlet]="cameraContent.template"
-      ></ng-container>
+      />
     </ngt-orthographic-camera>
     <ngt-group #group *ngIf="cameraContent && cameraContent.ngtsCameraContent">
       <ng-container
         *ngTemplateOutlet="cameraContent.template; context: { fbo: fboRef.nativeElement, group }"
-      ></ng-container>
+      />
     </ngt-group>
   `,
   imports: [NgIf, NgtRef, NgTemplateOutlet, NgtPush],

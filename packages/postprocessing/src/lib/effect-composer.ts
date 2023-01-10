@@ -57,7 +57,7 @@ function effectComposerApiFactory(composer: NgtpEffectComposer) {
   standalone: true,
   template: `
     <ngt-group *ref="groupRef">
-      <ng-content></ng-content>
+      <ng-content />
     </ngt-group>
   `,
   imports: [NgtRef],

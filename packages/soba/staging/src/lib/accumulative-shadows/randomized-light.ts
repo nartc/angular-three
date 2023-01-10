@@ -79,14 +79,11 @@ export class RandomizedLightConsumer {
         [intensity]="get('intensity') / get('amount')"
         [castShadow]="get('castShadow')"
       >
-        <ngt-value *args="[get('bias')]" attach="shadow.bias"></ngt-value>
-        <ngt-vector2 *args="[get('mapSize'), get('mapSize')]" attach="shadow.mapSize"></ngt-vector2>
-        <ngt-orthographic-camera
-          *args="get('cameraArgs')"
-          attach="shadow.camera"
-        ></ngt-orthographic-camera>
+        <ngt-value *args="[get('bias')]" attach="shadow.bias" />
+        <ngt-vector2 *args="[get('mapSize'), get('mapSize')]" attach="shadow.mapSize" />
+        <ngt-orthographic-camera *args="get('cameraArgs')" attach="shadow.camera" />
       </ngt-directional-light>
-      <ngts-randomized-light-consumer></ngts-randomized-light-consumer>
+      <ngts-randomized-light-consumer />
     </ngt-group>
   `,
   imports: [NgtRef, NgtRepeat, NgtArgs, RandomizedLightConsumer],

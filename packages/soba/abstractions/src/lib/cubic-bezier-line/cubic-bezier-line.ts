@@ -25,7 +25,7 @@ import { NgtsLineInputs } from '../line/line-inputs';
       [gapSize]="get('gapSize')"
       [wireframe]="get('wireframe')"
       [worldUnits]="get('worldUnits')"
-    ></ngts-line>
+    />
   `,
   imports: [NgtsLine, NgIf],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -9,7 +9,7 @@ extend({ Group });
   standalone: true,
   template: `
     <ngt-group ngtCompound *ref="groupRef" (beforeRender)="onBeforeRender($any($event))">
-      <ng-content></ng-content>
+      <ng-content />
     </ngt-group>
   `,
   imports: [NgtRef],

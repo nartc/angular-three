@@ -25,7 +25,7 @@ import { preloadFont, Text } from 'troika-three-text';
       [anchorY]="get('anchorY')"
       [font]="get('font')"
     >
-      <ng-content></ng-content>
+      <ng-content />
     </ngt-primitive>
   `,
   imports: [NgtArgs],

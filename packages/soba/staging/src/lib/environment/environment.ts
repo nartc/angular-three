@@ -34,7 +34,7 @@ export class NgtsEnvironmentContent {}
       [files]="get('files')"
       [path]="get('path')"
       [extensions]="get('extensions')"
-    ></ngts-environment-ground>
+    />
     <ng-template #noGround>
       <ngts-environment-map
         *ngIf="get('map'); else noMap"
@@ -42,7 +42,7 @@ export class NgtsEnvironmentContent {}
         [scene]="get('scene')"
         [blur]="get('blur')"
         [background]="get('background')"
-      ></ngts-environment-map>
+      />
       <ng-template #noMap>
         <ngts-environment-portal
           *ngIf="content; else noPortal"
@@ -58,7 +58,7 @@ export class NgtsEnvironmentContent {}
           [path]="get('path')"
           [preset]="get('preset')"
           [extensions]="get('extensions')"
-        ></ngts-environment-portal>
+        />
         <ng-template #noPortal>
           <ngts-environment-cube
             [frames]="get('frames')"
@@ -73,7 +73,7 @@ export class NgtsEnvironmentContent {}
             [path]="get('path')"
             [preset]="get('preset')"
             [extensions]="get('extensions')"
-          ></ngts-environment-cube>
+          />
         </ng-template>
       </ng-template>
     </ng-template>

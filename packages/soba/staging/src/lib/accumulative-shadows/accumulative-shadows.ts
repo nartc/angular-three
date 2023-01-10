@@ -181,8 +181,8 @@ export class AccumulativeShadowsConsumer {
   template: `
     <ngt-group ngtCompound>
       <ngt-group *ref="groupRef" [traverse]="nullTraverse">
-        <ng-content></ng-content>
-        <ngts-accumulative-shadows-consumer></ngts-accumulative-shadows-consumer>
+        <ng-content />
+        <ngts-accumulative-shadows-consumer />
       </ngt-group>
       <ngt-mesh
         *ref="meshRef"
@@ -190,7 +190,7 @@ export class AccumulativeShadowsConsumer {
         [scale]="get('scale')"
         [rotation]="[-Math.PI / 2, 0, 0]"
       >
-        <ngt-plane-geometry></ngt-plane-geometry>
+        <ngt-plane-geometry />
         <ngt-soft-shadow-material
           transparent
           depthWrite="false"
@@ -198,7 +198,7 @@ export class AccumulativeShadowsConsumer {
           [toneMapped]="get('toneMapped')"
           [blend]="get('colorBlend')"
           [map]="pLM.progressiveLightMap2.texture"
-        ></ngt-soft-shadow-material>
+        />
       </ngt-mesh>
     </ngt-group>
   `,

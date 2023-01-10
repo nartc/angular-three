@@ -31,8 +31,8 @@ extend({ Mesh, TextGeometry });
   standalone: true,
   template: `
     <ngt-mesh ngtCompound>
-      <ngt-text-geometry *args="geometryArgs$ | ngtPush : null"></ngt-text-geometry>
-      <ng-content></ng-content>
+      <ngt-text-geometry *args="geometryArgs$ | ngtPush : null" />
+      <ng-content />
     </ngt-mesh>
   `,
   imports: [NgtArgs, NgtPush],

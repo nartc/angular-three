@@ -48,11 +48,11 @@ extend({
             [opacity]="get('opacity')"
             [depthWrite]="get('depthWrite')"
           >
-            <ngt-value *args="[encoding]" attach="map.encoding"></ngt-value>
+            <ngt-value *args="[encoding]" attach="map.encoding" />
           </ngt-mesh-basic-material>
         </ngt-mesh>
         <ng-container *args="get('cameraArgs')">
-          <ngt-orthographic-camera *ref="shadowCameraRef"></ngt-orthographic-camera>
+          <ngt-orthographic-camera *ref="shadowCameraRef" />
         </ng-container>
       </ng-container>
     </ngt-group>

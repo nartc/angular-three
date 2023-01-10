@@ -1,4 +1,4 @@
-import { extend, NgtArgs, NgtPush, startWithUndefined } from '@angular-three/core';
+import { extend, NgtArgs, startWithUndefined } from '@angular-three/core';
 import { NgIf } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { combineLatest, map, startWith } from 'rxjs';
@@ -18,14 +18,14 @@ extend({ GroundProjectedEnv });
       [blur]="get('blur')"
       [scene]="get('scene')"
       [map]="get('texture')"
-    ></ngts-environment-map>
+    />
     <ng-container *ngIf="get('groundArgs') as groundArgs">
       <ngt-ground-projected-env
         *args="groundArgs"
         [scale]="get('groundScale')"
         [height]="get('groundHeight')"
         [radius]="get('groundRadius')"
-      ></ngt-ground-projected-env>
+      />
     </ng-container>
   `,
   imports: [NgtsEnvironmentMap, NgtArgs, NgIf],

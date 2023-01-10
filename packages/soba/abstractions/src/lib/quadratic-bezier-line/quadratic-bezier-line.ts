@@ -27,7 +27,7 @@ const v = new Vector3();
       [gapSize]="get('gapSize')"
       [wireframe]="get('wireframe')"
       [worldUnits]="get('worldUnits')"
-    ></ngts-line>
+    />
   `,
   imports: [NgtsLine],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

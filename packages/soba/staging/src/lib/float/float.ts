@@ -10,7 +10,7 @@ extend({ Group });
   template: `
     <ngt-group ngtCompound>
       <ngt-group *ref="groupRef" (beforeRender)="onBeforeRender($any($event))">
-        <ng-content></ng-content>
+        <ng-content />
       </ngt-group>
     </ngt-group>
   `,

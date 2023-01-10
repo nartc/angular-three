@@ -6,7 +6,7 @@ import { BlendFunction, TiltShiftEffect } from 'postprocessing';
 @Component({
   selector: 'ngtp-tilt-shift',
   standalone: true,
-  template: `<ngt-primitive *args="[get('effect')]" ngtCompound></ngt-primitive>`,
+  template: `<ngt-primitive *args="[get('effect')]" ngtCompound />`,
   imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   inputs: [

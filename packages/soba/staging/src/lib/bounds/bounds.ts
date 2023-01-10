@@ -72,7 +72,7 @@ extend({ Group });
   standalone: true,
   template: `
     <ngt-group ngtCompound *ref="groupRef">
-      <ng-content></ng-content>
+      <ng-content />
     </ngt-group>
   `,
   imports: [NgtRef],

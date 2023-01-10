@@ -68,18 +68,9 @@ const genStar = (r: number) => {
   template: `
     <ngt-points *ref="starsRef">
       <ngt-buffer-geometry>
-        <ngt-buffer-attribute
-          attach="attributes.position"
-          *args="[get('bufferAttributes').positions, 3]"
-        ></ngt-buffer-attribute>
-        <ngt-buffer-attribute
-          attach="attributes.color"
-          *args="[get('bufferAttributes').colors, 3]"
-        ></ngt-buffer-attribute>
-        <ngt-buffer-attribute
-          attach="attributes.size"
-          *args="[get('bufferAttributes').sizes, 1]"
-        ></ngt-buffer-attribute>
+        <ngt-buffer-attribute attach="attributes.position" *args="[get('bufferAttributes').positions, 3]" />
+        <ngt-buffer-attribute attach="attributes.color" *args="[get('bufferAttributes').colors, 3]" />
+        <ngt-buffer-attribute attach="attributes.size" *args="[get('bufferAttributes').sizes, 1]" />
       </ngt-buffer-geometry>
       <ngt-primitive
         *args="[material]"
@@ -90,7 +81,7 @@ const genStar = (r: number) => {
         [vertexColors]="true"
         (beforeRender)="onBeforeRender($any($event))"
       >
-        <ngt-value attach="uniforms.fade.value" *args="[get('fade')]"></ngt-value>
+        <ngt-value attach="uniforms.fade.value" *args="[get('fade')]" />
       </ngt-primitive>
     </ngt-points>
   `,

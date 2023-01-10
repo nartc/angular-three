@@ -6,7 +6,7 @@ import { BlendFunction, ScanlineEffect } from 'postprocessing';
 @Component({
   selector: 'ngtp-scanline',
   standalone: true,
-  template: `<ngt-primitive *args="[get('effect')]" ngtCompound></ngt-primitive>`,
+  template: `<ngt-primitive *args="[get('effect')]" ngtCompound />`,
   imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   inputs: ['density'],

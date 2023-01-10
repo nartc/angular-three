@@ -18,7 +18,7 @@ extend({ Group });
     <ngt-group ngtCompound *ref="groupRef">
       <ngt-group *ref="outerRef">
         <ngt-group *ref="innerRef">
-          <ng-content></ng-content>
+          <ng-content />
         </ngt-group>
       </ngt-group>
     </ngt-group>
