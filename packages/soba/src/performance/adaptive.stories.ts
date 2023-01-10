@@ -35,19 +35,19 @@ extend({
               receiveShadow
               [material]="archer.materials.material_0"
               [geometry]="archer.nodes['mesh_0'].geometry"
-            ></ngt-mesh>
+            />
             <ngt-mesh
               castShadow
               receiveShadow
               [material]="archer.materials.material_0"
               [geometry]="archer.nodes['mesh_1'].geometry"
-            ></ngt-mesh>
+            />
             <ngt-mesh
               castShadow
               receiveShadow
               [material]="archer.materials.material_0"
               [geometry]="archer.nodes['mesh_2'].geometry"
-            ></ngt-mesh>
+            />
           </ngt-group>
         </ngt-group>
       </ngt-group>
@@ -65,14 +65,14 @@ class Archer {
   selector: 'storybook-adaptive',
   standalone: true,
   template: `
-    <archer></archer>
+    <archer />
     <ngt-directional-light intensity="0.2" [position]="[10, 10, 5]" castShadow>
-      <ngt-vector2 *args="[64, 64]" attach="shadow.mapSize"></ngt-vector2>
-      <ngt-value *args="[-0.001]" attach="shadow.bias"></ngt-value>
+      <ngt-vector2 *args="[64, 64]" attach="shadow.mapSize" />
+      <ngt-value *args="[-0.001]" attach="shadow.bias" />
     </ngt-directional-light>
-    <ngts-adaptive-dpr></ngts-adaptive-dpr>
-    <ngts-adaptive-events></ngts-adaptive-events>
-    <ngts-orbit-controls [regress]="true"></ngts-orbit-controls>
+    <ngts-adaptive-dpr />
+    <ngts-adaptive-events />
+    <ngts-orbit-controls [regress]="true" />
   `,
   imports: [NgtArgs, NgtsAdaptiveDpr, NgtsAdaptiveEvents, NgtsOrbitControls, Archer],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -93,7 +93,6 @@ export const Default: Story = () => ({
     storyComponent: AdaptiveStory,
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [lights]="lights" [performance]="performance" [storyComponent]="storyComponent">
-</storybook-setup>
+<storybook-setup [camera]="camera" [controls]="controls" [lights]="lights" [performance]="performance" [storyComponent]="storyComponent" />
   `,
 });

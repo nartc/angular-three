@@ -11,12 +11,12 @@ extend({ Mesh, PlaneGeometry, MeshBasicMaterial, AxesHelper });
   selector: 'storybook-default-stars',
   standalone: true,
   template: `
-    <ngts-stars></ngts-stars>
+    <ngts-stars />
     <ngt-mesh [rotation]="[Math.PI / 2, 0, 0]">
-      <ngt-plane-geometry *args="[100, 100, 4, 4]"></ngt-plane-geometry>
-      <ngt-mesh-basic-material color="black" wireframe></ngt-mesh-basic-material>
+      <ngt-plane-geometry *args="[100, 100, 4, 4]" />
+      <ngt-mesh-basic-material color="black" wireframe />
     </ngt-mesh>
-    <ngt-axes-helper></ngt-axes-helper>
+    <ngt-axes-helper />
   `,
   imports: [NgtsStars, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -33,6 +33,6 @@ export default {
 export const Default: Story = () => ({
   props: { storyComponent: DefaultStarsStory },
   template: `
-<storybook-setup [storyComponent]="storyComponent"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" />
     `,
 });

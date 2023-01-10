@@ -8,12 +8,12 @@ import { StorybookSetup } from '../setup-canvas';
   selector: 'storybook-default-cloud',
   standalone: true,
   template: `
-    <ngts-cloud [position]="[-4, -2, 0]"></ngts-cloud>
-    <ngts-cloud [position]="[-4, 2, 0]"></ngts-cloud>
-    <ngts-cloud></ngts-cloud>
-    <ngts-cloud [position]="[4, -2, 0]"></ngts-cloud>
-    <ngts-cloud [position]="[4, 2, 0]"></ngts-cloud>
-    <ngts-orbit-controls [enablePan]="false" [zoomSpeed]="0.5"></ngts-orbit-controls>
+    <ngts-cloud [position]="[-4, -2, 0]" />
+    <ngts-cloud [position]="[-4, 2, 0]" />
+    <ngts-cloud />
+    <ngts-cloud [position]="[4, -2, 0]" />
+    <ngts-cloud [position]="[4, 2, 0]" />
+    <ngts-orbit-controls [enablePan]="false" [zoomSpeed]="0.5" />
   `,
   imports: [NgtsCloud, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -32,6 +32,6 @@ export const Default: Story = () => ({
     storyComponent: DefaultCloudStory,
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent"></storybook-setup>
+<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" />
     `,
 });

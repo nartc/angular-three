@@ -15,14 +15,14 @@ extend({ Mesh, BoxGeometry, MeshNormalMaterial });
   template: `
     <ngts-center [position]="[5, 5, 10]">
       <ngt-mesh>
-        <ngt-box-geometry *args="[10, 10, 10]"></ngt-box-geometry>
-        <ngt-mesh-normal-material wireframe></ngt-mesh-normal-material>
+        <ngt-box-geometry *args="[10, 10, 10]" />
+        <ngt-mesh-normal-material wireframe />
       </ngt-mesh>
       <ngt-primitive
         *args="[model$ | ngtPush : null]"
         scale="0.01"
         (beforeRender)="turn($any($event).object)"
-      ></ngt-primitive>
+      />
     </ngts-center>
   `,
   imports: [NgtsCenter, NgtPush, NgtArgs],
@@ -43,6 +43,6 @@ export default {
 export const Default: Story = () => ({
   props: { camera: { position: [0, 0, -10] }, storyComponent: DefaultCenterStory },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent"></storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" />
     `,
 });

@@ -18,11 +18,11 @@ extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial });
   selector: 'storybook-default-stage',
   standalone: true,
   template: `
-    <ngt-color attach="background" *args="['white']"></ngt-color>
+    <ngt-color attach="background" *args="['white']" />
     <ngts-stage [intensity]="intensity" [environment]="envPreset" [preset]="preset">
       <ngt-mesh>
-        <ngt-sphere-geometry *args="[1, 64, 64]"></ngt-sphere-geometry>
-        <ngt-mesh-standard-material roughness="0" color="royalblue"></ngt-mesh-standard-material>
+        <ngt-sphere-geometry *args="[1, 64, 64]" />
+        <ngt-mesh-standard-material roughness="0" color="royalblue" />
       </ngt-mesh>
     </ngts-stage>
   `,
@@ -43,7 +43,7 @@ export default {
 export const Default: Story = (args) => ({
   props: { camera: { position: [0, 0, 3] }, storyComponent: DefaultStageStory, storyInputs: args },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 

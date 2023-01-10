@@ -20,12 +20,12 @@ extend({ Mesh, PlaneGeometry, MeshBasicMaterial, AxesHelper });
       [inclination]="inclination$ | ngtPush : 0"
       [azimuth]="azimuth"
       [distance]="3000"
-    ></ngts-sky>
+    />
     <ngt-mesh [rotation]="[Math.PI / 2, 0, 0]">
-      <ngt-plane-geometry *args="[100, 100, 4, 4]"></ngt-plane-geometry>
-      <ngt-mesh-basic-material wireframe color="black"></ngt-mesh-basic-material>
+      <ngt-plane-geometry *args="[100, 100, 4, 4]" />
+      <ngt-mesh-basic-material wireframe color="black" />
     </ngt-mesh>
-    <ngt-axes-helper></ngt-axes-helper>
+    <ngt-axes-helper />
   `,
   imports: [NgtsSky, NgtArgs, NgtPush],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -52,12 +52,12 @@ class RotationSkyStory {
       [inclination]="inclination"
       [azimuth]="azimuth"
       [distance]="3000"
-    ></ngts-sky>
+    />
     <ngt-mesh [rotation]="[Math.PI / 2, 0, 0]">
-      <ngt-plane-geometry *args="[100, 100, 4, 4]"></ngt-plane-geometry>
-      <ngt-mesh-basic-material wireframe color="black"></ngt-mesh-basic-material>
+      <ngt-plane-geometry *args="[100, 100, 4, 4]" />
+      <ngt-mesh-basic-material wireframe color="black" />
     </ngt-mesh>
-    <ngt-axes-helper></ngt-axes-helper>
+    <ngt-axes-helper />
   `,
   imports: [NgtsSky, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -83,12 +83,12 @@ class CustomAnglesSkyStory {
       [mieCoefficient]="mieCoefficient"
       [mieDirectionalG]="mieDirectionalG"
       [sunPosition]="sunPosition"
-    ></ngts-sky>
+    />
     <ngt-mesh [rotation]="[Math.PI / 2, 0, 0]">
-      <ngt-plane-geometry *args="[100, 100, 4, 4]"></ngt-plane-geometry>
-      <ngt-mesh-basic-material wireframe color="black"></ngt-mesh-basic-material>
+      <ngt-plane-geometry *args="[100, 100, 4, 4]" />
+      <ngt-mesh-basic-material wireframe color="black" />
     </ngt-mesh>
-    <ngt-axes-helper></ngt-axes-helper>
+    <ngt-axes-helper />
   `,
   imports: [NgtsSky, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -111,7 +111,7 @@ export default {
 export const Default: Story = (args) => ({
   props: { storyComponent: DefaultSkyStory, storyInputs: args },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -126,7 +126,7 @@ Default.args = {
 export const CustomAngles: Story = (args) => ({
   props: { storyComponent: CustomAnglesSkyStory, storyInputs: args },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -142,7 +142,7 @@ CustomAngles.args = {
 export const Rotation: Story = (args) => ({
   props: { storyComponent: RotationSkyStory, storyInputs: args },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 

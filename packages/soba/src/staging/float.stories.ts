@@ -27,13 +27,13 @@ extend({ Mesh, BoxGeometry, PlaneGeometry, MeshStandardMaterial, MeshBasicMateri
       [speed]="speed"
     >
       <ngt-mesh>
-        <ngt-box-geometry *args="[2, 2, 2]"></ngt-box-geometry>
-        <ngt-mesh-standard-material wireframe color="white"></ngt-mesh-standard-material>
+        <ngt-box-geometry *args="[2, 2, 2]" />
+        <ngt-mesh-standard-material wireframe color="white" />
       </ngt-mesh>
     </ngts-float>
     <ngt-mesh [position]="[0, -6, 0]" [rotation]="[Math.PI / -2, 0, 0]">
-        <ngt-plane-geometry *args="[200, 200, 75, 75]"></ngt-plane-geometry>
-        <ngt-mesh-basic-material wireframe color="red" [side]="DoubleSide"></ngt-mesh-basic-material>
+        <ngt-plane-geometry *args="[200, 200, 75, 75]" />
+        <ngt-mesh-basic-material wireframe color="red" [side]="DoubleSide" />
     </ngt-mesh>
   `,
   imports: [NgtsFloat, NgtArgs],
@@ -61,13 +61,13 @@ export const Default: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
 Default.args = {
-    floatingRange: [undefined, 1],
-    rotationIntensity: 4,
-    floatIntensity: 2,
-    speed: 5
-}
+  floatingRange: [undefined, 1],
+  rotationIntensity: 4,
+  floatIntensity: 2,
+  speed: 5,
+};

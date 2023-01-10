@@ -19,10 +19,10 @@ extend({ Mesh, MeshStandardMaterial, TorusKnotGeometry, BoxGeometry });
   selector: 'storybook-ground-environment',
   standalone: true,
   template: `
-    <ngts-environment [ground]="{height, radius}" [preset]="preset"></ngts-environment>
+    <ngts-environment [ground]="{height, radius}" [preset]="preset" />
     <ngt-mesh [position]="[0, 5, 0]">
-      <ngt-box-geometry *args="[10, 10, 10]"></ngt-box-geometry>
-      <ngt-mesh-standard-material metalness="1" roughness="0"></ngt-mesh-standard-material>
+      <ngt-box-geometry *args="[10, 10, 10]" />
+      <ngt-mesh-standard-material metalness="1" roughness="0" />
     </ngt-mesh>
     <ngts-contact-shadows
       [resolution]="1024"
@@ -31,12 +31,9 @@ extend({ Mesh, MeshStandardMaterial, TorusKnotGeometry, BoxGeometry });
       [blur]="2"
       [opacity]="1"
       [far]="10"
-    ></ngts-contact-shadows>
-    <ngts-orbit-controls [autoRotate]="true"></ngts-orbit-controls>
-    <ngts-perspective-camera
-      [position]="[40, 40, 40]"
-      [makeDefault]="true"
-    ></ngts-perspective-camera>
+    />
+    <ngts-orbit-controls [autoRotate]="true" />
+    <ngts-perspective-camera [position]="[40, 40, 40]" [makeDefault]="true" />
   `,
   imports: [NgtsEnvironment, NgtsOrbitControls, NgtsPerspectiveCamera, NgtsContactShadows, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -55,12 +52,12 @@ class GroundEnvironmentStory {
       [background]="background"
       [path]="'soba/cube/'"
       [files]="['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']"
-    ></ngts-environment>
+    />
     <ngt-mesh>
-      <ngt-torus-knot-geometry *args="[1, 0.5, 128, 32]"></ngt-torus-knot-geometry>
-      <ngt-mesh-standard-material metalness="1" roughness="0"></ngt-mesh-standard-material>
+      <ngt-torus-knot-geometry *args="[1, 0.5, 128, 32]" />
+      <ngt-mesh-standard-material metalness="1" roughness="0" />
     </ngt-mesh>
-    <ngts-orbit-controls [autoRotate]="true"></ngts-orbit-controls>
+    <ngts-orbit-controls [autoRotate]="true" />
   `,
   imports: [NgtsEnvironment, NgtsOrbitControls, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -73,12 +70,12 @@ class FilesEnvironmentStory {
   selector: 'storybook-default-environment',
   standalone: true,
   template: `
-    <ngts-environment [background]="background" [preset]="preset" [blur]="blur"></ngts-environment>
+    <ngts-environment [background]="background" [preset]="preset" [blur]="blur" />
     <ngt-mesh>
-      <ngt-torus-knot-geometry *args="[1, 0.5, 128, 32]"></ngt-torus-knot-geometry>
-      <ngt-mesh-standard-material metalness="1" roughness="0"></ngt-mesh-standard-material>
+      <ngt-torus-knot-geometry *args="[1, 0.5, 128, 32]" />
+      <ngt-mesh-standard-material metalness="1" roughness="0" />
     </ngt-mesh>
-    <ngts-orbit-controls [autoRotate]="true"></ngts-orbit-controls>
+    <ngts-orbit-controls [autoRotate]="true" />
   `,
   imports: [NgtsEnvironment, NgtsOrbitControls, NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -102,7 +99,7 @@ export const Default: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [controls]="controls" [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [controls]="controls" [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -125,7 +122,7 @@ export const Files: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [controls]="controls" [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [controls]="controls" [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -141,7 +138,7 @@ export const Ground: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [controls]="controls" [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [controls]="controls" [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 Ground.args = {

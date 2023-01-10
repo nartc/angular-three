@@ -20,7 +20,7 @@ extend({ MeshNormalMaterial });
           [bevelSize]="0.05"
           text="Angular Three"
         >
-          <ngt-mesh-normal-material></ngt-mesh-normal-material>
+          <ngt-mesh-normal-material />
         </ngts-text-3d>
       </ngts-float>
     </ngts-center>
@@ -38,6 +38,6 @@ export default {
 export const Default: Story = () => ({
   props: { camera: { position: [0, 0, 5] }, storyComponent: DefaultText3DStory },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent"></storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" />
     `,
 });

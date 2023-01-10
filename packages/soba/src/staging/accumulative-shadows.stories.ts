@@ -17,7 +17,7 @@ import { StorybookSetup } from '../setup-canvas';
 @Component({
   selector: 'storybook-suzi',
   standalone: true,
-  template: `<ngt-primitive ngtCompound *args="[(suzi$ | ngtPush : null)?.scene]"></ngt-primitive>`,
+  template: `<ngt-primitive ngtCompound *args="[(suzi$ | ngtPush : null)?.scene]" />`,
   imports: [NgtArgs, NgtPush],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -54,13 +54,9 @@ extend({ Color });
   selector: 'storybook-default-accumulative-shadows',
   standalone: true,
   template: `
-    <ngt-color *args="['goldenrod']" attach="background"></ngt-color>
+    <ngt-color *args="['goldenrod']" attach="background" />
 
-    <storybook-suzi
-      [rotation]="[-0.63, 0, 0]"
-      [scale]="2"
-      [position]="[0, -1.175, 0]"
-    ></storybook-suzi>
+    <storybook-suzi [rotation]="[-0.63, 0, 0]" [scale]="2" [position]="[0, -1.175, 0]" />
     <ngts-accumulative-shadows
       [color]="'goldenrod'"
       [temporal]="true"
@@ -70,16 +66,10 @@ extend({ Color });
       [scale]="14"
       [position]="[0, -0.5, 0]"
     >
-      <ngts-randomized-light
-        [amount]="8"
-        [radius]="4"
-        [ambient]="0.5"
-        [bias]="0.001"
-        [position]="[5, 5, -10]"
-      ></ngts-randomized-light>
+      <ngts-randomized-light [amount]="8" [radius]="4" [ambient]="0.5" [bias]="0.001" [position]="[5, 5, -10]" />
     </ngts-accumulative-shadows>
-    <ngts-orbit-controls [autoRotate]="true"></ngts-orbit-controls>
-    <ngts-environment [preset]="'city'"></ngts-environment>
+    <ngts-orbit-controls [autoRotate]="true" />
+    <ngts-environment preset="city" />
   `,
   imports: [
     NgtsAccumulativeShadows,
@@ -101,6 +91,6 @@ export default {
 export const Default: Story = () => ({
   props: { storyComponent: DefaultAccumulativeShadowsStory },
   template: `
-<storybook-setup [storyComponent]="storyComponent"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" />
     `,
 });

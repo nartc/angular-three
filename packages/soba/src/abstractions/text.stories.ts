@@ -23,12 +23,7 @@ extend({ MeshBasicMaterial });
       [anchorY]="'middle'"
       (beforeRender)="turn($any($event).object)"
     >
-      <ngt-mesh-basic-material
-        [color]="color"
-        [side]="DoubleSide"
-        transparent
-        opacity="1"
-      ></ngt-mesh-basic-material>
+      <ngt-mesh-basic-material [color]="color" [side]="DoubleSide" transparent opacity="1" />
     </ngts-text>
   `,
   imports: [NgtsText],
@@ -58,8 +53,7 @@ class CustomMaterialTextStory {
       [anchorX]="'center'"
       [anchorY]="'middle'"
       (beforeRender)="turn($any($event).object)"
-    >
-    </ngts-text>
+    />
   `,
   imports: [NgtsText],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -90,8 +84,7 @@ class LTRTextStory {
       [outlineOpacity]="0.3"
       [outlineColor]="'#EC2D2D'"
       (beforeRender)="turn($any($event).object)"
-    >
-    </ngts-text>
+    />
   `,
   imports: [NgtsText],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -119,8 +112,7 @@ class ShadowTextStory {
       [strokeWidth]="'2.5%'"
       [strokeColor]="'#fff'"
       (beforeRender)="turn($any($event).object)"
-    >
-    </ngts-text>
+    />
   `,
   imports: [NgtsText],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -148,8 +140,7 @@ class StrokeTextStory {
       [outlineWidth]="2"
       [outlineColor]="'#fff'"
       (beforeRender)="turn($any($event).object)"
-    >
-    </ngts-text>
+    />
   `,
   imports: [NgtsText],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -175,8 +166,7 @@ class OutlineTextStory {
       [anchorX]="'center'"
       [anchorY]="'middle'"
       (beforeRender)="turn($any($event).object)"
-    >
-    </ngts-text>
+    />
   `,
   imports: [NgtsText],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -199,8 +189,7 @@ export const Default: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
-</storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -219,8 +208,7 @@ export const Outline: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
-</storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -238,8 +226,7 @@ export const Stroke: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
-</storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -257,8 +244,7 @@ export const Shadow: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
-</storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -276,8 +262,7 @@ export const LTR: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
-</storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -293,8 +278,7 @@ export const CustomMaterial: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs">
-</storybook-setup>
+<storybook-setup [camera]="camera" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 

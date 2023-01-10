@@ -20,10 +20,10 @@ extend({ AxesHelper });
       [opacity]="opacity"
       [speed]="speed"
       [noise]="noise"
-    ></ngts-sparkles>
-    <ngts-orbit-controls></ngts-orbit-controls>
-    <ngt-axes-helper></ngt-axes-helper>
-    <ngts-perspective-camera [position]="[2, 2, 2]" [makeDefault]="true"></ngts-perspective-camera>
+    />
+    <ngts-orbit-controls />
+    <ngt-axes-helper />
+    <ngts-perspective-camera [position]="[2, 2, 2]" [makeDefault]="true" />
   `,
   imports: [NgtsSparkles, NgtsPerspectiveCamera, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -67,7 +67,7 @@ export const Default: Story = (args) => ({
     controls: false,
   },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls" />
     `,
 });
 

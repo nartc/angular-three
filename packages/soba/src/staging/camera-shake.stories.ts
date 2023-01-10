@@ -20,12 +20,12 @@ extend({ Mesh, BoxGeometry, MeshStandardMaterial, PlaneGeometry, MeshBasicMateri
   standalone: true,
   template: `
     <ngt-mesh (beforeRender)="onBeforeRender($any($event).object)">
-      <ngt-box-geometry *args="[2, 2, 2]"></ngt-box-geometry>
-      <ngt-mesh-standard-material wireframe color="white"></ngt-mesh-standard-material>
+      <ngt-box-geometry *args="[2, 2, 2]" />
+      <ngt-mesh-standard-material wireframe color="white" />
     </ngt-mesh>
     <ngt-mesh [position]="[0, -6, 0]" [rotation]="[Math.PI / -2, 0, 0]">
-      <ngt-plane-geometry *args="[200, 200, 75, 75]"></ngt-plane-geometry>
-      <ngt-mesh-basic-material wireframe color="red" [side]="DoubleSide"></ngt-mesh-basic-material>
+      <ngt-plane-geometry *args="[200, 200, 75, 75]" />
+      <ngt-mesh-basic-material wireframe color="red" [side]="DoubleSide" />
     </ngt-mesh>
   `,
   imports: [NgtArgs],
@@ -44,7 +44,7 @@ class Scene {
   selector: 'storybook-with-orbit-controls-shake',
   standalone: true,
   template: `
-    <ngts-orbit-controls [makeDefault]="true"></ngts-orbit-controls>
+    <ngts-orbit-controls [makeDefault]="true" />
     <ngts-camera-shake
       [maxPitch]="maxPitch"
       [maxRoll]="maxRoll"
@@ -52,8 +52,8 @@ class Scene {
       [pitchFrequency]="pitchFrequency"
       [rollFrequency]="rollFrequency"
       [yawFrequency]="yawFrequency"
-    ></ngts-camera-shake>
-    <storybook-shake-scene></storybook-shake-scene>
+    />
+    <storybook-shake-scene />
   `,
   imports: [NgtsCameraShake, NgtsOrbitControls, Scene],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -78,8 +78,8 @@ class WithOrbitControlsShakeStory {
       [pitchFrequency]="pitchFrequency"
       [rollFrequency]="rollFrequency"
       [yawFrequency]="yawFrequency"
-    ></ngts-camera-shake>
-    <storybook-shake-scene></storybook-shake-scene>
+    />
+    <storybook-shake-scene />
   `,
   imports: [NgtsCameraShake, Scene],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -106,7 +106,7 @@ export const Default: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -127,7 +127,7 @@ export const WithOrbitControls: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 

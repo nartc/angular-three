@@ -20,9 +20,9 @@ extend({
   standalone: true,
   template: `
     <ngt-mesh>
-      <ngt-cone-geometry *args="args"></ngt-cone-geometry>
-      <ngt-value attach="material.color" *args="[color]"></ngt-value>
-      <ng-content></ng-content>
+      <ngt-cone-geometry *args="args" />
+      <ngt-value attach="material.color" *args="[color]" />
+      <ng-content />
     </ngt-mesh>
   `,
   imports: [NgtArgs],
@@ -38,9 +38,9 @@ class Cone {
   standalone: true,
   template: `
     <ngt-mesh ngtCompound>
-      <ngt-box-geometry *args="args"></ngt-box-geometry>
-      <ngt-value attach="material.color" *args="[color]"></ngt-value>
-      <ng-content></ng-content>
+      <ngt-box-geometry *args="args" />
+      <ngt-value attach="material.color" *args="[color]" />
+      <ng-content />
     </ngt-mesh>
   `,
   imports: [NgtArgs],
@@ -56,9 +56,9 @@ class Box {
   standalone: true,
   template: `
     <ngt-mesh>
-      <ngt-plane-geometry *args="args"></ngt-plane-geometry>
-      <ngt-value attach="material.color" *args="[color]"></ngt-value>
-      <ng-content></ng-content>
+      <ngt-plane-geometry *args="args" />
+      <ngt-value attach="material.color" *args="[color]" />
+      <ng-content />
     </ngt-mesh>
   `,
   imports: [NgtArgs],
@@ -80,16 +80,10 @@ class Plane {
       [lockZ]="lockZ"
       [position]="[0.5, 2.05, 0.5]"
     >
-      <ngts-text
-        text="box"
-        [fontSize]="1"
-        [outlineWidth]="'5%'"
-        [outlineColor]="'#000'"
-        [outlineOpacity]="1"
-      ></ngts-text>
+      <ngts-text text="box" [fontSize]="1" [outlineWidth]="'5%'" [outlineColor]="'#000'" [outlineOpacity]="1" />
     </ngts-billboard>
     <storybook-box [position]="[0.5, 1, 0.5]" color="red">
-      <ngt-mesh-standard-material></ngt-mesh-standard-material>
+      <ngt-mesh-standard-material />
     </storybook-box>
     <ngt-group [position]="[-2.5, -3, -1]">
       <ngts-billboard
@@ -105,10 +99,10 @@ class Plane {
           [outlineWidth]="'5%'"
           [outlineColor]="'#000'"
           [outlineOpacity]="1"
-        ></ngts-text>
+        />
       </ngts-billboard>
       <storybook-cone color="green">
-        <ngt-mesh-standard-material></ngt-mesh-standard-material>
+        <ngt-mesh-standard-material />
       </storybook-cone>
     </ngt-group>
     <ngts-billboard
@@ -119,11 +113,11 @@ class Plane {
       [position]="[0, 0, -5]"
     >
       <storybook-plane [args]="[2, 2]" color="#000066">
-        <ngt-mesh-standard-material></ngt-mesh-standard-material>
+        <ngt-mesh-standard-material />
       </storybook-plane>
     </ngts-billboard>
 
-    <ngts-orbit-controls [enablePan]="true" [zoomSpeed]="0.5"></ngts-orbit-controls>
+    <ngts-orbit-controls [enablePan]="true" [zoomSpeed]="0.5" />
   `,
   imports: [NgtsBillboard, NgtsOrbitControls, NgtsText, Cone, Box, Plane],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -146,7 +140,7 @@ class TextBillboardStory {
       [lockZ]="lockZ"
       [position]="[-4, -2, 0]"
     >
-      <storybook-plane [args]="[3, 2]" color="red"></storybook-plane>
+      <storybook-plane [args]="[3, 2]" color="red" />
     </ngts-billboard>
     <ngts-billboard
       [follow]="follow"
@@ -155,7 +149,7 @@ class TextBillboardStory {
       [lockZ]="lockZ"
       [position]="[-4, 2, 0]"
     >
-      <storybook-plane [args]="[3, 2]" color="orange"></storybook-plane>
+      <storybook-plane [args]="[3, 2]" color="orange" />
     </ngts-billboard>
     <ngts-billboard
       [follow]="follow"
@@ -164,7 +158,7 @@ class TextBillboardStory {
       [lockZ]="lockZ"
       [position]="[0, 0, 0]"
     >
-      <storybook-plane [args]="[3, 2]" color="green"></storybook-plane>
+      <storybook-plane [args]="[3, 2]" color="green" />
     </ngts-billboard>
     <ngts-billboard
       [follow]="follow"
@@ -173,7 +167,7 @@ class TextBillboardStory {
       [lockZ]="lockZ"
       [position]="[4, -2, 0]"
     >
-      <storybook-plane [args]="[3, 2]" color="blue"></storybook-plane>
+      <storybook-plane [args]="[3, 2]" color="blue" />
     </ngts-billboard>
     <ngts-billboard
       [follow]="follow"
@@ -182,10 +176,10 @@ class TextBillboardStory {
       [lockZ]="lockZ"
       [position]="[4, 2, 0]"
     >
-      <storybook-plane [args]="[3, 2]" color="yellow"></storybook-plane>
+      <storybook-plane [args]="[3, 2]" color="yellow" />
     </ngts-billboard>
 
-    <ngts-orbit-controls [enablePan]="true" [zoomSpeed]="0.5"></ngts-orbit-controls>
+    <ngts-orbit-controls [enablePan]="true" [zoomSpeed]="0.5" />
   `,
   imports: [NgtsBillboard, Plane, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -210,7 +204,7 @@ export const Default: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 
@@ -229,7 +223,7 @@ export const Text: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 

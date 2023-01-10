@@ -65,21 +65,19 @@ extend({
   standalone: true,
   template: `
     <ng-container *ngIf="canvasOptions.whiteBackground">
-      <ngt-color *args="['white']" attach="background"></ngt-color>
+      <ngt-color *args="['white']" attach="background" />
     </ng-container>
 
     <ng-container *ngIf="canvasOptions.lights">
-      <ngt-ambient-light intensity="0.8"></ngt-ambient-light>
-      <ngt-point-light intensity="1" [position]="[0, 6, 0]"></ngt-point-light>
+      <ngt-ambient-light intensity="0.8" />
+      <ngt-point-light intensity="1" [position]="[0, 6, 0]" />
     </ng-container>
 
     <ng-container *ngIf="canvasOptions.controls">
-      <ngts-orbit-controls
-        [makeDefault]="canvasOptions.controls?.makeDefault"
-      ></ngts-orbit-controls>
+      <ngts-orbit-controls [makeDefault]="canvasOptions.controls?.makeDefault" />
     </ng-container>
 
-    <ng-container #anchor></ng-container>
+    <ng-container #anchor />
   `,
   imports: [NgIf, NgtArgs, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -115,7 +113,7 @@ export class StorybookScene extends NgtRxStore implements OnInit, OnDestroy {
 @Component({
   selector: 'storybook-setup[storyComponent]',
   standalone: true,
-  template: ` <ng-container #anchor></ng-container> `,
+  template: ` <ng-container #anchor />`,
 })
 export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
   @Input() camera: CanvasOptions['camera'] = defaultCanvasOptions.camera;

@@ -64,8 +64,8 @@ const defaultCatmullRom = {
       [color]="color"
       [lineWidth]="lineWidth"
       [dashed]="dashed"
-    ></ngts-catmull-rom-line>
-    <ngts-orbit-controls [zoomSpeed]="0.5"></ngts-orbit-controls>
+    />
+    <ngts-orbit-controls [zoomSpeed]="0.5" />
   `,
   imports: [NgtsCatmullRomLine, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -94,8 +94,8 @@ class CatmullRomLineStory {
       [color]="color"
       [lineWidth]="lineWidth"
       [dashed]="dashed"
-    ></ngts-quadratic-bezier-line>
-    <ngts-orbit-controls [zoomSpeed]="0.5"></ngts-orbit-controls>
+    />
+    <ngts-orbit-controls [zoomSpeed]="0.5" />
   `,
   imports: [NgtsQuadraticBezierLine, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -122,8 +122,8 @@ class QuadraticBezierLineStory {
       [color]="color"
       [lineWidth]="lineWidth"
       [dashed]="dashed"
-    ></ngts-cubic-bezier-line>
-    <ngts-orbit-controls [zoomSpeed]="0.5"></ngts-orbit-controls>
+    />
+    <ngts-orbit-controls [zoomSpeed]="0.5" />
   `,
   imports: [NgtsCubicBezierLine, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -149,8 +149,8 @@ class CubicBezierLineStory {
       [lineWidth]="lineWidth"
       [dashed]="dashed"
       [points]="points"
-    ></ngts-line>
-    <ngts-orbit-controls [zoomSpeed]="0.5"></ngts-orbit-controls>
+    />
+    <ngts-orbit-controls [zoomSpeed]="0.5" />
   `,
   imports: [NgtsLine, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -173,8 +173,8 @@ class VertexColorsLineStory {
       [lineWidth]="lineWidth"
       [dashed]="dashed"
       [points]="points"
-    ></ngts-line>
-    <ngts-orbit-controls [zoomSpeed]="0.5"></ngts-orbit-controls>
+    />
+    <ngts-orbit-controls [zoomSpeed]="0.5" />
   `,
   imports: [NgtsLine, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -199,7 +199,7 @@ export const Default: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls" />
     `,
 });
 
@@ -217,7 +217,7 @@ export const VertexColors: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls" />
     `,
 });
 
@@ -235,7 +235,7 @@ export const CubicBezierLine: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls" />
     `,
 });
 
@@ -258,7 +258,7 @@ export const QuadraticBezierLine: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls" />
     `,
 });
 
@@ -279,7 +279,7 @@ export const CatmulRomLine: Story = (args) => ({
     storyInputs: args,
   },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" [camera]="camera" [controls]="controls" />
     `,
 });
 

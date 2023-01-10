@@ -20,8 +20,8 @@ extend({
       [position]="[0, 2, 0]"
       (beforeRender)="onBeforeRender($any($event).object, $any($event).state.clock)"
     >
-      <ngt-sphere-geometry *args="[1, 32, 32]"></ngt-sphere-geometry>
-      <ngt-mesh-basic-material color="#2a8aff"></ngt-mesh-basic-material>
+      <ngt-sphere-geometry *args="[1, 32, 32]" />
+      <ngt-mesh-basic-material color="#2a8aff" />
     </ngt-mesh>
     <ngts-contact-shadows
       [position]="[0, 0, 0]"
@@ -30,10 +30,10 @@ extend({
       [blur]="3"
       [rotation]="[Math.PI / 2, 0, 0]"
       [color]="colorized ? '#2a8aff' : 'black'"
-    ></ngts-contact-shadows>
+    />
     <ngt-mesh [position]="[0, -0.01, 0]" [rotation]="[-Math.PI / 2, 0, 0]">
-      <ngt-plane-geometry *args="[10, 10]"></ngt-plane-geometry>
-      <ngt-mesh-basic-material color="white"></ngt-mesh-basic-material>
+      <ngt-plane-geometry *args="[10, 10]" />
+      <ngt-mesh-basic-material color="white" />
     </ngt-mesh>
   `,
   imports: [NgtArgs, NgtsContactShadows],
@@ -56,14 +56,14 @@ export default {
 export const Default: Story = () => ({
   props: { storyComponent: DefaultContactShadowsStory },
   template: `
-<storybook-setup [storyComponent]="storyComponent"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" />
   `,
 });
 
 export const Colorized: Story = (args) => ({
   props: { storyComponent: DefaultContactShadowsStory, storyInputs: args },
   template: `
-<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs"></storybook-setup>
+<storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });
 

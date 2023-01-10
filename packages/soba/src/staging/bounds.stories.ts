@@ -28,8 +28,8 @@ extend({ Mesh, Color, SpotLight, HemisphereLight, Group });
       [material]="model.material"
       [geometry]="model.geometry"
     >
-      <ngt-value *args="['red']" attach="material.emissive"></ngt-value>
-      <ngt-value *args="[1]" attach="material.roughness"></ngt-value>
+      <ngt-value *args="['red']" attach="material.emissive" />
+      <ngt-value *args="[1]" attach="material.roughness" />
     </ngt-mesh>
   `,
   imports: [NgtArgs, NgIf, NgtPush],
@@ -47,55 +47,15 @@ class Model extends NgtRxStore {
   standalone: true,
   template: `
     <ngt-group (click)="onClick($any($event))" (pointermissed)="onPointerMissed($any($event))">
-      <storybook-model
-        name="Curly"
-        [position]="[1, -11, -20]"
-        [rotation]="[2, 0, -0]"
-      ></storybook-model>
-      <storybook-model
-        name="DNA"
-        [position]="[20, 0, -17]"
-        [rotation]="[1, 1, -2]"
-      ></storybook-model>
-      <storybook-model
-        name="Headphones"
-        [position]="[20, 2, 4]"
-        [rotation]="[1, 0, -1]"
-      ></storybook-model>
-      <storybook-model
-        name="Notebook"
-        [position]="[-21, -15, -13]"
-        [rotation]="[2, 0, 1]"
-      ></storybook-model>
-      <storybook-model
-        name="Rocket003"
-        [position]="[18, 15, -25]"
-        [rotation]="[1, 1, 0]"
-      ></storybook-model>
-      <storybook-model
-        name="Roundcube001"
-        [position]="[-25, -4, 5]"
-        [rotation]="[1, 0, 0]"
-        [scale]="0.5"
-      ></storybook-model>
-      <storybook-model
-        name="Table"
-        [position]="[1, -4, -28]"
-        [rotation]="[1, 0, -1]"
-        [scale]="0.5"
-      ></storybook-model>
-      <storybook-model
-        name="VR_Headset"
-        [position]="[7, -15, 28]"
-        [rotation]="[1, 0, -1]"
-        [scale]="5"
-      ></storybook-model>
-      <storybook-model
-        name="Zeppelin"
-        [position]="[-20, 10, 10]"
-        [rotation]="[3, -1, 3]"
-        [scale]="0.005"
-      ></storybook-model>
+      <storybook-model name="Curly" [position]="[1, -11, -20]" [rotation]="[2, 0, -0]" />
+      <storybook-model name="DNA" [position]="[20, 0, -17]" [rotation]="[1, 1, -2]" />
+      <storybook-model name="Headphones" [position]="[20, 2, 4]" [rotation]="[1, 0, -1]" />
+      <storybook-model name="Notebook" [position]="[-21, -15, -13]" [rotation]="[2, 0, 1]" />
+      <storybook-model name="Rocket003" [position]="[18, 15, -25]" [rotation]="[1, 1, 0]" />
+      <storybook-model name="Roundcube001" [position]="[-25, -4, 5]" [rotation]="[1, 0, 0]" [scale]="0.5" />
+      <storybook-model name="Table" [position]="[1, -4, -28]" [rotation]="[1, 0, -1]" [scale]="0.5" />
+      <storybook-model name="VR_Headset" [position]="[7, -15, 28]" [rotation]="[1, 0, -1]" [scale]="5" />
+      <storybook-model name="Zeppelin" [position]="[-20, 10, 10]" [rotation]="[3, -1, 3]" [scale]="0.005" />
     </ngt-group>
   `,
   imports: [Model, NgIf, NgtPush],
@@ -118,24 +78,13 @@ class Models {
   selector: 'storybook-default-bounds',
   standalone: true,
   template: `
-    <ngt-color *args="['#f08080']" attach="background"></ngt-color>
+    <ngt-color *args="['#f08080']" attach="background" />
 
-    <ngt-spot-light
-      [position]="[-100, -100, -100]"
-      intensity="0.2"
-      angle="0.3"
-      penumbra="1"
-    ></ngt-spot-light>
-
-    <ngt-hemisphere-light
-      color="white"
-      groundColor="#ff0f00"
-      [position]="[-7, 25, 13]"
-      intensity="1"
-    ></ngt-hemisphere-light>
+    <ngt-spot-light [position]="[-100, -100, -100]" intensity="0.2" angle="0.3" penumbra="1" />
+    <ngt-hemisphere-light color="white" groundColor="#ff0f00" [position]="[-7, 25, 13]" intensity="1" />
 
     <ngts-bounds>
-      <models></models>
+      <models />
     </ngts-bounds>
 
     <ngts-contact-shadows
@@ -145,13 +94,13 @@ class Models {
       [height]="200"
       [blur]="1"
       [far]="50"
-    ></ngts-contact-shadows>
+    />
 
     <ngts-orbit-controls
       [makeDefault]="true"
       [minPolarAngle]="0"
       [maxPolarAngle]="Math.PI * 1.75"
-    ></ngts-orbit-controls>
+    />
   `,
   imports: [NgtsBounds, NgtArgs, NgtsOrbitControls, NgtsContactShadows, Models],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -173,6 +122,6 @@ export const Default: Story = () => ({
     storyComponent: DefaultBoundsStory,
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [lights]="lights" [storyComponent]="storyComponent"></storybook-setup>
+<storybook-setup [camera]="camera" [controls]="controls" [lights]="lights" [storyComponent]="storyComponent" />
     `,
 });
