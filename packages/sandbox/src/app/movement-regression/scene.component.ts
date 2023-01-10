@@ -57,6 +57,7 @@ export function injectLerpedPointer() {
   const pointerRef = injectNgtRef(pointer.clone());
   const previous = new Vector2();
 
+  // not rxjs subscribe
   const sub = store.get('internal').subscribe((state) => {
     previous.copy(pointerRef.nativeElement);
     pointerRef.nativeElement.lerp(state.pointer, 0.1);
