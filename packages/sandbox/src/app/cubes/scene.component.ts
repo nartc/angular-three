@@ -30,8 +30,8 @@ extend({
   standalone: true,
   template: `
     <ngt-mesh ngtCompound *ref="meshRef">
-      <ngt-box-geometry *args="args"></ngt-box-geometry>
-      <ng-content></ng-content>
+      <ngt-box-geometry *args="args" />
+      <ng-content />
     </ngt-mesh>
   `,
   imports: [NgtRef, NgtArgs],
@@ -56,11 +56,9 @@ export class Box {
       (pointerout)="hover = false"
       (beforeRender)="onBeforeRender()"
     >
-      <ngt-mesh-normal-material *ngIf="isFun; else noFun"></ngt-mesh-normal-material>
+      <ngt-mesh-normal-material *ngIf="isFun; else noFun" />
       <ng-template #noFun>
-        <ngt-mesh-basic-material
-          [color]="hover ? (cubeClick.observed ? 'red' : 'hotpink') : 'orange'"
-        ></ngt-mesh-basic-material>
+        <ngt-mesh-basic-material [color]="hover ? (cubeClick.observed ? 'red' : 'hotpink') : 'orange'" />
       </ng-template>
     </ngts-box>
   `,
@@ -94,7 +92,7 @@ export class Cube {
       *args="[model$ | ngtPush : null]"
       scale="0.005"
       (beforeRender)="onBeforeRender($any($event).state.delta)"
-    ></ngt-primitive>
+    />
   `,
   imports: [NgtArgs, NgtPush],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -120,20 +118,20 @@ export class Model {
   selector: 'cubes-scene',
   standalone: true,
   template: `
-    <ngt-color *args="['skyblue']" attach="background"></ngt-color>
+    <ngt-color *args="['skyblue']" attach="background" />
 
-    <ngt-ambient-light></ngt-ambient-light>
+    <ngt-ambient-light />
 
     <ngt-group (beforeRender)="onBeforeRender($any($event).object)">
-      <cube *ngIf="show" [position]="[2.5, -1, 0]"></cube>
-      <cube (cubeClick)="show = !show" [position]="[-2.5, 1, 0]"></cube>
-      <cube [visible]="show" [isFun]="true" [position]="[2.5, 1, 0]"></cube>
-      <cube [isFun]="show" [position]="[-2.5, -1, 0]"></cube>
+      <cube *ngIf="show" [position]="[2.5, -1, 0]" />
+      <cube (cubeClick)="show = !show" [position]="[-2.5, 1, 0]" />
+      <cube [visible]="show" [isFun]="true" [position]="[2.5, 1, 0]" />
+      <cube [isFun]="show" [position]="[-2.5, -1, 0]" />
     </ngt-group>
 
-    <model></model>
+    <model />
 
-    <ngts-orbit-controls [autoRotate]="true"></ngts-orbit-controls>
+    <ngts-orbit-controls [autoRotate]="true" />
   `,
   imports: [Cube, Box, NgIf, NgtArgs, NgtsOrbitControls, Model],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -142,20 +142,20 @@ export class Cube {}
         (beforeRender)="onBeforeRender($any($event).object)"
         [position]="[1, 1, 1]"
       >
-        <ngt-mesh-basic-material color="red"></ngt-mesh-basic-material>
+        <ngt-mesh-basic-material color="red" />
         <ngt-mesh [position]="[-2, -2, -2]">
-          <ngt-box-geometry></ngt-box-geometry>
-          <ngt-mesh-basic-material color="blue"></ngt-mesh-basic-material>
+          <ngt-box-geometry />
+          <ngt-mesh-basic-material color="blue" />
         </ngt-mesh>
-        <ngts-box [position]="[-2, 2, -2]"></ngts-box>
+        <ngts-box [position]="[-2, 2, -2]" />
       </ngts-box>
       <ngts-box [position]="[1, 1, -1]">
-        <ngt-mesh-normal-material></ngt-mesh-normal-material>
+        <ngt-mesh-normal-material />
         <ngts-center [position]="[-2, -2, 2]">
-          <ngts-box></ngts-box>
+          <ngts-box />
           <ngt-mesh [position]="[-2, 0, 0]">
-            <ngt-box-geometry *args="[2, 2, 2]"></ngt-box-geometry>
-            <ngts-box [position]="[0, 4, 0]"></ngts-box>
+            <ngt-box-geometry *args="[2, 2, 2]" />
+            <ngts-box [position]="[0, 4, 0]" />
           </ngt-mesh>
         </ngts-center>
       </ngts-box>

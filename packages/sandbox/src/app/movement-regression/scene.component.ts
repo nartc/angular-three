@@ -99,7 +99,7 @@ interface BotGLTF extends GLTF {
           [normalMap]="texture"
           [normalScale]="[0.15, 0.15]"
         >
-          <ngt-value *args="[35, 35]" attach="normalMap.repeat"></ngt-value>
+          <ngt-value *args="[35, 35]" attach="normalMap.repeat" />
         </ngt-mesh-standard-material>
       </ngt-mesh>
       <ngt-mesh castShadow [geometry]="bot.nodes.Alpha_Joints.geometry">
@@ -107,7 +107,7 @@ interface BotGLTF extends GLTF {
           metalness="1"
           roughness="0.1"
           [color]="bot.materials.Alpha_Joints_MAT.color"
-        ></ngt-mesh-standard-material>
+        />
       </ngt-mesh>
     </ngt-group>
   `,
@@ -134,14 +134,9 @@ export class YBot {
   selector: 'sandbox-lights',
   standalone: true,
   template: `
-    <ngt-directional-light
-      intensity="1"
-      [position]="[2, 2, 0]"
-      color="red"
-      distance="5"
-    ></ngt-directional-light>
+    <ngt-directional-light intensity="1" [position]="[2, 2, 0]" color="red" distance="5" />
     <ngt-spot-light intensity="2" [position]="[-5, 10, 2]" angle="0.2" penumbra="1" castShadow>
-      <ngt-vector2 *args="[2048, 2048]" attach="shadow.mapSize"></ngt-vector2>
+      <ngt-vector2 *args="[2048, 2048]" attach="shadow.mapSize" />
     </ngt-spot-light>
     <ngt-group (beforeRender)="onBeforeRender($any($event).object)">
       <ngt-rect-area-light
@@ -150,14 +145,14 @@ export class YBot {
         height="4"
         [position]="[4.5, 0, -3]"
         (afterUpdate)="onAfterUpdate($any($event))"
-      ></ngt-rect-area-light>
+      />
       <ngt-rect-area-light
         intensity="2"
         width="40"
         height="4"
         [position]="[-10, 2, -10]"
         (afterUpdate)="onAfterUpdate($any($event))"
-      ></ngt-rect-area-light>
+      />
     </ngt-group>
   `,
   imports: [NgtArgs],
@@ -188,8 +183,8 @@ export class Lights {
         [radius]="0.1"
         [luminanceInfluence]="0"
         [bias]="0.035"
-      ></ngtp-ssao>
-      <ngtp-bloom [mipmapBlur]="true" [luminanceThreshold]="0.8" [intensity]="5"></ngtp-bloom>
+      />
+      <ngtp-bloom [mipmapBlur]="true" [luminanceThreshold]="0.8" [intensity]="5" />
     </ngtp-effect-composer>
   `,
   imports: [NgtpEffectComposer, NgtpSSAO, NgtpBloom],
@@ -219,11 +214,11 @@ export class Effects implements OnInit, OnDestroy {
   selector: 'sandbox-movement-regression-scene',
   standalone: true,
   template: `
-    <ngt-color *args="['lightblue']" attach="background"></ngt-color>
-    <ngt-fog *args="['#000', 0.8, 1]" attach="fog"></ngt-fog>
+    <ngt-color *args="['lightblue']" attach="background" />
+    <ngt-fog *args="['#000', 0.8, 1]" attach="fog" />
 
-    <sandbox-lights></sandbox-lights>
-    <sandbox-y-bot [position]="[0, -1.3, 0]"></sandbox-y-bot>
+    <sandbox-lights />
+    <sandbox-y-bot [position]="[0, -1.3, 0]" />
     <ngts-text
       text="hello"
       [color]="'white'"
@@ -231,20 +226,15 @@ export class Effects implements OnInit, OnDestroy {
       [fontSize]="0.6"
       [letterSpacing]="0"
     >
-      <ngt-value *args="[false]" attach="material.fog"></ngt-value>
+      <ngt-value *args="[false]" attach="material.fog" />
     </ngts-text>
     <ngt-mesh scale="4" [position]="[0, 1, -0.2]">
-      <ngt-plane-geometry></ngt-plane-geometry>
-      <ngt-mesh-standard-material
-        color="lightblue"
-        toneMapped="false"
-        fog="false"
-        envMapIntensity="0"
-      ></ngt-mesh-standard-material>
+      <ngt-plane-geometry />
+      <ngt-mesh-standard-material color="lightblue" toneMapped="false" fog="false" envMapIntensity="0" />
     </ngt-mesh>
 
-    <ngts-adaptive-dpr [pixelated]="true"></ngts-adaptive-dpr>
-    <sandbox-effects></sandbox-effects>
+    <ngts-adaptive-dpr [pixelated]="true" />
+    <sandbox-effects />
   `,
   imports: [Lights, YBot, NgtsText, NgtsAdaptiveDpr, NgtArgs, Effects],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

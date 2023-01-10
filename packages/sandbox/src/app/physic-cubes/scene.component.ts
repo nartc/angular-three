@@ -33,8 +33,8 @@ extend({
   standalone: true,
   template: `
     <ngt-mesh *ref="plane.ref" receiveShadow>
-      <ngt-plane-geometry *args="args"></ngt-plane-geometry>
-      <ngt-shadow-material transparent color="#171717" opacity="0.4"></ngt-shadow-material>
+      <ngt-plane-geometry *args="args" />
+      <ngt-shadow-material transparent color="#171717" opacity="0.4" />
     </ngt-mesh>
   `,
   imports: [NgtRef, NgtArgs],
@@ -57,8 +57,8 @@ export class Floor {
   standalone: true,
   template: `
     <ngt-mesh *ref="box.ref" receiveShadow castShadow>
-      <ngt-box-geometry></ngt-box-geometry>
-      <ngt-mesh-lambert-material color="hotpink"></ngt-mesh-lambert-material>
+      <ngt-box-geometry />
+      <ngt-mesh-lambert-material color="hotpink" />
     </ngt-mesh>
   `,
   imports: [NgtRef],
@@ -78,20 +78,20 @@ export class Cube {
   selector: 'physics-cubes-scene',
   standalone: true,
   template: `
-    <ngt-color *args="['skyblue']" attach="background"></ngt-color>
+    <ngt-color *args="['skyblue']" attach="background" />
 
-    <ngt-ambient-light></ngt-ambient-light>
+    <ngt-ambient-light />
     <ngt-directional-light [position]="10" castShadow>
-      <ngt-vector2 *args="[2048, 2048]" attach="shadow.mapSize"></ngt-vector2>
-      <ngt-value *args="[-0.001]" attach="shadow.bias"></ngt-value>
+      <ngt-vector2 *args="[2048, 2048]" attach="shadow.mapSize" />
+      <ngt-value *args="[-0.001]" attach="shadow.bias" />
     </ngt-directional-light>
 
     <ngtc-physics>
       <ngtc-debug>
-        <floor [position]="[0, -2.5, 0]"></floor>
-        <cube [position]="[0.1, 5, 0]"></cube>
-        <cube [position]="[0, 10, -1]"></cube>
-        <cube [position]="[0, 20, -2]"></cube>
+        <floor [position]="[0, -2.5, 0]" />
+        <cube [position]="[0.1, 5, 0]" />
+        <cube [position]="[0, 10, -1]" />
+        <cube [position]="[0, 20, -2]" />
       </ngtc-debug>
     </ngtc-physics>
   `,

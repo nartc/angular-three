@@ -44,10 +44,7 @@ extend({
   template: `
     <ngt-portal (beforeRender)="onBeforeRender($event.root)">
       <ng-template ngtPortalContent>
-        <ngts-orthographic-camera
-          [makeDefault]="true"
-          [position]="[0, 0, 100]"
-        ></ngts-orthographic-camera>
+        <ngts-orthographic-camera [makeDefault]="true" [position]="[0, 0, 100]" />
         <ngt-mesh
           *ref="meshRef"
           [position]="position$ | ngtPush : [0, 0, 0]"
@@ -58,13 +55,12 @@ extend({
             <ngt-mesh-lambert-material
               *dynamicAttach="['material', i]"
               [color]="hovered === i ? 'lightblue' : 'white'"
-            >
-            </ngt-mesh-lambert-material>
+            />
           </ng-container>
-          <ngt-box-geometry *args="[60, 60, 60]"></ngt-box-geometry>
+          <ngt-box-geometry *args="[60, 60, 60]" />
         </ngt-mesh>
-        <ngt-ambient-light intensity="1"></ngt-ambient-light>
-        <ngt-point-light [position]="200" intensity="0.5"></ngt-point-light>
+        <ngt-ambient-light intensity="1" />
+        <ngt-point-light [position]="200" intensity="0.5" />
       </ng-template>
     </ngt-portal>
   `,
@@ -105,14 +101,14 @@ export class ViewCube extends NgtRxStore {
   selector: 'view-cube-scene',
   standalone: true,
   template: `
-    <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
+    <ngt-ambient-light intensity="0.5" />
     <ngt-mesh scale="2">
-      <ngt-torus-geometry *args="[1, 0.25, 32, 100]"></ngt-torus-geometry>
-      <ngt-mesh-standard-material></ngt-mesh-standard-material>
+      <ngt-torus-geometry *args="[1, 0.25, 32, 100]" />
+      <ngt-mesh-standard-material />
     </ngt-mesh>
-    <ngts-orbit-controls></ngts-orbit-controls>
-    <ngts-environment preset="city"></ngts-environment>
-    <view-cube></view-cube>
+    <ngts-orbit-controls />
+    <ngts-environment preset="city" />
+    <view-cube />
   `,
   imports: [ViewCube, NgtArgs, NgtsOrbitControls, NgtsEnvironment],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

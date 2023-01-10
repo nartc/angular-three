@@ -6,7 +6,7 @@ import { Scene } from './scene.component';
   selector: 'sandbox-height-field',
   standalone: true,
   template: `
-    <ngt-canvas [scene]="Scene" [shadows]="true" [camera]="{ position: [0, -10, 10] }"></ngt-canvas>
+    <ngt-canvas [scene]="Scene" [shadows]="true" [camera]="{ position: [0, -10, 10] }" />
   `,
   imports: [NgtCanvas],
 })

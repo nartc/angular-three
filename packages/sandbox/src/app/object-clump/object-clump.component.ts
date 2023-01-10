@@ -10,7 +10,7 @@ import { Scene } from './scene.component';
       [scene]="Scene"
       [shadows]="true"
       [camera]="{ position: [0, 0, 20], fov: 35, near: 1, far: 40 }"
-    ></ngt-canvas>
+    />
   `,
   imports: [NgtCanvas],
 })

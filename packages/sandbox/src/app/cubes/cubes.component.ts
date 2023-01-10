@@ -5,7 +5,7 @@ import { Scene } from './scene.component';
 @Component({
   selector: 'sandbox-cubes',
   standalone: true,
-  template: ` <ngt-canvas [scene]="Scene" [camera]="{ position: [0, 0, 5] }"> </ngt-canvas> `,
+  template: ` <ngt-canvas [scene]="Scene" [camera]="{ position: [0, 0, 5] }" />`,
   imports: [NgtCanvas],
 })
 export default class SandboxCubes {

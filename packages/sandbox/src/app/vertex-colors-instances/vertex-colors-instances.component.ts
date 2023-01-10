@@ -5,7 +5,7 @@ import { Scene } from './scene.component';
 @Component({
   selector: 'sandbox-vertex-colors-instances',
   standalone: true,
-  template: ` <ngt-canvas [scene]="Scene" [camera]="{ position: [0, 0, 1] }"></ngt-canvas> `,
+  template: ` <ngt-canvas [scene]="Scene" [camera]="{ position: [0, 0, 1] }" />`,
   imports: [NgtCanvas],
 })
 export default class SandboxVertexColorsInstances {

@@ -13,7 +13,7 @@ import { Scene } from './scene.component';
       [gl]="{ antialias: false }"
       [camera]="{ position: [0, 0, 0.8], fov: 75, near: 0.5, far: 1 }"
       [compoundPrefixes]="['sandbox-y-bot']"
-    ></ngt-canvas>
+    />
   `,
   imports: [NgtCanvas],
 })

@@ -46,12 +46,9 @@ extend({
     <ng-container *args="[undefined, undefined, count]">
       <ngt-instanced-mesh *ref="spheresBody.ref" castShadow receiveShadow>
         <ngt-sphere-geometry *args="[radius, 16, 16]">
-          <ngt-instanced-buffer-attribute
-            *args="[colors, 3]"
-            attach="attributes.color"
-          ></ngt-instanced-buffer-attribute>
+          <ngt-instanced-buffer-attribute *args="[colors, 3]" attach="attributes.color" />
         </ngt-sphere-geometry>
-        <ngt-mesh-phong-material vertexColors></ngt-mesh-phong-material>
+        <ngt-mesh-phong-material vertexColors />
       </ngt-instanced-mesh>
     </ng-container>
   `,
@@ -93,8 +90,8 @@ export class Spheres implements OnInit {
       receiveShadow
       (beforeRender)="onBoxBeforeRender($any($event).state.clock)"
     >
-      <ngt-box-geometry *args="boxSize"></ngt-box-geometry>
-      <ngt-mesh-lambert-material></ngt-mesh-lambert-material>
+      <ngt-box-geometry *args="boxSize" />
+      <ngt-mesh-lambert-material />
     </ngt-mesh>
   `,
   imports: [NgtRef, NgtArgs],
@@ -121,8 +118,8 @@ export class Box {
   standalone: true,
   template: `
     <ngt-mesh *ref="planeBody.ref" receiveShadow>
-      <ngt-plane-geometry *args="args"></ngt-plane-geometry>
-      <ngt-mesh-phong-material [color]="color"></ngt-mesh-phong-material>
+      <ngt-plane-geometry *args="args" />
+      <ngt-mesh-phong-material [color]="color" />
     </ngt-mesh>
   `,
   imports: [NgtRef, NgtArgs],
@@ -146,41 +143,25 @@ export class Plane {
   selector: 'sandbox-kinematic-cube-scene',
   standalone: true,
   template: `
-    <ngt-hemisphere-light intensity="0.35"></ngt-hemisphere-light>
+    <ngt-hemisphere-light intensity="0.35" />
     <ngt-spot-light [position]="[30, 0, 30]" intensity="2" angle="0.3" penumbra="1" castShadow>
-      <ngt-vector2 *args="[256, 256]" attach="shadow.mapSize"></ngt-vector2>
+      <ngt-vector2 *args="[256, 256]" attach="shadow.mapSize" />
     </ngt-spot-light>
-    <ngt-point-light [position]="[-30, 0, -30]" intensity="0.5"></ngt-point-light>
+    <ngt-point-light [position]="[-30, 0, -30]" intensity="0.5" />
 
     <ngtc-physics [gravity]="[0, 0, -30]">
-      <sandbox-plane [color]="niceColor[4]"></sandbox-plane>
-      <sandbox-plane
-        [color]="niceColor[1]"
-        [position]="[-6, 0, 0]"
-        [rotation]="[0, 0.9, 0]"
-      ></sandbox-plane>
-      <sandbox-plane
-        [color]="niceColor[2]"
-        [position]="[6, 0, 0]"
-        [rotation]="[0, -0.9, 0]"
-      ></sandbox-plane>
-      <sandbox-plane
-        [color]="niceColor[3]"
-        [position]="[0, 6, 0]"
-        [rotation]="[0.9, 0, 0]"
-      ></sandbox-plane>
-      <sandbox-plane
-        [color]="niceColor[0]"
-        [position]="[0, -6, 0]"
-        [rotation]="[-0.9, 0, 0]"
-      ></sandbox-plane>
-      <sandbox-box></sandbox-box>
-      <sandbox-spheres [count]="100"></sandbox-spheres>
+      <sandbox-plane [color]="niceColor[4]" />
+      <sandbox-plane [color]="niceColor[1]" [position]="[-6, 0, 0]" [rotation]="[0, 0.9, 0]" />
+      <sandbox-plane [color]="niceColor[2]" [position]="[6, 0, 0]" [rotation]="[0, -0.9, 0]" />
+      <sandbox-plane [color]="niceColor[3]" [position]="[0, 6, 0]" [rotation]="[0.9, 0, 0]" />
+      <sandbox-plane [color]="niceColor[0]" [position]="[0, -6, 0]" [rotation]="[-0.9, 0, 0]" />
+      <sandbox-box />
+      <sandbox-spheres [count]="100" />
     </ngtc-physics>
   `,
   imports: [NgtArgs, NgtcPhysics, Plane, Box, Spheres],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene {
-    readonly niceColor = niceColor;
+  readonly niceColor = niceColor;
 }

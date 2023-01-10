@@ -73,14 +73,14 @@ const vec = new Vector3();
         receiveShadow
         (beforeRender)="onBeforeRender($any($event).object)"
       >
-        <ngt-sphere-geometry *args="[1, 32, 32]"></ngt-sphere-geometry>
+        <ngt-sphere-geometry *args="[1, 32, 32]" />
         <ngt-mesh-standard-material
           color="red"
           roughness="0"
           envMapIntensity="0.2"
           emissive="#370037"
           [map]="texture$ | ngtPush : null"
-        ></ngt-mesh-standard-material>
+        />
       </ngt-instanced-mesh>
     </ng-container>
   `,
@@ -123,24 +123,24 @@ export class Clump {
   selector: 'sandbox-object-clump-scene',
   standalone: true,
   template: `
-    <ngt-ambient-light intensity="0.25"></ngt-ambient-light>
+    <ngt-ambient-light intensity="0.25" />
     <ngt-spot-light [position]="30" intensity="1" angle="0.2" penumbra="1" castShadow>
-      <ngt-vector2 attach="shadow.mapSize" *args="[512, 512]"></ngt-vector2>
+      <ngt-vector2 attach="shadow.mapSize" *args="[512, 512]" />
     </ngt-spot-light>
-    <ngt-directional-light [position]="-10" intensity="5" color="purple"></ngt-directional-light>
+    <ngt-directional-light [position]="-10" intensity="5" color="purple" />
 
     <ngtc-physics [gravity]="[0, 2, 0]" [iterations]="10">
-      <sandbox-pointer></sandbox-pointer>
-      <sandbox-clump></sandbox-clump>
+      <sandbox-pointer />
+      <sandbox-clump />
     </ngtc-physics>
 
-    <ngts-environment files="assets/adamsbridge.hdr"></ngts-environment>
+    <ngts-environment files="assets/adamsbridge.hdr" />
 
     <ngtp-effect-composer>
-      <ngtp-bloom></ngtp-bloom>
+      <ngtp-bloom />
     </ngtp-effect-composer>
 
-    <ngts-sky></ngts-sky>
+    <ngts-sky />
   `,
   imports: [
     NgtArgs,

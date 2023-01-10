@@ -19,14 +19,14 @@ extend({ Group, Mesh, AmbientLight, DirectionalLight, Color });
         [dispose]="null"
         (beforeRender)="onBeforeRender($any($event).object)"
       >
-        <ngt-value attach="rotation.x" *args="[-Math.PI / 2]"></ngt-value>
+        <ngt-value attach="rotation.x" *args="[-Math.PI / 2]" />
 
         <ngt-mesh
           [material]="keen.materials['Scene_-_Root']"
           [geometry]="$any(keen.nodes['mesh_0']).geometry"
           castShadow
           receiveShadow
-        ></ngt-mesh>
+        />
       </ngt-group>
     </ng-container>
   `,
@@ -46,17 +46,17 @@ export class Keen {
   selector: 'sandbox-keen-bloom-scene',
   standalone: true,
   template: `
-    <ngt-color *args="['black']" attach="background"></ngt-color>
-    <ngts-orbit-controls></ngts-orbit-controls>
-    <sandbox-keen></sandbox-keen>
+    <ngt-color *args="['black']" attach="background" />
+    <ngts-orbit-controls />
+    <sandbox-keen />
 
-    <ngt-ambient-light></ngt-ambient-light>
-    <ngt-directional-light [position]="[0, 1, 2]" color="white"></ngt-directional-light>
+    <ngt-ambient-light />
+    <ngt-directional-light [position]="[0, 1, 2]" color="white" />
 
     <ngtp-effect-composer>
-      <ngtp-bloom [intensity]="5"></ngtp-bloom>
-      <ngtp-depth [inverted]="false"></ngtp-depth>
-      <ngtp-dot-screen [scale]="3"></ngtp-dot-screen>
+      <ngtp-bloom [intensity]="5" />
+      <ngtp-depth [inverted]="false" />
+      <ngtp-dot-screen [scale]="3" />
     </ngtp-effect-composer>
   `,
   imports: [

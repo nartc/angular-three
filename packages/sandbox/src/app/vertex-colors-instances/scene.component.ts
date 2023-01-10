@@ -30,12 +30,9 @@ extend({
   template: `
     <ngt-instanced-mesh #instanced *args="[undefined, undefined, length]">
       <ngt-box-geometry *args="[0.15, 0.15, 0.15]">
-        <ngt-instanced-buffer-attribute
-          attach="attributes.color"
-          *args="[colors, 3]"
-        ></ngt-instanced-buffer-attribute>
+        <ngt-instanced-buffer-attribute attach="attributes.color" *args="[colors, 3]" />
       </ngt-box-geometry>
-      <ngt-mesh-lambert-material vertexColors toneMapped="false"></ngt-mesh-lambert-material>
+      <ngt-mesh-lambert-material vertexColors toneMapped="false" />
     </ngt-instanced-mesh>
   `,
   imports: [NgtArgs],
@@ -77,12 +74,12 @@ export class ColorsInstances {
   selector: 'sandbox-vertex-colors-instances-scene',
   standalone: true,
   template: `
-    <ngt-ambient-light></ngt-ambient-light>
-    <ngt-directional-light intensity="0.55" [position]="150"></ngt-directional-light>
+    <ngt-ambient-light />
+    <ngt-directional-light intensity="0.55" [position]="150" />
 
-    <sandbox-colors-instances></sandbox-colors-instances>
+    <sandbox-colors-instances />
 
-    <ngts-orbit-controls [autoRotate]="true" [enablePan]="false"></ngts-orbit-controls>
+    <ngts-orbit-controls [autoRotate]="true" [enablePan]="false" />
   `,
   imports: [ColorsInstances, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

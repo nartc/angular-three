@@ -12,8 +12,7 @@ import { Scene } from './scene.component';
       [gl]="{ alpha: false }"
       [camera]="{ position: [-1, 5, 5], fov: 45 }"
       [scene]="Scene"
-    >
-    </ngt-canvas>
+    />
   `,
   imports: [NgtCanvas],
 })

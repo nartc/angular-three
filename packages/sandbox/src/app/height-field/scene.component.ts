@@ -85,12 +85,9 @@ extend({
     <ng-container *args="[undefined, undefined, number]">
       <ngt-instanced-mesh *ref="sphereBody.ref" castShadow receiveShadow>
         <ngt-sphere-geometry *args="[0.2, 16, 16]">
-          <ngt-instanced-buffer-attribute
-            attach="attributes.color"
-            *args="[colors, 3]"
-          ></ngt-instanced-buffer-attribute>
+          <ngt-instanced-buffer-attribute attach="attributes.color" *args="[colors, 3]" />
         </ngt-sphere-geometry>
-        <ngt-mesh-phong-material vertexColors></ngt-mesh-phong-material>
+        <ngt-mesh-phong-material vertexColors />
       </ngt-instanced-mesh>
     </ng-container>
   `,
@@ -133,7 +130,7 @@ export class Spheres implements OnInit {
 @Component({
   selector: 'height-map-geometry[elementSize][heights]',
   standalone: true,
-  template: `<ngt-buffer-geometry *ref="ref"></ngt-buffer-geometry>`,
+  template: `<ngt-buffer-geometry *ref="ref" />`,
   imports: [NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -190,8 +187,8 @@ export class HeightMapGeometry
   standalone: true,
   template: `
     <ngt-mesh *ref="heightFieldBody.ref" castShadow receiveShadow>
-      <ngt-mesh-phong-material [color]="color"></ngt-mesh-phong-material>
-      <height-map-geometry [elementSize]="elementSize" [heights]="heights"></height-map-geometry>
+      <ngt-mesh-phong-material [color]="color" />
+      <height-map-geometry [elementSize]="elementSize" [heights]="heights" />
     </ngt-mesh>
   `,
   imports: [HeightMapGeometry, NgtRef],
@@ -216,24 +213,20 @@ export class HeightField {
   selector: 'sandbox-height-field-scene',
   standalone: true,
   template: `
-    <ngt-color *args="['#171720']" attach="background"></ngt-color>
+    <ngt-color *args="['#171720']" attach="background" />
 
-    <ngts-orbit-controls
-      [dampingFactor]="0.2"
-      [minPolarAngle]="Math.PI / 3"
-      [maxPolarAngle]="Math.PI / 3"
-    ></ngts-orbit-controls>
+    <ngts-orbit-controls [dampingFactor]="0.2" [minPolarAngle]="Math.PI / 3" [maxPolarAngle]="Math.PI / 3" />
 
     <ngtc-physics>
-      <ngt-ambient-light intensity="0.5"></ngt-ambient-light>
-      <ngt-directional-light [position]="[0, 3, 0]" castShadow></ngt-directional-light>
+      <ngt-ambient-light intensity="0.5" />
+      <ngt-directional-light [position]="[0, 3, 0]" castShadow />
       <height-field
         [elementSize]="scale / 128"
         [heights]="heights"
         [position]="[-scale / 2, 0, scale / 2]"
         [rotation]="[Math.PI / -2, 0, 0]"
-      ></height-field>
-      <spheres [rows]="3" [columns]="3" [spread]="4"></spheres>
+      />
+      <spheres [rows]="3" [columns]="3" [spread]="4" />
     </ngtc-physics>
   `,
   imports: [NgtsOrbitControls, NgtcPhysics, HeightField, Spheres, NgtArgs],
