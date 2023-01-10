@@ -169,7 +169,7 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
       controls: this.controls,
       lights: this.lights,
     } as Required<CanvasOptions>;
-    const storyInputs$ = this.select('storyInputs').pipe(debounceTime(100));
+    const storyInputs$ = this.select('storyInputs').pipe(debounceTime(0));
     this.ref = this.anchor.createComponent(this.storybookCanvas, {
       environmentInjector: createEnvironmentInjector(
         [
