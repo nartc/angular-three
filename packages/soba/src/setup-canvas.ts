@@ -113,29 +113,9 @@ export class StorybookScene extends NgtRxStore implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'storybook-canvas',
-  standalone: true,
-  template: `
-    <ngt-canvas
-      [shadows]="true"
-      [performance]="canvasOptions.performance"
-      [camera]="canvasOptions.camera"
-      [scene]="Scene"
-      [compoundPrefixes]="['storybook']"
-    ></ngt-canvas>
-  `,
-  imports: [NgtCanvas],
-})
-export class StorybookCanvas {
-  readonly canvasOptions = inject(CANVAS_OPTIONS);
-  readonly Scene = StorybookScene;
-}
-
-@Component({
   selector: 'storybook-setup[storyComponent]',
   standalone: true,
   template: ` <ng-container #anchor></ng-container> `,
-  imports: [StorybookCanvas],
 })
 export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
   @Input() camera: CanvasOptions['camera'] = defaultCanvasOptions.camera;
@@ -152,7 +132,6 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
   anchor!: ViewContainerRef;
 
   private ref?: ComponentRef<unknown>;
-  readonly storybookCanvas = StorybookCanvas;
   readonly envInjector = inject(EnvironmentInjector);
 
   override initialize(): void {
@@ -169,8 +148,10 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
       controls: this.controls,
       lights: this.lights,
     } as Required<CanvasOptions>;
+
     const storyInputs$ = this.select('storyInputs').pipe(debounceTime(0));
-    this.ref = this.anchor.createComponent(this.storybookCanvas, {
+
+    this.ref = this.anchor.createComponent(NgtCanvas, {
       environmentInjector: createEnvironmentInjector(
         [
           { provide: CANVAS_OPTIONS, useValue: mergedOptions },
@@ -180,6 +161,11 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
         this.envInjector
       ),
     });
+    this.ref.setInput('shadows', true);
+    this.ref.setInput('performance', mergedOptions.performance);
+    this.ref.setInput('camera', mergedOptions.camera);
+    this.ref.setInput('compoundPrefixes', ['storybook']);
+    this.ref.setInput('scene', StorybookScene);
     this.ref.changeDetectorRef.detectChanges();
   }
 
