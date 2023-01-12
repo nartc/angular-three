@@ -38,7 +38,7 @@ const privateKeys = [
   'addInteraction',
   'removeInteraction',
 ] as const;
-type PrivateKeys = typeof privateKeys[number];
+type PrivateKeys = (typeof privateKeys)[number];
 
 export interface NgtPortalInputs {
   container: ElementRef<THREE.Object3D> | THREE.Object3D;
@@ -107,7 +107,7 @@ export class NgtPortalContent {}
   template: `
     <ng-container #portalContentAnchor>
       <ngt-portal-before-render
-        *ngIf="autoRender"
+        *ngIf="autoRender && portalContentRendered"
         [renderPriority]="autoRenderPriority"
         [parentScene]="parentScene"
         [parentCamera]="parentCamera"
@@ -151,6 +151,7 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
   readonly #raycaster = new Raycaster();
   readonly #pointer = new Vector2();
 
+  portalContentRendered = false;
   #portalContentView?: EmbeddedViewRef<unknown>;
 
   override initialize() {
@@ -197,14 +198,15 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
     this.hold(this.#parentStore.select(), (previous) =>
       this.#portalStore.set((state) => this.#inject(previous, state))
     );
+
     requestAnimationFrame(() => {
       this.#portalStore.set((injectState) => this.#inject(this.#parentStore.get(), injectState));
+      this.#portalContentView = this.portalContentAnchor.createEmbeddedView(
+        this.portalContentTemplate
+      );
+      this.#portalContentView.detectChanges();
+      this.portalContentRendered = true;
     });
-
-    this.#portalContentView = this.portalContentAnchor.createEmbeddedView(
-      this.portalContentTemplate
-    );
-    this.#portalContentView.detectChanges();
   }
 
   onBeforeRender(portal: NgtRenderState) {

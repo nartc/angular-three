@@ -207,7 +207,7 @@ export function processThreeEvent(
 
 export function eventToHandler(callback: (event: any) => void, cdr: ChangeDetectorRef) {
   return (
-    event: Parameters<Exclude<NgtEventHandlers[typeof supportedEvents[number]], undefined>>[0]
+    event: Parameters<Exclude<NgtEventHandlers[(typeof supportedEvents)[number]], undefined>>[0]
   ) => {
     callback(event);
     cdr?.detectChanges();
