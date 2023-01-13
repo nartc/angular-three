@@ -63,6 +63,7 @@
     "@ngrx/component-store": "^15.1.0",
     "@pmndrs/cannon-worker-api": "^2.3.2",
     "@rx-angular/state": "^1.7.0",
+    "@rx-angular/template": "^1.0.0-rc.5",
     "cannon-es": "^0.20.0",
     "cannon-es-debugger": "^1.0.0",
     "ngx-resize": "^1.0.4",
