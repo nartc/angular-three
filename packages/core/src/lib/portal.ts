@@ -203,7 +203,7 @@ export class NgtPortal extends NgtRxStore<NgtPortalInputs> implements OnInit, On
       this.#portalStore.set((injectState) => this.#inject(this.#parentStore.get(), injectState));
     });
     this.#portalContentView = this.portalContentAnchor.createEmbeddedView(
-        this.portalContentTemplate
+      this.portalContentTemplate
     );
     this.#portalContentView.detectChanges();
     this.portalContentRendered = true;
