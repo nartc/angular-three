@@ -3,8 +3,8 @@ import {
   extend,
   injectNgtRef,
   injectNgtStore,
-  NgtCamera,
   NgtPortal,
+  NgtPortalContent,
   NgtRef,
   NgtRxStore,
 } from '@angular-three/core';
@@ -23,7 +23,7 @@ import {
 } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
 import { combineLatest, map } from 'rxjs';
-import { Group, Matrix4, Object3D, Quaternion, Vector3 } from 'three';
+import { Group, Matrix4, Object3D, OrthographicCamera, Quaternion, Vector3 } from 'three';
 import { OrbitControls } from 'three-stdlib';
 
 type ControlsProto = { update(): void; target: THREE.Vector3 };
@@ -90,7 +90,7 @@ export class NgtsGizmoHelperContent {}
       </ng-template>
     </ngt-portal>
   `,
-  imports: [NgtPortal, NgtRef, NgtsOrthographicCamera, NgTemplateOutlet],
+  imports: [NgtPortal, NgtPortalContent, NgtRef, NgtsOrthographicCamera, NgTemplateOutlet],
   providers: [provideNgtsGizmoHelperApi([NgtsGizmoHelper], gizmoHelperApiFactory)],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -98,7 +98,7 @@ export class NgtsGizmoHelper extends NgtRxStore implements OnInit {
   readonly #store = injectNgtStore();
 
   readonly gizmoRef = injectNgtRef<Group>();
-  readonly virtualCameraRef = injectNgtRef<NgtCamera>();
+  readonly virtualCameraRef = injectNgtRef<OrthographicCamera>();
 
   animating = false;
   radius = 0;

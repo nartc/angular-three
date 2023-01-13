@@ -1,6 +1,7 @@
 import { NgtArgs, NgtPush } from '@angular-three/core';
 import {
   NgtsGizmoHelper,
+  NgtsGizmoHelperContent,
   NgtsGizmoViewcube,
   NgtsGizmoViewport,
 } from '@angular-three/soba/abstractions';
@@ -52,29 +53,30 @@ const args = {
   template: `
     <ngt-primitive *args="[model$ | ngtPush : null]" scale="0.01" />
     <ngts-gizmo-helper [alignment]="alignment" [margin]="[marginX, marginY]">
-        <ng-template ngtsGizmoHelperContent>
-      <ngts-gizmo-viewcube
-        *ngIf="gizmo === 'GizmoViewcube'; else viewport"
-        [color]="color"
-        [faces]="faces"
-        [hoverColor]="hoverColor"
-        [strokeColor]="strokeColor"
-        [textColor]="textColor"
-        [opacity]="opacity"
-      />
-      <ng-template #viewport>
-        <ngts-gizmo-viewport
-        [axisColors]="[colorX, colorY, colorZ]"
-        [hideNegativeAxes]="hideNegativeAxes"
-        [labelColor]="labelColor"
-        ></ngts-gizmo-viewport>
-      </ng-template>
+      <ng-template ngtsGizmoHelperContent>
+        <ngts-gizmo-viewcube
+          *ngIf="gizmo === 'GizmoViewcube'; else viewport"
+          [color]="color"
+          [faces]="faces"
+          [hoverColor]="hoverColor"
+          [strokeColor]="strokeColor"
+          [textColor]="textColor"
+          [opacity]="opacity"
+        />
+        <ng-template #viewport>
+          <ngts-gizmo-viewport
+            [axisColors]="[colorX, colorY, colorZ]"
+            [hideNegativeAxes]="hideNegativeAxes"
+            [labelColor]="labelColor"
+          />
         </ng-template>
+      </ng-template>
     </ngts-gizmo-helper>
     <ngts-orbit-controls [makeDefault]="true" />
   `,
   imports: [
     NgtsGizmoHelper,
+    NgtsGizmoHelperContent,
     NgtsGizmoViewcube,
     NgtsGizmoViewport,
     NgtArgs,

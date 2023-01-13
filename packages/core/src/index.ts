@@ -7,6 +7,7 @@ export * from './lib/directives/dynamic-attach';
 export * from './lib/directives/ref';
 export * from './lib/directives/repeat';
 export * from './lib/pipes/push';
+export * from './lib/portal';
 export * from './lib/renderer/renderer';
 export * from './lib/services/loader';
 export * from './lib/stores/rx-store';
@@ -17,6 +18,3 @@ export * from './lib/utils/di';
 export * from './lib/utils/instance';
 export * from './lib/utils/is';
 export * from './lib/utils/update';
-
-import { NgtPortal as Portal, NgtPortalContent } from './lib/portal';
-export const NgtPortal = [Portal, NgtPortalContent];

@@ -5,6 +5,7 @@ import {
   NgtArgs,
   NgtDynamicAttach,
   NgtPortal,
+  NgtPortalContent,
   NgtPush,
   NgtRef,
   NgtRenderState,
@@ -65,6 +66,7 @@ extend({
   `,
   imports: [
     NgtPortal,
+    NgtPortalContent,
     NgtPush,
     NgtArgs,
     NgtRepeat,

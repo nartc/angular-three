@@ -1,4 +1,12 @@
-import { extend, injectNgtRef, NgtArgs, NgtPortal, NgtRef, prepare } from '@angular-three/core';
+import {
+  extend,
+  injectNgtRef,
+  NgtArgs,
+  NgtPortal,
+  NgtPortalContent,
+  NgtRef,
+  prepare,
+} from '@angular-three/core';
 import { NgIf } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
@@ -37,7 +45,15 @@ extend({ CubeCamera });
       </ng-template>
     </ngt-portal>
   `,
-  imports: [NgtPortal, NgtsEnvironmentMap, NgtsEnvironmentCube, NgIf, NgtArgs, NgtRef],
+  imports: [
+    NgtPortal,
+    NgtPortalContent,
+    NgtsEnvironmentMap,
+    NgtsEnvironmentCube,
+    NgIf,
+    NgtArgs,
+    NgtRef,
+  ],
   providers: [RxActionFactory],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
