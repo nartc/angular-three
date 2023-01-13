@@ -5,7 +5,6 @@ import {
   injectNgtStore,
   NgtCamera,
   NgtPortal,
-  NgtPortalContent,
   NgtRef,
   NgtRxStore,
 } from '@angular-three/core';
@@ -91,7 +90,7 @@ export class NgtsGizmoHelperContent {}
       </ng-template>
     </ngt-portal>
   `,
-  imports: [NgtPortal, NgtPortalContent, NgtRef, NgtsOrthographicCamera, NgTemplateOutlet],
+  imports: [NgtPortal, NgtRef, NgtsOrthographicCamera, NgTemplateOutlet],
   providers: [provideNgtsGizmoHelperApi([NgtsGizmoHelper], gizmoHelperApiFactory)],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

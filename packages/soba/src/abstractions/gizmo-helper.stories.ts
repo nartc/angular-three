@@ -1,9 +1,5 @@
 import { NgtArgs, NgtPush } from '@angular-three/core';
-import {
-  NgtsGizmoHelper,
-  NgtsGizmoHelperContent,
-  NgtsGizmoViewcube,
-} from '@angular-three/soba/abstractions';
+import { NgtsGizmoHelper, NgtsGizmoViewcube } from '@angular-three/soba/abstractions';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import { NgIf } from '@angular/common';
@@ -66,15 +62,7 @@ const args = {
     </ngts-gizmo-helper>
     <ngts-orbit-controls [makeDefault]="true" />
   `,
-  imports: [
-    NgtsGizmoHelper,
-    NgtsGizmoHelperContent,
-    NgtsGizmoViewcube,
-    NgtArgs,
-    NgtPush,
-    NgIf,
-    NgtsOrbitControls,
-  ],
+  imports: [NgtsGizmoHelper, NgtsGizmoViewcube, NgtArgs, NgtPush, NgIf, NgtsOrbitControls],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class DefaultGizmoHelperStory {
