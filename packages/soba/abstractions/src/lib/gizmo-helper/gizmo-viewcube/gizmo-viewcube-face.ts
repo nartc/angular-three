@@ -1,5 +1,6 @@
 import { extend, NgtArgs, NgtDynamicAttach, NgtRepeat, NgtThreeEvent } from '@angular-three/core';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, Input } from '@angular/core';
 import { BoxGeometry, CanvasTexture, Mesh, MeshLambertMaterial } from 'three';
 import { injectNgtsGizmoHelperApi } from '../gizmo-helper';
 import { colors, defaultFaces } from './constants';
@@ -26,6 +27,8 @@ extend({ MeshLambertMaterial, Mesh, BoxGeometry });
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsGizmoViewcubeFaceMaterial extends NgtsGizmoViewcubeInputs {
+  readonly #document = inject(DOCUMENT);
+
   @Input() set index(index: number) {
     this.set({ index });
   }
@@ -58,7 +61,7 @@ export class NgtsGizmoViewcubeFaceMaterial extends NgtsGizmoViewcubeInputs {
       this.select(
         ['index', 'faces', 'color', 'font', 'textColor', 'strokeColor'],
         ({ index, faces, color, font, textColor, strokeColor }) => {
-          const canvas = document.createElement('canvas');
+          const canvas = this.#document.createElement('canvas');
           canvas.width = 128;
           canvas.height = 128;
           const context = canvas.getContext('2d')!;
@@ -128,8 +131,8 @@ export class NgtsGizmoViewcubeFaceCube extends NgtsGizmoViewcubeInputs {
   }
 
   onClick(event: NgtThreeEvent<MouseEvent>) {
-    if (this.clicked.observed) {
-      this.clicked.emit(event);
+    if (this.get('clickEmitter')?.observed) {
+      this.get('clickEmitter').emit(event);
     } else {
       event.stopPropagation();
       this.gizmoHelperApi.tweenCamera(event.face!.normal);

@@ -1,5 +1,9 @@
 import { NgtArgs, NgtPush } from '@angular-three/core';
-import { NgtsGizmoHelper, NgtsGizmoViewcube } from '@angular-three/soba/abstractions';
+import {
+  NgtsGizmoHelper,
+  NgtsGizmoViewcube,
+  NgtsGizmoViewport,
+} from '@angular-three/soba/abstractions';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import { NgIf } from '@angular/common';
@@ -50,7 +54,7 @@ const args = {
     <ngts-gizmo-helper [alignment]="alignment" [margin]="[marginX, marginY]">
         <ng-template ngtsGizmoHelperContent>
       <ngts-gizmo-viewcube
-        *ngIf="gizmo === 'GizmoViewcube'"
+        *ngIf="gizmo === 'GizmoViewcube'; else viewport"
         [color]="color"
         [faces]="faces"
         [hoverColor]="hoverColor"
@@ -58,11 +62,26 @@ const args = {
         [textColor]="textColor"
         [opacity]="opacity"
       />
+      <ng-template #viewport>
+        <ngts-gizmo-viewport
+        [axisColors]="[colorX, colorY, colorZ]"
+        [hideNegativeAxes]="hideNegativeAxes"
+        [labelColor]="labelColor"
+        ></ngts-gizmo-viewport>
+      </ng-template>
         </ng-template>
     </ngts-gizmo-helper>
     <ngts-orbit-controls [makeDefault]="true" />
   `,
-  imports: [NgtsGizmoHelper, NgtsGizmoViewcube, NgtArgs, NgtPush, NgIf, NgtsOrbitControls],
+  imports: [
+    NgtsGizmoHelper,
+    NgtsGizmoViewcube,
+    NgtsGizmoViewport,
+    NgtArgs,
+    NgtPush,
+    NgIf,
+    NgtsOrbitControls,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class DefaultGizmoHelperStory {

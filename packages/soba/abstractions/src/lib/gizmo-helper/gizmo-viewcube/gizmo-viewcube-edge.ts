@@ -54,8 +54,8 @@ export class NgtsGizmoViewcubeEdgeCube extends NgtsGizmoViewcubeInputs {
   }
 
   onClick(event: NgtThreeEvent<MouseEvent>) {
-    if (this.clicked.observed) {
-      this.clicked.emit(event);
+    if (this.get('clickEmitter')?.observed) {
+      this.get('clickEmitter').emit(event);
     } else {
       event.stopPropagation();
       this.gizmoHelperApi.tweenCamera(this.get('position'));

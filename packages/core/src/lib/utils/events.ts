@@ -42,6 +42,10 @@ export function removeInteractivity(store: NgtRxStore<NgtState>, object: Object3
   internal.capturedMap.forEach((captures, pointerId) => {
     releaseInternalPointerCapture(internal.capturedMap, object, captures, pointerId);
   });
+
+  if (store.get('previousStore')) {
+    removeInteractivity(store.get('previousStore')!, object);
+  }
 }
 
 export function createEvents(store: NgtRxStore<NgtState>) {

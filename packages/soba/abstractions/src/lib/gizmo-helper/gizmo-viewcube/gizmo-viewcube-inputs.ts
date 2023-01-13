@@ -1,5 +1,5 @@
 import { injectNgtStore, NgtRxStore, NgtThreeEvent } from '@angular-three/core';
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input } from '@angular/core';
 
 @Directive()
 export abstract class NgtsGizmoViewcubeInputs extends NgtRxStore {
@@ -25,5 +25,7 @@ export abstract class NgtsGizmoViewcubeInputs extends NgtRxStore {
     this.set({ faces: faces === undefined ? this.get('faces') : faces });
   }
 
-  @Output() clicked = new EventEmitter<NgtThreeEvent<MouseEvent>>();
+  @Input() set clickEmitter(clickEmitter: EventEmitter<NgtThreeEvent<MouseEvent>>) {
+    this.set({ clickEmitter });
+  }
 }

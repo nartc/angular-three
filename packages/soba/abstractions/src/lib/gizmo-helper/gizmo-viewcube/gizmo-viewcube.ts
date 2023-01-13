@@ -1,6 +1,6 @@
-import { extend } from '@angular-three/core';
+import { extend, NgtThreeEvent } from '@angular-three/core';
 import { NgFor } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output } from '@angular/core';
 import { AmbientLight, Group, PointLight } from 'three';
 import { cornerDimensions, corners, edgeDimensions, edges } from './constants';
 import { NgtsGizmoViewcubeEdgeCube } from './gizmo-viewcube-edge';
@@ -22,6 +22,7 @@ extend({ Group, AmbientLight, PointLight });
         [textColor]="get('textColor')"
         [strokeColor]="get('strokeColor')"
         [faces]="get('faces')"
+        [clickEmitter]="clicked"
       />
 
       <ngts-gizmo-viewcube-edge-cube
@@ -35,6 +36,7 @@ extend({ Group, AmbientLight, PointLight });
         [textColor]="get('textColor')"
         [strokeColor]="get('strokeColor')"
         [faces]="get('faces')"
+        [clickEmitter]="clicked"
       />
 
       <ngts-gizmo-viewcube-edge-cube
@@ -48,6 +50,7 @@ extend({ Group, AmbientLight, PointLight });
         [textColor]="get('textColor')"
         [strokeColor]="get('strokeColor')"
         [faces]="get('faces')"
+        [clickEmitter]="clicked"
       />
 
       <ngt-ambient-light intensity="0.5" />
@@ -71,4 +74,6 @@ export class NgtsGizmoViewcube extends NgtsGizmoViewcubeInputs {
   @Input() set color(color: string) {
     this.set({ color: color === undefined ? this.get('color') : color });
   }
+
+  @Output() clicked = new EventEmitter<NgtThreeEvent<MouseEvent>>();
 }
