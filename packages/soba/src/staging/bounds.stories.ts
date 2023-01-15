@@ -98,7 +98,7 @@ class Models {
   selector: 'storybook-default-bounds',
   standalone: true,
   template: `
-    <ngt-color *args="['#f08080']" attach="background" />
+    <ngt-color *args="['orangered']" attach="background" />
 
     <ngt-spot-light [position]="[-100, -100, -100]" intensity="0.2" angle="0.3" penumbra="1" />
     <ngt-hemisphere-light

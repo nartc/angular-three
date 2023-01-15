@@ -54,7 +54,7 @@ extend({ Color });
   selector: 'storybook-default-accumulative-shadows',
   standalone: true,
   template: `
-    <ngt-color *args="['goldenrod']" attach="background" />
+    <ngt-color *args="['chocolate']" attach="background" />
 
     <storybook-suzi [rotation]="[-0.63, 0, 0]" [scale]="2" [position]="[0, -1.175, 0]" />
     <ngts-accumulative-shadows
