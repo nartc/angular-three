@@ -336,7 +336,7 @@ export class NgtRenderer implements Renderer2 {
         return;
       }
 
-      if (name === 'attach') {
+      if (name === SPECIAL_PROPERTIES.ATTACH) {
         el.__ngt_renderer__[NgtRendererClassId.localState]().attach = Array.isArray(value)
           ? value.map((v) => v.toString())
           : value;

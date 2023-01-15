@@ -45,6 +45,8 @@ extend({
         >
           <ngt-mesh [scale]="cloud.scale" [rotation]="[0, 0, 0]">
             <ngt-plane-geometry />
+            <!-- we use ngIf here for texture because by the time ngt-value is initialized -->
+            <!-- [map] has not been resolved yet. we ngIf it so that texture is available before -->
             <ngt-mesh-standard-material
               *ngIf="cloudTexture$ | ngtPush : null as cloudTexture"
               transparent

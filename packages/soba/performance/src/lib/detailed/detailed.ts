@@ -1,6 +1,6 @@
 import { extend, injectNgtRef, NgtBeforeRender, NgtRxStore } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core';
-import { combineLatest, debounceTime } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { LOD } from 'three';
 
 extend({ LOD });
@@ -32,7 +32,7 @@ export class NgtsDetailed extends NgtRxStore implements OnInit {
 
   #updateLodChildren() {
     this.hold(
-      combineLatest([this.lodRef.children$(), this.select('distances')]).pipe(debounceTime(0)),
+      combineLatest([this.lodRef.children$(), this.select('distances')]),
       ([children, distances]) => {
         this.lodRef.nativeElement.levels.length = 0;
         children.forEach((child, index) => {

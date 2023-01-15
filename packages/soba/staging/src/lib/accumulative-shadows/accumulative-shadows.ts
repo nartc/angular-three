@@ -138,6 +138,8 @@ function accumulativeApiFactory(shadows: NgtsAccumulativeShadows) {
     shadows.pLM.configure(mesh);
 
     shadows.hold(
+      // objects on the Scene is part of the effect triggers because objects
+      // outside of the accumulative shadows need to be accounted for as well
       combineLatest([shadows.select(), getLocalState(store.get('scene'))!.objects]),
       () => {
         // Reset internals, buffers, ...
