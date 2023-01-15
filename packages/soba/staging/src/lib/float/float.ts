@@ -1,4 +1,4 @@
-import { extend, injectNgtRef, NgtBeforeRender, NgtRef, NgtRxStore } from '@angular-three/core';
+import { extend, injectNgtRef, NgtBeforeRender, NgtRxStore } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { Group, MathUtils } from 'three';
 
@@ -9,12 +9,11 @@ extend({ Group });
   standalone: true,
   template: `
     <ngt-group ngtCompound>
-      <ngt-group *ref="groupRef" (beforeRender)="onBeforeRender($any($event))">
+      <ngt-group [ref]="groupRef" (beforeRender)="onBeforeRender($any($event))">
         <ng-content />
       </ngt-group>
     </ngt-group>
   `,
-  imports: [NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsFloat extends NgtRxStore {

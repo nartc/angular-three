@@ -100,7 +100,7 @@ interface BotGLTF extends GLTF {
           [normalMap]="texture"
           [normalScale]="[0.15, 0.15]"
         >
-          <ngt-value *args="[35, 35]" attach="normalMap.repeat" />
+          <ngt-value [rawValue]="[35, 35]" attach="normalMap.repeat" />
         </ngt-mesh-standard-material>
       </ngt-mesh>
       <ngt-mesh castShadow [geometry]="bot.nodes.Alpha_Joints.geometry">
@@ -227,11 +227,16 @@ export class Effects implements OnInit, OnDestroy {
       [fontSize]="0.6"
       [letterSpacing]="0"
     >
-      <ngt-value *args="[false]" attach="material.fog" />
+      <ngt-value [rawValue]="false" attach="material.fog" />
     </ngts-text>
     <ngt-mesh scale="4" [position]="[0, 1, -0.2]">
       <ngt-plane-geometry />
-      <ngt-mesh-standard-material color="lightblue" toneMapped="false" fog="false" envMapIntensity="0" />
+      <ngt-mesh-standard-material
+        color="lightblue"
+        toneMapped="false"
+        fog="false"
+        envMapIntensity="0"
+      />
     </ngt-mesh>
 
     <ngts-adaptive-dpr [pixelated]="true" />

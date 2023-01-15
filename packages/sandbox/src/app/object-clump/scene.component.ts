@@ -1,6 +1,6 @@
 import { NgtcPhysics } from '@angular-three/cannon';
 import { injectSphere } from '@angular-three/cannon/services';
-import { extend, injectNgtStore, NgtArgs, NgtPush, NgtRef } from '@angular-three/core';
+import { extend, injectNgtStore, NgtArgs, NgtPush } from '@angular-three/core';
 import { NgtpEffectComposer } from '@angular-three/postprocessing';
 import { NgtpBloom } from '@angular-three/postprocessing/effects';
 import { injectNgtsTextureLoader } from '@angular-three/soba/loaders';
@@ -66,25 +66,24 @@ const vec = new Vector3();
   selector: 'sandbox-clump',
   standalone: true,
   template: `
-    <ng-container *args="[undefined, undefined, count]">
-      <ngt-instanced-mesh
-        *ref="sphereBody.ref"
-        castShadow
-        receiveShadow
-        (beforeRender)="onBeforeRender($any($event).object)"
-      >
-        <ngt-sphere-geometry *args="[1, 32, 32]" />
-        <ngt-mesh-standard-material
-          color="red"
-          roughness="0"
-          envMapIntensity="0.2"
-          emissive="#370037"
-          [map]="texture$ | ngtPush : null"
-        />
-      </ngt-instanced-mesh>
-    </ng-container>
+    <ngt-instanced-mesh
+      *args="[undefined, undefined, count]"
+      [ref]="sphereBody.ref"
+      castShadow
+      receiveShadow
+      (beforeRender)="onBeforeRender($any($event).object)"
+    >
+      <ngt-sphere-geometry *args="[1, 32, 32]" />
+      <ngt-mesh-standard-material
+        color="red"
+        roughness="0"
+        envMapIntensity="0.2"
+        emissive="#370037"
+        [map]="texture$ | ngtPush : null"
+      />
+    </ngt-instanced-mesh>
   `,
-  imports: [NgtArgs, NgtRef, NgtPush],
+  imports: [NgtArgs, NgtPush],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Clump {

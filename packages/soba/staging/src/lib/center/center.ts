@@ -1,4 +1,4 @@
-import { extend, injectNgtRef, NgtRef, NgtRxStore } from '@angular-three/core';
+import { extend, injectNgtRef, NgtRxStore } from '@angular-three/core';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -15,15 +15,14 @@ extend({ Group });
   selector: 'ngts-center',
   standalone: true,
   template: `
-    <ngt-group ngtCompound *ref="groupRef">
-      <ngt-group *ref="outerRef">
-        <ngt-group *ref="innerRef">
+    <ngt-group ngtCompound [ref]="groupRef">
+      <ngt-group [ref]="outerRef">
+        <ngt-group [ref]="innerRef">
           <ng-content />
         </ngt-group>
       </ngt-group>
     </ngt-group>
   `,
-  imports: [NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsCenter extends NgtRxStore implements OnInit {

@@ -1,4 +1,4 @@
-import { extend, injectNgtRef, NgtArgs, NgtPush, NgtRef, NgtVector3 } from '@angular-three/core';
+import { extend, injectNgtRef, NgtArgs, NgtPush, NgtVector3 } from '@angular-three/core';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { injectNgtsGLTFLoader } from '@angular-three/soba/loaders';
 import { NgIf } from '@angular/common';
@@ -29,12 +29,12 @@ extend({
   selector: 'ngts-box',
   standalone: true,
   template: `
-    <ngt-mesh ngtCompound *ref="meshRef">
+    <ngt-mesh ngtCompound [ref]="meshRef">
       <ngt-box-geometry *args="args" />
       <ng-content />
     </ngt-mesh>
   `,
-  imports: [NgtRef, NgtArgs],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Box {
@@ -58,7 +58,9 @@ export class Box {
     >
       <ngt-mesh-normal-material *ngIf="isFun; else noFun" />
       <ng-template #noFun>
-        <ngt-mesh-basic-material [color]="hover ? (cubeClick.observed ? 'red' : 'hotpink') : 'orange'" />
+        <ngt-mesh-basic-material
+          [color]="hover ? (cubeClick.observed ? 'red' : 'hotpink') : 'orange'"
+        />
       </ng-template>
     </ngts-box>
   `,

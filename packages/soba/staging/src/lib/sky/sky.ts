@@ -1,4 +1,4 @@
-import { injectNgtRef, NgtArgs, NgtRef, NgtRxStore, NgtVector3 } from '@angular-three/core';
+import { injectNgtRef, NgtArgs, NgtRxStore, NgtVector3 } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core';
 import { Vector3 } from 'three';
 import { Sky } from 'three-stdlib';
@@ -22,17 +22,21 @@ export function calcPosFromAngles(
   selector: 'ngts-sky',
   standalone: true,
   template: `
-    <ng-container *args="[skyRef.nativeElement]">
-      <ngt-primitive ngtCompound *ref="skyRef" [scale]="get('scale')">
-        <ngt-value *args="[get('mieCoefficient')]" attach="material.uniforms.mieCoefficient.value" />
-        <ngt-value *args="[get('mieDirectionalG')]" attach="material.uniforms.mieDirectionalG.value" />
-        <ngt-value *args="[get('rayleigh')]" attach="material.uniforms.rayleigh.value" />
-        <ngt-value *args="[get('sunPosition')]" attach="material.uniforms.sunPosition.value" />
-        <ngt-value *args="[get('turbidity')]" attach="material.uniforms.turbidity.value" />
-      </ngt-primitive>
-    </ng-container>
+    <ngt-primitive *args="[skyRef.nativeElement]" ngtCompound [ref]="skyRef" [scale]="get('scale')">
+      <ngt-value
+        [rawValue]="get('mieCoefficient')"
+        attach="material.uniforms.mieCoefficient.value"
+      />
+      <ngt-value
+        [rawValue]="get('mieDirectionalG')"
+        attach="material.uniforms.mieDirectionalG.value"
+      />
+      <ngt-value [rawValue]="get('rayleigh')" attach="material.uniforms.rayleigh.value" />
+      <ngt-value [rawValue]="get('sunPosition')" attach="material.uniforms.sunPosition.value" />
+      <ngt-value [rawValue]="get('turbidity')" attach="material.uniforms.turbidity.value" />
+    </ngt-primitive>
   `,
-  imports: [NgtRef, NgtArgs],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsSky extends NgtRxStore implements OnInit {

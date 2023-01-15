@@ -4,7 +4,6 @@ import {
   NgtArgs,
   NgtPortal,
   NgtPortalContent,
-  NgtRef,
   prepare,
 } from '@angular-three/core';
 import { NgIf } from '@angular/common';
@@ -27,9 +26,7 @@ extend({ CubeCamera });
     <ngt-portal [container]="virtualSceneRef">
       <ng-template ngtPortalContent>
         <ng-content />
-        <ng-container *args="get('cameraArgs')">
-          <ngt-cube-camera *ref="cubeCameraRef" />
-        </ng-container>
+        <ngt-cube-camera *args="get('cameraArgs')" [ref]="cubeCameraRef" />
         <ng-container *ngIf="get('files') || get('preset'); else environmentMap">
           <ngts-environment-cube
             [background]="true"
@@ -40,20 +37,16 @@ extend({ CubeCamera });
           />
         </ng-container>
         <ng-template #environmentMap>
-          <ngts-environment-map [background]="true" [map]="get('map')" [extensions]="get('extensions')" />
+          <ngts-environment-map
+            [background]="true"
+            [map]="get('map')"
+            [extensions]="get('extensions')"
+          />
         </ng-template>
       </ng-template>
     </ngt-portal>
   `,
-  imports: [
-    NgtPortal,
-    NgtPortalContent,
-    NgtsEnvironmentMap,
-    NgtsEnvironmentCube,
-    NgIf,
-    NgtArgs,
-    NgtRef,
-  ],
+  imports: [NgtPortal, NgtPortalContent, NgtsEnvironmentMap, NgtsEnvironmentCube, NgIf, NgtArgs],
   providers: [RxActionFactory],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

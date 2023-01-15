@@ -19,7 +19,12 @@ extend({ Mesh, BoxGeometry, MeshBasicMaterial });
       (click)="onClick($any($event))"
     >
       <ngt-box-geometry *args="get('dimensions')" />
-      <ngt-mesh-basic-material [color]="hover ? get('hoverColor') : 'white'" transparent opacity="0.6" [visible]="hover" />
+      <ngt-mesh-basic-material
+        [color]="hover ? get('hoverColor') : 'white'"
+        transparent
+        opacity="0.6"
+        [visible]="hover"
+      />
     </ngt-mesh>
   `,
   imports: [NgtArgs],

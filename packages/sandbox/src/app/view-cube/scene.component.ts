@@ -7,7 +7,6 @@ import {
   NgtPortal,
   NgtPortalContent,
   NgtPush,
-  NgtRef,
   NgtRenderState,
   NgtRepeat,
   NgtRxStore,
@@ -46,7 +45,7 @@ extend({
       <ng-template ngtPortalContent>
         <ngts-orthographic-camera [makeDefault]="true" [position]="[0, 0, 100]" />
         <ngt-mesh
-          *ref="meshRef"
+          [ref]="meshRef"
           [position]="position$ | ngtPush : [0, 0, 0]"
           (pointerout)="hovered = -1"
           (pointermove)="hovered = Math.floor(($any($event).faceIndex || 0) / 2)"
@@ -70,7 +69,6 @@ extend({
     NgtPush,
     NgtArgs,
     NgtRepeat,
-    NgtRef,
     NgtDynamicAttach,
     NgtsOrthographicCamera,
   ],

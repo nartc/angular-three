@@ -1,4 +1,4 @@
-import { extend, NgtPush, NgtRef, startWithUndefined } from '@angular-three/core';
+import { extend, NgtPush, startWithUndefined } from '@angular-three/core';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, ContentChild, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
@@ -13,8 +13,8 @@ extend({ OrthographicCamera, Group });
   standalone: true,
   template: `
     <ngt-orthographic-camera
-      *ref="cameraRef"
       ngtCompound
+      [ref]="cameraRef"
       [left]="left$ | ngtPush : 0"
       [right]="right$ | ngtPush : 0"
       [top]="top$ | ngtPush : 0"
@@ -31,7 +31,7 @@ extend({ OrthographicCamera, Group });
       />
     </ngt-group>
   `,
-  imports: [NgIf, NgtRef, NgTemplateOutlet, NgtPush],
+  imports: [NgIf, NgTemplateOutlet, NgtPush],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsOrthographicCamera extends NgtsCamera<THREE.OrthographicCamera> {

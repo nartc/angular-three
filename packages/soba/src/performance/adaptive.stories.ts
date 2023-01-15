@@ -68,7 +68,7 @@ class Archer {
     <archer />
     <ngt-directional-light intensity="0.2" [position]="[10, 10, 5]" castShadow>
       <ngt-vector2 *args="[64, 64]" attach="shadow.mapSize" />
-      <ngt-value *args="[-0.001]" attach="shadow.bias" />
+      <ngt-value [rawValue]="-0.001" attach="shadow.bias" />
     </ngt-directional-light>
     <ngts-adaptive-dpr />
     <ngts-adaptive-events />

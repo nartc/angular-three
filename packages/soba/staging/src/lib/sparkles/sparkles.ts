@@ -5,7 +5,6 @@ import {
   NgtAnyRecord,
   NgtArgs,
   NgtBeforeRender,
-  NgtRef,
   NgtRxStore,
 } from '@angular-three/core';
 import { shaderMaterial } from '@angular-three/soba/shaders';
@@ -111,7 +110,7 @@ function usePropAsIsOrAsAttribute<T = any>(
   selector: 'ngts-sparkles',
   standalone: true,
   template: `
-    <ngt-points ngtCompount *ref="pointsRef">
+    <ngt-points ngtCompount [ref]="pointsRef">
       <ngt-buffer-geometry>
         <ngt-buffer-attribute *args="[get('positions'), 3]" attach="attributes.position" />
         <ngt-buffer-attribute *args="[get('sizes'), 1]" attach="attributes.size" />
@@ -121,7 +120,7 @@ function usePropAsIsOrAsAttribute<T = any>(
         <ngt-buffer-attribute *args="[get('noises'), 3]" attach="attributes.noise" />
       </ngt-buffer-geometry>
       <ngt-sparkles-material
-        *ref="materialRef"
+        [ref]="materialRef"
         transparent
         depthWrite="false"
         [pixelRatio]="dpr"
@@ -129,7 +128,7 @@ function usePropAsIsOrAsAttribute<T = any>(
       />
     </ngt-points>
   `,
-  imports: [NgtRef, NgtArgs],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsSparkles extends NgtRxStore {

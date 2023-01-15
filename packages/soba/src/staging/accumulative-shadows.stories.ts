@@ -66,7 +66,13 @@ extend({ Color });
       [scale]="14"
       [position]="[0, -0.5, 0]"
     >
-      <ngts-randomized-light [amount]="8" [radius]="4" [ambient]="0.5" [bias]="0.001" [position]="[5, 5, -10]" />
+      <ngts-randomized-light
+        [amount]="8"
+        [radius]="4"
+        [ambient]="0.5"
+        [bias]="0.001"
+        [position]="[5, 5, -10]"
+      />
     </ngts-accumulative-shadows>
     <ngts-orbit-controls [autoRotate]="true" />
     <ngts-environment preset="city" />
@@ -89,8 +95,8 @@ export default {
 } as Meta;
 
 export const Default: Story = () => ({
-  props: { storyComponent: DefaultAccumulativeShadowsStory },
+  props: { storyComponent: DefaultAccumulativeShadowsStory, compoundPrefixes: ['storybook-suzi'] },
   template: `
-<storybook-setup [storyComponent]="storyComponent" />
+<storybook-setup [storyComponent]="storyComponent" [compoundPrefixes]="compoundPrefixes" />
     `,
 });

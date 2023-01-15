@@ -1,6 +1,6 @@
 import { NgtcPhysics } from '@angular-three/cannon';
 import { injectBox, injectPlane, injectSphere } from '@angular-three/cannon/services';
-import { extend, NgtArgs, NgtRef } from '@angular-three/core';
+import { extend, NgtArgs } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core';
 import { Triplet } from '@pmndrs/cannon-worker-api';
 // @ts-ignore
@@ -43,16 +43,19 @@ extend({
   selector: 'sandbox-spheres',
   standalone: true,
   template: `
-    <ng-container *args="[undefined, undefined, count]">
-      <ngt-instanced-mesh *ref="spheresBody.ref" castShadow receiveShadow>
-        <ngt-sphere-geometry *args="[radius, 16, 16]">
-          <ngt-instanced-buffer-attribute *args="[colors, 3]" attach="attributes.color" />
-        </ngt-sphere-geometry>
-        <ngt-mesh-phong-material vertexColors />
-      </ngt-instanced-mesh>
-    </ng-container>
+    <ngt-instanced-mesh
+      *args="[undefined, undefined, count]"
+      [ref]="spheresBody.ref"
+      castShadow
+      receiveShadow
+    >
+      <ngt-sphere-geometry *args="[radius, 16, 16]">
+        <ngt-instanced-buffer-attribute *args="[colors, 3]" attach="attributes.color" />
+      </ngt-sphere-geometry>
+      <ngt-mesh-phong-material vertexColors />
+    </ngt-instanced-mesh>
   `,
-  imports: [NgtArgs, NgtRef],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Spheres implements OnInit {
@@ -85,7 +88,7 @@ export class Spheres implements OnInit {
   standalone: true,
   template: `
     <ngt-mesh
-      *ref="boxBody.ref"
+      [ref]="boxBody.ref"
       castShadow
       receiveShadow
       (beforeRender)="onBoxBeforeRender($any($event).state.clock)"
@@ -94,7 +97,7 @@ export class Spheres implements OnInit {
       <ngt-mesh-lambert-material />
     </ngt-mesh>
   `,
-  imports: [NgtRef, NgtArgs],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Box {
@@ -117,12 +120,12 @@ export class Box {
   selector: 'sandbox-plane',
   standalone: true,
   template: `
-    <ngt-mesh *ref="planeBody.ref" receiveShadow>
+    <ngt-mesh [ref]="planeBody.ref" receiveShadow>
       <ngt-plane-geometry *args="args" />
       <ngt-mesh-phong-material [color]="color" />
     </ngt-mesh>
   `,
-  imports: [NgtRef, NgtArgs],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Plane {

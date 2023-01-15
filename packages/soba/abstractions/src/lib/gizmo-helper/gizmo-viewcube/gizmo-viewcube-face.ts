@@ -19,8 +19,11 @@ extend({ MeshLambertMaterial, Mesh, BoxGeometry });
       [opacity]="get('opacity')"
       transparent
     >
-      <ngt-value *args="[store.get('gl').outputEncoding]" attach="map.encoding" />
-      <ngt-value *args="[store.get('gl').capabilities.getMaxAnisotropy() || 1]" attach="map.anisotrophy" />
+      <ngt-value [rawValue]="store.get('gl').outputEncoding" attach="map.encoding" />
+      <ngt-value
+        [rawValue]="store.get('gl').capabilities.getMaxAnisotropy() || 1"
+        attach="map.anisotrophy"
+      />
     </ngt-mesh-lambert-material>
   `,
   imports: [NgtArgs, NgtDynamicAttach],

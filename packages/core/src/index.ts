@@ -4,7 +4,6 @@ export * from './lib/di/destroy';
 export * from './lib/di/ref';
 export * from './lib/directives/args';
 export * from './lib/directives/dynamic-attach';
-export * from './lib/directives/ref';
 export * from './lib/directives/repeat';
 export * from './lib/pipes/push';
 export * from './lib/portal';

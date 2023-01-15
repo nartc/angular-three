@@ -31,7 +31,7 @@ export const [injectNgtcDebugApi, provideNgtcDebugApi] =
   selector: 'ngtc-debug',
   standalone: true,
   template: `
-    <ngt-primitive *args="[scene]"/>
+    <ngt-primitive *args="[scene]" />
     <ng-content />
   `,
   providers: [

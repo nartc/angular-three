@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'sandbox-root',
-  template: `<router-outlet/>`,
+  template: `<router-outlet />`,
   imports: [RouterOutlet],
 })
 export class AppComponent {}

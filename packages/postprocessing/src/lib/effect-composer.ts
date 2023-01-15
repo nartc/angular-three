@@ -4,7 +4,6 @@ import {
   getLocalState,
   injectNgtRef,
   injectNgtStore,
-  NgtRef,
   NgtRxStore,
   startWithUndefined,
 } from '@angular-three/core';
@@ -56,11 +55,10 @@ function effectComposerApiFactory(composer: NgtpEffectComposer) {
   selector: 'ngtp-effect-composer',
   standalone: true,
   template: `
-    <ngt-group *ref="groupRef">
+    <ngt-group [ref]="groupRef">
       <ng-content />
     </ngt-group>
   `,
-  imports: [NgtRef],
   providers: [
     provideNgtpEffectComposerApi([NgtpEffectComposer], effectComposerApiFactory),
     RxActionFactory,

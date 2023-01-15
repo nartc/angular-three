@@ -4,7 +4,6 @@ import {
   injectNgtRef,
   injectNgtStore,
   is,
-  NgtRef,
   NgtRxStore,
 } from '@angular-three/core';
 import {
@@ -71,11 +70,10 @@ extend({ Group });
   selector: 'ngts-bounds',
   standalone: true,
   template: `
-    <ngt-group ngtCompound *ref="groupRef">
+    <ngt-group ngtCompound [ref]="groupRef">
       <ng-content />
     </ngt-group>
   `,
-  imports: [NgtRef],
   providers: [
     provideNgtsBoundsApi([NgtsBounds], (bounds: NgtsBounds) => {
       const store = injectNgtStore();

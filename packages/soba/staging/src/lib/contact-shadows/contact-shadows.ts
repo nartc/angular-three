@@ -4,7 +4,6 @@ import {
   injectNgtStore,
   NgtArgs,
   NgtPush,
-  NgtRef,
   NgtRxStore,
 } from '@angular-three/core';
 import { NgIf } from '@angular/common';
@@ -34,7 +33,7 @@ extend({
   selector: 'ngts-contact-shadows',
   standalone: true,
   template: `
-    <ngt-group ngtCompound *ref="groupRef" [rotation]="[Math.PI / 2, 0, 0]">
+    <ngt-group ngtCompound [ref]="groupRef" [rotation]="[Math.PI / 2, 0, 0]">
       <ng-container *ngIf="contactShadows$ | ngtPush : null as contactShadows">
         <ngt-mesh
           [renderOrder]="get('renderOrder')"
@@ -48,16 +47,14 @@ extend({
             [opacity]="get('opacity')"
             [depthWrite]="get('depthWrite')"
           >
-            <ngt-value *args="[encoding]" attach="map.encoding" />
+            <ngt-value [rawValue]="encoding" attach="map.encoding" />
           </ngt-mesh-basic-material>
         </ngt-mesh>
-        <ng-container *args="get('cameraArgs')">
-          <ngt-orthographic-camera *ref="shadowCameraRef" />
-        </ng-container>
+        <ngt-orthographic-camera *args="get('cameraArgs')" [ref]="shadowCameraRef" />
       </ng-container>
     </ngt-group>
   `,
-  imports: [NgtRef, NgIf, NgtPush, NgtArgs],
+  imports: [NgIf, NgtPush, NgtArgs],
   providers: [RxActionFactory],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

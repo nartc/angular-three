@@ -76,6 +76,9 @@ export function injectNgtRef<T>(
       if (ref.nativeElement !== newVal) {
         ref$.next(newVal);
         try {
+          // during creation phase, 'context' on ViewRef will be null
+          // we check the "context" to avoid running detectChanges during this phase.
+          // becuase there's nothing to check
           if ((cdr as NgtAnyRecord)['context']) {
             cdr.detectChanges();
           }

@@ -8,7 +8,6 @@ import { Scene } from './scene.component';
   template: `
     <ngt-canvas
       [shadows]="true"
-      [dpr]="[1, 2]"
       [gl]="{ alpha: false }"
       [camera]="{ position: [-1, 5, 5], fov: 45 }"
       [scene]="Scene"

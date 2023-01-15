@@ -1,4 +1,4 @@
-import { extend, injectNgtRef, NgtBeforeRender, NgtRef, NgtRxStore } from '@angular-three/core';
+import { extend, injectNgtRef, NgtBeforeRender, NgtRxStore } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core';
 import { combineLatest, debounceTime } from 'rxjs';
 import { LOD } from 'three';
@@ -9,11 +9,10 @@ extend({ LOD });
   selector: 'ngts-detailed[distances]',
   standalone: true,
   template: `
-    <ngt-lOD *ref="lodRef" ngtCompound (beforeRender)="onBeforeRender($any($event))">
+    <ngt-lOD [ref]="lodRef" ngtCompound (beforeRender)="onBeforeRender($any($event))">
       <ng-content />
     </ngt-lOD>
   `,
-  imports: [NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsDetailed extends NgtRxStore implements OnInit {

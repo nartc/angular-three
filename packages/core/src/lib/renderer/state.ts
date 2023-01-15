@@ -1,12 +1,14 @@
 import { ChangeDetectorRef, getDebugNode, Injector, Type } from '@angular/core';
+import { NgtInjectedRef } from '../di/ref';
 import { NgtArgs } from '../directives/args';
 import { NgtDynamicAttach } from '../directives/dynamic-attach';
-import { NgtRef } from '../directives/ref';
 import { NgtStore } from '../stores/store';
 import { NgtAnyRecord, NgtHasValidateForRenderer, NgtInstanceLocalState } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { getLocalState } from '../utils/instance';
-import { ATTRIBUTES, removeThreeChild } from './utils';
+import { is } from '../utils/is';
+import { NgtRendererClassId, NgtRendererCompoundClassId } from './class-id';
+import { removeThreeChild, SPECIAL_PROPERTIES } from './utils';
 
 export interface NgtRendererRootState {
   store: NgtStore;
@@ -14,176 +16,168 @@ export interface NgtRendererRootState {
   compoundPrefixes: string[];
 }
 
-export type NgtRendererCommonNode = {
-  __ngt_renderer__: {
-    removed: boolean;
-    parent: NgtRendererNode | null;
-    children: NgtRendererNode[];
-  };
+export type NgtRenderer = [
+  type: 'instance' | 'compound' | 'comment' | 'portal' | 'component',
+  parent: NgtRendererNode | null,
+  children: NgtRendererNode[],
+  removed: boolean,
+  comments: NgtRendererNode[],
+  compound: [applyFirst: boolean, props: Record<string, any>],
+  localState: () => NgtInstanceLocalState,
+  compoundParent: NgtRendererNode,
+  rawValue: any,
+  ref: NgtInjectedRef<any>,
+  injectorFactory: () => Injector,
+  container: NgtRendererNode,
+  compounded: NgtRendererNode,
+  queueOps: Set<() => void>,
+  cleanUps: Set<() => void>,
+  attributes: Record<string, any>,
+  properties: Record<string, any>
+];
+
+export type NgtRendererNode = {
+  __ngt_renderer__: NgtRenderer;
 };
 
-export type NgtRendererInstanceNode = {
-  __ngt_renderer_type__: 'instance';
-  __ngt_renderer__: {
-    compound?: { applyFirst: boolean; props: Record<string, any> };
-    localState: () => NgtInstanceLocalState;
-    compoundParent?: NgtRendererCompoundNode;
-    rawValue?: any;
-  };
-} & NgtRendererCommonNode;
-
-export type NgtRendererCompoundNode = {
-  __ngt_renderer_type__: 'compound';
-  __ngt_renderer__: {
-    compounded?: NgtRendererInstanceNode;
-    localState: () => NgtInstanceLocalState;
-    queueOps: Set<() => void>;
-    cleanUps: Set<() => void>;
-    attributes: Record<string, any>;
-    properties: Record<string, any>;
-  };
-} & NgtRendererCommonNode;
-
-export type NgtRendererCommentNode = {
-  __ngt_renderer_type__: 'comment';
-  __ngt_renderer__: {
-    injectorFactory: () => Injector;
-  };
-} & Comment &
-  NgtRendererCommonNode;
-
-export type NgtRendererPortalNode = {
-  __ngt_renderer_type__: 'portal';
-  __ngt_renderer__: {
-    injectorFactory: () => Injector;
-    container?: NgtRendererInstanceNode;
-  };
-} & NgtRendererCommonNode;
-
-export type NgtRendererComponentNode = {
-  __ngt_renderer_type__: 'component';
-} & NgtRendererCommonNode;
-
-export type NgtRendererNode =
-  | NgtRendererInstanceNode
-  | NgtRendererCompoundNode
-  | NgtRendererCommentNode
-  | NgtRendererPortalNode
-  | NgtRendererComponentNode;
-
 export class NgtRendererState {
-  private readonly commentNodes = new Set<NgtRendererCommentNode>();
-  private readonly portalNodes = new Set<NgtRendererPortalNode>();
+  private readonly comments: NgtRendererNode[] = [];
+  private readonly portals: NgtRendererNode[] = [];
 
   constructor(private readonly root: NgtRendererRootState) {}
 
-  createNode(type: NgtRendererNode['__ngt_renderer_type__'], node: NgtAnyRecord) {
+  createNode(type: NgtRenderer[0], node: NgtAnyRecord) {
     const rendererNode = Object.assign(node, {
-      __ngt_renderer_type__: type,
-      __ngt_renderer__: {
-        ...(node['__ngt_renderer__'] || {}),
-        removed: false,
-        parent: null,
-        children: [],
-      },
-    }) as NgtRendererNode;
+      __ngt_renderer__: [
+        type,
+        null,
+        [],
+        false,
+        [],
+        undefined!,
+        undefined!,
+        undefined!,
+        undefined!,
+        undefined!,
+        undefined!,
+        undefined!,
+        undefined!,
+        undefined!,
+        undefined!,
+        undefined!,
+        undefined!,
+      ] as NgtRenderer,
+    });
 
-    if (rendererNode.__ngt_renderer_type__ === 'instance') {
-      rendererNode.__ngt_renderer__.localState = () => getLocalState(node)!;
-      return rendererNode;
-    }
+    if (rendererNode.__ngt_renderer__)
+      if (rendererNode.__ngt_renderer__[NgtRendererClassId.type] === 'instance') {
+        rendererNode.__ngt_renderer__[NgtRendererClassId.localState] = () => getLocalState(node)!;
+        return rendererNode;
+      }
 
     if (
-      rendererNode.__ngt_renderer_type__ === 'comment' ||
-      rendererNode.__ngt_renderer_type__ === 'portal'
+      rendererNode.__ngt_renderer__[NgtRendererClassId.type] === 'comment' ||
+      rendererNode.__ngt_renderer__[NgtRendererClassId.type] === 'portal'
     ) {
-      rendererNode.__ngt_renderer__.injectorFactory = () => getDebugNode(node)!.injector;
-      if (rendererNode.__ngt_renderer_type__ === 'comment') {
-        this.commentNodes.add(rendererNode);
+      rendererNode.__ngt_renderer__[NgtRendererClassId.injectorFactory] = () =>
+        getDebugNode(node)!.injector;
+      if (rendererNode.__ngt_renderer__[NgtRendererClassId.type] === 'comment') {
+        this.comments.push(rendererNode);
       } else {
-        this.portalNodes.add(rendererNode);
+        this.portals.push(rendererNode);
       }
       return rendererNode;
     }
 
-    if (rendererNode.__ngt_renderer_type__ === 'compound') {
-      rendererNode.__ngt_renderer__.queueOps = new Set();
-      rendererNode.__ngt_renderer__.cleanUps = new Set();
-      rendererNode.__ngt_renderer__.attributes = {};
-      rendererNode.__ngt_renderer__.properties = {};
+    if (rendererNode.__ngt_renderer__[NgtRendererClassId.type] === 'compound') {
+      rendererNode.__ngt_renderer__[NgtRendererClassId.queueOps] = new Set();
+      rendererNode.__ngt_renderer__[NgtRendererClassId.cleanUps] = new Set();
+      rendererNode.__ngt_renderer__[NgtRendererClassId.attributes] = {};
+      rendererNode.__ngt_renderer__[NgtRendererClassId.properties] = {};
       return rendererNode;
     }
 
     return rendererNode;
   }
 
+  removeComment(node: NgtRendererNode) {
+    const nodeIndex = this.comments.findIndex((comment) => comment === node);
+    if (nodeIndex > -1) {
+      this.comments.splice(nodeIndex, 1);
+    }
+  }
+
   setParent(node: NgtRendererNode, parent: NgtRendererNode) {
-    if (!node.__ngt_renderer__.parent) {
-      node.__ngt_renderer__.parent = parent;
+    if (!node.__ngt_renderer__[NgtRendererClassId.parent]) {
+      node.__ngt_renderer__[NgtRendererClassId.parent] = parent;
     }
   }
 
   addChild(node: NgtRendererNode, child: NgtRendererNode) {
-    if (!node.__ngt_renderer__.children.includes(child)) {
-      node.__ngt_renderer__.children.push(child);
+    if (!node.__ngt_renderer__[NgtRendererClassId.children].includes(child)) {
+      node.__ngt_renderer__[NgtRendererClassId.children].push(child);
     }
   }
 
   removeChild(node: NgtRendererNode, child: NgtRendererNode) {
-    const index = node.__ngt_renderer__.children.findIndex((c: NgtRendererNode) => child === c);
+    const index = node.__ngt_renderer__[NgtRendererClassId.children].findIndex((c) => child === c);
     if (index >= 0) {
-      node.__ngt_renderer__.children.splice(index, 1);
+      node.__ngt_renderer__[NgtRendererClassId.children].splice(index, 1);
     }
   }
 
-  setCompoundInstance(compound: NgtRendererCompoundNode, instance: NgtRendererInstanceNode) {
-    compound.__ngt_renderer__.compounded = instance;
-    compound.__ngt_renderer__.localState = () => getLocalState(instance);
-    if (Object.keys(compound.__ngt_renderer__.attributes).length) {
-      for (const [key, value] of Object.entries(compound.__ngt_renderer__.attributes)) {
+  setCompoundInstance(compound: NgtRendererNode, instance: NgtRendererNode) {
+    compound.__ngt_renderer__[NgtRendererClassId.compounded] = instance;
+    compound.__ngt_renderer__[NgtRendererClassId.localState] = () => getLocalState(instance);
+    if (Object.keys(compound.__ngt_renderer__[NgtRendererClassId.attributes]).length) {
+      for (const [key, value] of Object.entries(
+        compound.__ngt_renderer__[NgtRendererClassId.attributes]
+      )) {
         this.applyAttribute(instance, key, value);
       }
     }
 
-    if (Object.keys(compound.__ngt_renderer__.properties).length) {
-      for (const [key, value] of Object.entries(compound.__ngt_renderer__.properties)) {
+    if (Object.keys(compound.__ngt_renderer__[NgtRendererClassId.properties]).length) {
+      for (const [key, value] of Object.entries(
+        compound.__ngt_renderer__[NgtRendererClassId.properties]
+      )) {
         this.applyProperty(instance, key, value);
       }
     }
     this.executeQueuedOperation(compound);
   }
 
-  queueCompoundOperation(node: NgtRendererCompoundNode, op: () => void) {
-    node.__ngt_renderer__.queueOps.add(op);
+  queueCompoundOperation(node: NgtRendererNode, op: () => void) {
+    node.__ngt_renderer__[NgtRendererClassId.queueOps].add(op);
   }
 
-  executeQueuedOperation(node: NgtRendererCompoundNode) {
-    if (node.__ngt_renderer__.queueOps.size) {
+  executeQueuedOperation(node: NgtRendererNode) {
+    if (node.__ngt_renderer__[NgtRendererClassId.queueOps].size) {
       queueMicrotask(() => {
-        node.__ngt_renderer__.queueOps.forEach((op) => op());
-        node.__ngt_renderer__.queueOps.clear();
+        node.__ngt_renderer__[NgtRendererClassId.queueOps].forEach((op) => op());
+        node.__ngt_renderer__[NgtRendererClassId.queueOps].clear();
       });
     }
   }
 
-  processPortal(portal: NgtRendererPortalNode) {
-    const injector = portal.__ngt_renderer__.injectorFactory?.();
+  processPortal(portal: NgtRendererNode) {
+    const injector = portal.__ngt_renderer__[NgtRendererClassId.injectorFactory]?.();
     if (injector) {
       const portalStore = injector.get(NgtStore, null);
       if (portalStore) {
         const portalContainer = portalStore.get('scene');
         if (portalContainer) {
-          portal.__ngt_renderer__.container = this.createNode(
+          portal.__ngt_renderer__[NgtRendererClassId.container] = this.createNode(
             'instance',
             portalContainer
-          ) as NgtRendererInstanceNode;
+          );
         }
       }
     }
   }
 
-  applyAttribute(el: NgtRendererInstanceNode, name: string, value: string) {
-    if (name === ATTRIBUTES.RENDER_PRIORITY) {
+  applyAttribute(el: NgtRendererNode, name: string, value: string) {
+    if (name === SPECIAL_PROPERTIES.RENDER_PRIORITY) {
       // priority needs to be set as an attribute string so that they can be set as early as possible
       // we convert that string to a number here. If it is invalid, we default to 0
       let priority = Number(value);
@@ -192,21 +186,21 @@ export class NgtRendererState {
         console.warn(`[NGT] passed in "priority" is an invalid number. Default to 0`);
       }
 
-      el.__ngt_renderer__.localState().priority = priority;
+      el.__ngt_renderer__[NgtRendererClassId.localState]().priority = priority;
       return;
     }
 
-    if (name === ATTRIBUTES.COMPOUND) {
+    if (name === SPECIAL_PROPERTIES.COMPOUND) {
       // we set the compound property on NgtRendererInstanceNode now so we know that this instance is being compounded
-      el.__ngt_renderer__.compound = { applyFirst: value === '' || value === 'first', props: {} };
+      el.__ngt_renderer__[NgtRendererClassId.compound] = [value === '' || value === 'first', {}];
       return;
     }
 
-    if (name === ATTRIBUTES.ATTACH) {
+    if (name === SPECIAL_PROPERTIES.ATTACH) {
       // handle attach attribute as string
       // attach can accept a dotted paths
       const paths = value.split('.');
-      if (paths.length) el.__ngt_renderer__.localState().attach = paths;
+      if (paths.length) el.__ngt_renderer__[NgtRendererClassId.localState]().attach = paths;
       return;
     }
 
@@ -221,14 +215,20 @@ export class NgtRendererState {
     applyProps(el, { [name]: maybeCoerced });
   }
 
-  applyProperty(el: NgtRendererInstanceNode, name: string, value: any) {
-    if (el.__ngt_renderer__.removed) return;
+  applyProperty(el: NgtRendererNode, name: string, value: any) {
+    if (el.__ngt_renderer__[NgtRendererClassId.removed]) return;
+    if (name === SPECIAL_PROPERTIES.REF && is.ref(value)) {
+      el.__ngt_renderer__[NgtRendererClassId.ref] = value as NgtInjectedRef<any>;
+      value.nativeElement = el;
+      return;
+    }
     if (
-      el.__ngt_renderer__.compound?.props &&
-      name in el.__ngt_renderer__.compound.props &&
-      !el.__ngt_renderer__.compound.applyFirst
+      el.__ngt_renderer__[NgtRendererClassId.compound]?.[NgtRendererCompoundClassId.props] &&
+      name in el.__ngt_renderer__[NgtRendererClassId.compound][NgtRendererCompoundClassId.props] &&
+      !el.__ngt_renderer__[NgtRendererClassId.compound][NgtRendererCompoundClassId.applyFirst]
     ) {
-      value = el.__ngt_renderer__.compound.props[name];
+      value =
+        el.__ngt_renderer__[NgtRendererClassId.compound][NgtRendererCompoundClassId.props][name];
     }
     applyProps(el, { [name]: value });
   }
@@ -245,46 +245,48 @@ export class NgtRendererState {
     return this.root.cdr;
   }
 
-  getClosestParentWithInstance(node: NgtRendererNode): NgtRendererInstanceNode | null {
-    let parent = node.__ngt_renderer__.parent;
-    while (parent && parent.__ngt_renderer_type__ !== 'instance') {
-      parent =
-        parent.__ngt_renderer_type__ === 'portal' && parent.__ngt_renderer__.container
-          ? parent.__ngt_renderer__.container
-          : parent.__ngt_renderer__.parent;
+  getClosestParentWithInstance(node: NgtRendererNode): NgtRendererNode | null {
+    let parent = node.__ngt_renderer__[NgtRendererClassId.parent];
+    while (parent && parent.__ngt_renderer__[NgtRendererClassId.type] !== 'instance') {
+      parent = parent.__ngt_renderer__[NgtRendererClassId.container]
+        ? parent.__ngt_renderer__[NgtRendererClassId.container]
+        : parent.__ngt_renderer__[NgtRendererClassId.parent];
     }
 
-    return parent as NgtRendererInstanceNode;
+    return parent;
   }
 
-  getClosestParentWithCompound(node: NgtRendererInstanceNode) {
-    if (node.__ngt_renderer__.compoundParent) return node.__ngt_renderer__.compoundParent;
-    let parent: NgtRendererNode | null = node.__ngt_renderer__.parent;
+  getClosestParentWithCompound(node: NgtRendererNode) {
+    if (node.__ngt_renderer__[NgtRendererClassId.compoundParent])
+      return node.__ngt_renderer__[NgtRendererClassId.compoundParent];
+
+    let parent: NgtRendererNode | null = node.__ngt_renderer__[NgtRendererClassId.parent];
     if (
       parent &&
-      parent.__ngt_renderer_type__ === 'compound' &&
-      !parent.__ngt_renderer__.compounded
+      parent.__ngt_renderer__[NgtRendererClassId.type] === 'compound' &&
+      !parent.__ngt_renderer__[NgtRendererClassId.compounded]
     ) {
       return parent;
     }
     while (
       parent &&
-      ((parent.__ngt_renderer_type__ === 'instance' && !parent.__ngt_renderer__.compoundParent) ||
-        parent.__ngt_renderer_type__ !== 'compound')
+      ((parent.__ngt_renderer__[NgtRendererClassId.type] === 'instance' &&
+        !parent.__ngt_renderer__[NgtRendererClassId.compoundParent]) ||
+        parent.__ngt_renderer__[NgtRendererClassId.type] !== 'compound')
     ) {
-      parent = parent.__ngt_renderer__.parent;
+      parent = parent.__ngt_renderer__[NgtRendererClassId.parent];
     }
 
     if (!parent) return;
 
     if (
-      (parent as NgtRendererNode).__ngt_renderer_type__ === 'instance' &&
-      (parent as unknown as NgtRendererInstanceNode).__ngt_renderer__.compoundParent
+      parent.__ngt_renderer__[NgtRendererClassId.type] === 'instance' &&
+      parent.__ngt_renderer__[NgtRendererClassId.compoundParent]
     ) {
-      return (parent as unknown as NgtRendererInstanceNode).__ngt_renderer__.compoundParent;
+      return parent.__ngt_renderer__[NgtRendererClassId.compoundParent];
     }
 
-    if (parent.__ngt_renderer_type__ === 'compound' && !parent.__ngt_renderer__.compounded) {
+    if (!parent.__ngt_renderer__[NgtRendererClassId.compounded]) {
       return parent;
     }
 
@@ -294,34 +296,32 @@ export class NgtRendererState {
   getCreationState() {
     const ngtArgs = this.#firstNonInjectedDirective(NgtArgs);
     const ngtDynamicAttach = this.#firstNonInjectedDirective(NgtDynamicAttach);
-    const ngtRef = this.#firstNonInjectedDirective(NgtRef);
 
     const injectedArgs = ngtArgs?.args || [];
-    const injectedRef = ngtRef?.ref;
 
     const attach = ngtDynamicAttach?.dynamicAttach || undefined;
     const store = this.#tryGetPortalStore();
 
-    return { injectedArgs, injectedRef, attach, store };
+    return { injectedArgs, attach, store };
   }
 
-  remove(node: NgtRendererNode, parent?: NgtRendererInstanceNode) {
-    if (node.__ngt_renderer__.removed) return;
-    if (node.__ngt_renderer_type__ === 'instance') {
-      delete node.__ngt_renderer__.compound;
-      delete node.__ngt_renderer__.compoundParent;
+  remove(node: NgtRendererNode, parent?: NgtRendererNode) {
+    if (node.__ngt_renderer__[NgtRendererClassId.removed]) return;
+    if (node.__ngt_renderer__[NgtRendererClassId.type] === 'instance') {
+      node.__ngt_renderer__[NgtRendererClassId.compound] = undefined!;
+      node.__ngt_renderer__[NgtRendererClassId.compoundParent] = undefined!;
 
-      const localState = node.__ngt_renderer__.localState?.();
+      const localState = node.__ngt_renderer__[NgtRendererClassId.localState]?.();
       if (localState) {
         if (localState.objects) {
           const objects = localState.objects.value;
-          objects.forEach((obj: NgtRendererInstanceNode) => this.remove(obj));
+          objects.forEach((obj) => this.remove(obj));
           localState.objects.complete();
         }
 
         if (localState.nonObjects) {
           const nonObjects = localState.nonObjects.value;
-          nonObjects.forEach((obj: NgtRendererInstanceNode) => this.remove(obj));
+          nonObjects.forEach((obj) => this.remove(obj));
           localState.nonObjects.complete();
         }
 
@@ -346,52 +346,43 @@ export class NgtRendererState {
         }
       }
 
-      node.__ngt_renderer__.localState =
-        null as unknown as NgtRendererInstanceNode['__ngt_renderer__']['localState'];
+      node.__ngt_renderer__[NgtRendererClassId.localState] = null!;
     }
 
-    if (node.__ngt_renderer_type__ === 'comment') {
-      // find out if this comment is a *ref
-      const ngtRef = node.__ngt_renderer__.injectorFactory?.().get(NgtRef, null);
-      if (ngtRef?.forceRef && ngtRef.forceRef.nativeElement) {
-        ngtRef.forceRef.nativeElement = null;
-      }
-      node.__ngt_renderer__.injectorFactory =
-        null as unknown as NgtRendererCommentNode['__ngt_renderer__']['injectorFactory'];
+    if (
+      node.__ngt_renderer__[NgtRendererClassId.type] === 'comment' ||
+      node.__ngt_renderer__[NgtRendererClassId.type] === 'portal'
+    ) {
+      node.__ngt_renderer__[NgtRendererClassId.injectorFactory] = null!;
     }
 
-    if (node.__ngt_renderer_type__ === 'portal') {
-      node.__ngt_renderer__.injectorFactory =
-        null as unknown as NgtRendererPortalNode['__ngt_renderer__']['injectorFactory'];
+    if (node.__ngt_renderer__[NgtRendererClassId.type] === 'compound') {
+      node.__ngt_renderer__[NgtRendererClassId.localState] = null!;
+      node.__ngt_renderer__[NgtRendererClassId.compounded] = undefined!;
+      node.__ngt_renderer__[NgtRendererClassId.attributes] = null!;
+      node.__ngt_renderer__[NgtRendererClassId.properties] = null!;
+      node.__ngt_renderer__[NgtRendererClassId.queueOps].clear();
+      node.__ngt_renderer__[NgtRendererClassId.queueOps] = null!;
+      node.__ngt_renderer__[NgtRendererClassId.cleanUps].forEach((cleanUp) => cleanUp());
+      node.__ngt_renderer__[NgtRendererClassId.cleanUps].clear();
+      node.__ngt_renderer__[NgtRendererClassId.cleanUps] = null!;
     }
 
-    if (node.__ngt_renderer_type__ === 'compound') {
-      node.__ngt_renderer__.localState =
-        null as unknown as NgtRendererCompoundNode['__ngt_renderer__']['localState'];
-      delete node.__ngt_renderer__.compounded;
-      node.__ngt_renderer__.attributes =
-        null as unknown as NgtRendererCompoundNode['__ngt_renderer__']['attributes'];
-      node.__ngt_renderer__.properties =
-        null as unknown as NgtRendererCompoundNode['__ngt_renderer__']['properties'];
-      node.__ngt_renderer__.queueOps.clear();
-      node.__ngt_renderer__.queueOps =
-        null as unknown as NgtRendererCompoundNode['__ngt_renderer__']['queueOps'];
-      node.__ngt_renderer__.cleanUps.forEach((cleanUp: () => void) => cleanUp());
-      node.__ngt_renderer__.cleanUps.clear();
-      node.__ngt_renderer__.cleanUps =
-        null as unknown as NgtRendererCompoundNode['__ngt_renderer__']['cleanUps'];
+    if (node.__ngt_renderer__[NgtRendererClassId.ref]) {
+      // nullify the ref on remove
+      node.__ngt_renderer__[NgtRendererClassId.ref].nativeElement = null;
+      node.__ngt_renderer__[NgtRendererClassId.ref] = undefined!;
     }
 
-    node.__ngt_renderer__.parent = null;
-    for (const renderChild of node.__ngt_renderer__.children || []) {
-      if (renderChild.__ngt_renderer_type__ === 'instance' && parent) {
+    node.__ngt_renderer__[NgtRendererClassId.parent] = null;
+    for (const renderChild of node.__ngt_renderer__[NgtRendererClassId.children] || []) {
+      if (renderChild.__ngt_renderer__[NgtRendererClassId.type] === 'instance' && parent) {
         removeThreeChild(parent, renderChild, true);
       }
       this.remove(renderChild, parent);
     }
-    node.__ngt_renderer__.children =
-      null as unknown as NgtRendererNode['__ngt_renderer__']['children'];
-    node.__ngt_renderer__.removed = true;
+    node.__ngt_renderer__[NgtRendererClassId.children] = null!;
+    node.__ngt_renderer__[NgtRendererClassId.removed] = true;
     if (parent) {
       this.removeChild(parent, node);
     }
@@ -400,13 +391,10 @@ export class NgtRendererState {
   #firstNonInjectedDirective<T extends NgtHasValidateForRenderer>(dir: Type<T>) {
     let directive: T | undefined;
 
-    // we only care about the comment states
-    const commentNodes = Array.from(this.commentNodes.values());
-
-    let i = commentNodes.length - 1;
+    let i = this.comments.length - 1;
     while (i >= 0) {
       // loop through the nodes backwards
-      const injector = getDebugNode(commentNodes[i])?.injector;
+      const injector = this.comments[i].__ngt_renderer__[NgtRendererClassId.injectorFactory]?.();
       if (!injector) {
         i--;
         continue;
@@ -414,8 +402,6 @@ export class NgtRendererState {
       const instance = injector.get(dir, null);
       if (instance && instance.validate()) {
         directive = instance;
-        // TODO: testing this to see if we can stop tracking this comment node
-        // this.commentNodes.delete(commentNodes[i]);
         break;
       }
 
@@ -428,11 +414,10 @@ export class NgtRendererState {
   #tryGetPortalStore() {
     let store: NgtStore | undefined;
     // we only care about the portal states because NgtStore only differs per Portal
-    const portalState = Array.from(this.portalNodes.values());
-    let i = portalState.length - 1;
+    let i = this.portals.length - 1;
     while (i >= 0) {
       // loop through the portal state backwards to find the closest NgtStore
-      const injector = portalState[i].__ngt_renderer__.injectorFactory?.();
+      const injector = this.portals[i].__ngt_renderer__[NgtRendererClassId.injectorFactory]?.();
       if (!injector) {
         i--;
         continue;

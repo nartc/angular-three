@@ -11,7 +11,7 @@ import { Scene } from './scene.component';
       [shadows]="true"
       frameloop="demand"
       [camera]="{ position: [0, 0, 40] }"
-    ></ngt-canvas>
+    />
   `,
   imports: [NgtCanvas],
 })

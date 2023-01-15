@@ -3,7 +3,6 @@ import {
   injectNgtStore,
   NgtAfterAttach,
   NgtArgs,
-  NgtRef,
   startWithUndefined,
 } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core';
@@ -16,33 +15,31 @@ import { NgtsLineInputs } from './line-inputs';
   selector: 'ngts-line[points]',
   standalone: true,
   template: `
-    <ng-container *args="[lineRef.nativeElement]">
-      <ngt-primitive *ref="lineRef" ngtCompound>
-        <ngt-primitive
-          *args="[get('lineGeometry')]"
-          attach="geometry"
-          (afterAttach)="onAfterAttach($any($event))"
-        />
-        <ngt-primitive
-          *args="[lineMaterial]"
-          attach="material"
-          [color]="get('color')"
-          [vertexColors]="Boolean(get('vertexColors'))"
-          [resolution]="get('materialResolution')"
-          [linewidth]="get('lineWidth')"
-          [alphaToCoverage]="get('alphaToCoverage')"
-          [dashed]="get('dashed')"
-          [dashScale]="get('dashScale')"
-          [dashSize]="get('dashSize')"
-          [dashOffset]="get('dashOffset')"
-          [gapSize]="get('gapSize')"
-          [wireframe]="get('wireframe')"
-          [worldUnits]="get('worldUnits')"
-        />
-      </ngt-primitive>
-    </ng-container>
+    <ngt-primitive *args="[lineRef.nativeElement]" [ref]="lineRef" ngtCompound>
+      <ngt-primitive
+        *args="[get('lineGeometry')]"
+        attach="geometry"
+        (afterAttach)="onAfterAttach($any($event))"
+      />
+      <ngt-primitive
+        *args="[lineMaterial]"
+        attach="material"
+        [color]="get('color')"
+        [vertexColors]="Boolean(get('vertexColors'))"
+        [resolution]="get('materialResolution')"
+        [linewidth]="get('lineWidth')"
+        [alphaToCoverage]="get('alphaToCoverage')"
+        [dashed]="get('dashed')"
+        [dashScale]="get('dashScale')"
+        [dashSize]="get('dashSize')"
+        [dashOffset]="get('dashOffset')"
+        [gapSize]="get('gapSize')"
+        [wireframe]="get('wireframe')"
+        [worldUnits]="get('worldUnits')"
+      />
+    </ngt-primitive>
   `,
-  imports: [NgtArgs, NgtRef],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsLine extends NgtsLineInputs implements OnInit {

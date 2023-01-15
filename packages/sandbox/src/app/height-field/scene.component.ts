@@ -1,6 +1,6 @@
 import { NgtcPhysics } from '@angular-three/cannon';
 import { injectHeightfield, injectSphere } from '@angular-three/cannon/services';
-import { extend, injectNgtRef, NgtArgs, NgtRef, NgtRxStore } from '@angular-three/core';
+import { extend, injectNgtRef, NgtArgs, NgtRxStore } from '@angular-three/core';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core';
 import { Triplet } from '@pmndrs/cannon-worker-api';
@@ -82,16 +82,19 @@ extend({
   selector: 'spheres[columns][rows][spread]',
   standalone: true,
   template: `
-    <ng-container *args="[undefined, undefined, number]">
-      <ngt-instanced-mesh *ref="sphereBody.ref" castShadow receiveShadow>
-        <ngt-sphere-geometry *args="[0.2, 16, 16]">
-          <ngt-instanced-buffer-attribute attach="attributes.color" *args="[colors, 3]" />
-        </ngt-sphere-geometry>
-        <ngt-mesh-phong-material vertexColors />
-      </ngt-instanced-mesh>
-    </ng-container>
+    <ngt-instanced-mesh
+      *args="[undefined, undefined, number]"
+      [ref]="sphereBody.ref"
+      castShadow
+      receiveShadow
+    >
+      <ngt-sphere-geometry *args="[0.2, 16, 16]">
+        <ngt-instanced-buffer-attribute attach="attributes.color" *args="[colors, 3]" />
+      </ngt-sphere-geometry>
+      <ngt-mesh-phong-material vertexColors />
+    </ngt-instanced-mesh>
   `,
-  imports: [NgtArgs, NgtRef],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Spheres implements OnInit {
@@ -130,8 +133,7 @@ export class Spheres implements OnInit {
 @Component({
   selector: 'height-map-geometry[elementSize][heights]',
   standalone: true,
-  template: `<ngt-buffer-geometry *ref="ref" />`,
-  imports: [NgtRef],
+  template: `<ngt-buffer-geometry [ref]="ref" />`,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HeightMapGeometry
@@ -186,12 +188,12 @@ export class HeightMapGeometry
   selector: 'height-field',
   standalone: true,
   template: `
-    <ngt-mesh *ref="heightFieldBody.ref" castShadow receiveShadow>
+    <ngt-mesh [ref]="heightFieldBody.ref" castShadow receiveShadow>
       <ngt-mesh-phong-material [color]="color" />
       <height-map-geometry [elementSize]="elementSize" [heights]="heights" />
     </ngt-mesh>
   `,
-  imports: [HeightMapGeometry, NgtRef],
+  imports: [HeightMapGeometry],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HeightField {
@@ -215,7 +217,11 @@ export class HeightField {
   template: `
     <ngt-color *args="['#171720']" attach="background" />
 
-    <ngts-orbit-controls [dampingFactor]="0.2" [minPolarAngle]="Math.PI / 3" [maxPolarAngle]="Math.PI / 3" />
+    <ngts-orbit-controls
+      [dampingFactor]="0.2"
+      [minPolarAngle]="Math.PI / 3"
+      [maxPolarAngle]="Math.PI / 3"
+    />
 
     <ngtc-physics>
       <ngt-ambient-light intensity="0.5" />

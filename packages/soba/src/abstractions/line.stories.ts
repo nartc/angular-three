@@ -168,12 +168,7 @@ class VertexColorsLineStory {
   selector: 'storybook-default-line',
   standalone: true,
   template: `
-    <ngts-line
-      [color]="color"
-      [lineWidth]="lineWidth"
-      [dashed]="dashed"
-      [points]="points"
-    />
+    <ngts-line [color]="color" [lineWidth]="lineWidth" [dashed]="dashed" [points]="points" />
     <ngts-orbit-controls [zoomSpeed]="0.5" />
   `,
   imports: [NgtsLine, NgtsOrbitControls],

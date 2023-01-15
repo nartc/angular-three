@@ -32,6 +32,7 @@ interface CanvasOptions {
         makeDefault?: boolean;
       };
   lights?: boolean;
+  compoundPrefixes?: string[];
 }
 
 const defaultCanvasOptions: CanvasOptions = {
@@ -121,6 +122,7 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
   @Input() whiteBackground: CanvasOptions['whiteBackground'] = defaultCanvasOptions.whiteBackground;
   @Input() lights: CanvasOptions['lights'] = defaultCanvasOptions.lights;
   @Input() controls: CanvasOptions['controls'] = defaultCanvasOptions.controls;
+  @Input() compoundPrefixes: CanvasOptions['compoundPrefixes'] = [];
   @Input() storyComponent!: Type<unknown>;
   @Input() set storyInputs(storyInputs: Record<string, unknown>) {
     this.set({ storyInputs });
@@ -145,6 +147,7 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
       whiteBackground: this.whiteBackground,
       controls: this.controls,
       lights: this.lights,
+      compoundPrefixes: this.compoundPrefixes,
     } as Required<CanvasOptions>;
 
     const storyInputs$ = this.select('storyInputs').pipe(debounceTime(0));
@@ -162,7 +165,7 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
     this.ref.setInput('shadows', true);
     this.ref.setInput('performance', mergedOptions.performance);
     this.ref.setInput('camera', mergedOptions.camera);
-    this.ref.setInput('compoundPrefixes', ['storybook']);
+    this.ref.setInput('compoundPrefixes', mergedOptions.compoundPrefixes);
     this.ref.setInput('scene', StorybookScene);
     this.ref.changeDetectorRef.detectChanges();
   }

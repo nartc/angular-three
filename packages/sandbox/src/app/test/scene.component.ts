@@ -1,4 +1,4 @@
-import { extend, injectNgtRef, NgtArgs, NgtRef } from '@angular-three/core';
+import { extend, injectNgtRef, NgtArgs } from '@angular-three/core';
 import { NgIf } from '@angular/common';
 import {
   ChangeDetectorRef,
@@ -70,13 +70,12 @@ extend({ Mesh, BoxGeometry, PlaneGeometry, MeshBasicMaterial, MeshNormalMaterial
   template: `
     <ngt-group>
       <ngt-group>
-        <ngt-group *ref="ref" ngtCompound>
-          <ng-content></ng-content>
+        <ngt-group [ref]="ref" ngtCompound>
+          <ng-content />
         </ngt-group>
       </ngt-group>
     </ngt-group>
   `,
-  imports: [NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Center {
@@ -87,12 +86,12 @@ export class Center {
   selector: 'ngts-box',
   standalone: true,
   template: `
-    <ngt-mesh ngtCompound *ref="ref">
-      <ngt-box-geometry *args="args"></ngt-box-geometry>
-      <ng-content></ng-content>
+    <ngt-mesh ngtCompound [ref]="ref">
+      <ngt-box-geometry *args="args" />
+      <ng-content />
     </ngt-mesh>
   `,
-  imports: [NgtRef, NgtArgs],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Box {
@@ -105,7 +104,7 @@ export class Box {
   standalone: true,
   template: `
     <ngts-box>
-      <ng-content></ng-content>
+      <ng-content />
     </ngts-box>
   `,
   imports: [Box],
@@ -168,7 +167,7 @@ export class Cube {}
     <!-- <sandbox-cube *ngIf="true"></sandbox-cube> -->
     <!-- </ngts-center> -->
   `,
-  imports: [NgtArgs, NgtRef, NgIf, Box, Center, Cube],
+  imports: [NgtArgs, NgIf, Box, Center, Cube],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene implements OnInit {

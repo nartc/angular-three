@@ -19,7 +19,7 @@ extend({ Group, Mesh, AmbientLight, DirectionalLight, Color });
         [dispose]="null"
         (beforeRender)="onBeforeRender($any($event).object)"
       >
-        <ngt-value attach="rotation.x" *args="[-Math.PI / 2]" />
+        <ngt-value attach="rotation.x" [rawValue]="-Math.PI / 2" />
 
         <ngt-mesh
           [material]="keen.materials['Scene_-_Root']"

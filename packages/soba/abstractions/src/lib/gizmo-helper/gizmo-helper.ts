@@ -5,7 +5,6 @@ import {
   injectNgtStore,
   NgtPortal,
   NgtPortalContent,
-  NgtRef,
   NgtRxStore,
 } from '@angular-three/core';
 import { NgtsOrthographicCamera } from '@angular-three/soba/cameras';
@@ -79,18 +78,18 @@ export class NgtsGizmoHelperContent {}
           [cameraRef]="virtualCameraRef"
           [makeDefault]="true"
           [position]="[0, 0, 200]"
-        ></ngts-orthographic-camera>
+        />
         <ngt-group
-          *ref="gizmoRef"
+          [ref]="gizmoRef"
           [position]="get('gizmoPosition')"
           (beforeRender)="onBeforeRender($any($event).state.delta)"
         >
-          <ng-container *ngTemplateOutlet="gizmoHelperContent"></ng-container>
+          <ng-container *ngTemplateOutlet="gizmoHelperContent" />
         </ngt-group>
       </ng-template>
     </ngt-portal>
   `,
-  imports: [NgtPortal, NgtPortalContent, NgtRef, NgtsOrthographicCamera, NgTemplateOutlet],
+  imports: [NgtPortal, NgtPortalContent, NgtsOrthographicCamera, NgTemplateOutlet],
   providers: [provideNgtsGizmoHelperApi([NgtsGizmoHelper], gizmoHelperApiFactory)],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

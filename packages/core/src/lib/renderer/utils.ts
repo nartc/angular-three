@@ -5,6 +5,7 @@ import { attach, detach } from '../utils/attach';
 import { removeInteractivity } from '../utils/events';
 import { getLocalState, invalidateInstance } from '../utils/instance';
 import { is } from '../utils/is';
+import { NgtRendererClassId } from './class-id';
 
 export const SPECIAL_DOM_TAG = {
   NGT_PORTAL: 'ngt-portal',
@@ -12,10 +13,18 @@ export const SPECIAL_DOM_TAG = {
   NGT_VALUE: 'ngt-value',
 } as const;
 
-export const ATTRIBUTES = {
+export const SPECIAL_PROPERTIES = {
   COMPOUND: 'ngtCompound',
   RENDER_PRIORITY: 'priority',
   ATTACH: 'attach',
+  VALUE: 'rawValue',
+  REF: 'ref',
+} as const;
+
+const SPECIAL_EVENTS = {
+  BEFORE_RENDER: 'beforeRender',
+  AFTER_UPDATE: 'afterUpdate',
+  AFTER_ATTACH: 'afterAttach',
 } as const;
 
 export function attachThreeInstances(parent: NgtInstanceNode, child: NgtInstanceNode) {
@@ -28,6 +37,10 @@ export function attachThreeInstances(parent: NgtInstanceNode, child: NgtInstance
 
   // whether the child is added to the parent with parent.add()
   let added = false;
+
+  if (!cLS.store) {
+    cLS.store = pLS.store;
+  }
 
   if (cLS.attach) {
     const attachProp = cLS.attach;
@@ -55,7 +68,10 @@ export function attachThreeInstances(parent: NgtInstanceNode, child: NgtInstance
 
       // attach
       if (cLS.isRaw) {
-        attach(parent, child.__ngt_renderer__.rawValue, attachProp);
+        cLS.parent = parent;
+        // at this point we don't have rawValue yet, so we bail and wait until the Renderer recalls attach
+        if (child.__ngt_renderer__[NgtRendererClassId.rawValue] === undefined) return;
+        attach(parent, child.__ngt_renderer__[NgtRendererClassId.rawValue], attachProp);
       } else {
         attach(parent, child, attachProp);
       }
@@ -145,26 +161,17 @@ export function processThreeEvent(
 ) {
   const lS = getLocalState(instance);
   if (lS) {
-    if (eventName === 'beforeRender') {
-      // beforeRender is a special event
+    if (eventName === SPECIAL_EVENTS.BEFORE_RENDER) {
       return lS.store
         .get('internal')
         .subscribe((state) => callback({ state, object: instance }), priority || 0, lS.store);
     }
 
-    if (eventName === 'afterUpdate') {
-      if (!lS.afterUpdate) {
-        lS.afterUpdate = new EventEmitter();
+    if (eventName === SPECIAL_EVENTS.AFTER_UPDATE || eventName === SPECIAL_EVENTS.AFTER_ATTACH) {
+      if (!lS[eventName]) {
+        lS[eventName] = new EventEmitter();
       }
-      const sub = lS.afterUpdate.subscribe(callback);
-      return sub.unsubscribe.bind(sub);
-    }
-
-    if (eventName === 'afterAttach') {
-      if (!lS.afterAttach) {
-        lS.afterAttach = new EventEmitter();
-      }
-      const sub = lS.afterAttach.subscribe(callback);
+      const sub = lS[eventName]!.subscribe(callback);
       return sub.unsubscribe.bind(sub);
     }
 

@@ -1,11 +1,4 @@
-import {
-  extend,
-  injectNgtRef,
-  NgtArgs,
-  NgtBeforeRender,
-  NgtRef,
-  NgtRxStore,
-} from '@angular-three/core';
+import { extend, injectNgtRef, NgtArgs, NgtBeforeRender, NgtRxStore } from '@angular-three/core';
 import { shaderMaterial } from '@angular-three/soba/shaders';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import {
@@ -66,10 +59,16 @@ const genStar = (r: number) => {
   selector: 'ngts-stars',
   standalone: true,
   template: `
-    <ngt-points *ref="starsRef">
+    <ngt-points [ref]="starsRef">
       <ngt-buffer-geometry>
-        <ngt-buffer-attribute attach="attributes.position" *args="[get('bufferAttributes').positions, 3]" />
-        <ngt-buffer-attribute attach="attributes.color" *args="[get('bufferAttributes').colors, 3]" />
+        <ngt-buffer-attribute
+          attach="attributes.position"
+          *args="[get('bufferAttributes').positions, 3]"
+        />
+        <ngt-buffer-attribute
+          attach="attributes.color"
+          *args="[get('bufferAttributes').colors, 3]"
+        />
         <ngt-buffer-attribute attach="attributes.size" *args="[get('bufferAttributes').sizes, 1]" />
       </ngt-buffer-geometry>
       <ngt-primitive
@@ -81,11 +80,11 @@ const genStar = (r: number) => {
         [vertexColors]="true"
         (beforeRender)="onBeforeRender($any($event))"
       >
-        <ngt-value attach="uniforms.fade.value" *args="[get('fade')]" />
+        <ngt-value attach="uniforms.fade.value" [rawValue]="get('fade')" />
       </ngt-primitive>
     </ngt-points>
   `,
-  imports: [NgtArgs, NgtRef],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsStars extends NgtRxStore {

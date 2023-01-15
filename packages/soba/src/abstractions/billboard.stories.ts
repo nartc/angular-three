@@ -21,7 +21,7 @@ extend({
   template: `
     <ngt-mesh>
       <ngt-cone-geometry *args="args" />
-      <ngt-value attach="material.color" *args="[color]" />
+      <ngt-value attach="material.color" [rawValue]="color" />
       <ng-content />
     </ngt-mesh>
   `,
@@ -39,7 +39,7 @@ class Cone {
   template: `
     <ngt-mesh ngtCompound>
       <ngt-box-geometry *args="args" />
-      <ngt-value attach="material.color" *args="[color]" />
+      <ngt-value attach="material.color" [rawValue]="color" />
       <ng-content />
     </ngt-mesh>
   `,
@@ -57,7 +57,7 @@ class Box {
   template: `
     <ngt-mesh>
       <ngt-plane-geometry *args="args" />
-      <ngt-value attach="material.color" *args="[color]" />
+      <ngt-value attach="material.color" [rawValue]="color" />
       <ng-content />
     </ngt-mesh>
   `,
@@ -80,12 +80,18 @@ class Plane {
       [lockZ]="lockZ"
       [position]="[0.5, 2.05, 0.5]"
     >
-      <ngts-text text="box" [fontSize]="1" [outlineWidth]="'5%'" [outlineColor]="'#000'" [outlineOpacity]="1" />
+      <ngts-text
+        text="box"
+        [fontSize]="1"
+        [outlineWidth]="'5%'"
+        [outlineColor]="'#000'"
+        [outlineOpacity]="1"
+      />
     </ngts-billboard>
     <storybook-box [position]="[0.5, 1, 0.5]" color="red">
       <ngt-mesh-standard-material />
     </storybook-box>
-    <ngt-group [position]="[-2.5, -3, -1]">
+    <ngt-group #group name="parent-group" [position]="[-2.5, -3, -1]">
       <ngts-billboard
         [follow]="follow"
         [lockX]="lockX"
@@ -196,15 +202,18 @@ export default {
   decorators: [moduleMetadata({ imports: [StorybookSetup] })],
 } as Meta;
 
+const compoundPrefixes = ['storybook-box'];
+
 export const Default: Story = (args) => ({
   props: {
     camera: { position: [0, 0, 10] },
     controls: false,
+    compoundPrefixes,
     storyComponent: DefaultBillboardStory,
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
+<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs" [compoundPrefixes]="compoundPrefixes" />
     `,
 });
 
@@ -220,10 +229,11 @@ export const Text: Story = (args) => ({
     camera: { position: [0, 0, 10] },
     controls: false,
     storyComponent: TextBillboardStory,
+    compoundPrefixes,
     storyInputs: args,
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
+<storybook-setup [camera]="camera" [controls]="controls" [storyComponent]="storyComponent" [storyInputs]="storyInputs" [compoundPrefixes]="compoundPrefixes" />
     `,
 });
 

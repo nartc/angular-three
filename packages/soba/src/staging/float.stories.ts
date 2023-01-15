@@ -32,8 +32,8 @@ extend({ Mesh, BoxGeometry, PlaneGeometry, MeshStandardMaterial, MeshBasicMateri
       </ngt-mesh>
     </ngts-float>
     <ngt-mesh [position]="[0, -6, 0]" [rotation]="[Math.PI / -2, 0, 0]">
-        <ngt-plane-geometry *args="[200, 200, 75, 75]" />
-        <ngt-mesh-basic-material wireframe color="red" [side]="DoubleSide" />
+      <ngt-plane-geometry *args="[200, 200, 75, 75]" />
+      <ngt-mesh-basic-material wireframe color="red" [side]="DoubleSide" />
     </ngt-mesh>
   `,
   imports: [NgtsFloat, NgtArgs],

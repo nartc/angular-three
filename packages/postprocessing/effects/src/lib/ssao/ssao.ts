@@ -1,4 +1,4 @@
-import { injectNgtRef, NgtAnyRecord, NgtArgs, NgtRef, NgtRxStore } from '@angular-three/core';
+import { injectNgtRef, NgtAnyRecord, NgtArgs, NgtRxStore } from '@angular-three/core';
 import { injectNgtpEffectComposertApi } from '@angular-three/postprocessing';
 import {
   Component,
@@ -17,12 +17,8 @@ import { combineLatest, map, startWith } from 'rxjs';
 @Component({
   selector: 'ngtp-ssao',
   standalone: true,
-  template: `
-    <ng-container *args="[get('effect')]">
-      <ngt-primitive *ref="ssaoRef" />
-    </ng-container>
-  `,
-  imports: [NgtArgs, NgtRef],
+  template: ` <ngt-primitive *args="[get('effect')]" [ref]="ssaoRef" /> `,
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   inputs: [
     'blendFunction',

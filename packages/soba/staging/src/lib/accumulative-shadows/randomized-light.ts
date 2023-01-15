@@ -3,12 +3,12 @@ import {
   extend,
   injectNgtRef,
   NgtArgs,
-  NgtRef,
   NgtRepeat,
   NgtRxStore,
 } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Directive, Input } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
+import { combineLatest } from 'rxjs';
 import * as THREE from 'three';
 import { DirectionalLight, Group, MathUtils, OrthographicCamera, Vector2, Vector3 } from 'three';
 import { injectNgtsAccumulativeApi } from './accumulative-shadows';
@@ -52,11 +52,16 @@ function lightsApiFactory(lights: NgtsRandomizedLight) {
 
   const api = { update } as NgtsRandomizedLightApi;
 
-  lights.effect(lights.select(selectSlice(['radius', 'ambient', 'length', 'position'])), () => {
-    const group = lights.groupRef.nativeElement;
-    if (accumulativeApi) accumulativeApi.lights.set(group.uuid, api);
-    return () => accumulativeApi.lights.delete(group.uuid);
-  });
+  lights.effect(
+    combineLatest([
+      lights.select(selectSlice(['radius', 'ambient', 'length', 'position'])),
+      lights.groupRef.$,
+    ]),
+    ([, group]) => {
+      if (accumulativeApi) accumulativeApi.lights.set(group.uuid, api);
+      return () => accumulativeApi.lights.delete(group.uuid);
+    }
+  );
 
   return api;
 }
@@ -73,20 +78,20 @@ export class RandomizedLightConsumer {
   selector: 'ngts-randomized-light',
   standalone: true,
   template: `
-    <ngt-group ngtCompound *ref="groupRef">
+    <ngt-group ngtCompound [ref]="groupRef">
       <ngt-directional-light
         *ngFor="let i; repeat: get('amount')"
         [intensity]="get('intensity') / get('amount')"
         [castShadow]="get('castShadow')"
       >
-        <ngt-value *args="[get('bias')]" attach="shadow.bias" />
+        <ngt-value [rawValue]="get('bias')" attach="shadow.bias" />
         <ngt-vector2 *args="[get('mapSize'), get('mapSize')]" attach="shadow.mapSize" />
         <ngt-orthographic-camera *args="get('cameraArgs')" attach="shadow.camera" />
       </ngt-directional-light>
       <ngts-randomized-light-consumer />
     </ngt-group>
   `,
-  imports: [NgtRef, NgtRepeat, NgtArgs, RandomizedLightConsumer],
+  imports: [NgtRepeat, NgtArgs, RandomizedLightConsumer],
   providers: [provideNgtsRandomizedLightApi([NgtsRandomizedLight], lightsApiFactory)],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

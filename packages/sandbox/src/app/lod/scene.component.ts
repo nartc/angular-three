@@ -6,6 +6,7 @@ import { NgtsDetailed } from '@angular-three/soba/performance';
 import { NgtsEnvironment } from '@angular-three/soba/staging';
 import { NgFor } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
+import { ForModule } from '@rx-angular/template/for';
 import { Observable } from 'rxjs';
 import { Mesh, PointLight, SpotLight } from 'three';
 import { GLTF } from 'three-stdlib';
@@ -34,11 +35,11 @@ extend({ Mesh, PointLight, SpotLight });
         [geometry]="level.nodes.Mesh_0001.geometry"
         [material]="level.materials.default"
       >
-        <ngt-value *args="[0.25]" attach="material.envMapIntensity"></ngt-value>
+        <ngt-value [rawValue]="0.25" attach="material.envMapIntensity" />
       </ngt-mesh>
     </ngts-detailed>
   `,
-  imports: [NgtsDetailed, NgFor, NgtPush, NgtArgs],
+  imports: [NgtsDetailed, NgFor, NgtPush, NgtArgs, ForModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Bust {
@@ -58,18 +59,14 @@ export class Bust {
   selector: 'sandbox-lod-scene',
   standalone: true,
   template: `
-    <sandbox-bust
-      *ngFor="let position of positions"
-      [position]="position.position"
-      [rotation]="position.rotation"
-    ></sandbox-bust>
-    <ngts-orbit-controls [zoomSpeed]="0.075"></ngts-orbit-controls>
-    <ngt-point-light [position]="[0, 0, 0]" intensity="0.5"></ngt-point-light>
-    <ngt-spot-light [position]="[50, 50, 50]" intensity="2.5" castShadow></ngt-spot-light>
-    <ngts-environment preset="city"></ngts-environment>
-    <ngts-bake-shadows></ngts-bake-shadows>
+    <sandbox-bust *ngFor="let p of positions" [position]="p.position" [rotation]="p.rotation" />
+    <ngts-orbit-controls [zoomSpeed]="0.075" />
+    <ngt-point-light [position]="[0, 0, 0]" intensity="0.5" />
+    <ngt-spot-light [position]="[50, 50, 50]" intensity="2.5" castShadow />
+    <ngts-environment preset="city" />
+    <ngts-bake-shadows />
   `,
-  imports: [Bust, NgtsOrbitControls, NgtsEnvironment, NgFor, NgtsBakeShadows],
+  imports: [Bust, ForModule, NgtsOrbitControls, NgtsEnvironment, NgFor, NgtsBakeShadows],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene {

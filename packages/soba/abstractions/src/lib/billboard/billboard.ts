@@ -1,4 +1,4 @@
-import { extend, injectNgtRef, NgtBeforeRender, NgtRef, NgtRxStore } from '@angular-three/core';
+import { extend, injectNgtRef, NgtBeforeRender, NgtRxStore } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { Group } from 'three';
 
@@ -8,11 +8,10 @@ extend({ Group });
   selector: 'ngts-billboard',
   standalone: true,
   template: `
-    <ngt-group ngtCompound *ref="groupRef" (beforeRender)="onBeforeRender($any($event))">
+    <ngt-group ngtCompound [ref]="groupRef" (beforeRender)="onBeforeRender($any($event))">
       <ng-content />
     </ngt-group>
   `,
-  imports: [NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsBillboard extends NgtRxStore {

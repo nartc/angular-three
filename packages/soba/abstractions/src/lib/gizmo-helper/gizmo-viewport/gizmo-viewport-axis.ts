@@ -71,8 +71,8 @@ export class NgtsGizmoViewportAxis extends NgtRxStore {
         alphaTest="0.3"
         toneMapped="false"
       >
-        <ngt-value *args="[gl.outputEncoding]" attach="map.encoding" />
-        <ngt-value *args="[gl.capabilities.getMaxAnisotropy() || 1]" attach="map.anisotropy" />
+        <ngt-value [rawValue]="gl.outputEncoding" attach="map.encoding" />
+        <ngt-value [rawValue]="gl.capabilities.getMaxAnisotropy() || 1" attach="map.anisotropy" />
       </ngt-sprite-material>
     </ngt-sprite>
   `,

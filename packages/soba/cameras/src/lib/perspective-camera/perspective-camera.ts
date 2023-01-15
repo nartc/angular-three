@@ -1,4 +1,4 @@
-import { extend, NgtRef } from '@angular-three/core';
+import { extend } from '@angular-three/core';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, ContentChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Group, PerspectiveCamera } from 'three';
@@ -11,7 +11,7 @@ extend({ PerspectiveCamera, Group });
   selector: 'ngts-perspective-camera',
   standalone: true,
   template: `
-    <ngt-perspective-camera *ref="cameraRef" ngtCompound>
+    <ngt-perspective-camera [ref]="cameraRef" ngtCompound>
       <ng-container
         *ngIf="cameraContent && !cameraContent.ngtsCameraContent"
         [ngTemplateOutlet]="cameraContent.template"
@@ -23,7 +23,7 @@ extend({ PerspectiveCamera, Group });
       />
     </ngt-group>
   `,
-  imports: [NgtRef, NgIf, NgTemplateOutlet],
+  imports: [NgIf, NgTemplateOutlet],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsPerspectiveCamera extends NgtsCamera<PerspectiveCamera> {

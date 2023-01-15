@@ -5,7 +5,6 @@ import {
   injectNgtRef,
   injectNgtStore,
   NgtAnyRecord,
-  NgtRef,
   NgtRxStore,
 } from '@angular-three/core';
 import { shaderMaterial } from '@angular-three/soba/shaders';
@@ -135,32 +134,34 @@ function accumulativeApiFactory(shadows: NgtsAccumulativeShadows) {
       ),
   });
 
-  shadows.pLM.configure(shadows.meshRef.nativeElement);
+  shadows.hold(shadows.meshRef.$, (mesh) => {
+    shadows.pLM.configure(mesh);
 
-  shadows.hold(
-    combineLatest([shadows.select(), getLocalState(store.get('scene'))!.objects]),
-    () => {
-      // Reset internals, buffers, ...
-      api.reset();
-      // Update lightmap
-      if (!api.temporal && api.frames !== Infinity) api.update(api.blend);
-    }
-  );
-
-  shadows.effect(actions.setBeforeRender$, () =>
-    store.get('internal').subscribe(() => {
-      const limit = shadows.get('limit');
-      if (
-        (api.temporal || api.frames === Infinity) &&
-        api.count < api.frames &&
-        api.count < limit
-      ) {
-        api.update();
-        api.count++;
+    shadows.hold(
+      combineLatest([shadows.select(), getLocalState(store.get('scene'))!.objects]),
+      () => {
+        // Reset internals, buffers, ...
+        api.reset();
+        // Update lightmap
+        if (!api.temporal && api.frames !== Infinity) api.update(api.blend);
       }
-    })
-  );
-  actions.setBeforeRender();
+    );
+
+    shadows.effect(actions.setBeforeRender$, () =>
+      store.get('internal').subscribe(() => {
+        const limit = shadows.get('limit');
+        if (
+          (api.temporal || api.frames === Infinity) &&
+          api.count < api.frames &&
+          api.count < limit
+        ) {
+          api.update();
+          api.count++;
+        }
+      })
+    );
+    actions.setBeforeRender();
+  });
 
   return api as NgtsAccumulativeApi;
 }
@@ -180,13 +181,13 @@ export class AccumulativeShadowsConsumer {
   standalone: true,
   template: `
     <ngt-group ngtCompound>
-      <ngt-group *ref="groupRef" [traverse]="nullTraverse">
+      <ngt-group [ref]="groupRef" [traverse]="nullTraverse">
         <ng-content />
         <ngts-accumulative-shadows-consumer />
       </ngt-group>
       <ngt-mesh
-        *ref="meshRef"
         receiveShadow
+        [ref]="meshRef"
         [scale]="get('scale')"
         [rotation]="[-Math.PI / 2, 0, 0]"
       >
@@ -202,7 +203,7 @@ export class AccumulativeShadowsConsumer {
       </ngt-mesh>
     </ngt-group>
   `,
-  imports: [NgtRef, AccumulativeShadowsConsumer],
+  imports: [AccumulativeShadowsConsumer],
   providers: [
     RxActionFactory,
     provideNgtsAccumulativeApi([NgtsAccumulativeShadows], accumulativeApiFactory),

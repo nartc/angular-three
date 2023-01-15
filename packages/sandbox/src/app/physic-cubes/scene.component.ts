@@ -1,7 +1,7 @@
 import { NgtcPhysics } from '@angular-three/cannon';
 import { NgtcDebug } from '@angular-three/cannon/debug';
 import { injectBox, injectPlane } from '@angular-three/cannon/services';
-import { extend, NgtArgs, NgtRef } from '@angular-three/core';
+import { extend, NgtArgs } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { Triplet } from '@pmndrs/cannon-worker-api';
 import {
@@ -32,12 +32,12 @@ extend({
   selector: 'floor',
   standalone: true,
   template: `
-    <ngt-mesh *ref="plane.ref" receiveShadow>
+    <ngt-mesh [ref]="plane.ref" receiveShadow>
       <ngt-plane-geometry *args="args" />
       <ngt-shadow-material transparent color="#171717" opacity="0.4" />
     </ngt-mesh>
   `,
-  imports: [NgtRef, NgtArgs],
+  imports: [NgtArgs],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Floor {
@@ -56,12 +56,11 @@ export class Floor {
   selector: 'cube',
   standalone: true,
   template: `
-    <ngt-mesh *ref="box.ref" receiveShadow castShadow>
+    <ngt-mesh [ref]="box.ref" receiveShadow castShadow>
       <ngt-box-geometry />
       <ngt-mesh-lambert-material color="hotpink" />
     </ngt-mesh>
   `,
-  imports: [NgtRef],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Cube {
@@ -83,7 +82,7 @@ export class Cube {
     <ngt-ambient-light />
     <ngt-directional-light [position]="10" castShadow>
       <ngt-vector2 *args="[2048, 2048]" attach="shadow.mapSize" />
-      <ngt-value *args="[-0.001]" attach="shadow.bias" />
+      <ngt-value [rawValue]="-0.001" attach="shadow.bias" />
     </ngt-directional-light>
 
     <ngtc-physics>

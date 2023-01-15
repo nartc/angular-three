@@ -103,8 +103,8 @@ extend({ AmbientLight, SpotLight, Vector2, PointLight, Group });
       [intensity]="get('intensity')! * 2"
       [castShadow]="!!get('shadows')"
     >
-      <ngt-value *args="[get('shadowsInfo').shadowBias]" attach="shadow.bias" />
-      <ngt-value *args="[get('shadowsInfo').normalBias]" attach="shadow.normalBias" />
+      <ngt-value [rawValue]="get('shadowsInfo').shadowBias" attach="shadow.bias" />
+      <ngt-value [rawValue]="get('shadowsInfo').normalBias" attach="shadow.normalBias" />
       <ngt-vector2
         *args="[get('shadowsInfo').shadowSize, get('shadowsInfo').shadowSize]"
         attach="shadow.mapSize"

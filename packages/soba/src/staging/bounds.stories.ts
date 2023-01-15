@@ -28,8 +28,8 @@ extend({ Mesh, Color, SpotLight, HemisphereLight, Group });
       [material]="model.material"
       [geometry]="model.geometry"
     >
-      <ngt-value *args="['red']" attach="material.emissive" />
-      <ngt-value *args="[1]" attach="material.roughness" />
+      <ngt-value [rawValue]="'red'" attach="material.emissive" />
+      <ngt-value [rawValue]="1" attach="material.roughness" />
     </ngt-mesh>
   `,
   imports: [NgtArgs, NgIf, NgtPush],
@@ -52,10 +52,30 @@ class Model extends NgtRxStore {
       <storybook-model name="Headphones" [position]="[20, 2, 4]" [rotation]="[1, 0, -1]" />
       <storybook-model name="Notebook" [position]="[-21, -15, -13]" [rotation]="[2, 0, 1]" />
       <storybook-model name="Rocket003" [position]="[18, 15, -25]" [rotation]="[1, 1, 0]" />
-      <storybook-model name="Roundcube001" [position]="[-25, -4, 5]" [rotation]="[1, 0, 0]" [scale]="0.5" />
-      <storybook-model name="Table" [position]="[1, -4, -28]" [rotation]="[1, 0, -1]" [scale]="0.5" />
-      <storybook-model name="VR_Headset" [position]="[7, -15, 28]" [rotation]="[1, 0, -1]" [scale]="5" />
-      <storybook-model name="Zeppelin" [position]="[-20, 10, 10]" [rotation]="[3, -1, 3]" [scale]="0.005" />
+      <storybook-model
+        name="Roundcube001"
+        [position]="[-25, -4, 5]"
+        [rotation]="[1, 0, 0]"
+        [scale]="0.5"
+      />
+      <storybook-model
+        name="Table"
+        [position]="[1, -4, -28]"
+        [rotation]="[1, 0, -1]"
+        [scale]="0.5"
+      />
+      <storybook-model
+        name="VR_Headset"
+        [position]="[7, -15, 28]"
+        [rotation]="[1, 0, -1]"
+        [scale]="5"
+      />
+      <storybook-model
+        name="Zeppelin"
+        [position]="[-20, 10, 10]"
+        [rotation]="[3, -1, 3]"
+        [scale]="0.005"
+      />
     </ngt-group>
   `,
   imports: [Model, NgIf, NgtPush],
@@ -81,7 +101,12 @@ class Models {
     <ngt-color *args="['#f08080']" attach="background" />
 
     <ngt-spot-light [position]="[-100, -100, -100]" intensity="0.2" angle="0.3" penumbra="1" />
-    <ngt-hemisphere-light color="white" groundColor="#ff0f00" [position]="[-7, 25, 13]" intensity="1" />
+    <ngt-hemisphere-light
+      color="white"
+      groundColor="#ff0f00"
+      [position]="[-7, 25, 13]"
+      intensity="1"
+    />
 
     <ngts-bounds>
       <models />
@@ -120,8 +145,9 @@ export const Default: Story = () => ({
     controls: false,
     lights: false,
     storyComponent: DefaultBoundsStory,
+    compoundPrefixes: ['storybook-model'],
   },
   template: `
-<storybook-setup [camera]="camera" [controls]="controls" [lights]="lights" [storyComponent]="storyComponent" />
+<storybook-setup [camera]="camera" [controls]="controls" [lights]="lights" [storyComponent]="storyComponent" [compoundPrefixes]="compoundPrefixes" />
     `,
 });

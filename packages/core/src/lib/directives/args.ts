@@ -37,6 +37,10 @@ export class NgtArgs implements NgtHasValidateForRenderer {
     return null;
   }
 
+  get injectedArgs() {
+    return this.#injectedArgs;
+  }
+
   validate() {
     return !this.#injected && !!this.#injectedArgs.length;
   }
