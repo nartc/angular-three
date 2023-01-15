@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, getDebugNode, Injector, Type } from '@angular/core';
 import { NgtInjectedRef } from '../di/ref';
 import { NgtArgs } from '../directives/args';
-import { NgtDynamicAttach } from '../directives/dynamic-attach';
 import { NgtStore } from '../stores/store';
 import { NgtAnyRecord, NgtHasValidateForRenderer, NgtInstanceLocalState } from '../types';
 import { applyProps } from '../utils/apply-props';
@@ -295,14 +294,11 @@ export class NgtRendererState {
 
   getCreationState() {
     const ngtArgs = this.#firstNonInjectedDirective(NgtArgs);
-    const ngtDynamicAttach = this.#firstNonInjectedDirective(NgtDynamicAttach);
-
     const injectedArgs = ngtArgs?.args || [];
 
-    const attach = ngtDynamicAttach?.dynamicAttach || undefined;
     const store = this.#tryGetPortalStore();
 
-    return { injectedArgs, attach, store };
+    return { injectedArgs, store };
   }
 
   remove(node: NgtRendererNode, parent?: NgtRendererNode) {

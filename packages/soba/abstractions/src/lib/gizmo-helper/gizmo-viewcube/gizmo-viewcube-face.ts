@@ -1,4 +1,4 @@
-import { extend, NgtArgs, NgtDynamicAttach, NgtRepeat, NgtThreeEvent } from '@angular-three/core';
+import { extend, NgtRepeat, NgtThreeEvent } from '@angular-three/core';
 import { DOCUMENT } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, Input } from '@angular/core';
 import { BoxGeometry, CanvasTexture, Mesh, MeshLambertMaterial } from 'three';
@@ -13,7 +13,7 @@ extend({ MeshLambertMaterial, Mesh, BoxGeometry });
   standalone: true,
   template: `
     <ngt-mesh-lambert-material
-      *dynamicAttach="['material', get('index')]"
+      [attach]="['material', get('index')]"
       [map]="get('texture')"
       [color]="get('hover') ? get('hoverColor') : get('color')"
       [opacity]="get('opacity')"
@@ -26,7 +26,6 @@ extend({ MeshLambertMaterial, Mesh, BoxGeometry });
       />
     </ngt-mesh-lambert-material>
   `,
-  imports: [NgtArgs, NgtDynamicAttach],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsGizmoViewcubeFaceMaterial extends NgtsGizmoViewcubeInputs {

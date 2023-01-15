@@ -3,7 +3,6 @@ import {
   injectNgtRef,
   injectNgtStore,
   NgtArgs,
-  NgtDynamicAttach,
   NgtPortal,
   NgtPortalContent,
   NgtPush,
@@ -50,12 +49,11 @@ extend({
           (pointerout)="hovered = -1"
           (pointermove)="hovered = Math.floor(($any($event).faceIndex || 0) / 2)"
         >
-          <ng-container *ngFor="let i; repeat: 6">
-            <ngt-mesh-lambert-material
-              *dynamicAttach="['material', i]"
-              [color]="hovered === i ? 'lightblue' : 'white'"
-            />
-          </ng-container>
+          <ngt-mesh-lambert-material
+            *ngFor="let i; repeat: 6"
+            [attach]="['material', i]"
+            [color]="hovered === i ? 'orange' : 'white'"
+          />
           <ngt-box-geometry *args="[60, 60, 60]" />
         </ngt-mesh>
         <ngt-ambient-light intensity="1" />
@@ -63,15 +61,7 @@ extend({
       </ng-template>
     </ngt-portal>
   `,
-  imports: [
-    NgtPortal,
-    NgtPortalContent,
-    NgtPush,
-    NgtArgs,
-    NgtRepeat,
-    NgtDynamicAttach,
-    NgtsOrthographicCamera,
-  ],
+  imports: [NgtPortal, NgtPortalContent, NgtPush, NgtArgs, NgtRepeat, NgtsOrthographicCamera],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ViewCube extends NgtRxStore {

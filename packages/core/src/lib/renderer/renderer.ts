@@ -17,11 +17,11 @@ import { injectNgtCompoundPrefixes } from './di';
 import { NgtRendererNode, NgtRendererState } from './state';
 import {
   attachThreeInstances,
-  SPECIAL_PROPERTIES,
   kebabToPascal,
   processThreeEvent,
   removeThreeChild,
   SPECIAL_DOM_TAG,
+  SPECIAL_PROPERTIES,
 } from './utils';
 
 @Injectable()
@@ -78,7 +78,7 @@ export class NgtRenderer implements Renderer2 {
       );
     }
 
-    const { injectedArgs, attach, store } = this.state.getCreationState();
+    const { injectedArgs, store } = this.state.getCreationState();
 
     // handle ngt-primitive and fail fast when not met requirement
     if (name === SPECIAL_DOM_TAG.NGT_PRIMITIVE) {
@@ -86,7 +86,7 @@ export class NgtRenderer implements Renderer2 {
       const object = injectedArgs[0];
       let localState = getLocalState(object);
       if (!localState) {
-        prepare(object, { store, attach, args: injectedArgs, primitive: true });
+        prepare(object, { store, args: injectedArgs, primitive: true });
         localState = getLocalState(object);
       }
 
@@ -100,20 +100,14 @@ export class NgtRenderer implements Renderer2 {
     const threeName = kebabToPascal(threeTag);
     const threeTarget = this.catalogue[threeName];
     if (threeTarget) {
-      const instance = prepare(new threeTarget(...injectedArgs), {
-        store,
-        attach,
-        args: injectedArgs,
-      });
+      const instance = prepare(new threeTarget(...injectedArgs), { store, args: injectedArgs });
       const node = this.state.createNode('instance', instance);
       const localState = node.__ngt_renderer__[NgtRendererClassId.localState]();
       if (localState) {
-        if (!attach) {
-          if (is.geometry(instance)) {
-            localState.attach = ['geometry'];
-          } else if (is.material(instance)) {
-            localState.attach = ['material'];
-          }
+        if (is.geometry(instance)) {
+          localState.attach = ['geometry'];
+        } else if (is.material(instance)) {
+          localState.attach = ['material'];
         }
       }
 
@@ -125,7 +119,8 @@ export class NgtRenderer implements Renderer2 {
 
   createComment(value: string) {
     const comment = this.delegate.createComment(value);
-    // TODO  The code in angular core has tNode that can be passed down to createComment. But it is not right now. We'll ask the team later
+    // TODO  The code in angular core has tNode that can be passed down to createComment.
+    // But it is not right now. We'll ask the team later
     return this.state.createNode('comment', comment);
   }
 
@@ -329,15 +324,26 @@ export class NgtRenderer implements Renderer2 {
     }
 
     if (el.__ngt_renderer__[NgtRendererClassId.type] === 'instance') {
-      if (el.__ngt_renderer__[NgtRendererClassId.localState]().isRaw && name === SPECIAL_PROPERTIES.VALUE) {
+      const parent =
+        el.__ngt_renderer__[NgtRendererClassId.localState]().parent ||
+        el.__ngt_renderer__[NgtRendererClassId.parent];
+      if (
+        el.__ngt_renderer__[NgtRendererClassId.localState]().isRaw &&
+        name === SPECIAL_PROPERTIES.VALUE
+      ) {
         el.__ngt_renderer__[NgtRendererClassId.rawValue] = value;
-        this.appendChild(
-          el.__ngt_renderer__[NgtRendererClassId.localState]().parent ||
-            el.__ngt_renderer__[NgtRendererClassId.parent],
-          el
-        );
+        this.appendChild(parent, el);
         return;
       }
+
+      if (name === 'attach') {
+        el.__ngt_renderer__[NgtRendererClassId.localState]().attach = Array.isArray(value)
+          ? value.map((v) => v.toString())
+          : value;
+        this.appendChild(parent, el);
+        return;
+      }
+
       this.state.applyProperty(el, name, value);
     }
   }
