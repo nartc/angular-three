@@ -2,7 +2,7 @@ import { injectNgtRef, injectNgtStore, NgtAfterAttach, NgtArgs, startWithUndefin
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
 import { Color, Vector2, Vector3 } from 'three';
-import { Line2, LineGeometry, LineMaterial } from 'three-stdlib';
+import { Line2, LineGeometry, LineMaterial, LineSegments2, LineSegmentsGeometry } from 'three-stdlib';
 import { NgtsLineInputs } from './line-inputs';
 
 @Component({
@@ -42,7 +42,7 @@ export class NgtsLine extends NgtsLineInputs implements OnInit {
 
     readonly #store = injectNgtStore();
 
-    @Input() lineRef = injectNgtRef<Line2>();
+    @Input() lineRef = injectNgtRef<LineSegments2 | Line2>();
 
     @Input() set points(points: Array<Vector3 | Vector2 | [number, number, number] | [number, number] | number>) {
         this.set({ points });
@@ -56,7 +56,7 @@ export class NgtsLine extends NgtsLineInputs implements OnInit {
     // has been attached. So it doesn't work with the props changed from the Material
     //
     // Alternatively, we can also run the effect on line#children changes.
-    onAfterAttach({ parent }: NgtAfterAttach<Line2, LineGeometry>) {
+    onAfterAttach({ parent }: NgtAfterAttach<Line2 | LineSegments2, LineGeometry>) {
         parent.computeLineDistances();
     }
 
@@ -64,9 +64,13 @@ export class NgtsLine extends NgtsLineInputs implements OnInit {
         super.initialize();
         this.connect(
             'lineGeometry',
-            combineLatest([this.select('points'), this.select('vertexColors').pipe(startWithUndefined())]).pipe(
-                map(([points, vertexColors]) => {
-                    const geometry = new LineGeometry();
+            combineLatest([
+                this.select('points'),
+                this.select('segments'),
+                this.select('vertexColors').pipe(startWithUndefined()),
+            ]).pipe(
+                map(([points, segments, vertexColors]) => {
+                    const geometry = segments ? new LineSegmentsGeometry() : new LineGeometry();
                     const pValues = (
                         points as Array<Vector3 | Vector2 | [number, number, number] | [number, number] | number>
                     ).map((p) => {
@@ -104,7 +108,8 @@ export class NgtsLine extends NgtsLineInputs implements OnInit {
                 map(([size, resolution]) => resolution ?? [size.width, size.height])
             )
         );
-        if (!this.lineRef.nativeElement) this.lineRef.nativeElement = new Line2();
+        if (!this.lineRef.nativeElement)
+            this.lineRef.nativeElement = this.get('segments') ? new LineSegments2() : new Line2();
         this.#computeLineDistances();
         this.#disposeGeometry();
     }
