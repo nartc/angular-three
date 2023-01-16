@@ -1,11 +1,15 @@
 import { NgtCanvas } from '@angular-three/core';
+import { NgtsStats } from '@angular-three/soba/performance';
 import { Component } from '@angular/core';
 import { Scene } from './scene.component';
 
 @Component({
     selector: 'sandbox-color-grading',
     standalone: true,
-    template: ` <ngt-canvas [scene]="Scene" frameloop="demand" [camera]="{ position: [0, 0, 5], fov: 45 }" /> `,
+    template: ` <ngt-canvas [scene]="Scene" frameloop="demand" [camera]="{ position: [0, 0, 5], fov: 45 }" /> 
+    <ngts-stats />
+    `,
+    imports: [NgtCanvas, NgtsStats],
     styles: [
         `
             :host {
@@ -16,7 +20,6 @@ import { Scene } from './scene.component';
             }
         `,
     ],
-    imports: [NgtCanvas],
 })
 export default class SandboxColorGrading {
     readonly Scene = Scene;

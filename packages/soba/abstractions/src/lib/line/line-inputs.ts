@@ -24,10 +24,6 @@ export abstract class NgtsLineInputs extends NgtRxStore {
         this.set({ color: color === undefined ? this.get('color') : color });
     }
 
-    @Input() set segments(segments: boolean) {
-        this.set({ segments: segments === undefined ? this.get('segments') : segments });
-    }
-
     @Input() set dashed(dashed: boolean) {
         this.set({ dashed: dashed === undefined ? this.get('dashed') : dashed });
     }
@@ -62,6 +58,6 @@ export abstract class NgtsLineInputs extends NgtRxStore {
 
     override initialize(): void {
         super.initialize();
-        this.set({ color: 'black', segments: false });
+        this.set({ color: 'black' });
     }
 }

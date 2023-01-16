@@ -48,6 +48,10 @@ export class NgtsLine extends NgtsLineInputs implements OnInit {
         this.set({ points });
     }
 
+    @Input() set segments(segments: boolean) {
+        this.set({ segments: segments === undefined ? this.get('segments') : segments });
+    }
+
     // TODO: Figure out if this is the case for everything else.
     // We'd want to run computeLineDistances on the Line2 on "points" changed
     // Consequently,when "points" changes, LineGeometry also changes and that causes
@@ -62,6 +66,7 @@ export class NgtsLine extends NgtsLineInputs implements OnInit {
 
     override initialize() {
         super.initialize();
+        this.set({ segments: false });
         this.connect(
             'lineGeometry',
             combineLatest([
