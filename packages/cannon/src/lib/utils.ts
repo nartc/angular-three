@@ -1,4 +1,4 @@
-import { ElementRef } from '@angular/core';
+import { NgtInjectedRef } from '@angular-three/core';
 import type {
   BodyProps,
   CannonWorkerAPI,
@@ -18,7 +18,7 @@ export class NgtcUtils {
   static q = new Quaternion();
 
   static getUUID<TObject extends THREE.Object3D = THREE.Object3D>(
-    ref: ElementRef<TObject>,
+    ref: NgtInjectedRef<TObject>,
     index?: number
   ): string | null {
     const suffix = index === undefined ? '' : `/${index}`;
@@ -27,7 +27,7 @@ export class NgtcUtils {
   }
 
   static subscribe<T extends SubscriptionName, TObject extends THREE.Object3D = THREE.Object3D>(
-    ref: ElementRef<TObject>,
+    ref: NgtInjectedRef<TObject>,
     worker: CannonWorkerAPI,
     subscriptions: Subscriptions,
     type: T,
