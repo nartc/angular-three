@@ -95,12 +95,7 @@ function injectConstraint<
   store.effect(
     combineLatest([store.select('worker'), bodyA.$, bodyB.$]),
     ([worker, bodyA, bodyB]) => {
-      worker.addConstraint({
-        props: [bodyA.uuid, bodyB.uuid, opts],
-        type,
-        uuid,
-      });
-
+      worker.addConstraint({ props: [bodyA.uuid, bodyB.uuid, opts], type, uuid });
       return () => worker.removeConstraint({ uuid });
     }
   );

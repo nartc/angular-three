@@ -252,11 +252,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       set: (value: PropValue<T>) => {
         const { worker } = store.get();
         const uuid = NgtcUtils.getUUID(ref, index);
-        uuid &&
-          worker[op]({
-            props: value,
-            uuid,
-          } as never);
+        uuid && worker[op]({ props: value, uuid } as never);
       },
       get subscribe() {
         const { subscriptions, worker } = store.get();

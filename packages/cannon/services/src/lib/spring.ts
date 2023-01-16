@@ -33,8 +33,7 @@ export function injectSpring<
   store.effect(
     combineLatest([store.select('worker'), bodyA.$, bodyB.$]),
     ([worker, bodyA, bodyB]) => {
-      worker.addSpring({
-        props: [bodyA.uuid, bodyB.uuid, opts],
+      worker.addSpring({props: [bodyA.uuid, bodyB.uuid, opts],
         uuid,
       });
       return () => worker.removeSpring({ uuid });
