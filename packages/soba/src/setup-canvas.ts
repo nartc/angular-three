@@ -132,6 +132,7 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
   anchor!: ViewContainerRef;
 
   private ref?: ComponentRef<unknown>;
+  private refEnvInjector?: EnvironmentInjector;
   readonly envInjector = inject(EnvironmentInjector);
 
   override initialize(): void {
@@ -151,16 +152,16 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
     } as Required<CanvasOptions>;
 
     const storyInputs$ = this.select('storyInputs').pipe(debounceTime(0));
-
+    this.refEnvInjector = createEnvironmentInjector(
+      [
+        { provide: CANVAS_OPTIONS, useValue: mergedOptions },
+        { provide: STORY_COMPONENT, useValue: this.storyComponent },
+        { provide: STORY_INPUTS, useValue: storyInputs$ },
+      ],
+      this.envInjector
+    );
     this.ref = this.anchor.createComponent(NgtCanvas, {
-      environmentInjector: createEnvironmentInjector(
-        [
-          { provide: CANVAS_OPTIONS, useValue: mergedOptions },
-          { provide: STORY_COMPONENT, useValue: this.storyComponent },
-          { provide: STORY_INPUTS, useValue: storyInputs$ },
-        ],
-        this.envInjector
-      ),
+      environmentInjector: this.refEnvInjector,
     });
     this.ref.setInput('shadows', true);
     this.ref.setInput('performance', mergedOptions.performance);
@@ -172,6 +173,7 @@ export class StorybookSetup extends NgtRxStore implements OnInit, OnDestroy {
 
   override ngOnDestroy() {
     this.ref?.destroy();
+    this.refEnvInjector?.destroy();
     super.ngOnDestroy();
   }
 }

@@ -167,6 +167,7 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
   glAnchor!: ViewContainerRef;
 
   #glComponentRef?: ComponentRef<unknown>;
+  #glViewEnvInjector?: EnvironmentInjector;
 
   ngOnInit() {
     // detach canvas from ChangeDetection
@@ -247,17 +248,18 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
     }
 
     requestAnimationFrame(() => {
+      this.#glViewEnvInjector = createEnvironmentInjector(
+        [
+          provideNgtRenderer({
+            store: this.#store,
+            changeDetectorRef: this.#cdr,
+            compoundPrefixes: this.compoundPrefixes,
+          }),
+        ],
+        this.#environmentInjector
+      );
       this.#glComponentRef = this.glAnchor.createComponent(this.scene, {
-        environmentInjector: createEnvironmentInjector(
-          [
-            provideNgtRenderer({
-              store: this.#store,
-              changeDetectorRef: this.#cdr,
-              compoundPrefixes: this.compoundPrefixes,
-            }),
-          ],
-          this.#environmentInjector
-        ),
+        environmentInjector: this.#glViewEnvInjector,
       });
       this.#glComponentRef.changeDetectorRef.detectChanges();
       this.#cdr.detectChanges();
@@ -268,6 +270,9 @@ export class NgtCanvas extends NgtRxStore<NgtCanvasInputs> implements OnInit, On
   override ngOnDestroy() {
     if (this.#glComponentRef) {
       this.#glComponentRef.destroy();
+    }
+    if (this.#glViewEnvInjector) {
+      this.#glViewEnvInjector.destroy();
     }
     injectNgtLoader.destroy();
     super.ngOnDestroy();
