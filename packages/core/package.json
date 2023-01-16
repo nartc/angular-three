@@ -1,13 +1,13 @@
 {
-  "name": "@angular-three/core",
-  "version": "0.0.1",
-  "peerDependencies": {
-    "@angular/common": "^15.0.0",
-    "@angular/core": "^15.0.0",
-    "three": "0.148"
-  },
-  "dependencies": {
-    "ngx-resize": "^1.0.0",
-    "tslib": "^2.3.0"
-  }
+    "name": "@angular-three/core",
+    "version": "0.0.1",
+    "peerDependencies": {
+        "@angular/common": "^15.0.0",
+        "@angular/core": "^15.0.0",
+        "three": "0.148"
+    },
+    "dependencies": {
+        "ngx-resize": "^1.0.0",
+        "tslib": "^2.3.0"
+    }
 }

@@ -1,11 +1,4 @@
-import {
-  extend,
-  injectNgtRef,
-  NgtArgs,
-  NgtPortal,
-  NgtPortalContent,
-  prepare,
-} from '@angular-three/core';
+import { extend, injectNgtRef, NgtArgs, NgtPortal, NgtPortalContent, prepare } from '@angular-three/core';
 import { NgIf } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { selectSlice } from '@rx-angular/state';
@@ -20,104 +13,95 @@ import { setEnvProps } from './utils';
 extend({ CubeCamera });
 
 @Component({
-  selector: 'ngts-environment-portal',
-  standalone: true,
-  template: `
-    <ngt-portal [container]="virtualSceneRef">
-      <ng-template ngtPortalContent>
-        <ng-content />
-        <ngt-cube-camera *args="get('cameraArgs')" [ref]="cubeCameraRef" />
-        <ng-container *ngIf="get('files') || get('preset'); else environmentMap">
-          <ngts-environment-cube
-            [background]="true"
-            [files]="get('files')"
-            [preset]="get('preset')"
-            [path]="get('path')"
-            [extensions]="get('extensions')"
-          />
-        </ng-container>
-        <ng-template #environmentMap>
-          <ngts-environment-map
-            [background]="true"
-            [map]="get('map')"
-            [extensions]="get('extensions')"
-          />
-        </ng-template>
-      </ng-template>
-    </ngt-portal>
-  `,
-  imports: [NgtPortal, NgtPortalContent, NgtsEnvironmentMap, NgtsEnvironmentCube, NgIf, NgtArgs],
-  providers: [RxActionFactory],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'ngts-environment-portal',
+    standalone: true,
+    template: `
+        <ngt-portal [container]="virtualSceneRef">
+            <ng-template ngtPortalContent>
+                <ng-content />
+                <ngt-cube-camera *args="get('cameraArgs')" [ref]="cubeCameraRef" />
+                <ng-container *ngIf="get('files') || get('preset'); else environmentMap">
+                    <ngts-environment-cube
+                        [background]="true"
+                        [files]="get('files')"
+                        [preset]="get('preset')"
+                        [path]="get('path')"
+                        [extensions]="get('extensions')"
+                    />
+                </ng-container>
+                <ng-template #environmentMap>
+                    <ngts-environment-map [background]="true" [map]="get('map')" [extensions]="get('extensions')" />
+                </ng-template>
+            </ng-template>
+        </ngt-portal>
+    `,
+    imports: [NgtPortal, NgtPortalContent, NgtsEnvironmentMap, NgtsEnvironmentCube, NgIf, NgtArgs],
+    providers: [RxActionFactory],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsEnvironmentPortal extends NgtsEnvironmentInputs implements OnInit {
-  readonly virtualSceneRef = injectNgtRef<Scene>(prepare(new Scene()));
-  readonly cubeCameraRef = injectNgtRef<CubeCamera>();
-  readonly #actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
+    readonly virtualSceneRef = injectNgtRef<Scene>(prepare(new Scene()));
+    readonly cubeCameraRef = injectNgtRef<CubeCamera>();
+    readonly #actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
 
-  override initialize(): void {
-    super.initialize();
-    this.set({
-      near: 1,
-      far: 1000,
-      resolution: 256,
-      frames: 1,
-      background: false,
-      preset: undefined,
-    });
-    this.connect(
-      'fbo',
-      this.select(['resolution'], ({ resolution }) => {
-        const fbo = new WebGLCubeRenderTarget(resolution);
-        fbo.texture.type = HalfFloatType;
-        return fbo;
-      })
-    );
-    this.connect(
-      'cameraArgs',
-      this.select(['fbo', 'near', 'far'], ({ near, far, fbo }) => [near, far, fbo])
-    );
-  }
+    override initialize(): void {
+        super.initialize();
+        this.set({
+            near: 1,
+            far: 1000,
+            resolution: 256,
+            frames: 1,
+            background: false,
+            preset: undefined,
+        });
+        this.connect(
+            'fbo',
+            this.select(['resolution'], ({ resolution }) => {
+                const fbo = new WebGLCubeRenderTarget(resolution);
+                fbo.texture.type = HalfFloatType;
+                return fbo;
+            })
+        );
+        this.connect(
+            'cameraArgs',
+            this.select(['fbo', 'near', 'far'], ({ near, far, fbo }) => [near, far, fbo])
+        );
+    }
 
-  ngOnInit(): void {
-    this.#setEnvProps();
-    this.#setBeforeRender();
-  }
+    ngOnInit(): void {
+        this.#setEnvProps();
+        this.#setBeforeRender();
+    }
 
-  #setEnvProps() {
-    this.effect(
-      combineLatest([
-        this.store.select(selectSlice(['gl', 'scene'])),
-        this.select(selectSlice(['fbo', 'scene', 'background', 'frames', 'blur'])),
-        this.virtualSceneRef.$,
-        this.cubeCameraRef.$,
-      ]),
-      ([
-        { gl, scene: defaultScene },
-        { fbo, scene, background, frames, blur },
-        virtualScene,
-        camera,
-      ]) => {
-        if (frames === 1) camera.update(gl, virtualScene);
-        return setEnvProps(background, scene, defaultScene, fbo.texture, blur);
-      }
-    );
-  }
+    #setEnvProps() {
+        this.effect(
+            combineLatest([
+                this.store.select(selectSlice(['gl', 'scene'])),
+                this.select(selectSlice(['fbo', 'scene', 'background', 'frames', 'blur'])),
+                this.virtualSceneRef.$,
+                this.cubeCameraRef.$,
+            ]),
+            ([{ gl, scene: defaultScene }, { fbo, scene, background, frames, blur }, virtualScene, camera]) => {
+                if (frames === 1) camera.update(gl, virtualScene);
+                return setEnvProps(background, scene, defaultScene, fbo.texture, blur);
+            }
+        );
+    }
 
-  #setBeforeRender() {
-    let count = 1;
-    this.effect(this.#actions.setBeforeRender$, () =>
-      this.store.get('internal').subscribe(() => {
-        const { frames } = this.get();
-        const gl = this.store.get('gl');
-        if (frames === Infinity || count < frames) {
-          if (this.cubeCameraRef.nativeElement) {
-            this.cubeCameraRef.nativeElement.update(gl, this.virtualSceneRef.nativeElement);
-            count++;
-          }
-        }
-      })
-    );
-    this.#actions.setBeforeRender();
-  }
+    #setBeforeRender() {
+        let count = 1;
+        this.effect(this.#actions.setBeforeRender$, () =>
+            this.store.get('internal').subscribe(() => {
+                const { frames } = this.get();
+                const gl = this.store.get('gl');
+                if (frames === Infinity || count < frames) {
+                    if (this.cubeCameraRef.nativeElement) {
+                        this.cubeCameraRef.nativeElement.update(gl, this.virtualSceneRef.nativeElement);
+                        count++;
+                    }
+                }
+            })
+        );
+        this.#actions.setBeforeRender();
+    }
 }

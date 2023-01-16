@@ -1,31 +1,31 @@
 export const enum NgtRendererClassId {
-  // common
-  type = 0,
-  parent,
-  children,
-  removed,
-  comments,
+    // common
+    type = 0,
+    parent,
+    children,
+    removed,
+    comments,
 
-  // instance
-  compound,
-  localState,
-  compoundParent,
-  rawValue,
-  ref,
+    // instance
+    compound,
+    localState,
+    compoundParent,
+    rawValue,
+    ref,
 
-  // comment and portal
-  injectorFactory,
-  container,
+    // comment and portal
+    injectorFactory,
+    container,
 
-  // compound
-  compounded,
-  queueOps,
-  cleanUps,
-  attributes,
-  properties,
+    // compound
+    compounded,
+    queueOps,
+    cleanUps,
+    attributes,
+    properties,
 }
 
 export const enum NgtRendererCompoundClassId {
-  applyFirst,
-  props,
+    applyFirst,
+    props,
 }

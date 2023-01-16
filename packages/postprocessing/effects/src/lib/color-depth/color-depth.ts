@@ -4,15 +4,15 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ColorDepthEffect } from 'postprocessing';
 
 @Component({
-  selector: 'ngtp-color-depth',
-  standalone: true,
-  template: `<ngt-primitive *args="[get('effect')]" ngtCompound />`,
-  imports: [NgtArgs],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  inputs: ['bits'],
+    selector: 'ngtp-color-depth',
+    standalone: true,
+    template: `<ngt-primitive *args="[get('effect')]" ngtCompound />`,
+    imports: [NgtArgs],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    inputs: ['bits'],
 })
 export class NgtpColorDepth extends NgtpEffect<ColorDepthEffect> {
-  override get effectConstructor(): NgtAnyConstructor<ColorDepthEffect> {
-    return ColorDepthEffect;
-  }
+    override get effectConstructor(): NgtAnyConstructor<ColorDepthEffect> {
+        return ColorDepthEffect;
+    }
 }

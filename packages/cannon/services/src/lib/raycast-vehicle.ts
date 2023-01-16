@@ -5,114 +5,102 @@ import { combineLatest } from 'rxjs';
 import { Object3D } from 'three';
 
 export interface NgtcRaycastVehicleProps {
-  chassisBody: NgtInjectedRef<THREE.Object3D>;
-  wheelInfos: WheelInfoOptions[];
-  wheels: Array<NgtInjectedRef<THREE.Object3D>>;
-  indexForwardAxis?: number;
-  indexRightAxis?: number;
-  indexUpAxis?: number;
+    chassisBody: NgtInjectedRef<THREE.Object3D>;
+    wheelInfos: WheelInfoOptions[];
+    wheels: Array<NgtInjectedRef<THREE.Object3D>>;
+    indexForwardAxis?: number;
+    indexRightAxis?: number;
+    indexUpAxis?: number;
 }
 
 export interface NgtcRaycastVehiclePublicApi {
-  applyEngineForce: (value: number, wheelIndex: number) => void;
-  setBrake: (brake: number, wheelIndex: number) => void;
-  setSteeringValue: (value: number, wheelIndex: number) => void;
-  sliding: {
-    subscribe: (callback: (sliding: boolean) => void) => void;
-  };
-  remove: () => void;
+    applyEngineForce: (value: number, wheelIndex: number) => void;
+    setBrake: (brake: number, wheelIndex: number) => void;
+    setSteeringValue: (value: number, wheelIndex: number) => void;
+    sliding: {
+        subscribe: (callback: (sliding: boolean) => void) => void;
+    };
+    remove: () => void;
 }
 
 export interface NgtcRaycastVehicleReturn<TObject extends THREE.Object3D = THREE.Object3D> {
-  ref: NgtInjectedRef<TObject>;
-  api: NgtcRaycastVehiclePublicApi;
+    ref: NgtInjectedRef<TObject>;
+    api: NgtcRaycastVehiclePublicApi;
 }
 
 export function injectRaycastVehicle<TObject extends THREE.Object3D = THREE.Object3D>(
-  fn: () => NgtcRaycastVehicleProps,
-  instanceRef?: NgtInjectedRef<TObject>
+    fn: () => NgtcRaycastVehicleProps,
+    instanceRef?: NgtInjectedRef<TObject>
 ): NgtcRaycastVehicleReturn<TObject> {
-  const store = injectNgtcStore({ skipSelf: true });
+    const store = injectNgtcStore({ skipSelf: true });
 
-  let ref = injectNgtRef<TObject>();
+    let ref = injectNgtRef<TObject>();
 
-  if (instanceRef) {
-    ref = instanceRef;
-  }
-
-  queueMicrotask(() => {
-    if (!ref.nativeElement) {
-      ref.nativeElement = new Object3D() as TObject;
+    if (instanceRef) {
+        ref = instanceRef;
     }
-  });
 
-  const {
-    chassisBody,
-    indexForwardAxis = 2,
-    indexRightAxis = 0,
-    indexUpAxis = 1,
-    wheelInfos,
-    wheels,
-  } = fn();
+    queueMicrotask(() => {
+        if (!ref.nativeElement) {
+            ref.nativeElement = new Object3D() as TObject;
+        }
+    });
 
-  store.effect(
-    combineLatest([
-      store.select('worker'),
-      ref.$,
-      chassisBody.$,
-      ...wheels.map((wheel) => wheel.$),
-    ]),
-    ([worker, object]) => {
-      const uuid = object.uuid;
-      const chassisBodyUUID = NgtcUtils.getUUID(chassisBody);
-      const wheelUUIDs = wheels.map((wheel) => NgtcUtils.getUUID(wheel));
+    const { chassisBody, indexForwardAxis = 2, indexRightAxis = 0, indexUpAxis = 1, wheelInfos, wheels } = fn();
 
-      if (!chassisBodyUUID || !wheelUUIDs.every((v) => typeof v === 'string')) return;
+    store.effect(
+        combineLatest([store.select('worker'), ref.$, chassisBody.$, ...wheels.map((wheel) => wheel.$)]),
+        ([worker, object]) => {
+            const uuid = object.uuid;
+            const chassisBodyUUID = NgtcUtils.getUUID(chassisBody);
+            const wheelUUIDs = wheels.map((wheel) => NgtcUtils.getUUID(wheel));
 
-      worker.addRaycastVehicle({
-        props: [
-          chassisBodyUUID,
-          wheelUUIDs as string[],
-          wheelInfos,
-          indexForwardAxis,
-          indexRightAxis,
-          indexUpAxis,
-        ],
-        uuid,
-      });
+            if (!chassisBodyUUID || !wheelUUIDs.every((v) => typeof v === 'string')) return;
 
-      return () => worker.removeRaycastVehicle({ uuid });
-    }
-  );
+            worker.addRaycastVehicle({
+                props: [
+                    chassisBodyUUID,
+                    wheelUUIDs as string[],
+                    wheelInfos,
+                    indexForwardAxis,
+                    indexRightAxis,
+                    indexUpAxis,
+                ],
+                uuid,
+            });
 
-  const api = {
-    applyEngineForce: (value: number, wheelIndex: number) => {
-      const worker = store.get('worker');
-      const uuid = NgtcUtils.getUUID(ref);
-      uuid && worker.applyRaycastVehicleEngineForce({ props: [value, wheelIndex], uuid });
-    },
-    setBrake: (brake: number, wheelIndex: number) => {
-      const worker = store.get('worker');
-      const uuid = NgtcUtils.getUUID(ref);
-      uuid && worker.setRaycastVehicleBrake({ props: [brake, wheelIndex], uuid });
-    },
-    setSteeringValue: (value: number, wheelIndex: number) => {
-      const worker = store.get('worker');
-      const uuid = NgtcUtils.getUUID(ref);
-      uuid && worker.setRaycastVehicleSteeringValue({ props: [value, wheelIndex], uuid });
-    },
-    sliding: {
-      get subscribe() {
-        const { worker, subscriptions } = store.get();
-        return NgtcUtils.subscribe(ref, worker, subscriptions, 'sliding', undefined, 'vehicles');
-      },
-    },
-    remove: () => {
-      const worker = store.get('worker');
-      const uuid = NgtcUtils.getUUID(ref);
-      uuid && worker.removeRaycastVehicle({ uuid });
-    },
-  } as NgtcRaycastVehiclePublicApi;
+            return () => worker.removeRaycastVehicle({ uuid });
+        }
+    );
 
-  return { ref, api };
+    const api = {
+        applyEngineForce: (value: number, wheelIndex: number) => {
+            const worker = store.get('worker');
+            const uuid = NgtcUtils.getUUID(ref);
+            uuid && worker.applyRaycastVehicleEngineForce({ props: [value, wheelIndex], uuid });
+        },
+        setBrake: (brake: number, wheelIndex: number) => {
+            const worker = store.get('worker');
+            const uuid = NgtcUtils.getUUID(ref);
+            uuid && worker.setRaycastVehicleBrake({ props: [brake, wheelIndex], uuid });
+        },
+        setSteeringValue: (value: number, wheelIndex: number) => {
+            const worker = store.get('worker');
+            const uuid = NgtcUtils.getUUID(ref);
+            uuid && worker.setRaycastVehicleSteeringValue({ props: [value, wheelIndex], uuid });
+        },
+        sliding: {
+            get subscribe() {
+                const { worker, subscriptions } = store.get();
+                return NgtcUtils.subscribe(ref, worker, subscriptions, 'sliding', undefined, 'vehicles');
+            },
+        },
+        remove: () => {
+            const worker = store.get('worker');
+            const uuid = NgtcUtils.getUUID(ref);
+            uuid && worker.removeRaycastVehicle({ uuid });
+        },
+    } as NgtcRaycastVehiclePublicApi;
+
+    return { ref, api };
 }

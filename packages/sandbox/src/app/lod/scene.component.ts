@@ -12,63 +12,63 @@ import { Mesh, PointLight, SpotLight } from 'three';
 import { GLTF } from 'three-stdlib';
 
 const positions = [...Array(800)].map(() => ({
-  position: [40 - Math.random() * 80, 40 - Math.random() * 80, 40 - Math.random() * 80],
-  rotation: [Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2],
+    position: [40 - Math.random() * 80, 40 - Math.random() * 80, 40 - Math.random() * 80],
+    rotation: [Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2],
 })) as Array<{ position: NgtVector3; rotation: NgtEuler }>;
 
 interface BustGLTF extends GLTF {
-  nodes: { Mesh_0001: THREE.Mesh };
-  materials: { default: THREE.MeshStandardMaterial };
+    nodes: { Mesh_0001: THREE.Mesh };
+    materials: { default: THREE.MeshStandardMaterial };
 }
 
 extend({ Mesh, PointLight, SpotLight });
 
 @Component({
-  selector: 'sandbox-bust',
-  standalone: true,
-  template: `
-    <ngts-detailed [distances]="[0, 15, 25, 35, 100]" [position]="position" [rotation]="rotation">
-      <ngt-mesh
-        *ngFor="let level of levels$ | ngtPush : []"
-        receiveShadow
-        castShadow
-        [geometry]="level.nodes.Mesh_0001.geometry"
-        [material]="level.materials.default"
-      >
-        <ngt-value [rawValue]="0.25" attach="material.envMapIntensity" />
-      </ngt-mesh>
-    </ngts-detailed>
-  `,
-  imports: [NgtsDetailed, NgFor, NgtPush, NgtArgs, ForModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'sandbox-bust',
+    standalone: true,
+    template: `
+        <ngts-detailed [distances]="[0, 15, 25, 35, 100]" [position]="position" [rotation]="rotation">
+            <ngt-mesh
+                *ngFor="let level of levels$ | ngtPush : []"
+                receiveShadow
+                castShadow
+                [geometry]="level.nodes.Mesh_0001.geometry"
+                [material]="level.materials.default"
+            >
+                <ngt-value [rawValue]="0.25" attach="material.envMapIntensity" />
+            </ngt-mesh>
+        </ngts-detailed>
+    `,
+    imports: [NgtsDetailed, NgFor, NgtPush, NgtArgs, ForModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Bust {
-  @Input() position: NgtVector3 = [0, 0, 0];
-  @Input() rotation: NgtEuler = [0, 0, 0];
+    @Input() position: NgtVector3 = [0, 0, 0];
+    @Input() rotation: NgtEuler = [0, 0, 0];
 
-  readonly levels$ = injectNgtsGLTFLoader([
-    'assets/bust-1-d.glb',
-    'assets/bust-2-d.glb',
-    'assets/bust-3-d.glb',
-    'assets/bust-4-d.glb',
-    'assets/bust-5-d.glb',
-  ]) as Observable<BustGLTF[]>;
+    readonly levels$ = injectNgtsGLTFLoader([
+        'assets/bust-1-d.glb',
+        'assets/bust-2-d.glb',
+        'assets/bust-3-d.glb',
+        'assets/bust-4-d.glb',
+        'assets/bust-5-d.glb',
+    ]) as Observable<BustGLTF[]>;
 }
 
 @Component({
-  selector: 'sandbox-lod-scene',
-  standalone: true,
-  template: `
-    <sandbox-bust *ngFor="let p of positions" [position]="p.position" [rotation]="p.rotation" />
-    <ngts-orbit-controls [zoomSpeed]="0.075" />
-    <ngt-point-light [position]="[0, 0, 0]" intensity="0.5" />
-    <ngt-spot-light [position]="[50, 50, 50]" intensity="2.5" castShadow />
-    <ngts-environment preset="city" />
-    <ngts-bake-shadows />
-  `,
-  imports: [Bust, ForModule, NgtsOrbitControls, NgtsEnvironment, NgFor, NgtsBakeShadows],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'sandbox-lod-scene',
+    standalone: true,
+    template: `
+        <sandbox-bust *ngFor="let p of positions" [position]="p.position" [rotation]="p.rotation" />
+        <ngts-orbit-controls [zoomSpeed]="0.075" />
+        <ngt-point-light [position]="[0, 0, 0]" intensity="0.5" />
+        <ngt-spot-light [position]="[50, 50, 50]" intensity="2.5" castShadow />
+        <ngts-environment preset="city" />
+        <ngts-bake-shadows />
+    `,
+    imports: [Bust, ForModule, NgtsOrbitControls, NgtsEnvironment, NgFor, NgtsBakeShadows],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene {
-  readonly positions = positions;
+    readonly positions = positions;
 }

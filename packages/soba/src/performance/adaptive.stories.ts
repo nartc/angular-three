@@ -11,88 +11,88 @@ import { GLTF } from 'three-stdlib';
 import { StorybookSetup } from '../setup-canvas';
 
 interface ArcherGLTF extends GLTF {
-  materials: { material_0: THREE.Material };
-  nodes: Record<'mesh_0' | 'mesh_1' | 'mesh_2', THREE.Mesh>;
+    materials: { material_0: THREE.Material };
+    nodes: Record<'mesh_0' | 'mesh_1' | 'mesh_2', THREE.Mesh>;
 }
 
 extend({
-  DirectionalLight,
-  Vector2,
-  Group,
-  Mesh,
+    DirectionalLight,
+    Vector2,
+    Group,
+    Mesh,
 });
 
 @Component({
-  selector: 'archer',
-  standalone: true,
-  template: `
-    <ng-container *ngIf="archer$ | ngtPush as archer">
-      <ngt-group>
-        <ngt-group [rotation]="[-Math.PI / 2, 0, 0]">
-          <ngt-group [position]="[0, 0, 2]">
-            <ngt-mesh
-              castShadow
-              receiveShadow
-              [material]="archer.materials.material_0"
-              [geometry]="archer.nodes['mesh_0'].geometry"
-            />
-            <ngt-mesh
-              castShadow
-              receiveShadow
-              [material]="archer.materials.material_0"
-              [geometry]="archer.nodes['mesh_1'].geometry"
-            />
-            <ngt-mesh
-              castShadow
-              receiveShadow
-              [material]="archer.materials.material_0"
-              [geometry]="archer.nodes['mesh_2'].geometry"
-            />
-          </ngt-group>
-        </ngt-group>
-      </ngt-group>
-    </ng-container>
-  `,
-  imports: [NgIf, NgtPush],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'archer',
+    standalone: true,
+    template: `
+        <ng-container *ngIf="archer$ | ngtPush as archer">
+            <ngt-group>
+                <ngt-group [rotation]="[-Math.PI / 2, 0, 0]">
+                    <ngt-group [position]="[0, 0, 2]">
+                        <ngt-mesh
+                            castShadow
+                            receiveShadow
+                            [material]="archer.materials.material_0"
+                            [geometry]="archer.nodes['mesh_0'].geometry"
+                        />
+                        <ngt-mesh
+                            castShadow
+                            receiveShadow
+                            [material]="archer.materials.material_0"
+                            [geometry]="archer.nodes['mesh_1'].geometry"
+                        />
+                        <ngt-mesh
+                            castShadow
+                            receiveShadow
+                            [material]="archer.materials.material_0"
+                            [geometry]="archer.nodes['mesh_2'].geometry"
+                        />
+                    </ngt-group>
+                </ngt-group>
+            </ngt-group>
+        </ng-container>
+    `,
+    imports: [NgIf, NgtPush],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class Archer {
-  readonly archer$ = injectNgtsGLTFLoader('soba/archer.glb') as Observable<ArcherGLTF>;
-  readonly Math = Math;
+    readonly archer$ = injectNgtsGLTFLoader('soba/archer.glb') as Observable<ArcherGLTF>;
+    readonly Math = Math;
 }
 
 @Component({
-  selector: 'storybook-adaptive',
-  standalone: true,
-  template: `
-    <archer />
-    <ngt-directional-light intensity="0.2" [position]="[10, 10, 5]" castShadow>
-      <ngt-vector2 *args="[64, 64]" attach="shadow.mapSize" />
-      <ngt-value [rawValue]="-0.001" attach="shadow.bias" />
-    </ngt-directional-light>
-    <ngts-adaptive-dpr />
-    <ngts-adaptive-events />
-    <ngts-orbit-controls [regress]="true" />
-  `,
-  imports: [NgtArgs, NgtsAdaptiveDpr, NgtsAdaptiveEvents, NgtsOrbitControls, Archer],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'storybook-adaptive',
+    standalone: true,
+    template: `
+        <archer />
+        <ngt-directional-light intensity="0.2" [position]="[10, 10, 5]" castShadow>
+            <ngt-vector2 *args="[64, 64]" attach="shadow.mapSize" />
+            <ngt-value [rawValue]="-0.001" attach="shadow.bias" />
+        </ngt-directional-light>
+        <ngts-adaptive-dpr />
+        <ngts-adaptive-events />
+        <ngts-orbit-controls [regress]="true" />
+    `,
+    imports: [NgtArgs, NgtsAdaptiveDpr, NgtsAdaptiveEvents, NgtsOrbitControls, Archer],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class AdaptiveStory {}
 
 export default {
-  title: 'Performance/Adaptive DPR',
-  decorators: [moduleMetadata({ imports: [StorybookSetup] })],
+    title: 'Performance/Adaptive DPR',
+    decorators: [moduleMetadata({ imports: [StorybookSetup] })],
 } as Meta;
 
 export const Default: Story = () => ({
-  props: {
-    camera: { position: [0, 0, 30], fov: 50 },
-    controls: false,
-    lights: false,
-    performance: { min: 0.2 },
-    storyComponent: AdaptiveStory,
-  },
-  template: `
+    props: {
+        camera: { position: [0, 0, 30], fov: 50 },
+        controls: false,
+        lights: false,
+        performance: { min: 0.2 },
+        storyComponent: AdaptiveStory,
+    },
+    template: `
 <storybook-setup [camera]="camera" [controls]="controls" [lights]="lights" [performance]="performance" [storyComponent]="storyComponent" />
   `,
 });

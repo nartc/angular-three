@@ -1,75 +1,75 @@
 {
-  "name": "sandbox",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
-  "sourceRoot": "packages/sandbox/src",
-  "prefix": "sandbox",
-  "targets": {
-    "build": {
-      "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/sandbox",
-        "index": "packages/sandbox/src/index.html",
-        "main": "packages/sandbox/src/main.ts",
-        "polyfills": ["zone.js"],
-        "tsConfig": "packages/sandbox/tsconfig.app.json",
-        "assets": ["packages/sandbox/src/favicon.ico", "packages/sandbox/src/assets"],
-        "styles": ["packages/sandbox/src/styles.css"],
-        "scripts": []
-      },
-      "configurations": {
-        "production": {
-          "budgets": [
-            {
-              "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+    "name": "sandbox",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "packages/sandbox/src",
+    "prefix": "sandbox",
+    "targets": {
+        "build": {
+            "executor": "@angular-devkit/build-angular:browser",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/packages/sandbox",
+                "index": "packages/sandbox/src/index.html",
+                "main": "packages/sandbox/src/main.ts",
+                "polyfills": ["zone.js"],
+                "tsConfig": "packages/sandbox/tsconfig.app.json",
+                "assets": ["packages/sandbox/src/favicon.ico", "packages/sandbox/src/assets"],
+                "styles": ["packages/sandbox/src/styles.css"],
+                "scripts": []
             },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
+            "configurations": {
+                "production": {
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "500kb",
+                            "maximumError": "1mb"
+                        },
+                        {
+                            "type": "anyComponentStyle",
+                            "maximumWarning": "2kb",
+                            "maximumError": "4kb"
+                        }
+                    ],
+                    "outputHashing": "all"
+                },
+                "development": {
+                    "buildOptimizer": false,
+                    "optimization": false,
+                    "vendorChunk": true,
+                    "extractLicenses": false,
+                    "sourceMap": true,
+                    "namedChunks": true
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "serve": {
+            "executor": "@angular-devkit/build-angular:dev-server",
+            "configurations": {
+                "production": {
+                    "browserTarget": "sandbox:build:production"
+                },
+                "development": {
+                    "browserTarget": "sandbox:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+            "executor": "@angular-devkit/build-angular:extract-i18n",
+            "options": {
+                "browserTarget": "sandbox:build"
             }
-          ],
-          "outputHashing": "all"
         },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "vendorChunk": true,
-          "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["packages/sandbox/**/*.ts", "packages/sandbox/**/*.html"]
+            }
         }
-      },
-      "defaultConfiguration": "production"
     },
-    "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
-      "configurations": {
-        "production": {
-          "browserTarget": "sandbox:build:production"
-        },
-        "development": {
-          "browserTarget": "sandbox:build:development"
-        }
-      },
-      "defaultConfiguration": "development"
-    },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "browserTarget": "sandbox:build"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["packages/sandbox/**/*.ts", "packages/sandbox/**/*.html"]
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

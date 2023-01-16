@@ -1,13 +1,13 @@
 {
-  "name": "@angular-three/soba",
-  "version": "0.0.1",
-  "peerDependencies": {
-    "@angular/common": "^15.0.0",
-    "@angular/core": "^15.0.0",
-    "three-stdlib": "^2.21.1"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0",
-    "troika-three-text": "^0.47.1"
-  }
+    "name": "@angular-three/soba",
+    "version": "0.0.1",
+    "peerDependencies": {
+        "@angular/common": "^15.0.0",
+        "@angular/core": "^15.0.0",
+        "three-stdlib": "^2.21.1"
+    },
+    "dependencies": {
+        "tslib": "^2.3.0",
+        "troika-three-text": "^0.47.1"
+    }
 }

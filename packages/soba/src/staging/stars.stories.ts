@@ -8,31 +8,31 @@ import { StorybookSetup } from '../setup-canvas';
 extend({ Mesh, PlaneGeometry, MeshBasicMaterial, AxesHelper });
 
 @Component({
-  selector: 'storybook-default-stars',
-  standalone: true,
-  template: `
-    <ngts-stars />
-    <ngt-mesh [rotation]="[Math.PI / 2, 0, 0]">
-      <ngt-plane-geometry *args="[100, 100, 4, 4]" />
-      <ngt-mesh-basic-material color="black" wireframe />
-    </ngt-mesh>
-    <ngt-axes-helper />
-  `,
-  imports: [NgtsStars, NgtArgs],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'storybook-default-stars',
+    standalone: true,
+    template: `
+        <ngts-stars />
+        <ngt-mesh [rotation]="[Math.PI / 2, 0, 0]">
+            <ngt-plane-geometry *args="[100, 100, 4, 4]" />
+            <ngt-mesh-basic-material color="black" wireframe />
+        </ngt-mesh>
+        <ngt-axes-helper />
+    `,
+    imports: [NgtsStars, NgtArgs],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class DefaultStarsStory {
-  readonly Math = Math;
+    readonly Math = Math;
 }
 
 export default {
-  title: 'Staging/Stars',
-  decorators: [moduleMetadata({ imports: [StorybookSetup] })],
+    title: 'Staging/Stars',
+    decorators: [moduleMetadata({ imports: [StorybookSetup] })],
 } as Meta;
 
 export const Default: Story = () => ({
-  props: { storyComponent: DefaultStarsStory },
-  template: `
+    props: { storyComponent: DefaultStarsStory },
+    template: `
 <storybook-setup [storyComponent]="storyComponent" />
     `,
 });

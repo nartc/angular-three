@@ -1,61 +1,61 @@
 import { Route } from '@angular/router';
 
 export const appRoutes: Route[] = [
-  {
-    path: '',
-    redirectTo: 'test',
-    pathMatch: 'full',
-  },
-  {
-    path: 'test',
-    loadComponent: () => import('./test/test.component'),
-  },
-  {
-    path: 'lod',
-    loadComponent: () => import('./lod/lod.component'),
-  },
-  {
-    path: 'color-grading',
-    loadComponent: () => import('./color-grading/color-grading.component'),
-  },
-  {
-    path: 'reuse-gltf',
-    loadComponent: () => import('./reuse-gltf/reuse-gltf.component'),
-  },
-  {
-    path: 'kinematic-cube',
-    loadComponent: () => import('./kinematic-cube/kinematic-cube.component'),
-  },
-  {
-    path: 'vertex-colors-instances',
-    loadComponent: () => import('./vertex-colors-instances/vertex-colors-instances.component'),
-  },
-  {
-    path: 'height-field',
-    loadComponent: () => import('./height-field/height-field.component'),
-  },
-  {
-    path: 'movement-regression',
-    loadComponent: () => import('./movement-regression/movement-regression.component'),
-  },
-  {
-    path: 'object-clump',
-    loadComponent: () => import('./object-clump/object-clump.component'),
-  },
-  {
-    path: 'keen-bloom',
-    loadComponent: () => import('./keen-bloom/keen-bloom.component'),
-  },
-  {
-    path: 'cubes',
-    loadComponent: () => import('./cubes/cubes.component'),
-  },
-  {
-    path: 'physic-cubes',
-    loadComponent: () => import('./physic-cubes/physic-cubes.component'),
-  },
-  {
-    path: 'view-cube',
-    loadComponent: () => import('./view-cube/view-cube.component'),
-  },
+    {
+        path: '',
+        redirectTo: 'test',
+        pathMatch: 'full',
+    },
+    {
+        path: 'test',
+        loadComponent: () => import('./test/test.component'),
+    },
+    {
+        path: 'lod',
+        loadComponent: () => import('./lod/lod.component'),
+    },
+    {
+        path: 'color-grading',
+        loadComponent: () => import('./color-grading/color-grading.component'),
+    },
+    {
+        path: 'reuse-gltf',
+        loadComponent: () => import('./reuse-gltf/reuse-gltf.component'),
+    },
+    {
+        path: 'kinematic-cube',
+        loadComponent: () => import('./kinematic-cube/kinematic-cube.component'),
+    },
+    {
+        path: 'vertex-colors-instances',
+        loadComponent: () => import('./vertex-colors-instances/vertex-colors-instances.component'),
+    },
+    {
+        path: 'height-field',
+        loadComponent: () => import('./height-field/height-field.component'),
+    },
+    {
+        path: 'movement-regression',
+        loadComponent: () => import('./movement-regression/movement-regression.component'),
+    },
+    {
+        path: 'object-clump',
+        loadComponent: () => import('./object-clump/object-clump.component'),
+    },
+    {
+        path: 'keen-bloom',
+        loadComponent: () => import('./keen-bloom/keen-bloom.component'),
+    },
+    {
+        path: 'cubes',
+        loadComponent: () => import('./cubes/cubes.component'),
+    },
+    {
+        path: 'physic-cubes',
+        loadComponent: () => import('./physic-cubes/physic-cubes.component'),
+    },
+    {
+        path: 'view-cube',
+        loadComponent: () => import('./view-cube/view-cube.component'),
+    },
 ];

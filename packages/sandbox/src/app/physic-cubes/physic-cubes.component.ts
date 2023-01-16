@@ -3,18 +3,18 @@ import { Component } from '@angular/core';
 import { Scene } from './scene.component';
 
 @Component({
-  selector: 'sandbox-physic-cubes',
-  standalone: true,
-  template: `
-    <ngt-canvas
-      [shadows]="true"
-      [gl]="{ alpha: false }"
-      [camera]="{ position: [-1, 5, 5], fov: 45 }"
-      [scene]="Scene"
-    />
-  `,
-  imports: [NgtCanvas],
+    selector: 'sandbox-physic-cubes',
+    standalone: true,
+    template: `
+        <ngt-canvas
+            [shadows]="true"
+            [gl]="{ alpha: false }"
+            [camera]="{ position: [-1, 5, 5], fov: 45 }"
+            [scene]="Scene"
+        />
+    `,
+    imports: [NgtCanvas],
 })
 export default class SandboxPhysicCubes {
-  readonly Scene = Scene;
+    readonly Scene = Scene;
 }

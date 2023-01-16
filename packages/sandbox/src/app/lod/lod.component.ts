@@ -3,18 +3,13 @@ import { Component } from '@angular/core';
 import { Scene } from './scene.component';
 
 @Component({
-  selector: 'sandbox-lod',
-  standalone: true,
-  template: `
-    <ngt-canvas
-      [scene]="Scene"
-      [shadows]="true"
-      frameloop="demand"
-      [camera]="{ position: [0, 0, 40] }"
-    />
-  `,
-  imports: [NgtCanvas],
+    selector: 'sandbox-lod',
+    standalone: true,
+    template: `
+        <ngt-canvas [scene]="Scene" [shadows]="true" frameloop="demand" [camera]="{ position: [0, 0, 40] }" />
+    `,
+    imports: [NgtCanvas],
 })
 export default class SandboxLOD {
-  readonly Scene = Scene;
+    readonly Scene = Scene;
 }

@@ -6,63 +6,60 @@ import { Clock, Mesh, MeshBasicMaterial, PlaneGeometry, SphereGeometry } from 't
 import { StorybookSetup } from '../setup-canvas';
 
 extend({
-  Mesh,
-  SphereGeometry,
-  MeshBasicMaterial,
-  PlaneGeometry,
+    Mesh,
+    SphereGeometry,
+    MeshBasicMaterial,
+    PlaneGeometry,
 });
 
 @Component({
-  selector: 'storybook-default-contact-shadows',
-  standalone: true,
-  template: `
-    <ngt-mesh
-      [position]="[0, 2, 0]"
-      (beforeRender)="onBeforeRender($any($event).object, $any($event).state.clock)"
-    >
-      <ngt-sphere-geometry *args="[1, 32, 32]" />
-      <ngt-mesh-basic-material color="#2a8aff" />
-    </ngt-mesh>
-    <ngts-contact-shadows
-      [position]="[0, 0, 0]"
-      [scale]="10"
-      [far]="3"
-      [blur]="3"
-      [rotation]="[Math.PI / 2, 0, 0]"
-      [color]="colorized ? '#2a8aff' : 'black'"
-    />
-    <ngt-mesh [position]="[0, -0.01, 0]" [rotation]="[-Math.PI / 2, 0, 0]">
-      <ngt-plane-geometry *args="[10, 10]" />
-      <ngt-mesh-basic-material color="white" />
-    </ngt-mesh>
-  `,
-  imports: [NgtArgs, NgtsContactShadows],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'storybook-default-contact-shadows',
+    standalone: true,
+    template: `
+        <ngt-mesh [position]="[0, 2, 0]" (beforeRender)="onBeforeRender($any($event).object, $any($event).state.clock)">
+            <ngt-sphere-geometry *args="[1, 32, 32]" />
+            <ngt-mesh-basic-material color="#2a8aff" />
+        </ngt-mesh>
+        <ngts-contact-shadows
+            [position]="[0, 0, 0]"
+            [scale]="10"
+            [far]="3"
+            [blur]="3"
+            [rotation]="[Math.PI / 2, 0, 0]"
+            [color]="colorized ? '#2a8aff' : 'black'"
+        />
+        <ngt-mesh [position]="[0, -0.01, 0]" [rotation]="[-Math.PI / 2, 0, 0]">
+            <ngt-plane-geometry *args="[10, 10]" />
+            <ngt-mesh-basic-material color="white" />
+        </ngt-mesh>
+    `,
+    imports: [NgtArgs, NgtsContactShadows],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class DefaultContactShadowsStory {
-  @Input() colorized = false;
-  readonly Math = Math;
+    @Input() colorized = false;
+    readonly Math = Math;
 
-  onBeforeRender(mesh: Mesh, clock: Clock) {
-    mesh.position.y = Math.sin(clock.getElapsedTime()) + 2;
-  }
+    onBeforeRender(mesh: Mesh, clock: Clock) {
+        mesh.position.y = Math.sin(clock.getElapsedTime()) + 2;
+    }
 }
 
 export default {
-  title: 'Staging/Contact Shadows',
-  decorators: [moduleMetadata({ imports: [StorybookSetup] })],
+    title: 'Staging/Contact Shadows',
+    decorators: [moduleMetadata({ imports: [StorybookSetup] })],
 } as Meta;
 
 export const Default: Story = () => ({
-  props: { storyComponent: DefaultContactShadowsStory },
-  template: `
+    props: { storyComponent: DefaultContactShadowsStory },
+    template: `
 <storybook-setup [storyComponent]="storyComponent" />
   `,
 });
 
 export const Colorized: Story = (args) => ({
-  props: { storyComponent: DefaultContactShadowsStory, storyInputs: args },
-  template: `
+    props: { storyComponent: DefaultContactShadowsStory, storyInputs: args },
+    template: `
 <storybook-setup [storyComponent]="storyComponent" [storyInputs]="storyInputs" />
     `,
 });

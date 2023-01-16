@@ -12,79 +12,78 @@ const v = new Vector3();
 const m = new Matrix4();
 
 function getMatrix(o: THREE.Object3D): THREE.Matrix4 {
-  if (o instanceof InstancedMesh) {
-    o.getMatrixAt(parseInt(o.uuid.split('/')[1]), m);
-    return m;
-  }
-  return o.matrix;
+    if (o instanceof InstancedMesh) {
+        o.getMatrixAt(parseInt(o.uuid.split('/')[1]), m);
+        return m;
+    }
+    return o.matrix;
 }
 
 export type NgtcDebugApi = {
-  add(id: string, props: BodyProps, type: BodyShapeType): void;
-  remove(id: string): void;
+    add(id: string, props: BodyProps, type: BodyShapeType): void;
+    remove(id: string): void;
 };
 
-export const [injectNgtcDebugApi, provideNgtcDebugApi] =
-  createInjectionToken<NgtcDebugApi>('NgtDebug API');
+export const [injectNgtcDebugApi, provideNgtcDebugApi] = createInjectionToken<NgtcDebugApi>('NgtDebug API');
 
 @Component({
-  selector: 'ngtc-debug',
-  standalone: true,
-  template: `
-    <ngt-primitive *args="[scene]" />
-    <ng-content />
-  `,
-  providers: [
-    provideNgtcDebugApi([NgtcDebug], (debug: NgtcDebug) => ({
-      add: (uuid: string, props: BodyProps, type: BodyShapeType) => {
-        const body = propsToBody({ uuid, props, type });
-        debug.bodies.push(body);
-        debug.bodyMap[uuid] = body;
-      },
-      remove: (id: string) => {
-        const debugBodyIndex = debug.bodies.indexOf(debug.bodyMap[id]);
-        if (debugBodyIndex > -1) debug.bodies.splice(debugBodyIndex, 1);
-        delete debug.bodyMap[id];
-      },
-    })),
-  ],
-  imports: [NgtArgs],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'ngtc-debug',
+    standalone: true,
+    template: `
+        <ngt-primitive *args="[scene]" />
+        <ng-content />
+    `,
+    providers: [
+        provideNgtcDebugApi([NgtcDebug], (debug: NgtcDebug) => ({
+            add: (uuid: string, props: BodyProps, type: BodyShapeType) => {
+                const body = propsToBody({ uuid, props, type });
+                debug.bodies.push(body);
+                debug.bodyMap[uuid] = body;
+            },
+            remove: (id: string) => {
+                const debugBodyIndex = debug.bodies.indexOf(debug.bodyMap[id]);
+                if (debugBodyIndex > -1) debug.bodies.splice(debugBodyIndex, 1);
+                delete debug.bodyMap[id];
+            },
+        })),
+    ],
+    imports: [NgtArgs],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtcDebug implements OnInit, OnDestroy {
-  @Input() color = 'black';
-  @Input() scale = 1;
-  @Input() impl = CannonDebugger;
-  @Input() disabled = false;
+    @Input() color = 'black';
+    @Input() scale = 1;
+    @Input() impl = CannonDebugger;
+    @Input() disabled = false;
 
-  readonly bodies: Body[] = [];
-  readonly bodyMap: Record<string, Body> = {};
-  readonly scene = new Scene();
-  readonly #physicsStore = injectNgtcStore({ skipSelf: true });
-  readonly #store = injectNgtStore();
+    readonly bodies: Body[] = [];
+    readonly bodyMap: Record<string, Body> = {};
+    readonly scene = new Scene();
+    readonly #physicsStore = injectNgtcStore({ skipSelf: true });
+    readonly #store = injectNgtStore();
 
-  #cannonDebugger!: ReturnType<typeof CannonDebugger>;
-  #beforeRenderCleanup?: () => void;
+    #cannonDebugger!: ReturnType<typeof CannonDebugger>;
+    #beforeRenderCleanup?: () => void;
 
-  ngOnInit() {
-    this.#cannonDebugger = this.impl(this.scene, { bodies: this.bodies } as World, {
-      color: this.color,
-      scale: this.scale,
-    });
+    ngOnInit() {
+        this.#cannonDebugger = this.impl(this.scene, { bodies: this.bodies } as World, {
+            color: this.color,
+            scale: this.scale,
+        });
 
-    this.#beforeRenderCleanup = this.#store.get('internal').subscribe(() => {
-      if (this.disabled || !this.#cannonDebugger) return;
-      const refs = this.#physicsStore.get('refs');
-      for (const uuid in this.bodyMap) {
-        getMatrix(refs[uuid]).decompose(v, q, s);
-        this.bodyMap[uuid].position.copy(v as unknown as Vec3);
-        this.bodyMap[uuid].quaternion.copy(q as unknown as CQuarternion);
-      }
-      this.#cannonDebugger.update();
-    });
-  }
+        this.#beforeRenderCleanup = this.#store.get('internal').subscribe(() => {
+            if (this.disabled || !this.#cannonDebugger) return;
+            const refs = this.#physicsStore.get('refs');
+            for (const uuid in this.bodyMap) {
+                getMatrix(refs[uuid]).decompose(v, q, s);
+                this.bodyMap[uuid].position.copy(v as unknown as Vec3);
+                this.bodyMap[uuid].quaternion.copy(q as unknown as CQuarternion);
+            }
+            this.#cannonDebugger.update();
+        });
+    }
 
-  ngOnDestroy() {
-    this.#beforeRenderCleanup?.();
-  }
+    ngOnDestroy() {
+        this.#beforeRenderCleanup?.();
+    }
 }

@@ -1,21 +1,7 @@
 import { extend, injectNgtRef, NgtArgs } from '@angular-three/core';
 import { NgIf } from '@angular/common';
-import {
-  ChangeDetectorRef,
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  inject,
-  Input,
-  OnInit,
-} from '@angular/core';
-import {
-  BoxGeometry,
-  Group,
-  Mesh,
-  MeshBasicMaterial,
-  MeshNormalMaterial,
-  PlaneGeometry,
-} from 'three';
+import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, inject, Input, OnInit } from '@angular/core';
+import { BoxGeometry, Group, Mesh, MeshBasicMaterial, MeshNormalMaterial, PlaneGeometry } from 'three';
 
 // NgtRenderNode
 
@@ -65,126 +51,122 @@ import {
 extend({ Mesh, BoxGeometry, PlaneGeometry, MeshBasicMaterial, MeshNormalMaterial, Group });
 
 @Component({
-  selector: 'ngts-center',
-  standalone: true,
-  template: `
-    <ngt-group>
-      <ngt-group>
-        <ngt-group [ref]="ref" ngtCompound>
-          <ng-content />
+    selector: 'ngts-center',
+    standalone: true,
+    template: `
+        <ngt-group>
+            <ngt-group>
+                <ngt-group [ref]="ref" ngtCompound>
+                    <ng-content />
+                </ngt-group>
+            </ngt-group>
         </ngt-group>
-      </ngt-group>
-    </ngt-group>
-  `,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    `,
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Center {
-  @Input() ref = injectNgtRef<Group>();
+    @Input() ref = injectNgtRef<Group>();
 }
 
 @Component({
-  selector: 'ngts-box',
-  standalone: true,
-  template: `
-    <ngt-mesh ngtCompound [ref]="ref">
-      <ngt-box-geometry *args="args" />
-      <ng-content />
-    </ngt-mesh>
-  `,
-  imports: [NgtArgs],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'ngts-box',
+    standalone: true,
+    template: `
+        <ngt-mesh ngtCompound [ref]="ref">
+            <ngt-box-geometry *args="args" />
+            <ng-content />
+        </ngt-mesh>
+    `,
+    imports: [NgtArgs],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Box {
-  @Input() ref = injectNgtRef<Mesh>();
-  @Input() args: ConstructorParameters<typeof BoxGeometry> = [];
+    @Input() ref = injectNgtRef<Mesh>();
+    @Input() args: ConstructorParameters<typeof BoxGeometry> = [];
 }
 
 @Component({
-  selector: 'sandbox-cube',
-  standalone: true,
-  template: `
-    <ngts-box>
-      <ng-content />
-    </ngts-box>
-  `,
-  imports: [Box],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'sandbox-cube',
+    standalone: true,
+    template: `
+        <ngts-box>
+            <ng-content />
+        </ngts-box>
+    `,
+    imports: [Box],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Cube {}
 
 @Component({
-  selector: 'sandbox-test-scene',
-  standalone: true,
-  template: `
-    <!-- <ngt-mesh -->
-    <!-- *ref="ref" -->
-    <!-- [position]="[1, 1, 1]" -->
-    <!-- (click)="active = !active" -->
-    <!-- [scale]="active ? 1.5 : 1" -->
-    <!-- (beforeRender)="onBeforeRender()" -->
-    <!-- > -->
-    <!-- <ng-container *ref="geometryRef"> -->
-    <!-- <ngt-box-geometry *args="[2, 2, 2]"></ngt-box-geometry> -->
-    <!-- </ng-container> -->
-    <!-- <ngt-mesh-basic-material -->
-    <!-- *ngIf="!useNormal; else normal" -->
-    <!-- color="hotpink" -->
-    <!-- ></ngt-mesh-basic-material> -->
-    <!-- <ng-template #normal> -->
-    <!-- <ngt-mesh-normal-material></ngt-mesh-normal-material> -->
-    <!-- </ng-template> -->
-    <!-- </ngt-mesh> -->
+    selector: 'sandbox-test-scene',
+    standalone: true,
+    template: `
+        <!-- <ngt-mesh -->
+        <!-- *ref="ref" -->
+        <!-- [position]="[1, 1, 1]" -->
+        <!-- (click)="active = !active" -->
+        <!-- [scale]="active ? 1.5 : 1" -->
+        <!-- (beforeRender)="onBeforeRender()" -->
+        <!-- > -->
+        <!-- <ng-container *ref="geometryRef"> -->
+        <!-- <ngt-box-geometry *args="[2, 2, 2]"></ngt-box-geometry> -->
+        <!-- </ng-container> -->
+        <!-- <ngt-mesh-basic-material -->
+        <!-- *ngIf="!useNormal; else normal" -->
+        <!-- color="hotpink" -->
+        <!-- ></ngt-mesh-basic-material> -->
+        <!-- <ng-template #normal> -->
+        <!-- <ngt-mesh-normal-material></ngt-mesh-normal-material> -->
+        <!-- </ng-template> -->
+        <!-- </ngt-mesh> -->
 
-    <ngts-center [position]="[1, -1, 1]">
-      <ngts-box
-        *ngIf="true"
-        (beforeRender)="onBeforeRender($any($event).object)"
-        [position]="[1, 1, 1]"
-      >
-        <ngt-mesh-basic-material color="red" />
-        <ngt-mesh [position]="[-2, -2, -2]">
-          <ngt-box-geometry *args="[2, 2, 2]" />
-          <ngt-mesh-basic-material color="blue" />
-        </ngt-mesh>
-        <ngts-box [position]="[-2, 2, -2]" />
-      </ngts-box>
-      <ngts-box [position]="[1, 1, -1]">
-        <ngt-mesh-normal-material />
-        <ngts-center [position]="[-2, -2, 2]">
-          <ngts-box />
-          <ngt-mesh [position]="[-2, 0, 0]">
-            <ngt-box-geometry *args="[2, 2, 2]" />
-            <ngts-box [position]="[0, 4, 0]" />
-          </ngt-mesh>
+        <ngts-center [position]="[1, -1, 1]">
+            <ngts-box *ngIf="true" (beforeRender)="onBeforeRender($any($event).object)" [position]="[1, 1, 1]">
+                <ngt-mesh-basic-material color="red" />
+                <ngt-mesh [position]="[-2, -2, -2]">
+                    <ngt-box-geometry *args="[2, 2, 2]" />
+                    <ngt-mesh-basic-material color="blue" />
+                </ngt-mesh>
+                <ngts-box [position]="[-2, 2, -2]" />
+            </ngts-box>
+            <ngts-box [position]="[1, 1, -1]">
+                <ngt-mesh-normal-material />
+                <ngts-center [position]="[-2, -2, 2]">
+                    <ngts-box />
+                    <ngt-mesh [position]="[-2, 0, 0]">
+                        <ngt-box-geometry *args="[2, 2, 2]" />
+                        <ngts-box [position]="[0, 4, 0]" />
+                    </ngt-mesh>
+                </ngts-center>
+            </ngts-box>
         </ngts-center>
-      </ngts-box>
-    </ngts-center>
 
-    <!-- <ngts-center> -->
-    <!-- <sandbox-cube> -->
-    <!-- <ngts-box [position]="[1, 0, 1]"></ngts-box> -->
-    <!-- </sandbox-cube> -->
-    <!-- <sandbox-cube *ngIf="true"></sandbox-cube> -->
-    <!-- </ngts-center> -->
-  `,
-  imports: [NgtArgs, NgIf, Box, Center, Cube],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+        <!-- <ngts-center> -->
+        <!-- <sandbox-cube> -->
+        <!-- <ngts-box [position]="[1, 0, 1]"></ngts-box> -->
+        <!-- </sandbox-cube> -->
+        <!-- <sandbox-cube *ngIf="true"></sandbox-cube> -->
+        <!-- </ngts-center> -->
+    `,
+    imports: [NgtArgs, NgIf, Box, Center, Cube],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene implements OnInit {
-  readonly #cdr = inject(ChangeDetectorRef);
+    readonly #cdr = inject(ChangeDetectorRef);
 
-  useNormal = true;
-  active = false;
+    useNormal = true;
+    active = false;
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.useNormal = false;
-      this.#cdr.detectChanges();
-    }, 2000);
-  }
+    ngOnInit() {
+        setTimeout(() => {
+            this.useNormal = false;
+            this.#cdr.detectChanges();
+        }, 2000);
+    }
 
-  onBeforeRender(obj: Mesh) {
-    obj.rotation.x += 0.01;
-    obj.rotation.y += 0.01;
-  }
+    onBeforeRender(obj: Mesh) {
+        obj.rotation.x += 0.01;
+        obj.rotation.y += 0.01;
+    }
 }

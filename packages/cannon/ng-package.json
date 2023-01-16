@@ -1,8 +1,8 @@
 {
-  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/packages/cannon",
-  "lib": {
-    "entryFile": "src/index.ts"
-  },
-  "allowedNonPeerDependencies": ["@pmndrs/cannon-worker-api", "cannon-es", "cannon-es-debugger"]
+    "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+    "dest": "../../dist/packages/cannon",
+    "lib": {
+        "entryFile": "src/index.ts"
+    },
+    "allowedNonPeerDependencies": ["@pmndrs/cannon-worker-api", "cannon-es", "cannon-es-debugger"]
 }

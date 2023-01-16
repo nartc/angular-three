@@ -2,9 +2,9 @@ import type { InjectOptions, Provider, Type } from '@angular/core';
 import { inject, InjectionToken } from '@angular/core';
 
 export interface InjectFn<T> {
-  (): T;
-  (options: InjectOptions & { optional?: false }): T;
-  (options: InjectOptions & { optional?: true }): T | null;
+    (): T;
+    (options: InjectOptions & { optional?: false }): T;
+    (options: InjectOptions & { optional?: true }): T | null;
 }
 
 /**
@@ -25,14 +25,14 @@ export interface InjectFn<T> {
  *
  */
 export function createInject<T>(token: Type<T> | InjectionToken<T>): InjectFn<T> {
-  return ((options) => inject(token, options || {})) as InjectFn<T>;
+    return ((options) => inject(token, options || {})) as InjectFn<T>;
 }
 
 export interface ProvideFn<T> {
-  (): Provider;
-  (value: T | Partial<T>): Provider;
-  (token: Type<T>, mode: 'useClass' | 'useExisting'): Provider;
-  (deps: Type<any>[], factory: (...args: any[]) => T): Provider;
+    (): Provider;
+    (value: T | Partial<T>): Provider;
+    (token: Type<T>, mode: 'useClass' | 'useExisting'): Provider;
+    (deps: Type<any>[], factory: (...args: any[]) => T): Provider;
 }
 
 /**
@@ -53,20 +53,20 @@ export interface ProvideFn<T> {
  * ```
  */
 export function createProvide<T>(token: Type<T> | InjectionToken<T>): ProvideFn<T> {
-  return (...args: any[]): Provider => {
-    const { data, mode } = processProvideArgs(args) || { data: {} };
+    return (...args: any[]): Provider => {
+        const { data, mode } = processProvideArgs(args) || { data: {} };
 
-    if (!mode) return [token];
+        if (!mode) return [token];
 
-    const provider = { provide: token };
-    provider[mode as keyof typeof provider] = data.value;
+        const provider = { provide: token };
+        provider[mode as keyof typeof provider] = data.value;
 
-    if (mode === 'useFactory') {
-      (provider as Record<string, unknown>)['deps'] = data.deps || [];
-    }
+        if (mode === 'useFactory') {
+            (provider as Record<string, unknown>)['deps'] = data.deps || [];
+        }
 
-    return provider as Provider;
-  };
+        return provider as Provider;
+    };
 }
 
 /**
@@ -80,39 +80,39 @@ export function createProvide<T>(token: Type<T> | InjectionToken<T>): ProvideFn<
  * ```
  */
 export function createInjectionToken<T>(
-  description: string,
-  defaultValueOrFactory?: T | (() => T)
+    description: string,
+    defaultValueOrFactory?: T | (() => T)
 ): [InjectFn<T>, ProvideFn<T>, InjectionToken<T>] {
-  let token = new InjectionToken<T>(description);
+    let token = new InjectionToken<T>(description);
 
-  if (defaultValueOrFactory) {
-    token = new InjectionToken<T>(description, {
-      factory:
-        typeof defaultValueOrFactory === 'function'
-          ? (defaultValueOrFactory as () => T)
-          : () => defaultValueOrFactory,
-    });
-  }
+    if (defaultValueOrFactory) {
+        token = new InjectionToken<T>(description, {
+            factory:
+                typeof defaultValueOrFactory === 'function'
+                    ? (defaultValueOrFactory as () => T)
+                    : () => defaultValueOrFactory,
+        });
+    }
 
-  return [createInject(token), createProvide(token), token];
+    return [createInject(token), createProvide(token), token];
 }
 
 function processProvideArgs(args: any[]): {
-  data: { value: any; deps?: any[] };
-  mode: 'useValue' | 'useFactory' | 'useExisting' | 'useClass';
+    data: { value: any; deps?: any[] };
+    mode: 'useValue' | 'useFactory' | 'useExisting' | 'useClass';
 } | null {
-  if (args.length === 1) {
-    return { data: { value: args[0] }, mode: 'useValue' };
-  }
-
-  if (args.length === 2) {
-    const [first, second] = args;
-    if (Array.isArray(first) && typeof second === 'function') {
-      return { data: { value: second, deps: first }, mode: 'useFactory' };
+    if (args.length === 1) {
+        return { data: { value: args[0] }, mode: 'useValue' };
     }
 
-    return { data: { value: first }, mode: second };
-  }
+    if (args.length === 2) {
+        const [first, second] = args;
+        if (Array.isArray(first) && typeof second === 'function') {
+            return { data: { value: second, deps: first }, mode: 'useFactory' };
+        }
 
-  return null;
+        return { data: { value: first }, mode: second };
+    }
+
+    return null;
 }
