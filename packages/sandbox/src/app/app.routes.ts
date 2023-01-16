@@ -15,6 +15,10 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./lod/lod.component'),
   },
   {
+    path: 'color-grading',
+    loadComponent: () => import('./color-grading/color-grading.component'),
+  },
+  {
     path: 'reuse-gltf',
     loadComponent: () => import('./reuse-gltf/reuse-gltf.component'),
   },
