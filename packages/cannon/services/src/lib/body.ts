@@ -1,6 +1,7 @@
 import { injectNgtcPhysicsStore, NgtPhysicsUtils } from '@angular-three/cannon';
 import { injectNgtcDebugApi } from '@angular-three/cannon/debug';
-import { ChangeDetectorRef, ElementRef, inject, ViewRef } from '@angular/core';
+import { injectNgtDestroy, injectNgtRef, NgtInjectedRef } from '@angular-three/core';
+import { ViewRef } from '@angular/core';
 import type {
   AtomicName,
   AtomicProps,
@@ -23,6 +24,7 @@ import type {
   Triplet,
   VectorName,
 } from '@pmndrs/cannon-worker-api';
+import { takeUntil } from 'rxjs';
 import { DynamicDrawUsage, Euler, InstancedMesh, Object3D, Quaternion, Vector3 } from 'three';
 
 export type NgtcAtomicApi<K extends AtomicName> = {
@@ -65,7 +67,7 @@ export interface NgtcPhysicsBodyPublicApi extends NgtcWorkerApi {
 }
 
 export interface NgtcPhysicBodyReturn<TObject extends THREE.Object3D> {
-  ref: ElementRef<TObject>;
+  ref: NgtInjectedRef<TObject>;
   api: NgtcPhysicsBodyPublicApi;
 }
 
@@ -74,14 +76,14 @@ export type NgtcArgFn<T> = (args: T) => unknown[];
 
 export function injectPlane<TObject extends THREE.Object3D>(
   fn: NgtcGetByIndex<PlaneProps>,
-  ref?: ElementRef<TObject>
+  ref?: NgtInjectedRef<TObject>
 ) {
   return injectBody<PlaneProps, TObject>('Plane', fn, () => [], ref);
 }
 
 export function injectBox<TObject extends THREE.Object3D>(
   fn: NgtcGetByIndex<BoxProps>,
-  ref?: ElementRef<TObject>
+  ref?: NgtInjectedRef<TObject>
 ) {
   const defaultBoxArgs: Triplet = [1, 1, 1];
   return injectBody<BoxProps, TObject>('Box', fn, (args = defaultBoxArgs): Triplet => args, ref);
@@ -89,28 +91,28 @@ export function injectBox<TObject extends THREE.Object3D>(
 
 export function injectCylinder<TObject extends THREE.Object3D>(
   fn: NgtcGetByIndex<CylinderProps>,
-  ref?: ElementRef<TObject>
+  ref?: NgtInjectedRef<TObject>
 ) {
   return injectBody<CylinderProps, TObject>('Cylinder', fn, (args = [] as []) => args, ref);
 }
 
 export function injectHeightfield<TObject extends THREE.Object3D>(
   fn: NgtcGetByIndex<HeightfieldProps>,
-  ref?: ElementRef<TObject>
+  ref?: NgtInjectedRef<TObject>
 ) {
   return injectBody<HeightfieldProps, TObject>('Heightfield', fn, (args) => args, ref);
 }
 
 export function injectParticle<TObject extends THREE.Object3D>(
   fn: NgtcGetByIndex<ParticleProps>,
-  ref?: ElementRef<TObject>
+  ref?: NgtInjectedRef<TObject>
 ) {
   return injectBody<ParticleProps, TObject>('Particle', fn, () => [], ref);
 }
 
 export function injectSphere<TObject extends THREE.Object3D>(
   fn: NgtcGetByIndex<SphereProps>,
-  ref?: ElementRef<TObject>
+  ref?: NgtInjectedRef<TObject>
 ) {
   return injectBody<SphereProps, TObject>(
     'Sphere',
@@ -125,14 +127,14 @@ export function injectSphere<TObject extends THREE.Object3D>(
 
 export function injectTrimesh<TObject extends THREE.Object3D>(
   fn: NgtcGetByIndex<TrimeshProps>,
-  ref?: ElementRef<TObject>
+  ref?: NgtInjectedRef<TObject>
 ) {
   return injectBody<TrimeshProps, TObject>('Trimesh', fn, (args) => args, ref);
 }
 
 export function injectConvexPolyhedron<TObject extends THREE.Object3D>(
   fn: NgtcGetByIndex<ConvexPolyhedronProps>,
-  ref?: ElementRef<TObject>
+  ref?: NgtInjectedRef<TObject>
 ) {
   return injectBody<ConvexPolyhedronProps, TObject>(
     'ConvexPolyhedron',
@@ -156,7 +158,7 @@ export function injectConvexPolyhedron<TObject extends THREE.Object3D>(
 
 export function injectCompoundBody<TObject extends THREE.Object3D>(
   fn: NgtcGetByIndex<CompoundBodyProps>,
-  ref?: ElementRef<TObject>
+  ref?: NgtInjectedRef<TObject>
 ) {
   return injectBody<CompoundBodyProps, TObject>('Compound', fn, (args) => args as unknown[], ref);
 }
@@ -167,28 +169,28 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
   type: BodyShapeType,
   getPropsFn: NgtcGetByIndex<TBodyProps>,
   argsFn: NgtcArgFn<TBodyProps['args']>,
-  instanceRef?: ElementRef<TObject>
+  instanceRef?: NgtInjectedRef<TObject>
 ): NgtcPhysicBodyReturn<TObject> {
-  const view = inject(ChangeDetectorRef) as ViewRef;
+  const [destroy$, cdr] = injectNgtDestroy();
   const debugApi = injectNgtcDebugApi({ skipSelf: true, optional: true });
   const store = injectNgtcPhysicsStore({ skipSelf: true });
 
-  let ref = new ElementRef<TObject>(null!);
+  let ref = injectNgtRef<TObject>();
 
   if (instanceRef) {
     ref = instanceRef;
   }
 
   queueMicrotask(() => {
-    const { events, refs, worker } = store.get();
-
-    if (!ref?.nativeElement) {
+    if (!ref.nativeElement) {
       ref.nativeElement = new Object3D() as TObject;
     }
+  });
 
-    const object = ref.nativeElement;
+  ref.$.pipe(takeUntil(destroy$)).subscribe((object) => {
+    const { events, refs, worker } = store.get();
+
     const currentWorker = worker;
-
     let objectCount = 1;
 
     if (object instanceof InstancedMesh) {
@@ -222,7 +224,6 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
             return { ...props, args: argsFn(props.args) };
           });
 
-
     currentWorker.addBodies({
       props: props.map(({ onCollide, onCollideBegin, onCollideEnd, ...serializableProps }) => ({
         onCollide: Boolean(onCollide),
@@ -234,7 +235,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       uuid: uuids,
     });
 
-    view.onDestroy(() => {
+    (cdr as ViewRef).onDestroy(() => {
       uuids.forEach((id) => {
         delete refs[id];
         debugApi?.remove(id);
