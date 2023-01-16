@@ -1,56 +1,29 @@
-import {
-  Directive,
-  EmbeddedViewRef,
-  inject,
-  Input,
-  TemplateRef,
-  ViewContainerRef,
-} from '@angular/core';
-import type { NgtHasValidateForRenderer } from '../types';
+import { Directive, Input } from '@angular/core';
 import { createInject } from '../utils/di';
+import { NgtHasValidateForRenderer } from './has-validate-for-renderer';
 
-@Directive({
-  selector: '[args]',
-  standalone: true,
-})
-export class NgtArgs implements NgtHasValidateForRenderer {
-  readonly #templateRef = inject(TemplateRef);
-  readonly #vcr = inject(ViewContainerRef);
-  #view?: EmbeddedViewRef<unknown>;
-
+@Directive({ selector: '[args]', standalone: true })
+export class NgtArgs extends NgtHasValidateForRenderer {
   #injectedArgs: any[] = [];
-  #injected = false;
 
   @Input() set args(args: any[] | null) {
     if (args == null || !Array.isArray(args)) return;
     if (args.length === 1 && args[0] === null) return;
-    this.#injected = false;
+    this.injected = false;
     this.#injectedArgs = args;
-    this.#createView();
+    this.createView();
   }
 
   get args() {
-    if (!this.#injected && this.#injectedArgs.length) {
-      this.#injected = true;
+    if (!this.injected && this.#injectedArgs.length) {
+      this.injected = true;
       return this.#injectedArgs;
     }
     return null;
   }
 
-  get injectedArgs() {
-    return this.#injectedArgs;
-  }
-
   validate() {
-    return !this.#injected && !!this.#injectedArgs.length;
-  }
-
-  #createView() {
-    if (this.#view && !this.#view.destroyed) {
-      this.#view.destroy();
-    }
-    this.#view = this.#vcr.createEmbeddedView(this.#templateRef);
-    this.#view.detectChanges();
+    return !this.injected && !!this.#injectedArgs.length;
   }
 }
 

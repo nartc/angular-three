@@ -222,9 +222,6 @@ export class NgtRenderer implements Renderer2 {
     isMove?: boolean | undefined
   ): void {
     if (!parent.__ngt_renderer__) return;
-    if (refChild.__ngt_renderer__[NgtRendererClassId.type] === 'comment') {
-      newChild.__ngt_renderer__[NgtRendererClassId.comments].push(refChild);
-    }
     this.appendChild(parent, newChild);
   }
 
@@ -380,21 +377,7 @@ export class NgtRenderer implements Renderer2 {
     return this.delegate.data;
   }
 
-  setValue(node: NgtRendererNode, value: string) {
-    // TODO right now, we'll remove everything that we don't care about.
-    // In the future, when we can determine which Comment we should track based on the tNode
-    // , we can remove this logic
-    if (
-      value.includes('ng-for-of') ||
-      value.includes('ng-if') ||
-      value.includes('rx-for-of') ||
-      value === 'container'
-    ) {
-      this.state.removeComment(node);
-    }
-    return this.delegate.setValue(node, value);
-  }
-
+  setValue = this.delegate.setValue.bind(this.delegate);
   destroy = this.delegate.destroy.bind(this.delegate);
   destroyNode = this.delegate.destroyNode;
   selectRootElement = this.delegate.selectRootElement.bind(this.delegate);

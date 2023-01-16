@@ -502,6 +502,3 @@ export interface NgtCanvasInputs {
   lookAt?: NgtVector3;
 }
 
-export interface NgtHasValidateForRenderer {
-  validate: () => boolean;
-}

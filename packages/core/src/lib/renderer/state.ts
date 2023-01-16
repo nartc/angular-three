@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, getDebugNode, Injector, Type } from '@angular/core';
 import { NgtInjectedRef } from '../di/ref';
 import { NgtArgs } from '../directives/args';
+import { NgtHasValidateForRenderer } from '../directives/has-validate-for-renderer';
 import { NgtStore } from '../stores/store';
-import { NgtAnyRecord, NgtHasValidateForRenderer, NgtInstanceLocalState } from '../types';
+import { NgtAnyRecord, NgtInstanceLocalState } from '../types';
 import { applyProps } from '../utils/apply-props';
 import { getLocalState } from '../utils/instance';
 import { is } from '../utils/is';
@@ -81,7 +82,11 @@ export class NgtRendererState {
       rendererNode.__ngt_renderer__[NgtRendererClassId.injectorFactory] = () =>
         getDebugNode(node)!.injector;
       if (rendererNode.__ngt_renderer__[NgtRendererClassId.type] === 'comment') {
-        this.comments.push(rendererNode);
+        // we attach an arrow function to the Comment node
+        // In our directives, we can call this function to only track the RendererNode
+        rendererNode['__ngt_add_comment__'] = () => {
+          this.comments.push(rendererNode);
+        };
       } else {
         this.portals.push(rendererNode);
       }
@@ -97,13 +102,6 @@ export class NgtRendererState {
     }
 
     return rendererNode;
-  }
-
-  removeComment(node: NgtRendererNode) {
-    const nodeIndex = this.comments.findIndex((comment) => comment === node);
-    if (nodeIndex > -1) {
-      this.comments.splice(nodeIndex, 1);
-    }
   }
 
   setParent(node: NgtRendererNode, parent: NgtRendererNode) {
@@ -293,11 +291,8 @@ export class NgtRendererState {
   }
 
   getCreationState() {
-    const ngtArgs = this.#firstNonInjectedDirective(NgtArgs);
-    const injectedArgs = ngtArgs?.args || [];
-
+    const injectedArgs = this.#firstNonInjectedDirective(NgtArgs)?.args || [];
     const store = this.#tryGetPortalStore();
-
     return { injectedArgs, store };
   }
 
@@ -345,11 +340,21 @@ export class NgtRendererState {
       node.__ngt_renderer__[NgtRendererClassId.localState] = null!;
     }
 
-    if (
-      node.__ngt_renderer__[NgtRendererClassId.type] === 'comment' ||
-      node.__ngt_renderer__[NgtRendererClassId.type] === 'portal'
-    ) {
+    if (node.__ngt_renderer__[NgtRendererClassId.type] === 'comment') {
       node.__ngt_renderer__[NgtRendererClassId.injectorFactory] = null!;
+      delete (node as NgtAnyRecord)['__ngt_add_comment__'];
+      const index = this.comments.findIndex((comment) => comment === node);
+      if (index > -1) {
+        this.comments.splice(index, 1);
+      }
+    }
+
+    if (node.__ngt_renderer__[NgtRendererClassId.type] === 'portal') {
+      node.__ngt_renderer__[NgtRendererClassId.injectorFactory] = null!;
+      const index = this.portals.findIndex((portal) => portal === node);
+      if (index > -1) {
+        this.portals.splice(index, 1);
+      }
     }
 
     if (node.__ngt_renderer__[NgtRendererClassId.type] === 'compound') {
@@ -389,8 +394,12 @@ export class NgtRendererState {
 
     let i = this.comments.length - 1;
     while (i >= 0) {
-      // loop through the nodes backwards
-      const injector = this.comments[i].__ngt_renderer__[NgtRendererClassId.injectorFactory]?.();
+      const comment = this.comments[i];
+      if (comment.__ngt_renderer__[NgtRendererClassId.removed]) {
+        i--;
+        continue;
+      }
+      const injector = comment.__ngt_renderer__[NgtRendererClassId.injectorFactory]?.();
       if (!injector) {
         i--;
         continue;
