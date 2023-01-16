@@ -15,6 +15,10 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./lod/lod.component'),
   },
   {
+    path: 'reuse-gltf',
+    loadComponent: () => import('./reuse-gltf/reuse-gltf.component'),
+  },
+  {
     path: 'kinematic-cube',
     loadComponent: () => import('./kinematic-cube/kinematic-cube.component'),
   },

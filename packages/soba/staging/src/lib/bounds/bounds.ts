@@ -243,6 +243,7 @@ extend({ Group });
             combineLatest([
               bounds.select(selectSlice(['clip', 'fit', 'observe'])),
               store.select(selectSlice(['camera', 'controls', 'size'])),
+              bounds.groupRef.children$(),
             ])
           )
         ),

@@ -7,6 +7,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { combineLatest } from 'rxjs';
 import { Box3, Group, Sphere, Vector3 } from 'three';
 
 extend({ Group });
@@ -100,7 +101,7 @@ export class NgtsCenter extends NgtRxStore implements OnInit {
   }
 
   #setPosition() {
-    this.hold(this.innerRef.children$(), () => {
+    this.hold(combineLatest([this.innerRef.$, this.innerRef.children$()]), ([innerGroup]) => {
       const {
         precise,
         top,
@@ -115,7 +116,7 @@ export class NgtsCenter extends NgtRxStore implements OnInit {
         right,
       } = this.get();
       this.outerRef.nativeElement.matrixWorld.identity();
-      const box3 = new Box3().setFromObject(this.innerRef.nativeElement, precise);
+      const box3 = new Box3().setFromObject(innerGroup, precise);
       const center = new Vector3();
       const sphere = new Sphere();
       const width = box3.max.x - box3.min.x;

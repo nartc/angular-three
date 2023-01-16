@@ -1,10 +1,12 @@
 import { extend, NgtArgs, NgtRxStore } from '@angular-three/core';
 import { NgIf } from '@angular/common';
 import {
+    ChangeDetectorRef,
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   Directive,
   EventEmitter,
+  inject,
   Input,
   OnChanges,
   Output,
@@ -210,6 +212,7 @@ extend({ AmbientLight, SpotLight, Vector2, PointLight, Group });
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NgtsStage extends NgtRxStore<NgtsStageProps> {
+  readonly #cdr = inject(ChangeDetectorRef);
   readonly Number = Number;
 
   @Input() set preset(preset: NgtsStageProps['preset']) {
@@ -326,6 +329,7 @@ export class NgtsStage extends NgtRxStore<NgtsStageProps> {
   }) {
     const { boundingSphere, width, height, depth } = props;
     this.set({ radius: boundingSphere.radius, width, height, depth });
+    this.#cdr.detectChanges();
     if (this.centered.observed) this.centered.emit(props);
   }
 }
