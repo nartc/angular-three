@@ -11,3 +11,4 @@ export * from './lib/ssao/ssao';
 export * from './lib/tilt-shift/tilt-shift';
 export * from './lib/tone-mapping/tone-mapping';
 export * from './lib/vignette/vignette';
+export * from './lib/lut/lut';
