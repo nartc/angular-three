@@ -1,4 +1,4 @@
-import { injectNgtcPhysicsStore, NgtPhysicsUtils } from '@angular-three/cannon';
+import { injectNgtcStore, NgtcUtils } from '@angular-three/cannon';
 import { injectNgtcDebugApi } from '@angular-three/cannon/debug';
 import { injectNgtDestroy, injectNgtRef, NgtInjectedRef } from '@angular-three/core';
 import { ViewRef } from '@angular/core';
@@ -62,13 +62,13 @@ export type NgtcWorkerApi = {
   remove: () => void;
 };
 
-export interface NgtcPhysicsBodyPublicApi extends NgtcWorkerApi {
+export interface NgtcBodyPublicApi extends NgtcWorkerApi {
   at: (index: number) => NgtcWorkerApi;
 }
 
-export interface NgtcPhysicBodyReturn<TObject extends THREE.Object3D> {
+export interface NgtcBodyReturn<TObject extends THREE.Object3D> {
   ref: NgtInjectedRef<TObject>;
-  api: NgtcPhysicsBodyPublicApi;
+  api: NgtcBodyPublicApi;
 }
 
 export type NgtcGetByIndex<T extends BodyProps> = (index: number) => T;
@@ -146,10 +146,10 @@ export function injectConvexPolyhedron<TObject extends THREE.Object3D>(
       axes,
       boundingSphereRadius,
     ] = []): ConvexPolyhedronArgs<Triplet> => [
-      vertices && vertices.map(NgtPhysicsUtils.makeTriplet),
+      vertices && vertices.map(NgtcUtils.makeTriplet),
       faces,
-      normals && normals.map(NgtPhysicsUtils.makeTriplet),
-      axes && axes.map(NgtPhysicsUtils.makeTriplet),
+      normals && normals.map(NgtcUtils.makeTriplet),
+      axes && axes.map(NgtcUtils.makeTriplet),
       boundingSphereRadius,
     ],
     ref
@@ -170,10 +170,10 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
   getPropsFn: NgtcGetByIndex<TBodyProps>,
   argsFn: NgtcArgFn<TBodyProps['args']>,
   instanceRef?: NgtInjectedRef<TObject>
-): NgtcPhysicBodyReturn<TObject> {
+): NgtcBodyReturn<TObject> {
   const [destroy$, cdr] = injectNgtDestroy();
   const debugApi = injectNgtcDebugApi({ skipSelf: true, optional: true });
-  const store = injectNgtcPhysicsStore({ skipSelf: true });
+  const store = injectNgtcStore({ skipSelf: true });
 
   let ref = injectNgtRef<TObject>();
 
@@ -207,20 +207,20 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       object instanceof InstancedMesh
         ? uuids.map((id, i) => {
             const props = getPropsFn(i);
-            NgtPhysicsUtils.prepare(temp, props);
+            NgtcUtils.prepare(temp, props);
             object.setMatrixAt(i, temp.matrix);
             object.instanceMatrix.needsUpdate = true;
             refs[id] = object;
             debugApi?.add(id, props, type);
-            NgtPhysicsUtils.setupCollision(events, props, id);
+            NgtcUtils.setupCollision(events, props, id);
             return { ...props, args: argsFn(props.args) };
           })
         : uuids.map((id, i) => {
             const props = getPropsFn(i);
-            NgtPhysicsUtils.prepare(object, props);
+            NgtcUtils.prepare(object, props);
             refs[id] = object;
             debugApi?.add(id, props, type);
-            NgtPhysicsUtils.setupCollision(events, props, id);
+            NgtcUtils.setupCollision(events, props, id);
             return { ...props, args: argsFn(props.args) };
           });
 
@@ -246,12 +246,12 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
   });
 
   const makeAtomic = <T extends AtomicName>(type: T, index?: number) => {
-    const op: SetOpName<T> = `set${NgtPhysicsUtils.capitalize(type)}`;
+    const op: SetOpName<T> = `set${NgtcUtils.capitalize(type)}`;
 
     return {
       set: (value: PropValue<T>) => {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid &&
           worker[op]({
             props: value,
@@ -260,7 +260,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       },
       get subscribe() {
         const { subscriptions, worker } = store.get();
-        return NgtPhysicsUtils.subscribe(ref, worker, subscriptions, type, index);
+        return NgtcUtils.subscribe(ref, worker, subscriptions, type, index);
       },
     };
   };
@@ -270,17 +270,17 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
     return {
       copy: ({ w, x, y, z }: Quaternion) => {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.setQuaternion({ props: [x, y, z, w], uuid });
       },
       set: (x: number, y: number, z: number, w: number) => {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.setQuaternion({ props: [x, y, z, w], uuid });
       },
       get subscribe() {
         const { subscriptions, worker } = store.get();
-        return NgtPhysicsUtils.subscribe(ref, worker, subscriptions, type, index);
+        return NgtcUtils.subscribe(ref, worker, subscriptions, type, index);
       },
     };
   };
@@ -289,22 +289,22 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
     return {
       copy: ({ x, y, z }: Vector3 | Euler) => {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.setRotation({ props: [x, y, z], uuid });
       },
       set: (x: number, y: number, z: number) => {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.setRotation({ props: [x, y, z], uuid });
       },
       subscribe: (callback: (value: Triplet) => void) => {
         const { subscriptions, worker } = store.get();
-        const id = NgtPhysicsUtils.incrementingId++;
+        const id = NgtcUtils.incrementingId++;
         const target = 'bodies';
         const type = 'quaternion';
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
 
-        subscriptions[id] = { [type]: NgtPhysicsUtils.quaternionToRotation(callback) };
+        subscriptions[id] = { [type]: NgtcUtils.quaternionToRotation(callback) };
         uuid && worker.subscribe({ props: { id, target, type }, uuid });
         return () => {
           delete subscriptions[id];
@@ -315,28 +315,28 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
   };
 
   const makeVec = (type: VectorName, index?: number) => {
-    const op: SetOpName<VectorName> = `set${NgtPhysicsUtils.capitalize(type)}`;
+    const op: SetOpName<VectorName> = `set${NgtcUtils.capitalize(type)}`;
     return {
       copy: ({ x, y, z }: Vector3 | Euler) => {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker[op]({ props: [x, y, z], uuid });
       },
       set: (x: number, y: number, z: number) => {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker[op]({ props: [x, y, z], uuid });
       },
       get subscribe() {
         const { subscriptions, worker } = store.get();
-        return NgtPhysicsUtils.subscribe(ref, worker, subscriptions, type, index);
+        return NgtcUtils.subscribe(ref, worker, subscriptions, type, index);
       },
     };
   };
 
   const makeRemove = (index?: number) => {
     const { worker } = store.get();
-    const uuid = NgtPhysicsUtils.getUUID(ref, index);
+    const uuid = NgtcUtils.getUUID(ref, index);
     return () => {
       if (uuid) {
         worker.removeBodies({ uuid: [uuid] });
@@ -352,27 +352,27 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       angularVelocity: makeVec('angularVelocity', index),
       applyForce(force: Triplet, worldPoint: Triplet) {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.applyForce({ props: [force, worldPoint], uuid });
       },
       applyImpulse(impulse: Triplet, worldPoint: Triplet) {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.applyImpulse({ props: [impulse, worldPoint], uuid });
       },
       applyLocalForce(force: Triplet, localPoint: Triplet) {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.applyLocalForce({ props: [force, localPoint], uuid });
       },
       applyLocalImpulse(impulse: Triplet, localPoint: Triplet) {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.applyLocalImpulse({ props: [impulse, localPoint], uuid });
       },
       applyTorque(torque: Triplet) {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.applyTorque({ props: [torque], uuid });
       },
       collisionFilterGroup: makeAtomic('collisionFilterGroup', index),
@@ -390,12 +390,12 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       rotation: makeRotation(index),
       scaleOverride(scale) {
         const { scaleOverrides } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         if (uuid) scaleOverrides[uuid] = new Vector3(...scale);
       },
       sleep() {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.sleep({ uuid });
       },
       sleepSpeedLimit: makeAtomic('sleepSpeedLimit', index),
@@ -404,7 +404,7 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
       velocity: makeVec('velocity', index),
       wakeUp() {
         const { worker } = store.get();
-        const uuid = NgtPhysicsUtils.getUUID(ref, index);
+        const uuid = NgtcUtils.getUUID(ref, index);
         uuid && worker.wakeUp({ uuid });
       },
     };

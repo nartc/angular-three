@@ -10,9 +10,9 @@ import type {
   Triplet,
 } from '@pmndrs/cannon-worker-api';
 import { Euler, Quaternion, Vector3 } from 'three';
-import type { NgtcCannonEvents } from './store';
+import type { NgtcEvents } from './store';
 
-export class NgtPhysicsUtils {
+export class NgtcUtils {
   static incrementingId = 0;
   static e = new Euler();
   static q = new Quaternion();
@@ -57,7 +57,7 @@ export class NgtPhysicsUtils {
   }
 
   static setupCollision(
-    events: NgtcCannonEvents,
+    events: NgtcEvents,
     { onCollide, onCollideBegin, onCollideEnd }: Partial<BodyProps>,
     uuid: string
   ) {

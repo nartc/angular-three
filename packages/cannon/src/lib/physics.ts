@@ -13,7 +13,7 @@ import { RxActionFactory } from '@rx-angular/state/actions';
 import { filter } from 'rxjs';
 
 import { InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three';
-import { injectNgtcPhysicsStore, NgtcPhysicsStore } from './store';
+import { injectNgtcStore, NgtcStore } from './store';
 
 const v = new Vector3();
 const s = new Vector3(1, 1, 1);
@@ -49,12 +49,12 @@ export interface NgtcPhysicsInputs extends CannonWorkerProps {
   selector: 'ngtc-physics',
   standalone: true,
   template: '<ng-content />',
-  providers: [NgtcPhysicsStore, RxActionFactory],
+  providers: [NgtcStore, RxActionFactory],
 })
 export class NgtcPhysics extends NgtRxStore<NgtcPhysicsInputs> implements OnInit, OnDestroy {
   readonly #store = injectNgtStore();
   readonly #actions = inject(RxActionFactory<{ setBeforeRender: void }>).create();
-  readonly #physicsStore = injectNgtcPhysicsStore();
+  readonly #physicsStore = injectNgtcStore();
 
   override initialize() {
     super.initialize();

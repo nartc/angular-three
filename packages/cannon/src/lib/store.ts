@@ -11,20 +11,20 @@ import {
   Subscriptions,
 } from '@pmndrs/cannon-worker-api';
 
-export type NgtcCannonEvent = CollideBeginEvent | CollideEndEvent | CollideEvent | RayhitEvent;
+export type NgtcEvent = CollideBeginEvent | CollideEndEvent | CollideEvent | RayhitEvent;
 export type NgtcCallbackByType<T extends { type: string }> = {
   [K in T['type']]?: T extends { type: K } ? (e: T) => void : never;
 };
 
-export type NgtcCannonEvents = {
-  [uuid: string]: Partial<NgtcCallbackByType<NgtcCannonEvent>>;
+export type NgtcEvents = {
+  [uuid: string]: Partial<NgtcCallbackByType<NgtcEvent>>;
 };
 
 export type NgtcScaleOverrides = { [uuid: string]: THREE.Vector3 };
 
-export interface NgtcPhysicsState {
+export interface NgtcState {
   bodies: { [uuid: string]: number };
-  events: NgtcCannonEvents;
+  events: NgtcEvents;
   refs: Refs;
   scaleOverrides: NgtcScaleOverrides;
   subscriptions: Subscriptions;
@@ -33,7 +33,7 @@ export interface NgtcPhysicsState {
 }
 
 @Injectable()
-export class NgtcPhysicsStore extends NgtRxStore<NgtcPhysicsState> implements OnDestroy {
+export class NgtcStore extends NgtRxStore<NgtcState> implements OnDestroy {
   override initialize() {
     super.initialize();
     this.set({
@@ -46,4 +46,4 @@ export class NgtcPhysicsStore extends NgtRxStore<NgtcPhysicsState> implements On
   }
 }
 
-export const injectNgtcPhysicsStore = createInject(NgtcPhysicsStore);
+export const injectNgtcStore = createInject(NgtcStore);

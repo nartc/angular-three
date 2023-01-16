@@ -1,4 +1,4 @@
-import { injectNgtcPhysicsStore } from '@angular-three/cannon';
+import { injectNgtcStore } from '@angular-three/cannon';
 import { createInjectionToken, injectNgtStore, NgtArgs } from '@angular-three/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnDestroy, OnInit } from '@angular/core';
 import { BodyProps, BodyShapeType, propsToBody } from '@pmndrs/cannon-worker-api';
@@ -60,7 +60,7 @@ export class NgtcDebug implements OnInit, OnDestroy {
   readonly bodies: Body[] = [];
   readonly bodyMap: Record<string, Body> = {};
   readonly scene = new Scene();
-  readonly #physicsStore = injectNgtcPhysicsStore({ skipSelf: true });
+  readonly #physicsStore = injectNgtcStore({ skipSelf: true });
   readonly #store = injectNgtStore();
 
   #cannonDebugger!: ReturnType<typeof CannonDebugger>;

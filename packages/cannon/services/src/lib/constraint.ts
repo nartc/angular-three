@@ -1,4 +1,4 @@
-import { injectNgtcPhysicsStore } from '@angular-three/cannon';
+import { injectNgtcStore } from '@angular-three/cannon';
 import { makeId, NgtInjectedRef } from '@angular-three/core';
 import {
   ConeTwistConstraintOpts,
@@ -27,7 +27,7 @@ export interface NgtHingeConstraintApi extends NgtcConstraintApi {
 export type NgtcConstraintORHingeApi<T extends 'Hinge' | ConstraintTypes> =
   T extends ConstraintTypes ? NgtcConstraintApi : NgtHingeConstraintApi;
 
-export interface NgtcPhysicsConstraintReturn<
+export interface NgtcConstraintReturn<
   T extends 'Hinge' | ConstraintTypes,
   TObjectA extends THREE.Object3D = THREE.Object3D,
   TObjectB extends THREE.Object3D = THREE.Object3D
@@ -88,9 +88,9 @@ function injectConstraint<
   bodyA: NgtInjectedRef<TObjectA>,
   bodyB: NgtInjectedRef<TObjectB>,
   opts: TOptions = {} as TOptions
-): NgtcPhysicsConstraintReturn<TConstraintType, TObjectA, TObjectB> {
+): NgtcConstraintReturn<TConstraintType, TObjectA, TObjectB> {
   const uuid = makeId();
-  const store = injectNgtcPhysicsStore({ skipSelf: true });
+  const store = injectNgtcStore({ skipSelf: true });
 
   store.effect(
     combineLatest([store.select('worker'), bodyA.$, bodyB.$]),
