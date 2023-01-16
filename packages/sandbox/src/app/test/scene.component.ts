@@ -143,7 +143,7 @@ export class Cube {}
       >
         <ngt-mesh-basic-material color="red" />
         <ngt-mesh [position]="[-2, -2, -2]">
-          <ngt-box-geometry />
+          <ngt-box-geometry *args="[2, 2, 2]" />
           <ngt-mesh-basic-material color="blue" />
         </ngt-mesh>
         <ngts-box [position]="[-2, 2, -2]" />

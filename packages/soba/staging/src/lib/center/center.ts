@@ -66,6 +66,10 @@ export class NgtsCenter extends NgtRxStore implements OnInit {
     this.set({ disableZ: disableZ === undefined ? this.get('disableZ') : disableZ });
   }
 
+  @Input() set disabled(disabled: boolean) {
+    this.set({ disabled });
+  }
+
   @Input() set precise(precise: boolean) {
     this.set({ precise: precise === undefined ? this.get('precise') : precise });
   }
@@ -97,8 +101,19 @@ export class NgtsCenter extends NgtRxStore implements OnInit {
 
   #setPosition() {
     this.hold(this.innerRef.children$(), () => {
-      const { precise, top, left, front, disableX, disableY, disableZ, back, bottom, right } =
-        this.get();
+      const {
+        precise,
+        top,
+        left,
+        front,
+        disabled,
+        disableX,
+        disableY,
+        disableZ,
+        back,
+        bottom,
+        right,
+      } = this.get();
       this.outerRef.nativeElement.matrixWorld.identity();
       const box3 = new Box3().setFromObject(this.innerRef.nativeElement, precise);
       const center = new Vector3();
@@ -113,9 +128,9 @@ export class NgtsCenter extends NgtRxStore implements OnInit {
       const hAlign = left ? -width / 2 : right ? width / 2 : 0;
       const dAlign = front ? depth / 2 : back ? -depth / 2 : 0;
       this.outerRef.nativeElement.position.set(
-        disableX ? 0 : -center.x + hAlign,
-        disableY ? 0 : -center.y + vAlign,
-        disableZ ? 0 : -center.z + dAlign
+        disabled || disableX ? 0 : -center.x + hAlign,
+        disabled || disableY ? 0 : -center.y + vAlign,
+        disabled || disableZ ? 0 : -center.z + dAlign
       );
 
       if (this.centered.observed) {
