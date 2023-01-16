@@ -6,8 +6,9 @@ import { Scene } from './scene.component';
 @Component({
     selector: 'sandbox-color-grading',
     standalone: true,
-    template: ` <ngt-canvas [scene]="Scene" frameloop="demand" [camera]="{ position: [0, 0, 5], fov: 45 }" /> 
-    <ngts-stats />
+    template: `
+        <ngt-canvas [scene]="Scene" frameloop="demand" [camera]="{ position: [0, 0, 5], fov: 45 }" />
+        <ngts-stats />
     `,
     imports: [NgtCanvas, NgtsStats],
     styles: [

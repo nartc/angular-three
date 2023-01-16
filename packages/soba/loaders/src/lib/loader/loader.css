@@ -1,0 +1,44 @@
+.ngts-loader-container {
+    --ngts-loader-container-opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #171717;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 300ms ease;
+    z-index: 1000;
+    opacity: var(--ngts-loader-container-opacity);
+}
+
+.ngts-loader-inner {
+    width: 100px;
+    height: 3px;
+    background: #272727;
+    text-align: center;
+}
+
+.ngts-loader-bar {
+    --ngts-loader-bar-scale: 0;
+    height: 3px;
+    width: 100px;
+    background: white;
+    transition: transform 200ms;
+    transform-origin: left center;
+    transform: scaleX(var(--ngts-loader-bar-scale));
+}
+
+.ngts-loader-data {
+    display: inline-block;
+    position: relative;
+    font-variant-numeric: tabular-nums;
+    margin-top: 0.8em;
+    color: #f0f0f0;
+    font-size: 0.6em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, Roboto,
+        Ubuntu, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    white-space: nowrap;
+}
