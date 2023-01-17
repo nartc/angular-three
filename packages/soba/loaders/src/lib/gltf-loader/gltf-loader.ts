@@ -1,5 +1,5 @@
-import { injectNgtLoader, NgtObjectMap } from '@angular-three/core';
-import { Observable } from 'rxjs';
+import { injectNgtLoader, NgtLoaderResults, NgtObjectMap } from '@angular-three/core';
+import { Observable, take } from 'rxjs';
 import * as THREE from 'three';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -34,13 +34,34 @@ function _extensions(useDraco: boolean | string, useMeshOpt: boolean, extensions
     };
 }
 
-export function injectNgtsGLTFLoader<TInput extends string | string[]>(
+export interface NgtsGLTFLoader {
+    <TInput extends string | string[] | Record<string, string>>(
+        path: TInput | Observable<TInput>,
+        useDraco?: boolean | string,
+        useMeshOpt?: boolean,
+        extensions?: (loader: GLTFLoader) => void
+    ): Observable<NgtLoaderResults<TInput, GLTF & NgtObjectMap>>;
+    preload: <TInput extends string | string[] | Record<string, string>>(
+        path: TInput | Observable<TInput>,
+        useDraco?: boolean | string,
+        useMeshOpt?: boolean,
+        extensions?: (loader: GLTFLoader) => void
+    ) => void;
+}
+
+function injectGLTFLoader<TInput extends string | string[] | Record<string, string>>(
     path: TInput | Observable<TInput>,
     useDraco: boolean | string = true,
     useMeshOpt = true,
     extensions?: (loader: GLTFLoader) => void
-): Observable<TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap> {
+): Observable<NgtLoaderResults<TInput, GLTF & NgtObjectMap>> {
     return injectNgtLoader(() => GLTFLoader, path, _extensions(useDraco, useMeshOpt, extensions)) as Observable<
-        TInput extends string[] ? (GLTF & NgtObjectMap)[] : GLTF & NgtObjectMap
+        NgtLoaderResults<TInput, GLTF & NgtObjectMap>
     >;
 }
+
+(injectGLTFLoader as NgtsGLTFLoader).preload = (path, useDraco = true, useMeshOpt = true, extensions) => {
+    injectGLTFLoader(path, useDraco, useMeshOpt, extensions).pipe(take(1)).subscribe();
+};
+
+export const injectNgtsGLTFLoader = injectGLTFLoader as NgtsGLTFLoader;
