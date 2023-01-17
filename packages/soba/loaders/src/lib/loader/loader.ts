@@ -33,7 +33,7 @@ const defaultDataInterpolation = (p: number) => `Loading ${p.toFixed(2)}%`;
     `,
     styleUrls: ['loader.css'],
     imports: [NgIf, AsyncPipe, NgtPush],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgtsLoader extends NgtRxStore implements OnInit {
     readonly #progress = injectNgtsProgress();

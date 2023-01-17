@@ -3,8 +3,7 @@ import { Route } from '@angular/router';
 export const appRoutes: Route[] = [
     {
         path: '',
-        redirectTo: 'test',
-        pathMatch: 'full',
+        loadComponent: () => import('./home/home.component'),
     },
     {
         path: 'test',
