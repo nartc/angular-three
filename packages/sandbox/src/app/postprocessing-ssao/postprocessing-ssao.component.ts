@@ -1,16 +1,17 @@
 import { NgtCanvas } from '@angular-three/core';
 import { NgtsStats } from '@angular-three/soba/performance';
-import { Component } from '@angular/core';
-import { BlendFunction } from 'postprocessing';
+import { Component, inject } from '@angular/core';
+import { BlendFunctionService } from './blend-function.service';
+import { Scene } from './scene.component';
 
 @Component({
     selector: 'sandbox-postprocessing-ssao',
     standalone: true,
     template: `
-        <button (click)="toggle()">Toggle BlendFunction (current: {{ blendFunctionName }})</button>
+        <button (click)="service.toggle()">Toggle BlendFunction (Current: {{ service.blendFunctionName }})</button>
         <div style="height: 400px; width: 400px">
             <ngt-canvas [scene]="Scene" [camera]="{ position: [10, 10, 10] }" />
-            <ngt-stats />
+            <ngts-stats />
         </div>
     `,
     styles: [
@@ -32,19 +33,10 @@ import { BlendFunction } from 'postprocessing';
             }
         `,
     ],
+    providers: [BlendFunctionService],
     imports: [NgtCanvas, NgtsStats],
 })
 export default class SandboxPostprocessingSSAO {
     readonly Scene = Scene;
-
-    blendFunction = BlendFunction.NORMAL;
-
-    get blendFunctionName() {
-        return this.blendFunction === BlendFunction.NORMAL ? 'NORMAL' : 'MULTIPLY';
-    }
-
-    toggle() {
-        this.blendFunction =
-            this.blendFunction === BlendFunction.NORMAL ? BlendFunction.MULTIPLY : BlendFunction.NORMAL;
-    }
+    readonly service = inject(BlendFunctionService);
 }

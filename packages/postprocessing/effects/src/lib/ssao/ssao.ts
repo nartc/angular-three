@@ -10,7 +10,6 @@ import {
     SimpleChanges,
     Type,
 } from '@angular/core';
-import { selectSlice } from '@rx-angular/state';
 import { BlendFunction, SSAOEffect } from 'postprocessing';
 import { combineLatest, map, startWith } from 'rxjs';
 
@@ -70,43 +69,60 @@ export class NgtpSSAO
         }));
     }
 
+    override initialize() {
+        super.initialize();
+        this.set({
+            blendFunction: BlendFunction.MULTIPLY,
+            samples: 30,
+            rings: 4,
+            distanceThreshold: 1.0,
+            distanceFalloff: 0.0,
+            rangeThreshold: 0.5,
+            rangeFalloff: 0.1,
+            luminanceInfluence: 0.9,
+            radius: 20,
+            scale: 0.5,
+            bias: 0.5,
+            intensity: 1.0,
+            color: null!,
+            depthAwareUpsampling: true,
+        });
+    }
+
     ngOnInit() {
-        const inputs =
+        const inputs$ =
             reflectComponentType(this.constructor as Type<any>)
                 ?.inputs.filter((input) => input.propName !== 'ssaoRef')
-                .map((input) => input.propName) || [];
+                .reduce((record, { propName }) => {
+                    record[propName] = this.select(propName).pipe(
+                        startWith(this.get(propName) !== undefined ? this.get(propName) : undefined)
+                    );
+                    return record;
+                }, {} as NgtAnyRecord) || {};
+
         this.connect(
             'effect',
             combineLatest([
                 this.#composerApi.select('entities'),
                 this.#composerApi.select('activeCamera'),
-                this.select(
-                    selectSlice(inputs),
-                    startWith({
-                        blendFunction: BlendFunction.MULTIPLY,
-                        samples: 30,
-                        rings: 4,
-                        distanceThreshold: 1.0,
-                        distanceFalloff: 0.0,
-                        rangeThreshold: 0.5,
-                        rangeFalloff: 0.1,
-                        luminanceInfluence: 0.9,
-                        radius: 20,
-                        scale: 0.5,
-                        bias: 0.5,
-                        intensity: 1.0,
-                        color: null,
-                        depthAwareUpsampling: true,
-                    })
-                ),
+                combineLatest(inputs$),
             ]).pipe(
-                map(([[normalPass, downSamplingPass], camera, props]) => {
+                map(([[, normalPass, downSamplingPass], camera, props]) => {
                     const { resolutionScale } = this.#composerApi;
-                    return new SSAOEffect(camera, normalPass && !downSamplingPass ? normalPass.texture : null, {
-                        normalDepthBuffer: downSamplingPass ? downSamplingPass.texture : null,
-                        resolutionScale: resolutionScale ?? 1,
-                        ...props,
-                    } as ConstructorParameters<typeof SSAOEffect>[2]);
+
+                    if (props['normalDepthBuffer'] === undefined) {
+                        props['normalDepthBuffer'] = downSamplingPass ? downSamplingPass.texture : null;
+                    }
+
+                    if (props['resolutionScale'] === undefined) {
+                        props['resolutionScale'] = resolutionScale ?? 1;
+                    }
+
+                    return new SSAOEffect(
+                        camera,
+                        normalPass && !downSamplingPass ? normalPass.texture : null,
+                        props as ConstructorParameters<typeof SSAOEffect>[2]
+                    );
                 })
             )
         );

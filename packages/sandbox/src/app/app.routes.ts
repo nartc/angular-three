@@ -6,6 +6,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./home/home.component'),
     },
     {
+        path: 'postprocessing-ssao',
+        loadComponent: () => import('./postprocessing-ssao/postprocessing-ssao.component'),
+    },
+    {
         path: 'test',
         loadComponent: () => import('./test/test.component'),
     },
