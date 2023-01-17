@@ -1,6 +1,14 @@
-import { extend, injectNgtRef, NgtArgs } from '@angular-three/core';
-import { NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, inject, Input, OnInit } from '@angular/core';
+import { extend, injectNgtRef, injectNgtStore, NgtArgs } from '@angular-three/core';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
+import {
+    ChangeDetectorRef,
+    Component,
+    CUSTOM_ELEMENTS_SCHEMA,
+    inject,
+    Input,
+    OnInit,
+    TemplateRef,
+} from '@angular/core';
 import { BoxGeometry, Group, Mesh, MeshBasicMaterial, MeshNormalMaterial, PlaneGeometry } from 'three';
 
 // NgtRenderNode
@@ -99,6 +107,24 @@ export class Box {
 export class Cube {}
 
 @Component({
+    selector: 'sandbox-cube-with-template',
+    standalone: true,
+    template: `
+        <ngts-box [name]="name">
+            <ng-container *ngIf="template" [ngTemplateOutlet]="template" />
+        </ngts-box>
+        <ng-content />
+    `,
+    imports: [Box, NgIf, NgTemplateOutlet],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+export class CubeWithTemplate {
+    @Input() name = '';
+    @Input() template?: TemplateRef<unknown>;
+    //    @ContentChild(TemplateRef) template?: TemplateRef<unknown>;
+}
+
+@Component({
     selector: 'sandbox-test-scene',
     standalone: true,
     template: `
@@ -121,6 +147,20 @@ export class Cube {}
         <!-- </ng-template> -->
         <!-- </ngt-mesh> -->
 
+        <ng-template #first>
+            <ngt-mesh [position]="[-2, 1, 1]">
+                <ngt-box-geometry *args="[0.5, 0.5, 0.5]" />
+                <ngt-mesh-basic-material color="darkred" />
+            </ngt-mesh>
+        </ng-template>
+
+        <ng-template #second>
+            <ngt-mesh [position]="[-2, 1, 1]">
+                <ngt-box-geometry *args="[2, 2, 2]" />
+                <ngt-mesh-basic-material color="goldenrod" />
+            </ngt-mesh>
+        </ng-template>
+
         <ngts-center [position]="[1, -1, 1]">
             <ngts-box *ngIf="true" (beforeRender)="onBeforeRender($any($event).object)" [position]="[1, 1, 1]">
                 <ngt-mesh-basic-material color="red" />
@@ -129,6 +169,8 @@ export class Cube {}
                     <ngt-mesh-basic-material color="blue" />
                 </ngt-mesh>
                 <ngts-box [position]="[-2, 2, -2]" />
+
+                <sandbox-cube-with-template [template]="first" />
             </ngts-box>
             <ngts-box [position]="[1, 1, -1]">
                 <ngt-mesh-normal-material />
@@ -140,7 +182,19 @@ export class Cube {}
                     </ngt-mesh>
                 </ngts-center>
             </ngts-box>
+            <sandbox-cube-with-template [template]="second" />
         </ngts-center>
+
+        <!-- <ng-template #template> -->
+        <!-- <ngt-mesh [position]="[-2, 1, 1]" name="the-mesh"> -->
+        <!-- <ngt-box-geometry *args="[2, 2, 2]" /> -->
+        <!-- <ngt-mesh-basic-material color="goldenrod" /> -->
+        <!-- </ngt-mesh> -->
+        <!-- </ng-template> -->
+
+        <!-- <sandbox-cube-with-template name="outer-cube"> -->
+        <!-- <sandbox-cube-with-template name="inner-cube" [template]="template"> </sandbox-cube-with-template> -->
+        <!-- </sandbox-cube-with-template> -->
 
         <!-- <ngts-center> -->
         <!-- <sandbox-cube> -->
@@ -149,16 +203,18 @@ export class Cube {}
         <!-- <sandbox-cube *ngIf="true"></sandbox-cube> -->
         <!-- </ngts-center> -->
     `,
-    imports: [NgtArgs, NgIf, Box, Center, Cube],
+    imports: [NgtArgs, NgIf, Box, Center, Cube, CubeWithTemplate],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Scene implements OnInit {
     readonly #cdr = inject(ChangeDetectorRef);
+    readonly store = injectNgtStore();
 
     useNormal = true;
     active = false;
 
     ngOnInit() {
+        console.log(this.store);
         setTimeout(() => {
             this.useNormal = false;
             this.#cdr.detectChanges();

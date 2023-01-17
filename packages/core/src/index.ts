@@ -8,6 +8,7 @@ export * from './lib/loop';
 export * from './lib/pipes/push';
 export * from './lib/portal';
 export * from './lib/renderer/renderer';
+export * from './lib/renderer/utils';
 export * from './lib/services/loader';
 export * from './lib/stores/rx-store';
 export * from './lib/stores/store';

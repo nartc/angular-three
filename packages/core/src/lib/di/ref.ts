@@ -1,4 +1,4 @@
-import { ElementRef } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
 import {
     BehaviorSubject,
     distinctUntilChanged,
@@ -22,6 +22,7 @@ export type NgtInjectedRef<T> = ElementRef<T> & {
     subscribe: Subscribe<T>;
     $: Observable<T>;
     children$: (childType?: 'objects' | 'nonObjects' | 'both') => Observable<NgtInstanceNode[]>;
+    useCD: (cdr: ChangeDetectorRef) => void;
 };
 
 export function injectNgtRef<T>(initialValue: ElementRef<T> | (T | null) = null): NgtInjectedRef<T> {
@@ -31,10 +32,14 @@ export function injectNgtRef<T>(initialValue: ElementRef<T> | (T | null) = null)
     }
 
     let lastValue = ref.nativeElement;
+    const cdRefs = [] as ChangeDetectorRef[];
     const ref$ = new BehaviorSubject<T>(lastValue);
+
     const [destroy$, cdr] = injectNgtDestroy(() => {
         ref$.complete();
     });
+
+    cdRefs.push(cdr);
 
     const obs$ = ref$.asObservable().pipe(distinctUntilChanged(), takeUntil(destroy$));
 
@@ -73,15 +78,23 @@ export function injectNgtRef<T>(initialValue: ElementRef<T> | (T | null) = null)
         set: (newVal: T) => {
             if (ref.nativeElement !== newVal) {
                 ref$.next(newVal);
-                try {
-                    // during creation phase, 'context' on ViewRef will be null
-                    // we check the "context" to avoid running detectChanges during this phase.
-                    // becuase there's nothing to check
-                    if ((cdr as NgtAnyRecord)['context']) {
-                        cdr.detectChanges();
+                const cds = [...cdRefs];
+                for (let i = 0; i < cds.length; i++) {
+                    const cd = cds[i];
+                    if ((cd as ViewRef).destroyed) {
+                        cdRefs.splice(i, 1);
+                        continue;
                     }
-                } catch (e) {
-                    cdr.markForCheck();
+                    try {
+                        // during creation phase, 'context' on ViewRef will be null
+                        // we check the "context" to avoid running detectChanges during this phase.
+                        // becuase there's nothing to check
+                        if ((cd as NgtAnyRecord)['context']) {
+                            cd.detectChanges();
+                        }
+                    } catch (e) {
+                        cd.markForCheck();
+                    }
                 }
                 lastValue = ref.nativeElement;
                 ref.nativeElement = newVal;
@@ -100,5 +113,6 @@ export function injectNgtRef<T>(initialValue: ElementRef<T> | (T | null) = null)
         get children$() {
             return children$;
         },
+        useCD: (cdr: ChangeDetectorRef) => void cdRefs.push(cdr),
     });
 }

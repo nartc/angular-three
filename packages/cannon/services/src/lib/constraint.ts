@@ -1,5 +1,5 @@
 import { injectNgtcStore } from '@angular-three/cannon';
-import { makeId, NgtInjectedRef } from '@angular-three/core';
+import { injectNgtRef, is, makeId, NgtInjectedRef } from '@angular-three/core';
 import {
     ConeTwistConstraintOpts,
     ConstraintOptns,
@@ -9,7 +9,7 @@ import {
     LockConstraintOpts,
     PointToPointConstraintOpts,
 } from '@pmndrs/cannon-worker-api';
-import { combineLatest } from 'rxjs';
+import { combineLatest, isObservable, Observable, of } from 'rxjs';
 
 export interface NgtcConstraintApi {
     disable: () => void;
@@ -41,35 +41,55 @@ export interface NgtcConstraintReturn<
 export function injectPointToPointConstraint<
     TObjectA extends THREE.Object3D = THREE.Object3D,
     TObjectB extends THREE.Object3D = THREE.Object3D
->(bodyA: NgtInjectedRef<TObjectA>, bodyB: NgtInjectedRef<TObjectB>, opts: PointToPointConstraintOpts) {
+>(
+    bodyA: NgtInjectedRef<TObjectA> | TObjectA,
+    bodyB: NgtInjectedRef<TObjectB> | TObjectB,
+    opts: Observable<PointToPointConstraintOpts> | PointToPointConstraintOpts
+) {
     return injectConstraint('PointToPoint', bodyA, bodyB, opts);
 }
 
 export function injectConeTwistConstraint<
     TObjectA extends THREE.Object3D = THREE.Object3D,
     TObjectB extends THREE.Object3D = THREE.Object3D
->(bodyA: NgtInjectedRef<TObjectA>, bodyB: NgtInjectedRef<TObjectB>, opts: ConeTwistConstraintOpts) {
+>(
+    bodyA: NgtInjectedRef<TObjectA> | TObjectA,
+    bodyB: NgtInjectedRef<TObjectB> | TObjectB,
+    opts: Observable<ConeTwistConstraintOpts> | ConeTwistConstraintOpts
+) {
     return injectConstraint('ConeTwist', bodyA, bodyB, opts);
 }
 
 export function injectDistanceConstraint<
     TObjectA extends THREE.Object3D = THREE.Object3D,
     TObjectB extends THREE.Object3D = THREE.Object3D
->(bodyA: NgtInjectedRef<TObjectA>, bodyB: NgtInjectedRef<TObjectB>, opts: DistanceConstraintOpts) {
+>(
+    bodyA: NgtInjectedRef<TObjectA> | TObjectA,
+    bodyB: NgtInjectedRef<TObjectB> | TObjectB,
+    opts: Observable<DistanceConstraintOpts> | DistanceConstraintOpts
+) {
     return injectConstraint('Distance', bodyA, bodyB, opts);
 }
 
 export function injectHingeConstraint<
     TObjectA extends THREE.Object3D = THREE.Object3D,
     TObjectB extends THREE.Object3D = THREE.Object3D
->(bodyA: NgtInjectedRef<TObjectA>, bodyB: NgtInjectedRef<TObjectB>, opts: HingeConstraintOpts) {
+>(
+    bodyA: NgtInjectedRef<TObjectA> | TObjectA,
+    bodyB: NgtInjectedRef<TObjectB> | TObjectB,
+    opts: Observable<HingeConstraintOpts> | HingeConstraintOpts
+) {
     return injectConstraint('Hinge', bodyA, bodyB, opts);
 }
 
 export function injectLockConstraint<
     TObjectA extends THREE.Object3D = THREE.Object3D,
     TObjectB extends THREE.Object3D = THREE.Object3D
->(bodyA: NgtInjectedRef<TObjectA>, bodyB: NgtInjectedRef<TObjectB>, opts: LockConstraintOpts) {
+>(
+    bodyA: NgtInjectedRef<TObjectA> | TObjectA,
+    bodyB: NgtInjectedRef<TObjectB> | TObjectB,
+    opts: Observable<LockConstraintOpts> | LockConstraintOpts
+) {
     return injectConstraint('Lock', bodyA, bodyB, opts);
 }
 
@@ -82,17 +102,24 @@ function injectConstraint<
         : ConstraintOptns
 >(
     type: TConstraintType,
-    bodyA: NgtInjectedRef<TObjectA>,
-    bodyB: NgtInjectedRef<TObjectB>,
-    opts: TOptions = {} as TOptions
+    bodyA: NgtInjectedRef<TObjectA> | TObjectA,
+    bodyB: NgtInjectedRef<TObjectB> | TObjectB,
+    opts: Observable<TOptions> | TOptions = {} as TOptions
 ): NgtcConstraintReturn<TConstraintType, TObjectA, TObjectB> {
     const uuid = makeId();
     const store = injectNgtcStore({ skipSelf: true });
 
-    store.effect(combineLatest([store.select('worker'), bodyA.$, bodyB.$]), ([worker, bodyA, bodyB]) => {
-        worker.addConstraint({ props: [bodyA.uuid, bodyB.uuid, opts], type, uuid });
-        return () => worker.removeConstraint({ uuid });
-    });
+    const opts$ = isObservable(opts) ? opts : of(opts);
+    const bodyARef = !is.ref(bodyA) ? injectNgtRef(bodyA) : bodyA;
+    const bodyBRef = !is.ref(bodyB) ? injectNgtRef(bodyB) : bodyB;
+
+    store.effect(
+        combineLatest([store.select('worker'), bodyARef.$, bodyBRef.$, opts$]),
+        ([worker, bodyA, bodyB, opts]) => {
+            worker.addConstraint({ props: [bodyA.uuid, bodyB.uuid, opts], type, uuid });
+            return () => worker.removeConstraint({ uuid });
+        }
+    );
 
     const api = {
         disable: () => {
@@ -131,5 +158,5 @@ function injectConstraint<
         };
     }
 
-    return { bodyA, bodyB, api };
+    return { bodyA: bodyARef, bodyB: bodyBRef, api };
 }

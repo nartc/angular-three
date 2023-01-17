@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
 import { supportedEvents } from '../events';
 import { NgtAttachFunction, NgtEventHandlers, NgtInstanceNode } from '../types';
 import { attach, detach } from '../utils/attach';
@@ -213,6 +214,19 @@ export function eventToHandler(callback: (event: any) => void, cdr: ChangeDetect
         callback(event);
         cdr?.detectChanges();
     };
+}
+
+export function fromThreeEvent(
+    instance: NgtInstanceNode,
+    eventName: (typeof supportedEvents)[number],
+    cdr: ChangeDetectorRef
+) {
+    return new Observable<Parameters<Required<NgtEventHandlers>[typeof eventName]>[0]>((obs) => {
+        const cleanUp = processThreeEvent(instance, 0, eventName, obs.next.bind(obs), cdr);
+        return () => {
+            cleanUp();
+        };
+    });
 }
 
 export function kebabToPascal(str: string): string {

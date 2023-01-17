@@ -3,7 +3,6 @@ import { NgtpEffectComposer } from '@angular-three/postprocessing';
 import { NgtpSSAO } from '@angular-three/postprocessing/effects';
 import { NgtsOrbitControls } from '@angular-three/soba/controls';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs';
 import { BoxGeometry, DirectionalLight, Mesh, MeshLambertMaterial, PlaneGeometry, SphereGeometry } from 'three';
 import { BlendFunctionService } from './blend-function.service';
 
@@ -122,9 +121,6 @@ export class Scene implements OnInit {
     }
 
     ngOnInit() {
-        const [destroy$, cdr] = this.ngtDestroy;
-        this.service.blendFunctionRef.$.pipe(takeUntil(destroy$)).subscribe(() => {
-            cdr.detectChanges();
-        });
+        this.service.blendFunctionRef.useCD(this.ngtDestroy[1]);
     }
 }
