@@ -10,6 +10,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./postprocessing-ssao/postprocessing-ssao.component'),
     },
     {
+        path: 'raycast-vehicle',
+        loadComponent: () => import('./raycast-vehicle/raycast-vehicle.component'),
+    },
+    {
         path: 'monday-morning',
         loadComponent: () => import('./monday-morning/monday-morning.component'),
     },

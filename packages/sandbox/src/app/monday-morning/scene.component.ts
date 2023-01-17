@@ -439,7 +439,7 @@ export class Cursor {
             position: [0, 0, 10000],
             type: 'Static',
         }),
-        this.cursorService.cursor
+        { instanceRef: this.cursorService.cursor }
     );
 
     onBeforeRender({ state: { pointer, viewport } }: NgtBeforeRender<Mesh>) {

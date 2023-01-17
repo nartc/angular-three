@@ -72,14 +72,20 @@ export class NgtcDebug implements OnInit, OnDestroy {
         });
 
         this.#beforeRenderCleanup = this.#store.get('internal').subscribe(() => {
-            if (this.disabled || !this.#cannonDebugger) return;
+            if (!this.#cannonDebugger) return;
             const refs = this.#physicsStore.get('refs');
             for (const uuid in this.bodyMap) {
                 getMatrix(refs[uuid]).decompose(v, q, s);
                 this.bodyMap[uuid].position.copy(v as unknown as Vec3);
                 this.bodyMap[uuid].quaternion.copy(q as unknown as CQuarternion);
             }
-            this.#cannonDebugger.update();
+            for (const child of this.scene.children) {
+                child.visible = !this.disabled;
+            }
+
+            if (!this.disabled) {
+                this.#cannonDebugger.update();
+            }
         });
     }
 

@@ -24,7 +24,7 @@ import type {
     Triplet,
     VectorName,
 } from '@pmndrs/cannon-worker-api';
-import { takeUntil } from 'rxjs';
+import { animationFrameScheduler, combineLatest, Observable, observeOn, ReplaySubject, takeUntil } from 'rxjs';
 import { DynamicDrawUsage, Euler, InstancedMesh, Object3D, Quaternion, Vector3 } from 'three';
 
 export type NgtcAtomicApi<K extends AtomicName> = {
@@ -76,40 +76,61 @@ export type NgtcArgFn<T> = (args: T) => unknown[];
 
 export function injectPlane<TObject extends THREE.Object3D>(
     fn: NgtcGetByIndex<PlaneProps>,
-    ref?: NgtInjectedRef<TObject>
+    opts?: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    }
 ) {
-    return injectBody<PlaneProps, TObject>('Plane', fn, () => [], ref);
+    return injectBody<PlaneProps, TObject>('Plane', fn, () => [], opts);
 }
 
-export function injectBox<TObject extends THREE.Object3D>(fn: NgtcGetByIndex<BoxProps>, ref?: NgtInjectedRef<TObject>) {
+export function injectBox<TObject extends THREE.Object3D>(
+    fn: NgtcGetByIndex<BoxProps>,
+    opts?: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    }
+) {
     const defaultBoxArgs: Triplet = [1, 1, 1];
-    return injectBody<BoxProps, TObject>('Box', fn, (args = defaultBoxArgs): Triplet => args, ref);
+    return injectBody<BoxProps, TObject>('Box', fn, (args = defaultBoxArgs): Triplet => args, opts);
 }
 
 export function injectCylinder<TObject extends THREE.Object3D>(
     fn: NgtcGetByIndex<CylinderProps>,
-    ref?: NgtInjectedRef<TObject>
+    opts?: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    }
 ) {
-    return injectBody<CylinderProps, TObject>('Cylinder', fn, (args = [] as []) => args, ref);
+    return injectBody<CylinderProps, TObject>('Cylinder', fn, (args = [] as []) => args, opts);
 }
 
 export function injectHeightfield<TObject extends THREE.Object3D>(
     fn: NgtcGetByIndex<HeightfieldProps>,
-    ref?: NgtInjectedRef<TObject>
+    opts?: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    }
 ) {
-    return injectBody<HeightfieldProps, TObject>('Heightfield', fn, (args) => args, ref);
+    return injectBody<HeightfieldProps, TObject>('Heightfield', fn, (args) => args, opts);
 }
 
 export function injectParticle<TObject extends THREE.Object3D>(
     fn: NgtcGetByIndex<ParticleProps>,
-    ref?: NgtInjectedRef<TObject>
+    opts?: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    }
 ) {
-    return injectBody<ParticleProps, TObject>('Particle', fn, () => [], ref);
+    return injectBody<ParticleProps, TObject>('Particle', fn, () => [], opts);
 }
 
 export function injectSphere<TObject extends THREE.Object3D>(
     fn: NgtcGetByIndex<SphereProps>,
-    ref?: NgtInjectedRef<TObject>
+    opts?: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    }
 ) {
     return injectBody<SphereProps, TObject>(
         'Sphere',
@@ -118,20 +139,26 @@ export function injectSphere<TObject extends THREE.Object3D>(
             if (!Array.isArray(args)) throw new Error('injectSphere args must be an array');
             return [args[0]];
         },
-        ref
+        opts
     );
 }
 
 export function injectTrimesh<TObject extends THREE.Object3D>(
     fn: NgtcGetByIndex<TrimeshProps>,
-    ref?: NgtInjectedRef<TObject>
+    opts?: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    }
 ) {
-    return injectBody<TrimeshProps, TObject>('Trimesh', fn, (args) => args, ref);
+    return injectBody<TrimeshProps, TObject>('Trimesh', fn, (args) => args, opts);
 }
 
 export function injectConvexPolyhedron<TObject extends THREE.Object3D>(
     fn: NgtcGetByIndex<ConvexPolyhedronProps>,
-    ref?: NgtInjectedRef<TObject>
+    opts?: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    }
 ) {
     return injectBody<ConvexPolyhedronProps, TObject>(
         'ConvexPolyhedron',
@@ -143,15 +170,18 @@ export function injectConvexPolyhedron<TObject extends THREE.Object3D>(
             axes && axes.map(NgtcUtils.makeTriplet),
             boundingSphereRadius,
         ],
-        ref
+        opts
     );
 }
 
 export function injectCompoundBody<TObject extends THREE.Object3D>(
     fn: NgtcGetByIndex<CompoundBodyProps>,
-    ref?: NgtInjectedRef<TObject>
+    opts?: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    }
 ) {
-    return injectBody<CompoundBodyProps, TObject>('Compound', fn, (args) => args as unknown[], ref);
+    return injectBody<CompoundBodyProps, TObject>('Compound', fn, (args) => args as unknown[], opts);
 }
 
 const temp = new Object3D();
@@ -160,23 +190,43 @@ function injectBody<TBodyProps extends BodyProps, TObject extends THREE.Object3D
     type: BodyShapeType,
     getPropsFn: NgtcGetByIndex<TBodyProps>,
     argsFn: NgtcArgFn<TBodyProps['args']>,
-    instanceRef?: NgtInjectedRef<TObject>
+    {
+        instanceRef,
+        waitFor,
+    }: {
+        instanceRef?: NgtInjectedRef<TObject>;
+        waitFor?: Observable<unknown>;
+    } = {}
 ): NgtcBodyReturn<TObject> {
-    const [destroy$, cdr] = injectNgtDestroy();
     const debugApi = injectNgtcDebugApi({ skipSelf: true, optional: true });
     const store = injectNgtcStore({ skipSelf: true });
-
+    const [destroy$, cdr] = injectNgtDestroy(() => {
+        microQueue$.complete();
+    });
     let ref = injectNgtRef<TObject>();
+
+    const microQueue$ = new ReplaySubject<void>(1);
+    const waits$ = [microQueue$] as Observable<unknown>[];
+
+    if (waitFor) {
+        waits$.push(waitFor);
+    }
 
     if (instanceRef) {
         ref = instanceRef;
     }
 
     queueMicrotask(() => {
-        if (!ref.nativeElement) {
-            ref.nativeElement = new Object3D() as TObject;
-        }
+        microQueue$.next();
     });
+
+    combineLatest(waits$)
+        .pipe(observeOn(animationFrameScheduler), takeUntil(destroy$))
+        .subscribe(() => {
+            if (!ref.nativeElement) {
+                ref.nativeElement = new Object3D() as TObject;
+            }
+        });
 
     ref.$.pipe(takeUntil(destroy$)).subscribe((object) => {
         const { events, refs, worker } = store.get();

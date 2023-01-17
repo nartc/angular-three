@@ -201,6 +201,17 @@ export class NgtRenderer implements Renderer2 {
             if (closestGrandparentInstance) {
                 this.appendChild(closestGrandparentInstance, newChild);
             }
+            return;
+        }
+
+        if (
+            parent.__ngt_renderer__[NgtRendererClassId.type] === 'component' &&
+            newChild.__ngt_renderer__[NgtRendererClassId.type] === 'component'
+        ) {
+            const closestGrandparentInstance = this.state.getClosestParentWithInstance(parent);
+            if (closestGrandparentInstance) {
+                this.appendChild(closestGrandparentInstance, newChild);
+            }
         }
     }
 
