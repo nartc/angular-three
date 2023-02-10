@@ -1,3 +1,7 @@
+# This repository is now archived. Please check https://github.com/angular-threejs/angular-three for latest updates to Angular Three.
+
+---
+
 # Declarative THREE.js in Angular
 
 🔥 Leverage your [Angular](https://angular.io) skill to build mind-blowing 3D applications
